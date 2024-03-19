@@ -2,6 +2,14 @@ import axios from "axios";
 import { load } from "cheerio";
 
 import { ZennArticle } from "../types/zenn";
+import { convertRssToJson } from "./rss";
+
+export const fetchZennV2 = async () => {
+  const data = await convertRssToJson("https://zenn.dev/feed");
+  console.log("🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥");
+  console.log(data);
+  return data;
+};
 
 export const fetchZenn = async () => {
   const url = "https://zenn.dev/";
@@ -55,7 +63,5 @@ export const fetchZenn = async () => {
     return newArticle;
   });
 
-  console.log("💧");
-  console.log(articles);
-  console.log("💧");
+  return articles;
 };

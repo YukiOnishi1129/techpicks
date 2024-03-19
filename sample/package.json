@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/jsdom": "^21.1.6",
     "@types/node": "^20.11.30",
     "nodemon": "^3.1.0",
     "ts-node": "^10.9.2",
@@ -19,6 +20,8 @@
   },
   "dependencies": {
     "axios": "^1.6.8",
-    "cheerio": "^1.0.0-rc.12"
+    "cheerio": "^1.0.0-rc.12",
+    "jsdom": "^24.0.0",
+    "rss-parser": "^3.13.0"
   }
 }
