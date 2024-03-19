@@ -1,5 +1,5 @@
 import axios from "axios";
-import cheerio from "cheerio";
+import { load } from "cheerio";
 import { ZennArticle } from "./types/zenn";
 
 const fetchZenn = async () => {
@@ -7,7 +7,7 @@ const fetchZenn = async () => {
 
   const { data } = await axios.get(url);
 
-  const $ = cheerio.load(data);
+  const $ = load(data);
   const raw = $("script[id=__NEXT_DATA__]").html() ?? "";
   if (raw === undefined) return {};
   const rawData = JSON.parse(raw).props.pageProps.dailyTechArticles;
