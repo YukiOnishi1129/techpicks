@@ -9,6 +9,7 @@ export type Rss = {
   contentSnippet: string;
   rdfAbout: string;
   isoDate: string;
+  image: string;
 };
 
 // export type Ogp = {

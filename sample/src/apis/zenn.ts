@@ -55,7 +55,5 @@ export const fetchZenn = async () => {
     return newArticle;
   });
 
-  console.log("💧");
-  console.log(articles);
-  console.log("💧");
+  return articles;
 };
