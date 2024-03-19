@@ -1,1 +1,3 @@
-console.log("aaaaaa");
+import { fetchZenn } from "./apis/zenn";
+
+// fetchZenn();
