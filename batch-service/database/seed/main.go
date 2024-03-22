@@ -4,8 +4,6 @@ import (
 	"cloud.google.com/go/firestore"
 	"context"
 	"github.com/YukiOnishi1129/techpicks/batch-service/database"
-	"github.com/YukiOnishi1129/techpicks/batch-service/database/seed/seeders"
-	"github.com/YukiOnishi1129/techpicks/batch-service/infrastructure/firestore/repository"
 	"github.com/joho/godotenv"
 	"log"
 )
@@ -24,28 +22,12 @@ func main() {
 		return
 	}
 
-	pr := repository.NewPlatformRepository(client)
-
 	// do seeder
-	ps := seeders.NewPlatformSeed(pr)
-
-	err = ps.SeedPlatform(ctx)
-	if err != nil {
-		log.Fatalf("Failed to insert: %v", err)
-		return
-	}
-
-	//res, err := pr.GetPlatforms(ctx)
-	//fmt.Printf("getres:  %v/n", res)
+	//ps := seeders.NewPlatformSeed(client)
 	//
+	//err = ps.SeedPlatform(ctx)
 	//if err != nil {
-	//	fmt.Printf("ゲットエラー")
-	//	return
-	//}
-
-	//err = seeders.SeedPlatform(ctx, client)
-	//if err != nil {
-	//	log.Fatalf("Failed to seed platform: %v", err)
+	//	log.Fatalf("Failed to insert: %v", err)
 	//	return
 	//}
 
