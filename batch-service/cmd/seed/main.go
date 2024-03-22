@@ -16,6 +16,7 @@ func main() {
 		return
 	}
 	client, err := database.CreateFirestoreClient(ctx)
+
 	if err != nil {
 		log.Fatalf("Failed to create client: %v", err)
 		return
@@ -26,8 +27,4 @@ func main() {
 
 		}
 	}(client)
-
-	//initializer.Init()
-	//rss := usecase.GetRSS()
-	//println("【rss count】: ", len(rss))
 }
