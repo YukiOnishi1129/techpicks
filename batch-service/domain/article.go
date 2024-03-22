@@ -6,7 +6,9 @@ type Article struct {
 	Description  string
 	ThumbnailURL string
 	ArticleURL   string
+	Published    string
 	Platform     ArticlePlatform
+	IsEng        bool
 	IsPrivate    bool
 	CreatedAt    string
 	UpdatedAt    string
@@ -16,6 +18,6 @@ type Article struct {
 type ArticlePlatform struct {
 	ID           string
 	Name         string
-	PlatformType string
+	PlatformType PlatformType
 	SiteURL      string
 }
