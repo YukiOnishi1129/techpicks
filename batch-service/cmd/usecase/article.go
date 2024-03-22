@@ -6,6 +6,7 @@ import (
 	"github.com/YukiOnishi1129/techpicks/batch-service/domain"
 	"github.com/YukiOnishi1129/techpicks/batch-service/infrastructure/firestore/repository"
 	"github.com/google/uuid"
+	"log"
 	"time"
 )
 
@@ -16,12 +17,14 @@ type ArticleUsecaseInterface interface {
 type ArticleUsecase struct {
 	client *firestore.Client
 	pr     *repository.PlatformRepository
+	ar     *repository.ArticleRepository
 }
 
-func NewArticleUsecase(client *firestore.Client, pr *repository.PlatformRepository) *ArticleUsecase {
+func NewArticleUsecase(client *firestore.Client, pr *repository.PlatformRepository, ar *repository.ArticleRepository) *ArticleUsecase {
 	return &ArticleUsecase{
 		client: client,
 		pr:     pr,
+		ar:     ar,
 	}
 }
 
@@ -50,41 +53,60 @@ func (au *ArticleUsecase) CreateArticles(ctx context.Context, client *firestore.
 	}
 
 	for _, p := range platforms {
-		println(p.RssURL)
-		batch := client.BulkWriter(ctx)
 		rss, err := GetRSS(p.RssURL)
 		if err != nil {
 			return err
 		}
+		go func(rss []RSS) {
+			err := func(rss []RSS) error {
+				log.Printf("【start create article】: %s", p.Name)
+				batch := client.BulkWriter(ctx)
 
-		for _, r := range rss {
-			articleID, err := uuid.NewUUID()
+				aCount := 0
+				for _, r := range rss {
+					// confirm same article
+					count, err := au.ar.GetCountArticlesByLink(ctx, r.Link)
+					if count > 0 {
+
+						log.Printf("【skip create article】: %s", r.Title)
+						continue
+					}
+					articleID, err := uuid.NewUUID()
+					if err != nil {
+						return err
+					}
+					createdAt := time.Now().Format("2006-01-02T15:04:05Z")
+					ref := client.Collection("articles").Doc(articleID.String())
+					_, err = batch.Set(ref, ArticleFirestore{
+						Title:           r.Title,
+						Description:     r.Description,
+						ThumbnailURL:    r.Image,
+						ArticleURL:      r.Link,
+						Published:       r.Published,
+						PlatformID:      p.ID,
+						PlatformName:    p.Name,
+						PlatformSiteURL: p.SiteURL,
+						PlatformType:    p.PlatformType,
+						IsEng:           p.IsEng,
+						IsPrivate:       false,
+						CreatedAt:       createdAt,
+						UpdatedAt:       createdAt,
+						DeletedAt:       nil,
+					})
+					if err != nil {
+						return err
+					}
+					aCount++
+				}
+				batch.Flush()
+				log.Printf("【end create article】: %s", p.Name)
+				log.Printf("【article count】: %d", aCount)
+				return nil
+			}(rss)
 			if err != nil {
-				return err
 			}
-			createdAt := time.Now().Format("2006-01-02T15:04:05Z")
-			ref := client.Collection("articles").Doc(articleID.String())
-			_, err = batch.Set(ref, ArticleFirestore{
-				Title:           r.Title,
-				Description:     r.Description,
-				ThumbnailURL:    r.Image,
-				ArticleURL:      r.Link,
-				Published:       r.Published,
-				PlatformID:      p.ID,
-				PlatformName:    p.Name,
-				PlatformSiteURL: p.SiteURL,
-				PlatformType:    p.PlatformType,
-				IsEng:           p.IsEng,
-				IsPrivate:       false,
-				CreatedAt:       createdAt,
-				UpdatedAt:       createdAt,
-				DeletedAt:       nil,
-			})
-			if err != nil {
-				return err
-			}
-		}
-		batch.Flush()
+		}(rss)
+
 	}
 	return nil
 }

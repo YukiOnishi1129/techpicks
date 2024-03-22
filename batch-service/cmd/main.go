@@ -11,6 +11,7 @@ import (
 )
 
 func main() {
+	log.Printf("Start batch service")
 	ctx := context.Background()
 	err := godotenv.Load(".env")
 	if err != nil {
@@ -30,7 +31,9 @@ func main() {
 	}(client)
 
 	pr := repository.NewPlatformRepository(client)
-	au := usecase.NewArticleUsecase(client, pr)
+	ar := repository.NewArticleRepository(client)
+	au := usecase.NewArticleUsecase(client, pr, ar)
+
 	err = au.CreateArticles(ctx, client)
 	if err != nil {
 		log.Fatalf("Failed to create articles: %v", err)

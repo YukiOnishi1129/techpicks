@@ -356,7 +356,7 @@ func getPlatforms() []platformType {
 		},
 		{
 			Name:         "Money Forward",
-			RssUrl:       "https://tech.up-sider.com/rss",
+			RssUrl:       "https://moneyforward-dev.jp/rss",
 			SiteUrl:      "https://moneyforward-dev.jp/",
 			PlatformType: domain.PlatformTypeCompany,
 			IsEng:        false,
