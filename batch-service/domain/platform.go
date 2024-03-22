@@ -3,9 +3,8 @@ package domain
 type Platform struct {
 	ID           string
 	Name         string
-	RssUrl       string
-	ThumbnailUrl string
-
+	RssURL       string
+	SiteURL      string
 	PlatformType int64
 	CreatedAt    string
 	UpdatedAt    string

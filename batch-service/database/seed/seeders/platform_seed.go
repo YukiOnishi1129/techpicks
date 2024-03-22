@@ -2,7 +2,6 @@ package seeders
 
 import (
 	"context"
-	"fmt"
 	"github.com/YukiOnishi1129/techpicks/batch-service/domain"
 	"github.com/YukiOnishi1129/techpicks/batch-service/infrastructure/firestore/repository"
 	"github.com/google/uuid"
@@ -22,7 +21,6 @@ func NewPlatformSeed(pr *repository.PlatformRepository) *PlatformSeed {
 }
 
 type PlatformFirestore struct {
-	//Id           string  `firestore:"id"`
 	Name         string  `firestore:"name"`
 	RssUrl       string  `firestore:"rss_url"`
 	ThumbnailUrl string  `firestore:"thumbnail_url"`
@@ -42,14 +40,13 @@ func (ps *PlatformSeed) SeedPlatform(ctx context.Context) error {
 	err = ps.pr.CreatePlatform(ctx, domain.Platform{
 		ID:           platformID.String(),
 		Name:         "Mercari Engineering Blog",
-		RssUrl:       "https://engineering.mercari.com/blog/feed.xml",
-		ThumbnailUrl: "https://engineering.mercari.com/images/ogp.png",
+		RssURL:       "https://engineering.mercari.com/blog/feed.xml",
+		SiteURL:      "https://engineering.mercari.com/blog/",
 		PlatformType: 2,
 		CreatedAt:    createdAt,
 		UpdatedAt:    createdAt,
 		DeletedAt:    nil,
 	})
-	fmt.Printf("=============")
 	if err != nil {
 		return err
 	}

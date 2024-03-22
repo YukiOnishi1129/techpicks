@@ -31,8 +31,17 @@ func main() {
 
 	err = ps.SeedPlatform(ctx)
 	if err != nil {
+		log.Fatalf("Failed to insert: %v", err)
 		return
 	}
+
+	//res, err := pr.GetPlatforms(ctx)
+	//fmt.Printf("getres:  %v/n", res)
+	//
+	//if err != nil {
+	//	fmt.Printf("ゲットエラー")
+	//	return
+	//}
 
 	//err = seeders.SeedPlatform(ctx, client)
 	//if err != nil {
@@ -43,7 +52,7 @@ func main() {
 	defer func(client *firestore.Client) {
 		err := client.Close()
 		if err != nil {
-
+			return
 		}
 	}(client)
 }
