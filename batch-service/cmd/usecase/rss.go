@@ -12,6 +12,9 @@ type RSS struct {
 	Description string
 	Published   string
 	Image       string
+	// Type        site || company
+	//	Platform    string
+	//	Language    string
 }
 
 func GetRSS() []RSS {
