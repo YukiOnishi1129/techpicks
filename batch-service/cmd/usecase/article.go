@@ -46,6 +46,8 @@ type ArticleFirestore struct {
 }
 
 func (au *ArticleUsecase) CreateArticles(ctx context.Context, client *firestore.Client) error {
+
+	now := time.Now()
 	// get platforms
 	platforms, err := au.pr.GetPlatforms(ctx)
 	if err != nil {
@@ -57,8 +59,8 @@ func (au *ArticleUsecase) CreateArticles(ctx context.Context, client *firestore.
 		if err != nil {
 			return err
 		}
-		go func(rss []RSS) {
-			err := func(rss []RSS) error {
+		go func(rss []RSS, p domain.Platform) {
+			err := func(rss []RSS, p domain.Platform) error {
 				log.Printf("【start create article】: %s", p.Name)
 				batch := client.BulkWriter(ctx)
 
@@ -102,11 +104,14 @@ func (au *ArticleUsecase) CreateArticles(ctx context.Context, client *firestore.
 				log.Printf("【end create article】: %s", p.Name)
 				log.Printf("【article count】: %d", aCount)
 				return nil
-			}(rss)
+			}(rss, p)
 			if err != nil {
 			}
-		}(rss)
-
+		}(rss, p)
 	}
+
+	end := time.Now()
+	diff := end.Sub(now)
+	log.Printf("【end create article all】: %s", diff)
 	return nil
 }
