@@ -12,16 +12,16 @@ type RSS struct {
 	Description string
 	Published   string
 	Image       string
-	// Type        site || company
-	//	Platform    string
-	//	Language    string
 }
 
-func GetRSS() []RSS {
-	url := "https://engineering.mercari.com/blog/feed.xml"
+func GetRSS(rssURL string) ([]RSS, error) {
 
 	fp := gofeed.NewParser()
-	feed, _ := fp.ParseURL(url)
+	feed, err := fp.ParseURL(rssURL)
+
+	if err != nil {
+		return nil, err
+	}
 
 	items := feed.Items
 
@@ -42,7 +42,7 @@ func GetRSS() []RSS {
 		}
 	}
 
-	return rss
+	return rss, nil
 }
 
 func getOGPImage(url string) (string, error) {

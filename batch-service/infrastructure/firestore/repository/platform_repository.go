@@ -61,22 +61,38 @@ func (pr *PlatformRepository) GetPlatforms(ctx context.Context) ([]domain.Platfo
 		if err != nil {
 			break
 		}
-		var p PlatformFirestore
-		err = doc.DataTo(&p)
-		if err != nil {
-			return nil, err
-		}
+		//var p PlatformFirestore
+		//err = doc.DataTo(&p)
+		//println("🔥🔥🔥🔥🔥🔥🔥🔥")
+		//println(fmt.Printf("%+v", doc.Data()))
+		//if err != nil {
+		//	return nil, err
+		//}
+		//p := doc.Data()
+		//
+		//p["name"]
+		//doc.Data()
+		//name, err := doc.DataAt("Name")
+		//if err != nil {
+		//	return nil, err
+		//}
+		data := doc.Data()
+		platformType := data["PlatformType"].(int64)
+
 		platforms = append(platforms, domain.Platform{
 			ID:           doc.Ref.ID,
-			Name:         p.Name,
-			RssURL:       p.RssURL,
-			SiteURL:      p.SiteURL,
-			PlatformType: p.PlatformType,
-			IsEng:        p.IsEng,
-			CreatedAt:    p.CreatedAt,
-			UpdatedAt:    p.UpdatedAt,
-			DeletedAt:    p.DeletedAt,
+			Name:         data["Name"].(string),
+			RssURL:       data["RssURL"].(string),
+			SiteURL:      data["SiteURL"].(string),
+			PlatformType: domain.PlatformType(platformType),
+			IsEng:        data["IsEng"].(bool),
+			CreatedAt:    data["CreatedAt"].(string),
+			UpdatedAt:    data["UpdatedAt"].(string),
+			//DeletedAt:    p.DeletedAt,
 		})
+		if data["DeletedAt"] != nil {
+			platforms[len(platforms)-1].DeletedAt = data["DeletedAt"].(*string)
+		}
 	}
 	return platforms, nil
 }

@@ -3,7 +3,6 @@ package main
 import (
 	"cloud.google.com/go/firestore"
 	"context"
-	"github.com/YukiOnishi1129/techpicks/batch-service/cmd/usecase"
 	"github.com/YukiOnishi1129/techpicks/batch-service/database"
 	"github.com/YukiOnishi1129/techpicks/batch-service/domain"
 	"github.com/joho/godotenv"
@@ -47,9 +46,9 @@ func main() {
 	}(client)
 
 	//initializer.Init()
-	rss := usecase.GetRSS()
-
-	println(len(rss))
+	//rss := usecase.GetRSS("")
+	//
+	//println(len(rss))
 
 	//articles := make([]domain.Article, len(rss))
 
