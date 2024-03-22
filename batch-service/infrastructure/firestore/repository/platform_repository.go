@@ -3,7 +3,6 @@ package repository
 import (
 	"cloud.google.com/go/firestore"
 	"context"
-	"fmt"
 	"github.com/YukiOnishi1129/techpicks/batch-service/domain"
 )
 
@@ -16,38 +15,36 @@ type PlatformRepositoryInterface interface {
 }
 
 type PlatformRepository struct {
-	client *firestore.Client
+	Client *firestore.Client
 }
 
 func NewPlatformRepository(client *firestore.Client) *PlatformRepository {
-	return &PlatformRepository{client: client}
+	return &PlatformRepository{Client: client}
 }
 
-type platformFirestore struct {
-	Name         string  `firestore:"name"`
-	RssURL       string  `firestore:"rss_url"`
-	SiteURL      string  `firestore:"site_url"`
-	PlatformType int64   `firestore:"platform_type"`
-	CreatedAt    string  `firestore:"created_at"`
-	UpdatedAt    string  `firestore:"updated_at"`
-	DeletedAt    *string `firestore:"deleted_at"`
+type PlatformFirestore struct {
+	Name         string              `firestore:"name"`
+	RssURL       string              `firestore:"rss_url"`
+	SiteURL      string              `firestore:"site_url"`
+	PlatformType domain.PlatformType `firestore:"platform_type"`
+	IsEng        bool                `firestore:"is_eng"`
+	CreatedAt    string              `firestore:"created_at"`
+	UpdatedAt    string              `firestore:"updated_at"`
+	DeletedAt    *string             `firestore:"deleted_at"`
 }
 
 // CreatePlatform is a method to create a platform
 func (pr *PlatformRepository) CreatePlatform(ctx context.Context, arg domain.Platform) error {
-	res, err := pr.client.Collection("platforms").Doc(arg.ID).Set(ctx, platformFirestore{
+	_, err := pr.Client.Collection("platforms").Doc(arg.ID).Set(ctx, PlatformFirestore{
 		Name:         arg.Name,
 		RssURL:       arg.RssURL,
 		SiteURL:      arg.SiteURL,
 		PlatformType: arg.PlatformType,
+		IsEng:        arg.IsEng,
 		CreatedAt:    arg.CreatedAt,
 		UpdatedAt:    arg.UpdatedAt,
 		DeletedAt:    arg.DeletedAt,
 	})
-
-	fmt.Printf("【client】: %v\n", pr.client)
-
-	fmt.Printf("【res】: %v\n", res)
 
 	if err != nil {
 		return err
@@ -57,14 +54,14 @@ func (pr *PlatformRepository) CreatePlatform(ctx context.Context, arg domain.Pla
 
 // GetPlatforms is a method to get all platforms
 func (pr *PlatformRepository) GetPlatforms(ctx context.Context) ([]domain.Platform, error) {
-	iter := pr.client.Collection("platforms").Documents(ctx)
+	iter := pr.Client.Collection("platforms").Documents(ctx)
 	var platforms []domain.Platform
 	for {
 		doc, err := iter.Next()
 		if err != nil {
 			break
 		}
-		var p platformFirestore
+		var p PlatformFirestore
 		err = doc.DataTo(&p)
 		if err != nil {
 			return nil, err
@@ -75,6 +72,7 @@ func (pr *PlatformRepository) GetPlatforms(ctx context.Context) ([]domain.Platfo
 			RssURL:       p.RssURL,
 			SiteURL:      p.SiteURL,
 			PlatformType: p.PlatformType,
+			IsEng:        p.IsEng,
 			CreatedAt:    p.CreatedAt,
 			UpdatedAt:    p.UpdatedAt,
 			DeletedAt:    p.DeletedAt,
@@ -85,11 +83,11 @@ func (pr *PlatformRepository) GetPlatforms(ctx context.Context) ([]domain.Platfo
 
 // GetPlatForm is a method to get a platform by id
 func (pr *PlatformRepository) GetPlatForm(ctx context.Context, id string) (domain.Platform, error) {
-	doc, err := pr.client.Collection("platforms").Doc(id).Get(ctx)
+	doc, err := pr.Client.Collection("platforms").Doc(id).Get(ctx)
 	if err != nil {
 		return domain.Platform{}, err
 	}
-	var p platformFirestore
+	var p PlatformFirestore
 	err = doc.DataTo(&p)
 	if err != nil {
 		return domain.Platform{}, err
@@ -100,6 +98,7 @@ func (pr *PlatformRepository) GetPlatForm(ctx context.Context, id string) (domai
 		RssURL:       p.RssURL,
 		SiteURL:      p.SiteURL,
 		PlatformType: p.PlatformType,
+		IsEng:        p.IsEng,
 		CreatedAt:    p.CreatedAt,
 		UpdatedAt:    p.UpdatedAt,
 		DeletedAt:    p.DeletedAt,
@@ -108,11 +107,12 @@ func (pr *PlatformRepository) GetPlatForm(ctx context.Context, id string) (domai
 
 // UpdatePlatform is a method to update a platform
 func (pr *PlatformRepository) UpdatePlatform(ctx context.Context, arg domain.Platform) error {
-	_, err := pr.client.Collection("platforms").Doc(arg.ID).Set(ctx, platformFirestore{
+	_, err := pr.Client.Collection("platforms").Doc(arg.ID).Set(ctx, PlatformFirestore{
 		Name:         arg.Name,
 		RssURL:       arg.RssURL,
 		SiteURL:      arg.SiteURL,
 		PlatformType: arg.PlatformType,
+		IsEng:        arg.IsEng,
 		CreatedAt:    arg.CreatedAt,
 		UpdatedAt:    arg.UpdatedAt,
 		DeletedAt:    arg.DeletedAt,
@@ -125,7 +125,7 @@ func (pr *PlatformRepository) UpdatePlatform(ctx context.Context, arg domain.Pla
 
 // DeletePlatform is a method to delete a platform
 func (pr *PlatformRepository) DeletePlatform(ctx context.Context, id string) error {
-	_, err := pr.client.Collection("platforms").Doc(id).Delete(ctx)
+	_, err := pr.Client.Collection("platforms").Doc(id).Delete(ctx)
 	if err != nil {
 		return err
 	}
