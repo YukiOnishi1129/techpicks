@@ -3,7 +3,6 @@ import Link from "next/link";
 
 export default async function Home() {
   const articles = await getArticles({});
-  console.log(articles.length);
   return (
     <div className="w-[90%] h-auto mt-4 mx-auto border-2 grid grid-cols-4 gap-4">
       {articles.map((article) => (

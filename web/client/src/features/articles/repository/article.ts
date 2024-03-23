@@ -4,22 +4,34 @@ import { Article, ArticlePlatform } from "@/types/article";
 const articleRef = db.collection("articles");
 
 type getArticleParams = {
-  limit?: number;
   keyword?: string;
+  platformId?: string;
+  limit?: number;
   sort?: FirebaseFirestore.OrderByDirection;
   sortColum?: string;
 };
 
 export const getArticles = async ({
-  limit = 20,
   keyword,
+  platformId,
+  limit = 20,
   sort = "desc",
   sortColum = "published_at",
 }: getArticleParams) => {
-  if (keyword) {
-    articleRef.where("title", "array-contains", keyword);
+  let q = articleRef.limit(limit);
+
+  if (platformId) {
+    q = q.where("platform_id", "==", platformId);
   }
-  const snapshot = await articleRef.orderBy(sortColum, sort).limit(limit).get();
+  if (keyword) {
+    q = q
+      .orderBy("title")
+      .startAt(keyword)
+      .endAt(keyword + "\uf8ff");
+  } else {
+    q = q.orderBy(sortColum, sort);
+  }
+  const snapshot = await q.get();
   const articles = snapshot.docs.map((doc) => {
     const data = doc.data();
     return {
