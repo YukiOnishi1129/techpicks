@@ -28,33 +28,7 @@ func (ar *ArticleRepository) GetArticles(ctx context.Context) ([]domain.Article,
 		if err != nil {
 			break
 		}
-		data := doc.Data()
-
-		article := domain.Article{
-			ID:           doc.Ref.ID,
-			Title:        data["title"].(string),
-			Description:  data["description"].(string),
-			ThumbnailURL: data["thumbnail_url"].(string),
-			ArticleURL:   data["article_url"].(string),
-			Published:    data["published"].(string),
-			Platform: domain.ArticlePlatform{
-				ID:           data["platform_id"].(string),
-				Name:         data["platform_name"].(string),
-				PlatformType: data["platform_type"].(domain.PlatformType),
-				SiteURL:      data["platform_site_url"].(string),
-			},
-			IsEng:     data["is_eng"].(bool),
-			IsPrivate: data["is_private"].(bool),
-			CreatedAt: data["created_at"].(string),
-			UpdatedAt: data["updated_at"].(string),
-		}
-
-		if data["deleted_at"] != nil {
-			deletedAt := data["deleted_at"].(string)
-			article.DeletedAt = &deletedAt
-		}
-
-		articles = append(articles, article)
+		articles = append(articles, convertFirestoreToArticle(doc))
 	}
 	return articles, nil
 }
@@ -67,32 +41,7 @@ func (ar *ArticleRepository) GetArticlesByPlatform(ctx context.Context, platform
 		if err != nil {
 			break
 		}
-		data := doc.Data()
-		platformType := data["platform_type"].(int64)
-		article := domain.Article{
-			ID:           doc.Ref.ID,
-			Title:        data["title"].(string),
-			Description:  data["description"].(string),
-			ThumbnailURL: data["thumbnail_url"].(string),
-			ArticleURL:   data["article_url"].(string),
-			Published:    data["published"].(string),
-			Platform: domain.ArticlePlatform{
-				ID:           data["platform_id"].(string),
-				Name:         data["platform_name"].(string),
-				PlatformType: domain.PlatformType(platformType),
-				SiteURL:      data["platform_site_url"].(string),
-			},
-			IsEng:     data["is_eng"].(bool),
-			IsPrivate: data["is_private"].(bool),
-			CreatedAt: data["created_at"].(string),
-			UpdatedAt: data["updated_at"].(string),
-		}
-
-		if data["deleted_at"] != nil {
-			deletedAt := data["deleted_at"].(string)
-			article.DeletedAt = &deletedAt
-		}
-		articles = append(articles, article)
+		articles = append(articles, convertFirestoreToArticle(doc))
 	}
 	return articles, nil
 }
@@ -108,4 +57,32 @@ func (ar *ArticleRepository) GetCountArticlesByLink(ctx context.Context, link st
 		count++
 	}
 	return count, nil
+}
+
+func convertFirestoreToArticle(doc *firestore.DocumentSnapshot) domain.Article {
+	data := doc.Data()
+	platformType := data["platform_type"].(int64)
+	article := domain.Article{
+		ID:           doc.Ref.ID,
+		Title:        data["title"].(string),
+		Description:  data["description"].(string),
+		ThumbnailURL: data["thumbnail_url"].(string),
+		ArticleURL:   data["article_url"].(string),
+		Published:    data["published"].(string),
+		Platform: domain.ArticlePlatform{
+			ID:           data["platform_id"].(string),
+			Name:         data["platform_name"].(string),
+			PlatformType: domain.PlatformType(platformType),
+			SiteURL:      data["platform_site_url"].(string),
+		},
+		IsEng:     data["is_eng"].(bool),
+		IsPrivate: data["is_private"].(bool),
+		CreatedAt: data["created_at"].(string),
+		UpdatedAt: data["updated_at"].(string),
+	}
+	if data["deleted_at"] != nil {
+		deletedAt := data["deleted_at"].(string)
+		article.DeletedAt = &deletedAt
+	}
+	return article
 }
