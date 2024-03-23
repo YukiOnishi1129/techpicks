@@ -3,20 +3,23 @@ import { Article, ArticlePlatform } from "@/types/article";
 
 const articleRef = db.collection("articles");
 
+const LIMIT = 20;
+
 type getArticleParams = {
   platformId?: string;
-  limit?: number;
+  offset?: number;
   sort?: FirebaseFirestore.OrderByDirection;
   sortColum?: string;
 };
 
 export const getArticles = async ({
   platformId,
-  limit = 20,
+  offset = 1,
   sort = "desc",
   sortColum = "published_at",
 }: getArticleParams) => {
-  let q = articleRef.orderBy(sortColum, sort).limit(limit);
+  const order = (offset - 1) * LIMIT;
+  let q = articleRef.orderBy(sortColum, sort).limit(LIMIT).offset(order);
   if (platformId) {
     q = q.where("platform_id", "==", platformId);
   }
@@ -24,11 +27,14 @@ export const getArticles = async ({
   return snapshot.docs.map((doc) => convertToArticle(doc));
 };
 
-export const getArticlesByTitle = async (keyword: string) => {
+export const getArticlesByTitle = async (keyword: string, offset: number) => {
+  const order = (offset - 1) * LIMIT;
   const snapshot = await articleRef
     .orderBy("title")
     .startAt(keyword)
     .endAt(keyword + "\uf8ff")
+    .limit(LIMIT)
+    .offset(order)
     .get();
   return snapshot.docs.map((doc) => {
     return convertToArticle(doc);
