@@ -15,7 +15,6 @@ type RSS struct {
 }
 
 func GetRSS(rssURL string) ([]RSS, error) {
-	//var wg sync.WaitGroup
 	fp := gofeed.NewParser()
 	feed, err := fp.ParseURL(rssURL)
 	if err != nil {
@@ -23,9 +22,6 @@ func GetRSS(rssURL string) ([]RSS, error) {
 	}
 	items := feed.Items
 	rss := make([]RSS, len(items))
-	//wg.Add(1)
-	//go func(items []*gofeed.Item) {
-	//defer wg.Done()
 	for i, item := range items {
 		image, err := getOGPImage(item.Link)
 		if err != nil {
@@ -40,8 +36,6 @@ func GetRSS(rssURL string) ([]RSS, error) {
 			Image:       image,
 		}
 	}
-	//}(items)
-	//wg.Wait()
 	return rss, nil
 }
 

@@ -7,6 +7,7 @@ import (
 	"github.com/YukiOnishi1129/techpicks/batch-service/infrastructure/firestore/repository"
 	"github.com/google/uuid"
 	"log"
+	"sync"
 	"time"
 )
 
@@ -53,7 +54,7 @@ func (au *ArticleUsecase) CreateArticles(ctx context.Context, client *firestore.
 		return err
 	}
 	for _, p := range platforms {
-		//var wg sync.WaitGroup
+		var wg sync.WaitGroup
 		rss, err := GetRSS(p.RssURL)
 		articles, err := au.ar.GetArticlesByPlatform(ctx, p.ID)
 		if err != nil {
@@ -62,9 +63,9 @@ func (au *ArticleUsecase) CreateArticles(ctx context.Context, client *firestore.
 		if err != nil {
 			return err
 		}
-		//wg.Add(1)
-		createArticles(ctx, client, articles, rss, p)
-		//wg.Wait()
+		wg.Add(1)
+		go createArticles(ctx, client, &wg, articles, rss, p)
+		wg.Wait()
 	}
 
 	end := time.Now()
@@ -73,9 +74,9 @@ func (au *ArticleUsecase) CreateArticles(ctx context.Context, client *firestore.
 	return nil
 }
 
-func createArticles(ctx context.Context, client *firestore.Client, articles []domain.Article, rss []RSS, p domain.Platform) {
+func createArticles(ctx context.Context, client *firestore.Client, wg *sync.WaitGroup, articles []domain.Article, rss []RSS, p domain.Platform) {
 	log.Printf("【start create article】: %s", p.Name)
-	//defer wg.Done()
+	defer wg.Done()
 	batch := client.BulkWriter(ctx)
 	aCount := 0
 
