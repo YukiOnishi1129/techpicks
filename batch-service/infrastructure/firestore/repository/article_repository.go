@@ -68,7 +68,7 @@ func convertFirestoreToArticle(doc *firestore.DocumentSnapshot) domain.Article {
 		Description:  data["description"].(string),
 		ThumbnailURL: data["thumbnail_url"].(string),
 		ArticleURL:   data["article_url"].(string),
-		Published:    data["published"].(string),
+		PublishedAt:  data["published_at"].(string),
 		Platform: domain.ArticlePlatform{
 			ID:           data["platform_id"].(string),
 			Name:         data["platform_name"].(string),

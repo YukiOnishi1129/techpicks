@@ -3,8 +3,23 @@ import { Article, ArticlePlatform } from "@/types/article";
 
 const articleRef = db.collection("articles");
 
-export const getArticles = async (limit: number) => {
-  const snapshot = await articleRef.limit(limit).get();
+type getArticleParams = {
+  limit?: number;
+  keyword?: string;
+  sort?: FirebaseFirestore.OrderByDirection;
+  sortColum?: string;
+};
+
+export const getArticles = async ({
+  limit = 20,
+  keyword,
+  sort = "desc",
+  sortColum = "published_at",
+}: getArticleParams) => {
+  if (keyword) {
+    articleRef.where("title", "array-contains", keyword);
+  }
+  const snapshot = await articleRef.orderBy(sortColum, sort).limit(limit).get();
   const articles = snapshot.docs.map((doc) => {
     doc.data();
 

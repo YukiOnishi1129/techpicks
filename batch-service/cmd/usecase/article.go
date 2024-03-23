@@ -87,7 +87,7 @@ func createArticles(ctx context.Context, client *firestore.Client, wg *sync.Wait
 			Description:     r.Description,
 			ThumbnailURL:    r.Image,
 			ArticleURL:      r.Link,
-			Published:       r.Published,
+			PublishedAt:     r.PublishedAt,
 			PlatformID:      p.ID,
 			PlatformName:    p.Name,
 			PlatformSiteURL: p.SiteURL,

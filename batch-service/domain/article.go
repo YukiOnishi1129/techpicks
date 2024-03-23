@@ -6,7 +6,7 @@ type Article struct {
 	Description  string
 	ThumbnailURL string
 	ArticleURL   string
-	Published    string
+	PublishedAt  string
 	Platform     ArticlePlatform
 	IsEng        bool
 	IsPrivate    bool
@@ -28,7 +28,7 @@ type ArticleFirestore struct {
 	Description     string       `firestore:"description"`
 	ThumbnailURL    string       `firestore:"thumbnail_url"`
 	ArticleURL      string       `firestore:"article_url"`
-	Published       string       `firestore:"published"`
+	PublishedAt     string       `firestore:"published_at"`
 	PlatformID      string       `firestore:"platform_id"`
 	PlatformName    string       `firestore:"platform_name"`
 	PlatformType    PlatformType `firestore:"platform_type"`
