@@ -21,28 +21,25 @@ export const getArticles = async ({
   }
   const snapshot = await articleRef.orderBy(sortColum, sort).limit(limit).get();
   const articles = snapshot.docs.map((doc) => {
-    doc.data();
-
     const data = doc.data();
-    const platform = doc.data().platform as ArticlePlatform;
     return {
       id: doc.id,
       title: data["title"],
       description: data["description"],
-      thumbnailURL: doc.data().thumbnailURL,
-      articleUrl: doc.data().articleUrl,
-      publishedAt: doc.data().publishedAt,
+      thumbnailURL: data["thumbnail_url"],
+      articleUrl: data["article_url"],
+      publishedAt: data["published_at"],
       platform: {
-        id: platform.id,
-        name: platform.name,
-        platformType: platform.platformType,
-        siteUrl: platform.siteUrl,
+        id: data["platform_id"],
+        name: data["platform_name"],
+        platformType: data["platform_type"],
+        siteUrl: data["platform_site_url"],
       },
-      isEng: doc.data().isEng,
-      isPrivate: doc.data().isPrivate,
-      createdAt: doc.data().createdAt,
-      updatedAt: doc.data().updatedAt,
-      deletedAt: doc.data().deletedAt,
+      isEng: data["is_eng"],
+      isPrivate: data["is_private"],
+      createdAt: data["created_at"],
+      updatedAt: data["updated_at"],
+      deletedAt: data["deleted_at"],
     } as Article;
   });
   return articles;
