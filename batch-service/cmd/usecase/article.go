@@ -7,7 +7,6 @@ import (
 	"github.com/YukiOnishi1129/techpicks/batch-service/infrastructure/firestore/repository"
 	"github.com/google/uuid"
 	"log"
-	"sync"
 	"time"
 )
 
@@ -54,14 +53,18 @@ func (au *ArticleUsecase) CreateArticles(ctx context.Context, client *firestore.
 		return err
 	}
 	for _, p := range platforms {
-		var wg sync.WaitGroup
+		//var wg sync.WaitGroup
 		rss, err := GetRSS(p.RssURL)
+		articles, err := au.ar.GetArticlesByPlatform(ctx, p.ID)
+		if err != nil {
+			continue
+		}
 		if err != nil {
 			return err
 		}
-		wg.Add(1)
-		go createArticles(ctx, client, au.ar, &wg, rss, p)
-		wg.Wait()
+		//wg.Add(1)
+		createArticles(ctx, client, articles, rss, p)
+		//wg.Wait()
 	}
 
 	end := time.Now()
@@ -70,19 +73,25 @@ func (au *ArticleUsecase) CreateArticles(ctx context.Context, client *firestore.
 	return nil
 }
 
-func createArticles(ctx context.Context, client *firestore.Client, ar *repository.ArticleRepository, wg *sync.WaitGroup, rss []RSS, p domain.Platform) {
+func createArticles(ctx context.Context, client *firestore.Client, articles []domain.Article, rss []RSS, p domain.Platform) {
 	log.Printf("【start create article】: %s", p.Name)
-	defer wg.Done()
-
+	//defer wg.Done()
 	batch := client.BulkWriter(ctx)
 	aCount := 0
+
 	for _, r := range rss {
-		// confirm same article
-		count, err := ar.GetCountArticlesByLink(ctx, r.Link)
-		if count > 0 {
+		isSkip := false
+		for _, article := range articles {
+			if article.ArticleURL == r.Link {
+				isSkip = true
+				break
+			}
+		}
+		if isSkip {
 			log.Printf("【skip create article】: %s", r.Title)
 			continue
 		}
+
 		articleID, err := uuid.NewUUID()
 		if err != nil {
 			continue
