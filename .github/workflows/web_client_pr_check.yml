@@ -6,6 +6,7 @@ on:
       - "main"
       - "develop"
       - "feature/*"
+      - "YL-*"
     paths:
       - "web/client/**"
       - ".github/workflows/web_client_pr_check.yml"
@@ -41,3 +42,5 @@ jobs:
 
       - name: Build
         run: npm run build
+        env:
+          GOOGLE_CREDENTIALS_JSON: ${{ secrets.GOOGLE_CREDENTIALS_JSON }}
