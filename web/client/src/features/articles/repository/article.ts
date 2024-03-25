@@ -1,5 +1,5 @@
 import { db } from "@/lib/firestore";
-import { Article, ArticlePlatform } from "@/types/article";
+import { Article } from "@/types/article";
 
 const articleRef = db.collection("articles");
 
