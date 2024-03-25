@@ -22,20 +22,9 @@ func NewPlatformRepository(client *firestore.Client) *PlatformRepository {
 	return &PlatformRepository{Client: client}
 }
 
-type PlatformFirestore struct {
-	Name         string              `firestore:"name"`
-	RssURL       string              `firestore:"rss_url"`
-	SiteURL      string              `firestore:"site_url"`
-	PlatformType domain.PlatformType `firestore:"platform_type"`
-	IsEng        bool                `firestore:"is_eng"`
-	CreatedAt    string              `firestore:"created_at"`
-	UpdatedAt    string              `firestore:"updated_at"`
-	DeletedAt    *string             `firestore:"deleted_at"`
-}
-
 // CreatePlatform is a method to create a platform
 func (pr *PlatformRepository) CreatePlatform(ctx context.Context, arg domain.Platform) error {
-	_, err := pr.Client.Collection("platforms").Doc(arg.ID).Set(ctx, PlatformFirestore{
+	_, err := pr.Client.Collection("platforms").Doc(arg.ID).Set(ctx, domain.PlatformFirestore{
 		Name:         arg.Name,
 		RssURL:       arg.RssURL,
 		SiteURL:      arg.SiteURL,
@@ -61,38 +50,7 @@ func (pr *PlatformRepository) GetPlatforms(ctx context.Context) ([]domain.Platfo
 		if err != nil {
 			break
 		}
-		//var p PlatformFirestore
-		//err = doc.DataTo(&p)
-		//println("🔥🔥🔥🔥🔥🔥🔥🔥")
-		//println(fmt.Printf("%+v", doc.Data()))
-		//if err != nil {
-		//	return nil, err
-		//}
-		//p := doc.Data()
-		//
-		//p["name"]
-		//doc.Data()
-		//name, err := doc.DataAt("Name")
-		//if err != nil {
-		//	return nil, err
-		//}
-		data := doc.Data()
-		platformType := data["PlatformType"].(int64)
-
-		platforms = append(platforms, domain.Platform{
-			ID:           doc.Ref.ID,
-			Name:         data["Name"].(string),
-			RssURL:       data["RssURL"].(string),
-			SiteURL:      data["SiteURL"].(string),
-			PlatformType: domain.PlatformType(platformType),
-			IsEng:        data["IsEng"].(bool),
-			CreatedAt:    data["CreatedAt"].(string),
-			UpdatedAt:    data["UpdatedAt"].(string),
-			//DeletedAt:    p.DeletedAt,
-		})
-		if data["DeletedAt"] != nil {
-			platforms[len(platforms)-1].DeletedAt = data["DeletedAt"].(*string)
-		}
+		platforms = append(platforms, convertFirestoreToPlatform(doc))
 	}
 	return platforms, nil
 }
@@ -103,27 +61,12 @@ func (pr *PlatformRepository) GetPlatForm(ctx context.Context, id string) (domai
 	if err != nil {
 		return domain.Platform{}, err
 	}
-	var p PlatformFirestore
-	err = doc.DataTo(&p)
-	if err != nil {
-		return domain.Platform{}, err
-	}
-	return domain.Platform{
-		ID:           doc.Ref.ID,
-		Name:         p.Name,
-		RssURL:       p.RssURL,
-		SiteURL:      p.SiteURL,
-		PlatformType: p.PlatformType,
-		IsEng:        p.IsEng,
-		CreatedAt:    p.CreatedAt,
-		UpdatedAt:    p.UpdatedAt,
-		DeletedAt:    p.DeletedAt,
-	}, nil
+	return convertFirestoreToPlatform(doc), nil
 }
 
 // UpdatePlatform is a method to update a platform
 func (pr *PlatformRepository) UpdatePlatform(ctx context.Context, arg domain.Platform) error {
-	_, err := pr.Client.Collection("platforms").Doc(arg.ID).Set(ctx, PlatformFirestore{
+	_, err := pr.Client.Collection("platforms").Doc(arg.ID).Set(ctx, domain.PlatformFirestore{
 		Name:         arg.Name,
 		RssURL:       arg.RssURL,
 		SiteURL:      arg.SiteURL,
@@ -146,4 +89,24 @@ func (pr *PlatformRepository) DeletePlatform(ctx context.Context, id string) err
 		return err
 	}
 	return nil
+}
+
+// convertFirestoreToPlatform is a method to convert firestore data to platform
+func convertFirestoreToPlatform(doc *firestore.DocumentSnapshot) domain.Platform {
+	data := doc.Data()
+	platformType := data["platform_type"].(int64)
+	platform := domain.Platform{
+		ID:           doc.Ref.ID,
+		Name:         data["name"].(string),
+		RssURL:       data["rss_url"].(string),
+		SiteURL:      data["site_url"].(string),
+		PlatformType: domain.PlatformType(platformType),
+		IsEng:        data["is_eng"].(bool),
+		CreatedAt:    data["created_at"].(string),
+		UpdatedAt:    data["updated_at"].(string),
+	}
+	if data["deleted_at"] != nil {
+		platform.DeletedAt = data["deleted_at"].(*string)
+	}
+	return platform
 }

@@ -10,7 +10,7 @@ type RSS struct {
 	Title       string
 	Link        string
 	Description string
-	Published   string
+	PublishedAt string
 	Image       string
 }
 
@@ -32,7 +32,7 @@ func GetRSS(rssURL string) ([]RSS, error) {
 			Title:       item.Title,
 			Link:        item.Link,
 			Description: item.Description,
-			Published:   item.Published,
+			PublishedAt: item.Published,
 			Image:       image,
 		}
 	}
