@@ -3,6 +3,7 @@ package seeders
 import (
 	"cloud.google.com/go/firestore"
 	"context"
+	"fmt"
 	"github.com/YukiOnishi1129/techpicks/batch-service/domain"
 	"github.com/google/uuid"
 	"time"
@@ -22,8 +23,27 @@ func NewPlatformSeed(client *firestore.Client) *PlatformSeed {
 
 func (ps *PlatformSeed) SeedPlatform(ctx context.Context) error {
 	batch := ps.Client.BulkWriter(ctx)
-	platforms := getPlatforms()
-	for _, platform := range platforms {
+	iter := ps.Client.Collection("platforms").Documents(ctx)
+
+	platforms := getPlatformDatas()
+	for _, p := range platforms {
+		isSkip := false
+		for {
+			doc, err := iter.Next()
+			if err != nil {
+				break
+			}
+			data := doc.Data()
+			if data["site_url"].(string) == p.SiteURL {
+				isSkip = true
+				break
+			}
+		}
+		if isSkip {
+			fmt.Printf("skip: %s\n", p.Name)
+			continue
+		}
+
 		platformID, err := uuid.NewUUID()
 		if err != nil {
 			return err
@@ -32,12 +52,11 @@ func (ps *PlatformSeed) SeedPlatform(ctx context.Context) error {
 
 		ref := ps.Client.Collection("platforms").Doc(platformID.String())
 		_, err = batch.Set(ref, domain.PlatformFirestore{
-			ID:           platformID.String(),
-			Name:         platform.Name,
-			RssURL:       platform.RssURL,
-			SiteURL:      platform.SiteURL,
-			PlatformType: platform.PlatformType,
-			IsEng:        platform.IsEng,
+			Name:         p.Name,
+			RssURL:       p.RssURL,
+			SiteURL:      p.SiteURL,
+			PlatformType: p.PlatformType,
+			IsEng:        p.IsEng,
 			CreatedAt:    createdAt,
 			UpdatedAt:    createdAt,
 			DeletedAt:    nil,
@@ -50,7 +69,7 @@ func (ps *PlatformSeed) SeedPlatform(ctx context.Context) error {
 	return nil
 }
 
-func getPlatforms() []domain.PlatformFirestore {
+func getPlatformDatas() []domain.PlatformFirestore {
 	return []domain.PlatformFirestore{
 		{
 			Name:         "qiita",
@@ -497,6 +516,13 @@ func getPlatforms() []domain.PlatformFirestore {
 			Name:         "mercari",
 			RssURL:       "https://engineering.mercari.com/en/blog/feed.xml",
 			SiteURL:      "https://engineering.mercari.com/en/blog/",
+			PlatformType: domain.PlatformTypeCompany,
+			IsEng:        true,
+		},
+		{
+			Name:         "ROUTE 06",
+			RssURL:       "https://tech.route06.co.jp/feed",
+			SiteURL:      "https://tech.route06.co.jp/",
 			PlatformType: domain.PlatformTypeCompany,
 			IsEng:        false,
 		},
