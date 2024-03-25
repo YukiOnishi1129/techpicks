@@ -6,6 +6,7 @@ on:
       - "main"
       - "develop"
       - "feature/*"
+      - "YL-*"
     paths:
       - "web/client/**"
       - ".github/workflows/web_client_pr_check.yml"
