@@ -5,7 +5,7 @@ const articleRef = db.collection("articles");
 
 const LIMIT = 20;
 
-type getArticleParams = {
+export type GetArticleParams = {
   platformId?: string;
   offset?: number;
   sort?: FirebaseFirestore.OrderByDirection;
@@ -17,7 +17,8 @@ export const getArticles = async ({
   offset = 1,
   sort = "desc",
   sortColum = "published_at",
-}: getArticleParams) => {
+}: GetArticleParams) => {
+  "use server";
   const order = (offset - 1) * LIMIT;
   let q = articleRef.orderBy(sortColum, sort).limit(LIMIT).offset(order);
   if (platformId) {
