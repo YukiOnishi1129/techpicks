@@ -1,8 +1,9 @@
 "use client";
-import { AppShell, Burger, Container, Group, Skeleton } from "@mantine/core";
+import { AppShell, Container, Skeleton } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { MantineLogo } from "@mantinex/mantine-logo";
 import { ReactNode } from "react";
+
+import { Header } from "./Header";
 
 export const BaseLayout = ({ children }: { children: ReactNode }) => {
   const [desktopOpened, { toggle: toggleDesktop }] = useDisclosure();
@@ -17,15 +18,7 @@ export const BaseLayout = ({ children }: { children: ReactNode }) => {
       padding="md"
     >
       <AppShell.Header>
-        <Group h="100%" px="md">
-          <Burger
-            opened={desktopOpened}
-            onClick={toggleDesktop}
-            hiddenFrom="sm"
-            size="sm"
-          />
-          <MantineLogo size={30} />
-        </Group>
+        <Header desktopOpened={desktopOpened} toggleDesktop={toggleDesktop} />
       </AppShell.Header>
       <AppShell.Navbar p="md">
         Navbar
