@@ -1,0 +1,20 @@
+{
+  "folders": [
+    {
+      "name": "💻 Client",
+      "path": "./web/client"
+    },
+    {
+      "name": "🌉 Admin",
+      "path": "./web/admin"
+    },
+    {
+      "name": "🤖 Batch-service",
+      "path": "./batch-service/"
+    },
+    {
+      "name": "🌏 Root",
+      "path": "./"
+    }
+  ]
+}
