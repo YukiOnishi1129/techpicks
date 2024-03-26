@@ -6,6 +6,7 @@ on:
       - "main"
       - "develop"
       - "feature/*"
+      - "feat/*"
       - "YL-*"
     paths:
       - "web/client/**"

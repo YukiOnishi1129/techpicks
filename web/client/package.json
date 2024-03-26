@@ -10,12 +10,16 @@
     "lint:fix": "eslint --ext .js,.jsx,.ts,.tsx --fix ."
   },
   "dependencies": {
-    "@mantine/core": "^7.6.2",
-    "@mantine/hooks": "^7.6.2",
-    "@mantine/notifications": "^7.6.2",
+    "@auth/firebase-adapter": "^1.5.1",
+    "@mantine/core": "^7.7.0",
+    "@mantine/hooks": "^7.7.0",
+    "@mantine/notifications": "^7.7.0",
+    "@mantinex/mantine-logo": "^1.0.1",
+    "@next-auth/firebase-adapter": "^2.0.1",
     "firebase": "^10.9.0",
-    "firebase-admin": "^12.0.0",
+    "firebase-admin": "^11.4.1",
     "next": "^14.1.3",
+    "next-auth": "^4.24.7",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
