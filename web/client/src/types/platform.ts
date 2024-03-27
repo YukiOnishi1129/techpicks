@@ -5,9 +5,9 @@ export type Platform = {
   siteUrl: string;
   platformType: PlatformType;
   isEng: boolean;
-  createdAt: string;
-  updatedAt: string;
-  deletedAt?: string;
+  createdAt: number;
+  updatedAt: number;
+  deletedAt?: number;
 };
 
 export type PlatformType = {

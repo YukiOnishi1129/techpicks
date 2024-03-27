@@ -14,19 +14,18 @@ type Platform struct {
 	SiteURL      string
 	PlatformType PlatformType
 	IsEng        bool
-	CreatedAt    string
-	UpdatedAt    string
-	DeletedAt    *string
+	CreatedAt    int
+	UpdatedAt    int
+	DeletedAt    *int
 }
 
 type PlatformFirestore struct {
-	ID           string       `firestore:"id"`
 	Name         string       `firestore:"name"`
 	RssURL       string       `firestore:"rss_url"`
 	SiteURL      string       `firestore:"site_url"`
 	PlatformType PlatformType `firestore:"platform_type"`
 	IsEng        bool         `firestore:"is_eng"`
-	CreatedAt    string       `firestore:"created_at"`
-	UpdatedAt    string       `firestore:"updated_at"`
-	DeletedAt    *string      `firestore:"deleted_at"`
+	CreatedAt    int          `firestore:"created_at"`
+	UpdatedAt    int          `firestore:"updated_at"`
+	DeletedAt    *int         `firestore:"deleted_at"`
 }

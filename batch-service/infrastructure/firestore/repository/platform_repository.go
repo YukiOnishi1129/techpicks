@@ -95,6 +95,8 @@ func (pr *PlatformRepository) DeletePlatform(ctx context.Context, id string) err
 func convertFirestoreToPlatform(doc *firestore.DocumentSnapshot) domain.Platform {
 	data := doc.Data()
 	platformType := data["platform_type"].(int64)
+	cratedAt := data["created_at"].(int64)
+	updatedAt := data["updated_at"].(int64)
 	platform := domain.Platform{
 		ID:           doc.Ref.ID,
 		Name:         data["name"].(string),
@@ -102,11 +104,12 @@ func convertFirestoreToPlatform(doc *firestore.DocumentSnapshot) domain.Platform
 		SiteURL:      data["site_url"].(string),
 		PlatformType: domain.PlatformType(platformType),
 		IsEng:        data["is_eng"].(bool),
-		CreatedAt:    data["created_at"].(string),
-		UpdatedAt:    data["updated_at"].(string),
+		CreatedAt:    int(cratedAt),
+		UpdatedAt:    int(updatedAt),
 	}
 	if data["deleted_at"] != nil {
-		platform.DeletedAt = data["deleted_at"].(*string)
+		deletedAt := int(data["deleted_at"].(int64))
+		platform.DeletedAt = &deletedAt
 	}
 	return platform
 }

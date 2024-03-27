@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { FC } from "react";
 
+import { formatDate } from "@/lib/date";
 import { Article } from "@/types/article";
 
 type ArticleCardProps = {
@@ -20,6 +21,7 @@ export const ArticleCard: FC<ArticleCardProps> = ({
             alt=""
           />
         </div>
+        <p>{formatDate(article.publishedAt)}</p>
         <div className="w-full h-1/4 border-2 ">
           <h3>{article.title}</h3>
         </div>

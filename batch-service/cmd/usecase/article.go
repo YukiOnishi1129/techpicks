@@ -80,7 +80,7 @@ func createArticles(ctx context.Context, client *firestore.Client, wg *sync.Wait
 		if err != nil {
 			continue
 		}
-		createdAt := time.Now().Format("2006-01-02T15:04:05Z")
+		now := time.Now().Unix()
 		ref := client.Collection("articles").Doc(articleID.String())
 		_, err = batch.Set(ref, domain.ArticleFirestore{
 			Title:           r.Title,
@@ -94,8 +94,8 @@ func createArticles(ctx context.Context, client *firestore.Client, wg *sync.Wait
 			PlatformType:    p.PlatformType,
 			IsEng:           p.IsEng,
 			IsPrivate:       false,
-			CreatedAt:       createdAt,
-			UpdatedAt:       createdAt,
+			CreatedAt:       int(now),
+			UpdatedAt:       int(now),
 			DeletedAt:       nil,
 		})
 		if err != nil {
