@@ -20,11 +20,7 @@ export const getArticles = async ({
 }: GetArticleParams) => {
   "use server";
   const order = (offset - 1) * LIMIT;
-  let q = articleRef
-    .where("published_at", "!=", "")
-    .orderBy(sortColum, sort)
-    .limit(LIMIT)
-    .offset(order);
+  let q = articleRef.orderBy(sortColum, sort).limit(LIMIT).offset(order);
   if (platformId) {
     q = q.where("platform_id", "==", platformId);
   }

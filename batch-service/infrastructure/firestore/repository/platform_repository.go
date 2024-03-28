@@ -43,7 +43,14 @@ func (pr *PlatformRepository) CreatePlatform(ctx context.Context, arg domain.Pla
 
 // GetPlatforms is a method to get all platforms
 func (pr *PlatformRepository) GetPlatforms(ctx context.Context) ([]domain.Platform, error) {
-	iter := pr.Client.Collection("platforms").Documents(ctx)
+	iter := pr.Client.Collection("platforms").WhereEntity(firestore.OrFilter{
+		Filters: []firestore.EntityFilter{
+			firestore.PropertyFilter{
+				Path:     "deleted_at",
+				Operator: "==",
+				Value:    nil,
+			}},
+	}).Documents(ctx)
 	var platforms []domain.Platform
 	for {
 		doc, err := iter.Next()

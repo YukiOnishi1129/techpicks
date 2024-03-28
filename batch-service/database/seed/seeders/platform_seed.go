@@ -69,6 +69,7 @@ func (ps *PlatformSeed) SeedPlatform(ctx context.Context) error {
 }
 
 func getPlatformDatas() []domain.PlatformFirestore {
+	deletedAt := int(time.Now().Unix())
 	return []domain.PlatformFirestore{
 		{
 			Name:         "qiita",
@@ -125,6 +126,7 @@ func getPlatformDatas() []domain.PlatformFirestore {
 			SiteURL:      "https://stackoverflow.com/",
 			PlatformType: domain.PlatformTypeSite,
 			IsEng:        true,
+			DeletedAt:    &deletedAt,
 		},
 		{
 			Name:         "free code camp",

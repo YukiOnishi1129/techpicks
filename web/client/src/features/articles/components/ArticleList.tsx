@@ -69,9 +69,11 @@ export function ArticleList({ initialArticles, fetchArticles }: Props) {
   }, [loadMore, offset]);
 
   return (
-    <div className="w-[90%] h-auto mt-4 mx-auto border-2 grid grid-cols-3 gap-4">
-      {flatArticles.map((article) => (
-        <ArticleCard key={article.id} article={article} />
+    <div className="w-[90%] h-auto mt-4 mx-auto md:grid grid-cols-3 gap-4">
+      {flatArticles.map((article, index) => (
+        <div key={`${article.id}-${index}`} className="mb-4">
+          <ArticleCard article={article} />
+        </div>
       ))}
       <div ref={observerTarget}>{hashMore && <Loader />}</div>
     </div>
