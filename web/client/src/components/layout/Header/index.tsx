@@ -1,43 +1,18 @@
-"use client";
-
-import { Group, Burger, Loader } from "@mantine/core";
-import { MantineLogo } from "@mantinex/mantine-logo";
-import { Session } from "next-auth";
-import { useSession } from "next-auth/react";
+import Link from "next/link";
+import { getServerSession } from "next-auth/next";
 
 import { LoggedMenu } from "./LoggedMenu";
 import { NotLoggedMenu } from "./NotLoggedMenu";
 
-type HeaderProps = {
-  desktopOpened: boolean;
-  toggleDesktop: () => void;
-};
-
-export function Header({ desktopOpened, toggleDesktop }: HeaderProps) {
-  const { data: session, status } = useSession();
+export async function Header() {
+  const session = await getServerSession();
   return (
-    <Group h="100%" px="md">
-      <Burger
-        opened={desktopOpened}
-        onClick={toggleDesktop}
-        hiddenFrom="sm"
-        size="sm"
-      />
-      <MantineLogo size={30} />
-      <Navigation session={session} status={status} />
-    </Group>
+    <div className="fixed flex justify-between px-8 w-screen h-16 items-center bg-white border-b border-gray-300 shadow-md">
+      <Link href="/" className="cursor-pointer">
+        <h1 className="font-bold text-2xl">Tech Picks</h1>
+      </Link>
+
+      <div className="flex">{session ? <LoggedMenu /> : <NotLoggedMenu />}</div>
+    </div>
   );
 }
-
-type NavigationProps = {
-  session: Session | null;
-  status: "loading" | "authenticated" | "unauthenticated";
-};
-
-const Navigation = ({ session, status }: NavigationProps) => {
-  if (status === "loading") {
-    return <Loader />;
-  }
-
-  return <>{session ? <LoggedMenu /> : <NotLoggedMenu />}</>;
-};

@@ -1,7 +1,7 @@
 "use client";
-import { Loader } from "@mantine/core";
 import { useCallback, useRef, useState, useEffect } from "react";
 
+import { Loader } from "@/components/ui/loader";
 import { ArticleCard } from "@/features/articles/components/ArticleCard";
 import { GetArticleParams } from "@/features/articles/repository/article";
 import { Article } from "@/types/article";

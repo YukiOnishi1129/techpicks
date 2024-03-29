@@ -1,15 +1,16 @@
 "use client";
 
-import { Group, Button } from "@mantine/core";
 import Link from "next/link";
+
+import { Button } from "@/components/ui/button";
 
 export const NotLoggedMenu = () => {
   return (
-    <Group visibleFrom="sm">
+    <div className="grid grid-cols-2">
       <Link href="/login">
-        <Button variant="default">Login</Button>
+        <Button variant={"ghost"}>Login</Button>
       </Link>
-      <Button variant="white">Signup</Button>
-    </Group>
+      <Button variant={"destructive"}>Signup</Button>
+    </div>
   );
 };
