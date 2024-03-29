@@ -1,8 +1,8 @@
+import Link from "next/link";
 import { getServerSession } from "next-auth/next";
 
 import { LoggedMenu } from "./LoggedMenu";
 import { NotLoggedMenu } from "./NotLoggedMenu";
-import Link from "next/link";
 
 export async function Header() {
   const session = await getServerSession();
