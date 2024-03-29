@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"fmt"
+	"github.com/Songmu/go-httpdate"
 	"github.com/mmcdole/gofeed"
 	"github.com/otiai10/opengraph"
 )
@@ -10,7 +11,7 @@ type RSS struct {
 	Title       string
 	Link        string
 	Description string
-	PublishedAt string
+	PublishedAt int
 	Image       string
 }
 
@@ -28,11 +29,21 @@ func GetRSS(rssURL string) ([]RSS, error) {
 			println(fmt.Sprintf("【image】: %s\n", image))
 			continue
 		}
+		if item.Published == "" {
+			println(fmt.Sprintf("skiped published: %s\n", item.Published))
+			continue
+		}
+		t, err := httpdate.Str2Time(item.Published, nil)
+		if err != nil {
+			println(fmt.Sprintf("skiped time: %s\n", t))
+			continue
+		}
+
 		rss[i] = RSS{
 			Title:       item.Title,
 			Link:        item.Link,
 			Description: item.Description,
-			PublishedAt: item.Published,
+			PublishedAt: int(t.Unix()),
 			Image:       image,
 		}
 	}

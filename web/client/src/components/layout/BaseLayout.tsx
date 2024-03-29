@@ -1,9 +1,10 @@
 "use client";
-import { AppShell, Container, Skeleton } from "@mantine/core";
+import { AppShell, Container } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { ReactNode } from "react";
 
 import { Header } from "./Header";
+import { Sidebar } from "./Sidebar";
 
 export const BaseLayout = ({ children }: { children: ReactNode }) => {
   const [desktopOpened, { toggle: toggleDesktop }] = useDisclosure();
@@ -21,12 +22,12 @@ export const BaseLayout = ({ children }: { children: ReactNode }) => {
         <Header desktopOpened={desktopOpened} toggleDesktop={toggleDesktop} />
       </AppShell.Header>
       <AppShell.Navbar p="md">
-        Navbar
-        {Array(15)
+        <Sidebar />
+        {/* {Array(15)
           .fill(0)
           .map((_, index) => (
             <Skeleton key={index} h={28} mt="sm" animate={false} />
-          ))}
+          ))} */}
       </AppShell.Navbar>
       <AppShell.Main>
         <Container className="mt-16">{children}</Container>

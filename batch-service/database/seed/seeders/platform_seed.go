@@ -48,8 +48,7 @@ func (ps *PlatformSeed) SeedPlatform(ctx context.Context) error {
 		if err != nil {
 			return err
 		}
-		createdAt := time.Now().Format("2006-01-02T15:04:05Z")
-
+		now := time.Now().Unix()
 		ref := ps.Client.Collection("platforms").Doc(platformID.String())
 		_, err = batch.Set(ref, domain.PlatformFirestore{
 			Name:         p.Name,
@@ -57,8 +56,8 @@ func (ps *PlatformSeed) SeedPlatform(ctx context.Context) error {
 			SiteURL:      p.SiteURL,
 			PlatformType: p.PlatformType,
 			IsEng:        p.IsEng,
-			CreatedAt:    createdAt,
-			UpdatedAt:    createdAt,
+			CreatedAt:    int(now),
+			UpdatedAt:    int(now),
 			DeletedAt:    nil,
 		})
 		if err != nil {
@@ -70,6 +69,7 @@ func (ps *PlatformSeed) SeedPlatform(ctx context.Context) error {
 }
 
 func getPlatformDatas() []domain.PlatformFirestore {
+	deletedAt := int(time.Now().Unix())
 	return []domain.PlatformFirestore{
 		{
 			Name:         "qiita",
@@ -126,6 +126,7 @@ func getPlatformDatas() []domain.PlatformFirestore {
 			SiteURL:      "https://stackoverflow.com/",
 			PlatformType: domain.PlatformTypeSite,
 			IsEng:        true,
+			DeletedAt:    &deletedAt,
 		},
 		{
 			Name:         "free code camp",
@@ -159,13 +160,6 @@ func getPlatformDatas() []domain.PlatformFirestore {
 			Name:         "CyberAgent",
 			RssURL:       "https://developers.cyberagent.co.jp/blog/feed/",
 			SiteURL:      "https://developers.cyberagent.co.jp/blog/",
-			PlatformType: domain.PlatformTypeCompany,
-			IsEng:        false,
-		},
-		{
-			Name:         "リクルート",
-			RssURL:       "https://www.recruit.co.jp/employment/students/engineers/techblog/feed/",
-			SiteURL:      "https://www.recruit.co.jp/employment/students/engineers/techblog/",
 			PlatformType: domain.PlatformTypeCompany,
 			IsEng:        false,
 		},
@@ -523,6 +517,13 @@ func getPlatformDatas() []domain.PlatformFirestore {
 			Name:         "ROUTE 06",
 			RssURL:       "https://tech.route06.co.jp/feed",
 			SiteURL:      "https://tech.route06.co.jp/",
+			PlatformType: domain.PlatformTypeCompany,
+			IsEng:        false,
+		},
+		{
+			Name:         "スタディサプリ",
+			RssURL:       "https://blog.studysapuri.jp/rss",
+			SiteURL:      "https://blog.studysapuri.jp/",
 			PlatformType: domain.PlatformTypeCompany,
 			IsEng:        false,
 		},

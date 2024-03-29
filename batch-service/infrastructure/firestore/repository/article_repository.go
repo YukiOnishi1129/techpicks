@@ -62,13 +62,16 @@ func (ar *ArticleRepository) GetCountArticlesByLink(ctx context.Context, link st
 func convertFirestoreToArticle(doc *firestore.DocumentSnapshot) domain.Article {
 	data := doc.Data()
 	platformType := data["platform_type"].(int64)
+	publishedAt := int(data["published_at"].(int64))
+	createdAt := int(data["created_at"].(int64))
+	updatedAt := int(data["updated_at"].(int64))
 	article := domain.Article{
 		ID:           doc.Ref.ID,
 		Title:        data["title"].(string),
 		Description:  data["description"].(string),
 		ThumbnailURL: data["thumbnail_url"].(string),
 		ArticleURL:   data["article_url"].(string),
-		PublishedAt:  data["published_at"].(string),
+		PublishedAt:  publishedAt,
 		Platform: domain.ArticlePlatform{
 			ID:           data["platform_id"].(string),
 			Name:         data["platform_name"].(string),
@@ -77,11 +80,11 @@ func convertFirestoreToArticle(doc *firestore.DocumentSnapshot) domain.Article {
 		},
 		IsEng:     data["is_eng"].(bool),
 		IsPrivate: data["is_private"].(bool),
-		CreatedAt: data["created_at"].(string),
-		UpdatedAt: data["updated_at"].(string),
+		CreatedAt: createdAt,
+		UpdatedAt: updatedAt,
 	}
 	if data["deleted_at"] != nil {
-		deletedAt := data["deleted_at"].(string)
+		deletedAt := int(data["deleted_at"].(int64))
 		article.DeletedAt = &deletedAt
 	}
 	return article

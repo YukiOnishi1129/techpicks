@@ -6,13 +6,13 @@ export type Article = {
   description: string;
   thumbnailURL: string;
   articleUrl: string;
-  publishedAt: string;
+  publishedAt: number;
   platform: ArticlePlatform;
   isEng: boolean;
   isPrivate: boolean;
-  createdAt: string;
-  updatedAt: string;
-  deletedAt?: string;
+  createdAt: number;
+  updatedAt: number;
+  deletedAt?: number;
 };
 
 export type ArticlePlatform = {
