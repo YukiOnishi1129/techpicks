@@ -70,8 +70,8 @@ export function ArticleList({ initialArticles, fetchArticles }: Props) {
 
   return (
     <div className="w-[90%] h-auto mt-4 mx-auto md:grid grid-cols-3 gap-4">
-      {flatArticles.map((article, index) => (
-        <div key={`${article.id}-${index}`} className="mb-4">
+      {flatArticles.map((article) => (
+        <div key={article.id} className="mb-4">
           <ArticleCard article={article} />
         </div>
       ))}
