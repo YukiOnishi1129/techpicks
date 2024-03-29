@@ -1,10 +1,11 @@
 "use client";
 import { signIn } from "next-auth/react";
+import { Button } from "@/components/ui/button";
 
 export const LoginForm = () => {
   return (
-    <button onClick={() => signIn("google", { callbackUrl: "/" })}>
+    <Button onClick={() => signIn("google", { callbackUrl: "/" })}>
       Login
-    </button>
+    </Button>
   );
 };

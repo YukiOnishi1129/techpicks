@@ -1,5 +1,6 @@
 "use client";
 import { useCallback, useRef, useState, useEffect } from "react";
+import { Loader } from "@/components/ui/loader";
 
 import { ArticleCard } from "@/features/articles/components/ArticleCard";
 import { GetArticleParams } from "@/features/articles/repository/article";
@@ -74,7 +75,7 @@ export function ArticleList({ initialArticles, fetchArticles }: Props) {
           <ArticleCard article={article} />
         </div>
       ))}
-      <div ref={observerTarget}>{hashMore && <p>Loading...</p>}</div>
+      <div ref={observerTarget}>{hashMore && <Loader />}</div>
     </div>
   );
 }

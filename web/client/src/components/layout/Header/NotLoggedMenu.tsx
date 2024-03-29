@@ -1,14 +1,15 @@
 "use client";
 
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 export const NotLoggedMenu = () => {
   return (
     <div className="flex">
       <Link href="/login">
-        <button>Login</button>
+        <Button>Login</Button>
       </Link>
-      <button>Signup</button>
+      <Button>Signup</Button>
     </div>
   );
 };
