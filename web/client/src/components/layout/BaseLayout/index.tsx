@@ -11,11 +11,11 @@ export const BaseLayout = ({ children }: { children: ReactNode }) => {
       </header>
 
       <div className="h-16" />
-      <main className="flex">
-        <div className="fixed w-[200px] h-lvh">
+      <main className="md:flex">
+        <div className="invisible md:visible fixed w-[200px] h-lvh">
           <Sidebar />
         </div>
-        <div className="w-[200px] mr-[10px]" />
+        <div className="invisible md:visible w-[200px] mr-[10px]" />
         <div className="w-full mx-auto">{children}</div>
       </main>
     </div>
