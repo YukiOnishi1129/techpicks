@@ -69,9 +69,9 @@ export function ArticleList({ initialArticles, fetchArticles }: Props) {
   }, [loadMore, offset]);
 
   return (
-    <div className="w-[90%] h-auto mt-4 mx-auto md:grid grid-cols-3 gap-4">
+    <div className="w-[80%] h-auto mt-4 mx-auto">
       {flatArticles.map((article) => (
-        <div key={article.id} className="mb-4">
+        <div key={article.id} className="mb-10">
           <ArticleCard article={article} />
         </div>
       ))}

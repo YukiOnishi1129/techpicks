@@ -17,19 +17,25 @@ export const ArticleCard: FC<ArticleCardProps> = ({
   const imageUrl = useCheckImageExist(article.thumbnailURL);
 
   return (
-    <div className="cursor-pointer border-2">
+    <div className="cursor-pointer w-full rounded hover:opacity-30">
       <Link href={article.articleUrl} target="_blank">
-        <div className="w-full h-48 border-2 ">
-          <img
-            className="w-full h-full object-cover object-center"
-            src={imageUrl}
-            alt=""
-          />
-        </div>
-        <p>{formatDate(article.publishedAt)}</p>
-        <p>{article.platform.name}</p>
-        <div className="w-full h-1/4 border-2 ">
-          <h3>{article.title}</h3>
+        <div className="grid grid-cols-2">
+          <div className="w-[90%] h-48">
+            <img
+              className="h-full object-cover object-center rounded"
+              src={imageUrl}
+              alt=""
+            />
+          </div>
+          <div>
+            <div className="w-full h-1/4">
+              <h3>{article.title}</h3>
+            </div>
+            <div>
+              <p>{article.platform.name}</p>
+            </div>
+            <p>{formatDate(article.publishedAt)}</p>
+          </div>
         </div>
       </Link>
     </div>
