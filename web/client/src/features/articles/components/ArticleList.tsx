@@ -69,7 +69,7 @@ export function ArticleList({ initialArticles, fetchArticles }: Props) {
   }, [loadMore, offset]);
 
   return (
-    <div className="w-[80%] h-auto mt-4 mx-auto">
+    <div className="w-auto h-auto mt-4 mx-auto">
       {flatArticles.map((article) => (
         <div key={article.id} className="mb-10">
           <ArticleCard article={article} />

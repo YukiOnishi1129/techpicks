@@ -16,7 +16,7 @@ export const BaseLayout = ({ children }: { children: ReactNode }) => {
           <Sidebar />
         </div>
         <div className="invisible md:visible w-[200px] mr-[10px]" />
-        <div className="w-full mx-auto">{children}</div>
+        <div className="md:w-[70%] w-[90%] mx-auto">{children}</div>
       </main>
     </div>
   );
