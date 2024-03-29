@@ -1,5 +1,4 @@
 "use client";
-import { Loader } from "@mantine/core";
 import { useCallback, useRef, useState, useEffect } from "react";
 
 import { ArticleCard } from "@/features/articles/components/ArticleCard";
@@ -75,7 +74,7 @@ export function ArticleList({ initialArticles, fetchArticles }: Props) {
           <ArticleCard article={article} />
         </div>
       ))}
-      <div ref={observerTarget}>{hashMore && <Loader />}</div>
+      <div ref={observerTarget}>{hashMore && <p>Loading...</p>}</div>
     </div>
   );
 }

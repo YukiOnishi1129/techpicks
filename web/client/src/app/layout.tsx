@@ -1,4 +1,3 @@
-import { ColorSchemeScript } from "@mantine/core";
 import { Inter } from "next/font/google";
 
 import { BaseLayout } from "@/components/layout/BaseLayout";
@@ -6,7 +5,6 @@ import { BaseLayout } from "@/components/layout/BaseLayout";
 import { Providers } from "./provider";
 
 import type { Metadata } from "next";
-import "@mantine/core/styles.css";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -23,9 +21,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <head>
-        <ColorSchemeScript />
-      </head>
+      <head></head>
       <body className={inter.className}>
         <Providers>
           <BaseLayout> {children}</BaseLayout>

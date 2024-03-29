@@ -1,15 +1,14 @@
 "use client";
 
-import { Group, Button } from "@mantine/core";
 import Link from "next/link";
 
 export const NotLoggedMenu = () => {
   return (
-    <Group visibleFrom="sm">
+    <div className="flex">
       <Link href="/login">
-        <Button variant="default">Login</Button>
+        <button>Login</button>
       </Link>
-      <Button variant="white">Signup</Button>
-    </Group>
+      <button>Signup</button>
+    </div>
   );
 };
