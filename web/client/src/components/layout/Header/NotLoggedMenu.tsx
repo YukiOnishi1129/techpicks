@@ -5,11 +5,11 @@ import { Button } from "@/components/ui/button";
 
 export const NotLoggedMenu = () => {
   return (
-    <div className="flex">
+    <div className="grid grid-cols-2">
       <Link href="/login">
-        <Button>Login</Button>
+        <Button variant={"ghost"}>Login</Button>
       </Link>
-      <Button>Signup</Button>
+      <Button variant={"destructive"}>Signup</Button>
     </div>
   );
 };
