@@ -23,7 +23,6 @@ export const getArticles = async ({
   sortColum = "published_at",
 }: GetArticleParams) => {
   "use server";
-  if (offset > 3) return [];
   const order = (offset - 1) * LIMIT;
   let q = articleRef.orderBy(sortColum, sort).limit(LIMIT).offset(order);
   if (languageStatus != 0) {
@@ -39,7 +38,6 @@ export const getArticles = async ({
 
 export const getArticlesByTitle = async (keyword: string, offset: number) => {
   "use server";
-  if (offset > 5) return [];
   const order = (offset - 1) * LIMIT;
   const snapshot = await articleRef
     .orderBy("title")

@@ -88,14 +88,16 @@ export function ArticleList({
           <Button className="block ml-4 w-5/12">英語記事</Button>
         </div>
       </div>
-      {flatArticles.map((article) => (
-        <div key={article.id} className="border-t-2 py-8">
-          <ArticleDetailDialog article={article}>
-            <ArticleCard article={article} />
-          </ArticleDetailDialog>
-        </div>
-      ))}
-      <div ref={observerTarget}>{hashMore && <Loader />}</div>
+      <div className="overflow-y-scroll m-auto h-[600px]">
+        {flatArticles.map((article) => (
+          <div key={article.id} className="border-t-2 py-8">
+            <ArticleDetailDialog article={article}>
+              <ArticleCard article={article} />
+            </ArticleDetailDialog>
+          </div>
+        ))}
+        <div ref={observerTarget}>{hashMore && <Loader />}</div>
+      </div>
     </div>
   );
 }
