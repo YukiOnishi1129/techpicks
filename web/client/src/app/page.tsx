@@ -1,6 +1,6 @@
 import { ArticleListTemplate } from "@/features/articles/components/ArticleListTemplate";
-import { getArticles } from "@/features/articles/repository/article";
 
+import { Article } from "@/types/article";
 import { LanguageStatus } from "@/types/language";
 
 type PageProps = {
@@ -8,17 +8,47 @@ type PageProps = {
   searchParams: { [key: string]: string | string[] | undefined };
 };
 
-export default async function Home({ params, searchParams }: PageProps) {
+const getArticleApi = async ({
+  languageStatus,
+  offset,
+}: {
+  languageStatus: string;
+  offset: string;
+}) => {
+  "use server";
+  const response = await fetch(
+    `http://localhost:80/api/articles/?offset=${offset}&languageStatus=${languageStatus}`,
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      cache: "no-cache",
+    }
+  );
+  const data = await response.json();
+
+  return data.articles as Article[];
+};
+
+export default async function Home({ searchParams }: PageProps) {
   const languageStatus =
     typeof searchParams["languageStatus"] === "string"
       ? (parseInt(searchParams["languageStatus"]) as LanguageStatus)
-      : 0;
-  const articles = await getArticles({ languageStatus });
+      : 1;
+  const articles = await getArticleApi({
+    languageStatus: languageStatus.toString(),
+    offset: "1",
+  });
+
   return (
-    <ArticleListTemplate
-      initialArticles={articles}
-      languageStatus={languageStatus}
-      fetchArticles={getArticles}
-    />
+    <>
+      {articles && (
+        <ArticleListTemplate
+          initialArticles={articles}
+          languageStatus={languageStatus}
+          fetchArticles={getArticleApi}
+        />
+      )}
+    </>
   );
 }

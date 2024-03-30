@@ -1,3 +1,5 @@
+import { revalidateTag } from "next/cache";
+
 import { db } from "@/lib/firestore";
 
 import { Article } from "@/types/article";
@@ -33,6 +35,7 @@ export const getArticles = async ({
     q = q.where("platform_id", "==", platformId);
   }
   const snapshot = await q.get();
+  revalidateTag("articles");
   return snapshot.docs.map((doc) => convertToArticle(doc));
 };
 

@@ -1,8 +1,4 @@
-"use client";
-
 import { FC } from "react";
-
-import { GetArticleParams } from "@/features/articles/repository/article";
 
 import { Article } from "@/types/article";
 import { LanguageStatus } from "@/types/language";
@@ -13,12 +9,12 @@ type ArticleListProps = {
   initialArticles: Array<Article>;
   languageStatus: LanguageStatus;
   fetchArticles: ({
-    platformId,
     languageStatus,
     offset,
-    sort,
-    sortColum,
-  }: GetArticleParams) => Promise<Article[]>;
+  }: {
+    languageStatus: string;
+    offset: string;
+  }) => Promise<Article[]>;
 };
 
 export const ArticleListTemplate: FC<ArticleListProps> = ({

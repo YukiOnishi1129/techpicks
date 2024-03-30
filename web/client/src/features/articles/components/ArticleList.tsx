@@ -2,26 +2,25 @@
 import { useCallback, useRef, useState, useEffect } from "react";
 
 import { ArticleCard } from "@/features/articles/components/ArticleCard";
-import { GetArticleParams } from "@/features/articles/repository/article";
 
-import { Button } from "@/components/ui/button";
 import { Loader } from "@/components/ui/loader";
 
 import { Article } from "@/types/article";
 import { LanguageStatus } from "@/types/language";
 
 import { ArticleDetailDialog } from "./ArticleDetailDialog";
+import { LanguageTabMenu } from "./LanguageTabMenu";
 
 type Props = {
   initialArticles: Array<Article>;
   languageStatus: LanguageStatus;
   fetchArticles: ({
-    platformId,
     languageStatus,
     offset,
-    sort,
-    sortColum,
-  }: GetArticleParams) => Promise<Article[]>;
+  }: {
+    languageStatus: string;
+    offset: string;
+  }) => Promise<Article[]>;
 };
 
 export function ArticleList({
@@ -39,7 +38,10 @@ export function ArticleList({
 
   const loadMore = useCallback(
     async (offset: number) => {
-      const newArticles = await fetchArticles({ offset, languageStatus });
+      const newArticles = await fetchArticles({
+        offset: offset.toString(),
+        languageStatus: languageStatus.toString(),
+      });
       setArticles((prev) => [...prev, ...newArticles]);
 
       const count = newArticles.length;
@@ -83,10 +85,7 @@ export function ArticleList({
   return (
     <div className="w-auto">
       <div className="bg-white w-full py-4 border-b-2">
-        <div className="flex justify-around">
-          <Button className="block w-5/12">日本語記事</Button>
-          <Button className="block ml-4 w-5/12">英語記事</Button>
-        </div>
+        <LanguageTabMenu languageStatus={languageStatus} />
       </div>
       <div className="overflow-y-scroll m-auto h-[600px]">
         {flatArticles.map((article) => (
