@@ -48,7 +48,7 @@ const convertToArticle = (doc: FirebaseFirestore.QueryDocumentSnapshot) => {
   return {
     id: doc.id,
     title: data["title"],
-    description: data["description"],
+    description: data.description,
     thumbnailURL: data["thumbnail_url"],
     articleUrl: data["article_url"],
     publishedAt: data["published_at"],

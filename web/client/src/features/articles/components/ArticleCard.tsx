@@ -1,5 +1,5 @@
 "use client";
-import parse, { HTMLReactParserOptions } from "html-react-parser";
+
 import Link from "next/link";
 import { FC } from "react";
 
@@ -15,16 +15,6 @@ export const ArticleCard: FC<ArticleCardProps> = ({
   article,
 }: ArticleCardProps) => {
   const imageUrl = useCheckImageExist(article.thumbnailURL);
-
-  const options: HTMLReactParserOptions = {
-    replace(domNode) {
-      // @ts-ignore
-      if (domNode.name === "img") return <></>;
-      // @ts-ignore
-      if (domNode.name === "strong") return <p></p>;
-    },
-  };
-
   return (
     <div className="cursor-pointer relative w-full rounded hover:opacity-30">
       <Link href={article.articleUrl} target="_blank">
@@ -38,7 +28,7 @@ export const ArticleCard: FC<ArticleCardProps> = ({
           </div>
 
           <div className="w-[65%]">
-            <h3 className="w-full h-18 font-bold md:text-lg text-md line-clamp-3">
+            <h3 className="w-full h-18 font-bold md:text-2xl text-md line-clamp-3">
               {article.title}
             </h3>
             <div className="py-2">
@@ -46,11 +36,16 @@ export const ArticleCard: FC<ArticleCardProps> = ({
                 {article.platform.name}
               </span>
             </div>
-            <div className="hidden md:inline-block">
-              <p className="line-clamp-3">
+            {/* <div className="hidden md:inline-block"> */}
+            {/* <div
+                className="line-clamp-3"
+                dangerouslySetInnerHTML={{ __html: article.description }}
+              /> */}
+            {/* <p className="line-clamp-3">{article.description}</p> */}
+            {/* <div className="line-clamp-3">
                 {parse(article.description, options)}
-              </p>
-            </div>
+              </div> */}
+            {/* </div> */}
 
             {/* <p>{formatDate(article.publishedAt)}</p> */}
           </div>
