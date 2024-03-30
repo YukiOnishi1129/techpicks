@@ -30,6 +30,7 @@ export const getArticles = async ({
 };
 
 export const getArticlesByTitle = async (keyword: string, offset: number) => {
+  "use server";
   const order = (offset - 1) * LIMIT;
   const snapshot = await articleRef
     .orderBy("title")
@@ -43,12 +44,23 @@ export const getArticlesByTitle = async (keyword: string, offset: number) => {
   });
 };
 
-const convertToArticle = (doc: FirebaseFirestore.QueryDocumentSnapshot) => {
+export const getArticleById = async (id: string) => {
+  "use server";
+  const doc = await articleRef.doc(id).get();
+  return convertToArticle(doc);
+};
+
+const convertToArticle = (
+  doc: FirebaseFirestore.DocumentSnapshot<FirebaseFirestore.DocumentData>
+) => {
   const data = doc.data();
+  if (!data) {
+    throw new Error("Document data is not found");
+  }
   return {
     id: doc.id,
     title: data["title"],
-    description: data["description"],
+    description: data.description,
     thumbnailURL: data["thumbnail_url"],
     articleUrl: data["article_url"],
     publishedAt: data["published_at"],

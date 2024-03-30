@@ -71,9 +71,9 @@ export function ArticleList({ initialArticles, fetchArticles }: Props) {
   }, [loadMore, offset]);
 
   return (
-    <div className="w-auto h-auto mt-4 mx-auto">
+    <div className="w-auto h-auto mt-16 mx-auto">
       {flatArticles.map((article) => (
-        <div key={article.id} className="mb-10">
+        <div key={article.id} className="border-t-2 py-8">
           <ArticleCard article={article} />
         </div>
       ))}
