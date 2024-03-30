@@ -1,6 +1,7 @@
 import { db } from "@/lib/firestore";
 
 import { Article } from "@/types/article";
+import { LanguageStatus } from "@/types/language";
 
 const articleRef = db.collection("articles");
 
@@ -8,6 +9,7 @@ const LIMIT = 20;
 
 export type GetArticleParams = {
   platformId?: string;
+  languageStatus?: LanguageStatus;
   offset?: number;
   sort?: FirebaseFirestore.OrderByDirection;
   sortColum?: string;
@@ -15,13 +17,19 @@ export type GetArticleParams = {
 
 export const getArticles = async ({
   platformId,
+  languageStatus = 0,
   offset = 1,
   sort = "desc",
   sortColum = "published_at",
 }: GetArticleParams) => {
   "use server";
+  if (offset > 3) return [];
   const order = (offset - 1) * LIMIT;
   let q = articleRef.orderBy(sortColum, sort).limit(LIMIT).offset(order);
+  if (languageStatus != 0) {
+    const isEng = languageStatus === 2;
+    q = q.where("is_eng", "==", isEng);
+  }
   if (platformId) {
     q = q.where("platform_id", "==", platformId);
   }
@@ -31,6 +39,7 @@ export const getArticles = async ({
 
 export const getArticlesByTitle = async (keyword: string, offset: number) => {
   "use server";
+  if (offset > 5) return [];
   const order = (offset - 1) * LIMIT;
   const snapshot = await articleRef
     .orderBy("title")

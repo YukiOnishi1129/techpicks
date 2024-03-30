@@ -1,4 +1,5 @@
 "use client";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useRef, useState, useEffect } from "react";
 
 import { ArticleCard } from "@/features/articles/components/ArticleCard";
@@ -15,6 +16,7 @@ type Props = {
   initialArticles: Array<Article>;
   fetchArticles: ({
     platformId,
+    languageStatus,
     offset,
     sort,
     sortColum,
@@ -22,6 +24,9 @@ type Props = {
 };
 
 export function ArticleList({ initialArticles, fetchArticles }: Props) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const params = new URLSearchParams(searchParams);
   const observerTarget = useRef(null);
 
   const [articles, setArticles] = useState<Article[]>(initialArticles);
@@ -32,19 +37,23 @@ export function ArticleList({ initialArticles, fetchArticles }: Props) {
 
   const loadMore = useCallback(
     async (offset: number) => {
+      params.set("languageStatus", "1");
       const newArticles = await fetchArticles({ offset });
       setArticles((prev) => [...prev, ...newArticles]);
 
       const count = newArticles.length;
       setHashMore(count > 0);
+      router.replace(`/?${params.toString()}`);
     },
-    [fetchArticles]
+    [fetchArticles, router, params]
   );
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
+          console.log("🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥");
+          console.log(entry.isIntersecting);
           if (entry.isIntersecting && hashMore) {
             setOffset((prev) => prev + 1);
           }
@@ -81,16 +90,14 @@ export function ArticleList({ initialArticles, fetchArticles }: Props) {
           <Button className="block ml-4 w-5/12">英語記事</Button>
         </div>
       </div>
-      <div className="overflow-y-scroll m-auto h-[600px]">
-        {flatArticles.map((article) => (
-          <div key={article.id} className="border-t-2 py-8">
-            <ArticleDetailDialog article={article}>
-              <ArticleCard article={article} />
-            </ArticleDetailDialog>
-          </div>
-        ))}
-        <div ref={observerTarget}>{hashMore && <Loader />}</div>
-      </div>
+      {flatArticles.map((article) => (
+        <div key={article.id} className="border-t-2 py-8">
+          <ArticleDetailDialog article={article}>
+            <ArticleCard article={article} />
+          </ArticleDetailDialog>
+        </div>
+      ))}
+      <div ref={observerTarget}>{hashMore && <Loader />}</div>
     </div>
   );
 }
