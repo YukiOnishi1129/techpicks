@@ -6,7 +6,7 @@ import { FC } from "react";
 
 import { useCheckImageExist } from "@/hooks/useImage";
 
-import { Article, Article } from "@/types/article";
+import { Article } from "@/types/article";
 
 type ArticleCardProps = {
   article: Article;
