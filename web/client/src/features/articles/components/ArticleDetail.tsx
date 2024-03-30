@@ -7,6 +7,8 @@ import { Button } from "@/components/ui/button";
 import { useCheckImageExist } from "@/hooks/useImage";
 import { useParseHtml } from "@/hooks/useParseHtml";
 
+import { showDiffDateToCurrentDate } from "@/lib/date";
+
 import { Article } from "@/types/article";
 
 type ArticleDetailProps = {
@@ -27,7 +29,7 @@ export const ArticleDetail = ({ article }: ArticleDetailProps) => {
 
       <div>
         <img
-          className="m-auto h-[370px] pb-8 rounded-md "
+          className="m-auto h-[370px] pb-8 rounded-md object-cover object-center"
           src={imageUrl}
           alt=""
         />
@@ -41,10 +43,13 @@ export const ArticleDetail = ({ article }: ArticleDetailProps) => {
               {article.platform.name}
             </span>
           </Link>
+          <span className="pl-2 text-sm">
+            {showDiffDateToCurrentDate(article.publishedAt)}
+          </span>
         </div>
 
         <div className="">
-          <p>{convertParseHtml(article.description)}</p>
+          <div>{convertParseHtml(article.description)}</div>
         </div>
 
         <div className="my-10 text-center">

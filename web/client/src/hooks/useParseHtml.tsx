@@ -6,7 +6,7 @@ export const useParseHtml = () => {
     return {
       replace(domNode) {
         // @ts-ignore
-        if (domNode.name === "img") return <></>;
+        if (domNode.name === "img" || domNode.name === "iframe") return <></>;
         // @ts-ignore
         if (domNode.name === "strong") return <p></p>;
       },

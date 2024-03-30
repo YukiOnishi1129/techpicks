@@ -5,6 +5,8 @@ import { FC } from "react";
 
 import { useCheckImageExist } from "@/hooks/useImage";
 
+import { showDiffDateToCurrentDate } from "@/lib/date";
+
 import { Article } from "@/types/article";
 
 type ArticleCardProps = {
@@ -27,19 +29,10 @@ export const ArticleCard: FC<ArticleCardProps> = ({
               <span className="md:text-md text-xs font-bold px-2 py-1 rounded-lg text-white bg-sky-500">
                 {article.platform.name}
               </span>
+              <p className="pt-2 text-sm">
+                {showDiffDateToCurrentDate(article.publishedAt)}
+              </p>
             </div>
-            {/* <div className="hidden md:inline-block"> */}
-            {/* <div
-                className="line-clamp-3"
-                dangerouslySetInnerHTML={{ __html: article.description }}
-              /> */}
-            {/* <p className="line-clamp-3">{article.description}</p> */}
-            {/* <div className="line-clamp-3">
-                {parse(article.description, options)}
-              </div> */}
-            {/* </div> */}
-
-            {/* <p>{formatDate(article.publishedAt)}</p> */}
           </div>
 
           <div className="md:w-48 md:h-32 w-24 h-16  flex justify-center">
