@@ -7,7 +7,12 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "lint:fix": "eslint --ext .js,.jsx,.ts,.tsx --fix ."
+    "lint:fix": "eslint --ext .js,.jsx,.ts,.tsx --fix .",
+    "format": "npx prettier --write .",
+    "prepare": "cd ../.. && husky web/client/.husky"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": "prettier --write"
   },
   "dependencies": {
     "@auth/firebase-adapter": "^1.5.1",
@@ -44,6 +49,8 @@
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-simple-import-sort": "^12.0.0",
     "eslint-plugin-unused-imports": "^3.1.0",
+    "husky": "^8.0.0",
+    "lint-staged": "^15.2.2",
     "postcss": "^8",
     "prettier": "^3.2.5",
     "tailwindcss": "^3.3.0",
