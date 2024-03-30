@@ -87,7 +87,7 @@ export function ArticleList({
       <div className="bg-white w-full py-4 border-b-2">
         <LanguageTabMenu languageStatus={languageStatus} />
       </div>
-      <div className="overflow-y-scroll m-auto h-[600px]">
+      <div className="overflow-y-scroll m-auto h-[700px] md:h-[600px]">
         {flatArticles &&
           flatArticles.map((article) => (
             <div key={article.id} className="border-t-2 py-8">
@@ -96,7 +96,13 @@ export function ArticleList({
               </ArticleDetailDialog>
             </div>
           ))}
-        <div ref={observerTarget}>{hashMore && <Loader />}</div>
+        <div ref={observerTarget}>
+          {hashMore && (
+            <div className="flex justify-center py-4">
+              <Loader />
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

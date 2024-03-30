@@ -2,6 +2,8 @@ import { Suspense } from "react";
 
 import { ArticleListTemplate } from "@/features/articles/components/ArticleListTemplate";
 
+import { Loader } from "@/components/ui/loader";
+
 import { LanguageStatus } from "@/types/language";
 
 type PageProps = {
@@ -17,7 +19,13 @@ export default async function Home({ searchParams }: PageProps) {
 
   return (
     <>
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense
+        fallback={
+          <div>
+            <Loader />
+          </div>
+        }
+      >
         <ArticleListTemplate languageStatus={languageStatus} />
       </Suspense>
     </>
