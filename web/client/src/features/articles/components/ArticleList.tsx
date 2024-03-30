@@ -1,5 +1,4 @@
 "use client";
-import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useRef, useState, useEffect } from "react";
 
 import { ArticleCard } from "@/features/articles/components/ArticleCard";
@@ -9,11 +8,13 @@ import { Button } from "@/components/ui/button";
 import { Loader } from "@/components/ui/loader";
 
 import { Article } from "@/types/article";
+import { LanguageStatus } from "@/types/language";
 
 import { ArticleDetailDialog } from "./ArticleDetailDialog";
 
 type Props = {
   initialArticles: Array<Article>;
+  languageStatus: LanguageStatus;
   fetchArticles: ({
     platformId,
     languageStatus,
@@ -23,10 +24,11 @@ type Props = {
   }: GetArticleParams) => Promise<Article[]>;
 };
 
-export function ArticleList({ initialArticles, fetchArticles }: Props) {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const params = new URLSearchParams(searchParams);
+export function ArticleList({
+  initialArticles,
+  languageStatus,
+  fetchArticles,
+}: Props) {
   const observerTarget = useRef(null);
 
   const [articles, setArticles] = useState<Article[]>(initialArticles);
@@ -37,23 +39,19 @@ export function ArticleList({ initialArticles, fetchArticles }: Props) {
 
   const loadMore = useCallback(
     async (offset: number) => {
-      params.set("languageStatus", "1");
-      const newArticles = await fetchArticles({ offset });
+      const newArticles = await fetchArticles({ offset, languageStatus });
       setArticles((prev) => [...prev, ...newArticles]);
 
       const count = newArticles.length;
       setHashMore(count > 0);
-      router.replace(`/?${params.toString()}`);
     },
-    [fetchArticles, router, params]
+    [fetchArticles, languageStatus]
   );
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          console.log("🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥");
-          console.log(entry.isIntersecting);
           if (entry.isIntersecting && hashMore) {
             setOffset((prev) => prev + 1);
           }
@@ -80,7 +78,7 @@ export function ArticleList({ initialArticles, fetchArticles }: Props) {
     if (offset > 1) {
       loadMore(offset);
     }
-  }, [loadMore, offset]);
+  }, [loadMore, offset, hashMore]);
 
   return (
     <div className="w-auto">
