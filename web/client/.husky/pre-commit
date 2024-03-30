@@ -1,1 +1,1 @@
-cd client && npm run lint-staged
+npx lint-staged

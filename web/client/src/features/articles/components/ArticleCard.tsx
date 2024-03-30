@@ -1,12 +1,11 @@
 "use client";
-
 import parse, { HTMLReactParserOptions } from "html-react-parser";
 import Link from "next/link";
 import { FC } from "react";
 
 import { useCheckImageExist } from "@/hooks/useImage";
 
-import { Article, Article } from "@/types/article";
+import { Article } from "@/types/article";
 
 type ArticleCardProps = {
   article: Article;
