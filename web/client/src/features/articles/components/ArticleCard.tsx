@@ -9,6 +9,8 @@ import { showDiffDateToCurrentDate } from "@/lib/date";
 
 import { Article } from "@/types/article";
 
+import { ArticleDetailModal } from "./ArticleDetailModal";
+
 type ArticleCardProps = {
   article: Article;
 };
@@ -19,6 +21,7 @@ export const ArticleCard: FC<ArticleCardProps> = ({
   const imageUrl = useCheckImageExist(article.thumbnailURL);
   return (
     <div className="cursor-pointer relative w-full rounded hover:opacity-30">
+      <ArticleDetailModal article={article} />
       <Link href={`/article/${article.id}`}>
         <div className="flex justify-around">
           <div className="w-[65%]">
