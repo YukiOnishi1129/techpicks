@@ -9,6 +9,8 @@ export const useParseHtml = () => {
         if (domNode.name === "img" || domNode.name === "iframe") return <></>;
         // @ts-ignore
         if (domNode.name === "strong") return <p></p>;
+        // @ts-ignore
+        if (domNode.name === "pre") return <></>;
       },
     };
   }, []);
