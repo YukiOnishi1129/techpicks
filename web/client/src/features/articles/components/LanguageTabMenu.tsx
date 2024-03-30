@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 
 import { LanguageStatus } from "@/types/language";
 
-import { serverRevalidateTag } from "../actions/serverActions";
+import { fetchArticleAPI } from "../actions/article";
 
 type LanguageTabMenuProps = {
   languageStatus: LanguageStatus;
@@ -21,13 +21,17 @@ export const LanguageTabMenu: FC<LanguageTabMenuProps> = ({
   const onClick = useCallback(
     async (language: LanguageStatus) => {
       //   const lang = language as number;
-      //   const params = new URLSearchParams(searchParams);
+      const offset = searchParams.get("offset")?.toString() || "1";
       //   params.set("languageStatus", lang.toString());
       //   router.replace(`/?${params.toString()}`);
-      await serverRevalidateTag();
-      router.push(`/?languageStatus=${language}`);
+      //   await serverRevalidateTag();
+      await fetchArticleAPI({
+        languageStatus: language.toString(),
+        offset: offset,
+      });
+      router.push(`/?offset=${offset}&languageStatus=${language}`);
     },
-    [router]
+    [router, searchParams]
   );
 
   return (
