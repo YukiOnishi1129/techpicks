@@ -1,4 +1,5 @@
 import { db } from "@/lib/firestore";
+
 import { Article } from "@/types/article";
 
 const articleRef = db.collection("articles");

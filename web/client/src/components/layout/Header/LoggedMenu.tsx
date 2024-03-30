@@ -1,10 +1,10 @@
 "use client";
-import { signOut } from "next-auth/react";
-
-import { Button } from "@/components/ui/button";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Session } from "next-auth";
+import { signOut } from "next-auth/react";
 import { FC } from "react";
+
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 
 type LoggedMenuProps = {
   session: Session | null;

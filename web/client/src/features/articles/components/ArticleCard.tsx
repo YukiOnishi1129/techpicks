@@ -5,6 +5,7 @@ import Link from "next/link";
 import { FC } from "react";
 
 import { useCheckImageExist } from "@/hooks/useImage";
+
 import { Article } from "@/types/article";
 
 type ArticleCardProps = {

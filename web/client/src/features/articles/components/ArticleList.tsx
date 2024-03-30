@@ -1,9 +1,11 @@
 "use client";
 import { useCallback, useRef, useState, useEffect } from "react";
 
-import { Loader } from "@/components/ui/loader";
 import { ArticleCard } from "@/features/articles/components/ArticleCard";
 import { GetArticleParams } from "@/features/articles/repository/article";
+
+import { Loader } from "@/components/ui/loader";
+
 import { Article } from "@/types/article";
 
 type Props = {
