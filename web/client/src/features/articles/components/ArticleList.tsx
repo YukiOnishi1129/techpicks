@@ -1,9 +1,11 @@
 "use client";
 import { useCallback, useRef, useState, useEffect } from "react";
 
-import { Loader } from "@/components/ui/loader";
 import { ArticleCard } from "@/features/articles/components/ArticleCard";
 import { GetArticleParams } from "@/features/articles/repository/article";
+
+import { Loader } from "@/components/ui/loader";
+
 import { Article } from "@/types/article";
 
 type Props = {
@@ -69,9 +71,9 @@ export function ArticleList({ initialArticles, fetchArticles }: Props) {
   }, [loadMore, offset]);
 
   return (
-    <div className="w-[90%] h-auto mt-4 mx-auto md:grid grid-cols-3 gap-4">
+    <div className="w-auto h-auto mt-4 mx-auto">
       {flatArticles.map((article) => (
-        <div key={article.id} className="mb-4">
+        <div key={article.id} className="mb-10">
           <ArticleCard article={article} />
         </div>
       ))}
