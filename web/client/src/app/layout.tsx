@@ -21,7 +21,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <head></head>
+      <head>
+        <title>Tech Picks</title>
+      </head>
       <body className={inter.className}>
         <Providers>
           <BaseLayout> {children}</BaseLayout>

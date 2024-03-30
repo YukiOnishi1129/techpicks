@@ -2,40 +2,52 @@
 import { useCallback, useRef, useState, useEffect } from "react";
 
 import { ArticleCard } from "@/features/articles/components/ArticleCard";
-import { GetArticleParams } from "@/features/articles/repository/article";
 
 import { Loader } from "@/components/ui/loader";
 
 import { Article } from "@/types/article";
+import { LanguageStatus } from "@/types/language";
+
+import { ArticleDetailDialog } from "./ArticleDetailDialog";
+import { LanguageTabMenu } from "./LanguageTabMenu";
 
 type Props = {
   initialArticles: Array<Article>;
+  languageStatus: LanguageStatus;
   fetchArticles: ({
-    platformId,
+    languageStatus,
     offset,
-    sort,
-    sortColum,
-  }: GetArticleParams) => Promise<Article[]>;
+  }: {
+    languageStatus: string;
+    offset: string;
+  }) => Promise<Article[]>;
 };
 
-export function ArticleList({ initialArticles, fetchArticles }: Props) {
+export function ArticleList({
+  initialArticles,
+  languageStatus,
+  fetchArticles,
+}: Props) {
   const observerTarget = useRef(null);
 
   const [articles, setArticles] = useState<Article[]>(initialArticles);
   const [hashMore, setHashMore] = useState(true);
   const [offset, setOffset] = useState(1);
 
-  const flatArticles = articles.flatMap((article) => article);
+  const flatArticles = articles ? articles.flatMap((article) => article) : [];
 
   const loadMore = useCallback(
     async (offset: number) => {
-      const newArticles = await fetchArticles({ offset });
+      const newArticles = await fetchArticles({
+        offset: offset.toString(),
+        languageStatus: languageStatus.toString(),
+      });
       setArticles((prev) => [...prev, ...newArticles]);
 
       const count = newArticles.length;
       setHashMore(count > 0);
     },
-    [fetchArticles]
+    [fetchArticles, languageStatus]
   );
 
   useEffect(() => {
@@ -68,16 +80,30 @@ export function ArticleList({ initialArticles, fetchArticles }: Props) {
     if (offset > 1) {
       loadMore(offset);
     }
-  }, [loadMore, offset]);
+  }, [loadMore, offset, hashMore]);
 
   return (
-    <div className="w-auto h-auto mt-16 mx-auto">
-      {flatArticles.map((article) => (
-        <div key={article.id} className="border-t-2 py-8">
-          <ArticleCard article={article} />
+    <div className="w-auto">
+      <div className="bg-white w-full py-4 border-b-2">
+        <LanguageTabMenu languageStatus={languageStatus} />
+      </div>
+      <div className="overflow-y-scroll m-auto h-[700px] md:h-[600px]">
+        {flatArticles &&
+          flatArticles.map((article) => (
+            <div key={article.id} className="border-t-2 py-8">
+              <ArticleDetailDialog article={article}>
+                <ArticleCard article={article} />
+              </ArticleDetailDialog>
+            </div>
+          ))}
+        <div ref={observerTarget}>
+          {hashMore && (
+            <div className="flex justify-center py-4">
+              <Loader />
+            </div>
+          )}
         </div>
-      ))}
-      <div ref={observerTarget}>{hashMore && <Loader />}</div>
+      </div>
     </div>
   );
 }
