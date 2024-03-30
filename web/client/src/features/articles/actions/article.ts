@@ -4,10 +4,10 @@ import { Article } from "@/types/article";
 
 export const fetchArticleAPI = async ({
   languageStatus,
-  offset,
+  offset = "1",
 }: {
   languageStatus: string;
-  offset: string;
+  offset?: string;
 }) => {
   const response = await fetch(
     `http://localhost:80/api/articles/?offset=${offset}&languageStatus=${languageStatus}`,
@@ -15,6 +15,7 @@ export const fetchArticleAPI = async ({
       headers: {
         "Content-Type": "application/json",
       },
+      next: { tags: ["articles"] },
       cache: "no-store",
     }
   );

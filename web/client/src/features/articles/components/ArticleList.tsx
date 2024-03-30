@@ -34,7 +34,7 @@ export function ArticleList({
   const [hashMore, setHashMore] = useState(true);
   const [offset, setOffset] = useState(1);
 
-  const flatArticles = articles.flatMap((article) => article);
+  const flatArticles = articles ? articles.flatMap((article) => article) : [];
 
   const loadMore = useCallback(
     async (offset: number) => {
@@ -88,13 +88,14 @@ export function ArticleList({
         <LanguageTabMenu languageStatus={languageStatus} />
       </div>
       <div className="overflow-y-scroll m-auto h-[600px]">
-        {flatArticles.map((article) => (
-          <div key={article.id} className="border-t-2 py-8">
-            <ArticleDetailDialog article={article}>
-              <ArticleCard article={article} />
-            </ArticleDetailDialog>
-          </div>
-        ))}
+        {flatArticles &&
+          flatArticles.map((article) => (
+            <div key={article.id} className="border-t-2 py-8">
+              <ArticleDetailDialog article={article}>
+                <ArticleCard article={article} />
+              </ArticleDetailDialog>
+            </div>
+          ))}
         <div ref={observerTarget}>{hashMore && <Loader />}</div>
       </div>
     </div>

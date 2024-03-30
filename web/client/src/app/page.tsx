@@ -1,4 +1,5 @@
-import { fetchArticleAPI } from "@/features/articles/actions/article";
+import { Suspense } from "react";
+
 import { ArticleListTemplate } from "@/features/articles/components/ArticleListTemplate";
 
 import { LanguageStatus } from "@/types/language";
@@ -13,20 +14,12 @@ export default async function Home({ searchParams }: PageProps) {
     typeof searchParams["languageStatus"] === "string"
       ? (parseInt(searchParams["languageStatus"]) as LanguageStatus)
       : 1;
-  const articles = await fetchArticleAPI({
-    languageStatus: languageStatus.toString(),
-    offset: "1",
-  });
 
   return (
     <>
-      {articles && (
-        <ArticleListTemplate
-          initialArticles={articles}
-          languageStatus={languageStatus}
-          fetchArticles={fetchArticleAPI}
-        />
-      )}
+      <Suspense fallback={<div>Loading...</div>}>
+        <ArticleListTemplate languageStatus={languageStatus} />
+      </Suspense>
     </>
   );
 }

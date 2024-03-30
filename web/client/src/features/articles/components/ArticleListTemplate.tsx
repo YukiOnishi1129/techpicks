@@ -1,32 +1,36 @@
 import { FC } from "react";
 
-import { Article } from "@/types/article";
 import { LanguageStatus } from "@/types/language";
 
 import { ArticleList } from "./ArticleList";
+import { fetchArticleAPI } from "../actions/article";
 
 type ArticleListProps = {
-  initialArticles: Array<Article>;
   languageStatus: LanguageStatus;
-  fetchArticles: ({
-    languageStatus,
-    offset,
-  }: {
-    languageStatus: string;
-    offset: string;
-  }) => Promise<Article[]>;
 };
 
-export const ArticleListTemplate: FC<ArticleListProps> = ({
-  initialArticles,
+export const ArticleListTemplate: FC<ArticleListProps> = async ({
   languageStatus,
-  fetchArticles,
 }: ArticleListProps) => {
+  const articles = await fetchArticleAPI({
+    languageStatus: languageStatus.toString(),
+  });
   return (
-    <ArticleList
-      initialArticles={initialArticles}
-      languageStatus={languageStatus}
-      fetchArticles={fetchArticles}
-    />
+    <>
+      {languageStatus === 1 && (
+        <ArticleList
+          initialArticles={articles}
+          languageStatus={languageStatus}
+          fetchArticles={fetchArticleAPI}
+        />
+      )}
+      {languageStatus === 2 && (
+        <ArticleList
+          initialArticles={articles}
+          languageStatus={languageStatus}
+          fetchArticles={fetchArticleAPI}
+        />
+      )}
+    </>
   );
 };

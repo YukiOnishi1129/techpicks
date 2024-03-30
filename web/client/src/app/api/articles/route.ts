@@ -16,8 +16,7 @@ export async function GET(req: NextRequest) {
     languageStatus: status,
     offset: parseInt(offset || "1"),
   });
-  // console.log("🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥");
-  // console.log(articles);
+  console.log(status);
   return Response.json(
     { articles: articles, message: "success" },
     {
