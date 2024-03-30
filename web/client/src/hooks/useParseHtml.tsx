@@ -1,5 +1,4 @@
 import hljs, { AutoHighlightResult } from "highlight.js";
-// import hljs from "highlight.js/lib/common";
 import parse, {
   HTMLReactParserOptions,
   domToReact,
@@ -9,12 +8,6 @@ import parse, {
 } from "html-react-parser";
 import { useCallback, useMemo } from "react";
 import "highlight.js/styles/hybrid.css";
-// import "highlight.js/styles/github.css";
-
-// hljs.registerLanguage(
-//   "typescript",
-//   require("highlight.js/lib/languages/typescript")
-// );
 
 export const useParseHtml = () => {
   const options: HTMLReactParserOptions = useMemo(() => {
