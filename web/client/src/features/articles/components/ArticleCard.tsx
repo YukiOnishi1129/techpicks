@@ -20,7 +20,7 @@ export const ArticleCard: FC<ArticleCardProps> = ({
     <div className="cursor-pointer relative w-full rounded hover:opacity-30">
       <div className="flex justify-around">
         <div className="w-[65%]">
-          <h3 className="w-full h-18 pt-2 font-bold md:text-xl text-md tracking-wide line-clamp-3">
+          <h3 className="w-full h-18 pt-2 font-bold text-lg md:text-xl  tracking-wide line-clamp-3">
             {article.title}
           </h3>
           <div className="py-2">
