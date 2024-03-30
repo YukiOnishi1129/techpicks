@@ -3,8 +3,5 @@
   "typescript.enablePromptUseWorkspaceTsdk": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
-  "editor.codeActionsOnSave": {
-    "source.addMissingImports": "explicit",
-    "source.fixAll": "explicit"
-  }
+  "editor.codeActionsOnSave": ["source.addMissingImports", "source.fixAll"]
 }
