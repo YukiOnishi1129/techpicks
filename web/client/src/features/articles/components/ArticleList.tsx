@@ -8,6 +8,8 @@ import { Loader } from "@/components/ui/loader";
 
 import { Article } from "@/types/article";
 
+import { ArticleDetailModal } from "./ArticleDetailModal";
+
 type Props = {
   initialArticles: Array<Article>;
   fetchArticles: ({
@@ -74,7 +76,9 @@ export function ArticleList({ initialArticles, fetchArticles }: Props) {
     <div className="w-auto h-auto mt-16 mx-auto">
       {flatArticles.map((article) => (
         <div key={article.id} className="border-t-2 py-8">
-          <ArticleCard article={article} />
+          <ArticleDetailModal article={article}>
+            <ArticleCard article={article} />
+          </ArticleDetailModal>
         </div>
       ))}
       <div ref={observerTarget}>{hashMore && <Loader />}</div>

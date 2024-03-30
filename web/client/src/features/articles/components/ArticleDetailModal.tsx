@@ -17,15 +17,23 @@ import { Article } from "@/types/article";
 
 type ArticleDetailProps = {
   article: Article;
+  children: React.ReactNode;
 };
 
 export const ArticleDetailModal: FC<ArticleDetailProps> = ({
   article,
+  children,
 }: ArticleDetailProps) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="ghost">Edit Profile</Button>
+        <Button
+          type="reset"
+          variant="ghost"
+          className="p-0 block w-full h-full text-basic whitespace-normal text-left"
+        >
+          {children}
+        </Button>
       </DialogTrigger>
       <DialogContent className="w-[90%] h-[80%]">
         <DialogHeader>
