@@ -5,6 +5,8 @@ go 1.22.0
 require (
 	cloud.google.com/go/firestore v1.15.0
 	firebase.google.com/go v3.13.0+incompatible
+	github.com/Songmu/go-httpdate v1.0.0
+	github.com/advancedlogic/GoOse v0.0.0-20231203033844-ae6b36caf275
 	github.com/google/uuid v1.6.0
 	github.com/joho/godotenv v1.5.1
 	github.com/mmcdole/gofeed v1.3.0
@@ -20,8 +22,6 @@ require (
 	cloud.google.com/go/longrunning v0.5.5 // indirect
 	cloud.google.com/go/storage v1.38.0 // indirect
 	github.com/PuerkitoBio/goquery v1.8.0 // indirect
-	github.com/Songmu/go-httpdate v1.0.0 // indirect
-	github.com/advancedlogic/GoOse v0.0.0-20231203033844-ae6b36caf275 // indirect
 	github.com/andybalholm/cascadia v1.3.1 // indirect
 	github.com/araddon/dateparse v0.0.0-20180729174819-cfd92a431d0e // indirect
 	github.com/fatih/set v0.2.1 // indirect
