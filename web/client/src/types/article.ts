@@ -18,6 +18,8 @@ export type Article = {
 export type ArticlePlatform = {
   id: string;
   name: string;
+  categoryName: string;
   platformType: PlatformType;
   siteUrl: string;
+  faviconUrl: string;
 };

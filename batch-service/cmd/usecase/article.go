@@ -58,7 +58,7 @@ func (au *ArticleUsecase) CreateArticles(ctx context.Context, client *firestore.
 }
 
 func createArticles(ctx context.Context, client *firestore.Client, wg *sync.WaitGroup, articles []domain.Article, rss []RSS, p domain.Platform) {
-	log.Printf("【start create article】: %s", p.Name)
+	log.Printf("【start create article】: %s %s", p.Name, p.CategoryName)
 	defer wg.Done()
 	batch := client.BulkWriter(ctx)
 	aCount := 0
@@ -83,20 +83,22 @@ func createArticles(ctx context.Context, client *firestore.Client, wg *sync.Wait
 		now := time.Now().Unix()
 		ref := client.Collection("articles").Doc(articleID.String())
 		_, err = batch.Set(ref, domain.ArticleFirestore{
-			Title:           r.Title,
-			Description:     r.Description,
-			ThumbnailURL:    r.Image,
-			ArticleURL:      r.Link,
-			PublishedAt:     r.PublishedAt,
-			PlatformID:      p.ID,
-			PlatformName:    p.Name,
-			PlatformSiteURL: p.SiteURL,
-			PlatformType:    p.PlatformType,
-			IsEng:           p.IsEng,
-			IsPrivate:       false,
-			CreatedAt:       int(now),
-			UpdatedAt:       int(now),
-			DeletedAt:       nil,
+			Title:                r.Title,
+			Description:          r.Description,
+			ThumbnailURL:         r.ImageURL,
+			ArticleURL:           r.Link,
+			PublishedAt:          r.PublishedAt,
+			PlatformID:           p.ID,
+			PlatformName:         p.Name,
+			PlatformCategoryName: p.CategoryName,
+			PlatformSiteURL:      p.SiteURL,
+			PlatformType:         p.PlatformType,
+			PlatformFaviconURL:   p.FaviconURL,
+			IsEng:                p.IsEng,
+			IsPrivate:            false,
+			CreatedAt:            int(now),
+			UpdatedAt:            int(now),
+			DeletedAt:            nil,
 		})
 		if err != nil {
 			continue
@@ -104,6 +106,6 @@ func createArticles(ctx context.Context, client *firestore.Client, wg *sync.Wait
 		aCount++
 	}
 	batch.Flush()
-	log.Printf("【end create article】: %s", p.Name)
+	log.Printf("【end create article】: %s  %s", p.Name, p.CategoryName)
 	log.Printf("【article count】: %d", aCount)
 }

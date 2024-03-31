@@ -70,10 +70,21 @@ const ArticleContent = ({ article }: { article: Article }) => {
               href={article.platform.siteUrl}
               target="_blank"
             >
+              <img
+                className="w-[24px] h-[24px] inline-block mr-2"
+                src={article.platform.faviconUrl}
+                alt=""
+              />
               <span className="md:text-basic text-xs font-bold px-2 py-1 rounded-lg text-white bg-sky-500">
                 {article.platform.name}
               </span>
+              {article.platform.categoryName && (
+                <span className="md:text-md text-xs font-bold ml-2 px-2 py-1 rounded-lg text-white bg-yellow-600">
+                  {article.platform.categoryName}
+                </span>
+              )}
             </Link>
+
             <span className="pl-2 text-sm">
               {showDiffDateToCurrentDate(article.publishedAt)}
             </span>
