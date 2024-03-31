@@ -24,9 +24,19 @@ export const ArticleCard: FC<ArticleCardProps> = ({
             {article.title}
           </h3>
           <div className="py-2">
+            <img
+              className="w-[24px] h-[24px] inline-block mr-2"
+              src={article.platform.faviconUrl}
+              alt=""
+            />
             <span className="md:text-md text-xs font-bold px-2 py-1 rounded-lg text-white bg-sky-500">
               {article.platform.name}
             </span>
+            {article.platform.categoryName && (
+              <span className="md:text-md text-xs font-bold ml-2 px-2 py-1 rounded-lg text-white bg-yellow-600">
+                {article.platform.categoryName}
+              </span>
+            )}
             <p className="pt-2 text-sm">
               {showDiffDateToCurrentDate(article.publishedAt)}
             </p>

@@ -3,6 +3,7 @@ package usecase
 import (
 	"fmt"
 	"github.com/Songmu/go-httpdate"
+	goose "github.com/advancedlogic/GoOse"
 	"github.com/mmcdole/gofeed"
 	"github.com/otiai10/opengraph"
 )
@@ -12,7 +13,7 @@ type RSS struct {
 	Link        string
 	Description string
 	PublishedAt int
-	Image       string
+	ImageURL    string
 }
 
 func GetRSS(rssURL string) ([]RSS, error) {
@@ -24,10 +25,11 @@ func GetRSS(rssURL string) ([]RSS, error) {
 	items := feed.Items
 	rss := make([]RSS, len(items))
 	for i, item := range items {
-		image, err := getOGPImage(item.Link)
+		ogpImageURL, err := getOGPImage(item.Link)
 		if err != nil {
-			println(fmt.Sprintf("【image】: %s\n", image))
+			println(fmt.Sprintf("skiped url: %s\n, error: %s\n", item.Link, err))
 			continue
+
 		}
 		if item.Published == "" {
 			println(fmt.Sprintf("skiped published: %s\n", item.Published))
@@ -44,7 +46,7 @@ func GetRSS(rssURL string) ([]RSS, error) {
 			Link:        item.Link,
 			Description: item.Description,
 			PublishedAt: int(t.Unix()),
-			Image:       image,
+			ImageURL:    ogpImageURL,
 		}
 	}
 	return rss, nil
@@ -59,4 +61,15 @@ func getOGPImage(url string) (string, error) {
 		return ogp.Image[0].URL, nil
 	}
 	return "", nil
+}
+
+func getMetaData(url string) (faviconURL, ogpImageURL string, err error) {
+	g := goose.New()
+	article, err := g.ExtractFromURL(url)
+	if err != nil {
+		return "", "", err
+	}
+	faviconURL = article.MetaFavicon
+	ogpImageURL = article.TopImage
+	return faviconURL, ogpImageURL, nil
 }

@@ -105,14 +105,17 @@ func convertFirestoreToPlatform(doc *firestore.DocumentSnapshot) domain.Platform
 	cratedAt := data["created_at"].(int64)
 	updatedAt := data["updated_at"].(int64)
 	platform := domain.Platform{
-		ID:           doc.Ref.ID,
-		Name:         data["name"].(string),
-		RssURL:       data["rss_url"].(string),
-		SiteURL:      data["site_url"].(string),
-		PlatformType: domain.PlatformType(platformType),
-		IsEng:        data["is_eng"].(bool),
-		CreatedAt:    int(cratedAt),
-		UpdatedAt:    int(updatedAt),
+		ID:                doc.Ref.ID,
+		Name:              data["name"].(string),
+		CategoryName:      data["category_name"].(string),
+		RssURL:            data["rss_url"].(string),
+		SiteURL:           data["site_url"].(string),
+		PlatformType:      domain.PlatformType(platformType),
+		ThumbnailImageURL: data["thumbnail_image_url"].(string),
+		FaviconURL:        data["favicon_url"].(string),
+		IsEng:             data["is_eng"].(bool),
+		CreatedAt:         int(cratedAt),
+		UpdatedAt:         int(updatedAt),
 	}
 	if data["deleted_at"] != nil {
 		deletedAt := int(data["deleted_at"].(int64))

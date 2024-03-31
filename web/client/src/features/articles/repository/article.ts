@@ -77,8 +77,10 @@ const convertToArticle = (
     platform: {
       id: data["platform_id"],
       name: data["platform_name"],
+      categoryName: data["platform_category_name"],
       platformType: data["platform_type"],
       siteUrl: data["platform_site_url"],
+      faviconUrl: data["platform_favicon_url"],
     },
     isEng: data["is_eng"],
     isPrivate: data["is_private"],
