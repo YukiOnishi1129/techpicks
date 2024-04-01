@@ -35,13 +35,13 @@ export const ArticleDetailDialog: FC<ArticleDetailDialogProps> = ({
         <Button
           type="reset"
           variant="ghost"
-          className="p-0 block w-full h-full text-basic whitespace-normal text-left"
+          className="block size-full whitespace-normal p-0 text-left text-base"
           onClick={() => setOpen(true)}
         >
           {children}
         </Button>
       </DialogTrigger>
-      <DialogContent className="w-[90%] max-h-[70%] sm:max-h-[90%] overflow-hidden">
+      <DialogContent className="max-h-[70%] w-[90%] overflow-hidden sm:max-h-[90%]">
         {open && <ArticleContent article={article} />}
       </DialogContent>
     </Dialog>
@@ -71,15 +71,15 @@ const ArticleContent = ({ article }: { article: Article }) => {
               target="_blank"
             >
               <img
-                className="w-[24px] h-[24px] inline-block mr-2"
+                className="mr-2 inline-block size-[24px]"
                 src={article.platform.faviconUrl}
                 alt=""
               />
-              <span className="md:text-basic text-xs font-bold px-2 py-1 rounded-lg text-white bg-sky-500">
+              <span className="rounded-lg bg-sky-500 px-2 py-1 text-xs font-bold text-white md:text-base">
                 {article.platform.name}
               </span>
               {article.platform.categoryName && (
-                <span className="md:text-md text-xs font-bold ml-2 px-2 py-1 rounded-lg text-white bg-yellow-600">
+                <span className="ml-2 rounded-lg bg-yellow-600 px-2 py-1 text-xs font-bold text-white md:text-base">
                   {article.platform.categoryName}
                 </span>
               )}
@@ -95,7 +95,7 @@ const ArticleContent = ({ article }: { article: Article }) => {
       <div className="overflow-y-scroll">
         <Link href={article.articleUrl} target="_blank">
           <img
-            className="cursor-pointer m-auto h-[370px] pb-8 rounded-md object-cover object-center hover:opacity-80"
+            className="m-auto h-[370px] cursor-pointer rounded-md object-cover object-center pb-8 hover:opacity-80"
             src={imageUrl}
             alt=""
           />
@@ -105,7 +105,7 @@ const ArticleContent = ({ article }: { article: Article }) => {
           <Link href={article.articleUrl} target="_blank">
             <Button
               size={"lg"}
-              className="bg-blue-700 text-xl w-[50%] hover:bg-blue-900"
+              className="w-1/2 bg-blue-700 text-xl hover:bg-blue-900"
             >
               本文を読む
             </Button>
@@ -120,7 +120,7 @@ const ArticleContent = ({ article }: { article: Article }) => {
           <Link href={article.articleUrl} target="_blank">
             <Button
               size={"lg"}
-              className="bg-blue-700 text-xl w-[50%] hover:bg-blue-900"
+              className="w-1/2 bg-blue-700 text-xl hover:bg-blue-900"
             >
               本文を読む
             </Button>

@@ -84,10 +84,10 @@ export function ArticleList({
 
   return (
     <div className="w-auto">
-      <div className="bg-white w-full py-4 border-b-2">
+      <div className="w-full border-b-2 bg-white py-4">
         <LanguageTabMenu languageStatus={languageStatus} />
       </div>
-      <div className="overflow-y-scroll m-auto h-[700px] md:h-[600px]">
+      <div className="m-auto h-[700px] overflow-y-scroll md:h-[600px]">
         {flatArticles &&
           flatArticles.map((article) => (
             <div key={article.id} className="border-t-2 py-8">

@@ -30,7 +30,7 @@ export const ArticleDetail = ({ article }: ArticleDetailProps) => {
       <div>
         <Link href={article.articleUrl} target="_blank">
           <img
-            className="cursor-pointer m-auto h-[370px] pb-8 rounded-md object-cover object-center hover:opacity-80"
+            className="m-auto h-[370px] cursor-pointer rounded-md object-cover object-center pb-8 hover:opacity-80"
             src={imageUrl}
             alt=""
           />
@@ -50,7 +50,7 @@ export const ArticleDetail = ({ article }: ArticleDetailProps) => {
             href={article.platform.siteUrl}
             target="_blank"
           >
-            <span className="md:text-basic text-sm font-bold px-2 py-1 rounded-lg text-white bg-sky-500">
+            <span className="rounded-lg bg-sky-500 px-2 py-1 text-sm font-bold text-white md:text-base">
               {article.platform.name}
             </span>
           </Link>
@@ -67,7 +67,7 @@ export const ArticleDetail = ({ article }: ArticleDetailProps) => {
           <Link href={article.articleUrl} target="_blank">
             <Button
               size={"lg"}
-              className="bg-blue-700 text-xl w-[50%] hover:bg-blue-900"
+              className="w-1/2 bg-blue-700 text-xl hover:bg-blue-900"
             >
               続きを読む
             </Button>

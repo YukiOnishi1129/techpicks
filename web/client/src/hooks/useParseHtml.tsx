@@ -18,7 +18,7 @@ export const useParseHtml = () => {
           if (domNode.name === "img" && domNode?.attribs) {
             return (
               <img
-                className="w-full h-auto"
+                className="h-auto w-full"
                 src={domNode.attribs.src}
                 alt={domNode.attribs.alt}
               />
@@ -57,7 +57,7 @@ export const useParseHtml = () => {
           }
           if (domNode.name === "h2")
             return (
-              <h2 className="text-2xl font-bold tracking-wide pb-4 pt-8">
+              <h2 className="pb-4 pt-8 text-2xl font-bold tracking-wide">
                 {domToReact(
                   (domNode as Element).children as DOMNode[],
                   options
@@ -66,7 +66,7 @@ export const useParseHtml = () => {
             );
           if (domNode.name === "h3")
             return (
-              <h3 className="text-xl font-bold tracking-wide pb-4 pt-8">
+              <h3 className="pb-4 pt-8 text-xl font-bold tracking-wide">
                 {domToReact(
                   (domNode as Element).children as DOMNode[],
                   options
@@ -75,7 +75,7 @@ export const useParseHtml = () => {
             );
           if (domNode.name === "h4")
             return (
-              <h4 className="text-lg font-bold tracking-wide pb-4 pt-8">
+              <h4 className="pb-4 pt-8 text-lg font-bold tracking-wide">
                 {domToReact(
                   (domNode as Element).children as DOMNode[],
                   options
@@ -84,7 +84,7 @@ export const useParseHtml = () => {
             );
           if (domNode.name === "blockquote")
             return (
-              <blockquote className="border-l-4 border-gray-500 pl-4 py-2">
+              <blockquote className="border-l-4 border-gray-500 py-2 pl-4">
                 {domToReact(
                   (domNode as Element).children as DOMNode[],
                   options
@@ -93,7 +93,7 @@ export const useParseHtml = () => {
             );
           if (domNode.name === "p")
             return (
-              <p className="text-lg tracking-wide py-2">
+              <p className="py-2 text-lg tracking-wide">
                 {domToReact(
                   (domNode as Element).children as DOMNode[],
                   options
@@ -102,7 +102,7 @@ export const useParseHtml = () => {
             );
           if (domNode.name === "ul") {
             return (
-              <ul className="list-disc pl-8 py-2">
+              <ul className="list-disc py-2 pl-8">
                 {domToReact(
                   (domNode as Element).children as DOMNode[],
                   options
@@ -112,7 +112,7 @@ export const useParseHtml = () => {
           }
           if (domNode.name === "ol") {
             return (
-              <ol className="list-decimal pl-8 py-2">
+              <ol className="list-decimal py-2 pl-8">
                 {domToReact(
                   (domNode as Element).children as DOMNode[],
                   options
@@ -136,7 +136,7 @@ export const useParseHtml = () => {
           }
           if (domNode.name === "code") {
             return (
-              <code className="bg-gray-200 text-lg rounded-basic">
+              <code className="rounded bg-gray-200 text-lg">
                 {domToReact(
                   (domNode as Element).children as DOMNode[],
                   options
