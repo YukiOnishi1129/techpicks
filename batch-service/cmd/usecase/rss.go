@@ -3,7 +3,6 @@ package usecase
 import (
 	"fmt"
 	"github.com/Songmu/go-httpdate"
-	goose "github.com/advancedlogic/GoOse"
 	"github.com/mmcdole/gofeed"
 	"github.com/otiai10/opengraph"
 )
@@ -63,13 +62,13 @@ func getOGPImage(url string) (string, error) {
 	return "", nil
 }
 
-func getMetaData(url string) (faviconURL, ogpImageURL string, err error) {
-	g := goose.New()
-	article, err := g.ExtractFromURL(url)
-	if err != nil {
-		return "", "", err
-	}
-	faviconURL = article.MetaFavicon
-	ogpImageURL = article.TopImage
-	return faviconURL, ogpImageURL, nil
-}
+//func getMetaData(url string) (faviconURL, ogpImageURL string, err error) {
+//	g := goose.New()
+//	article, err := g.ExtractFromURL(url)
+//	if err != nil {
+//		return "", "", err
+//	}
+//	faviconURL = article.MetaFavicon
+//	ogpImageURL = article.TopImage
+//	return faviconURL, ogpImageURL, nil
+//}

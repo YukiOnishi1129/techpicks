@@ -9,9 +9,9 @@ import { NotLoggedMenu } from "./NotLoggedMenu";
 export async function Header() {
   const session = await getServerSession(authOptions);
   return (
-    <div className="z-50 fixed flex justify-between px-8 w-screen h-16 items-center bg-white border-b border-gray-300 shadow-md">
+    <div className="fixed z-50 flex h-16 w-screen items-center justify-between border-b border-gray-300 bg-white px-8 shadow-md">
       <Link href="/" className="cursor-pointer">
-        <h1 className="font-bold text-2xl">Tech Picks</h1>
+        <h1 className="text-2xl font-bold">Tech Picks</h1>
       </Link>
 
       <div className="flex">

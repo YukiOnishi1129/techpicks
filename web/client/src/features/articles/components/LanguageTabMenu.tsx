@@ -34,7 +34,7 @@ export const LanguageTabMenu: FC<LanguageTabMenuProps> = ({
       </Button>
 
       <Button
-        className="block ml-4 w-5/12"
+        className="ml-4 block w-5/12"
         disabled={languageStatus === 2}
         onClick={() => onClick(2)}
       >
