@@ -1,8 +1,13 @@
 empty:
 	echo "empty"
 
-## supabase
+# supabase
+supabase-start:
+	supabase start
+supabase-stop:
+	supabase stop
 
+# migration
 create-migrate-file:
 	supabase migration new ${name}
 migrate:
