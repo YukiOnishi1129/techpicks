@@ -3,7 +3,7 @@ CREATE FUNCTION set_feeds_update_time()
 
 CREATE TABLE feeds
 (
-    id uuid NOT NULL,
+    id uuid NOT NULL DEFAULT uuid_generate_v4(),
     name VARCHAR(255) NOT NULL,
     platform_id uuid NOT NULL,
     category_id uuid NOT NULL,

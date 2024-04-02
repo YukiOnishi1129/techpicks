@@ -1,9 +1,12 @@
+alter database postgres
+set timezone to 'Asia/Tokyo';
+
 CREATE FUNCTION set_platforms_update_time()
     RETURNS TRIGGER AS $$ BEGIN NEW.updated_at = NOW(); RETURN NEW; END; $$ LANGUAGE plpgsql;
 
 CREATE TABLE platforms
 (
-    id uuid NOT NULL,
+    id uuid NOT NULL DEFAULT uuid_generate_v4(),
     title VARCHAR(255) NOT NULL,
     site_url VARCHAR(255) NOT NULL,
     platform_type INT NOT NULL,

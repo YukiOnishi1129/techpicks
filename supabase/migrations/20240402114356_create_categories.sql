@@ -3,7 +3,7 @@ CREATE FUNCTION set_categories_update_time()
 
 CREATE TABLE categories
 (
-    id uuid NOT NULL,
+    id uuid NOT NULL DEFAULT uuid_generate_v4(),
     name VARCHAR(255) NOT NULL,
     type INT NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
