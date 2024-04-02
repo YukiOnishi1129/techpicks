@@ -1,25 +1,28 @@
 package domain
 
+import (
+	"time"
+)
+
 type PlatformType int
 
 const (
 	PlatformTypeSite PlatformType = iota
 	PlatformTypeCompany
+	PlatformTypeSummary
 )
 
 type Platform struct {
-	ID                string
-	Name              string
-	CategoryName      string
-	RssURL            string
-	SiteURL           string
-	PlatformType      PlatformType
-	IsEng             bool
-	ThumbnailImageURL string
-	FaviconURL        string
-	CreatedAt         int
-	UpdatedAt         int
-	DeletedAt         *int
+	ID           string
+	Title        string
+	SiteURL      string
+	PlatformType PlatformType
+	ThumbnailURL string
+	IsEng        bool
+	FaviconURL   string
+	CreatedAt    time.Time
+	UpdatedAt    time.Time
+	DeletedAt    *time.Time
 }
 
 type PlatformFirestore struct {
