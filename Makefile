@@ -9,3 +9,8 @@ migrate:
 	supabase migration up
 reset-migrate:
 	supabase db reset
+
+
+# create entity
+create-entity:
+	$(shell ./scripts/create-entity.sh)
