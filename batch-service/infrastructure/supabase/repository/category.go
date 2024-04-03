@@ -12,7 +12,7 @@ import (
 type CategoryRepositoryInterface interface {
 	GetCategories(ctx context.Context) ([]domain.Category, error)
 	GetCategory(ctx context.Context, id string) (domain.Category, error)
-	CreateCategory(ctx context.Context, arg domain.CreateCategoryInputDTO) (domain.Category, error)
+	CreateCategory(ctx context.Context, arg domain.CreateCategoryInputDTO) (categoryID string, err error)
 	UpdateCategory(ctx context.Context, arg domain.UpdateCategoryInputDTO) error
 }
 
@@ -35,6 +35,7 @@ func (cr *CategoryRepository) GetCategories(ctx context.Context) ([]domain.Categ
 		category := domain.Category{
 			ID:        c.ID,
 			Name:      c.Name,
+			Type:      domain.CategoryType(c.Type),
 			CreatedAt: c.CreatedAt,
 			UpdatedAt: c.UpdatedAt,
 		}
@@ -55,6 +56,7 @@ func (cr *CategoryRepository) GetCategory(ctx context.Context, id string) (domai
 	category := domain.Category{
 		ID:        c.ID,
 		Name:      c.Name,
+		Type:      domain.CategoryType(c.Type),
 		CreatedAt: c.CreatedAt,
 		UpdatedAt: c.UpdatedAt,
 	}
@@ -65,22 +67,16 @@ func (cr *CategoryRepository) GetCategory(ctx context.Context, id string) (domai
 }
 
 // CreateCategory is a method to create a category
-func (cr *CategoryRepository) CreateCategory(ctx context.Context, arg domain.CreateCategoryInputDTO) (domain.Category, error) {
+func (cr *CategoryRepository) CreateCategory(ctx context.Context, arg domain.CreateCategoryInputDTO) (categoryID string, err error) {
 	c := entity.Category{
 		Name: arg.Name,
 		Type: arg.Type,
 	}
-	err := c.Insert(ctx, cr.db, boil.Infer())
+	err = c.Insert(ctx, cr.db, boil.Infer())
 	if err != nil {
-		return domain.Category{}, err
+		return "", err
 	}
-	return domain.Category{
-		ID:        c.ID,
-		Name:      c.Name,
-		Type:      c.Type,
-		CreatedAt: c.CreatedAt,
-		UpdatedAt: c.UpdatedAt,
-	}, err
+	return c.ID, err
 }
 
 // UpdateCategory is a method to update a category

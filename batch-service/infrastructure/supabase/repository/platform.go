@@ -48,7 +48,7 @@ func (pr *PlatformRepository) GetPlatForm(ctx context.Context, id string) (domai
 func convertDBtoPlatformDomain(p *entity.Platform) domain.Platform {
 	platform := domain.Platform{
 		ID:           p.ID,
-		Title:        p.Title,
+		Name:         p.Name,
 		SiteURL:      p.SiteURL,
 		PlatformType: domain.PlatformType(p.PlatformType),
 		IsEng:        p.IsEng,

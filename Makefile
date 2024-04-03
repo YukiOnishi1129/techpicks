@@ -8,6 +8,7 @@ supabase-stop:
 	supabase stop
 
 # migration
+##  make create-migrate-file name=""
 create-migrate-file:
 	supabase migration new ${name}
 migrate:

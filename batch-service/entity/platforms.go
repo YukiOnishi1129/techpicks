@@ -25,10 +25,9 @@ import (
 // Platform is an object representing the database table.
 type Platform struct {
 	ID           string    `boil:"id" json:"id" toml:"id" yaml:"id"`
-	Title        string    `boil:"title" json:"title" toml:"title" yaml:"title"`
+	Name         string    `boil:"name" json:"name" toml:"name" yaml:"name"`
 	SiteURL      string    `boil:"site_url" json:"site_url" toml:"site_url" yaml:"site_url"`
 	PlatformType int       `boil:"platform_type" json:"platform_type" toml:"platform_type" yaml:"platform_type"`
-	ThumbnailURL string    `boil:"thumbnail_url" json:"thumbnail_url" toml:"thumbnail_url" yaml:"thumbnail_url"`
 	FaviconURL   string    `boil:"favicon_url" json:"favicon_url" toml:"favicon_url" yaml:"favicon_url"`
 	IsEng        bool      `boil:"is_eng" json:"is_eng" toml:"is_eng" yaml:"is_eng"`
 	CreatedAt    time.Time `boil:"created_at" json:"created_at" toml:"created_at" yaml:"created_at"`
@@ -41,10 +40,9 @@ type Platform struct {
 
 var PlatformColumns = struct {
 	ID           string
-	Title        string
+	Name         string
 	SiteURL      string
 	PlatformType string
-	ThumbnailURL string
 	FaviconURL   string
 	IsEng        string
 	CreatedAt    string
@@ -52,10 +50,9 @@ var PlatformColumns = struct {
 	DeletedAt    string
 }{
 	ID:           "id",
-	Title:        "title",
+	Name:         "name",
 	SiteURL:      "site_url",
 	PlatformType: "platform_type",
-	ThumbnailURL: "thumbnail_url",
 	FaviconURL:   "favicon_url",
 	IsEng:        "is_eng",
 	CreatedAt:    "created_at",
@@ -65,10 +62,9 @@ var PlatformColumns = struct {
 
 var PlatformTableColumns = struct {
 	ID           string
-	Title        string
+	Name         string
 	SiteURL      string
 	PlatformType string
-	ThumbnailURL string
 	FaviconURL   string
 	IsEng        string
 	CreatedAt    string
@@ -76,10 +72,9 @@ var PlatformTableColumns = struct {
 	DeletedAt    string
 }{
 	ID:           "platforms.id",
-	Title:        "platforms.title",
+	Name:         "platforms.name",
 	SiteURL:      "platforms.site_url",
 	PlatformType: "platforms.platform_type",
-	ThumbnailURL: "platforms.thumbnail_url",
 	FaviconURL:   "platforms.favicon_url",
 	IsEng:        "platforms.is_eng",
 	CreatedAt:    "platforms.created_at",
@@ -89,21 +84,11 @@ var PlatformTableColumns = struct {
 
 // Generated where
 
-type whereHelperbool struct{ field string }
-
-func (w whereHelperbool) EQ(x bool) qm.QueryMod  { return qmhelper.Where(w.field, qmhelper.EQ, x) }
-func (w whereHelperbool) NEQ(x bool) qm.QueryMod { return qmhelper.Where(w.field, qmhelper.NEQ, x) }
-func (w whereHelperbool) LT(x bool) qm.QueryMod  { return qmhelper.Where(w.field, qmhelper.LT, x) }
-func (w whereHelperbool) LTE(x bool) qm.QueryMod { return qmhelper.Where(w.field, qmhelper.LTE, x) }
-func (w whereHelperbool) GT(x bool) qm.QueryMod  { return qmhelper.Where(w.field, qmhelper.GT, x) }
-func (w whereHelperbool) GTE(x bool) qm.QueryMod { return qmhelper.Where(w.field, qmhelper.GTE, x) }
-
 var PlatformWhere = struct {
 	ID           whereHelperstring
-	Title        whereHelperstring
+	Name         whereHelperstring
 	SiteURL      whereHelperstring
 	PlatformType whereHelperint
-	ThumbnailURL whereHelperstring
 	FaviconURL   whereHelperstring
 	IsEng        whereHelperbool
 	CreatedAt    whereHelpertime_Time
@@ -111,10 +96,9 @@ var PlatformWhere = struct {
 	DeletedAt    whereHelpernull_Time
 }{
 	ID:           whereHelperstring{field: "\"platforms\".\"id\""},
-	Title:        whereHelperstring{field: "\"platforms\".\"title\""},
+	Name:         whereHelperstring{field: "\"platforms\".\"name\""},
 	SiteURL:      whereHelperstring{field: "\"platforms\".\"site_url\""},
 	PlatformType: whereHelperint{field: "\"platforms\".\"platform_type\""},
-	ThumbnailURL: whereHelperstring{field: "\"platforms\".\"thumbnail_url\""},
 	FaviconURL:   whereHelperstring{field: "\"platforms\".\"favicon_url\""},
 	IsEng:        whereHelperbool{field: "\"platforms\".\"is_eng\""},
 	CreatedAt:    whereHelpertime_Time{field: "\"platforms\".\"created_at\""},
@@ -150,8 +134,8 @@ func (r *platformR) GetFeeds() FeedSlice {
 type platformL struct{}
 
 var (
-	platformAllColumns            = []string{"id", "title", "site_url", "platform_type", "thumbnail_url", "favicon_url", "is_eng", "created_at", "updated_at", "deleted_at"}
-	platformColumnsWithoutDefault = []string{"title", "site_url", "platform_type", "thumbnail_url", "favicon_url"}
+	platformAllColumns            = []string{"id", "name", "site_url", "platform_type", "favicon_url", "is_eng", "created_at", "updated_at", "deleted_at"}
+	platformColumnsWithoutDefault = []string{"name", "site_url", "platform_type", "favicon_url"}
 	platformColumnsWithDefault    = []string{"id", "is_eng", "created_at", "updated_at", "deleted_at"}
 	platformPrimaryKeyColumns     = []string{"id"}
 	platformGeneratedColumns      = []string{}

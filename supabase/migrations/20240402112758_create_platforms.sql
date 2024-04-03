@@ -7,10 +7,9 @@ CREATE FUNCTION set_platforms_update_time()
 CREATE TABLE platforms
 (
     id uuid NOT NULL DEFAULT uuid_generate_v4(),
-    title VARCHAR(255) NOT NULL,
+    name VARCHAR(255) NOT NULL,
     site_url VARCHAR(255) NOT NULL,
     platform_type INT NOT NULL,
-    thumbnail_url VARCHAR(255) NOT NULL,
     favicon_url VARCHAR(255) NOT NULL,
     is_eng BOOLEAN NOT NULL DEFAULT false,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,

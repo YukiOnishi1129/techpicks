@@ -4,10 +4,32 @@ import (
 	"time"
 )
 
+type CategoryType int
+
+const (
+	CategoryTypeAll CategoryType = iota
+	CategoryTypeTrend
+	CategoryTypeLanguage
+	CategoryTypeFrontend
+	CategoryTypeBackend
+	CategoryTypeMobile
+	CategoryTypeCloud
+	CategoryTypeLibrary
+	CategoryTypeTool
+	CategoryTypeDatabase
+	CategoryTypeInfrastructure
+	CategoryTypeMachineLearning
+	CategoryTypeSecurity
+	CategoryTypeNetwork
+	CategoryTypeDevOps
+	CategoryTypeDesign
+	CategoryTypeOthers
+)
+
 type Category struct {
 	ID        string
 	Name      string
-	Type      int
+	Type      CategoryType
 	CreatedAt time.Time
 	UpdatedAt time.Time
 	DeletedAt *time.Time

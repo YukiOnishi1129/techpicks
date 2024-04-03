@@ -14,10 +14,9 @@ const (
 
 type Platform struct {
 	ID           string
-	Title        string
+	Name         string
 	SiteURL      string
 	PlatformType PlatformType
-	ThumbnailURL string
 	IsEng        bool
 	FaviconURL   string
 	CreatedAt    time.Time

@@ -69,7 +69,7 @@ func convertDBtoFeedDomain(f *entity.Feed) domain.Feed {
 		RssURL: f.RSSURL,
 		Platform: domain.Platform{
 			ID:           f.R.Platform.ID,
-			Title:        f.R.Platform.Title,
+			Name:         f.R.Platform.Name,
 			SiteURL:      f.R.Platform.SiteURL,
 			PlatformType: domain.PlatformType(f.R.Platform.PlatformType),
 			IsEng:        f.R.Platform.IsEng,
