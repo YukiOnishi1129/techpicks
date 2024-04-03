@@ -20,12 +20,11 @@ func main() {
 	if err != nil {
 		log.Fatalf("Failed to init db: %v", err)
 		return
-
 	}
 	defer func(db *sql.DB) {
 		err := db.Close()
 		if err != nil {
-
+			log.Fatalf("Failed to close db connection: %v", err)
 		}
 	}(db)
 

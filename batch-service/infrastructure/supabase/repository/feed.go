@@ -79,7 +79,7 @@ func convertDBtoFeedDomain(f *entity.Feed) domain.Feed {
 		Category: domain.Category{
 			ID:        f.R.Category.ID,
 			Name:      f.R.Category.Name,
-			Type:      f.R.Category.Type,
+			Type:      domain.CategoryType(f.R.Category.Type),
 			CreatedAt: f.R.Category.CreatedAt,
 			UpdatedAt: f.R.Category.UpdatedAt,
 		},

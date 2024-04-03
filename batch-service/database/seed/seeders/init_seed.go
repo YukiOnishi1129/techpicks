@@ -11,7 +11,6 @@ import (
 	"github.com/volatiletech/sqlboiler/v4/boil"
 
 	"github.com/YukiOnishi1129/techpicks/batch-service/domain"
-	goose "github.com/advancedlogic/GoOse"
 )
 
 type InitSeedInterface interface {
@@ -34,7 +33,7 @@ func (is *InitSeed) SeedInitData(ctx context.Context) error {
 	seedCategories := getCategoryDatas()
 	seedPlatformFeeds := getSeedPlatformAndFeeds()
 	for _, s := range seedCategories {
-		categoryID, err := uuid.NewUUID()
+		categoryID, _ := uuid.NewUUID()
 		category := entity.Category{
 			ID:   categoryID.String(),
 			Name: s.Name,
@@ -43,7 +42,7 @@ func (is *InitSeed) SeedInitData(ctx context.Context) error {
 
 		err = category.Insert(ctx, tx, boil.Infer())
 		if err != nil {
-			err := tx.Rollback()
+			err = tx.Rollback()
 			if err != nil {
 				return err
 			}
@@ -55,14 +54,7 @@ func (is *InitSeed) SeedInitData(ctx context.Context) error {
 				f, _ := entity.Platforms(qm.Where("site_url = ?", p.PlatformSiteURL)).One(ctx, tx)
 				if f != nil {
 					println("platform already exists")
-					feedID, err := uuid.NewUUID()
-					if err != nil {
-						err := tx.Rollback()
-						if err != nil {
-							return err
-						}
-						return err
-					}
+					feedID, _ := uuid.NewUUID()
 					feed := entity.Feed{
 						ID:         feedID.String(),
 						Name:       p.FeedName,
@@ -72,7 +64,7 @@ func (is *InitSeed) SeedInitData(ctx context.Context) error {
 					}
 					err = feed.Insert(ctx, tx, boil.Infer())
 					if err != nil {
-						err := tx.Rollback()
+						err = tx.Rollback()
 						if err != nil {
 							return err
 						}
@@ -80,14 +72,7 @@ func (is *InitSeed) SeedInitData(ctx context.Context) error {
 					}
 					continue
 				}
-				platformID, err := uuid.NewUUID()
-				if err != nil {
-					err := tx.Rollback()
-					if err != nil {
-						return err
-					}
-					return err
-				}
+				platformID, _ := uuid.NewUUID()
 				platform := entity.Platform{
 					ID:           platformID.String(),
 					Name:         p.PlatformName,
@@ -98,21 +83,14 @@ func (is *InitSeed) SeedInitData(ctx context.Context) error {
 				}
 				err = platform.Insert(ctx, tx, boil.Infer())
 				if err != nil {
-					err := tx.Rollback()
+					err = tx.Rollback()
 					if err != nil {
 						return err
 					}
 					return err
 				}
 
-				feedID, err := uuid.NewUUID()
-				if err != nil {
-					err := tx.Rollback()
-					if err != nil {
-						return err
-					}
-					return err
-				}
+				feedID, _ := uuid.NewUUID()
 
 				feed := entity.Feed{
 					ID:         feedID.String(),
@@ -123,7 +101,7 @@ func (is *InitSeed) SeedInitData(ctx context.Context) error {
 				}
 				err = feed.Insert(ctx, tx, boil.Infer())
 				if err != nil {
-					err := tx.Rollback()
+					err = tx.Rollback()
 					if err != nil {
 						return err
 					}
@@ -139,16 +117,16 @@ func (is *InitSeed) SeedInitData(ctx context.Context) error {
 	return nil
 }
 
-func getMetaData(url string) (faviconURL, ogpImageURL string, err error) {
-	g := goose.New()
-	article, err := g.ExtractFromURL(url)
-	if err != nil {
-		return "", "", err
-	}
-	faviconURL = article.MetaFavicon
-	ogpImageURL = article.TopImage
-	return faviconURL, ogpImageURL, nil
-}
+//func getMetaData(url string) (faviconURL, ogpImageURL string, err error) {
+//	g := goose.New()
+//	article, err := g.ExtractFromURL(url)
+//	if err != nil {
+//		return "", "", err
+//	}
+//	faviconURL = article.MetaFavicon
+//	ogpImageURL = article.TopImage
+//	return faviconURL, ogpImageURL, nil
+//}
 
 type seedCategory struct {
 	Name           string
