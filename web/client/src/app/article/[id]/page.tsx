@@ -1,5 +1,4 @@
-import { ArticleDetail } from "@/features/articles/components/ArticleDetail";
-import { getArticleById } from "@/features/articles/repository/article";
+// import { getArticleById } from "@/features/articles/repository/article";
 
 type ArticleDetailPageProps = {
   params: {
@@ -10,6 +9,6 @@ type ArticleDetailPageProps = {
 export default async function ArticleDetailPage({
   params,
 }: ArticleDetailPageProps) {
-  const article = await getArticleById(params.id);
-  return <ArticleDetail article={article} />;
+  // const article = await getArticleById(params.id);
+  return <div></div>;
 }
