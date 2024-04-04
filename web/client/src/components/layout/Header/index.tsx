@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getServerSession } from "next-auth/next";
+import { CiSearch } from "react-icons/ci";
 
 import { authOptions } from "@/lib/auth";
 
@@ -14,7 +15,10 @@ export async function Header() {
         <h1 className="text-2xl font-bold">Tech Picks</h1>
       </Link>
 
-      <div className="flex">
+      <div className="flex items-center">
+        <Link className="mr-8" href="/article/search">
+          <CiSearch className="size-8" />
+        </Link>
         {session ? <LoggedMenu session={session} /> : <NotLoggedMenu />}
       </div>
     </div>
