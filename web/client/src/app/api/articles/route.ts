@@ -7,6 +7,7 @@ import { LanguageStatus } from "@/types/language";
 export async function GET(req: NextRequest) {
   const searchParams = req.nextUrl.searchParams;
   const languageStatus = searchParams.get("languageStatus");
+  const keyword = searchParams.get("keyword") || undefined;
   const offset = searchParams.get("offset");
   const status =
     typeof languageStatus === "string"
@@ -14,6 +15,7 @@ export async function GET(req: NextRequest) {
       : 1;
   const articles = await getArticles({
     languageStatus: status,
+    keyword: keyword,
     offset: parseInt(offset || "1"),
   });
   return Response.json(

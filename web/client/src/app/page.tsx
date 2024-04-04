@@ -16,6 +16,11 @@ export default async function Home({ searchParams }: PageProps) {
       ? (parseInt(searchParams["languageStatus"]) as LanguageStatus)
       : 1;
 
+  const keyword =
+    typeof searchParams["keyword"] === "string"
+      ? searchParams["keyword"]
+      : undefined;
+
   return (
     <>
       <Suspense
@@ -25,7 +30,10 @@ export default async function Home({ searchParams }: PageProps) {
           </div>
         }
       >
-        <ArticleListTemplate languageStatus={languageStatus} />
+        <ArticleListTemplate
+          languageStatus={languageStatus}
+          keyword={keyword}
+        />
       </Suspense>
     </>
   );

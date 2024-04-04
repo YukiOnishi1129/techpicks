@@ -1,15 +1,13 @@
-import { db } from "@/lib/firestore";
 import prisma from "@/lib/prisma";
 
 import { ArticleType } from "@/types/article";
 import { LanguageStatus } from "@/types/language";
 
-const articleRef = db.collection("articles");
-
 const LIMIT = 20;
 
 export type GetArticleParams = {
   platformId?: string;
+  keyword?: string;
   languageStatus?: LanguageStatus;
   offset?: number;
   sort?: "asc" | "desc";
@@ -17,6 +15,7 @@ export type GetArticleParams = {
 };
 
 export const getArticles = async ({
+  keyword,
   languageStatus = 1,
   offset = 1,
   sort = "desc",
@@ -25,6 +24,39 @@ export const getArticles = async ({
   "use server";
 
   let orderBy = {};
+
+  let where = {};
+  if (keyword) {
+    where = {
+      AND: [
+        {
+          OR: [
+            {
+              title: {
+                contains: keyword,
+              },
+            },
+            {
+              description: {
+                contains: keyword,
+              },
+            },
+          ],
+        },
+        {
+          platform: {
+            isEng: languageStatus === 2,
+          },
+        },
+      ],
+    };
+  } else {
+    where = {
+      platform: {
+        isEng: languageStatus === 2,
+      },
+    };
+  }
 
   switch (sortColum) {
     case "publishedAt":
@@ -38,11 +70,7 @@ export const getArticles = async ({
   const res = await prisma.article.findMany({
     take: 20,
     skip: (offset - 1) * LIMIT,
-    where: {
-      platform: {
-        isEng: languageStatus === 2,
-      },
-    },
+    where,
     orderBy,
     include: {
       feedArticleRelatoins: {

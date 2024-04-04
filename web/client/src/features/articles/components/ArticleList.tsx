@@ -14,11 +14,14 @@ import { LanguageTabMenu } from "./LanguageTabMenu";
 type Props = {
   initialArticles: Array<ArticleType>;
   languageStatus: LanguageStatus;
+  keyword?: string;
   fetchArticles: ({
     languageStatus,
+    keyword,
     offset,
   }: {
     languageStatus: string;
+    keyword?: string;
     offset: string;
   }) => Promise<ArticleType[]>;
 };
@@ -26,6 +29,7 @@ type Props = {
 export function ArticleList({
   initialArticles,
   languageStatus,
+  keyword,
   fetchArticles,
 }: Props) {
   const observerTarget = useRef(null);
@@ -40,6 +44,7 @@ export function ArticleList({
     async (offset: number) => {
       const newArticles = await fetchArticles({
         offset: offset.toString(),
+        keyword: keyword,
         languageStatus: languageStatus.toString(),
       });
       setArticles((prev) => [...prev, ...newArticles]);
@@ -85,17 +90,16 @@ export function ArticleList({
   return (
     <div className="w-auto">
       <div className="w-full border-b-2 bg-white py-4">
-        <LanguageTabMenu languageStatus={languageStatus} />
+        <LanguageTabMenu languageStatus={languageStatus} keyword={keyword} />
       </div>
       <div className="m-auto h-[700px] overflow-y-scroll md:h-[600px]">
-        {flatArticles &&
-          flatArticles.map((article) => (
-            <div key={article.id} className="border-t-2 py-8">
-              <ArticleDetailDialog article={article}>
-                <ArticleCard article={article} />
-              </ArticleDetailDialog>
-            </div>
-          ))}
+        {flatArticles.map((article) => (
+          <div key={article.id} className="border-t-2 py-8">
+            <ArticleDetailDialog article={article}>
+              <ArticleCard article={article} />
+            </ArticleDetailDialog>
+          </div>
+        ))}
         <div ref={observerTarget}>
           {hashMore && (
             <div className="flex justify-center py-4">

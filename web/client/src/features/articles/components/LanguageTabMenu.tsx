@@ -9,17 +9,23 @@ import { LanguageStatus } from "@/types/language";
 
 type LanguageTabMenuProps = {
   languageStatus: LanguageStatus;
+  keyword?: string;
 };
 export const LanguageTabMenu: FC<LanguageTabMenuProps> = ({
   languageStatus,
+  keyword,
 }: LanguageTabMenuProps) => {
   const router = useRouter();
 
   const onClick = useCallback(
     async (language: LanguageStatus) => {
-      router.replace(`/?languageStatus=${language}`);
+      let path = `/?languageStatus=${language}`;
+      if (keyword) {
+        path += `&keyword=${keyword}`;
+      }
+      router.replace(path);
     },
-    [router]
+    [router, keyword]
   );
 
   return (
