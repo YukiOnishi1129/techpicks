@@ -49,6 +49,7 @@ func (au *ArticleUsecase) BatchCreateArticles(ctx context.Context) error {
 
 		log.Printf("【start create article】: %s", f.Name)
 		aCount := 0
+		farCount := 0
 		// get rss
 		rss, err := GetRSS(f.RSSURL)
 		if err != nil {
@@ -77,7 +78,7 @@ func (au *ArticleUsecase) BatchCreateArticles(ctx context.Context) error {
 							}
 							continue
 						}
-						aCount++
+						farCount++
 						break
 					}
 				}
@@ -85,7 +86,6 @@ func (au *ArticleUsecase) BatchCreateArticles(ctx context.Context) error {
 			}
 
 			if isSkip {
-				log.Printf("【skip create article】: %s", r.Title)
 				continue
 			}
 
@@ -126,7 +126,9 @@ func (au *ArticleUsecase) BatchCreateArticles(ctx context.Context) error {
 				}
 				continue
 			}
+			log.Printf("【create article】: %s", r.Title)
 			aCount++
+			farCount++
 		}
 
 		err = tx.Commit()
@@ -136,7 +138,8 @@ func (au *ArticleUsecase) BatchCreateArticles(ctx context.Context) error {
 		}
 		log.Printf("【commit transaction】")
 		log.Printf("【end create article】: %s", f.Name)
-		log.Printf("【article count】: %d", aCount)
+		log.Printf("【add article count】: %d", aCount)
+		log.Printf("【add feed_article_relationcount】: %d", farCount)
 	}
 	log.Printf("【end BatchCreateArticles】")
 	end := time.Now()
