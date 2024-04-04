@@ -1,18 +1,22 @@
+import {
+  Article as PrismaArticle,
+  Platform as PrismaPlatform,
+  Feed as PrismaFeed,
+  Category as PrismaCategory,
+} from "@prisma/client";
+
 import { PlatformType } from "./platform";
 
-export type Article = {
-  id: string;
-  title: string;
-  description: string;
-  thumbnailURL: string;
-  articleUrl: string;
-  publishedAt: number;
-  platform: ArticlePlatform;
-  isEng: boolean;
-  isPrivate: boolean;
-  createdAt: number;
-  updatedAt: number;
-  deletedAt?: number;
+export type ArticleType = Omit<PrismaArticle, "platformId"> & {
+  platform: PrismaPlatform;
+  feeds: Array<
+    Omit<
+      PrismaFeed & {
+        category: PrismaCategory;
+      },
+      "platformId" | "categoryId"
+    >
+  >;
 };
 
 export type ArticlePlatform = {

@@ -7,12 +7,10 @@ import { Button } from "@/components/ui/button";
 import { useCheckImageExist } from "@/hooks/useImage";
 import { useParseHtml } from "@/hooks/useParseHtml";
 
-import { showDiffDateToCurrentDate } from "@/lib/date";
-
-import { Article } from "@/types/article";
+import { ArticleType } from "@/types/article";
 
 type ArticleDetailProps = {
-  article: Article;
+  article: ArticleType;
 };
 
 export const ArticleDetail = ({ article }: ArticleDetailProps) => {
@@ -55,7 +53,7 @@ export const ArticleDetail = ({ article }: ArticleDetailProps) => {
             </span>
           </Link>
           <span className="pl-2 text-sm">
-            {showDiffDateToCurrentDate(article.publishedAt)}
+            {article.publishedAt.toDateString()}
           </span>
         </div>
 

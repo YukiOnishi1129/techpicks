@@ -76,3 +76,85 @@ model VerificationToken {
   @@unique([identifier, token])
   @@map("verification_tokens")
 }
+
+model FeedArticleRelation {
+  id           String   @id @default(uuid())
+  feedId       String @map("feed_id")
+  articleId    String @map("article_id")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  feed         Feed  @relation(fields: [feedId], references: [id], onDelete: Cascade)
+  article      Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+
+  @@map("feed_article_relations")
+
+}
+
+model Article {
+  id           String   @id @default(uuid())
+  platformId   String @map("platform_id")
+  title        String
+  description  String
+  articleUrl   String @map("article_url")
+  publishedAt  DateTime @map("published_at")
+  thumbnailURL String @map("thumbnail_url")
+  isPrivate    Boolean @map("is_private")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+  feedArticleRelatoins FeedArticleRelation[]
+
+  platform     Platform  @relation(fields: [platformId], references: [id], onDelete: Cascade)
+
+  @@map("articles")
+
+}
+
+model Feed {
+  id           String   @id @default(uuid())
+  name         String
+  platformId   String @map("platform_id")
+  categoryId   String @map("category_id")
+  siteUrl      String @map("site_url")
+  rssUrl       String @map("rss_url")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+  deletedAt    DateTime? @map("deleted_at")
+
+  platform     Platform  @relation(fields: [platformId], references: [id], onDelete: Cascade)
+  category     Category  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  feedArticleRelatoins FeedArticleRelation[]
+
+  @@map("feeds")
+}
+
+
+model Category {
+  id           String   @id @default(uuid())
+  name         String
+  type         Int 
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+  deletedAt    DateTime? @map("deleted_at")
+  feeds        Feed[]
+
+  @@map("categories")
+}
+
+
+model Platform {
+  id           String   @id @default(uuid())
+  name         String
+  siteUrl      String @map("site_url")
+  platformType Int @map("platform_type")
+  faviconUrl   String @map("favicon_url")
+  isEng        Boolean @map("is_eng")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+  deletedAt    DateTime? @map("deleted_at")
+  feeds        Feed[]
+  articles     Article[]
+
+  @@map("platforms")
+}

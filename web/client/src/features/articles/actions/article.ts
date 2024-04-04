@@ -1,6 +1,6 @@
 "use server";
 
-import { Article } from "@/types/article";
+import { ArticleType } from "@/types/article";
 
 export const fetchArticleAPI = async ({
   languageStatus,
@@ -21,5 +21,5 @@ export const fetchArticleAPI = async ({
   );
   const data = await response.json();
 
-  return data.articles as Article[];
+  return data.articles as ArticleType[];
 };

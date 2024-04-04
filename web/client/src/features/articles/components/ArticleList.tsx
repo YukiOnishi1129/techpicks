@@ -5,14 +5,14 @@ import { ArticleCard } from "@/features/articles/components/ArticleCard";
 
 import { Loader } from "@/components/ui/loader";
 
-import { Article } from "@/types/article";
+import { ArticleType } from "@/types/article";
 import { LanguageStatus } from "@/types/language";
 
 import { ArticleDetailDialog } from "./ArticleDetailDialog";
 import { LanguageTabMenu } from "./LanguageTabMenu";
 
 type Props = {
-  initialArticles: Array<Article>;
+  initialArticles: Array<ArticleType>;
   languageStatus: LanguageStatus;
   fetchArticles: ({
     languageStatus,
@@ -20,7 +20,7 @@ type Props = {
   }: {
     languageStatus: string;
     offset: string;
-  }) => Promise<Article[]>;
+  }) => Promise<ArticleType[]>;
 };
 
 export function ArticleList({
@@ -30,7 +30,7 @@ export function ArticleList({
 }: Props) {
   const observerTarget = useRef(null);
 
-  const [articles, setArticles] = useState<Article[]>(initialArticles);
+  const [articles, setArticles] = useState<ArticleType[]>(initialArticles);
   const [hashMore, setHashMore] = useState(true);
   const [offset, setOffset] = useState(1);
 

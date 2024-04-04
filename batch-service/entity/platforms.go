@@ -108,19 +108,29 @@ var PlatformWhere = struct {
 
 // PlatformRels is where relationship names are stored.
 var PlatformRels = struct {
-	Feeds string
+	Articles string
+	Feeds    string
 }{
-	Feeds: "Feeds",
+	Articles: "Articles",
+	Feeds:    "Feeds",
 }
 
 // platformR is where relationships are stored.
 type platformR struct {
-	Feeds FeedSlice `boil:"Feeds" json:"Feeds" toml:"Feeds" yaml:"Feeds"`
+	Articles ArticleSlice `boil:"Articles" json:"Articles" toml:"Articles" yaml:"Articles"`
+	Feeds    FeedSlice    `boil:"Feeds" json:"Feeds" toml:"Feeds" yaml:"Feeds"`
 }
 
 // NewStruct creates a new relationship struct
 func (*platformR) NewStruct() *platformR {
 	return &platformR{}
+}
+
+func (r *platformR) GetArticles() ArticleSlice {
+	if r == nil {
+		return nil
+	}
+	return r.Articles
 }
 
 func (r *platformR) GetFeeds() FeedSlice {
@@ -446,6 +456,20 @@ func (q platformQuery) Exists(ctx context.Context, exec boil.ContextExecutor) (b
 	return count > 0, nil
 }
 
+// Articles retrieves all the article's Articles with an executor.
+func (o *Platform) Articles(mods ...qm.QueryMod) articleQuery {
+	var queryMods []qm.QueryMod
+	if len(mods) != 0 {
+		queryMods = append(queryMods, mods...)
+	}
+
+	queryMods = append(queryMods,
+		qm.Where("\"articles\".\"platform_id\"=?", o.ID),
+	)
+
+	return Articles(queryMods...)
+}
+
 // Feeds retrieves all the feed's Feeds with an executor.
 func (o *Platform) Feeds(mods ...qm.QueryMod) feedQuery {
 	var queryMods []qm.QueryMod
@@ -458,6 +482,119 @@ func (o *Platform) Feeds(mods ...qm.QueryMod) feedQuery {
 	)
 
 	return Feeds(queryMods...)
+}
+
+// LoadArticles allows an eager lookup of values, cached into the
+// loaded structs of the objects. This is for a 1-M or N-M relationship.
+func (platformL) LoadArticles(ctx context.Context, e boil.ContextExecutor, singular bool, maybePlatform interface{}, mods queries.Applicator) error {
+	var slice []*Platform
+	var object *Platform
+
+	if singular {
+		var ok bool
+		object, ok = maybePlatform.(*Platform)
+		if !ok {
+			object = new(Platform)
+			ok = queries.SetFromEmbeddedStruct(&object, &maybePlatform)
+			if !ok {
+				return errors.New(fmt.Sprintf("failed to set %T from embedded struct %T", object, maybePlatform))
+			}
+		}
+	} else {
+		s, ok := maybePlatform.(*[]*Platform)
+		if ok {
+			slice = *s
+		} else {
+			ok = queries.SetFromEmbeddedStruct(&slice, maybePlatform)
+			if !ok {
+				return errors.New(fmt.Sprintf("failed to set %T from embedded struct %T", slice, maybePlatform))
+			}
+		}
+	}
+
+	args := make(map[interface{}]struct{})
+	if singular {
+		if object.R == nil {
+			object.R = &platformR{}
+		}
+		args[object.ID] = struct{}{}
+	} else {
+		for _, obj := range slice {
+			if obj.R == nil {
+				obj.R = &platformR{}
+			}
+			args[obj.ID] = struct{}{}
+		}
+	}
+
+	if len(args) == 0 {
+		return nil
+	}
+
+	argsSlice := make([]interface{}, len(args))
+	i := 0
+	for arg := range args {
+		argsSlice[i] = arg
+		i++
+	}
+
+	query := NewQuery(
+		qm.From(`articles`),
+		qm.WhereIn(`articles.platform_id in ?`, argsSlice...),
+	)
+	if mods != nil {
+		mods.Apply(query)
+	}
+
+	results, err := query.QueryContext(ctx, e)
+	if err != nil {
+		return errors.Wrap(err, "failed to eager load articles")
+	}
+
+	var resultSlice []*Article
+	if err = queries.Bind(results, &resultSlice); err != nil {
+		return errors.Wrap(err, "failed to bind eager loaded slice articles")
+	}
+
+	if err = results.Close(); err != nil {
+		return errors.Wrap(err, "failed to close results in eager load on articles")
+	}
+	if err = results.Err(); err != nil {
+		return errors.Wrap(err, "error occurred during iteration of eager loaded relations for articles")
+	}
+
+	if len(articleAfterSelectHooks) != 0 {
+		for _, obj := range resultSlice {
+			if err := obj.doAfterSelectHooks(ctx, e); err != nil {
+				return err
+			}
+		}
+	}
+	if singular {
+		object.R.Articles = resultSlice
+		for _, foreign := range resultSlice {
+			if foreign.R == nil {
+				foreign.R = &articleR{}
+			}
+			foreign.R.Platform = object
+		}
+		return nil
+	}
+
+	for _, foreign := range resultSlice {
+		for _, local := range slice {
+			if local.ID == foreign.PlatformID {
+				local.R.Articles = append(local.R.Articles, foreign)
+				if foreign.R == nil {
+					foreign.R = &articleR{}
+				}
+				foreign.R.Platform = local
+				break
+			}
+		}
+	}
+
+	return nil
 }
 
 // LoadFeeds allows an eager lookup of values, cached into the
@@ -570,6 +707,59 @@ func (platformL) LoadFeeds(ctx context.Context, e boil.ContextExecutor, singular
 		}
 	}
 
+	return nil
+}
+
+// AddArticles adds the given related objects to the existing relationships
+// of the platform, optionally inserting them as new records.
+// Appends related to o.R.Articles.
+// Sets related.R.Platform appropriately.
+func (o *Platform) AddArticles(ctx context.Context, exec boil.ContextExecutor, insert bool, related ...*Article) error {
+	var err error
+	for _, rel := range related {
+		if insert {
+			rel.PlatformID = o.ID
+			if err = rel.Insert(ctx, exec, boil.Infer()); err != nil {
+				return errors.Wrap(err, "failed to insert into foreign table")
+			}
+		} else {
+			updateQuery := fmt.Sprintf(
+				"UPDATE \"articles\" SET %s WHERE %s",
+				strmangle.SetParamNames("\"", "\"", 1, []string{"platform_id"}),
+				strmangle.WhereClause("\"", "\"", 2, articlePrimaryKeyColumns),
+			)
+			values := []interface{}{o.ID, rel.ID}
+
+			if boil.IsDebug(ctx) {
+				writer := boil.DebugWriterFrom(ctx)
+				fmt.Fprintln(writer, updateQuery)
+				fmt.Fprintln(writer, values)
+			}
+			if _, err = exec.ExecContext(ctx, updateQuery, values...); err != nil {
+				return errors.Wrap(err, "failed to update foreign table")
+			}
+
+			rel.PlatformID = o.ID
+		}
+	}
+
+	if o.R == nil {
+		o.R = &platformR{
+			Articles: related,
+		}
+	} else {
+		o.R.Articles = append(o.R.Articles, related...)
+	}
+
+	for _, rel := range related {
+		if rel.R == nil {
+			rel.R = &articleR{
+				Platform: o,
+			}
+		} else {
+			rel.R.Platform = o
+		}
+	}
 	return nil
 }
 

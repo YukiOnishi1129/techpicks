@@ -4,12 +4,10 @@ import { FC } from "react";
 
 import { useCheckImageExist } from "@/hooks/useImage";
 
-import { showDiffDateToCurrentDate } from "@/lib/date";
-
-import { Article } from "@/types/article";
+import { ArticleType } from "@/types/article";
 
 type ArticleCardProps = {
-  article: Article;
+  article: ArticleType;
 };
 
 export const ArticleCard: FC<ArticleCardProps> = ({
@@ -32,14 +30,21 @@ export const ArticleCard: FC<ArticleCardProps> = ({
             <span className="rounded-lg bg-sky-500 px-2 py-1 text-xs font-bold text-white md:text-base">
               {article.platform.name}
             </span>
-            {article.platform.categoryName && (
+            {article.feeds.length > 0 &&
+              article.feeds.map((feed) => (
+                <span
+                  key={`${feed.id}-${feed.category.id}`}
+                  className="ml-2 rounded-lg bg-yellow-600 px-2 py-1 text-xs font-bold text-white md:text-base"
+                >
+                  {feed.category.name}
+                </span>
+              ))}
+            {/* {article.platform.categoryName && (
               <span className="ml-2 rounded-lg bg-yellow-600 px-2 py-1 text-xs font-bold text-white md:text-base">
                 {article.platform.categoryName}
               </span>
-            )}
-            <p className="pt-2 text-sm">
-              {showDiffDateToCurrentDate(article.publishedAt)}
-            </p>
+            )} */}
+            {/* <p className="pt-2 text-sm">{article.publishedAt.}</p> */}
           </div>
         </div>
 

@@ -94,12 +94,13 @@ func (au *ArticleUsecase) BatchCreateArticles(ctx context.Context) error {
 			// insert article
 			articleID, _ := uuid.NewUUID()
 			publishedAt := time.Unix(int64(r.PublishedAt), 0)
-			articleTitle := ""
-			if len(r.Title) > 255 {
-				articleTitle = r.Title[:255]
+			articleTitle := r.Title
+			if len(articleTitle) > 255 {
+				articleTitle = articleTitle[:255]
 			}
 			article := entity.Article{
 				ID:           articleID.String(),
+				PlatformID:   f.PlatformID,
 				Title:        articleTitle,
 				Description:  r.Description,
 				ThumbnailURL: r.ImageURL,
