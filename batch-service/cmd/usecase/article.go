@@ -1,29 +1,143 @@
 package usecase
 
 import (
-	"cloud.google.com/go/firestore"
 	"context"
+	"database/sql"
+	"github.com/YukiOnishi1129/techpicks/batch-service/entity"
+	"github.com/google/uuid"
+	"github.com/volatiletech/sqlboiler/v4/boil"
+	"github.com/volatiletech/sqlboiler/v4/queries/qm"
+	"log"
+	"time"
 )
 
 type ArticleUsecaseInterface interface {
-	CreateArticles(ctx context.Context, client *firestore.Client) error
+	CreateArticles(ctx context.Context, db *sql.DB) error
 }
 
-//type ArticleUsecase struct {
-//	client *firestore.Client
-//	pr     *repository.PlatformRepository
-//	ar     *repository.ArticleRepository
-//}
-//
-//func NewArticleUsecase(client *firestore.Client, pr *repository.PlatformRepository, ar *repository.ArticleRepository) *ArticleUsecase {
-//	return &ArticleUsecase{
-//		client: client,
-//		pr:     pr,
-//		ar:     ar,
-//	}
-//}
+type ArticleUsecase struct {
+	db *sql.DB
+}
 
-//func (au *ArticleUsecase) CreateArticles(ctx context.Context, client *firestore.Client) error {
+func NewArticleUsecase(db *sql.DB) *ArticleUsecase {
+	return &ArticleUsecase{
+		db: db,
+	}
+}
+
+func (au *ArticleUsecase) BatchCreateArticles(ctx context.Context) error {
+	now := time.Now()
+	log.Printf("【start BatchCreateArticles】")
+	feeds, err := entity.Feeds(qm.Where("deleted_at IS NULL"), qm.OrderBy("created_at")).All(ctx, au.db)
+	if err != nil {
+		log.Printf("【error get feeds】: %s", err)
+		return err
+	}
+	// for feeds
+	for _, f := range feeds {
+		// transaction
+		tx, err := au.db.BeginTx(ctx, nil)
+		if err != nil {
+			log.Printf("【error begin transaction】: %s", err)
+			return err
+		}
+		log.Printf("【begin transaction】")
+
+		log.Printf("【start create article】: %s", f.Name)
+		aCount := 0
+		// get rss
+		rss, err := GetRSS(f.RSSURL)
+		if err != nil {
+			log.Printf("【error get rss】: %s", f.Name)
+			continue
+		}
+
+		for _, r := range rss {
+			isSkip := false
+			// 1. check article table at article_url
+			articles, _ := entity.Articles(qm.Where("article_url = ?", r.Link)).All(ctx, tx)
+			if articles != nil {
+				for _, a := range articles {
+					feedArticleRelation, _ := entity.FeedArticleRelations(qm.Where("feed_id = ?", f.ID), qm.Where("article_id = ?", a.ID)).One(ctx, tx)
+					if feedArticleRelation == nil {
+						print("🔥🔥🔥🔥🔥🔥🔥🔥")
+						err = createFeedArticleRelation(ctx, tx, f.ID, a.ID)
+						if err != nil {
+							log.Printf("【error insert feed article relation】: %s", r.Title)
+							continue
+						}
+						aCount++
+						break
+					}
+				}
+				isSkip = true
+			}
+
+			if isSkip {
+				log.Printf("【skip create article】: %s", r.Title)
+				continue
+			}
+
+			// create article and feed_article_relation data
+			// insert article
+			articleID, _ := uuid.NewUUID()
+			publishedAt := time.Unix(int64(r.PublishedAt), 0)
+			article := entity.Article{
+				ID:           articleID.String(),
+				Title:        r.Title,
+				Description:  r.Description,
+				ThumbnailURL: r.ImageURL,
+				ArticleURL:   r.Link,
+				PublishedAt:  publishedAt,
+				IsPrivate:    false,
+			}
+			err = article.Insert(ctx, tx, boil.Infer())
+			if err != nil {
+				log.Printf("【error insert article】: %s, err: %v", r.Title, err)
+				continue
+			}
+
+			// insert feed article relation
+			err = createFeedArticleRelation(ctx, tx, f.ID, articleID.String())
+			if err != nil {
+				log.Printf("【error insert feed article relation】: %s", r.Title)
+				continue
+			}
+			aCount++
+		}
+
+		err = tx.Commit()
+		if err != nil {
+			log.Printf("【error commit transaction】: %s", err)
+			return err
+		}
+		log.Printf("【commit transaction】")
+		log.Printf("【end create article】: %s", f.Name)
+		log.Printf("【article count】: %d", aCount)
+	}
+	log.Printf("【end BatchCreateArticles】")
+	end := time.Now()
+	diff := end.Sub(now)
+	log.Printf("【end create article all】: %s", diff)
+
+	return nil
+}
+
+func createFeedArticleRelation(ctx context.Context, tx *sql.Tx, feedID, articleID string) error {
+	feedArticleRelationID, _ := uuid.NewUUID()
+	feedArticleRelation := entity.FeedArticleRelation{
+		ID:        feedArticleRelationID.String(),
+		FeedID:    feedID,
+		ArticleID: articleID,
+	}
+	err := feedArticleRelation.Insert(ctx, tx, boil.Infer())
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+//func (au *ArticleUsecase) CreateArticles(ctx context.Context) error {
 //	now := time.Now()
 //	// get platforms
 //	platforms, err := au.pr.GetPlatforms(ctx)

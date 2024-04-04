@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"github.com/YukiOnishi1129/techpicks/batch-service/entity"
 	"github.com/google/uuid"
+	"github.com/volatiletech/null/v8"
 	"github.com/volatiletech/sqlboiler/v4/queries/qm"
 	"time"
 
@@ -50,7 +51,7 @@ func (is *InitSeed) SeedInitData(ctx context.Context) error {
 		}
 
 		for _, p := range seedPlatformFeeds {
-			if p.seedCategoryID != s.seedCategoryID {
+			if p.seedCategoryID == s.seedCategoryID {
 				f, _ := entity.Platforms(qm.Where("site_url = ?", p.PlatformSiteURL)).One(ctx, tx)
 				if f != nil {
 					println("platform already exists")
@@ -61,6 +62,10 @@ func (is *InitSeed) SeedInitData(ctx context.Context) error {
 						RSSURL:     p.RssURL,
 						PlatformID: f.ID,
 						CategoryID: category.ID,
+					}
+
+					if p.DeletedAt != nil {
+						feed.DeletedAt = null.TimeFromPtr(p.DeletedAt)
 					}
 					err = feed.Insert(ctx, tx, boil.Infer())
 					if err != nil {
@@ -81,6 +86,9 @@ func (is *InitSeed) SeedInitData(ctx context.Context) error {
 					FaviconURL:   p.FaviconURL,
 					IsEng:        p.IsEng,
 				}
+				if p.DeletedAt != nil {
+					platform.DeletedAt = null.TimeFromPtr(p.DeletedAt)
+				}
 				err = platform.Insert(ctx, tx, boil.Infer())
 				if err != nil {
 					err = tx.Rollback()
@@ -98,6 +106,9 @@ func (is *InitSeed) SeedInitData(ctx context.Context) error {
 					RSSURL:     p.RssURL,
 					PlatformID: platformID.String(),
 					CategoryID: categoryID.String(),
+				}
+				if p.DeletedAt != nil {
+					feed.DeletedAt = null.TimeFromPtr(p.DeletedAt)
 				}
 				err = feed.Insert(ctx, tx, boil.Infer())
 				if err != nil {

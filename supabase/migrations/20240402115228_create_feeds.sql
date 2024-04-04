@@ -7,7 +7,7 @@ CREATE TABLE feeds
     name VARCHAR(255) NOT NULL,
     platform_id uuid NOT NULL,
     category_id uuid NOT NULL,
-    rss_url VARCHAR(255) NOT NULL,
+    rss_url TEXT NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     deleted_at TIMESTAMP DEFAULT NULL,

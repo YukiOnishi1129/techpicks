@@ -1,7 +1,9 @@
 package main
 
 import (
+	"context"
 	"database/sql"
+	"github.com/YukiOnishi1129/techpicks/batch-service/cmd/usecase"
 	"github.com/YukiOnishi1129/techpicks/batch-service/database"
 	"github.com/joho/godotenv"
 	"log"
@@ -9,7 +11,7 @@ import (
 
 func main() {
 	log.Printf("Start batch service")
-	//ctx := context.Background()
+	ctx := context.Background()
 	err := godotenv.Load(".env")
 	if err != nil {
 		log.Fatalf("Error loading .env file")
@@ -28,13 +30,11 @@ func main() {
 		}
 	}(db)
 
-	//pr := repository.NewPlatformRepository(client)
-	//ar := repository.NewArticleRepository(client)
-	//au := usecase.NewArticleUsecase(client, pr, ar)
-	//
-	//err = au.CreateArticles(ctx, client)
-	//if err != nil {
-	//	log.Fatalf("Failed to create articles: %v", err)
-	//	return
-	//}
+	au := usecase.NewArticleUsecase(db)
+
+	err = au.BatchCreateArticles(ctx)
+	if err != nil {
+		log.Fatalf("Failed to create articles: %v", err)
+		return
+	}
 }
