@@ -1,10 +1,12 @@
 package usecase
 
 import (
+	"context"
 	"fmt"
 	"github.com/Songmu/go-httpdate"
 	"github.com/mmcdole/gofeed"
 	"github.com/otiai10/opengraph"
+	"time"
 )
 
 type RSS struct {
@@ -16,8 +18,11 @@ type RSS struct {
 }
 
 func GetRSS(rssURL string) ([]RSS, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
 	fp := gofeed.NewParser()
-	feed, err := fp.ParseURL(rssURL)
+
+	feed, err := fp.ParseURLWithContext(rssURL, ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -39,7 +44,6 @@ func GetRSS(rssURL string) ([]RSS, error) {
 			println(fmt.Sprintf("skiped time: %s\n", t))
 			continue
 		}
-
 		rss[i] = RSS{
 			Title:       item.Title,
 			Link:        item.Link,
@@ -52,7 +56,9 @@ func GetRSS(rssURL string) ([]RSS, error) {
 }
 
 func getOGPImage(url string) (string, error) {
-	ogp, err := opengraph.Fetch(url)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	ogp, err := opengraph.FetchWithContext(ctx, url)
 	if err != nil {
 		return "", err
 	}

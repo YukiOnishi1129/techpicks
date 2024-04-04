@@ -10,14 +10,14 @@ func TestGetRss(t *testing.T) {
 	}{
 		{
 			name:    "Success: GetRss",
-			rssURL:  "https://medium.com/feed/tag/nextjs",
-			siteURL: "https://zenn.dev/itta/articles/a1cc436afbc901",
+			rssURL:  "https://menthas.com/javascript/rss",
+			siteURL: "https://menthas.com/javascript/rss",
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			//GetRSS(tt.rssURL)
+			// GetRSS(tt.rssURL)
 			//getFavicon(tt.siteURL)
 		})
 	}

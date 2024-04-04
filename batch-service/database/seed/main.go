@@ -1,7 +1,6 @@
 package main
 
 import (
-	"cloud.google.com/go/firestore"
 	"context"
 	"github.com/YukiOnishi1129/techpicks/batch-service/database"
 	"github.com/YukiOnishi1129/techpicks/batch-service/database/seed/seeders"
@@ -16,7 +15,11 @@ func main() {
 		log.Fatalf("Error loading .env file")
 		return
 	}
-	client, err := database.CreateFirestoreClient(ctx)
+	db, err := database.Init()
+	if err != nil {
+		log.Fatalf("Failed to init db: %v", err)
+		return
+	}
 
 	if err != nil {
 		log.Fatalf("Failed to create client: %v", err)
@@ -24,18 +27,11 @@ func main() {
 	}
 
 	// do seeder
-	ps := seeders.NewPlatformSeed(client)
+	is := seeders.NewInitSeed(db)
 
-	err = ps.SeedPlatform(ctx)
+	err = is.SeedInitData(ctx)
 	if err != nil {
 		log.Fatalf("Failed to insert: %v", err)
 		return
 	}
-
-	defer func(client *firestore.Client) {
-		err := client.Close()
-		if err != nil {
-			return
-		}
-	}(client)
 }

@@ -1,27 +1,44 @@
 package domain
 
+import "time"
+
 type Article struct {
 	ID           string
 	Title        string
 	Description  string
 	ThumbnailURL string
 	ArticleURL   string
-	PublishedAt  int
-	Platform     ArticlePlatform
-	IsEng        bool
+	PublishedAt  time.Time
 	IsPrivate    bool
-	CreatedAt    int
-	UpdatedAt    int
-	DeletedAt    *int
+	CreatedAt    time.Time
+	UpdatedAt    time.Time
+	DeletedAt    *time.Time
 }
 
-type ArticlePlatform struct {
-	ID                   string
-	Name                 string
-	PlatformCategoryName string
-	PlatformType         PlatformType
-	SiteURL              string
-	FaviconURL           string
+type GetArticlesInputDTO struct {
+	Title      *string
+	ArticleURL *string
+	StartedAt  *time.Time
+	EndedAt    *time.Time
+}
+
+type CreateArticleInputDTO struct {
+	Title        string
+	Description  string
+	ThumbnailURL string
+	ArticleURL   string
+	PublishedAt  time.Time
+	IsPrivate    *bool
+}
+
+type UpdateArticleInputDTO struct {
+	ID           string
+	Title        string
+	Description  string
+	ThumbnailURL string
+	ArticleURL   string
+	PublishedAt  time.Time
+	IsPrivate    *bool
 }
 
 type ArticleFirestore struct {
