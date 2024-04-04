@@ -1,13 +1,13 @@
-import { FirestoreAdapter } from "@next-auth/firebase-adapter";
-import { cert } from "firebase-admin/app";
+import { PrismaAdapter } from "@auth/prisma-adapter";
 import { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 
+import prisma from "./prisma";
+
 export const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
-  adapter: FirestoreAdapter({
-    credential: cert(JSON.parse(process.env.GOOGLE_CREDENTIALS_JSON as string)),
-  }),
+  // @ts-ignore
+  adapter: PrismaAdapter(prisma),
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID as string,
@@ -20,9 +20,9 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async signIn({ user, account, profile, email, credentials }) {
       // console.log("signIn");
-      console.log("user", user);
-      // console.log("account", account);
-      // console.log("profile", profile);
+      // console.log("user🔥🔥🔥🔥🔥🔥🔥", user);
+      // console.log("account🔥🔥🔥🔥🔥🔥🔥", account);
+      // console.log("profile🔥🔥🔥🔥🔥🔥🔥", profile);
       // console.log("email", email);
       // console.log("credentials", credentials);
       // here is db access

@@ -1,8 +1,7 @@
+import { Loader } from "lucide-react";
 import { Suspense } from "react";
 
 import { ArticleListTemplate } from "@/features/articles/components/ArticleListTemplate";
-
-import { Loader } from "@/components/ui/loader";
 
 import { LanguageStatus } from "@/types/language";
 

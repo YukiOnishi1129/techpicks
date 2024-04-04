@@ -15,12 +15,10 @@ import {
 import { useCheckImageExist } from "@/hooks/useImage";
 import { useParseHtml } from "@/hooks/useParseHtml";
 
-import { showDiffDateToCurrentDate } from "@/lib/date";
-
-import { Article } from "@/types/article";
+import { ArticleType } from "@/types/article";
 
 type ArticleDetailDialogProps = {
-  article: Article;
+  article: ArticleType;
   children: React.ReactNode;
 };
 
@@ -48,7 +46,7 @@ export const ArticleDetailDialog: FC<ArticleDetailDialogProps> = ({
   );
 };
 
-const ArticleContent = ({ article }: { article: Article }) => {
+const ArticleContent = ({ article }: { article: ArticleType }) => {
   const imageUrl = useCheckImageExist(article.thumbnailURL);
   const { convertParseHtml } = useParseHtml();
   return (
@@ -75,18 +73,33 @@ const ArticleContent = ({ article }: { article: Article }) => {
                 src={article.platform.faviconUrl}
                 alt=""
               />
+            </Link>
+            <Link
+              className="hover:opacity-80"
+              href={article.platform.siteUrl}
+              target="_blank"
+            >
               <span className="rounded-lg bg-sky-500 px-2 py-1 text-xs font-bold text-white md:text-base">
                 {article.platform.name}
               </span>
-              {article.platform.categoryName && (
-                <span className="ml-2 rounded-lg bg-yellow-600 px-2 py-1 text-xs font-bold text-white md:text-base">
-                  {article.platform.categoryName}
-                </span>
-              )}
             </Link>
 
+            {article.feeds.length > 0 &&
+              article.feeds.map((feed) => (
+                <Link
+                  key={`${feed.id}-${feed.category.id}`}
+                  className="ml-2 hover:opacity-80"
+                  href={feed.siteUrl}
+                  target="_blank"
+                >
+                  <span className="rounded-lg bg-yellow-600 px-2 py-1 text-xs font-bold text-white md:text-base">
+                    {feed.category.name}
+                  </span>
+                </Link>
+              ))}
+
             <span className="pl-2 text-sm">
-              {showDiffDateToCurrentDate(article.publishedAt)}
+              {article.publishedAt.toString()}
             </span>
           </div>
         </DialogDescription>

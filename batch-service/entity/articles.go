@@ -24,6 +24,7 @@ import (
 // Article is an object representing the database table.
 type Article struct {
 	ID           string    `boil:"id" json:"id" toml:"id" yaml:"id"`
+	PlatformID   string    `boil:"platform_id" json:"platform_id" toml:"platform_id" yaml:"platform_id"`
 	Title        string    `boil:"title" json:"title" toml:"title" yaml:"title"`
 	Description  string    `boil:"description" json:"description" toml:"description" yaml:"description"`
 	ArticleURL   string    `boil:"article_url" json:"article_url" toml:"article_url" yaml:"article_url"`
@@ -39,6 +40,7 @@ type Article struct {
 
 var ArticleColumns = struct {
 	ID           string
+	PlatformID   string
 	Title        string
 	Description  string
 	ArticleURL   string
@@ -49,6 +51,7 @@ var ArticleColumns = struct {
 	UpdatedAt    string
 }{
 	ID:           "id",
+	PlatformID:   "platform_id",
 	Title:        "title",
 	Description:  "description",
 	ArticleURL:   "article_url",
@@ -61,6 +64,7 @@ var ArticleColumns = struct {
 
 var ArticleTableColumns = struct {
 	ID           string
+	PlatformID   string
 	Title        string
 	Description  string
 	ArticleURL   string
@@ -71,6 +75,7 @@ var ArticleTableColumns = struct {
 	UpdatedAt    string
 }{
 	ID:           "articles.id",
+	PlatformID:   "articles.platform_id",
 	Title:        "articles.title",
 	Description:  "articles.description",
 	ArticleURL:   "articles.article_url",
@@ -83,54 +88,6 @@ var ArticleTableColumns = struct {
 
 // Generated where
 
-type whereHelperstring struct{ field string }
-
-func (w whereHelperstring) EQ(x string) qm.QueryMod     { return qmhelper.Where(w.field, qmhelper.EQ, x) }
-func (w whereHelperstring) NEQ(x string) qm.QueryMod    { return qmhelper.Where(w.field, qmhelper.NEQ, x) }
-func (w whereHelperstring) LT(x string) qm.QueryMod     { return qmhelper.Where(w.field, qmhelper.LT, x) }
-func (w whereHelperstring) LTE(x string) qm.QueryMod    { return qmhelper.Where(w.field, qmhelper.LTE, x) }
-func (w whereHelperstring) GT(x string) qm.QueryMod     { return qmhelper.Where(w.field, qmhelper.GT, x) }
-func (w whereHelperstring) GTE(x string) qm.QueryMod    { return qmhelper.Where(w.field, qmhelper.GTE, x) }
-func (w whereHelperstring) LIKE(x string) qm.QueryMod   { return qm.Where(w.field+" LIKE ?", x) }
-func (w whereHelperstring) NLIKE(x string) qm.QueryMod  { return qm.Where(w.field+" NOT LIKE ?", x) }
-func (w whereHelperstring) ILIKE(x string) qm.QueryMod  { return qm.Where(w.field+" ILIKE ?", x) }
-func (w whereHelperstring) NILIKE(x string) qm.QueryMod { return qm.Where(w.field+" NOT ILIKE ?", x) }
-func (w whereHelperstring) IN(slice []string) qm.QueryMod {
-	values := make([]interface{}, 0, len(slice))
-	for _, value := range slice {
-		values = append(values, value)
-	}
-	return qm.WhereIn(fmt.Sprintf("%s IN ?", w.field), values...)
-}
-func (w whereHelperstring) NIN(slice []string) qm.QueryMod {
-	values := make([]interface{}, 0, len(slice))
-	for _, value := range slice {
-		values = append(values, value)
-	}
-	return qm.WhereNotIn(fmt.Sprintf("%s NOT IN ?", w.field), values...)
-}
-
-type whereHelpertime_Time struct{ field string }
-
-func (w whereHelpertime_Time) EQ(x time.Time) qm.QueryMod {
-	return qmhelper.Where(w.field, qmhelper.EQ, x)
-}
-func (w whereHelpertime_Time) NEQ(x time.Time) qm.QueryMod {
-	return qmhelper.Where(w.field, qmhelper.NEQ, x)
-}
-func (w whereHelpertime_Time) LT(x time.Time) qm.QueryMod {
-	return qmhelper.Where(w.field, qmhelper.LT, x)
-}
-func (w whereHelpertime_Time) LTE(x time.Time) qm.QueryMod {
-	return qmhelper.Where(w.field, qmhelper.LTE, x)
-}
-func (w whereHelpertime_Time) GT(x time.Time) qm.QueryMod {
-	return qmhelper.Where(w.field, qmhelper.GT, x)
-}
-func (w whereHelpertime_Time) GTE(x time.Time) qm.QueryMod {
-	return qmhelper.Where(w.field, qmhelper.GTE, x)
-}
-
 type whereHelperbool struct{ field string }
 
 func (w whereHelperbool) EQ(x bool) qm.QueryMod  { return qmhelper.Where(w.field, qmhelper.EQ, x) }
@@ -142,6 +99,7 @@ func (w whereHelperbool) GTE(x bool) qm.QueryMod { return qmhelper.Where(w.field
 
 var ArticleWhere = struct {
 	ID           whereHelperstring
+	PlatformID   whereHelperstring
 	Title        whereHelperstring
 	Description  whereHelperstring
 	ArticleURL   whereHelperstring
@@ -152,6 +110,7 @@ var ArticleWhere = struct {
 	UpdatedAt    whereHelpertime_Time
 }{
 	ID:           whereHelperstring{field: "\"articles\".\"id\""},
+	PlatformID:   whereHelperstring{field: "\"articles\".\"platform_id\""},
 	Title:        whereHelperstring{field: "\"articles\".\"title\""},
 	Description:  whereHelperstring{field: "\"articles\".\"description\""},
 	ArticleURL:   whereHelperstring{field: "\"articles\".\"article_url\""},
@@ -164,19 +123,29 @@ var ArticleWhere = struct {
 
 // ArticleRels is where relationship names are stored.
 var ArticleRels = struct {
+	Platform             string
 	FeedArticleRelations string
 }{
+	Platform:             "Platform",
 	FeedArticleRelations: "FeedArticleRelations",
 }
 
 // articleR is where relationships are stored.
 type articleR struct {
+	Platform             *Platform                `boil:"Platform" json:"Platform" toml:"Platform" yaml:"Platform"`
 	FeedArticleRelations FeedArticleRelationSlice `boil:"FeedArticleRelations" json:"FeedArticleRelations" toml:"FeedArticleRelations" yaml:"FeedArticleRelations"`
 }
 
 // NewStruct creates a new relationship struct
 func (*articleR) NewStruct() *articleR {
 	return &articleR{}
+}
+
+func (r *articleR) GetPlatform() *Platform {
+	if r == nil {
+		return nil
+	}
+	return r.Platform
 }
 
 func (r *articleR) GetFeedArticleRelations() FeedArticleRelationSlice {
@@ -190,8 +159,8 @@ func (r *articleR) GetFeedArticleRelations() FeedArticleRelationSlice {
 type articleL struct{}
 
 var (
-	articleAllColumns            = []string{"id", "title", "description", "article_url", "published_at", "thumbnail_url", "is_private", "created_at", "updated_at"}
-	articleColumnsWithoutDefault = []string{"title", "description", "article_url", "published_at", "thumbnail_url"}
+	articleAllColumns            = []string{"id", "platform_id", "title", "description", "article_url", "published_at", "thumbnail_url", "is_private", "created_at", "updated_at"}
+	articleColumnsWithoutDefault = []string{"platform_id", "title", "description", "article_url", "published_at", "thumbnail_url"}
 	articleColumnsWithDefault    = []string{"id", "is_private", "created_at", "updated_at"}
 	articlePrimaryKeyColumns     = []string{"id"}
 	articleGeneratedColumns      = []string{}
@@ -502,6 +471,17 @@ func (q articleQuery) Exists(ctx context.Context, exec boil.ContextExecutor) (bo
 	return count > 0, nil
 }
 
+// Platform pointed to by the foreign key.
+func (o *Article) Platform(mods ...qm.QueryMod) platformQuery {
+	queryMods := []qm.QueryMod{
+		qm.Where("\"id\" = ?", o.PlatformID),
+	}
+
+	queryMods = append(queryMods, mods...)
+
+	return Platforms(queryMods...)
+}
+
 // FeedArticleRelations retrieves all the feed_article_relation's FeedArticleRelations with an executor.
 func (o *Article) FeedArticleRelations(mods ...qm.QueryMod) feedArticleRelationQuery {
 	var queryMods []qm.QueryMod
@@ -514,6 +494,126 @@ func (o *Article) FeedArticleRelations(mods ...qm.QueryMod) feedArticleRelationQ
 	)
 
 	return FeedArticleRelations(queryMods...)
+}
+
+// LoadPlatform allows an eager lookup of values, cached into the
+// loaded structs of the objects. This is for an N-1 relationship.
+func (articleL) LoadPlatform(ctx context.Context, e boil.ContextExecutor, singular bool, maybeArticle interface{}, mods queries.Applicator) error {
+	var slice []*Article
+	var object *Article
+
+	if singular {
+		var ok bool
+		object, ok = maybeArticle.(*Article)
+		if !ok {
+			object = new(Article)
+			ok = queries.SetFromEmbeddedStruct(&object, &maybeArticle)
+			if !ok {
+				return errors.New(fmt.Sprintf("failed to set %T from embedded struct %T", object, maybeArticle))
+			}
+		}
+	} else {
+		s, ok := maybeArticle.(*[]*Article)
+		if ok {
+			slice = *s
+		} else {
+			ok = queries.SetFromEmbeddedStruct(&slice, maybeArticle)
+			if !ok {
+				return errors.New(fmt.Sprintf("failed to set %T from embedded struct %T", slice, maybeArticle))
+			}
+		}
+	}
+
+	args := make(map[interface{}]struct{})
+	if singular {
+		if object.R == nil {
+			object.R = &articleR{}
+		}
+		args[object.PlatformID] = struct{}{}
+
+	} else {
+		for _, obj := range slice {
+			if obj.R == nil {
+				obj.R = &articleR{}
+			}
+
+			args[obj.PlatformID] = struct{}{}
+
+		}
+	}
+
+	if len(args) == 0 {
+		return nil
+	}
+
+	argsSlice := make([]interface{}, len(args))
+	i := 0
+	for arg := range args {
+		argsSlice[i] = arg
+		i++
+	}
+
+	query := NewQuery(
+		qm.From(`platforms`),
+		qm.WhereIn(`platforms.id in ?`, argsSlice...),
+	)
+	if mods != nil {
+		mods.Apply(query)
+	}
+
+	results, err := query.QueryContext(ctx, e)
+	if err != nil {
+		return errors.Wrap(err, "failed to eager load Platform")
+	}
+
+	var resultSlice []*Platform
+	if err = queries.Bind(results, &resultSlice); err != nil {
+		return errors.Wrap(err, "failed to bind eager loaded slice Platform")
+	}
+
+	if err = results.Close(); err != nil {
+		return errors.Wrap(err, "failed to close results of eager load for platforms")
+	}
+	if err = results.Err(); err != nil {
+		return errors.Wrap(err, "error occurred during iteration of eager loaded relations for platforms")
+	}
+
+	if len(platformAfterSelectHooks) != 0 {
+		for _, obj := range resultSlice {
+			if err := obj.doAfterSelectHooks(ctx, e); err != nil {
+				return err
+			}
+		}
+	}
+
+	if len(resultSlice) == 0 {
+		return nil
+	}
+
+	if singular {
+		foreign := resultSlice[0]
+		object.R.Platform = foreign
+		if foreign.R == nil {
+			foreign.R = &platformR{}
+		}
+		foreign.R.Articles = append(foreign.R.Articles, object)
+		return nil
+	}
+
+	for _, local := range slice {
+		for _, foreign := range resultSlice {
+			if local.PlatformID == foreign.ID {
+				local.R.Platform = foreign
+				if foreign.R == nil {
+					foreign.R = &platformR{}
+				}
+				foreign.R.Articles = append(foreign.R.Articles, local)
+				break
+			}
+		}
+	}
+
+	return nil
 }
 
 // LoadFeedArticleRelations allows an eager lookup of values, cached into the
@@ -624,6 +724,53 @@ func (articleL) LoadFeedArticleRelations(ctx context.Context, e boil.ContextExec
 				break
 			}
 		}
+	}
+
+	return nil
+}
+
+// SetPlatform of the article to the related item.
+// Sets o.R.Platform to related.
+// Adds o to related.R.Articles.
+func (o *Article) SetPlatform(ctx context.Context, exec boil.ContextExecutor, insert bool, related *Platform) error {
+	var err error
+	if insert {
+		if err = related.Insert(ctx, exec, boil.Infer()); err != nil {
+			return errors.Wrap(err, "failed to insert into foreign table")
+		}
+	}
+
+	updateQuery := fmt.Sprintf(
+		"UPDATE \"articles\" SET %s WHERE %s",
+		strmangle.SetParamNames("\"", "\"", 1, []string{"platform_id"}),
+		strmangle.WhereClause("\"", "\"", 2, articlePrimaryKeyColumns),
+	)
+	values := []interface{}{related.ID, o.ID}
+
+	if boil.IsDebug(ctx) {
+		writer := boil.DebugWriterFrom(ctx)
+		fmt.Fprintln(writer, updateQuery)
+		fmt.Fprintln(writer, values)
+	}
+	if _, err = exec.ExecContext(ctx, updateQuery, values...); err != nil {
+		return errors.Wrap(err, "failed to update local table")
+	}
+
+	o.PlatformID = related.ID
+	if o.R == nil {
+		o.R = &articleR{
+			Platform: related,
+		}
+	} else {
+		o.R.Platform = related
+	}
+
+	if related.R == nil {
+		related.R = &platformR{
+			Articles: ArticleSlice{o},
+		}
+	} else {
+		related.R.Articles = append(related.R.Articles, o)
 	}
 
 	return nil
