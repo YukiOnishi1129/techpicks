@@ -39,6 +39,10 @@ func (au *ArticleUsecase) BatchCreateArticles(ctx context.Context) error {
 		tx, err := au.db.BeginTx(ctx, nil)
 		if err != nil {
 			log.Printf("【error begin transaction】: %s", err)
+			err := tx.Rollback()
+			if err != nil {
+				return err
+			}
 			return err
 		}
 		log.Printf("【begin transaction】")
@@ -49,6 +53,10 @@ func (au *ArticleUsecase) BatchCreateArticles(ctx context.Context) error {
 		rss, err := GetRSS(f.RSSURL)
 		if err != nil {
 			log.Printf("【error get rss】: %s", f.Name)
+			err := tx.Rollback()
+			if err != nil {
+				continue
+			}
 			continue
 		}
 
@@ -60,10 +68,13 @@ func (au *ArticleUsecase) BatchCreateArticles(ctx context.Context) error {
 				for _, a := range articles {
 					feedArticleRelation, _ := entity.FeedArticleRelations(qm.Where("feed_id = ?", f.ID), qm.Where("article_id = ?", a.ID)).One(ctx, tx)
 					if feedArticleRelation == nil {
-						print("🔥🔥🔥🔥🔥🔥🔥🔥")
 						err = createFeedArticleRelation(ctx, tx, f.ID, a.ID)
 						if err != nil {
 							log.Printf("【error insert feed article relation】: %s", r.Title)
+							err := tx.Rollback()
+							if err != nil {
+								continue
+							}
 							continue
 						}
 						aCount++
@@ -82,9 +93,13 @@ func (au *ArticleUsecase) BatchCreateArticles(ctx context.Context) error {
 			// insert article
 			articleID, _ := uuid.NewUUID()
 			publishedAt := time.Unix(int64(r.PublishedAt), 0)
+			articleTitle := ""
+			if len(r.Title) > 255 {
+				articleTitle = r.Title[:255]
+			}
 			article := entity.Article{
 				ID:           articleID.String(),
-				Title:        r.Title,
+				Title:        articleTitle,
 				Description:  r.Description,
 				ThumbnailURL: r.ImageURL,
 				ArticleURL:   r.Link,
@@ -94,6 +109,10 @@ func (au *ArticleUsecase) BatchCreateArticles(ctx context.Context) error {
 			err = article.Insert(ctx, tx, boil.Infer())
 			if err != nil {
 				log.Printf("【error insert article】: %s, err: %v", r.Title, err)
+				err := tx.Rollback()
+				if err != nil {
+					continue
+				}
 				continue
 			}
 
@@ -101,6 +120,10 @@ func (au *ArticleUsecase) BatchCreateArticles(ctx context.Context) error {
 			err = createFeedArticleRelation(ctx, tx, f.ID, articleID.String())
 			if err != nil {
 				log.Printf("【error insert feed article relation】: %s", r.Title)
+				err := tx.Rollback()
+				if err != nil {
+					continue
+				}
 				continue
 			}
 			aCount++
