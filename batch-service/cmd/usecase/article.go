@@ -3,12 +3,13 @@ package usecase
 import (
 	"context"
 	"database/sql"
+	"log"
+	"time"
+
 	"github.com/YukiOnishi1129/techpicks/batch-service/entity"
 	"github.com/google/uuid"
 	"github.com/volatiletech/sqlboiler/v4/boil"
 	"github.com/volatiletech/sqlboiler/v4/queries/qm"
-	"log"
-	"time"
 )
 
 type ArticleUsecaseInterface interface {
@@ -39,7 +40,7 @@ func (au *ArticleUsecase) BatchCreateArticles(ctx context.Context) error {
 		tx, err := au.db.BeginTx(ctx, nil)
 		if err != nil {
 			log.Printf("【error begin transaction】: %s", err)
-			err := tx.Rollback()
+			err = tx.Rollback()
 			if err != nil {
 				return err
 			}
@@ -54,7 +55,7 @@ func (au *ArticleUsecase) BatchCreateArticles(ctx context.Context) error {
 		rss, err := GetRSS(f.RSSURL)
 		if err != nil {
 			log.Printf("【error get rss】: %s", f.Name)
-			err := tx.Rollback()
+			err = tx.Rollback()
 			if err != nil {
 				continue
 			}
@@ -72,7 +73,7 @@ func (au *ArticleUsecase) BatchCreateArticles(ctx context.Context) error {
 						err = createFeedArticleRelation(ctx, tx, f.ID, a.ID)
 						if err != nil {
 							log.Printf("【error insert feed article relation】: %s", r.Title)
-							err := tx.Rollback()
+							err = tx.Rollback()
 							if err != nil {
 								continue
 							}
@@ -109,7 +110,7 @@ func (au *ArticleUsecase) BatchCreateArticles(ctx context.Context) error {
 			err = article.Insert(ctx, tx, boil.Infer())
 			if err != nil {
 				log.Printf("【error insert article】: %s, err: %v", r.Title, err)
-				err := tx.Rollback()
+				err = tx.Rollback()
 				if err != nil {
 					continue
 				}
@@ -120,7 +121,7 @@ func (au *ArticleUsecase) BatchCreateArticles(ctx context.Context) error {
 			err = createFeedArticleRelation(ctx, tx, f.ID, articleID.String())
 			if err != nil {
 				log.Printf("【error insert feed article relation】: %s", r.Title)
-				err := tx.Rollback()
+				err = tx.Rollback()
 				if err != nil {
 					continue
 				}

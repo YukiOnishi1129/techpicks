@@ -3,10 +3,11 @@ package main
 import (
 	"context"
 	"database/sql"
+	"log"
+
 	"github.com/YukiOnishi1129/techpicks/batch-service/cmd/usecase"
 	"github.com/YukiOnishi1129/techpicks/batch-service/database"
 	"github.com/joho/godotenv"
-	"log"
 )
 
 func main() {
@@ -24,7 +25,7 @@ func main() {
 		return
 	}
 	defer func(db *sql.DB) {
-		err := db.Close()
+		err = db.Close()
 		if err != nil {
 			log.Fatalf("Failed to close db connection: %v", err)
 		}
