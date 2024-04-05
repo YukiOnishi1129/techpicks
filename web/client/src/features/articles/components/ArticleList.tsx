@@ -57,7 +57,7 @@ export function ArticleList({
       const count = newArticles.length;
       setHashMore(count > 0);
     },
-    [fetchArticles, languageStatus]
+    [fetchArticles, languageStatus, keyword, platformIdList]
   );
 
   useEffect(() => {
