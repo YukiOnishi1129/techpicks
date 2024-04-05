@@ -2038,5 +2038,27 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FaviconURL:      "https://cdn.hashnode.com/res/hashnode/image/upload/v1611242155728/W3_BYVVVh.png",
 			IsEng:           true,
 		},
+		{
+			PlatformName:    "LogRocket",
+			FeedName:        "LogRocket",
+			seedCategoryID:  1,
+			RssURL:          "https://blog.logrocket.com/feed/",
+			PlatformSiteURL: "https://blog.logrocket.com/",
+			FeedSiteURL:     "https://blog.logrocket.com/",
+			PlatformType:    domain.PlatformTypeCompany,
+			FaviconURL:      "https://blog.logrocket.com/wp-content/uploads/2019/06/cropped-cropped-favicon-196x196.png?w=192",
+			IsEng:           true,
+		},
+		{
+			PlatformName:    "フューチャー技術ブログ",
+			FeedName:        "フューチャー技術ブログ",
+			seedCategoryID:  1,
+			RssURL:          "https://future-architect.github.io/atom.xml",
+			PlatformSiteURL: "https://future-architect.github.io/",
+			FeedSiteURL:     "https://future-architect.github.io/",
+			PlatformType:    domain.PlatformTypeCompany,
+			FaviconURL:      "https://future-architect.github.io/favicon.ico",
+			IsEng:           false,
+		},
 	}
 }

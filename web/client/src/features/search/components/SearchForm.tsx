@@ -1,13 +1,16 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Platform } from "@prisma/client";
+import { Label } from "@radix-ui/react-label";
 import { useRouter } from "next/navigation";
-import { FC } from "react";
+import { FC, useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
+import { fetchPlatformAPI } from "@/features/platforms/actions/platform";
+
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Form,
   FormControl,
@@ -20,10 +23,13 @@ import {
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
+import { Platform } from "@/types/platform";
+
 const formSchema = z.object({
   keyword: z.string().optional(),
-  platform: z.string().optional(),
+  platformIds: z.array(z.string()).optional(),
   language: z.string().optional(),
+  platformType: z.string(),
 });
 
 type SearchFormProps = {
@@ -33,19 +39,22 @@ type SearchFormProps = {
 export const SearchForm: FC<SearchFormProps> = ({
   platforms,
 }: SearchFormProps) => {
+  const [showPlatforms, setShowPlatforms] =
+    useState<Array<Platform>>(platforms);
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       keyword: "",
       language: "1",
+      platformType: "0",
+      platformIds: [],
     },
   });
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    console.log(values);
     if (values.keyword === "") {
       return;
     }
@@ -53,6 +62,20 @@ export const SearchForm: FC<SearchFormProps> = ({
       `/?languageStatus=${values.language}&keyword=${values.keyword}`
     );
   };
+
+  const fetchPlatform = useCallback(async () => {
+    const language = form.getValues("language");
+    const platformType = form.getValues("platformType");
+    const response = await fetchPlatformAPI({
+      languageStatus: language,
+      platformType: platformType !== "0" ? platformType : undefined,
+    });
+    setShowPlatforms(response);
+  }, [form]);
+
+  useEffect(() => {
+    fetchPlatform();
+  }, [fetchPlatform]);
 
   return (
     <div>
@@ -68,7 +91,9 @@ export const SearchForm: FC<SearchFormProps> = ({
                 <FormControl>
                   <Input placeholder="shadcn" {...field} />
                 </FormControl>
-                <FormDescription>This is search keyword.</FormDescription>
+                <FormDescription>
+                  Let&apos;s enter the keyword you want to search.
+                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -86,16 +111,109 @@ export const SearchForm: FC<SearchFormProps> = ({
                     defaultValue={field.value}
                     className="flex flex-col space-y-1"
                   >
-                    <RadioGroupItem value={"1"}>Japanese</RadioGroupItem>
-                    <RadioGroupItem value={"2"}>English</RadioGroupItem>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value={"1"} id={"language-1"} />
+                      <Label htmlFor="language-1">Japanese</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value={"2"} id={"language-2"} />
+                      <Label htmlFor="language-2">English</Label>
+                    </div>
                   </RadioGroup>
                 </FormControl>
-                <FormDescription>This is search keyword.</FormDescription>
+                <FormDescription>
+                  Let&apos;s select the language you want to search.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          {/* platform type*/}
+          <FormField
+            control={form.control}
+            name="platformType"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>PlatformType</FormLabel>
+                <FormControl>
+                  <RadioGroup
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                    className="flex flex-col space-y-1"
+                  >
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value={"0"} id={"platform-type-0"} />
+                      <Label htmlFor="platform-type-0">All</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value={"1"} id={"platform-type-1"} />
+                      <Label htmlFor="platform-type-1">Site</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value={"2"} id={"platform-type-2"} />
+                      <Label htmlFor="platform-type-2">Company</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value={"3"} id={"platform-type-3"} />
+                      <Label htmlFor="platform-type-3">Summary</Label>
+                    </div>
+                  </RadioGroup>
+                </FormControl>
+                <FormDescription>
+                  Let&apos;s select the platform type you want to search.
+                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
           />
           {/* platform */}
+          <FormField
+            control={form.control}
+            name="platformIds"
+            render={() => (
+              <FormItem>
+                <div className="mb-4">
+                  <FormLabel className="text-base">Platform</FormLabel>
+                  <FormDescription>
+                    Please select the platform you want to search.
+                  </FormDescription>
+                </div>
+                {showPlatforms &&
+                  showPlatforms.map((platform) => (
+                    <FormField
+                      key={platform.id}
+                      control={form.control}
+                      name="platformIds"
+                      render={({ field }) => (
+                        <FormItem
+                          key={platform.id}
+                          className="flex flex-row items-start space-x-3 space-y-0"
+                        >
+                          <FormControl>
+                            <Checkbox
+                              checked={field.value?.includes(platform.id)}
+                              onCheckedChange={(checked) => {
+                                const array = field.value ?? [];
+                                return checked
+                                  ? field.onChange([...array, platform.id])
+                                  : field.onChange(
+                                      field.value?.filter(
+                                        (value) => value !== platform.id
+                                      )
+                                    );
+                              }}
+                            />
+                          </FormControl>
+                          <FormLabel className="text-sm font-normal">
+                            {platform.name}
+                          </FormLabel>
+                        </FormItem>
+                      )}
+                    />
+                  ))}
+              </FormItem>
+            )}
+          />
           {/* category */}
           {/*  */}
 

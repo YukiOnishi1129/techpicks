@@ -13,8 +13,9 @@ create-migrate-file:
 	supabase migration new ${name}
 migrate:
 	supabase migration up
-reset-migrate:
-	supabase db reset
+
+seed:
+	go run ./database/seed/seed.go
 
 
 # create entity
