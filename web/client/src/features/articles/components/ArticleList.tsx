@@ -9,23 +9,31 @@ import { ArticleType } from "@/types/article";
 import { LanguageStatus } from "@/types/language";
 
 import { ArticleDetailDialog } from "./ArticleDetailDialog";
-import { LanguageTabMenu } from "./LanguageTabMenu";
+import { ArticleLanguageTabMenu } from "./ArticleLanguageTabMenu";
 
 type Props = {
   initialArticles: Array<ArticleType>;
   languageStatus: LanguageStatus;
+  keyword?: string;
+  platformIdList: Array<string>;
   fetchArticles: ({
     languageStatus,
+    keyword,
     offset,
+    platformIdList,
   }: {
     languageStatus: string;
+    keyword?: string;
     offset: string;
+    platformIdList: Array<string>;
   }) => Promise<ArticleType[]>;
 };
 
 export function ArticleList({
   initialArticles,
   languageStatus,
+  keyword,
+  platformIdList,
   fetchArticles,
 }: Props) {
   const observerTarget = useRef(null);
@@ -40,14 +48,16 @@ export function ArticleList({
     async (offset: number) => {
       const newArticles = await fetchArticles({
         offset: offset.toString(),
+        keyword: keyword,
         languageStatus: languageStatus.toString(),
+        platformIdList: platformIdList,
       });
       setArticles((prev) => [...prev, ...newArticles]);
 
       const count = newArticles.length;
       setHashMore(count > 0);
     },
-    [fetchArticles, languageStatus]
+    [fetchArticles, languageStatus, keyword, platformIdList]
   );
 
   useEffect(() => {
@@ -85,17 +95,19 @@ export function ArticleList({
   return (
     <div className="w-auto">
       <div className="w-full border-b-2 bg-white py-4">
-        <LanguageTabMenu languageStatus={languageStatus} />
+        <ArticleLanguageTabMenu
+          languageStatus={languageStatus}
+          keyword={keyword}
+        />
       </div>
       <div className="m-auto h-[700px] overflow-y-scroll md:h-[600px]">
-        {flatArticles &&
-          flatArticles.map((article) => (
-            <div key={article.id} className="border-t-2 py-8">
-              <ArticleDetailDialog article={article}>
-                <ArticleCard article={article} />
-              </ArticleDetailDialog>
-            </div>
-          ))}
+        {flatArticles.map((article) => (
+          <div key={article.id} className="border-t-2 py-8">
+            <ArticleDetailDialog article={article}>
+              <ArticleCard article={article} />
+            </ArticleDetailDialog>
+          </div>
+        ))}
         <div ref={observerTarget}>
           {hashMore && (
             <div className="flex justify-center py-4">

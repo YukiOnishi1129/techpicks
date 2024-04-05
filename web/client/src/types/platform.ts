@@ -3,13 +3,19 @@ export type Platform = {
   name: string;
   siteUrl: string;
   faviconUrl: string;
-  thumbnailUrl: string;
-  createdAt: number;
-  updatedAt: number;
-  deletedAt?: number;
+  platformType: number;
+  isEng: boolean;
+  createdAt: Date;
+  updatedAt: Date;
 };
 
-export type PlatformType = {
-  PlatformTypeSite: 0;
-  PlatformTypeCompany: 1;
-};
+export type PlatformType =
+  | PlatformTypeUnknown
+  | PlatformTypeSite
+  | PlatformTypeCompany
+  | PlatformTypeSummary;
+
+type PlatformTypeUnknown = 0;
+type PlatformTypeSite = 1;
+type PlatformTypeCompany = 2;
+type PlatformTypeSummary = 2;

@@ -1,28 +1,33 @@
 import { NextRequest } from "next/server";
 
-import { getArticles } from "@/features/articles/repository/article";
+import { getPlatforms } from "@/features/platforms/repository/platform";
 
 import { LanguageStatus } from "@/types/language";
+import { PlatformType } from "@/types/platform";
 
 export async function GET(req: NextRequest) {
   const searchParams = req.nextUrl.searchParams;
   const languageStatus = searchParams.get("languageStatus");
-  const keyword = searchParams.get("keyword") || undefined;
-  const offset = searchParams.get("offset");
+  const platformType = searchParams.get("platformType");
   const platformIdList = searchParams.getAll("platformId");
+
   const status =
     typeof languageStatus === "string"
       ? (parseInt(languageStatus) as LanguageStatus)
       : 1;
 
-  const articles = await getArticles({
+  const type = platformType
+    ? (parseInt(platformType) as PlatformType)
+    : undefined;
+
+  const platforms = await getPlatforms({
     languageStatus: status,
-    keyword: keyword,
+    platformType: type,
     platformIdList: platformIdList,
-    offset: parseInt(offset || "1"),
   });
+
   return Response.json(
-    { articles: articles, message: "success" },
+    { platforms: platforms, message: "success" },
     {
       status: 200,
       headers: {
@@ -33,15 +38,3 @@ export async function GET(req: NextRequest) {
     }
   );
 }
-
-// export default async function handler(
-//   req: NextApiRequest,
-//   res: NextApiResponse<ResponseData>
-// ) {
-//   const languageStatus =
-//     typeof req.query?.languageStatus === "string"
-//       ? (parseInt(req.query.languageStatus) as LanguageStatus)
-//       : 1;
-//   const articles = await getArticles({ languageStatus });
-//   res.status(200).json({ data: articles, message: "success" });
-// }
