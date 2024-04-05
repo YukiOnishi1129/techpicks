@@ -9,4 +9,13 @@ export type Platform = {
   updatedAt: Date;
 };
 
-export type PlatformType = 0 | 1 | 2;
+export type PlatformType =
+  | PlatformTypeUnknown
+  | PlatformTypeSite
+  | PlatformTypeCompany
+  | PlatformTypeSummary;
+
+type PlatformTypeUnknown = 0;
+type PlatformTypeSite = 1;
+type PlatformTypeCompany = 2;
+type PlatformTypeSummary = 2;

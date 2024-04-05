@@ -21,6 +21,18 @@ export const getPlatforms = async ({
       platformType: platformType,
       isEng: languageStatus === 2,
     };
+  } else if (platformNameList && platformType) {
+    where = {
+      platformType: platformType,
+      isEng: languageStatus === 2,
+      id: {
+        in: [...platformNameList],
+      },
+    };
+  } else {
+    where = {
+      isEng: languageStatus === 2,
+    };
   }
 
   if (platformType && platformNameList) {
@@ -32,6 +44,9 @@ export const getPlatforms = async ({
       },
     };
   }
+  console.log("🔥🔥🔥🔥🔥🔥🔥🔥🔥");
+  console.log(where);
+
   const res = await prisma.platform.findMany({
     where,
     select: {

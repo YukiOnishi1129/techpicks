@@ -21,6 +21,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Loader } from "@/components/ui/loader";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 import { Platform } from "@/types/platform";
@@ -39,6 +40,7 @@ type SearchFormProps = {
 export const SearchForm: FC<SearchFormProps> = ({
   platforms,
 }: SearchFormProps) => {
+  const [loading, setLoading] = useState(false);
   const [showPlatforms, setShowPlatforms] =
     useState<Array<Platform>>(platforms);
   const router = useRouter();
@@ -52,6 +54,9 @@ export const SearchForm: FC<SearchFormProps> = ({
     },
   });
 
+  const watchLanguage = form.watch("language");
+  const watchPlatformType = form.watch("platformType");
+
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
@@ -64,18 +69,24 @@ export const SearchForm: FC<SearchFormProps> = ({
   };
 
   const fetchPlatform = useCallback(async () => {
-    const language = form.getValues("language");
-    const platformType = form.getValues("platformType");
+    setLoading(true);
+    // const language = form.getValues("language");
+    // const platformType = form.getValues("platformType");
     const response = await fetchPlatformAPI({
-      languageStatus: language,
-      platformType: platformType !== "0" ? platformType : undefined,
+      languageStatus: watchLanguage,
+      platformType: watchPlatformType !== "0" ? watchPlatformType : undefined,
     });
     setShowPlatforms(response);
-  }, [form]);
+    setLoading(false);
+  }, [watchLanguage, watchPlatformType]);
 
   useEffect(() => {
     fetchPlatform();
-  }, [fetchPlatform]);
+  }, [
+    fetchPlatform,
+    // form.getValues("language"),
+    // form.getValues("platformType"),
+  ]);
 
   return (
     <div>
@@ -178,7 +189,10 @@ export const SearchForm: FC<SearchFormProps> = ({
                     Please select the platform you want to search.
                   </FormDescription>
                 </div>
-                {showPlatforms &&
+                {loading ? (
+                  <Loader />
+                ) : (
+                  showPlatforms &&
                   showPlatforms.map((platform) => (
                     <FormField
                       key={platform.id}
@@ -210,7 +224,8 @@ export const SearchForm: FC<SearchFormProps> = ({
                         </FormItem>
                       )}
                     />
-                  ))}
+                  ))
+                )}
               </FormItem>
             )}
           />

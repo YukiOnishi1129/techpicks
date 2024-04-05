@@ -7,7 +7,8 @@ import (
 type PlatformType int
 
 const (
-	PlatformTypeSite PlatformType = iota
+	platformUnknown PlatformType = iota
+	PlatformTypeSite
 	PlatformTypeCompany
 	PlatformTypeSummary
 )
