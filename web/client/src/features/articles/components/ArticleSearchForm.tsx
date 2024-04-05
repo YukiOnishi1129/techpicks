@@ -63,7 +63,6 @@ export const ArticleSearchForm: FC<ArticleSearchFormProps> = ({
     if (values.keyword !== "") {
       keywordPath = `&keyword=${values.keyword}`;
     }
-    console.log(keywordPath);
     let platformIdPath = "";
     if (values.platformIdList) {
       platformIdPath = values.platformIdList

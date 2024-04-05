@@ -1,14 +1,14 @@
 import Link from "next/link";
-import { getServerSession } from "next-auth/next";
 import { CiSearch } from "react-icons/ci";
-
-import { authOptions } from "@/lib/auth";
-
 import { LoggedMenu } from "./LoggedMenu";
 import { NotLoggedMenu } from "./NotLoggedMenu";
+import { createServerSideClient } from "@/lib/supabase/client/serverClient";
 
 export async function Header() {
-  const session = await getServerSession(authOptions);
+  const supabase = await createServerSideClient();
+  const { data, error } = await supabase.auth.getUser();
+  const user = data?.user;
+
   return (
     <div className="fixed z-50 flex h-16 w-screen items-center justify-between border-b border-gray-300 bg-white px-8 shadow-md">
       <Link href="/" className="cursor-pointer">
@@ -19,7 +19,7 @@ export async function Header() {
         <Link className="mr-8" href="/article/search">
           <CiSearch className="size-8" />
         </Link>
-        {session ? <LoggedMenu session={session} /> : <NotLoggedMenu />}
+        {user ? <LoggedMenu user={user} /> : <NotLoggedMenu />}
       </div>
     </div>
   );

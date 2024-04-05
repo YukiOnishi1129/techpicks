@@ -1,26 +1,29 @@
 "use client";
-import { Session } from "next-auth";
-import { signOut } from "next-auth/react";
+import { User } from "@supabase/supabase-js";
 import { FC } from "react";
 
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { logout } from "@/features/auth/actions/auth";
+
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 
 type LoggedMenuProps = {
-  session: Session | null;
+  user: User | null;
 };
+export const LoggedMenu: FC<LoggedMenuProps> = ({ user }: LoggedMenuProps) => {
+  const image = user?.user_metadata["avatar_url"] || "no_image.png";
+  // console.log("🔥🔥🔥🔥🔥🔥🔥");
+  // console.log(user);
 
-export const LoggedMenu: FC<LoggedMenuProps> = ({
-  session,
-}: LoggedMenuProps) => {
-  const image = session?.user?.image || "no_image.png";
   return (
     <div className="grid grid-cols-2">
       <Avatar>
         <AvatarImage src={image} alt="avatar" />
-        <AvatarFallback>{session?.user?.name}</AvatarFallback>
+        <AvatarFallback>
+          {user?.user_metadata["full_name"] || ""}
+        </AvatarFallback>
       </Avatar>
-      <Button onClick={() => signOut()}>Logout</Button>
+      <Button onClick={() => logout()}>Logout</Button>
     </div>
   );
 };

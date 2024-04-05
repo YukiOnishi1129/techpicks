@@ -10,7 +10,7 @@ export async function login() {
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "google",
     options: {
-      redirectTo: "/auth/callback'",
+      redirectTo: `${process.env.WEB_DOMAIN}/auth/callback`,
     },
   });
   if (error) {
@@ -18,6 +18,15 @@ export async function login() {
   }
 
   if (data?.url) redirect(data.url);
+}
 
-  redirect("/");
+export async function logout() {
+  "use server";
+  const supabase = await createServerSideClient();
+  const { error } = await supabase.auth.signOut();
+
+  if (error) {
+    redirect("/error");
+  }
+  if (!error) redirect("/");
 }
