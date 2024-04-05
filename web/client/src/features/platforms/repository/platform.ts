@@ -4,13 +4,13 @@ import { Platform, PlatformType } from "@/types/platform";
 export type GetPlatformParams = {
   languageStatus?: LanguageStatus;
   platformType?: PlatformType;
-  platformNameList?: Array<string>;
+  platformIdList?: Array<string>;
 };
 
 export const getPlatforms = async ({
   languageStatus = 1,
   platformType,
-  platformNameList,
+  platformIdList,
 }: GetPlatformParams) => {
   "use server";
 
@@ -21,12 +21,12 @@ export const getPlatforms = async ({
       platformType: platformType,
       isEng: languageStatus === 2,
     };
-  } else if (platformNameList && platformType) {
+  } else if (platformIdList && platformType) {
     where = {
       platformType: platformType,
       isEng: languageStatus === 2,
       id: {
-        in: [...platformNameList],
+        in: [...platformIdList],
       },
     };
   } else {
@@ -34,18 +34,6 @@ export const getPlatforms = async ({
       isEng: languageStatus === 2,
     };
   }
-
-  if (platformType && platformNameList) {
-    where = {
-      platformType: platformType,
-      isEng: languageStatus === 2,
-      id: {
-        in: [...platformNameList],
-      },
-    };
-  }
-  console.log("🔥🔥🔥🔥🔥🔥🔥🔥🔥");
-  console.log(where);
 
   const res = await prisma.platform.findMany({
     where,

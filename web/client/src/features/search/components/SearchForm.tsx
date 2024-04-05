@@ -28,7 +28,7 @@ import { Platform } from "@/types/platform";
 
 const formSchema = z.object({
   keyword: z.string().optional(),
-  platformIds: z.array(z.string()).optional(),
+  platformIdList: z.array(z.string()).optional(),
   language: z.string().optional(),
   platformType: z.string(),
 });
@@ -50,7 +50,7 @@ export const SearchForm: FC<SearchFormProps> = ({
       keyword: "",
       language: "1",
       platformType: "0",
-      platformIds: [],
+      platformIdList: [],
     },
   });
 
@@ -58,20 +58,25 @@ export const SearchForm: FC<SearchFormProps> = ({
   const watchPlatformType = form.watch("platformType");
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    if (values.keyword === "") {
-      return;
+    let keywordPath = "";
+
+    if (values.keyword !== "") {
+      keywordPath = `&keyword=${values.keyword}`;
+    }
+    console.log(keywordPath);
+    let platformIdPath = "";
+    if (values.platformIdList) {
+      platformIdPath = values.platformIdList
+        .map((platformId) => `&platformId=${platformId}`)
+        .join("");
     }
     router.replace(
-      `/?languageStatus=${values.language}&keyword=${values.keyword}`
+      `/?languageStatus=${values.language}${keywordPath}${platformIdPath}`
     );
   };
 
   const fetchPlatform = useCallback(async () => {
     setLoading(true);
-    // const language = form.getValues("language");
-    // const platformType = form.getValues("platformType");
     const response = await fetchPlatformAPI({
       languageStatus: watchLanguage,
       platformType: watchPlatformType !== "0" ? watchPlatformType : undefined,
@@ -82,11 +87,7 @@ export const SearchForm: FC<SearchFormProps> = ({
 
   useEffect(() => {
     fetchPlatform();
-  }, [
-    fetchPlatform,
-    // form.getValues("language"),
-    // form.getValues("platformType"),
-  ]);
+  }, [fetchPlatform]);
 
   return (
     <div>
@@ -180,7 +181,7 @@ export const SearchForm: FC<SearchFormProps> = ({
           {/* platform */}
           <FormField
             control={form.control}
-            name="platformIds"
+            name="platformIdList"
             render={() => (
               <FormItem>
                 <div className="mb-4">
@@ -197,7 +198,7 @@ export const SearchForm: FC<SearchFormProps> = ({
                     <FormField
                       key={platform.id}
                       control={form.control}
-                      name="platformIds"
+                      name="platformIdList"
                       render={({ field }) => (
                         <FormItem
                           key={platform.id}

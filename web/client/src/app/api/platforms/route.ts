@@ -9,6 +9,7 @@ export async function GET(req: NextRequest) {
   const searchParams = req.nextUrl.searchParams;
   const languageStatus = searchParams.get("languageStatus");
   const platformType = searchParams.get("platformType");
+  const platformIdList = searchParams.getAll("platformId");
 
   const status =
     typeof languageStatus === "string"
@@ -22,6 +23,7 @@ export async function GET(req: NextRequest) {
   const platforms = await getPlatforms({
     languageStatus: status,
     platformType: type,
+    platformIdList: platformIdList,
   });
 
   return Response.json(

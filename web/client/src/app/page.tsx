@@ -21,6 +21,11 @@ export default async function Home({ searchParams }: PageProps) {
       ? searchParams["keyword"]
       : undefined;
 
+  const platformIdList =
+    typeof searchParams["platformId"] !== "string" && searchParams["platformId"]
+      ? searchParams["platformId"]
+      : [];
+
   return (
     <>
       <Suspense
@@ -33,6 +38,7 @@ export default async function Home({ searchParams }: PageProps) {
         <ArticleListTemplate
           languageStatus={languageStatus}
           keyword={keyword}
+          platformIdList={platformIdList}
         />
       </Suspense>
     </>

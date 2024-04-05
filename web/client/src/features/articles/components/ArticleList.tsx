@@ -15,14 +15,17 @@ type Props = {
   initialArticles: Array<ArticleType>;
   languageStatus: LanguageStatus;
   keyword?: string;
+  platformIdList: Array<string>;
   fetchArticles: ({
     languageStatus,
     keyword,
     offset,
+    platformIdList,
   }: {
     languageStatus: string;
     keyword?: string;
     offset: string;
+    platformIdList: Array<string>;
   }) => Promise<ArticleType[]>;
 };
 
@@ -30,6 +33,7 @@ export function ArticleList({
   initialArticles,
   languageStatus,
   keyword,
+  platformIdList,
   fetchArticles,
 }: Props) {
   const observerTarget = useRef(null);
@@ -46,6 +50,7 @@ export function ArticleList({
         offset: offset.toString(),
         keyword: keyword,
         languageStatus: languageStatus.toString(),
+        platformIdList: platformIdList,
       });
       setArticles((prev) => [...prev, ...newArticles]);
 

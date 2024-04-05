@@ -9,13 +9,16 @@ export async function GET(req: NextRequest) {
   const languageStatus = searchParams.get("languageStatus");
   const keyword = searchParams.get("keyword") || undefined;
   const offset = searchParams.get("offset");
+  const platformIdList = searchParams.getAll("platformId");
   const status =
     typeof languageStatus === "string"
       ? (parseInt(languageStatus) as LanguageStatus)
       : 1;
+
   const articles = await getArticles({
     languageStatus: status,
     keyword: keyword,
+    platformIdList: platformIdList,
     offset: parseInt(offset || "1"),
   });
   return Response.json(

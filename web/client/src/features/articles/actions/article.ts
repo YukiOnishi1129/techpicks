@@ -6,10 +6,12 @@ export const fetchArticleAPI = async ({
   languageStatus,
   keyword,
   offset = "1",
+  platformIdList,
 }: {
   languageStatus: string;
   keyword?: string;
   offset?: string;
+  platformIdList: Array<string>;
 }) => {
   let url = `http://localhost:80/api/articles/?offset=${offset}`;
   if (languageStatus) {
@@ -17,6 +19,12 @@ export const fetchArticleAPI = async ({
   }
   if (keyword) {
     url += `&keyword=${keyword}`;
+  }
+  if (platformIdList.length) {
+    const platformIdPath = platformIdList
+      .map((platformId) => `&platformId=${platformId}`)
+      .join("");
+    url += platformIdPath;
   }
   const response = await fetch(url, {
     headers: {

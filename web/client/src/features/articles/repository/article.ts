@@ -9,6 +9,7 @@ export type GetArticleParams = {
   platformId?: string;
   keyword?: string;
   languageStatus?: LanguageStatus;
+  platformIdList: Array<string>;
   offset?: number;
   sort?: "asc" | "desc";
   sortColum?: string;
@@ -17,6 +18,7 @@ export type GetArticleParams = {
 export const getArticles = async ({
   keyword,
   languageStatus = 1,
+  platformIdList,
   offset = 1,
   sort = "desc",
   sortColum = "publishedAt",
@@ -54,6 +56,15 @@ export const getArticles = async ({
     where = {
       platform: {
         isEng: languageStatus === 2,
+      },
+    };
+  }
+
+  if (platformIdList.length) {
+    where = {
+      ...where,
+      platformId: {
+        in: [...platformIdList],
       },
     };
   }

@@ -8,15 +8,18 @@ import { fetchArticleAPI } from "../actions/article";
 type ArticleListProps = {
   languageStatus: LanguageStatus;
   keyword?: string;
+  platformIdList: Array<string>;
 };
 
 export const ArticleListTemplate: FC<ArticleListProps> = async ({
   languageStatus,
   keyword,
+  platformIdList,
 }: ArticleListProps) => {
   const articles = await fetchArticleAPI({
     languageStatus: languageStatus.toString(),
     keyword,
+    platformIdList,
   });
   return (
     <>
@@ -25,6 +28,7 @@ export const ArticleListTemplate: FC<ArticleListProps> = async ({
           initialArticles={articles}
           languageStatus={languageStatus}
           keyword={keyword}
+          platformIdList={platformIdList}
           fetchArticles={fetchArticleAPI}
         />
       )}
@@ -33,6 +37,7 @@ export const ArticleListTemplate: FC<ArticleListProps> = async ({
           initialArticles={articles}
           languageStatus={languageStatus}
           keyword={keyword}
+          platformIdList={platformIdList}
           fetchArticles={fetchArticleAPI}
         />
       )}
