@@ -9,7 +9,7 @@ import { ArticleType } from "@/types/article";
 import { LanguageStatus } from "@/types/language";
 
 import { ArticleDetailDialog } from "./ArticleDetailDialog";
-import { LanguageTabMenu } from "./LanguageTabMenu";
+import { ArticleLanguageTabMenu } from "./ArticleLanguageTabMenu";
 
 type Props = {
   initialArticles: Array<ArticleType>;
@@ -95,7 +95,10 @@ export function ArticleList({
   return (
     <div className="w-auto">
       <div className="w-full border-b-2 bg-white py-4">
-        <LanguageTabMenu languageStatus={languageStatus} keyword={keyword} />
+        <ArticleLanguageTabMenu
+          languageStatus={languageStatus}
+          keyword={keyword}
+        />
       </div>
       <div className="m-auto h-[700px] overflow-y-scroll md:h-[600px]">
         {flatArticles.map((article) => (

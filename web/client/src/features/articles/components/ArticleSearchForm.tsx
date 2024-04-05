@@ -33,13 +33,13 @@ const formSchema = z.object({
   platformType: z.string(),
 });
 
-type SearchFormProps = {
+type ArticleSearchFormProps = {
   platforms: Array<Platform>;
 };
 
-export const SearchForm: FC<SearchFormProps> = ({
+export const ArticleSearchForm: FC<ArticleSearchFormProps> = ({
   platforms,
-}: SearchFormProps) => {
+}: ArticleSearchFormProps) => {
   const [loading, setLoading] = useState(false);
   const [showPlatforms, setShowPlatforms] =
     useState<Array<Platform>>(platforms);

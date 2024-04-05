@@ -1,5 +1,5 @@
+import { ArticleSearchForm } from "@/features/articles/components/ArticleSearchForm";
 import { fetchPlatformAPI } from "@/features/platforms/actions/platform";
-import { SearchForm } from "@/features/search/components/SearchForm";
 
 type PageProps = {
   params: { slug: string };
@@ -12,7 +12,7 @@ export default async function SearchArticlePage({ searchParams }: PageProps) {
   return (
     <div>
       <h1>Search Article Page</h1>
-      <SearchForm platforms={platforms} />
+      <ArticleSearchForm platforms={platforms} />
     </div>
   );
 }

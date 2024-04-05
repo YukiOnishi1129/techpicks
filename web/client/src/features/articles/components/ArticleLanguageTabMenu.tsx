@@ -7,14 +7,14 @@ import { Button } from "@/components/ui/button";
 
 import { LanguageStatus } from "@/types/language";
 
-type LanguageTabMenuProps = {
+type ArticleLanguageTabMenuProps = {
   languageStatus: LanguageStatus;
   keyword?: string;
 };
-export const LanguageTabMenu: FC<LanguageTabMenuProps> = ({
+export const ArticleLanguageTabMenu: FC<ArticleLanguageTabMenuProps> = ({
   languageStatus,
   keyword,
-}: LanguageTabMenuProps) => {
+}: ArticleLanguageTabMenuProps) => {
   const router = useRouter();
 
   const onClick = useCallback(
@@ -36,7 +36,6 @@ export const LanguageTabMenu: FC<LanguageTabMenuProps> = ({
         onClick={() => onClick(1)}
       >
         日本語記事
-        {/* <Link href={`/?languageStatus=1`}></Link> */}
       </Button>
 
       <Button
@@ -45,7 +44,6 @@ export const LanguageTabMenu: FC<LanguageTabMenuProps> = ({
         onClick={() => onClick(2)}
       >
         英語語記事
-        {/* <Link href={`/?languageStatus=2`}></Link> */}
       </Button>
     </div>
   );
