@@ -15,23 +15,24 @@ export const getPlatforms = async ({
   "use server";
 
   let where = {};
+  where = {
+    ...where,
+    isEng: languageStatus === 2,
+  };
 
   if (platformType) {
     where = {
+      ...where,
       platformType: platformType,
-      isEng: languageStatus === 2,
     };
-  } else if (platformIdList && platformType) {
+  }
+
+  if (platformIdList?.length) {
     where = {
-      platformType: platformType,
-      isEng: languageStatus === 2,
+      ...where,
       id: {
         in: [...platformIdList],
       },
-    };
-  } else {
-    where = {
-      isEng: languageStatus === 2,
     };
   }
 
@@ -47,6 +48,7 @@ export const getPlatforms = async ({
       createdAt: true,
       updatedAt: true,
     },
+    orderBy: [{ platformType: "asc" }, { name: "asc" }],
   });
 
   const platforms: Array<Platform> = res.map((platform) => {
