@@ -4,14 +4,11 @@
 -- CreateTable
 CREATE TABLE "profiles" (
     "id" uuid REFERENCES auth.users NOT NULL,
-    -- "name" TEXT,
-    -- "first_name" varchar NULL,
-    -- "last_name" varchar NULL,
+    "name" TEXT NULL,
     "email" TEXT NULL,
-    -- "email_verified" TIMESTAMP(3),
-    -- "image" TEXT NULL,
-    -- "provider" TEXT,
-    -- "is_super_admin" BOOLEAN DEFAULT FALSE,
+    "image" TEXT NULL,
+    -- "provider" TEXT NULL,
+    "is_super_admin" BOOLEAN NULL,
     -- "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     -- "updated_at" TIMESTAMP(3) NOT NULL,
     -- "deleted_at" TIMESTAMP(3),
@@ -61,8 +58,14 @@ alter table profiles enable row level security;
 create function public.handle_new_user()
 returns trigger as $$
 begin
-  insert into public.profiles (id, email)
-  values (new.id, new.email);
+  insert into public.profiles (id, name, email, image, is_super_admin)
+  values (
+    new.id,
+    new.raw_user_meta_data->>'name',
+    new.email,
+    new.raw_user_meta_data->>'avatar_url',
+    '0'
+    );
   return new;
 end;
 $$ language plpgsql security definer;
