@@ -6,11 +6,12 @@ CREATE TABLE "profiles" (
     "id" uuid REFERENCES auth.users NOT NULL,
     "name" TEXT NULL,
     "email" TEXT NULL,
+    "email_verified_at" TIMESTAMP(3) NULL,
     "image" TEXT NULL,
-    -- "provider" TEXT NULL,
+    "provider" TEXT NULL,
     "is_super_admin" BOOLEAN NULL,
-    -- "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    -- "updated_at" TIMESTAMP(3) NOT NULL,
+    "created_at" TIMESTAMP(3) NULL,
+    "updated_at" TIMESTAMP(3) NULL,
     -- "deleted_at" TIMESTAMP(3),
 
     CONSTRAINT "profiles_pkey" PRIMARY KEY ("id")
@@ -58,13 +59,17 @@ alter table profiles enable row level security;
 create function public.handle_new_user()
 returns trigger as $$
 begin
-  insert into public.profiles (id, name, email, image, is_super_admin)
+  insert into public.profiles (id, name, email, email_verified_at, image, provider, is_super_admin, created_at, updated_at)
   values (
     new.id,
     new.raw_user_meta_data->>'name',
     new.email,
+    new.email_confirmed_at,
     new.raw_user_meta_data->>'avatar_url',
-    '0'
+    new.raw_app_meta_data->>'provider',
+    '0',
+    new.created_at,
+    new.updated_at
     );
   return new;
 end;
