@@ -1,81 +1,74 @@
--- CreateTable
-CREATE TABLE "accounts" (
-    "id" TEXT NOT NULL,
-    "user_id" TEXT NOT NULL,
-    "type" TEXT NOT NULL,
-    "provider" TEXT NOT NULL,
-    "provider_account_id" TEXT NOT NULL,
-    "refresh_token" TEXT,
-    "access_token" TEXT,
-    "expires_at" INTEGER,
-    "token_type" TEXT,
-    "scope" TEXT,
-    "id_token" TEXT,
-    "session_state" TEXT,
-    "oauth_token_secret" TEXT,
-    "oauth_token" TEXT,
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3) NOT NULL,
-
-    CONSTRAINT "accounts_pkey" PRIMARY KEY ("id")
-);
+-- CREATE FUNCTION set_profiles_update_time()
+--     RETURNS TRIGGER AS $$ BEGIN NEW.updated_at = NOW(); RETURN NEW; END; $$ LANGUAGE plpgsql;
 
 -- CreateTable
-CREATE TABLE "sessions" (
-    "id" TEXT NOT NULL,
-    "session_token" TEXT NOT NULL,
-    "user_id" TEXT NOT NULL,
-    "expires" TIMESTAMP(3) NOT NULL,
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3) NOT NULL,
+CREATE TABLE "profiles" (
+    "id" uuid REFERENCES auth.users NOT NULL,
+    -- "name" TEXT,
+    -- "first_name" varchar NULL,
+    -- "last_name" varchar NULL,
+    "email" TEXT NULL,
+    -- "email_verified" TIMESTAMP(3),
+    -- "image" TEXT NULL,
+    -- "provider" TEXT,
+    -- "is_super_admin" BOOLEAN DEFAULT FALSE,
+    -- "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    -- "updated_at" TIMESTAMP(3) NOT NULL,
+    -- "deleted_at" TIMESTAMP(3),
 
-    CONSTRAINT "sessions_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "users" (
-    "id" TEXT NOT NULL,
-    "name" TEXT,
-    "email" TEXT,
-    "email_verified" TIMESTAMP(3),
-    "image" TEXT,
-    "is_super_admin" BOOLEAN,
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3) NOT NULL,
-    "deleted_at" TIMESTAMP(3),
-
-    CONSTRAINT "users_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "verification_tokens" (
-    "id" TEXT NOT NULL,
-    "identifier" TEXT NOT NULL,
-    "token" TEXT NOT NULL,
-    "expires" TIMESTAMP(3) NOT NULL,
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3) NOT NULL,
-
-    CONSTRAINT "verification_tokens_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "profiles_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "accounts_provider_provider_account_id_key" ON "accounts"("provider", "provider_account_id");
+-- CREATE UNIQUE INDEX "profiles_email_key" ON "profiles"("email");
 
--- CreateIndex
-CREATE UNIQUE INDEX "sessions_session_token_key" ON "sessions"("session_token");
+-- CREATE TRIGGER profiles_update_tri BEFORE UPDATE ON profiles FOR EACH ROW EXECUTE PROCEDURE set_profiles_update_time();
 
--- CreateIndex
-CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
+alter table profiles enable row level security;
 
--- CreateIndex
-CREATE UNIQUE INDEX "verification_tokens_token_key" ON "verification_tokens"("token");
+-- create policy "Public profiles are viewable by everyone."
+--   on profiles for select
+--   using ( true );
 
--- CreateIndex
-CREATE UNIQUE INDEX "verification_tokens_identifier_token_key" ON "verification_tokens"("identifier", "token");
+-- create policy "Users can insert their own profile."
+--   on profiles for insert
+--   with check ( auth.uid() = id );
 
--- AddForeignKey
-ALTER TABLE "accounts" ADD CONSTRAINT "accounts_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+-- create policy "Users can update own profile."
+--   on profiles for update
+--   using ( auth.uid() = id );
 
--- AddForeignKey
-ALTER TABLE "sessions" ADD CONSTRAINT "sessions_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- inserts a row into public.profiles
+-- CREATE OR REPLACE FUNCTION public.create_profile_for_user()
+--  RETURNS trigger
+--  LANGUAGE plpgsql
+--  SECURITY DEFINER
+-- AS $$
+-- BEGIN
+--   INSERT INTO public.profiles (id, email, first_name, last_name, avatar_url)
+--   SELECT
+--     new.id,
+--     new.email,
+--     COALESCE(split_part(jsonb_extract_path_text(new.raw_user_meta_data, 'full_name'), ' ', 1), NULL),
+--     COALESCE(split_part(jsonb_extract_path_text(new.raw_user_meta_data, 'full_name'), ' ', 2), NULL),
+--     COALESCE(jsonb_extract_path_text(new.raw_user_meta_data, 'picture'), jsonb_extract_path_text(new.raw_user_meta_data, 'avatar_url'), NULL);
+--   RETURN new;
+-- END;
+-- $$
+
+
+create function public.handle_new_user()
+returns trigger as $$
+begin
+  insert into public.profiles (id, email)
+  values (new.id, new.email);
+  return new;
+end;
+$$ language plpgsql security definer;
+
+
+-- trigger the function every time a user is created
+create trigger on_auth_user_created
+  after insert on auth.users
+  for each row execute procedure public.handle_new_user();

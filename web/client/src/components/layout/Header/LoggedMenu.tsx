@@ -12,9 +12,6 @@ type LoggedMenuProps = {
 };
 export const LoggedMenu: FC<LoggedMenuProps> = ({ user }: LoggedMenuProps) => {
   const image = user?.user_metadata["avatar_url"] || "no_image.png";
-  // console.log("🔥🔥🔥🔥🔥🔥🔥");
-  // console.log(user);
-
   return (
     <div className="grid grid-cols-2">
       <Avatar>
