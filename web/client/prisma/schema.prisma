@@ -13,34 +13,20 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Account {
-  id                 String  @id @default(uuid())
-  userId             String  @map("user_id")
-  provider           String
-  providerAccountId  String  @map("provider_account_id")
-  createdAt          DateTime @default(now()) @map("created_at")
-  updatedAt          DateTime @updatedAt @map("updated_at")
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([provider, providerAccountId])
-  @@map("accounts")
-}
-
-
-model User {
+model Profile {
   id            String    @id @default(uuid())
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime? @map("email_verified")
-  image         String?
-  isSuperAdmin  Boolean? @default(false) @map("is_super_admin")
+  name          String
+  email         String  
+  emailVerifiedAt DateTime? @map("email_verified_at")
+  image         String
+  provider      String?
+  isSuperAdmin  Boolean @default(false) @map("is_super_admin")
   createdAt     DateTime @default(now()) @map("created_at")
   updatedAt     DateTime @updatedAt @map("updated_at")
   deletedAt     DateTime? @map("deleted_at")
-  accounts      Account[]
 
-  @@map("users")
+  @@map("profiles")
 }
 
 
