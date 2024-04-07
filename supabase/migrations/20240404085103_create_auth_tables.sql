@@ -6,7 +6,7 @@ CREATE TABLE "profiles" (
     "email_verified_at" TIMESTAMP(3) NULL,
     "image" TEXT NULL,
     "provider" TEXT NULL,
-    "is_super_admin" BOOLEAN NULL,
+    "is_super_admin" BOOLEAN NOT NULL DEFAULT FALSE,
     "created_at" TIMESTAMP(3) NULL,
     "updated_at" TIMESTAMP(3) NULL,
 
@@ -35,7 +35,7 @@ create policy "Users can update own profile."
 create function public.handle_new_user()
 returns trigger as $$
 begin
-  insert into public.profiles (id, name, email, email_verified_at, image, provider, is_super_admin, created_at, updated_at)
+  insert into public.profiles (id, name, email, email_verified_at, image, provider, created_at, updated_at)
   values (
     new.id,
     new.raw_user_meta_data->>'name',
@@ -43,7 +43,6 @@ begin
     new.email_confirmed_at,
     new.raw_user_meta_data->>'avatar_url',
     new.raw_app_meta_data->>'provider',
-    '0',
     new.created_at,
     new.updated_at
     );
