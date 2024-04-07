@@ -1,15 +1,15 @@
 import Link from "next/link";
 import { CiSearch } from "react-icons/ci";
 
-import { createServerSideClient } from "@/lib/supabase/client/serverClient";
+
+import { getUser } from "@/features/users/actions/user";
 
 import { LoggedMenu } from "./LoggedMenu";
 import { NotLoggedMenu } from "./NotLoggedMenu";
 
+
 export async function Header() {
-  const supabase = await createServerSideClient();
-  const { data, error } = await supabase.auth.getUser();
-  const user = data?.user;
+  const user = await getUser();
 
   return (
     <div className="fixed z-50 flex h-16 w-screen items-center justify-between border-b border-gray-300 bg-white px-8 shadow-md">
