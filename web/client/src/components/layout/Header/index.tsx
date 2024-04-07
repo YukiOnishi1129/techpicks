@@ -1,8 +1,10 @@
 import Link from "next/link";
 import { CiSearch } from "react-icons/ci";
+
+import { createServerSideClient } from "@/lib/supabase/client/serverClient";
+
 import { LoggedMenu } from "./LoggedMenu";
 import { NotLoggedMenu } from "./NotLoggedMenu";
-import { createServerSideClient } from "@/lib/supabase/client/serverClient";
 
 export async function Header() {
   const supabase = await createServerSideClient();
