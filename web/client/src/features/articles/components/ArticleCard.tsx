@@ -22,6 +22,7 @@ export const ArticleCard: FC<ArticleCardProps> = ({
             {article.title}
           </h3>
           <div className="py-2">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               className="mr-2 inline-block size-[24px]"
               src={article.platform.faviconUrl}
@@ -49,6 +50,7 @@ export const ArticleCard: FC<ArticleCardProps> = ({
         </div>
 
         <div className="flex h-16 w-24 justify-center  md:h-32 md:w-48">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             className="h-full rounded-lg border-2 object-cover object-center shadow-md"
             src={imageUrl}
