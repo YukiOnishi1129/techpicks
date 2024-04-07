@@ -17,6 +17,7 @@ export const useParseHtml = () => {
           if (domNode.name === "iframe") return <></>;
           if (domNode.name === "img" && domNode?.attribs) {
             return (
+              // eslint-disable-next-line @next/next/no-img-element
               <img
                 className="h-auto w-full"
                 src={domNode.attribs.src}
@@ -51,6 +52,7 @@ export const useParseHtml = () => {
             const highlightCode: AutoHighlightResult = hljs.highlightAuto(code);
             return (
               <pre>
+                {/* eslint-disable-next-line tailwindcss/no-custom-classname */}
                 <code className="hljs">{parse(highlightCode.value)}</code>
               </pre>
             );

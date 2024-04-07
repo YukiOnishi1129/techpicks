@@ -27,6 +27,7 @@ export const ArticleDetail = ({ article }: ArticleDetailProps) => {
 
       <div>
         <Link href={article.articleUrl} target="_blank">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             className="m-auto h-[370px] cursor-pointer rounded-md object-cover object-center pb-8 hover:opacity-80"
             src={imageUrl}

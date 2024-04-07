@@ -21,10 +21,16 @@ export default async function Home({ searchParams }: PageProps) {
       ? searchParams["keyword"]
       : undefined;
 
-  const platformIdList =
-    typeof searchParams["platformId"] !== "string" && searchParams["platformId"]
-      ? searchParams["platformId"]
-      : [];
+  let platformIdList: Array<string> = [];
+
+  if (
+    typeof searchParams["platformId"] !== "string" &&
+    searchParams["platformId"]
+  )
+    platformIdList = searchParams["platformId"];
+
+  if (typeof searchParams["platformId"] === "string")
+    platformIdList.push(searchParams["platformId"]);
 
   return (
     <>

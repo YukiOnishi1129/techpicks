@@ -1,12 +1,9 @@
 "use client";
-import { signIn } from "next-auth/react";
 
 import { Button } from "@/components/ui/button";
 
-export const LoginForm = () => {
-  return (
-    <Button onClick={() => signIn("google", { callbackUrl: "/" })}>
-      Login
-    </Button>
-  );
+import { login } from "./actions/auth";
+
+export const LoginForm = async () => {
+  return <Button onClick={() => login()}>Login</Button>;
 };

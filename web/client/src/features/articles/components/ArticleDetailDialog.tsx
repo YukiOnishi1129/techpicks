@@ -68,6 +68,7 @@ const ArticleContent = ({ article }: { article: ArticleType }) => {
               href={article.platform.siteUrl}
               target="_blank"
             >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 className="mr-2 inline-block size-[24px]"
                 src={article.platform.faviconUrl}
@@ -107,6 +108,7 @@ const ArticleContent = ({ article }: { article: ArticleType }) => {
 
       <div className="overflow-y-scroll">
         <Link href={article.articleUrl} target="_blank">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             className="m-auto h-[370px] cursor-pointer rounded-md object-cover object-center pb-8 hover:opacity-80"
             src={imageUrl}

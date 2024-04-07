@@ -23,6 +23,10 @@ const (
 	CategoryTypeNetwork
 	CategoryTypeDevOps
 	CategoryTypeDesign
+	CategoryTypeManagement
+	CategoryTypeFinance
+	CategoryTypeBusiness
+	CategoryTypeCareer
 	CategoryTypeOthers
 )
 
