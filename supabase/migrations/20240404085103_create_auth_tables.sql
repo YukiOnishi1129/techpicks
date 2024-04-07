@@ -1,10 +1,10 @@
 -- CreateTable
 CREATE TABLE "profiles" (
     "id" uuid REFERENCES auth.users NOT NULL,
-    "name" TEXT NULL,
-    "email" TEXT NULL,
+    "name" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
     "email_verified_at" TIMESTAMP(3) NULL,
-    "image" TEXT NULL,
+    "image" TEXT NOT NULL,
     "provider" TEXT NULL,
     "is_super_admin" BOOLEAN NOT NULL DEFAULT FALSE,
     "created_at" TIMESTAMP(3) NULL,
