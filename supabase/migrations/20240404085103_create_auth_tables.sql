@@ -9,6 +9,7 @@ CREATE TABLE "profiles" (
     "is_super_admin" BOOLEAN NOT NULL DEFAULT FALSE,
     "created_at" TIMESTAMP(3) NULL,
     "updated_at" TIMESTAMP(3) NULL,
+    "deleted_at" TIMESTAMP(3) NULL,
 
     CONSTRAINT "profiles_pkey" PRIMARY KEY ("id")
 );
