@@ -1,4 +1,6 @@
--- CreateTable
+CREATE FUNCTION set_profiles_update_time()
+    RETURNS TRIGGER AS $$ BEGIN NEW.updated_at = NOW(); RETURN NEW; END; $$ LANGUAGE plpgsql;
+
 CREATE TABLE "profiles" (
     "id" uuid REFERENCES auth.users NOT NULL,
     "name" TEXT NOT NULL,
@@ -8,11 +10,13 @@ CREATE TABLE "profiles" (
     "provider" TEXT NULL,
     "is_super_admin" BOOLEAN NOT NULL DEFAULT FALSE,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3) NULL,
+    "updated_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "deleted_at" TIMESTAMP(3) NULL,
 
     CONSTRAINT "profiles_pkey" PRIMARY KEY ("id")
 );
+
+CREATE TRIGGER profiles_update_tri BEFORE UPDATE ON profiles FOR EACH ROW EXECUTE PROCEDURE set_profiles_update_time();
 
 -- CreateIndex
 -- CREATE UNIQUE INDEX "profiles_email_key" ON "profiles"("email");
@@ -30,6 +34,8 @@ create policy "Users can insert their own profile."
 create policy "Users can update own profile."
   on profiles for update
   using ( auth.uid() = id );
+
+
 
 
 -- inserts a row into public.profiles
