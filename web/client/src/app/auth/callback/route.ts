@@ -26,44 +26,7 @@ export async function GET(request: Request) {
         },
       }
     );
-    // const res = await supabase.auth.getUser();
-    // if (!res) {
-    //   return NextResponse.redirect(`${origin}/login`);
-    // }
-
-    // prisma.user.upsert({
-    //   where: { email: user?.email || "" },
-    //   update: {
-    //     email: user?.email,
-    //     name: user?.user_metadata.full_name,
-    //     image: user?.user_metadata.avatar_url,
-    //   },
-    //   create: {
-    //     email: user?.email,
-    //     name: user?.user_metadata["full_name"],
-    //     image: user?.user_metadata["avatar_url"],
-    //   },
-    // });
-    /**
-     * id
-     * email
-     * email_confirmed_at
-     * image: user.app_metadata.avatar_url
-     * name: user.app_metadata.full_name
-     *
-     * email_verified?: email_confirmed_at?
-     *
-     * account
-     * id : UUID
-     * user_id
-     * provider: app_metadata.provider
-     * provider_id: identities[0].provider_id
-     *
-     */
     const { error } = await supabase.auth.exchangeCodeForSession(code);
-
-    console.log("🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥");
-    console.log(error);
 
     if (!error) {
       return NextResponse.redirect(`${origin}${next}`);

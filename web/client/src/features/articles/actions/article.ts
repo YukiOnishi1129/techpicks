@@ -20,8 +20,6 @@ export const fetchArticleAPI = async ({
   if (keyword) {
     url += `&keyword=${keyword}`;
   }
-  console.log("🔥🔥🔥🔥🔥🔥🔥");
-  console.log(platformIdList);
   if (platformIdList.length) {
     const platformIdPath = platformIdList
       .map((platformId) => `&platformId=${platformId}`)
