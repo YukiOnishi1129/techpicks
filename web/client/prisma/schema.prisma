@@ -16,8 +16,8 @@ datasource db {
 model Bookmark {
   id           String   @id @default(uuid())
   userId       String @map("user_id")
-  platformId   String @map("platform_id")
-  articleId    String @map("article_id")
+  platformId   String? @map("platform_id")
+  articleId    String? @map("article_id")
   title        String
   description  String
   articleUrl   String @map("article_url")
@@ -28,8 +28,8 @@ model Bookmark {
   updatedAt    DateTime @updatedAt @map("updated_at")
 
   profile         Profile  @relation(fields: [userId], references: [id], onDelete: Cascade)
-  platform        Platform  @relation(fields: [platformId], references: [id], onDelete: Cascade)
-  article      Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  platform        Platform?  @relation(fields: [platformId], references: [id], onDelete: Cascade)
+  article      Article?  @relation(fields: [articleId], references: [id], onDelete: Cascade)
 
   @@map("bookmarks")
 
