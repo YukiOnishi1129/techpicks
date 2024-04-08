@@ -95,19 +95,6 @@ export const getArticles = async ({
               createdAt: true,
               updatedAt: true,
               deletedAt: true,
-              platform: {
-                select: {
-                  id: true,
-                  name: true,
-                  siteUrl: true,
-                  faviconUrl: true,
-                  platformType: true,
-                  isEng: true,
-                  createdAt: true,
-                  updatedAt: true,
-                  deletedAt: true,
-                },
-              },
               category: {
                 select: {
                   id: true,
