@@ -13,6 +13,28 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Bookmark {
+  id           String   @id @default(uuid())
+  userId       String @map("user_id")
+  platformId   String? @map("platform_id")
+  articleId    String? @map("article_id")
+  title        String
+  description  String
+  articleUrl   String @map("article_url")
+  publishedAt  DateTime @map("published_at")
+  thumbnailURL String @map("thumbnail_url")
+  isRead    Boolean @map("is_read")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  profile         Profile  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  platform        Platform?  @relation(fields: [platformId], references: [id], onDelete: Cascade)
+  article      Article?  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+
+  @@map("bookmarks")
+
+}
+
 
 model Profile {
   id            String    @id @default(uuid())
@@ -25,6 +47,7 @@ model Profile {
   createdAt     DateTime @default(now()) @map("created_at")
   updatedAt     DateTime @updatedAt @map("updated_at")
   deletedAt     DateTime? @map("deleted_at")
+  bookmarks      Bookmark[]
 
   @@map("profiles")
 }
@@ -57,9 +80,9 @@ model Article {
   createdAt    DateTime @default(now()) @map("created_at")
   updatedAt    DateTime @updatedAt @map("updated_at")
   feedArticleRelatoins FeedArticleRelation[]
+  bookmarks      Bookmark[]
 
   platform     Platform  @relation(fields: [platformId], references: [id], onDelete: Cascade)
-
   @@map("articles")
 
 }
@@ -109,6 +132,7 @@ model Platform {
   deletedAt    DateTime? @map("deleted_at")
   feeds        Feed[]
   articles     Article[]
+  bookmarks    Bookmark[]
 
   @@map("platforms")
 }

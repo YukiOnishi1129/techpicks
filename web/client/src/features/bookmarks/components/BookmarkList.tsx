@@ -1,24 +1,23 @@
 "use client";
-import { User } from "@supabase/supabase-js";
-import { useCallback, useRef, useState, useEffect } from "react";
 
-import { ArticleCard } from "@/features/articles/components/ArticleCard";
+import { User } from "@supabase/supabase-js";
+import { FC, useCallback, useEffect, useRef, useState } from "react";
 
 import { Loader } from "@/components/ui/loader";
 
-import { ArticleType } from "@/types/article";
+import { BookmarkType } from "@/types/bookmark";
 import { LanguageStatus } from "@/types/language";
 
-import { ArticleDetailDialog } from "./ArticleDetailDialog";
-import { ArticleLanguageTabMenu } from "./ArticleLanguageTabMenu";
+import { BookmarkCard } from "./BookmarkCard";
+import { BookmarkLanguageTabMenu } from "./BookmarkLanguageTabMenu";
 
 type Props = {
   user: User | undefined;
-  initialArticles: Array<ArticleType>;
+  initialBookmarks: Array<BookmarkType>;
   languageStatus: LanguageStatus;
   keyword?: string;
   platformIdList: Array<string>;
-  fetchArticles: ({
+  fetchBookmarks: ({
     languageStatus,
     keyword,
     offset,
@@ -28,39 +27,40 @@ type Props = {
     keyword?: string;
     offset: string;
     platformIdList: Array<string>;
-  }) => Promise<ArticleType[]>;
+  }) => Promise<BookmarkType[]>;
 };
 
-export function ArticleList({
-  user,
-  initialArticles,
-  languageStatus,
+export const BookmarkList: FC<Props> = ({
+  initialBookmarks,
   keyword,
+  languageStatus,
   platformIdList,
-  fetchArticles,
-}: Props) {
+  fetchBookmarks,
+}: Props) => {
   const observerTarget = useRef(null);
 
-  const [articles, setArticles] = useState<ArticleType[]>(initialArticles);
+  const [bookmarks, setBookmarks] = useState<BookmarkType[]>(initialBookmarks);
   const [hashMore, setHashMore] = useState(true);
   const [offset, setOffset] = useState(1);
 
-  const flatArticles = articles ? articles.flatMap((article) => article) : [];
+  const flatBookmarks = bookmarks
+    ? bookmarks.flatMap((bookmark) => bookmark)
+    : [];
 
   const loadMore = useCallback(
     async (offset: number) => {
-      const newArticles = await fetchArticles({
+      const newBookmarks = await fetchBookmarks({
         offset: offset.toString(),
         keyword: keyword,
         languageStatus: languageStatus.toString(),
         platformIdList: platformIdList,
       });
-      setArticles((prev) => [...prev, ...newArticles]);
+      setBookmarks((prev) => [...prev, ...newBookmarks]);
 
-      const count = newArticles.length;
+      const count = newBookmarks.length;
       setHashMore(count > 0);
     },
-    [fetchArticles, languageStatus, keyword, platformIdList]
+    [fetchBookmarks, languageStatus, keyword, platformIdList]
   );
 
   useEffect(() => {
@@ -98,17 +98,15 @@ export function ArticleList({
   return (
     <div className="w-auto">
       <div className="w-full border-b-2 bg-white py-4">
-        <ArticleLanguageTabMenu
+        <BookmarkLanguageTabMenu
           languageStatus={languageStatus}
           keyword={keyword}
         />
       </div>
       <div className="m-auto h-[700px] overflow-y-scroll md:h-[600px]">
-        {flatArticles.map((article) => (
-          <div key={article.id} className="border-t-2 py-8">
-            <ArticleDetailDialog article={article} user={user}>
-              <ArticleCard article={article} user={user} />
-            </ArticleDetailDialog>
+        {flatBookmarks.map((bookmark) => (
+          <div key={bookmark.id} className="border-t-2 py-8">
+            <BookmarkCard bookmark={bookmark} />
           </div>
         ))}
         <div ref={observerTarget}>
@@ -121,4 +119,4 @@ export function ArticleList({
       </div>
     </div>
   );
-}
+};

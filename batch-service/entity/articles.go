@@ -172,15 +172,18 @@ var ArticleWhere = struct {
 // ArticleRels is where relationship names are stored.
 var ArticleRels = struct {
 	Platform             string
+	Bookmarks            string
 	FeedArticleRelations string
 }{
 	Platform:             "Platform",
+	Bookmarks:            "Bookmarks",
 	FeedArticleRelations: "FeedArticleRelations",
 }
 
 // articleR is where relationships are stored.
 type articleR struct {
 	Platform             *Platform                `boil:"Platform" json:"Platform" toml:"Platform" yaml:"Platform"`
+	Bookmarks            BookmarkSlice            `boil:"Bookmarks" json:"Bookmarks" toml:"Bookmarks" yaml:"Bookmarks"`
 	FeedArticleRelations FeedArticleRelationSlice `boil:"FeedArticleRelations" json:"FeedArticleRelations" toml:"FeedArticleRelations" yaml:"FeedArticleRelations"`
 }
 
@@ -194,6 +197,13 @@ func (r *articleR) GetPlatform() *Platform {
 		return nil
 	}
 	return r.Platform
+}
+
+func (r *articleR) GetBookmarks() BookmarkSlice {
+	if r == nil {
+		return nil
+	}
+	return r.Bookmarks
 }
 
 func (r *articleR) GetFeedArticleRelations() FeedArticleRelationSlice {
@@ -530,6 +540,20 @@ func (o *Article) Platform(mods ...qm.QueryMod) platformQuery {
 	return Platforms(queryMods...)
 }
 
+// Bookmarks retrieves all the bookmark's Bookmarks with an executor.
+func (o *Article) Bookmarks(mods ...qm.QueryMod) bookmarkQuery {
+	var queryMods []qm.QueryMod
+	if len(mods) != 0 {
+		queryMods = append(queryMods, mods...)
+	}
+
+	queryMods = append(queryMods,
+		qm.Where("\"bookmarks\".\"article_id\"=?", o.ID),
+	)
+
+	return Bookmarks(queryMods...)
+}
+
 // FeedArticleRelations retrieves all the feed_article_relation's FeedArticleRelations with an executor.
 func (o *Article) FeedArticleRelations(mods ...qm.QueryMod) feedArticleRelationQuery {
 	var queryMods []qm.QueryMod
@@ -656,6 +680,119 @@ func (articleL) LoadPlatform(ctx context.Context, e boil.ContextExecutor, singul
 					foreign.R = &platformR{}
 				}
 				foreign.R.Articles = append(foreign.R.Articles, local)
+				break
+			}
+		}
+	}
+
+	return nil
+}
+
+// LoadBookmarks allows an eager lookup of values, cached into the
+// loaded structs of the objects. This is for a 1-M or N-M relationship.
+func (articleL) LoadBookmarks(ctx context.Context, e boil.ContextExecutor, singular bool, maybeArticle interface{}, mods queries.Applicator) error {
+	var slice []*Article
+	var object *Article
+
+	if singular {
+		var ok bool
+		object, ok = maybeArticle.(*Article)
+		if !ok {
+			object = new(Article)
+			ok = queries.SetFromEmbeddedStruct(&object, &maybeArticle)
+			if !ok {
+				return errors.New(fmt.Sprintf("failed to set %T from embedded struct %T", object, maybeArticle))
+			}
+		}
+	} else {
+		s, ok := maybeArticle.(*[]*Article)
+		if ok {
+			slice = *s
+		} else {
+			ok = queries.SetFromEmbeddedStruct(&slice, maybeArticle)
+			if !ok {
+				return errors.New(fmt.Sprintf("failed to set %T from embedded struct %T", slice, maybeArticle))
+			}
+		}
+	}
+
+	args := make(map[interface{}]struct{})
+	if singular {
+		if object.R == nil {
+			object.R = &articleR{}
+		}
+		args[object.ID] = struct{}{}
+	} else {
+		for _, obj := range slice {
+			if obj.R == nil {
+				obj.R = &articleR{}
+			}
+			args[obj.ID] = struct{}{}
+		}
+	}
+
+	if len(args) == 0 {
+		return nil
+	}
+
+	argsSlice := make([]interface{}, len(args))
+	i := 0
+	for arg := range args {
+		argsSlice[i] = arg
+		i++
+	}
+
+	query := NewQuery(
+		qm.From(`bookmarks`),
+		qm.WhereIn(`bookmarks.article_id in ?`, argsSlice...),
+	)
+	if mods != nil {
+		mods.Apply(query)
+	}
+
+	results, err := query.QueryContext(ctx, e)
+	if err != nil {
+		return errors.Wrap(err, "failed to eager load bookmarks")
+	}
+
+	var resultSlice []*Bookmark
+	if err = queries.Bind(results, &resultSlice); err != nil {
+		return errors.Wrap(err, "failed to bind eager loaded slice bookmarks")
+	}
+
+	if err = results.Close(); err != nil {
+		return errors.Wrap(err, "failed to close results in eager load on bookmarks")
+	}
+	if err = results.Err(); err != nil {
+		return errors.Wrap(err, "error occurred during iteration of eager loaded relations for bookmarks")
+	}
+
+	if len(bookmarkAfterSelectHooks) != 0 {
+		for _, obj := range resultSlice {
+			if err := obj.doAfterSelectHooks(ctx, e); err != nil {
+				return err
+			}
+		}
+	}
+	if singular {
+		object.R.Bookmarks = resultSlice
+		for _, foreign := range resultSlice {
+			if foreign.R == nil {
+				foreign.R = &bookmarkR{}
+			}
+			foreign.R.Article = object
+		}
+		return nil
+	}
+
+	for _, foreign := range resultSlice {
+		for _, local := range slice {
+			if queries.Equal(local.ID, foreign.ArticleID) {
+				local.R.Bookmarks = append(local.R.Bookmarks, foreign)
+				if foreign.R == nil {
+					foreign.R = &bookmarkR{}
+				}
+				foreign.R.Article = local
 				break
 			}
 		}
@@ -819,6 +956,133 @@ func (o *Article) SetPlatform(ctx context.Context, exec boil.ContextExecutor, in
 		}
 	} else {
 		related.R.Articles = append(related.R.Articles, o)
+	}
+
+	return nil
+}
+
+// AddBookmarks adds the given related objects to the existing relationships
+// of the article, optionally inserting them as new records.
+// Appends related to o.R.Bookmarks.
+// Sets related.R.Article appropriately.
+func (o *Article) AddBookmarks(ctx context.Context, exec boil.ContextExecutor, insert bool, related ...*Bookmark) error {
+	var err error
+	for _, rel := range related {
+		if insert {
+			queries.Assign(&rel.ArticleID, o.ID)
+			if err = rel.Insert(ctx, exec, boil.Infer()); err != nil {
+				return errors.Wrap(err, "failed to insert into foreign table")
+			}
+		} else {
+			updateQuery := fmt.Sprintf(
+				"UPDATE \"bookmarks\" SET %s WHERE %s",
+				strmangle.SetParamNames("\"", "\"", 1, []string{"article_id"}),
+				strmangle.WhereClause("\"", "\"", 2, bookmarkPrimaryKeyColumns),
+			)
+			values := []interface{}{o.ID, rel.ID}
+
+			if boil.IsDebug(ctx) {
+				writer := boil.DebugWriterFrom(ctx)
+				fmt.Fprintln(writer, updateQuery)
+				fmt.Fprintln(writer, values)
+			}
+			if _, err = exec.ExecContext(ctx, updateQuery, values...); err != nil {
+				return errors.Wrap(err, "failed to update foreign table")
+			}
+
+			queries.Assign(&rel.ArticleID, o.ID)
+		}
+	}
+
+	if o.R == nil {
+		o.R = &articleR{
+			Bookmarks: related,
+		}
+	} else {
+		o.R.Bookmarks = append(o.R.Bookmarks, related...)
+	}
+
+	for _, rel := range related {
+		if rel.R == nil {
+			rel.R = &bookmarkR{
+				Article: o,
+			}
+		} else {
+			rel.R.Article = o
+		}
+	}
+	return nil
+}
+
+// SetBookmarks removes all previously related items of the
+// article replacing them completely with the passed
+// in related items, optionally inserting them as new records.
+// Sets o.R.Article's Bookmarks accordingly.
+// Replaces o.R.Bookmarks with related.
+// Sets related.R.Article's Bookmarks accordingly.
+func (o *Article) SetBookmarks(ctx context.Context, exec boil.ContextExecutor, insert bool, related ...*Bookmark) error {
+	query := "update \"bookmarks\" set \"article_id\" = null where \"article_id\" = $1"
+	values := []interface{}{o.ID}
+	if boil.IsDebug(ctx) {
+		writer := boil.DebugWriterFrom(ctx)
+		fmt.Fprintln(writer, query)
+		fmt.Fprintln(writer, values)
+	}
+	_, err := exec.ExecContext(ctx, query, values...)
+	if err != nil {
+		return errors.Wrap(err, "failed to remove relationships before set")
+	}
+
+	if o.R != nil {
+		for _, rel := range o.R.Bookmarks {
+			queries.SetScanner(&rel.ArticleID, nil)
+			if rel.R == nil {
+				continue
+			}
+
+			rel.R.Article = nil
+		}
+		o.R.Bookmarks = nil
+	}
+
+	return o.AddBookmarks(ctx, exec, insert, related...)
+}
+
+// RemoveBookmarks relationships from objects passed in.
+// Removes related items from R.Bookmarks (uses pointer comparison, removal does not keep order)
+// Sets related.R.Article.
+func (o *Article) RemoveBookmarks(ctx context.Context, exec boil.ContextExecutor, related ...*Bookmark) error {
+	if len(related) == 0 {
+		return nil
+	}
+
+	var err error
+	for _, rel := range related {
+		queries.SetScanner(&rel.ArticleID, nil)
+		if rel.R != nil {
+			rel.R.Article = nil
+		}
+		if _, err = rel.Update(ctx, exec, boil.Whitelist("article_id")); err != nil {
+			return err
+		}
+	}
+	if o.R == nil {
+		return nil
+	}
+
+	for _, rel := range related {
+		for i, ri := range o.R.Bookmarks {
+			if rel != ri {
+				continue
+			}
+
+			ln := len(o.R.Bookmarks)
+			if ln > 1 && i < ln-1 {
+				o.R.Bookmarks[i] = o.R.Bookmarks[ln-1]
+			}
+			o.R.Bookmarks = o.R.Bookmarks[:ln-1]
+			break
+		}
 	}
 
 	return nil

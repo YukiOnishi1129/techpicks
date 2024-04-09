@@ -4,27 +4,9 @@ import (
 	"cloud.google.com/go/firestore"
 	"context"
 	"github.com/YukiOnishi1129/techpicks/batch-service/database"
-	"github.com/YukiOnishi1129/techpicks/batch-service/domain"
 	"github.com/joho/godotenv"
 	"log"
 )
-
-type ArticleFirestore struct {
-	Title           string              `firestore:"title"`
-	Description     string              `firestore:"description"`
-	ThumbnailURL    string              `firestore:"thumbnail_url"`
-	ArticleURL      string              `firestore:"article_url"`
-	Published       string              `firestore:"published"`
-	PlatformID      string              `firestore:"platform_id"`
-	PlatformName    string              `firestore:"platform_name"`
-	PlatformType    domain.PlatformType `firestore:"platform_type"`
-	PlatformSiteURL string              `firestore:"platform_site_url"`
-	IsEng           bool                `firestore:"is_eng"`
-	IsPrivate       bool                `firestore:"is_private"`
-	CreatedAt       string              `firestore:"created_at"`
-	UpdatedAt       string              `firestore:"updated_at"`
-	DeletedAt       *string             `firestore:"deleted_at"`
-}
 
 func main() {
 	ctx := context.Background()

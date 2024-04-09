@@ -3,6 +3,7 @@ package usecase
 import "testing"
 
 func TestGetRss(t *testing.T) {
+	t.Parallel()
 	tests := []struct {
 		name    string
 		rssURL  string

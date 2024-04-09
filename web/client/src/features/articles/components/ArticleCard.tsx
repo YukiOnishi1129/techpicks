@@ -1,19 +1,59 @@
 "use client";
 
-import { FC } from "react";
+import { User } from "@supabase/supabase-js";
+import { FC, useCallback } from "react";
+import { FcBookmark } from "react-icons/fc";
+import { MdOutlineBookmarkAdd } from "react-icons/md";
+import { uuid } from "uuidv4";
+
+import {
+  createBookmark,
+  deleteBookmark,
+} from "@/features/bookmarks/repository/bookmark";
+
+import { Button } from "@/components/ui/button";
 
 import { useCheckImageExist } from "@/hooks/useImage";
+
+import { showDiffDateToCurrentDate } from "@/lib/date";
 
 import { ArticleType } from "@/types/article";
 
 type ArticleCardProps = {
   article: ArticleType;
+  user: User | undefined;
 };
 
 export const ArticleCard: FC<ArticleCardProps> = ({
   article,
+  user,
 }: ArticleCardProps) => {
   const imageUrl = useCheckImageExist(article.thumbnailURL);
+
+  const handleAddBookmark = useCallback(async () => {
+    if (!user || !article?.bookmarkId) return;
+    const id = uuid();
+    await createBookmark({
+      id: id,
+      title: article.title,
+      description: article.description,
+      articleUrl: article.articleUrl,
+      publishedAt: article.publishedAt,
+      thumbnailURL: article.thumbnailURL,
+      isRead: false,
+      userId: user.id,
+      platformId: article.platform.id,
+    });
+  }, [article, user]);
+
+  const handleRemoveBookmark = useCallback(async () => {
+    if (!user || !article?.bookmarkId) return;
+    await deleteBookmark({
+      bookmarkId: article.bookmarkId,
+      userId: user.id,
+    });
+  }, [article.bookmarkId, user]);
+
   return (
     <div className="relative w-full cursor-pointer rounded hover:opacity-30">
       <div className="flex justify-around">
@@ -40,12 +80,30 @@ export const ArticleCard: FC<ArticleCardProps> = ({
                   {feed.category.name}
                 </span>
               ))}
-            {/* {article.platform.categoryName && (
-              <span className="ml-2 rounded-lg bg-yellow-600 px-2 py-1 text-xs font-bold text-white md:text-base">
-                {article.platform.categoryName}
-              </span>
-            )} */}
-            {/* <p className="pt-2 text-sm">{article.publishedAt.}</p> */}
+            <p className="pt-2 text-sm">
+              {showDiffDateToCurrentDate(article.publishedAt)}
+            </p>
+            {user && (
+              <div>
+                {article.isBookmarked ? (
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={handleRemoveBookmark}
+                  >
+                    <FcBookmark className="inline-block" size={36} />
+                  </Button>
+                ) : (
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={handleAddBookmark}
+                  >
+                    <MdOutlineBookmarkAdd className="inline-block" size={36} />
+                  </Button>
+                )}
+              </div>
+            )}
           </div>
         </div>
 

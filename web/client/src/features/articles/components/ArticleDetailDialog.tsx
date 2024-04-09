@@ -1,32 +1,46 @@
 "use client";
+import { User } from "@supabase/supabase-js";
 import Link from "next/link";
-import { FC, useState } from "react";
+import { FC, useCallback, useState } from "react";
+import { FcBookmark } from "react-icons/fc";
+import { MdOutlineBookmarkAdd } from "react-icons/md";
+import { uuid } from "uuidv4";
+
+import {
+  createBookmark,
+  deleteBookmark,
+} from "@/features/bookmarks/repository/bookmark";
 
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogTrigger,
-  DialogContent,
   DialogHeader,
   DialogTitle,
   DialogDescription,
+  DialogContent,
 } from "@/components/ui/dialog";
 
 import { useCheckImageExist } from "@/hooks/useImage";
 import { useParseHtml } from "@/hooks/useParseHtml";
 
+import { formatShowDateTime } from "@/lib/date";
+
 import { ArticleType } from "@/types/article";
 
 type ArticleDetailDialogProps = {
   article: ArticleType;
+  user: User | undefined;
   children: React.ReactNode;
 };
 
 export const ArticleDetailDialog: FC<ArticleDetailDialogProps> = ({
   article,
+  user,
   children,
 }: ArticleDetailDialogProps) => {
   const [open, setOpen] = useState(false);
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -40,15 +54,57 @@ export const ArticleDetailDialog: FC<ArticleDetailDialogProps> = ({
         </Button>
       </DialogTrigger>
       <DialogContent className="max-h-[70%] w-[90%] overflow-hidden sm:max-h-[90%]">
-        {open && <ArticleContent article={article} />}
+        {open && <ArticleContent article={article} user={user} />}
       </DialogContent>
     </Dialog>
   );
 };
 
-const ArticleContent = ({ article }: { article: ArticleType }) => {
+const ArticleContent = ({
+  article,
+  user,
+}: {
+  article: ArticleType;
+  user: User | undefined;
+}) => {
   const imageUrl = useCheckImageExist(article.thumbnailURL);
   const { convertParseHtml } = useParseHtml();
+
+  const [bookmarkId, setBookmarkId] = useState<string | undefined>(
+    article.bookmarkId
+  );
+
+  const handleAddBookmark = useCallback(async () => {
+    if (!user) return;
+    const uniqueId = uuid();
+    const id = await createBookmark({
+      id: uniqueId,
+      title: article.title,
+      description: article.description,
+      articleId: article.id,
+      articleUrl: article.articleUrl,
+      publishedAt: article.publishedAt,
+      thumbnailURL: article.thumbnailURL,
+      isRead: false,
+      userId: user.id,
+      platformId: article.platform.id,
+    });
+    setBookmarkId(id);
+  }, [article, user]);
+
+  const handleRemoveBookmark = useCallback(
+    async (bookmarkId: string) => {
+      if (!user || !bookmarkId) return;
+
+      await deleteBookmark({
+        bookmarkId: bookmarkId,
+        userId: user.id,
+      });
+      setBookmarkId(undefined);
+    },
+    [user]
+  );
+
   return (
     <>
       <DialogHeader>
@@ -100,8 +156,30 @@ const ArticleContent = ({ article }: { article: ArticleType }) => {
               ))}
 
             <span className="pl-2 text-sm">
-              {article.publishedAt.toString()}
+              {formatShowDateTime(article.publishedAt)}
             </span>
+
+            {user && (
+              <div>
+                {bookmarkId ? (
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={() => handleRemoveBookmark(bookmarkId)}
+                  >
+                    <FcBookmark className="inline-block" size={36} />
+                  </Button>
+                ) : (
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={handleAddBookmark}
+                  >
+                    <MdOutlineBookmarkAdd className="inline-block" size={36} />
+                  </Button>
+                )}
+              </div>
+            )}
           </div>
         </DialogDescription>
       </DialogHeader>
