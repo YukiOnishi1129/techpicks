@@ -25,7 +25,7 @@ export const formatDate = (date?: Dayjs | Date | string | null) => {
 };
 
 export const formatShowDateTime = (date?: Dayjs | Date | string | null) => {
-  return getDayjsTz(date).format("YYYY年M月DD日 H時m分");
+  return getDayjsTz(date).format("YYYY年M月D日 H時m分");
 };
 
 export const diffHours = (nowUnixTime: number, targetUnixTime: number) => {

@@ -107,7 +107,7 @@ export function ArticleList({
       <div className="m-auto h-[700px] overflow-y-scroll md:h-[600px]">
         {flatArticles.map((article) => (
           <div key={article.id} className="border-t-2 py-8">
-            <ArticleDetailDialog article={article}>
+            <ArticleDetailDialog article={article} user={user}>
               <ArticleCard article={article} user={user} />
             </ArticleDetailDialog>
           </div>

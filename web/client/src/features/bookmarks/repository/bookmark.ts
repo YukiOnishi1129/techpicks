@@ -169,6 +169,7 @@ export const getBookmark = async ({ bookmarkId, userId }: GetBookmarkDTO) => {
 type CreateBookmarkDTO = {
   title: string;
   description: string;
+  articleId?: string;
   articleUrl: string;
   publishedAt: Date;
   thumbnailURL: string;
@@ -183,6 +184,7 @@ export const createBookmark = async (dto: CreateBookmarkDTO) => {
       data: {
         title: dto.title,
         description: dto.description,
+        articleId: dto.articleId,
         articleUrl: dto.articleUrl,
         publishedAt: dto.publishedAt,
         thumbnailURL: dto.thumbnailURL,
