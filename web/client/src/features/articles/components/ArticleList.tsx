@@ -11,8 +11,10 @@ import { LanguageStatus } from "@/types/language";
 import { ArticleDetailDialog } from "./ArticleDetailDialog";
 import { ArticleLanguageTabMenu } from "./ArticleLanguageTabMenu";
 import { useUser } from "@/features/users/hooks/useUser";
+import { User } from "@supabase/supabase-js";
 
 type Props = {
+  user: User | undefined;
   initialArticles: Array<ArticleType>;
   languageStatus: LanguageStatus;
   keyword?: string;
@@ -31,6 +33,7 @@ type Props = {
 };
 
 export function ArticleList({
+  user,
   initialArticles,
   languageStatus,
   keyword,
@@ -105,7 +108,7 @@ export function ArticleList({
         {flatArticles.map((article) => (
           <div key={article.id} className="border-t-2 py-8">
             <ArticleDetailDialog article={article}>
-              <ArticleCard article={article} />
+              <ArticleCard article={article} user={user} />
             </ArticleDetailDialog>
           </div>
         ))}

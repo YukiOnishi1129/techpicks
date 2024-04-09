@@ -1,23 +1,53 @@
 "use client";
 
-import { FC } from "react";
+import { FC, useCallback } from "react";
 import { MdOutlineBookmarkAdd } from "react-icons/md";
+import { FcBookmark } from "react-icons/fc";
 
 import { useCheckImageExist } from "@/hooks/useImage";
 
 import { ArticleType } from "@/types/article";
 import { showDiffDateToCurrentDate } from "@/lib/date";
-import { useUser } from "@/features/users/hooks/useUser";
+import { User } from "@supabase/supabase-js";
+import { Button } from "@/components/ui/button";
+import {
+  createBookmark,
+  deleteBookmark,
+} from "@/features/bookmarks/repository/bookmark";
 
 type ArticleCardProps = {
   article: ArticleType;
+  user: User | undefined;
 };
 
 export const ArticleCard: FC<ArticleCardProps> = ({
   article,
+  user,
 }: ArticleCardProps) => {
-  const { user } = useUser();
   const imageUrl = useCheckImageExist(article.thumbnailURL);
+
+  const handleAddBookmark = useCallback(async () => {
+    if (!user || !article?.bookmarkId) return;
+    await createBookmark({
+      title: article.title,
+      description: article.description,
+      articleUrl: article.articleUrl,
+      publishedAt: article.publishedAt,
+      thumbnailURL: article.thumbnailURL,
+      isRead: false,
+      userId: user.id,
+      platformId: article.platform.id,
+    });
+  }, []);
+
+  const handleRemoveBookmark = useCallback(async () => {
+    if (!user || !article?.bookmarkId) return;
+    await deleteBookmark({
+      bookmarkId: article.bookmarkId,
+      userId: user.id,
+    });
+  }, []);
+
   return (
     <div className="relative w-full cursor-pointer rounded hover:opacity-30">
       <div className="flex justify-around">
@@ -49,8 +79,22 @@ export const ArticleCard: FC<ArticleCardProps> = ({
             </p>
             {user && (
               <div>
-                {!article.isBookmarked && (
-                  <MdOutlineBookmarkAdd className="inline-block" />
+                {article.isBookmarked ? (
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={handleRemoveBookmark}
+                  >
+                    <FcBookmark className="inline-block" size={36} />
+                  </Button>
+                ) : (
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={handleAddBookmark}
+                  >
+                    <MdOutlineBookmarkAdd className="inline-block" size={36} />
+                  </Button>
                 )}
               </div>
             )}

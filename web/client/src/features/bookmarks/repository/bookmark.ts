@@ -2,6 +2,7 @@
 
 import prisma from "@/lib/prisma";
 import { BookmarkType } from "@/types/bookmark";
+import { platform } from "os";
 
 type GetBookmarkList = {
   userId: string;
@@ -87,12 +88,12 @@ export const getBookmarkList = async ({ userId }: GetBookmarkList) => {
   return bookmarkList;
 };
 
-type GetBookmark = {
+type GetBookmarkDTO = {
   bookmarkId: string;
   userId: string;
 };
 
-export const getBookmark = async ({ bookmarkId, userId }: GetBookmark) => {
+export const getBookmark = async ({ bookmarkId, userId }: GetBookmarkDTO) => {
   const data = await prisma.bookmark.findFirst({
     where: {
       id: bookmarkId,
@@ -165,18 +166,29 @@ export const getBookmark = async ({ bookmarkId, userId }: GetBookmark) => {
   return bookmarkData;
 };
 
-export const createBookmark = async (bookmarkData: BookmarkType) => {
+type CreateBookmarkDTO = {
+  title: string;
+  description: string;
+  articleUrl: string;
+  publishedAt: Date;
+  thumbnailURL: string;
+  isRead: boolean;
+  userId: string;
+  platformId: string;
+};
+
+export const createBookmark = async (dto: CreateBookmarkDTO) => {
   try {
     const data = await prisma.bookmark.create({
       data: {
-        title: bookmarkData.title,
-        description: bookmarkData.description,
-        articleUrl: bookmarkData.articleUrl,
-        publishedAt: bookmarkData.publishedAt,
-        thumbnailURL: bookmarkData.thumbnailURL,
-        isRead: bookmarkData.isRead,
-        userId: bookmarkData.user.id,
-        platformId: bookmarkData?.platform?.id,
+        title: dto.title,
+        description: dto.description,
+        articleUrl: dto.articleUrl,
+        publishedAt: dto.publishedAt,
+        thumbnailURL: dto.thumbnailURL,
+        isRead: dto.isRead,
+        userId: dto.userId,
+        platformId: dto.platformId,
       },
     });
     return data.id;
@@ -185,11 +197,20 @@ export const createBookmark = async (bookmarkData: BookmarkType) => {
   }
 };
 
-export const deleteBookmark = async (bookmarkId: string) => {
+type DeleteBookmarkDTO = {
+  bookmarkId: string;
+  userId: string;
+};
+
+export const deleteBookmark = async ({
+  bookmarkId,
+  userId,
+}: DeleteBookmarkDTO) => {
   try {
     await prisma.bookmark.delete({
       where: {
         id: bookmarkId,
+        userId: userId,
       },
     });
   } catch (err) {

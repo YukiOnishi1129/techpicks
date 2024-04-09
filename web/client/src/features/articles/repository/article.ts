@@ -159,6 +159,7 @@ export const getArticles = async ({
         deletedAt: article.platform.deletedAt,
       },
       isBookmarked: isBookmarked,
+      bookmarkId: isBookmarked ? article.bookmarks[0].id : undefined,
       feeds: article.feedArticleRelatoins.map((feed) => {
         return {
           id: feed.feed.id,

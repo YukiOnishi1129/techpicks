@@ -4,6 +4,7 @@ import { LanguageStatus } from "@/types/language";
 
 import { ArticleList } from "./ArticleList";
 import { fetchArticleAPI } from "../actions/article";
+import { getUser } from "@/features/users/actions/user";
 
 type ArticleListProps = {
   languageStatus: LanguageStatus;
@@ -21,10 +22,12 @@ export const ArticleListTemplate: FC<ArticleListProps> = async ({
     keyword,
     platformIdList,
   });
+  const user = await getUser();
   return (
     <>
       {languageStatus === 1 && (
         <ArticleList
+          user={user}
           initialArticles={articles}
           languageStatus={languageStatus}
           keyword={keyword}
@@ -34,6 +37,7 @@ export const ArticleListTemplate: FC<ArticleListProps> = async ({
       )}
       {languageStatus === 2 && (
         <ArticleList
+          user={user}
           initialArticles={articles}
           languageStatus={languageStatus}
           keyword={keyword}

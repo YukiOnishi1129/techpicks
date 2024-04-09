@@ -3,12 +3,12 @@ import { User } from "@supabase/supabase-js";
 import { useEffect, useState } from "react";
 
 export const useUser = () => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<User | undefined>(undefined);
   const fetchUser = async () => {
     const supabase = await createBrowserSideClient();
     const { data, error } = await supabase.auth.getUser();
 
-    setUser(data?.user);
+    setUser(data?.user || undefined);
   };
 
   useEffect(() => {
