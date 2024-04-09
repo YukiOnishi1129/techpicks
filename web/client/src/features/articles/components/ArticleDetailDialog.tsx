@@ -1,6 +1,15 @@
 "use client";
+import { User } from "@supabase/supabase-js";
 import Link from "next/link";
 import { FC, useCallback, useState } from "react";
+import { FcBookmark } from "react-icons/fc";
+import { MdOutlineBookmarkAdd } from "react-icons/md";
+import { uuid } from "uuidv4";
+
+import {
+  createBookmark,
+  deleteBookmark,
+} from "@/features/bookmarks/repository/bookmark";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -15,15 +24,9 @@ import {
 import { useCheckImageExist } from "@/hooks/useImage";
 import { useParseHtml } from "@/hooks/useParseHtml";
 
-import { ArticleType } from "@/types/article";
 import { formatShowDateTime } from "@/lib/date";
-import { FcBookmark } from "react-icons/fc";
-import { User } from "@supabase/supabase-js";
-import { MdOutlineBookmarkAdd } from "react-icons/md";
-import {
-  createBookmark,
-  deleteBookmark,
-} from "@/features/bookmarks/repository/bookmark";
+
+import { ArticleType } from "@/types/article";
 
 type ArticleDetailDialogProps = {
   article: ArticleType;
@@ -73,7 +76,9 @@ const ArticleContent = ({
 
   const handleAddBookmark = useCallback(async () => {
     if (!user) return;
+    const uniqueId = uuid();
     const id = await createBookmark({
+      id: uniqueId,
       title: article.title,
       description: article.description,
       articleId: article.id,
@@ -84,15 +89,11 @@ const ArticleContent = ({
       userId: user.id,
       platformId: article.platform.id,
     });
-    console.log("🔥🔥🔥🔥🔥");
-    console.log(id);
     setBookmarkId(id);
   }, []);
 
   const handleRemoveBookmark = useCallback(
     async (bookmarkId: string) => {
-      console.log("🔥🔥🔥🔥🔥");
-      console.log(bookmarkId);
       if (!user || !bookmarkId) return;
 
       await deleteBookmark({

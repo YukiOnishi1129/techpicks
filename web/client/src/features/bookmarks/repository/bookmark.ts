@@ -1,18 +1,84 @@
 "use server";
 
+import { getUser } from "@/features/users/actions/user";
+
 import prisma from "@/lib/prisma";
+
 import { BookmarkType } from "@/types/bookmark";
-import { platform } from "os";
+import { LanguageStatus } from "@/types/language";
+
+const LIMIT = 20;
 
 type GetBookmarkList = {
-  userId: string;
+  platformId?: string;
+  keyword?: string;
+  languageStatus?: LanguageStatus;
+  platformIdList: Array<string>;
+  offset?: number;
+  sort?: "asc" | "desc";
+  sortColum?: string;
 };
 
-export const getBookmarkList = async ({ userId }: GetBookmarkList) => {
+export const getBookmarkList = async ({
+  keyword,
+  languageStatus = 1,
+  platformIdList,
+  offset = 1,
+  sort = "desc",
+  sortColum = "publishedAt",
+}: GetBookmarkList) => {
+  const user = await getUser();
+  let where = {};
+  if (keyword) {
+    where = {
+      AND: [
+        {
+          OR: [
+            {
+              title: {
+                contains: keyword,
+              },
+            },
+            {
+              description: {
+                contains: keyword,
+              },
+            },
+          ],
+        },
+        {
+          platform: {
+            isEng: languageStatus === 2,
+          },
+        },
+      ],
+    };
+  } else {
+    where = {
+      platform: {
+        isEng: languageStatus === 2,
+      },
+    };
+  }
+
+  if (platformIdList.length) {
+    where = {
+      ...where,
+      platformId: {
+        in: [...platformIdList],
+      },
+    };
+  }
+
+  where = {
+    ...where,
+    userId: user?.id,
+  };
+
   const res = await prisma.bookmark.findMany({
-    where: {
-      userId: userId,
-    },
+    take: 20,
+    skip: (offset - 1) * LIMIT,
+    where,
     orderBy: [
       {
         createdAt: "desc",
@@ -167,6 +233,7 @@ export const getBookmark = async ({ bookmarkId, userId }: GetBookmarkDTO) => {
 };
 
 type CreateBookmarkDTO = {
+  id: string;
   title: string;
   description: string;
   articleId?: string;
@@ -182,6 +249,7 @@ export const createBookmark = async (dto: CreateBookmarkDTO) => {
   try {
     const data = await prisma.bookmark.create({
       data: {
+        id: dto.id,
         title: dto.title,
         description: dto.description,
         articleId: dto.articleId,

@@ -1,4 +1,5 @@
 "use client";
+import { User } from "@supabase/supabase-js";
 import { useCallback, useRef, useState, useEffect } from "react";
 
 import { ArticleCard } from "@/features/articles/components/ArticleCard";
@@ -10,8 +11,6 @@ import { LanguageStatus } from "@/types/language";
 
 import { ArticleDetailDialog } from "./ArticleDetailDialog";
 import { ArticleLanguageTabMenu } from "./ArticleLanguageTabMenu";
-import { useUser } from "@/features/users/hooks/useUser";
-import { User } from "@supabase/supabase-js";
 
 type Props = {
   user: User | undefined;

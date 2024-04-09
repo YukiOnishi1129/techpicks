@@ -4,8 +4,8 @@ import { getUser } from "@/features/users/actions/user";
 
 import { LanguageStatus } from "@/types/language";
 
-import { ArticleList } from "./ArticleList";
-import { fetchArticleAPI } from "../actions/article";
+import { BookmarkList } from "./BookmarkList";
+import { fetchBookmarkListAPI } from "../actions/bookmark";
 
 type ArticleListProps = {
   languageStatus: LanguageStatus;
@@ -13,12 +13,12 @@ type ArticleListProps = {
   platformIdList: Array<string>;
 };
 
-export const ArticleListTemplate: FC<ArticleListProps> = async ({
+export const BookmarkListTemplate: FC<ArticleListProps> = async ({
   languageStatus,
   keyword,
   platformIdList,
 }: ArticleListProps) => {
-  const articles = await fetchArticleAPI({
+  const bookmarks = await fetchBookmarkListAPI({
     languageStatus: languageStatus.toString(),
     keyword,
     platformIdList,
@@ -27,23 +27,23 @@ export const ArticleListTemplate: FC<ArticleListProps> = async ({
   return (
     <>
       {languageStatus === 1 && (
-        <ArticleList
+        <BookmarkList
           user={user}
-          initialArticles={articles}
+          initialBookmarks={bookmarks}
           languageStatus={languageStatus}
           keyword={keyword}
           platformIdList={platformIdList}
-          fetchArticles={fetchArticleAPI}
+          fetchBookmarks={fetchBookmarkListAPI}
         />
       )}
       {languageStatus === 2 && (
-        <ArticleList
+        <BookmarkList
           user={user}
-          initialArticles={articles}
+          initialBookmarks={bookmarks}
           languageStatus={languageStatus}
           keyword={keyword}
           platformIdList={platformIdList}
-          fetchArticles={fetchArticleAPI}
+          fetchBookmarks={fetchBookmarkListAPI}
         />
       )}
     </>

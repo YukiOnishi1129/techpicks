@@ -1,19 +1,23 @@
 "use client";
 
-import { FC, useCallback } from "react";
-import { MdOutlineBookmarkAdd } from "react-icons/md";
-import { FcBookmark } from "react-icons/fc";
-
-import { useCheckImageExist } from "@/hooks/useImage";
-
-import { ArticleType } from "@/types/article";
-import { showDiffDateToCurrentDate } from "@/lib/date";
 import { User } from "@supabase/supabase-js";
-import { Button } from "@/components/ui/button";
+import { FC, useCallback } from "react";
+import { FcBookmark } from "react-icons/fc";
+import { MdOutlineBookmarkAdd } from "react-icons/md";
+import { uuid } from "uuidv4";
+
 import {
   createBookmark,
   deleteBookmark,
 } from "@/features/bookmarks/repository/bookmark";
+
+import { Button } from "@/components/ui/button";
+
+import { useCheckImageExist } from "@/hooks/useImage";
+
+import { showDiffDateToCurrentDate } from "@/lib/date";
+
+import { ArticleType } from "@/types/article";
 
 type ArticleCardProps = {
   article: ArticleType;
@@ -28,7 +32,9 @@ export const ArticleCard: FC<ArticleCardProps> = ({
 
   const handleAddBookmark = useCallback(async () => {
     if (!user || !article?.bookmarkId) return;
+    const id = uuid();
     await createBookmark({
+      id: id,
       title: article.title,
       description: article.description,
       articleUrl: article.articleUrl,
