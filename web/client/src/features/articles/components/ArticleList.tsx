@@ -10,6 +10,7 @@ import { LanguageStatus } from "@/types/language";
 
 import { ArticleDetailDialog } from "./ArticleDetailDialog";
 import { ArticleLanguageTabMenu } from "./ArticleLanguageTabMenu";
+import { useUser } from "@/features/users/hooks/useUser";
 
 type Props = {
   initialArticles: Array<ArticleType>;

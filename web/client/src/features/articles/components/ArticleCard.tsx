@@ -1,10 +1,13 @@
 "use client";
 
 import { FC } from "react";
+import { MdOutlineBookmarkAdd } from "react-icons/md";
 
 import { useCheckImageExist } from "@/hooks/useImage";
 
 import { ArticleType } from "@/types/article";
+import { showDiffDateToCurrentDate } from "@/lib/date";
+import { useUser } from "@/features/users/hooks/useUser";
 
 type ArticleCardProps = {
   article: ArticleType;
@@ -13,7 +16,9 @@ type ArticleCardProps = {
 export const ArticleCard: FC<ArticleCardProps> = ({
   article,
 }: ArticleCardProps) => {
+  const { user } = useUser();
   const imageUrl = useCheckImageExist(article.thumbnailURL);
+  console.log(user);
   return (
     <div className="relative w-full cursor-pointer rounded hover:opacity-30">
       <div className="flex justify-around">
@@ -40,12 +45,16 @@ export const ArticleCard: FC<ArticleCardProps> = ({
                   {feed.category.name}
                 </span>
               ))}
-            {/* {article.platform.categoryName && (
-              <span className="ml-2 rounded-lg bg-yellow-600 px-2 py-1 text-xs font-bold text-white md:text-base">
-                {article.platform.categoryName}
-              </span>
-            )} */}
-            {/* <p className="pt-2 text-sm">{article.publishedAt.}</p> */}
+            <p className="pt-2 text-sm">
+              {showDiffDateToCurrentDate(article.publishedAt)}
+            </p>
+            {user && (
+              <div>
+                {!article.isBookmarked && (
+                  <MdOutlineBookmarkAdd className="inline-block" />
+                )}
+              </div>
+            )}
           </div>
         </div>
 

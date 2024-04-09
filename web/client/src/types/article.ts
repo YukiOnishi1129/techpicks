@@ -17,6 +17,7 @@ export type ArticleType = Omit<PrismaArticle, "platformId"> & {
       "platformId" | "categoryId"
     >
   >;
+  isBookmarked: boolean;
 };
 
 export type ArticlePlatform = {
