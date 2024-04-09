@@ -8,6 +8,9 @@ import { Loader } from "@/components/ui/loader";
 import { BookmarkType } from "@/types/bookmark";
 import { LanguageStatus } from "@/types/language";
 
+import { BookmarkCard } from "./BookmarkCard";
+import { BookmarkLanguageTabMenu } from "./BookmarkLanguageTabMenu";
+
 type Props = {
   user: User | undefined;
   initialBookmarks: Array<BookmarkType>;
@@ -28,7 +31,6 @@ type Props = {
 };
 
 export const BookmarkList: FC<Props> = ({
-  user,
   initialBookmarks,
   keyword,
   languageStatus,
@@ -95,9 +97,17 @@ export const BookmarkList: FC<Props> = ({
 
   return (
     <div className="w-auto">
+      <div className="w-full border-b-2 bg-white py-4">
+        <BookmarkLanguageTabMenu
+          languageStatus={languageStatus}
+          keyword={keyword}
+        />
+      </div>
       <div className="m-auto h-[700px] overflow-y-scroll md:h-[600px]">
         {flatBookmarks.map((bookmark) => (
-          <div key={bookmark.id} className="border-t-2 py-8"></div>
+          <div key={bookmark.id} className="border-t-2 py-8">
+            <BookmarkCard bookmark={bookmark} />
+          </div>
         ))}
         <div ref={observerTarget}>
           {hashMore && (
