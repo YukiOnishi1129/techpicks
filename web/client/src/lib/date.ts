@@ -1,11 +1,11 @@
-import dayjs, { Dayjs, locale, unix } from "dayjs";
+import dayjs, { Dayjs, locale, extend } from "dayjs";
 import ja from "dayjs/locale/ja";
-import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
+import utc from "dayjs/plugin/utc";
 
-dayjs.locale(ja);
-dayjs.extend(utc);
-dayjs.extend(timezone);
+locale(ja);
+extend(utc);
+extend(timezone);
 dayjs.tz.setDefault("Asia/Tokyo");
 
 const getDayjsTz = (date?: Dayjs | Date | string | null) => {

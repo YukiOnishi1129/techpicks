@@ -44,7 +44,7 @@ export const ArticleCard: FC<ArticleCardProps> = ({
       userId: user.id,
       platformId: article.platform.id,
     });
-  }, []);
+  }, [article, user]);
 
   const handleRemoveBookmark = useCallback(async () => {
     if (!user || !article?.bookmarkId) return;
@@ -52,7 +52,7 @@ export const ArticleCard: FC<ArticleCardProps> = ({
       bookmarkId: article.bookmarkId,
       userId: user.id,
     });
-  }, []);
+  }, [article.bookmarkId, user]);
 
   return (
     <div className="relative w-full cursor-pointer rounded hover:opacity-30">

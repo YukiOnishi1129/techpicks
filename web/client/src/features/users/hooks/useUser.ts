@@ -1,6 +1,7 @@
-import { createBrowserSideClient } from "@/lib/supabase/client/browserClient";
 import { User } from "@supabase/supabase-js";
 import { useEffect, useState } from "react";
+
+import { createBrowserSideClient } from "@/lib/supabase/client/browserClient";
 
 export const useUser = () => {
   const [user, setUser] = useState<User | undefined>(undefined);

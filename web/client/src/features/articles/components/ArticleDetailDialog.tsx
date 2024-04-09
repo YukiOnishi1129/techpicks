@@ -90,7 +90,7 @@ const ArticleContent = ({
       platformId: article.platform.id,
     });
     setBookmarkId(id);
-  }, []);
+  }, [article, user]);
 
   const handleRemoveBookmark = useCallback(
     async (bookmarkId: string) => {
@@ -102,7 +102,7 @@ const ArticleContent = ({
       });
       setBookmarkId(undefined);
     },
-    [bookmarkId]
+    [user]
   );
 
   return (
