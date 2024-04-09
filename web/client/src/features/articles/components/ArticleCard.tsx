@@ -18,7 +18,6 @@ export const ArticleCard: FC<ArticleCardProps> = ({
 }: ArticleCardProps) => {
   const { user } = useUser();
   const imageUrl = useCheckImageExist(article.thumbnailURL);
-  console.log(user);
   return (
     <div className="relative w-full cursor-pointer rounded hover:opacity-30">
       <div className="flex justify-around">
