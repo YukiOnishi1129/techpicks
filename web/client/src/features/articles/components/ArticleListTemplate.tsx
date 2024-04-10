@@ -6,6 +6,7 @@ import { getUser } from "@/features/users/actions/user";
 
 import { LanguageStatus } from "@/types/language";
 
+import { ArticleLanguageTabMenu } from "./ArticleLanguageTabMenu";
 import { ArticleList } from "./ArticleList";
 import { fetchArticleAPI } from "../actions/article";
 
@@ -35,6 +36,12 @@ export const ArticleListTemplate: FC<ArticleListProps> = async ({
             <CiSearch size="36" />
           </Link>
         </div>
+      </div>
+      <div className="w-full border-b-2 bg-white py-4">
+        <ArticleLanguageTabMenu
+          languageStatus={languageStatus}
+          keyword={keyword}
+        />
       </div>
       {languageStatus === 1 && (
         <ArticleList
