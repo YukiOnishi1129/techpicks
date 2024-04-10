@@ -17,7 +17,6 @@ import {
   DialogTrigger,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
   DialogContent,
 } from "@/components/ui/dialog";
 
@@ -44,14 +43,20 @@ export const ArticleDetailDialog: FC<ArticleDetailDialogProps> = ({
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button
-          type="reset"
-          variant="ghost"
+        <div
+          role="button"
+          tabIndex={1}
           className="block size-full whitespace-normal p-0 text-left text-base"
           onClick={() => setOpen(true)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              // Enter or Space で実行
+              setOpen(true);
+            }
+          }}
         >
           {children}
-        </Button>
+        </div>
       </DialogTrigger>
       <DialogContent className="max-h-[70%] w-[90%] overflow-hidden sm:max-h-[90%]">
         {open && <ArticleContent article={article} user={user} />}
@@ -117,71 +122,64 @@ const ArticleContent = ({
             <h1 className="pb-4">{article.title}</h1>
           </Link>
         </DialogTitle>
-        <DialogDescription>
-          <div className="pb-0">
-            <Link
-              className="hover:opacity-80"
-              href={article.platform.siteUrl}
-              target="_blank"
-            >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                className="mr-2 inline-block size-[24px]"
-                src={article.platform.faviconUrl}
-                alt=""
-              />
-            </Link>
-            <Link
-              className="hover:opacity-80"
-              href={article.platform.siteUrl}
-              target="_blank"
-            >
-              <span className="rounded-lg bg-sky-500 px-2 py-1 text-xs font-bold text-white md:text-base">
-                {article.platform.name}
-              </span>
-            </Link>
-
-            {article.feeds.length > 0 &&
-              article.feeds.map((feed) => (
-                <Link
-                  key={`${feed.id}-${feed.category.id}`}
-                  className="ml-2 hover:opacity-80"
-                  href={feed.siteUrl}
-                  target="_blank"
-                >
-                  <span className="rounded-lg bg-yellow-600 px-2 py-1 text-xs font-bold text-white md:text-base">
-                    {feed.category.name}
-                  </span>
-                </Link>
-              ))}
-
-            <span className="pl-2 text-sm">
-              {formatShowDateTime(article.publishedAt)}
+        <div className="pb-0">
+          <Link
+            className="hover:opacity-80"
+            href={article.platform.siteUrl}
+            target="_blank"
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              className="mr-2 inline-block size-[24px]"
+              src={article.platform.faviconUrl}
+              alt=""
+            />
+          </Link>
+          <Link
+            className="hover:opacity-80"
+            href={article.platform.siteUrl}
+            target="_blank"
+          >
+            <span className="rounded-lg bg-sky-500 px-2 py-1 text-xs font-bold text-white md:text-base">
+              {article.platform.name}
             </span>
+          </Link>
 
-            {user && (
-              <div>
-                {bookmarkId ? (
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    onClick={() => handleRemoveBookmark(bookmarkId)}
-                  >
-                    <FcBookmark className="inline-block" size={36} />
-                  </Button>
-                ) : (
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    onClick={handleAddBookmark}
-                  >
-                    <MdOutlineBookmarkAdd className="inline-block" size={36} />
-                  </Button>
-                )}
-              </div>
+          {article.feeds.length > 0 &&
+            article.feeds.map((feed) => (
+              <Link
+                key={`${feed.id}-${feed.category.id}`}
+                className="ml-2 hover:opacity-80"
+                href={feed.siteUrl}
+                target="_blank"
+              >
+                <span className="rounded-lg bg-yellow-600 px-2 py-1 text-xs font-bold text-white md:text-base">
+                  {feed.category.name}
+                </span>
+              </Link>
+            ))}
+
+          <span className="pl-2 text-sm">
+            {formatShowDateTime(article.publishedAt)}
+          </span>
+        </div>
+        {user && (
+          <div>
+            {bookmarkId ? (
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={() => handleRemoveBookmark(bookmarkId)}
+              >
+                <FcBookmark className="inline-block" size={36} />
+              </Button>
+            ) : (
+              <Button variant="outline" size="icon" onClick={handleAddBookmark}>
+                <MdOutlineBookmarkAdd className="inline-block" size={36} />
+              </Button>
             )}
           </div>
-        </DialogDescription>
+        )}
       </DialogHeader>
 
       <div className="overflow-y-scroll">
