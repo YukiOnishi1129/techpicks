@@ -9,6 +9,7 @@ import { BookmarkType } from "@/types/bookmark";
 import { LanguageStatus } from "@/types/language";
 
 import { BookmarkCard } from "./BookmarkCard";
+import { BookmarkDetailSheet } from "./BookmarkDetailSheet";
 
 type Props = {
   user: User | undefined;
@@ -98,7 +99,9 @@ export const BookmarkList: FC<Props> = ({
     <div className="m-auto h-[700px] overflow-y-scroll md:h-[600px]">
       {flatBookmarks.map((bookmark) => (
         <div key={bookmark.id} className="border-t-2 py-8">
-          <BookmarkCard bookmark={bookmark} />
+          <BookmarkDetailSheet bookmark={bookmark}>
+            <BookmarkCard bookmark={bookmark} />
+          </BookmarkDetailSheet>
         </div>
       ))}
       <div ref={observerTarget}>
