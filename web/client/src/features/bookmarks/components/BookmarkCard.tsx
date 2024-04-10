@@ -17,28 +17,8 @@ export const BookmarkCard: FC<BookmarkCardProps> = ({
   const imageUrl = useCheckImageExist(bookmark.thumbnailURL);
 
   return (
-    <div className="relative w-full cursor-pointer rounded hover:opacity-30">
+    <div className="relative w-full cursor-pointer rounded">
       <div className="flex justify-around">
-        <div className="w-[65%]">
-          <h3 className="line-clamp-3 h-16 w-full pt-2 text-lg font-bold  tracking-wide md:text-xl">
-            {bookmark.title}
-          </h3>
-          <div className="py-2">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              className="mr-2 inline-block size-[24px]"
-              src={bookmark.platform?.faviconUrl}
-              alt=""
-            />
-            <span className="rounded-lg bg-sky-500 px-2 py-1 text-xs font-bold text-white md:text-base">
-              {bookmark.platform?.name}
-            </span>
-            <p className="pt-2 text-sm">
-              {showDiffDateToCurrentDate(bookmark.publishedAt)}
-            </p>
-          </div>
-        </div>
-
         <div className="flex h-16 w-24 justify-center  md:h-32 md:w-48">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
@@ -46,6 +26,25 @@ export const BookmarkCard: FC<BookmarkCardProps> = ({
             src={imageUrl}
             alt=""
           />
+        </div>
+
+        <div className="w-[65%]">
+          <h3 className="mb-8 line-clamp-3 w-4/5  pt-2 text-lg font-bold tracking-wide md:text-xl">
+            {bookmark.title}
+          </h3>
+
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            className="mr-2 inline-block size-[24px]"
+            src={bookmark.platform?.faviconUrl}
+            alt=""
+          />
+          <p className="inline-block rounded-lg  bg-sky-500 px-2 py-1 text-xs font-bold text-white md:text-base">
+            {bookmark.platform?.name}
+          </p>
+          <p className="pt-2 text-sm">
+            {showDiffDateToCurrentDate(bookmark.publishedAt)}
+          </p>
         </div>
       </div>
     </div>
