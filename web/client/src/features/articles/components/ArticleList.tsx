@@ -1,8 +1,6 @@
 "use client";
 import { User } from "@supabase/supabase-js";
-import Link from "next/link";
 import { useCallback, useRef, useState, useEffect } from "react";
-import { CiSearch } from "react-icons/ci";
 
 import { ArticleCard } from "@/features/articles/components/ArticleCard";
 
@@ -98,15 +96,7 @@ export function ArticleList({
   }, [loadMore, offset, hashMore]);
 
   return (
-    <div className="w-auto">
-      <div className="flex w-full items-end justify-between px-4">
-        <h1 className="mb-4 mt-8 text-2xl font-bold text-gray-800">Today</h1>
-        <div className="mb-4 mr-8 flex items-end">
-          <Link className="mr-8" href="/article/search">
-            <CiSearch size="36" />
-          </Link>
-        </div>
-      </div>
+    <>
       <div className="w-full border-b-2 bg-white py-4">
         <ArticleLanguageTabMenu
           languageStatus={languageStatus}
@@ -129,6 +119,6 @@ export function ArticleList({
           )}
         </div>
       </div>
-    </div>
+    </>
   );
 }
