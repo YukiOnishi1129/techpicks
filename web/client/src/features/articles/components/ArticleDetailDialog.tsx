@@ -46,7 +46,6 @@ export const ArticleDetailDialog: FC<ArticleDetailDialogProps> = ({
         <div
           role="button"
           tabIndex={1}
-          className="block size-full whitespace-normal p-0 text-left text-base"
           onClick={() => setOpen(true)}
           onKeyDown={(e) => {
             if (e.key === "Enter" || e.key === " ") {

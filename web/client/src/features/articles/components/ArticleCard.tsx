@@ -21,37 +21,8 @@ export const ArticleCard: FC<ArticleCardProps> = ({
   const imageUrl = useCheckImageExist(article.thumbnailURL);
 
   return (
-    <div className="relative w-full cursor-pointer rounded hover:opacity-30">
+    <div className="relative w-full cursor-pointer rounded">
       <div className="flex justify-around">
-        <div className="w-[65%]">
-          <h3 className="line-clamp-3 h-16 w-full pt-2 text-lg font-bold  tracking-wide md:text-xl">
-            {article.title}
-          </h3>
-          <div className="py-2">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              className="mr-2 inline-block size-[24px]"
-              src={article.platform.faviconUrl}
-              alt=""
-            />
-            <span className="rounded-lg bg-sky-500 px-2 py-1 text-xs font-bold text-white md:text-base">
-              {article.platform.name}
-            </span>
-            {article.feeds.length > 0 &&
-              article.feeds.map((feed) => (
-                <span
-                  key={`${feed.id}-${feed.category.id}`}
-                  className="ml-2 rounded-lg bg-yellow-600 px-2 py-1 text-xs font-bold text-white md:text-base"
-                >
-                  {feed.category.name}
-                </span>
-              ))}
-            <p className="pt-2 text-sm">
-              {showDiffDateToCurrentDate(article.publishedAt)}
-            </p>
-          </div>
-        </div>
-
         <div className="flex h-16 w-24 justify-center  md:h-32 md:w-48">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
@@ -59,6 +30,37 @@ export const ArticleCard: FC<ArticleCardProps> = ({
             src={imageUrl}
             alt=""
           />
+        </div>
+
+        <div className="w-[65%]">
+          <h3 className="mb-8 line-clamp-3 w-4/5 text-lg font-bold tracking-wide md:text-xl">
+            {article.title}
+          </h3>
+
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            className="mr-2 inline-block size-[24px]"
+            src={article.platform.faviconUrl}
+            alt=""
+          />
+          <p className="inline-block rounded-lg bg-sky-500 px-2 py-1 text-xs font-bold text-white md:text-base">
+            {article.platform.name}
+          </p>
+
+          <div className="ml-[32px] w-full flex-wrap pt-2">
+            {article.feeds.length > 0 &&
+              article.feeds.map((feed) => (
+                <p
+                  key={`${feed.id}-${feed.category.id}`}
+                  className="mr-2 inline-block rounded-lg bg-yellow-600 px-2 py-1 text-xs font-bold text-white md:text-base"
+                >
+                  {feed.category.name}
+                </p>
+              ))}
+          </div>
+          <p className="pt-4 text-sm">
+            {showDiffDateToCurrentDate(article.publishedAt)}
+          </p>
         </div>
       </div>
     </div>

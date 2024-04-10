@@ -60,23 +60,26 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
   );
 
   return (
-    <div key={article.id} className="relative border-t-2 py-8">
-      <ArticleDetailDialog article={article} user={user}>
-        <ArticleCard article={article} user={user} />
-      </ArticleDetailDialog>
-      <div className="absolute bottom-0 left-0 flex size-8 items-center justify-center rounded-full bg-white">
+    <div key={article.id} className="relative py-2">
+      <div className="pb-12">
+        <ArticleDetailDialog article={article} user={user}>
+          <ArticleCard article={article} user={user} />
+        </ArticleDetailDialog>
+      </div>
+
+      <div className="absolute right-5 top-0 flex size-8 items-center justify-center rounded-full bg-white py-8 md:right-12">
         {user && (
           <div>
             {bookmarkId ? (
               <Button
-                variant="outline"
+                variant="ghost"
                 size="icon"
                 onClick={() => handleRemoveBookmark(bookmarkId)}
               >
                 <FcBookmark className="inline-block" size={36} />
               </Button>
             ) : (
-              <Button variant="outline" size="icon" onClick={handleAddBookmark}>
+              <Button variant="ghost" size="icon" onClick={handleAddBookmark}>
                 <MdOutlineBookmarkAdd className="inline-block" size={36} />
               </Button>
             )}
