@@ -15,7 +15,7 @@ import { Button } from "@/components/ui/button";
 import { ArticleType } from "@/types/article";
 
 import { ArticleCard } from "./ArticleCard";
-import { ArticleDetailDialog } from "./ArticleDetailDialog";
+import { ArticleDetailSheet } from "./ArticleDetailSheet";
 
 type ArticleCardWrapperProps = {
   article: ArticleType;
@@ -62,9 +62,9 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
   return (
     <div key={article.id} className="relative py-2">
       <div className="pb-12">
-        <ArticleDetailDialog article={article} user={user}>
+        <ArticleDetailSheet article={article} user={user}>
           <ArticleCard article={article} user={user} />
-        </ArticleDetailDialog>
+        </ArticleDetailSheet>
       </div>
 
       <div className="absolute right-5 top-0 flex size-8 items-center justify-center rounded-full bg-white py-8 md:right-12">

@@ -29,20 +29,23 @@ export const BookmarkCard: FC<BookmarkCardProps> = ({
         </div>
 
         <div className="w-[65%]">
-          <h3 className="mb-8 line-clamp-3 w-4/5  pt-2 text-lg font-bold tracking-wide md:text-xl">
+          <h3 className="mb-8 line-clamp-3 w-4/5  pt-2 text-left text-lg font-bold tracking-wide md:text-xl">
             {bookmark.title}
           </h3>
 
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            className="mr-2 inline-block size-[24px]"
-            src={bookmark.platform?.faviconUrl}
-            alt=""
-          />
-          <p className="inline-block rounded-lg  bg-sky-500 px-2 py-1 text-xs font-bold text-white md:text-base">
-            {bookmark.platform?.name}
-          </p>
-          <p className="pt-2 text-sm">
+          <div className="flex w-full items-center pt-2 md:w-4/5">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              className="mr-2 inline-block size-[24px]"
+              src={bookmark.platform?.faviconUrl}
+              alt=""
+            />
+            <p className="inline-block rounded-lg  bg-sky-500 px-2 py-1 text-xs font-bold text-white md:text-base">
+              {bookmark.platform?.name}
+            </p>
+          </div>
+
+          <p className="flex pt-2 text-sm">
             {showDiffDateToCurrentDate(bookmark.publishedAt)}
           </p>
         </div>
