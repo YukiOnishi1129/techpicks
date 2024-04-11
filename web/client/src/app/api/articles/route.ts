@@ -2,6 +2,7 @@ import { NextRequest } from "next/server";
 
 import { getArticles } from "@/features/articles/repository/article";
 
+import { ArticleTabType } from "@/types/article";
 import { LanguageStatus } from "@/types/language";
 
 export async function GET(req: NextRequest) {
@@ -14,12 +15,14 @@ export async function GET(req: NextRequest) {
     typeof languageStatus === "string"
       ? (parseInt(languageStatus) as LanguageStatus)
       : 1;
+  const tab = searchParams.get("tab") as ArticleTabType;
 
   const articles = await getArticles({
     languageStatus: status,
     keyword: keyword,
     platformIdList: platformIdList,
     offset: parseInt(offset || "1"),
+    tab: tab,
   });
   return Response.json(
     { articles: articles, message: "success" },

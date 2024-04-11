@@ -1,19 +1,21 @@
 "use server";
 
-import { ArticleType } from "@/types/article";
+import { ArticleTabType, ArticleType } from "@/types/article";
 
 export const fetchArticleAPI = async ({
   languageStatus,
   keyword,
   offset = "1",
   platformIdList,
+  tab,
 }: {
   languageStatus: string;
   keyword?: string;
   offset?: string;
   platformIdList: Array<string>;
+  tab: ArticleTabType;
 }) => {
-  let url = `http://localhost:80/api/articles/?offset=${offset}`;
+  let url = `http://localhost:80/api/articles/?offset=${offset}&tab=${tab}`;
   if (languageStatus) {
     url += `&languageStatus=${languageStatus}`;
   }

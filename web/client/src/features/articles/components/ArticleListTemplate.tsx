@@ -1,34 +1,104 @@
+import { User } from "@supabase/supabase-js";
 import Link from "next/link";
 import { FC } from "react";
 import { CiSearch } from "react-icons/ci";
 
 import { getUser } from "@/features/users/actions/user";
 
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
+import { ArticleTabType } from "@/types/article";
 import { LanguageStatus } from "@/types/language";
 
 import { ArticleLanguageTabMenu } from "./ArticleLanguageTabMenu";
 import { ArticleList } from "./ArticleList";
 import { fetchArticleAPI } from "../actions/article";
 
-type ArticleListProps = {
+type ArticleListTemplateProps = {
   languageStatus: LanguageStatus;
   keyword?: string;
   platformIdList: Array<string>;
 };
 
-export const ArticleListTemplate: FC<ArticleListProps> = async ({
+export const ArticleListTemplate: FC<ArticleListTemplateProps> = async ({
   languageStatus,
   keyword,
   platformIdList,
-}: ArticleListProps) => {
+}: ArticleListTemplateProps) => {
+  const user = await getUser();
+  return (
+    <div className="w-auto">
+      <Tabs defaultValue="trend">
+        <TabsList>
+          <TabsTrigger value="trend">新着トレンド</TabsTrigger>
+          <TabsTrigger value="site">記事サイト</TabsTrigger>
+          <TabsTrigger value="company">企業ブログ</TabsTrigger>
+          <TabsTrigger value="summary">まとめサイト</TabsTrigger>
+        </TabsList>
+        <TabsContent value="trend">
+          <ArticleListContent
+            languageStatus={languageStatus}
+            keyword={keyword}
+            platformIdList={platformIdList}
+            user={user}
+            tab={"trend"}
+          />
+        </TabsContent>
+        <TabsContent value="site">
+          <ArticleListContent
+            languageStatus={languageStatus}
+            keyword={keyword}
+            platformIdList={platformIdList}
+            user={user}
+            tab={"site"}
+          />
+        </TabsContent>
+        <TabsContent value="company">
+          <ArticleListContent
+            languageStatus={languageStatus}
+            keyword={keyword}
+            platformIdList={platformIdList}
+            user={user}
+            tab={"company"}
+          />
+        </TabsContent>
+        <TabsContent value="summary">
+          <ArticleListContent
+            languageStatus={languageStatus}
+            keyword={keyword}
+            platformIdList={platformIdList}
+            user={user}
+            tab={"summary"}
+          />
+        </TabsContent>
+      </Tabs>
+    </div>
+  );
+};
+
+type ArticleListContentProps = {
+  languageStatus: LanguageStatus;
+  keyword?: string;
+  platformIdList: Array<string>;
+  user: User | undefined;
+  tab: ArticleTabType;
+};
+
+const ArticleListContent = async ({
+  languageStatus,
+  keyword,
+  platformIdList,
+  user,
+  tab,
+}: ArticleListContentProps) => {
   const articles = await fetchArticleAPI({
     languageStatus: languageStatus.toString(),
     keyword,
     platformIdList,
+    tab,
   });
-  const user = await getUser();
   return (
-    <div className="w-auto">
+    <>
       <div className="flex w-full items-end justify-between px-4">
         <h1 className="mb-4 mt-8 text-2xl font-bold text-gray-800">Today</h1>
         <div className="mb-4 mr-8 flex items-end">
@@ -43,6 +113,7 @@ export const ArticleListTemplate: FC<ArticleListProps> = async ({
           keyword={keyword}
         />
       </div>
+
       {languageStatus === 1 && (
         <ArticleList
           user={user}
@@ -50,6 +121,7 @@ export const ArticleListTemplate: FC<ArticleListProps> = async ({
           languageStatus={languageStatus}
           keyword={keyword}
           platformIdList={platformIdList}
+          tab={tab}
           fetchArticles={fetchArticleAPI}
         />
       )}
@@ -60,9 +132,10 @@ export const ArticleListTemplate: FC<ArticleListProps> = async ({
           languageStatus={languageStatus}
           keyword={keyword}
           platformIdList={platformIdList}
+          tab={tab}
           fetchArticles={fetchArticleAPI}
         />
       )}
-    </div>
+    </>
   );
 };
