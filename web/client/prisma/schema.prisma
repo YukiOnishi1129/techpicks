@@ -94,6 +94,7 @@ model Feed {
   categoryId   String @map("category_id")
   siteUrl      String @map("site_url")
   rssUrl       String @map("rss_url")
+  isTrending   Boolean @default(false) @map("is_trending")
   createdAt    DateTime @default(now()) @map("created_at")
   updatedAt    DateTime @updatedAt @map("updated_at")
   deletedAt    DateTime? @map("deleted_at")

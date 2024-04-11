@@ -71,6 +71,17 @@ export const getArticles = async ({
     };
   }
 
+  // where = {
+  //   ...where,
+  //   feedArticleRelatoins: {
+  //     some: {
+  //       feed: {
+  //         isTrending: true,
+  //       },
+  //     },
+  //   },
+  // };
+
   switch (sortColum) {
     case "publishedAt":
       orderBy = {
@@ -94,6 +105,7 @@ export const getArticles = async ({
               name: true,
               siteUrl: true,
               rssUrl: true,
+              isTrending: true,
               createdAt: true,
               updatedAt: true,
               deletedAt: true,
@@ -166,6 +178,7 @@ export const getArticles = async ({
           name: feed.feed.name,
           siteUrl: feed.feed.siteUrl,
           rssUrl: feed.feed.rssUrl,
+          isTrending: feed.feed.isTrending,
           createdAt: feed.feed.createdAt,
           updatedAt: feed.feed.updatedAt,
           deletedAt: feed.feed.deletedAt,
