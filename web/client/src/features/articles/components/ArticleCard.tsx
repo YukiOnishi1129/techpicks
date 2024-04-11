@@ -1,17 +1,7 @@
 "use client";
 
 import { User } from "@supabase/supabase-js";
-import { FC, useCallback } from "react";
-import { FcBookmark } from "react-icons/fc";
-import { MdOutlineBookmarkAdd } from "react-icons/md";
-import { uuid } from "uuidv4";
-
-import {
-  createBookmark,
-  deleteBookmark,
-} from "@/features/bookmarks/repository/bookmark";
-
-import { Button } from "@/components/ui/button";
+import { FC } from "react";
 
 import { useCheckImageExist } from "@/hooks/useImage";
 
@@ -30,83 +20,9 @@ export const ArticleCard: FC<ArticleCardProps> = ({
 }: ArticleCardProps) => {
   const imageUrl = useCheckImageExist(article.thumbnailURL);
 
-  const handleAddBookmark = useCallback(async () => {
-    if (!user || !article?.bookmarkId) return;
-    const id = uuid();
-    await createBookmark({
-      id: id,
-      title: article.title,
-      description: article.description,
-      articleUrl: article.articleUrl,
-      publishedAt: article.publishedAt,
-      thumbnailURL: article.thumbnailURL,
-      isRead: false,
-      userId: user.id,
-      platformId: article.platform.id,
-    });
-  }, [article, user]);
-
-  const handleRemoveBookmark = useCallback(async () => {
-    if (!user || !article?.bookmarkId) return;
-    await deleteBookmark({
-      bookmarkId: article.bookmarkId,
-      userId: user.id,
-    });
-  }, [article.bookmarkId, user]);
-
   return (
-    <div className="relative w-full cursor-pointer rounded hover:opacity-30">
+    <div className="relative w-full cursor-pointer rounded">
       <div className="flex justify-around">
-        <div className="w-[65%]">
-          <h3 className="line-clamp-3 h-16 w-full pt-2 text-lg font-bold  tracking-wide md:text-xl">
-            {article.title}
-          </h3>
-          <div className="py-2">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              className="mr-2 inline-block size-[24px]"
-              src={article.platform.faviconUrl}
-              alt=""
-            />
-            <span className="rounded-lg bg-sky-500 px-2 py-1 text-xs font-bold text-white md:text-base">
-              {article.platform.name}
-            </span>
-            {article.feeds.length > 0 &&
-              article.feeds.map((feed) => (
-                <span
-                  key={`${feed.id}-${feed.category.id}`}
-                  className="ml-2 rounded-lg bg-yellow-600 px-2 py-1 text-xs font-bold text-white md:text-base"
-                >
-                  {feed.category.name}
-                </span>
-              ))}
-            <p className="pt-2 text-sm">
-              {showDiffDateToCurrentDate(article.publishedAt)}
-            </p>
-            {user && (
-              <div>
-                {article.isBookmarked ? (
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    onClick={handleRemoveBookmark}
-                  >
-                    <FcBookmark className="inline-block" size={36} />
-                  </Button>
-                ) : (
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    onClick={handleAddBookmark}
-                  >
-                    <MdOutlineBookmarkAdd className="inline-block" size={36} />
-                  </Button>
-                )}
-              </div>
-            )}
-          </div>
-        </div>
-
         <div className="flex h-16 w-24 justify-center  md:h-32 md:w-48">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
@@ -114,6 +30,39 @@ export const ArticleCard: FC<ArticleCardProps> = ({
             src={imageUrl}
             alt=""
           />
+        </div>
+
+        <div className="w-[65%]">
+          <h3 className="mb-8 line-clamp-3 w-4/5 text-left text-lg font-bold tracking-wide md:text-xl">
+            {article.title}
+          </h3>
+
+          <div className="flex w-full items-center pt-2 md:w-4/5">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              className="mr-2 inline-block size-[24px]"
+              src={article.platform.faviconUrl}
+              alt=""
+            />
+            <p className="inline-block rounded-lg bg-sky-500 px-2 py-1 text-xs font-bold text-white md:text-base">
+              {article.platform.name}
+            </p>
+          </div>
+
+          <div className="ml-[32px] flex w-full flex-wrap pt-2">
+            {article.feeds.length > 0 &&
+              article.feeds.map((feed) => (
+                <p
+                  key={`${feed.id}-${feed.category.id}`}
+                  className="mr-2 inline-block rounded-lg bg-yellow-600 px-2 py-1 text-xs font-bold text-white md:text-base"
+                >
+                  {feed.category.name}
+                </p>
+              ))}
+          </div>
+          <p className="flex pt-4 text-sm">
+            {showDiffDateToCurrentDate(article.publishedAt)}
+          </p>
         </div>
       </div>
     </div>

@@ -1,9 +1,12 @@
+import Link from "next/link";
 import { FC } from "react";
+import { CiSearch } from "react-icons/ci";
 
 import { getUser } from "@/features/users/actions/user";
 
 import { LanguageStatus } from "@/types/language";
 
+import { ArticleLanguageTabMenu } from "./ArticleLanguageTabMenu";
 import { ArticleList } from "./ArticleList";
 import { fetchArticleAPI } from "../actions/article";
 
@@ -25,7 +28,21 @@ export const ArticleListTemplate: FC<ArticleListProps> = async ({
   });
   const user = await getUser();
   return (
-    <>
+    <div className="w-auto">
+      <div className="flex w-full items-end justify-between px-4">
+        <h1 className="mb-4 mt-8 text-2xl font-bold text-gray-800">Today</h1>
+        <div className="mb-4 mr-8 flex items-end">
+          <Link className="mr-8" href="/article/search">
+            <CiSearch size="36" />
+          </Link>
+        </div>
+      </div>
+      <div className="w-full border-b-2 bg-white py-4">
+        <ArticleLanguageTabMenu
+          languageStatus={languageStatus}
+          keyword={keyword}
+        />
+      </div>
       {languageStatus === 1 && (
         <ArticleList
           user={user}
@@ -46,6 +63,6 @@ export const ArticleListTemplate: FC<ArticleListProps> = async ({
           fetchArticles={fetchArticleAPI}
         />
       )}
-    </>
+    </div>
   );
 };

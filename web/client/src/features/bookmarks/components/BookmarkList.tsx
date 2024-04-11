@@ -9,7 +9,7 @@ import { BookmarkType } from "@/types/bookmark";
 import { LanguageStatus } from "@/types/language";
 
 import { BookmarkCard } from "./BookmarkCard";
-import { BookmarkLanguageTabMenu } from "./BookmarkLanguageTabMenu";
+import { BookmarkDetailSheet } from "./BookmarkDetailSheet";
 
 type Props = {
   user: User | undefined;
@@ -96,26 +96,20 @@ export const BookmarkList: FC<Props> = ({
   }, [loadMore, offset, hashMore]);
 
   return (
-    <div className="w-auto">
-      <div className="w-full border-b-2 bg-white py-4">
-        <BookmarkLanguageTabMenu
-          languageStatus={languageStatus}
-          keyword={keyword}
-        />
-      </div>
-      <div className="m-auto h-[700px] overflow-y-scroll md:h-[600px]">
-        {flatBookmarks.map((bookmark) => (
-          <div key={bookmark.id} className="border-t-2 py-8">
+    <div className="m-auto h-[700px] overflow-y-scroll md:h-[600px]">
+      {flatBookmarks.map((bookmark) => (
+        <div key={bookmark.id} className="border-t-2 py-8">
+          <BookmarkDetailSheet bookmark={bookmark}>
             <BookmarkCard bookmark={bookmark} />
-          </div>
-        ))}
-        <div ref={observerTarget}>
-          {hashMore && (
-            <div className="flex justify-center py-4">
-              <Loader />
-            </div>
-          )}
+          </BookmarkDetailSheet>
         </div>
+      ))}
+      <div ref={observerTarget}>
+        {hashMore && (
+          <div className="flex justify-center py-4">
+            <Loader />
+          </div>
+        )}
       </div>
     </div>
   );

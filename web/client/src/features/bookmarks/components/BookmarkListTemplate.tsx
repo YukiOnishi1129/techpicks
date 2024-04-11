@@ -4,6 +4,7 @@ import { getUser } from "@/features/users/actions/user";
 
 import { LanguageStatus } from "@/types/language";
 
+import { BookmarkLanguageTabMenu } from "./BookmarkLanguageTabMenu";
 import { BookmarkList } from "./BookmarkList";
 import { fetchBookmarkListAPI } from "../actions/bookmark";
 
@@ -25,7 +26,14 @@ export const BookmarkListTemplate: FC<ArticleListProps> = async ({
   });
   const user = await getUser();
   return (
-    <>
+    <div className="w-auto">
+      <h1 className="mb-4 mt-8 text-2xl font-bold text-gray-800">Read Later</h1>
+      <div className="w-full border-b-2 bg-white py-4">
+        <BookmarkLanguageTabMenu
+          languageStatus={languageStatus}
+          keyword={keyword}
+        />
+      </div>
       {languageStatus === 1 && (
         <BookmarkList
           user={user}
@@ -46,6 +54,6 @@ export const BookmarkListTemplate: FC<ArticleListProps> = async ({
           fetchBookmarks={fetchBookmarkListAPI}
         />
       )}
-    </>
+    </div>
   );
 };

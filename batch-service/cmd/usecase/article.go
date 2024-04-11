@@ -65,7 +65,7 @@ func (au *ArticleUsecase) BatchCreateArticles(ctx context.Context) error {
 		for _, r := range rss {
 			isSkip := false
 			// 1. check article table at article_url
-			articles, _ := entity.Articles(qm.Where("article_url = ?", r.Link)).All(ctx, tx)
+			articles, _ := entity.Articles(qm.Where("article_url = ?", r.Link), qm.Where("platform_id = ?", f.PlatformID)).All(ctx, tx)
 			if articles != nil {
 				for _, a := range articles {
 					feedArticleRelation, _ := entity.FeedArticleRelations(qm.Where("feed_id = ?", f.ID), qm.Where("article_id = ?", a.ID)).One(ctx, tx)

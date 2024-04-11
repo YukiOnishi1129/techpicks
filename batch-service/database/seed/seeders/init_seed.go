@@ -59,12 +59,14 @@ func (is *InitSeed) SeedInitData(ctx context.Context) error {
 				if p != nil {
 					f, _ := entity.Feeds(qm.Where("rss_url = ?", sp.RssURL)).One(ctx, tx)
 					if f == nil {
+
 						err = createFeed(ctx, tx, createFeedArg{
 							PlatformID:  p.ID,
 							CategoryID:  categoryIDStr,
 							FeedName:    sp.FeedName,
 							RssURL:      sp.RssURL,
 							FeedSiteURL: sp.FeedSiteURL,
+							IsTrending:  sp.IsTrending,
 							DeletedAt:   sp.DeletedAt,
 						})
 						if err != nil {
@@ -94,6 +96,7 @@ func (is *InitSeed) SeedInitData(ctx context.Context) error {
 					FeedName:    sp.FeedName,
 					RssURL:      sp.RssURL,
 					FeedSiteURL: sp.FeedSiteURL,
+					IsTrending:  sp.IsTrending,
 					DeletedAt:   sp.DeletedAt,
 				})
 				if err != nil {
@@ -144,6 +147,7 @@ type createFeedArg struct {
 	FeedName    string
 	RssURL      string
 	FeedSiteURL string
+	IsTrending  bool
 	DeletedAt   *time.Time
 }
 
@@ -154,6 +158,7 @@ func createFeed(ctx context.Context, tx *sql.Tx, arg createFeedArg) error {
 		Name:       arg.FeedName,
 		RSSURL:     arg.RssURL,
 		SiteURL:    arg.FeedSiteURL,
+		IsTrending: arg.IsTrending,
 		PlatformID: arg.PlatformID,
 		CategoryID: arg.CategoryID,
 	}
@@ -453,6 +458,7 @@ type seedPlatformFeed struct {
 	PlatformType    domain.PlatformType
 	FaviconURL      string
 	IsEng           bool
+	IsTrending      bool
 	RssURL          string
 	DeletedAt       *time.Time
 }
@@ -470,28 +476,31 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			PlatformType:    domain.PlatformTypeSite,
 			FaviconURL:      "https://cdn.qiita.com/assets/favicons/public/apple-touch-icon-ec5ba42a24ae923f16825592efdc356f.png",
 			IsEng:           false,
+			IsTrending:      true,
 		},
 		{
 			PlatformName:    "Zenn",
-			FeedName:        "Zennの新着記事",
-			seedCategoryID:  1,
+			FeedName:        "Zennのトレンド",
+			seedCategoryID:  2,
 			RssURL:          "https://zenn.dev/feed",
 			PlatformSiteURL: "https://zenn.dev",
 			FeedSiteURL:     "https://zenn.dev/",
 			PlatformType:    domain.PlatformTypeSite,
 			FaviconURL:      "https://static.zenn.studio/images/logo-transparent.png",
 			IsEng:           false,
+			IsTrending:      true,
 		},
 		{
 			PlatformName:    "はてなブックマーク",
 			FeedName:        "はてなブックマークのテクノロジー",
-			seedCategoryID:  3,
+			seedCategoryID:  2,
 			RssURL:          "https://b.hatena.ne.jp/hotentry/it.rss",
 			PlatformSiteURL: "https://b.hatena.ne.jp/hotentry",
 			FeedSiteURL:     "https://b.hatena.ne.jp/hotentry/it",
 			PlatformType:    domain.PlatformTypeSummary,
 			FaviconURL:      "https://b.st-hatena.com/9912ec0e0fc8f818cf97c46ebfa93196dc945692/images/v4/public/gh-logo@2x.png",
 			IsEng:           false,
+			IsTrending:      true,
 		},
 		{
 			PlatformName:    "dev.to",
@@ -514,6 +523,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			PlatformType:    domain.PlatformTypeSite,
 			FaviconURL:      "https://i0.wp.com/alistapart.com/wp-content/uploads/2019/03/cropped-icon_navigation-laurel-512.jpg?fit=32%2C32&ssl=1",
 			IsEng:           true,
+			DeletedAt:       &deletedAt,
 		},
 		{
 			PlatformName:    "David Walsh Blog",
@@ -1179,13 +1189,14 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 		{
 			PlatformName:    "Menthas",
 			FeedName:        "Menthas",
-			seedCategoryID:  1,
+			seedCategoryID:  2,
 			RssURL:          "https://menthas.com/all/rss",
 			PlatformSiteURL: "https://menthas.com",
 			FeedSiteURL:     "https://menthas.com",
 			PlatformType:    domain.PlatformTypeSummary,
 			FaviconURL:      "https://menthas.com/apple-touch-icon.png",
 			IsEng:           false,
+			IsTrending:      true,
 		},
 		{
 			PlatformName:    "Menthas",

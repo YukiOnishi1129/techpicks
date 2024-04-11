@@ -1,7 +1,7 @@
 "use client";
 import { User } from "@supabase/supabase-js";
 import Link from "next/link";
-import { FC, useCallback, useState } from "react";
+import { FC, useState, useCallback } from "react";
 import { FcBookmark } from "react-icons/fc";
 import { MdOutlineBookmarkAdd } from "react-icons/md";
 import { uuid } from "uuidv4";
@@ -13,12 +13,14 @@ import {
 
 import { Button } from "@/components/ui/button";
 import {
-  Dialog,
-  DialogTrigger,
-  DialogHeader,
-  DialogTitle,
-  DialogContent,
-} from "@/components/ui/dialog";
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+  SheetFooter,
+  SheetClose,
+} from "@/components/ui/sheet";
 
 import { useCheckImageExist } from "@/hooks/useImage";
 import { useParseHtml } from "@/hooks/useParseHtml";
@@ -27,22 +29,22 @@ import { formatShowDateTime } from "@/lib/date";
 
 import { ArticleType } from "@/types/article";
 
-type ArticleDetailDialogProps = {
+type ArticleDetailSheetProps = {
   article: ArticleType;
   user: User | undefined;
   children: React.ReactNode;
 };
 
-export const ArticleDetailDialog: FC<ArticleDetailDialogProps> = ({
+export const ArticleDetailSheet: FC<ArticleDetailSheetProps> = ({
   article,
   user,
   children,
-}: ArticleDetailDialogProps) => {
+}: ArticleDetailSheetProps) => {
   const [open, setOpen] = useState(false);
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>
+    <Sheet>
+      <SheetTrigger>
         <div
           role="button"
           tabIndex={1}
@@ -56,11 +58,11 @@ export const ArticleDetailDialog: FC<ArticleDetailDialogProps> = ({
         >
           {children}
         </div>
-      </DialogTrigger>
-      <DialogContent className="max-h-[70%] w-[90%] overflow-hidden sm:max-h-[90%]">
+      </SheetTrigger>
+      <SheetContent>
         {open && <ArticleContent article={article} user={user} />}
-      </DialogContent>
-    </Dialog>
+      </SheetContent>
+    </Sheet>
   );
 };
 
@@ -73,7 +75,6 @@ const ArticleContent = ({
 }) => {
   const imageUrl = useCheckImageExist(article.thumbnailURL);
   const { convertParseHtml } = useParseHtml();
-
   const [bookmarkId, setBookmarkId] = useState<string | undefined>(
     article.bookmarkId
   );
@@ -111,8 +112,8 @@ const ArticleContent = ({
 
   return (
     <>
-      <DialogHeader>
-        <DialogTitle>
+      <SheetHeader>
+        <SheetTitle>
           <Link
             className="cursor-pointer text-lg font-semibold  tracking-wide hover:text-blue-500"
             href={article.articleUrl}
@@ -120,27 +121,27 @@ const ArticleContent = ({
           >
             <h1 className="pb-4">{article.title}</h1>
           </Link>
-        </DialogTitle>
+        </SheetTitle>
         <div className="pb-0">
           <Link
             className="hover:opacity-80"
-            href={article.platform.siteUrl}
+            href={article.platform?.siteUrl || ""}
             target="_blank"
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               className="mr-2 inline-block size-[24px]"
-              src={article.platform.faviconUrl}
+              src={article.platform?.faviconUrl || ""}
               alt=""
             />
           </Link>
           <Link
             className="hover:opacity-80"
-            href={article.platform.siteUrl}
+            href={article.platform?.siteUrl || ""}
             target="_blank"
           >
             <span className="rounded-lg bg-sky-500 px-2 py-1 text-xs font-bold text-white md:text-base">
-              {article.platform.name}
+              {article.platform?.name || ""}
             </span>
           </Link>
 
@@ -162,6 +163,7 @@ const ArticleContent = ({
             {formatShowDateTime(article.publishedAt)}
           </span>
         </div>
+
         {user && (
           <div>
             {bookmarkId ? (
@@ -179,44 +181,54 @@ const ArticleContent = ({
             )}
           </div>
         )}
-      </DialogHeader>
 
-      <div className="overflow-y-scroll">
-        <Link href={article.articleUrl} target="_blank">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            className="m-auto h-[370px] cursor-pointer rounded-md object-cover object-center pb-8 hover:opacity-80"
-            src={imageUrl}
-            alt=""
-          />
-        </Link>
-
-        <div className="my-10 text-center">
+        <div className="h-[600px] overflow-y-scroll md:h-[500px]">
           <Link href={article.articleUrl} target="_blank">
-            <Button
-              size={"lg"}
-              className="w-1/2 bg-blue-700 text-xl hover:bg-blue-900"
-            >
-              本文を読む
-            </Button>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              className="m-auto h-[370px] cursor-pointer rounded-md object-cover object-center pb-8 hover:opacity-80"
+              src={imageUrl}
+              alt=""
+            />
           </Link>
-        </div>
 
-        <div className="text-lg tracking-wide">
-          <div>{convertParseHtml(article.description)}</div>
-        </div>
+          <div className="my-10 text-center">
+            <Link href={article.articleUrl} target="_blank">
+              <Button
+                size={"lg"}
+                className="w-1/2 bg-blue-700 text-xl hover:bg-blue-900"
+              >
+                本文を読む
+              </Button>
+            </Link>
+          </div>
 
-        <div className="my-10 text-center">
-          <Link href={article.articleUrl} target="_blank">
-            <Button
-              size={"lg"}
-              className="w-1/2 bg-blue-700 text-xl hover:bg-blue-900"
-            >
-              本文を読む
-            </Button>
-          </Link>
+          <div className="text-lg tracking-wide">
+            <div>{convertParseHtml(article.description)}</div>
+          </div>
+
+          <div className="my-10 text-center">
+            <Link href={article.articleUrl} target="_blank">
+              <Button
+                size={"lg"}
+                className="w-1/2 bg-blue-700 text-xl hover:bg-blue-900"
+              >
+                本文を読む
+              </Button>
+            </Link>
+          </div>
         </div>
-      </div>
+      </SheetHeader>
+      <SheetFooter className="mt-8">
+        <SheetClose asChild>
+          <Button
+            variant="outline"
+            className=" inline-block w-1/2 text-xl hover:bg-blue-900"
+          >
+            閉じる
+          </Button>
+        </SheetClose>
+      </SheetFooter>
     </>
   );
 };
