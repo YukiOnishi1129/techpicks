@@ -46,7 +46,7 @@ export const ArticleLanguageSwitch: FC<ArticleLanguageSwitchProps> = ({
   );
 
   return (
-    <div className="flex items-center space-x-2">
+    <div className="flex items-center justify-end space-x-2">
       {isLoading ? (
         <Loader />
       ) : (

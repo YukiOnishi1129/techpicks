@@ -37,11 +37,19 @@ export const ArticleListTemplate: FC<ArticleListTemplateProps> = async ({
         </div>
       </div>
       <Tabs defaultValue="trend">
-        <TabsList>
-          <TabsTrigger value="trend">新着トレンド</TabsTrigger>
-          <TabsTrigger value="site">記事サイト</TabsTrigger>
-          <TabsTrigger value="company">企業ブログ</TabsTrigger>
-          <TabsTrigger value="summary">まとめサイト</TabsTrigger>
+        <TabsList className="w-full">
+          <TabsTrigger className="w-1/4" value="trend">
+            Trend
+          </TabsTrigger>
+          <TabsTrigger className="w-1/4" value="site">
+            Site
+          </TabsTrigger>
+          <TabsTrigger className="w-1/4" value="company">
+            Company
+          </TabsTrigger>
+          <TabsTrigger className="w-1/4" value="summary">
+            Summary
+          </TabsTrigger>
         </TabsList>
         <TabsContent value="trend">
           <ArticleListContent
