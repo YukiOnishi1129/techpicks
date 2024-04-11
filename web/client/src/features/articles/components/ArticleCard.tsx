@@ -22,18 +22,20 @@ export const ArticleCard: FC<ArticleCardProps> = ({
 
   return (
     <div className="relative w-full cursor-pointer rounded">
-      <div className="flex justify-around">
-        <div className="flex h-16 w-24 justify-center  md:h-32 md:w-48">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            className="h-full rounded-lg border-2 object-cover object-center shadow-md"
-            src={imageUrl}
-            alt=""
-          />
+      <div className="justify-around md:flex">
+        <div className="flex justify-center md:w-[30%]">
+          <div className="w-full  md:h-36 md:w-48">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              className="h-full rounded-lg border-2 object-cover object-center shadow-md"
+              src={imageUrl}
+              alt=""
+            />
+          </div>
         </div>
 
-        <div className="w-[65%]">
-          <h3 className="mb-8 line-clamp-3 w-4/5 text-left text-lg font-bold tracking-wide md:text-xl">
+        <div className="mt-4 md:mt-0 md:w-[65%]">
+          <h3 className="mb-8 line-clamp-3 text-left text-lg font-bold tracking-wide md:w-4/5 md:text-xl">
             {article.title}
           </h3>
 
@@ -54,7 +56,7 @@ export const ArticleCard: FC<ArticleCardProps> = ({
               article.feeds.map((feed) => (
                 <p
                   key={`${feed.id}-${feed.category.id}`}
-                  className="mr-2 inline-block rounded-lg bg-yellow-600 px-2 py-1 text-xs font-bold text-white md:text-base"
+                  className="mb-2 mr-2 inline-block rounded-lg bg-yellow-600 px-2 py-1 text-xs font-bold text-white md:text-base"
                 >
                   {feed.category.name}
                 </p>

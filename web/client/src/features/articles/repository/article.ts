@@ -1,6 +1,6 @@
 import prisma from "@/lib/prisma";
 
-import { ArticleType } from "@/types/article";
+import { ArticleTabType, ArticleType } from "@/types/article";
 import { LanguageStatus } from "@/types/language";
 
 const LIMIT = 20;
@@ -11,6 +11,7 @@ export type GetArticleParams = {
   keyword?: string;
   languageStatus?: LanguageStatus;
   platformIdList: Array<string>;
+  tab: ArticleTabType;
   offset?: number;
   sort?: "asc" | "desc";
   sortColum?: string;
@@ -21,6 +22,7 @@ export const getArticles = async ({
   keyword,
   languageStatus = 1,
   platformIdList,
+  tab,
   offset = 1,
   sort = "desc",
   sortColum = "publishedAt",
@@ -71,16 +73,47 @@ export const getArticles = async ({
     };
   }
 
-  // where = {
-  //   ...where,
-  //   feedArticleRelatoins: {
-  //     some: {
-  //       feed: {
-  //         isTrending: true,
-  //       },
-  //     },
-  //   },
-  // };
+  switch (tab) {
+    case "trend":
+      where = {
+        ...where,
+        feedArticleRelatoins: {
+          some: {
+            feed: {
+              isTrending: true,
+            },
+          },
+        },
+      };
+      break;
+    case "site":
+      where = {
+        ...where,
+        platform: {
+          platformType: 1,
+          isEng: languageStatus === 2,
+        },
+      };
+      break;
+    case "company":
+      where = {
+        ...where,
+        platform: {
+          platformType: 2,
+          isEng: languageStatus === 2,
+        },
+      };
+      break;
+    case "summary":
+      where = {
+        ...where,
+        platform: {
+          platformType: 3,
+          isEng: languageStatus === 2,
+        },
+      };
+      break;
+  }
 
   switch (sortColum) {
     case "publishedAt":

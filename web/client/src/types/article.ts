@@ -5,8 +5,6 @@ import {
   Category as PrismaCategory,
 } from "@prisma/client";
 
-import { PlatformType } from "./platform";
-
 export type ArticleType = Omit<PrismaArticle, "platformId"> & {
   platform: PrismaPlatform;
   feeds: Array<
@@ -21,11 +19,13 @@ export type ArticleType = Omit<PrismaArticle, "platformId"> & {
   bookmarkId?: string;
 };
 
-export type ArticlePlatform = {
-  id: string;
-  name: string;
-  categoryName: string;
-  platformType: PlatformType;
-  siteUrl: string;
-  faviconUrl: string;
-};
+export type ArticleTabType =
+  | ArticleTrendTab
+  | ArticleSiteTab
+  | ArticleCompanyTab
+  | ArticleSummaryTab;
+
+type ArticleTrendTab = "trend";
+type ArticleSiteTab = "site";
+type ArticleCompanyTab = "company";
+type ArticleSummaryTab = "summary";

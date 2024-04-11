@@ -44,14 +44,13 @@ export const ArticleDetailSheet: FC<ArticleDetailSheetProps> = ({
 
   return (
     <Sheet>
-      <SheetTrigger>
+      <SheetTrigger className="w-full">
         <div
           role="button"
           tabIndex={1}
           onClick={() => setOpen(true)}
           onKeyDown={(e) => {
             if (e.key === "Enter" || e.key === " ") {
-              // Enter or Space で実行
               setOpen(true);
             }
           }}

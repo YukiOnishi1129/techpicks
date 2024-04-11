@@ -4,7 +4,7 @@ import { useCallback, useRef, useState, useEffect } from "react";
 
 import { Loader } from "@/components/ui/loader";
 
-import { ArticleType } from "@/types/article";
+import { ArticleTabType, ArticleType } from "@/types/article";
 import { LanguageStatus } from "@/types/language";
 
 import { ArticleCardWrapper } from "./ArticleCardWrapper";
@@ -15,6 +15,7 @@ type Props = {
   languageStatus: LanguageStatus;
   keyword?: string;
   platformIdList: Array<string>;
+  tab: ArticleTabType;
   fetchArticles: ({
     languageStatus,
     keyword,
@@ -25,6 +26,7 @@ type Props = {
     keyword?: string;
     offset: string;
     platformIdList: Array<string>;
+    tab: ArticleTabType;
   }) => Promise<ArticleType[]>;
 };
 
@@ -34,6 +36,7 @@ export function ArticleList({
   languageStatus,
   keyword,
   platformIdList,
+  tab,
   fetchArticles,
 }: Props) {
   const observerTarget = useRef(null);
@@ -51,13 +54,14 @@ export function ArticleList({
         keyword: keyword,
         languageStatus: languageStatus.toString(),
         platformIdList: platformIdList,
+        tab: tab,
       });
       setArticles((prev) => [...prev, ...newArticles]);
 
       const count = newArticles.length;
       setHashMore(count > 0);
     },
-    [fetchArticles, languageStatus, keyword, platformIdList]
+    [fetchArticles, languageStatus, keyword, platformIdList, tab]
   );
 
   useEffect(() => {
@@ -94,18 +98,32 @@ export function ArticleList({
 
   return (
     <>
-      <div className="m-auto h-[700px] overflow-y-scroll md:h-[600px]">
-        {flatArticles.map((article) => (
-          <ArticleCardWrapper key={article.id} article={article} user={user} />
-        ))}
-        <div ref={observerTarget}>
-          {hashMore && (
-            <div className="flex justify-center py-4">
-              <Loader />
-            </div>
-          )}
+      {flatArticles.length === 0 ? (
+        <div className="flex h-[700px] flex-col items-center justify-center md:h-[600px]">
+          <p className="text-center text-lg font-bold text-gray-500 md:text-xl">
+            Sorry, no article.
+          </p>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img className="mt-8 h-1/2" src="/sorry.png" alt="" />
         </div>
-      </div>
+      ) : (
+        <div className="m-auto h-[700px] overflow-y-scroll md:h-[600px]">
+          {flatArticles.map((article) => (
+            <ArticleCardWrapper
+              key={article.id}
+              article={article}
+              user={user}
+            />
+          ))}
+          <div ref={observerTarget}>
+            {hashMore && (
+              <div className="flex justify-center py-4">
+                <Loader />
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </>
   );
 }
