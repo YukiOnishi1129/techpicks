@@ -4,6 +4,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
+// import { useOgp } from "@/features/ogp/hooks/useOgp";
+
+import { getOgpData } from "@/features/ogp/actions/ogp";
+
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -37,8 +41,7 @@ export const CreateBookmarkDialog = () => {
     },
   });
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
-    console.log(data);
+  async function onSubmit(data: z.infer<typeof FormSchema>) {
     // toast({
     //   title: "You submitted the following values:",
     //   description: (
@@ -47,6 +50,11 @@ export const CreateBookmarkDialog = () => {
     //     </pre>
     //   ),
     // });
+    const ogpData = await getOgpData(data.url);
+    console.log(ogpData);
+
+    // const result = await getOgpData(data.url);
+    // console.log(result);
   }
   return (
     <Dialog>
