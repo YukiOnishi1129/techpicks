@@ -39,8 +39,6 @@ export const diffDates = (nowUnixTime: number, targetUnixTime: number) => {
 };
 
 export const showDiffDateToCurrentDate = (targetDate: Date) => {
-  // const targetDateUnixTime = targetDate.getTime();
-
   const targetDateUnixTime = convertUnixTime(getDayjsTz(targetDate.toString()));
   const currentUnixTime = convertUnixTime(getDayjsTz());
   const diffHour = diffHours(currentUnixTime, targetDateUnixTime);
@@ -49,5 +47,5 @@ export const showDiffDateToCurrentDate = (targetDate: Date) => {
     return `${diffHour}時間前  (${getDayjsTz(targetDate.toString()).format("YYYY年M月DD日 H時m分")})`;
   }
   const date = diffDates(currentUnixTime, targetDateUnixTime);
-  return `${date % 24}日前  (${getDayjsTz(targetDate.toString())})`;
+  return `${date % 24}日前  (${getDayjsTz(targetDate.toString()).format("YYYY年M月DD日 H時m分")})`;
 };

@@ -9,6 +9,8 @@ import { LanguageStatus } from "@/types/language";
 
 const LIMIT = 20;
 
+const { v4: uuidv4 } = require("uuid");
+
 type GetBookmarkList = {
   platformId?: string;
   keyword?: string;
@@ -214,8 +216,41 @@ export const getBookmark = async ({ bookmarkId, userId }: GetBookmarkDTO) => {
   return bookmarkData;
 };
 
+export const getBookmarkCountById = async ({
+  bookmarkId,
+  userId,
+}: {
+  bookmarkId: string;
+  userId: string;
+}) => {
+  const res = await prisma.bookmark.count({
+    where: {
+      id: bookmarkId,
+      userId: userId,
+    },
+  });
+
+  return res;
+};
+
+export const getBookmarkCountByArticleId = async ({
+  articleId,
+  userId,
+}: {
+  articleId: string;
+  userId: string;
+}) => {
+  const res = await prisma.bookmark.count({
+    where: {
+      userId: userId,
+      articleId: articleId,
+    },
+  });
+
+  return res;
+};
+
 type CreateBookmarkDTO = {
-  id: string;
   title: string;
   description: string;
   articleId?: string;
@@ -233,9 +268,10 @@ type CreateBookmarkDTO = {
 
 export const createBookmark = async (dto: CreateBookmarkDTO) => {
   try {
+    const uuid = uuidv4();
     const data = await prisma.bookmark.create({
       data: {
-        id: dto.id,
+        id: uuid,
         title: dto.title,
         description: dto.description,
         articleId: dto.articleId,

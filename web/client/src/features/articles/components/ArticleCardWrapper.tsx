@@ -3,11 +3,13 @@ import { User } from "@supabase/supabase-js";
 import { FC, useCallback, useState } from "react";
 import { FcBookmark } from "react-icons/fc";
 import { MdOutlineBookmarkAdd } from "react-icons/md";
-import { uuid } from "uuidv4";
+// import { uuid } from "uuidv4";
 
 import {
   createBookmark,
   deleteBookmark,
+  getBookmarkCountByArticleId,
+  getBookmarkCountById,
 } from "@/features/bookmarks/repository/bookmark";
 
 import { Button } from "@/components/ui/button";
@@ -29,31 +31,43 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
   const [bookmarkId, setBookmarkId] = useState<string | undefined>(
     article.bookmarkId
   );
-  const handleAddBookmark = useCallback(async () => {
-    if (!user) return;
-    const uniqueId = uuid();
-    const id = await createBookmark({
-      id: uniqueId,
-      title: article.title,
-      description: article.description,
-      articleId: article.id,
-      articleUrl: article.articleUrl,
-      publishedAt: article.publishedAt,
-      thumbnailURL: article.thumbnailURL,
-      isRead: false,
-      userId: user.id,
-      platformId: article.platform.id,
-      isEng: article.platform.isEng,
-      platformName: article.platform.name,
-      platformUrl: article.platform.siteUrl,
-      platformFaviconUrl: article.platform.faviconUrl,
-    });
-    setBookmarkId(id);
-  }, [article, user]);
+  const handleAddBookmark = useCallback(
+    async (articleId: string) => {
+      if (!user) return;
+      const count = await getBookmarkCountByArticleId({
+        articleId: articleId,
+        userId: user.id,
+      });
+      if (count > 0) return;
+
+      const id = await createBookmark({
+        title: article.title,
+        description: article.description,
+        articleId: article.id,
+        articleUrl: article.articleUrl,
+        publishedAt: article.publishedAt,
+        thumbnailURL: article.thumbnailURL,
+        isRead: false,
+        userId: user.id,
+        platformId: article.platform.id,
+        isEng: article.platform.isEng,
+        platformName: article.platform.name,
+        platformUrl: article.platform.siteUrl,
+        platformFaviconUrl: article.platform.faviconUrl,
+      });
+      setBookmarkId(id);
+    },
+    [article, user]
+  );
 
   const handleRemoveBookmark = useCallback(
     async (bookmarkId: string) => {
       if (!user || !bookmarkId) return;
+      const count = await getBookmarkCountById({
+        bookmarkId: bookmarkId,
+        userId: user.id,
+      });
+      if (count === 0) return;
       await deleteBookmark({
         bookmarkId: bookmarkId,
         userId: user.id,
@@ -83,7 +97,11 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
                 <FcBookmark className="inline-block" size={36} />
               </Button>
             ) : (
-              <Button variant="ghost" size="icon" onClick={handleAddBookmark}>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => handleAddBookmark(article.id)}
+              >
                 <MdOutlineBookmarkAdd className="inline-block" size={36} />
               </Button>
             )}

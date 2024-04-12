@@ -4,11 +4,12 @@ import Link from "next/link";
 import { FC, useState, useCallback } from "react";
 import { FcBookmark } from "react-icons/fc";
 import { MdOutlineBookmarkAdd } from "react-icons/md";
-import { uuid } from "uuidv4";
 
 import {
   createBookmark,
   deleteBookmark,
+  getBookmarkCountByArticleId,
+  getBookmarkCountById,
 } from "@/features/bookmarks/repository/bookmark";
 
 import { Button } from "@/components/ui/button";
@@ -78,31 +79,43 @@ const ArticleContent = ({
     article.bookmarkId
   );
 
-  const handleAddBookmark = useCallback(async () => {
-    if (!user) return;
-    const uniqueId = uuid();
-    const id = await createBookmark({
-      id: uniqueId,
-      title: article.title,
-      description: article.description,
-      articleId: article.id,
-      articleUrl: article.articleUrl,
-      publishedAt: article.publishedAt,
-      thumbnailURL: article.thumbnailURL,
-      isRead: false,
-      isEng: article.platform.isEng,
-      userId: user.id,
-      platformId: article.platform.id,
-      platformName: article.platform.name,
-      platformUrl: article.platform.siteUrl,
-      platformFaviconUrl: article.platform.faviconUrl,
-    });
-    setBookmarkId(id);
-  }, [article, user]);
+  const handleAddBookmark = useCallback(
+    async (articleId: string) => {
+      if (!user) return;
+      const count = await getBookmarkCountByArticleId({
+        articleId: articleId,
+        userId: user.id,
+      });
+      if (count > 0) return;
+      const id = await createBookmark({
+        title: article.title,
+        description: article.description,
+        articleId: article.id,
+        articleUrl: article.articleUrl,
+        publishedAt: article.publishedAt,
+        thumbnailURL: article.thumbnailURL,
+        isRead: false,
+        isEng: article.platform.isEng,
+        userId: user.id,
+        platformId: article.platform.id,
+        platformName: article.platform.name,
+        platformUrl: article.platform.siteUrl,
+        platformFaviconUrl: article.platform.faviconUrl,
+      });
+      setBookmarkId(id);
+    },
+    [article, user]
+  );
 
   const handleRemoveBookmark = useCallback(
     async (bookmarkId: string) => {
       if (!user || !bookmarkId) return;
+
+      const count = await getBookmarkCountById({
+        bookmarkId: bookmarkId,
+        userId: user.id,
+      });
+      if (count === 0) return;
 
       await deleteBookmark({
         bookmarkId: bookmarkId,
@@ -178,7 +191,11 @@ const ArticleContent = ({
                 <FcBookmark className="inline-block" size={36} />
               </Button>
             ) : (
-              <Button variant="outline" size="icon" onClick={handleAddBookmark}>
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={() => handleAddBookmark(article.id)}
+              >
                 <MdOutlineBookmarkAdd className="inline-block" size={36} />
               </Button>
             )}
