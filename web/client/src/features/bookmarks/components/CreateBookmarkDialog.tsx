@@ -99,24 +99,33 @@ export const CreateBookmarkDialog = () => {
                   </FormItem>
                 )}
               />
-              <Button type="submit" disabled={isPending}>
+              {/* <Button type="submit" disabled={isPending}>
                 Submit
-              </Button>
+              </Button> */}
             </form>
           </Form>
         </div>
         {isPending && <Loader />}
         {ogpData && (
-          <div>
-            <h3>{ogpData.title}</h3>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={ogpData.image} alt="" />
-            <p>{ogpData.description}</p>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={ogpData.favIconImage} alt="" />
-            <Link href={ogpData.siteUrl} target="_blank">
-              {ogpData.siteName}
-            </Link>
+          <div className="mt-8 flex h-[200px] w-full justify-around overflow-y-scroll">
+            <div className="w-2/5">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={ogpData.image} alt="" />
+            </div>
+            <div className="w-2/5">
+              <h3>{ogpData.title}</h3>
+              <p className="overflow-hidden truncate">{ogpData.description}</p>
+
+              <div>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img className="size-6" src={ogpData.favIconImage} alt="" />
+                <span>
+                  <Link href={ogpData.siteUrl} target="_blank">
+                    {ogpData.siteName}
+                  </Link>
+                </span>
+              </div>
+            </div>
           </div>
         )}
         <DialogClose>
