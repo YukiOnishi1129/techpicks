@@ -1,10 +1,10 @@
 "use client";
-
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader } from "lucide-react";
+import Link from "next/link";
+import { useCallback, useState, ClipboardEvent, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-
-// import { useOgp } from "@/features/ogp/hooks/useOgp";
 
 import { getOgpData } from "@/features/ogp/actions/ogp";
 
@@ -28,7 +28,11 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
+import { OgpType } from "@/types/ogp";
+
 export const CreateBookmarkDialog = () => {
+  const [ogpData, setOgpData] = useState<OgpType | null>(null);
+  const [isPending, startTransition] = useTransition();
   const FormSchema = z.object({
     url: z.string().min(1, {
       message: "Please enter a valid URL",
@@ -41,21 +45,21 @@ export const CreateBookmarkDialog = () => {
     },
   });
 
-  async function onSubmit(data: z.infer<typeof FormSchema>) {
-    // toast({
-    //   title: "You submitted the following values:",
-    //   description: (
-    //     <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-    //       <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-    //     </pre>
-    //   ),
-    // });
-    const ogpData = await getOgpData(data.url);
-    console.log(ogpData);
+  const onSubmit = useCallback(async (data: z.infer<typeof FormSchema>) => {
+    startTransition(async () => {
+      const ogp = await getOgpData(data.url);
+      setOgpData(ogp);
+    });
+  }, []);
 
-    // const result = await getOgpData(data.url);
-    // console.log(result);
-  }
+  const onPaste = useCallback(
+    async (event: ClipboardEvent<HTMLInputElement>) => {
+      const pastedText = event.clipboardData?.getData("text");
+      onSubmit({ url: pastedText });
+    },
+    [onSubmit]
+  );
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -78,7 +82,13 @@ export const CreateBookmarkDialog = () => {
                   <FormItem>
                     <FormLabel>Article url</FormLabel>
                     <FormControl>
-                      <Input placeholder="https://www.google.com" {...field} />
+                      <Input
+                        placeholder="https://example.com"
+                        type="url"
+                        pattern="https://.*|http://.*"
+                        onPaste={onPaste}
+                        {...field}
+                      />
                     </FormControl>
                     <FormDescription>
                       {
@@ -89,10 +99,26 @@ export const CreateBookmarkDialog = () => {
                   </FormItem>
                 )}
               />
-              <Button type="submit">Submit</Button>
+              <Button type="submit" disabled={isPending}>
+                Submit
+              </Button>
             </form>
           </Form>
         </div>
+        {isPending && <Loader />}
+        {ogpData && (
+          <div>
+            <h3>{ogpData.title}</h3>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={ogpData.image} alt="" />
+            <p>{ogpData.description}</p>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={ogpData.favIconImage} alt="" />
+            <Link href={ogpData.siteUrl} target="_blank">
+              {ogpData.siteName}
+            </Link>
+          </div>
+        )}
         <DialogClose>
           <Button>{"Close"}</Button>
         </DialogClose>

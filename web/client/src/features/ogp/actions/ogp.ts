@@ -2,13 +2,7 @@
 
 import { parse } from "node-html-parser";
 
-type OgpType = {
-  title: string;
-  description: string;
-  siteUrl: string;
-  image: string;
-  favIconImage: string;
-};
+import { OgpType } from "@/types/ogp";
 
 const allowedTags = [
   "title",
@@ -22,13 +16,14 @@ const allowedTags = [
   "icon",
   "apple-touch-icon",
   "shortcut icon",
+  "og:site_name",
 ];
 
 export const getOgpData = async (url: string) => {
   const encodeUri = encodeURI(url);
 
   const res = await fetch(encodeUri, {
-    headers: { "User-Agent": "Googlebot" },
+    headers: { "User-Agent": "bot" },
   });
   const html = await res.text();
   const root = parse(html);
@@ -64,6 +59,8 @@ export const getOgpData = async (url: string) => {
 
   const siteUrl = await getDomainUrl(url);
 
+  const siteName = objectMap["og:site_name"];
+
   const imageSrc = objectMap["og:image"];
 
   const favIconImage =
@@ -77,6 +74,7 @@ export const getOgpData = async (url: string) => {
     title,
     description,
     siteUrl,
+    siteName,
     image,
     favIconImage,
   };
