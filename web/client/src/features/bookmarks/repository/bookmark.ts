@@ -123,6 +123,10 @@ export const getBookmarkList = async ({
       publishedAt: bookmark.publishedAt,
       thumbnailURL: bookmark.thumbnailURL,
       isRead: bookmark.isRead,
+      isEng: bookmark.isEng,
+      platformName: bookmark.platformName,
+      platformUrl: bookmark.platformUrl,
+      platformFaviconUrl: bookmark.platformFaviconUrl,
       user: {
         id: bookmark.profile.id,
         name: bookmark.profile.name,
@@ -134,19 +138,6 @@ export const getBookmarkList = async ({
       createdAt: bookmark.createdAt,
       updatedAt: bookmark.updatedAt,
     };
-
-    if (bookmark.platform) {
-      bookmarkData.platform = {
-        id: bookmark.platform.id,
-        name: bookmark.platform.name,
-        siteUrl: bookmark.platform.siteUrl,
-        faviconUrl: bookmark.platform.faviconUrl,
-        platformType: bookmark.platform.platformType,
-        isEng: bookmark.platform.isEng,
-        createdAt: bookmark.platform.createdAt,
-        updatedAt: bookmark.platform.updatedAt,
-      };
-    }
 
     return bookmarkData;
   });
@@ -204,6 +195,10 @@ export const getBookmark = async ({ bookmarkId, userId }: GetBookmarkDTO) => {
     publishedAt: data.publishedAt,
     thumbnailURL: data.thumbnailURL,
     isRead: data.isRead,
+    isEng: data.isEng,
+    platformName: data.platformName,
+    platformUrl: data.platformUrl,
+    platformFaviconUrl: data.platformFaviconUrl,
     user: {
       id: data.profile.id,
       name: data.profile.name,
@@ -215,19 +210,6 @@ export const getBookmark = async ({ bookmarkId, userId }: GetBookmarkDTO) => {
     createdAt: data.createdAt,
     updatedAt: data.updatedAt,
   };
-
-  if (data.platform) {
-    bookmarkData.platform = {
-      id: data.platform.id,
-      name: data.platform.name,
-      siteUrl: data.platform.siteUrl,
-      faviconUrl: data.platform.faviconUrl,
-      platformType: data.platform.platformType,
-      isEng: data.platform.isEng,
-      createdAt: data.platform.createdAt,
-      updatedAt: data.platform.updatedAt,
-    };
-  }
 
   return bookmarkData;
 };
@@ -243,6 +225,10 @@ type CreateBookmarkDTO = {
   isRead: boolean;
   userId: string;
   platformId: string;
+  platformName?: string;
+  platformUrl?: string;
+  platformFaviconUrl?: string;
+  isEng: boolean;
 };
 
 export const createBookmark = async (dto: CreateBookmarkDTO) => {
@@ -259,6 +245,10 @@ export const createBookmark = async (dto: CreateBookmarkDTO) => {
         isRead: dto.isRead,
         userId: dto.userId,
         platformId: dto.platformId,
+        platformName: dto?.platformName || "",
+        platformUrl: dto?.platformUrl || "",
+        platformFaviconUrl: dto?.platformFaviconUrl || "",
+        isEng: dto.isEng,
       },
     });
     return data.id;

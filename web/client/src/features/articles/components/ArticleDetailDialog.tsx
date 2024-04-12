@@ -89,9 +89,13 @@ const ArticleContent = ({
       articleUrl: article.articleUrl,
       publishedAt: article.publishedAt,
       thumbnailURL: article.thumbnailURL,
-      isRead: false,
-      userId: user.id,
       platformId: article.platform.id,
+      isRead: false,
+      isEng: article.platform.isEng,
+      userId: user.id,
+      platformName: article.platform.name,
+      platformUrl: article.platform.siteUrl,
+      platformFaviconUrl: article.platform.faviconUrl,
     });
     setBookmarkId(id);
   }, [article, user]);

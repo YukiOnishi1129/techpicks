@@ -43,6 +43,10 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
       isRead: false,
       userId: user.id,
       platformId: article.platform.id,
+      isEng: article.platform.isEng,
+      platformName: article.platform.name,
+      platformUrl: article.platform.siteUrl,
+      platformFaviconUrl: article.platform.faviconUrl,
     });
     setBookmarkId(id);
   }, [article, user]);
