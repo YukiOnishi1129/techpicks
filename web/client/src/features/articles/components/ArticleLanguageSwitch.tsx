@@ -22,7 +22,7 @@ export const ArticleLanguageSwitch: FC<ArticleLanguageSwitchProps> = ({
   tab,
 }: ArticleLanguageSwitchProps) => {
   const switchLabel = languageStatus === 1 ? "Japanese" : "English";
-  const [isEng, setIsEng] = useState(languageStatus === 2);
+  const [isEng, setIsEng] = useState(switchLabel === "English");
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
