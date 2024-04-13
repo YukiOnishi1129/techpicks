@@ -31,7 +31,7 @@ type Bookmark struct {
 	Title              string      `boil:"title" json:"title" toml:"title" yaml:"title"`
 	Description        string      `boil:"description" json:"description" toml:"description" yaml:"description"`
 	ArticleURL         string      `boil:"article_url" json:"article_url" toml:"article_url" yaml:"article_url"`
-	PublishedAt        time.Time   `boil:"published_at" json:"published_at" toml:"published_at" yaml:"published_at"`
+	PublishedAt        null.Time   `boil:"published_at" json:"published_at,omitempty" toml:"published_at" yaml:"published_at,omitempty"`
 	ThumbnailURL       string      `boil:"thumbnail_url" json:"thumbnail_url" toml:"thumbnail_url" yaml:"thumbnail_url"`
 	PlatformName       string      `boil:"platform_name" json:"platform_name" toml:"platform_name" yaml:"platform_name"`
 	PlatformURL        string      `boil:"platform_url" json:"platform_url" toml:"platform_url" yaml:"platform_url"`
@@ -169,6 +169,30 @@ func (w whereHelpernull_String) NIN(slice []string) qm.QueryMod {
 func (w whereHelpernull_String) IsNull() qm.QueryMod    { return qmhelper.WhereIsNull(w.field) }
 func (w whereHelpernull_String) IsNotNull() qm.QueryMod { return qmhelper.WhereIsNotNull(w.field) }
 
+type whereHelpernull_Time struct{ field string }
+
+func (w whereHelpernull_Time) EQ(x null.Time) qm.QueryMod {
+	return qmhelper.WhereNullEQ(w.field, false, x)
+}
+func (w whereHelpernull_Time) NEQ(x null.Time) qm.QueryMod {
+	return qmhelper.WhereNullEQ(w.field, true, x)
+}
+func (w whereHelpernull_Time) LT(x null.Time) qm.QueryMod {
+	return qmhelper.Where(w.field, qmhelper.LT, x)
+}
+func (w whereHelpernull_Time) LTE(x null.Time) qm.QueryMod {
+	return qmhelper.Where(w.field, qmhelper.LTE, x)
+}
+func (w whereHelpernull_Time) GT(x null.Time) qm.QueryMod {
+	return qmhelper.Where(w.field, qmhelper.GT, x)
+}
+func (w whereHelpernull_Time) GTE(x null.Time) qm.QueryMod {
+	return qmhelper.Where(w.field, qmhelper.GTE, x)
+}
+
+func (w whereHelpernull_Time) IsNull() qm.QueryMod    { return qmhelper.WhereIsNull(w.field) }
+func (w whereHelpernull_Time) IsNotNull() qm.QueryMod { return qmhelper.WhereIsNotNull(w.field) }
+
 var BookmarkWhere = struct {
 	ID                 whereHelperstring
 	UserID             whereHelperstring
@@ -177,7 +201,7 @@ var BookmarkWhere = struct {
 	Title              whereHelperstring
 	Description        whereHelperstring
 	ArticleURL         whereHelperstring
-	PublishedAt        whereHelpertime_Time
+	PublishedAt        whereHelpernull_Time
 	ThumbnailURL       whereHelperstring
 	PlatformName       whereHelperstring
 	PlatformURL        whereHelperstring
@@ -194,7 +218,7 @@ var BookmarkWhere = struct {
 	Title:              whereHelperstring{field: "\"bookmarks\".\"title\""},
 	Description:        whereHelperstring{field: "\"bookmarks\".\"description\""},
 	ArticleURL:         whereHelperstring{field: "\"bookmarks\".\"article_url\""},
-	PublishedAt:        whereHelpertime_Time{field: "\"bookmarks\".\"published_at\""},
+	PublishedAt:        whereHelpernull_Time{field: "\"bookmarks\".\"published_at\""},
 	ThumbnailURL:       whereHelperstring{field: "\"bookmarks\".\"thumbnail_url\""},
 	PlatformName:       whereHelperstring{field: "\"bookmarks\".\"platform_name\""},
 	PlatformURL:        whereHelperstring{field: "\"bookmarks\".\"platform_url\""},
@@ -254,8 +278,8 @@ type bookmarkL struct{}
 
 var (
 	bookmarkAllColumns            = []string{"id", "user_id", "platform_id", "article_id", "title", "description", "article_url", "published_at", "thumbnail_url", "platform_name", "platform_url", "platform_favicon_url", "is_eng", "is_read", "created_at", "updated_at"}
-	bookmarkColumnsWithoutDefault = []string{"user_id", "title", "description", "article_url", "published_at", "thumbnail_url", "platform_name", "platform_url", "platform_favicon_url"}
-	bookmarkColumnsWithDefault    = []string{"id", "platform_id", "article_id", "is_eng", "is_read", "created_at", "updated_at"}
+	bookmarkColumnsWithoutDefault = []string{"user_id", "title", "description", "article_url", "thumbnail_url", "platform_name", "platform_url", "platform_favicon_url"}
+	bookmarkColumnsWithDefault    = []string{"id", "platform_id", "article_id", "published_at", "is_eng", "is_read", "created_at", "updated_at"}
 	bookmarkPrimaryKeyColumns     = []string{"id"}
 	bookmarkGeneratedColumns      = []string{}
 )

@@ -36,18 +36,6 @@ func (au *ArticleUsecase) BatchCreateArticles(ctx context.Context) error {
 	}
 	// for feeds
 	for _, f := range feeds {
-		// transaction
-		tx, err := au.db.BeginTx(ctx, nil)
-		if err != nil {
-			log.Printf("【error begin transaction】: %s", err)
-			err = tx.Rollback()
-			if err != nil {
-				return err
-			}
-			return err
-		}
-		log.Printf("【begin transaction】")
-
 		log.Printf("【start create article】: %s", f.Name)
 		aCount := 0
 		farCount := 0
@@ -55,14 +43,21 @@ func (au *ArticleUsecase) BatchCreateArticles(ctx context.Context) error {
 		rss, err := GetRSS(f.RSSURL)
 		if err != nil {
 			log.Printf("【error get rss】: %s", f.Name)
-			err = tx.Rollback()
-			if err != nil {
-				continue
-			}
 			continue
 		}
-
 		for _, r := range rss {
+			// transaction
+			tx, err := au.db.BeginTx(ctx, nil)
+			if err != nil {
+				log.Printf("【error begin transaction】: %s", err)
+				err = tx.Rollback()
+				if err != nil {
+					return err
+				}
+				return err
+			}
+			log.Printf("【begin transaction】")
+
 			isSkip := false
 			// 1. check article table at article_url
 			articles, _ := entity.Articles(qm.Where("article_url = ?", r.Link), qm.Where("platform_id = ?", f.PlatformID)).All(ctx, tx)
@@ -85,11 +80,15 @@ func (au *ArticleUsecase) BatchCreateArticles(ctx context.Context) error {
 				}
 				isSkip = true
 			}
-
 			if isSkip {
+				log.Printf("【commit transaction】")
+				err = tx.Commit()
+				if err != nil {
+					log.Printf("【error commit transaction】: %s", err)
+					return err
+				}
 				continue
 			}
-
 			// create article and feed_article_relation data
 			// insert article
 			articleID, _ := uuid.NewUUID()
@@ -128,17 +127,16 @@ func (au *ArticleUsecase) BatchCreateArticles(ctx context.Context) error {
 				}
 				continue
 			}
+			log.Printf("【commit transaction】")
+			err = tx.Commit()
+			if err != nil {
+				log.Printf("【error commit transaction】: %s", err)
+				return err
+			}
 			log.Printf("【create article】: %s", r.Title)
 			aCount++
 			farCount++
 		}
-
-		err = tx.Commit()
-		if err != nil {
-			log.Printf("【error commit transaction】: %s", err)
-			return err
-		}
-		log.Printf("【commit transaction】")
 		log.Printf("【end create article】: %s", f.Name)
 		log.Printf("【add article count】: %d", aCount)
 		log.Printf("【add feed_article_relationcount】: %d", farCount)

@@ -10,7 +10,7 @@ CREATE TABLE bookmarks
     title VARCHAR(255) NOT NULL,
     description TEXT NOT NULL,
     article_url TEXT NOT NULL,
-    published_at TIMESTAMPTZ NOT NULL,
+    published_at TIMESTAMPTZ NULL,
     thumbnail_url TEXT NOT NULL,
     platform_name TEXT NOT NULL,
     platform_url TEXT NOT NULL,
