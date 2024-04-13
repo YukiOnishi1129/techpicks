@@ -39,3 +39,23 @@ export const fetchArticleAPI = async ({
 
   return data.articles as ArticleType[];
 };
+
+export const fetchArticleByArticleAndPlatformUrlAPI = async ({
+  articleUrl,
+  platformUrl,
+}: {
+  articleUrl: string;
+  platformUrl: string;
+}) => {
+  let url = `http://localhost:80/api/articles/article-platform-url?articleUrl=${articleUrl}&platformUrl=${platformUrl}`;
+  const response = await fetch(url, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+    next: { tags: ["articles"] },
+    cache: "no-store",
+  });
+  const data = await response.json();
+
+  return data.articles as ArticleType;
+};

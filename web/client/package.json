@@ -10,8 +10,7 @@
     "lint:fix": "eslint --ext .js,.jsx,.ts,.tsx --fix .",
     "format": "npx prettier --write .",
     "prepare": "cd ../.. && husky web/client/.husky",
-    "gen:prisma": "prisma generate",
-    "migrate": "prisma migrate dev"
+    "gen:prisma": "prisma generate"
   },
   "lint-staged": {
     "*.{js, jsx, ts,tsx}": "eslint  --ext .js,.jsx,.ts,.tsx --fix ."

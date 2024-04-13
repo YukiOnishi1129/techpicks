@@ -1,11 +1,19 @@
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { User } from "@supabase/supabase-js";
 import { Loader } from "lucide-react";
 import Link from "next/link";
-import { useCallback, useState, ClipboardEvent, useTransition } from "react";
+import {
+  useCallback,
+  useState,
+  ClipboardEvent,
+  useTransition,
+  FC,
+} from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
+import { fetchArticleByArticleAndPlatformUrlAPI } from "@/features/articles/actions/article";
 import { getOgpData } from "@/features/ogp/actions/ogp";
 
 import { Button } from "@/components/ui/button";
@@ -30,7 +38,18 @@ import { Input } from "@/components/ui/input";
 
 import { OgpType } from "@/types/ogp";
 
-export const CreateBookmarkDialog = () => {
+import {
+  createBookmark,
+  getBookmarkCountByArticleUrl,
+} from "../repository/bookmark";
+
+type CreateBookmarkDialogProps = {
+  user: User | undefined;
+};
+
+export const CreateBookmarkDialog: FC<CreateBookmarkDialogProps> = ({
+  user,
+}: CreateBookmarkDialogProps) => {
   const [ogpData, setOgpData] = useState<OgpType | null>(null);
   const [isPending, startTransition] = useTransition();
   const FormSchema = z.object({
@@ -59,6 +78,66 @@ export const CreateBookmarkDialog = () => {
     },
     [onSubmit]
   );
+
+  const handleAddSubmit = useCallback(async () => {
+    console.log("Add bookmark");
+    if (!user) return;
+    // 1. check article is already bookmarked
+    const url = form.getValues("url");
+    const count = await getBookmarkCountByArticleUrl({
+      articleUrl: url,
+      userId: user.id,
+    });
+    // TODO: if count > 0, show error message
+    if (count > 0) return;
+
+    // 2. If same article url is in article table, register that date to bookmark table.
+    const article = await fetchArticleByArticleAndPlatformUrlAPI({
+      articleUrl: url,
+      platformUrl: ogpData?.siteUrl || "",
+    });
+
+    if (article) {
+      await createBookmark({
+        title: article.title,
+        description: article.description,
+        articleId: article.id,
+        articleUrl: article.articleUrl,
+        thumbnailURL: article.thumbnailURL,
+        isRead: false,
+        userId: user.id,
+        platformId: article.platform.id,
+        platformName: article.platform.name,
+        platformUrl: article.platform.siteUrl,
+        platformFaviconUrl: article.platform.faviconUrl,
+        isEng: article.platform.isEng,
+      });
+      // TODO: show success message
+      return;
+    }
+    // 3. If not, get ogp data and register that data to article table and bookmark table.
+    const res = await createBookmark({
+      title: ogpData?.title || "",
+      description: ogpData?.description || "",
+      articleUrl: url,
+      thumbnailURL: ogpData?.image || "",
+      isRead: false,
+      userId: user.id,
+      platformName: ogpData?.siteName || "",
+      platformUrl: ogpData?.siteUrl || "",
+      platformFaviconUrl: ogpData?.favIconImage || "",
+      isEng: false,
+    });
+  }, [
+    form,
+    ogpData?.description,
+    ogpData?.favIconImage,
+    ogpData?.image,
+    ogpData?.siteName,
+    ogpData?.siteUrl,
+    ogpData?.title,
+    user,
+  ]);
 
   return (
     <Dialog>
@@ -99,32 +178,36 @@ export const CreateBookmarkDialog = () => {
                   </FormItem>
                 )}
               />
-              {/* <Button type="submit" disabled={isPending}>
-                Submit
-              </Button> */}
             </form>
           </Form>
         </div>
         {isPending && <Loader />}
-        {ogpData && (
-          <div className="mt-8 flex h-[200px] w-full justify-around overflow-y-scroll">
-            <div className="w-2/5">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={ogpData.image} alt="" />
-            </div>
-            <div className="w-2/5">
-              <h3>{ogpData.title}</h3>
-              <p className="overflow-hidden truncate">{ogpData.description}</p>
-
-              <div>
+        {!isPending && ogpData && (
+          <div className="mt-8 w-full">
+            <div className="flex h-[200px] w-full justify-around overflow-y-scroll">
+              <div className="w-2/5">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img className="size-6" src={ogpData.favIconImage} alt="" />
-                <span>
-                  <Link href={ogpData.siteUrl} target="_blank">
-                    {ogpData.siteName}
-                  </Link>
-                </span>
+                <img src={ogpData.image} alt="" />
               </div>
+              <div className="w-2/5">
+                <h3>{ogpData.title}</h3>
+                <p className="overflow-hidden truncate">
+                  {ogpData.description}
+                </p>
+
+                <div>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img className="size-6" src={ogpData.favIconImage} alt="" />
+                  <span>
+                    <Link href={ogpData.siteUrl} target="_blank">
+                      {ogpData.siteName}
+                    </Link>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div className="mt-4">
+              <Button onClick={handleAddSubmit}>{"Add bookmark"}</Button>
             </div>
           </div>
         )}

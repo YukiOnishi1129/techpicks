@@ -250,16 +250,33 @@ export const getBookmarkCountByArticleId = async ({
   return res;
 };
 
+export const getBookmarkCountByArticleUrl = async ({
+  articleUrl,
+  userId,
+}: {
+  articleUrl: string;
+  userId: string;
+}) => {
+  const res = await prisma.bookmark.count({
+    where: {
+      userId: userId,
+      articleUrl: articleUrl,
+    },
+  });
+
+  return res;
+};
+
 type CreateBookmarkDTO = {
   title: string;
   description: string;
   articleId?: string;
   articleUrl: string;
-  publishedAt: Date;
+  publishedAt?: Date;
   thumbnailURL: string;
   isRead: boolean;
   userId: string;
-  platformId: string;
+  platformId?: string;
   platformName?: string;
   platformUrl?: string;
   platformFaviconUrl?: string;
