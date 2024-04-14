@@ -77,74 +77,78 @@ export const getBookmarkList = async ({
     userId: user?.id,
   };
 
-  const res = await prisma.bookmark.findMany({
-    take: 20,
-    skip: (offset - 1) * LIMIT,
-    where,
-    orderBy: [
-      {
-        createdAt: "desc",
-      },
-      {
-        publishedAt: "desc",
-      },
-    ],
-    include: {
-      profile: {
-        select: {
-          id: true,
-          name: true,
-          email: true,
-          image: true,
-          createdAt: true,
-          updatedAt: true,
+  try {
+    const res = await prisma.bookmark.findMany({
+      take: 20,
+      skip: (offset - 1) * LIMIT,
+      where,
+      orderBy: [
+        {
+          createdAt: "desc",
+        },
+        {
+          publishedAt: "desc",
+        },
+      ],
+      include: {
+        profile: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            image: true,
+            createdAt: true,
+            updatedAt: true,
+          },
+        },
+        platform: {
+          select: {
+            id: true,
+            name: true,
+            siteUrl: true,
+            faviconUrl: true,
+            platformType: true,
+            isEng: true,
+            createdAt: true,
+            updatedAt: true,
+          },
         },
       },
-      platform: {
-        select: {
-          id: true,
-          name: true,
-          siteUrl: true,
-          faviconUrl: true,
-          platformType: true,
-          isEng: true,
-          createdAt: true,
-          updatedAt: true,
+    });
+
+    const bookmarkList: Array<BookmarkType> = res.map((bookmark) => {
+      const bookmarkData: BookmarkType = {
+        id: bookmark.id,
+        articleId: bookmark?.articleId,
+        title: bookmark.title,
+        description: bookmark.description,
+        articleUrl: bookmark.articleUrl,
+        publishedAt: bookmark.publishedAt,
+        thumbnailURL: bookmark.thumbnailURL,
+        isRead: bookmark.isRead,
+        isEng: bookmark.isEng,
+        platformName: bookmark.platformName,
+        platformUrl: bookmark.platformUrl,
+        platformFaviconUrl: bookmark.platformFaviconUrl,
+        user: {
+          id: bookmark.profile.id,
+          name: bookmark.profile.name,
+          email: bookmark.profile.email,
+          image: bookmark.profile.image,
+          createdAt: bookmark.profile.createdAt,
+          updatedAt: bookmark.profile.updatedAt,
         },
-      },
-    },
-  });
+        createdAt: bookmark.createdAt,
+        updatedAt: bookmark.updatedAt,
+      };
 
-  const bookmarkList: Array<BookmarkType> = res.map((bookmark) => {
-    const bookmarkData: BookmarkType = {
-      id: bookmark.id,
-      articleId: bookmark?.articleId,
-      title: bookmark.title,
-      description: bookmark.description,
-      articleUrl: bookmark.articleUrl,
-      publishedAt: bookmark.publishedAt,
-      thumbnailURL: bookmark.thumbnailURL,
-      isRead: bookmark.isRead,
-      isEng: bookmark.isEng,
-      platformName: bookmark.platformName,
-      platformUrl: bookmark.platformUrl,
-      platformFaviconUrl: bookmark.platformFaviconUrl,
-      user: {
-        id: bookmark.profile.id,
-        name: bookmark.profile.name,
-        email: bookmark.profile.email,
-        image: bookmark.profile.image,
-        createdAt: bookmark.profile.createdAt,
-        updatedAt: bookmark.profile.updatedAt,
-      },
-      createdAt: bookmark.createdAt,
-      updatedAt: bookmark.updatedAt,
-    };
+      return bookmarkData;
+    });
 
-    return bookmarkData;
-  });
-
-  return bookmarkList;
+    return bookmarkList;
+  } catch (err) {
+    throw new Error(`Failed to get bookmark list: ${err}`);
+  }
 };
 
 type GetBookmarkDTO = {
@@ -153,67 +157,71 @@ type GetBookmarkDTO = {
 };
 
 export const getBookmark = async ({ bookmarkId, userId }: GetBookmarkDTO) => {
-  const data = await prisma.bookmark.findFirst({
-    where: {
-      id: bookmarkId,
-      userId: userId,
-    },
-    include: {
-      profile: {
-        select: {
-          id: true,
-          name: true,
-          email: true,
-          image: true,
-          createdAt: true,
-          updatedAt: true,
+  try {
+    const data = await prisma.bookmark.findFirst({
+      where: {
+        id: bookmarkId,
+        userId: userId,
+      },
+      include: {
+        profile: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            image: true,
+            createdAt: true,
+            updatedAt: true,
+          },
+        },
+        platform: {
+          select: {
+            id: true,
+            name: true,
+            siteUrl: true,
+            faviconUrl: true,
+            platformType: true,
+            isEng: true,
+            createdAt: true,
+            updatedAt: true,
+          },
         },
       },
-      platform: {
-        select: {
-          id: true,
-          name: true,
-          siteUrl: true,
-          faviconUrl: true,
-          platformType: true,
-          isEng: true,
-          createdAt: true,
-          updatedAt: true,
-        },
-      },
-    },
-  });
+    });
 
-  if (!data) {
-    return null;
+    if (!data) {
+      return null;
+    }
+
+    const bookmarkData: BookmarkType = {
+      id: data.id,
+      articleId: data?.articleId,
+      title: data.title,
+      description: data.description,
+      articleUrl: data.articleUrl,
+      publishedAt: data.publishedAt,
+      thumbnailURL: data.thumbnailURL,
+      isRead: data.isRead,
+      isEng: data.isEng,
+      platformName: data.platformName,
+      platformUrl: data.platformUrl,
+      platformFaviconUrl: data.platformFaviconUrl,
+      user: {
+        id: data.profile.id,
+        name: data.profile.name,
+        email: data.profile.email,
+        image: data.profile.image,
+        createdAt: data.profile.createdAt,
+        updatedAt: data.profile.updatedAt,
+      },
+      createdAt: data.createdAt,
+      updatedAt: data.updatedAt,
+    };
+
+    return bookmarkData;
+  } catch (err) {
+    throw new Error(`Failed to get bookmark: ${err}`);
   }
-
-  const bookmarkData: BookmarkType = {
-    id: data.id,
-    articleId: data?.articleId,
-    title: data.title,
-    description: data.description,
-    articleUrl: data.articleUrl,
-    publishedAt: data.publishedAt,
-    thumbnailURL: data.thumbnailURL,
-    isRead: data.isRead,
-    isEng: data.isEng,
-    platformName: data.platformName,
-    platformUrl: data.platformUrl,
-    platformFaviconUrl: data.platformFaviconUrl,
-    user: {
-      id: data.profile.id,
-      name: data.profile.name,
-      email: data.profile.email,
-      image: data.profile.image,
-      createdAt: data.profile.createdAt,
-      updatedAt: data.profile.updatedAt,
-    },
-    createdAt: data.createdAt,
-    updatedAt: data.updatedAt,
-  };
-
-  return bookmarkData;
 };
 
 export const getBookmarkCountById = async ({
@@ -223,14 +231,18 @@ export const getBookmarkCountById = async ({
   bookmarkId: string;
   userId: string;
 }) => {
-  const res = await prisma.bookmark.count({
-    where: {
-      id: bookmarkId,
-      userId: userId,
-    },
-  });
+  try {
+    const res = await prisma.bookmark.count({
+      where: {
+        id: bookmarkId,
+        userId: userId,
+      },
+    });
 
-  return res;
+    return res;
+  } catch (err) {
+    throw new Error(`Failed to get bookmark count: ${err}`);
+  }
 };
 
 export const getBookmarkCountByArticleId = async ({
@@ -240,14 +252,17 @@ export const getBookmarkCountByArticleId = async ({
   articleId: string;
   userId: string;
 }) => {
-  const res = await prisma.bookmark.count({
-    where: {
-      userId: userId,
-      articleId: articleId,
-    },
-  });
-
-  return res;
+  try {
+    const res = await prisma.bookmark.count({
+      where: {
+        userId: userId,
+        articleId: articleId,
+      },
+    });
+    return res;
+  } catch (err) {
+    throw new Error(`Failed to get bookmark count: ${err}`);
+  }
 };
 
 export const getBookmarkCountByArticleUrl = async ({
@@ -257,14 +272,17 @@ export const getBookmarkCountByArticleUrl = async ({
   articleUrl: string;
   userId: string;
 }) => {
-  const res = await prisma.bookmark.count({
-    where: {
-      userId: userId,
-      articleUrl: articleUrl,
-    },
-  });
-
-  return res;
+  try {
+    const res = await prisma.bookmark.count({
+      where: {
+        userId: userId,
+        articleUrl: articleUrl,
+      },
+    });
+    return res;
+  } catch (err) {
+    throw new Error(`Failed to get bookmark count: ${err}`);
+  }
 };
 
 type CreateBookmarkDTO = {

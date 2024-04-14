@@ -1,26 +1,32 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { getArticleByArticleAndPlatformUrl } from "@/features/articles/repository/article";
+import { getBookmarkCountByArticleUrl } from "@/features/bookmarks/repository/bookmark";
 import { getUser } from "@/features/users/actions/user";
 
 export async function GET(req: NextRequest) {
   const searchParams = req.nextUrl.searchParams;
   const articleUrl = searchParams.get("articleUrl");
-  const platformUrl = searchParams.get("platformUrl");
 
   const user = await getUser();
 
-  const article = await getArticleByArticleAndPlatformUrl({
+  if (!user) {
+    return NextResponse.json(
+      {
+        message: "unauthorized",
+      },
+      {
+        status: 401,
+      }
+    );
+  }
+
+  const count = await getBookmarkCountByArticleUrl({
     articleUrl: articleUrl || "",
-    platformUrl: platformUrl || "",
-    userId: user?.id,
+    userId: user?.id || "",
   });
 
   return NextResponse.json(
-    {
-      article: article,
-      message: "success",
-    },
+    { count: count, message: "success" },
     {
       status: 200,
     }

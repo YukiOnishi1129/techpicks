@@ -2,7 +2,15 @@
 
 import { ArticleTabType, ArticleType } from "@/types/article";
 
-export const fetchArticleAPI = async ({
+export type FetchArticlesAPIResponse = {
+  data: {
+    articles: ArticleType[];
+    message: string;
+  };
+  status: number;
+};
+
+export const fetchArticlesAPI = async ({
   languageStatus,
   keyword,
   offset = "1",
@@ -14,7 +22,7 @@ export const fetchArticleAPI = async ({
   offset?: string;
   platformIdList: Array<string>;
   tab: ArticleTabType;
-}) => {
+}): Promise<FetchArticlesAPIResponse> => {
   let url = `http://localhost:80/api/articles/?offset=${offset}&tab=${tab}`;
   if (languageStatus) {
     url += `&languageStatus=${languageStatus}`;
@@ -36,8 +44,23 @@ export const fetchArticleAPI = async ({
     cache: "no-store",
   });
   const data = await response.json();
+  const status = response.status;
 
-  return data.articles as ArticleType[];
+  return {
+    data: {
+      articles: data.articles as ArticleType[],
+      message: "success",
+    },
+    status,
+  };
+};
+
+export type FetchArticleByArticleAndPlatformUrlAPIResponse = {
+  data: {
+    article: ArticleType | undefined;
+    message: string;
+  };
+  status: number;
 };
 
 export const fetchArticleByArticleAndPlatformUrlAPI = async ({
@@ -46,16 +69,23 @@ export const fetchArticleByArticleAndPlatformUrlAPI = async ({
 }: {
   articleUrl: string;
   platformUrl: string;
-}) => {
+}): Promise<FetchArticleByArticleAndPlatformUrlAPIResponse> => {
   let url = `http://localhost:80/api/articles/article-platform-url?articleUrl=${articleUrl}&platformUrl=${platformUrl}`;
   const response = await fetch(url, {
     headers: {
       "Content-Type": "application/json",
     },
-    next: { tags: ["articles"] },
+    next: { tags: ["articles/byArticleAndPlatformUrl"] },
     cache: "no-store",
   });
   const data = await response.json();
+  const status = response.status;
 
-  return data.articles as ArticleType;
+  return {
+    data: {
+      article: data.articles as ArticleType | undefined,
+      message: "success",
+    },
+    status,
+  };
 };

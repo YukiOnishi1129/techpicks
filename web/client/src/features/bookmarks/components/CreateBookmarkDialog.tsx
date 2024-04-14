@@ -38,10 +38,8 @@ import { Input } from "@/components/ui/input";
 
 import { OgpType } from "@/types/ogp";
 
-import {
-  createBookmark,
-  getBookmarkCountByArticleUrl,
-} from "../repository/bookmark";
+import { fetchBookmarkCountByArticleUrl } from "../actions/bookmark";
+import { createBookmark } from "../repository/bookmark";
 
 type CreateBookmarkDialogProps = {
   user: User | undefined;
@@ -84,21 +82,23 @@ export const CreateBookmarkDialog: FC<CreateBookmarkDialogProps> = ({
     if (!user) return;
     // 1. check article is already bookmarked
     const url = form.getValues("url");
-    const count = await getBookmarkCountByArticleUrl({
+    const countResponse = await fetchBookmarkCountByArticleUrl({
       articleUrl: url,
-      userId: user.id,
     });
+    const count = countResponse.data?.count;
+    if (countResponse.status !== 200 || !count) return;
     // TODO: if count > 0, show error message
     if (count > 0) return;
 
     // 2. If same article url is in article table, register that date to bookmark table.
-    const article = await fetchArticleByArticleAndPlatformUrlAPI({
+    const articleResponse = await fetchArticleByArticleAndPlatformUrlAPI({
       articleUrl: url,
       platformUrl: ogpData?.siteUrl || "",
     });
 
-    if (article) {
-      await createBookmark({
+    if (articleResponse.status === 200 && articleResponse.data?.article) {
+      const article = articleResponse.data.article;
+      const createResponse = await createBookmark({
         title: article.title,
         description: article.description,
         articleId: article.id,

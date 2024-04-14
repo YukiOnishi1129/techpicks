@@ -2,6 +2,14 @@
 
 import { BookmarkType } from "@/types/bookmark";
 
+export type FetchBookmarkListAPIResponse = {
+  data: {
+    bookmarks: BookmarkType[];
+    message: string;
+  };
+  status: number;
+};
+
 export const fetchBookmarkListAPI = async ({
   languageStatus,
   keyword,
@@ -12,7 +20,7 @@ export const fetchBookmarkListAPI = async ({
   keyword?: string;
   offset?: string;
   platformIdList: Array<string>;
-}) => {
+}): Promise<FetchBookmarkListAPIResponse> => {
   let url = `http://localhost:80/api/bookmarks/?offset=${offset}`;
   if (languageStatus) {
     url += `&languageStatus=${languageStatus}`;
@@ -35,5 +43,125 @@ export const fetchBookmarkListAPI = async ({
   });
   const data = await response.json();
 
-  return data.bookmarks as BookmarkType[];
+  return {
+    data: {
+      bookmarks: data.bookmarks as BookmarkType[],
+      message: "success",
+    },
+    status: response.status,
+  };
+};
+
+type FetchBookmarkCountAPIResponse = {
+  data: {
+    count?: number;
+    message: string;
+  };
+  status: number;
+};
+
+export const fetchBookmarkCountByArticleUrl = async ({
+  articleUrl,
+}: {
+  articleUrl: string;
+}): Promise<FetchBookmarkCountAPIResponse> => {
+  let url = `http://localhost:80/api/bookmarks/count/by-article-url/articleUrl=${articleUrl}`;
+  const response = await fetch(url, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+    next: { tags: ["bookmarks/count"] },
+    cache: "no-store",
+  });
+  const data = await response.json();
+  const status = response.status;
+
+  return {
+    data: {
+      count: data?.count as number | undefined,
+      message: data.message as string,
+    },
+    status,
+  };
+};
+
+type CreateBookmarkAPIRequest = {
+  title: string;
+  description: string;
+  articleId?: string;
+  articleUrl: string;
+  thumbnailURL: string;
+  platformId?: string;
+  platformName?: string;
+  platformUrl?: string;
+  platformFaviconUrl?: string;
+  isEng: boolean;
+};
+
+type CreateBookmarkAPIResponse = {
+  data: {
+    id: string;
+    message: string;
+  };
+  status: number;
+};
+
+export const createBookmarkAPI = async ({
+  title,
+  description,
+  articleId,
+  articleUrl,
+  thumbnailURL,
+  platformId,
+  platformName,
+  platformUrl,
+  platformFaviconUrl,
+  isEng,
+}: CreateBookmarkAPIRequest): Promise<CreateBookmarkAPIResponse> => {
+  let url = `http://localhost:80/api/bookmarks/`;
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      title,
+      description,
+      articleId,
+      articleUrl,
+      thumbnailURL,
+      platformId,
+      platformName,
+      platformUrl,
+      platformFaviconUrl,
+      isEng,
+    }),
+    next: { tags: ["bookmarks/create"] },
+    cache: "no-store",
+  });
+  const data = await response.json();
+  const status = response.status;
+
+  return {
+    data: {
+      id: data.id as string,
+      message: data.message as string,
+    },
+    status,
+  };
+};
+
+export const deleteBookmarkAPI = async ({ id }: { id: string }) => {
+  let url = `http://localhost:80/api/bookmarks/${id}`;
+  const response = await fetch(url, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    next: { tags: ["bookmarks/delete"] },
+    cache: "no-store",
+  });
+  const data = await response.json();
+
+  return data;
 };
