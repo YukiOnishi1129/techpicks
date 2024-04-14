@@ -13,6 +13,7 @@ export const useArticleBookmark = ({ article }: { article: ArticleType }) => {
   const [bookmarkId, setBookmarkId] = useState<string | undefined>(
     article.bookmarkId
   );
+
   const handleAddBookmark = useCallback(
     async (articleId: string) => {
       // TODO: repair api
