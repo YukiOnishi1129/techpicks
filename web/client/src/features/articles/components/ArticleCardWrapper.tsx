@@ -1,16 +1,9 @@
 "use client";
 import { User } from "@supabase/supabase-js";
-import { FC, useCallback, useState } from "react";
+import { FC } from "react";
 import { FcBookmark } from "react-icons/fc";
 import { MdOutlineBookmarkAdd } from "react-icons/md";
 // import { uuid } from "uuidv4";
-
-import {
-  createBookmark,
-  deleteBookmark,
-  getBookmarkCountByArticleId,
-  getBookmarkCountById,
-} from "@/features/bookmarks/repository/bookmark";
 
 import { Button } from "@/components/ui/button";
 
@@ -18,6 +11,7 @@ import { ArticleType } from "@/types/article";
 
 import { ArticleCard } from "./ArticleCard";
 import { ArticleDetailSheet } from "./ArticleDetailSheet";
+import { useArticleBookmark } from "../hooks/useBookmark";
 
 type ArticleCardWrapperProps = {
   article: ArticleType;
@@ -28,54 +22,8 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
   article,
   user,
 }: ArticleCardWrapperProps) => {
-  const [bookmarkId, setBookmarkId] = useState<string | undefined>(
-    article.bookmarkId
-  );
-  const handleAddBookmark = useCallback(
-    async (articleId: string) => {
-      if (!user) return;
-      const count = await getBookmarkCountByArticleId({
-        articleId: articleId,
-        userId: user.id,
-      });
-      if (count > 0) return;
-
-      const id = await createBookmark({
-        title: article.title,
-        description: article.description,
-        articleId: article.id,
-        articleUrl: article.articleUrl,
-        publishedAt: article.publishedAt,
-        thumbnailURL: article.thumbnailURL,
-        isRead: false,
-        userId: user.id,
-        platformId: article.platform.id,
-        isEng: article.platform.isEng,
-        platformName: article.platform.name,
-        platformUrl: article.platform.siteUrl,
-        platformFaviconUrl: article.platform.faviconUrl,
-      });
-      setBookmarkId(id);
-    },
-    [article, user]
-  );
-
-  const handleRemoveBookmark = useCallback(
-    async (bookmarkId: string) => {
-      if (!user || !bookmarkId) return;
-      const count = await getBookmarkCountById({
-        bookmarkId: bookmarkId,
-        userId: user.id,
-      });
-      if (count === 0) return;
-      await deleteBookmark({
-        bookmarkId: bookmarkId,
-        userId: user.id,
-      });
-      setBookmarkId(undefined);
-    },
-    [user]
-  );
+  const { bookmarkId, handleAddBookmark, handleRemoveBookmark } =
+    useArticleBookmark({ article });
 
   return (
     <div key={article.id} className="relative py-2">

@@ -90,6 +90,7 @@ type CreateBookmarkAPIRequest = {
   description: string;
   articleId?: string;
   articleUrl: string;
+  publishedAt?: Date;
   thumbnailURL: string;
   platformId?: string;
   platformName?: string;
@@ -111,6 +112,7 @@ export const createBookmarkAPI = async ({
   description,
   articleId,
   articleUrl,
+  publishedAt,
   thumbnailURL,
   platformId,
   platformName,
@@ -129,6 +131,7 @@ export const createBookmarkAPI = async ({
       description,
       articleId,
       articleUrl,
+      publishedAt,
       thumbnailURL,
       platformId,
       platformName,

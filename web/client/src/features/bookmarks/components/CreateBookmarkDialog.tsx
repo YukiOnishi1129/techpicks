@@ -38,8 +38,10 @@ import { Input } from "@/components/ui/input";
 
 import { OgpType } from "@/types/ogp";
 
-import { fetchBookmarkCountByArticleUrl } from "../actions/bookmark";
-import { createBookmark } from "../repository/bookmark";
+import {
+  createBookmarkAPI,
+  fetchBookmarkCountByArticleUrl,
+} from "../actions/bookmark";
 
 type CreateBookmarkDialogProps = {
   user: User | undefined;
@@ -98,14 +100,12 @@ export const CreateBookmarkDialog: FC<CreateBookmarkDialogProps> = ({
 
     if (articleResponse.status === 200 && articleResponse.data?.article) {
       const article = articleResponse.data.article;
-      const createResponse = await createBookmark({
+      const createResponse = await createBookmarkAPI({
         title: article.title,
         description: article.description,
         articleId: article.id,
         articleUrl: article.articleUrl,
         thumbnailURL: article.thumbnailURL,
-        isRead: false,
-        userId: user.id,
         platformId: article.platform.id,
         platformName: article.platform.name,
         platformUrl: article.platform.siteUrl,
@@ -116,13 +116,11 @@ export const CreateBookmarkDialog: FC<CreateBookmarkDialogProps> = ({
       return;
     }
     // 3. If not, get ogp data and register that data to article table and bookmark table.
-    const res = await createBookmark({
+    const res = await createBookmarkAPI({
       title: ogpData?.title || "",
       description: ogpData?.description || "",
       articleUrl: url,
       thumbnailURL: ogpData?.image || "",
-      isRead: false,
-      userId: user.id,
       platformName: ogpData?.siteName || "",
       platformUrl: ogpData?.siteUrl || "",
       platformFaviconUrl: ogpData?.favIconImage || "",

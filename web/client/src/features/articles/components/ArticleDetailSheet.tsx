@@ -1,16 +1,9 @@
 "use client";
 import { User } from "@supabase/supabase-js";
 import Link from "next/link";
-import { FC, useState, useCallback } from "react";
+import { FC, useState } from "react";
 import { FcBookmark } from "react-icons/fc";
 import { MdOutlineBookmarkAdd } from "react-icons/md";
-
-import {
-  createBookmark,
-  deleteBookmark,
-  getBookmarkCountByArticleId,
-  getBookmarkCountById,
-} from "@/features/bookmarks/repository/bookmark";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -29,6 +22,8 @@ import { useParseHtml } from "@/hooks/useParseHtml";
 import { formatShowDateTime } from "@/lib/date";
 
 import { ArticleType } from "@/types/article";
+
+import { useArticleBookmark } from "../hooks/useBookmark";
 
 type ArticleDetailSheetProps = {
   article: ArticleType;
@@ -75,56 +70,8 @@ const ArticleContent = ({
 }) => {
   const imageUrl = useCheckImageExist(article.thumbnailURL);
   const { convertParseHtml } = useParseHtml();
-  const [bookmarkId, setBookmarkId] = useState<string | undefined>(
-    article.bookmarkId
-  );
-
-  const handleAddBookmark = useCallback(
-    async (articleId: string) => {
-      if (!user) return;
-      const count = await getBookmarkCountByArticleId({
-        articleId: articleId,
-        userId: user.id,
-      });
-      if (count > 0) return;
-      const id = await createBookmark({
-        title: article.title,
-        description: article.description,
-        articleId: article.id,
-        articleUrl: article.articleUrl,
-        publishedAt: article.publishedAt,
-        thumbnailURL: article.thumbnailURL,
-        isRead: false,
-        isEng: article.platform.isEng,
-        userId: user.id,
-        platformId: article.platform.id,
-        platformName: article.platform.name,
-        platformUrl: article.platform.siteUrl,
-        platformFaviconUrl: article.platform.faviconUrl,
-      });
-      setBookmarkId(id);
-    },
-    [article, user]
-  );
-
-  const handleRemoveBookmark = useCallback(
-    async (bookmarkId: string) => {
-      if (!user || !bookmarkId) return;
-
-      const count = await getBookmarkCountById({
-        bookmarkId: bookmarkId,
-        userId: user.id,
-      });
-      if (count === 0) return;
-
-      await deleteBookmark({
-        bookmarkId: bookmarkId,
-        userId: user.id,
-      });
-      setBookmarkId(undefined);
-    },
-    [user]
-  );
+  const { bookmarkId, handleAddBookmark, handleRemoveBookmark } =
+    useArticleBookmark({ article });
 
   return (
     <>
