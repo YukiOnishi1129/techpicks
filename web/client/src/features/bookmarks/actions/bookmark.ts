@@ -12,6 +12,13 @@ export type FetchBookmarkListAPIResponse = {
   status: number;
 };
 
+/**
+ * Fetch Bookmark List API
+ * @param languageStatus
+ * @param keyword
+ * @param offset
+ * @param platformIdList
+ */
 export const fetchBookmarkListAPI = async ({
   languageStatus,
   keyword,
@@ -60,6 +67,39 @@ type FetchBookmarkCountAPIResponse = {
   status: number;
 };
 
+/**
+ * Fetch Bookmark By Id Count API
+ * @param {bookmarkId: string}
+ * @returns
+ */
+export const fetchBookmarkByIdCountAPI = async ({
+  bookmarkId,
+}: {
+  bookmarkId: string;
+}): Promise<FetchBookmarkCountAPIResponse> => {
+  let url = `http://localhost:80/api/bookmarks/count/${bookmarkId}`;
+  const response = await getFetch({
+    url,
+    tagName: "bookmarks/count",
+    cacheType: "no-store",
+  });
+  const data = await response.json();
+  const status = response.status;
+
+  return {
+    data: {
+      count: data?.count as number | undefined,
+      message: data.message as string,
+    },
+    status,
+  };
+};
+
+/**
+ * Fetch Bookmark Count By ArticleId API
+ * @param {articleId: string}
+ * @returns
+ */
 export const fetchBookmarkCountByArticleIdAPI = async ({
   articleId,
 }: {
@@ -83,6 +123,11 @@ export const fetchBookmarkCountByArticleIdAPI = async ({
   };
 };
 
+/**
+ * Fetch Bookmark Count By ArticleUrl API
+ * @param {articleUrl: string}
+ * @returns
+ */
 export const fetchBookmarkCountByArticleUrl = async ({
   articleUrl,
 }: {
@@ -131,6 +176,11 @@ type CreateBookmarkAPIResponse = {
   status: number;
 };
 
+/**
+ * Create Bookmark API
+ * @param {CreateBookmarkAPIRequest}
+ * @returns
+ */
 export const createBookmarkAPI = async ({
   title,
   description,
@@ -185,6 +235,11 @@ type DeleteBookmarkAPIResponse = {
   status: number;
 };
 
+/**
+ * Delete Bookmark API
+ * @param {bookmarkId: string}
+ * @returns
+ */
 export const deleteBookmarkAPI = async ({
   bookmarkId,
 }: {

@@ -3,9 +3,9 @@ import { useState, useCallback } from "react";
 import {
   createBookmarkAPI,
   deleteBookmarkAPI,
+  fetchBookmarkByIdCountAPI,
   fetchBookmarkCountByArticleIdAPI,
 } from "@/features/bookmarks/actions/bookmark";
-import { getBookmarkCountById } from "@/features/bookmarks/repository/bookmark";
 
 import { ArticleType } from "@/types/article";
 
@@ -43,12 +43,14 @@ export const useArticleBookmark = ({ article }: { article: ArticleType }) => {
 
   const handleRemoveBookmark = useCallback(async (bookmarkId: string) => {
     if (!bookmarkId) return;
-    // TODO: repair api
-    const count = await getBookmarkCountById({
+    const res = await fetchBookmarkByIdCountAPI({
       bookmarkId: bookmarkId,
-      userId: "",
     });
-    if (count === 0) return;
+    // TODO: show 401 error message
+    if (res.status !== 200) return;
+    // TODO: show 404 error message
+    if (!res.data?.count) return;
+
     const { status } = await deleteBookmarkAPI({
       bookmarkId: bookmarkId,
     });
