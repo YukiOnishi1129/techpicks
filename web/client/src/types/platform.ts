@@ -18,4 +18,4 @@ export type PlatformType =
 type PlatformTypeUnknown = 0;
 type PlatformTypeSite = 1;
 type PlatformTypeCompany = 2;
-type PlatformTypeSummary = 2;
+type PlatformTypeSummary = 3;

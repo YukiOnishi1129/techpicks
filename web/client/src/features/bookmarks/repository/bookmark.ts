@@ -1,5 +1,8 @@
 "use server";
 
+// eslint-disable-next-line import/named
+import { v4 as uuidv4 } from "uuid";
+
 import { getUser } from "@/features/users/actions/user";
 
 import prisma from "@/lib/prisma";
@@ -8,8 +11,6 @@ import { BookmarkType } from "@/types/bookmark";
 import { LanguageStatus } from "@/types/language";
 
 const LIMIT = 20;
-
-const { v4: uuidv4 } = require("uuid");
 
 type GetBookmarkList = {
   platformId?: string;
@@ -119,17 +120,17 @@ export const getBookmarkList = async ({
     const bookmarkList: Array<BookmarkType> = res.map((bookmark) => {
       const bookmarkData: BookmarkType = {
         id: bookmark.id,
-        articleId: bookmark?.articleId,
+        articleId: bookmark?.articleId || undefined,
         title: bookmark.title,
         description: bookmark.description,
         articleUrl: bookmark.articleUrl,
-        publishedAt: bookmark.publishedAt,
-        thumbnailURL: bookmark.thumbnailURL,
+        publishedAt: bookmark.publishedAt || undefined,
+        thumbnailURL: bookmark.thumbnailURL || undefined,
         isRead: bookmark.isRead,
         isEng: bookmark.isEng,
-        platformName: bookmark.platformName,
-        platformUrl: bookmark.platformUrl,
-        platformFaviconUrl: bookmark.platformFaviconUrl,
+        platformName: bookmark.platformName || undefined,
+        platformUrl: bookmark.platformUrl || undefined,
+        platformFaviconUrl: bookmark.platformFaviconUrl || undefined,
         user: {
           id: bookmark.profile.id,
           name: bookmark.profile.name,
@@ -195,17 +196,17 @@ export const getBookmark = async ({ bookmarkId, userId }: GetBookmarkDTO) => {
 
     const bookmarkData: BookmarkType = {
       id: data.id,
-      articleId: data?.articleId,
+      articleId: data?.articleId || undefined,
       title: data.title,
       description: data.description,
       articleUrl: data.articleUrl,
-      publishedAt: data.publishedAt,
-      thumbnailURL: data.thumbnailURL,
+      publishedAt: data.publishedAt || undefined,
+      thumbnailURL: data.thumbnailURL || undefined,
       isRead: data.isRead,
       isEng: data.isEng,
-      platformName: data.platformName,
-      platformUrl: data.platformUrl,
-      platformFaviconUrl: data.platformFaviconUrl,
+      platformName: data.platformName || undefined,
+      platformUrl: data.platformUrl || undefined,
+      platformFaviconUrl: data.platformFaviconUrl || undefined,
       user: {
         id: data.profile.id,
         name: data.profile.name,
