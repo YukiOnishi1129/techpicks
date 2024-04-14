@@ -18,11 +18,10 @@ export const useArticleBookmark = ({ article }: { article: ArticleType }) => {
 
   const handleAddBookmark = useCallback(
     async (articleId: string) => {
-      const countResponse = await fetchBookmarkCountByArticleIdAPI({
+      const { data, status } = await fetchBookmarkCountByArticleIdAPI({
         articleId: articleId,
       });
-      const count = countResponse.data?.count;
-      if (count && count > 0) return;
+      if (data?.count && data.count > 0) return;
 
       const createResponse = await createBookmarkAPI({
         title: article.title,
