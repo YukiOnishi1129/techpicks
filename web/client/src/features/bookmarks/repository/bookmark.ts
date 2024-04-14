@@ -254,13 +254,13 @@ export const getBookmarkCountByArticleId = async ({
   userId: string;
 }) => {
   try {
-    const res = await prisma.bookmark.count({
+    const count = await prisma.bookmark.count({
       where: {
         userId: userId,
         articleId: articleId,
       },
     });
-    return res;
+    return count;
   } catch (err) {
     throw new Error(`Failed to get bookmark count: ${err}`);
   }

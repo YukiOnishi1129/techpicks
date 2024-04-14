@@ -1,8 +1,10 @@
 import { useState, useCallback } from "react";
 
-import { createBookmarkAPI } from "@/features/bookmarks/actions/bookmark";
 import {
-  getBookmarkCountByArticleId,
+  createBookmarkAPI,
+  fetchBookmarkCountByArticleIdAPI,
+} from "@/features/bookmarks/actions/bookmark";
+import {
   getBookmarkCountById,
   deleteBookmark,
 } from "@/features/bookmarks/repository/bookmark";
@@ -16,12 +18,11 @@ export const useArticleBookmark = ({ article }: { article: ArticleType }) => {
 
   const handleAddBookmark = useCallback(
     async (articleId: string) => {
-      // TODO: repair api
-      const count = await getBookmarkCountByArticleId({
+      const countResponse = await fetchBookmarkCountByArticleIdAPI({
         articleId: articleId,
-        userId: "",
       });
-      if (count > 0) return;
+      const count = countResponse.data?.count;
+      if (count && count > 0) return;
 
       const createResponse = await createBookmarkAPI({
         title: article.title,

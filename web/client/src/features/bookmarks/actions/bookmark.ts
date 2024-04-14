@@ -60,6 +60,31 @@ type FetchBookmarkCountAPIResponse = {
   status: number;
 };
 
+export const fetchBookmarkCountByArticleIdAPI = async ({
+  articleId,
+}: {
+  articleId: string;
+}): Promise<FetchBookmarkCountAPIResponse> => {
+  let url = `http://localhost:80/api/bookmarks/count/by-article-id/articleId=${articleId}`;
+  const response = await fetch(url, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+    next: { tags: ["bookmarks/count"] },
+    cache: "no-store",
+  });
+  const data = await response.json();
+  const status = response.status;
+
+  return {
+    data: {
+      count: data?.count as number | undefined,
+      message: data.message as string,
+    },
+    status,
+  };
+};
+
 export const fetchBookmarkCountByArticleUrl = async ({
   articleUrl,
 }: {
