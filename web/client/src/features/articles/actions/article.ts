@@ -1,5 +1,7 @@
 "use server";
 
+import { getFetch } from "@/lib/fetch";
+
 import { ArticleTabType, ArticleType } from "@/types/article";
 
 export type FetchArticlesAPIResponse = {
@@ -36,12 +38,10 @@ export const fetchArticlesAPI = async ({
       .join("");
     url += platformIdPath;
   }
-  const response = await fetch(url, {
-    headers: {
-      "Content-Type": "application/json",
-    },
-    next: { tags: ["articles"] },
-    cache: "no-store",
+  const response = await getFetch({
+    url,
+    tagName: "articles",
+    cacheType: "no-store",
   });
   const data = await response.json();
   const status = response.status;
@@ -71,12 +71,10 @@ export const fetchArticleByArticleAndPlatformUrlAPI = async ({
   platformUrl: string;
 }): Promise<FetchArticleByArticleAndPlatformUrlAPIResponse> => {
   let url = `http://localhost:80/api/articles/article-platform-url?articleUrl=${articleUrl}&platformUrl=${platformUrl}`;
-  const response = await fetch(url, {
-    headers: {
-      "Content-Type": "application/json",
-    },
-    next: { tags: ["articles/byArticleAndPlatformUrl"] },
-    cache: "no-store",
+  const response = await getFetch({
+    url,
+    tagName: "articles/byArticleAndPlatformUrl",
+    cacheType: "no-store",
   });
   const data = await response.json();
   const status = response.status;

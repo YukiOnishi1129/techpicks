@@ -41,3 +41,24 @@ export const postFetch = async ({
     cache: cacheType,
   });
 };
+
+type DeleteFetchArg = {
+  url: string;
+  tagName: string;
+  cacheType: RequestCache;
+};
+
+export const deleteFetch = async ({
+  url,
+  tagName,
+  cacheType = "no-store",
+}: DeleteFetchArg) => {
+  return fetch(url, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    next: { tags: [tagName] },
+    cache: cacheType,
+  });
+};
