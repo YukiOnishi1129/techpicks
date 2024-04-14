@@ -20,7 +20,7 @@ export const BookmarkListTemplate: FC<ArticleListProps> = async ({
   keyword,
   platformIdList,
 }: ArticleListProps) => {
-  const bookmarks = await fetchBookmarkListAPI({
+  const res = await fetchBookmarkListAPI({
     languageStatus: languageStatus.toString(),
     keyword,
     platformIdList,
@@ -39,7 +39,7 @@ export const BookmarkListTemplate: FC<ArticleListProps> = async ({
       {languageStatus === 1 && (
         <BookmarkList
           user={user}
-          initialBookmarks={bookmarks}
+          initialBookmarks={res.data.bookmarks}
           languageStatus={languageStatus}
           keyword={keyword}
           platformIdList={platformIdList}
@@ -49,7 +49,7 @@ export const BookmarkListTemplate: FC<ArticleListProps> = async ({
       {languageStatus === 2 && (
         <BookmarkList
           user={user}
-          initialBookmarks={bookmarks}
+          initialBookmarks={res.data.bookmarks}
           languageStatus={languageStatus}
           keyword={keyword}
           platformIdList={platformIdList}

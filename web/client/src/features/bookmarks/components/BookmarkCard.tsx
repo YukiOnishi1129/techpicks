@@ -37,17 +37,18 @@ export const BookmarkCard: FC<BookmarkCardProps> = ({
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               className="mr-2 inline-block size-[24px]"
-              src={bookmark.platform?.faviconUrl}
+              src={bookmark.platformFaviconUrl}
               alt=""
             />
             <p className="inline-block rounded-lg  bg-sky-500 px-2 py-1 text-xs font-bold text-white md:text-base">
-              {bookmark.platform?.name}
+              {bookmark.platformName}
             </p>
           </div>
-
-          <p className="flex pt-2 text-sm">
-            {showDiffDateToCurrentDate(bookmark.publishedAt)}
-          </p>
+          {bookmark.publishedAt && (
+            <p className="flex pt-2 text-sm">
+              {showDiffDateToCurrentDate(bookmark.publishedAt)}
+            </p>
+          )}
         </div>
       </div>
     </div>

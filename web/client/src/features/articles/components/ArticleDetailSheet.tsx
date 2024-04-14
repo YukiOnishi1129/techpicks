@@ -23,7 +23,7 @@ import { formatShowDateTime } from "@/lib/date";
 
 import { ArticleType } from "@/types/article";
 
-import { useArticleBookmark } from "../hooks/useBookmark";
+import { useArticleBookmark } from "../hooks/useArticleBookmark";
 
 type ArticleDetailSheetProps = {
   article: ArticleType;

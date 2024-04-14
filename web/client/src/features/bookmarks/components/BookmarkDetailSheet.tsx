@@ -34,7 +34,6 @@ export const BookmarkDetailSheet: FC<BookmarkDetailSheetProps> = ({
   return (
     <Sheet>
       <SheetTrigger>
-        {" "}
         <div
           role="button"
           tabIndex={1}
@@ -75,23 +74,23 @@ const BookmarkContent = ({ bookmark }: { bookmark: BookmarkType }) => {
         <div className="pb-0">
           <Link
             className="hover:opacity-80"
-            href={bookmark.platform?.siteUrl || ""}
+            href={bookmark?.platformUrl || ""}
             target="_blank"
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               className="mr-2 inline-block size-[24px]"
-              src={bookmark.platform?.faviconUrl || ""}
+              src={bookmark?.platformFaviconUrl || ""}
               alt=""
             />
           </Link>
           <Link
             className="hover:opacity-80"
-            href={bookmark.platform?.siteUrl || ""}
+            href={bookmark?.platformUrl || ""}
             target="_blank"
           >
             <span className="rounded-lg bg-sky-500 px-2 py-1 text-xs font-bold text-white md:text-base">
-              {bookmark.platform?.name || ""}
+              {bookmark?.platformName || ""}
             </span>
           </Link>
 

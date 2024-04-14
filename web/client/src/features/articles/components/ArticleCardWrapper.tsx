@@ -11,7 +11,7 @@ import { ArticleType } from "@/types/article";
 
 import { ArticleCard } from "./ArticleCard";
 import { ArticleDetailSheet } from "./ArticleDetailSheet";
-import { useArticleBookmark } from "../hooks/useBookmark";
+import { useArticleBookmark } from "../hooks/useArticleBookmark";
 
 type ArticleCardWrapperProps = {
   article: ArticleType;
