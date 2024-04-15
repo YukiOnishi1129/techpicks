@@ -4,5 +4,5 @@ export type OgpType = {
   siteUrl: string;
   siteName: string;
   image: string;
-  favIconImage: string;
+  faviconImage: string;
 };

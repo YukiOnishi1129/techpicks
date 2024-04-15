@@ -70,13 +70,15 @@ export const getOgpData = async (url: string) => {
 
   const image = await setImagePath(url, imageSrc);
 
+  const faviconUrl = await setFaviconUrl(url, favIconImage);
+
   const ogpData: OgpType = {
     title,
     description,
     siteUrl,
     siteName,
     image,
-    favIconImage,
+    faviconImage: faviconUrl,
   };
 
   return ogpData;
@@ -92,4 +94,13 @@ const setImagePath = async (url: string, imageUrl: string) => {
 const getDomainUrl = async (url: string) => {
   const { protocol, host } = new URL(url);
   return new URL(`${protocol}//${host}`).toString();
+};
+
+const setFaviconUrl = async (url: string, faviconUrl: string) => {
+  const str = "http";
+  if (!str.indexOf(faviconUrl)) {
+    return faviconUrl;
+  }
+  const { protocol, host } = new URL(url);
+  return new URL(faviconUrl, `${protocol}//${host}`).toString();
 };

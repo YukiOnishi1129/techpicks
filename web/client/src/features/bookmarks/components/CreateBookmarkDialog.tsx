@@ -155,7 +155,7 @@ export const CreateBookmarkDialog: FC<CreateBookmarkDialogProps> = ({
       userId: user?.id || "",
       platformName: ogpData?.siteName || "",
       platformUrl: ogpData?.siteUrl || "",
-      platformFaviconUrl: ogpData?.favIconImage || "",
+      platformFaviconUrl: ogpData?.faviconImage || "",
       isEng: isEng,
     });
     if (!id) {
@@ -227,7 +227,7 @@ export const CreateBookmarkDialog: FC<CreateBookmarkDialogProps> = ({
 
                 <div>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img className="size-6" src={ogpData.favIconImage} alt="" />
+                  <img className="size-6" src={ogpData.faviconImage} alt="" />
                   <span>
                     <Link href={ogpData.siteUrl} target="_blank">
                       {ogpData.siteName}
