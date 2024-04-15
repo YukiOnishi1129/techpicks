@@ -36,6 +36,10 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
+import { useStatusToast } from "@/hooks/useStatusToast";
+
+import { checkJapaneseArticle } from "@/lib/check";
+
 import { OgpType } from "@/types/ogp";
 
 import { fetchBookmarkCountByArticleUrlAPI } from "../actions/bookmark";
@@ -50,6 +54,7 @@ export const CreateBookmarkDialog: FC<CreateBookmarkDialogProps> = ({
 }: CreateBookmarkDialogProps) => {
   const [ogpData, setOgpData] = useState<OgpType | null>(null);
   const [isPending, startTransition] = useTransition();
+  const { successToast, failToast } = useStatusToast();
   const FormSchema = z.object({
     url: z.string().min(1, {
       message: "Please enter a valid URL",
@@ -78,17 +83,30 @@ export const CreateBookmarkDialog: FC<CreateBookmarkDialogProps> = ({
   );
 
   const handleAddSubmit = useCallback(async () => {
-    console.log("Add bookmark");
-    if (!user) return;
+    if (!user) {
+      failToast({
+        description: "Fail: Please login to bookmark this article",
+      });
+      return;
+    }
     // 1. check article is already bookmarked
     const url = form.getValues("url");
     const countResponse = await fetchBookmarkCountByArticleUrlAPI({
       articleUrl: url,
     });
-    if (countResponse.status !== 200) return;
+    if (countResponse.status !== 200) {
+      failToast({
+        description: "Fail: fetch bookmark count failed",
+      });
+      return;
+    }
     const count = countResponse.data?.count;
-    // TODO: if count > 0, show error message
-    if (count != undefined && count > 0) return;
+    if (count != undefined && count > 0) {
+      failToast({
+        description: "Fail: This article is already bookmarked",
+      });
+      return;
+    }
 
     // 2. If same article url is in article table, register that date to bookmark table.
     const articleResponse = await fetchArticleByArticleAndPlatformUrlAPI({
@@ -98,7 +116,7 @@ export const CreateBookmarkDialog: FC<CreateBookmarkDialogProps> = ({
 
     if (articleResponse.status === 200 && articleResponse.data?.article) {
       const article = articleResponse.data.article;
-      const createResponse = await createBookmark({
+      const id = await createBookmark({
         title: article.title,
         description: article.description,
         articleId: article.id,
@@ -112,10 +130,22 @@ export const CreateBookmarkDialog: FC<CreateBookmarkDialogProps> = ({
         platformFaviconUrl: article.platform.faviconUrl,
         isEng: article.platform.isEng,
       });
-      // TODO: show success message
+      if (!id) {
+        failToast({
+          description: "Fail: add bookmark failed",
+        });
+        return;
+      }
+      successToast({
+        description: "Success: add bookmark",
+      });
       return;
     }
     // 3. If not, get ogp data and register that data to article table and bookmark table.
+    const isEng = !checkJapaneseArticle({
+      title: ogpData?.title || "",
+      description: ogpData?.description || "",
+    });
     const id = await createBookmark({
       title: ogpData?.title || "",
       description: ogpData?.description || "",
@@ -126,18 +156,18 @@ export const CreateBookmarkDialog: FC<CreateBookmarkDialogProps> = ({
       platformName: ogpData?.siteName || "",
       platformUrl: ogpData?.siteUrl || "",
       platformFaviconUrl: ogpData?.favIconImage || "",
-      isEng: false,
+      isEng: isEng,
     });
-  }, [
-    form,
-    ogpData?.description,
-    ogpData?.favIconImage,
-    ogpData?.image,
-    ogpData?.siteName,
-    ogpData?.siteUrl,
-    ogpData?.title,
-    user,
-  ]);
+    if (!id) {
+      failToast({
+        description: "Fail: add bookmark failed",
+      });
+      return;
+    }
+    successToast({
+      description: "Success: add bookmark",
+    });
+  }, [form, failToast, successToast, user, ogpData]);
 
   return (
     <Dialog>

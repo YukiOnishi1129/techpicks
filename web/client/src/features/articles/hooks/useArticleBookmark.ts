@@ -10,14 +10,11 @@ import {
 } from "@/features/bookmarks/repository/bookmark";
 import { getUser } from "@/features/users/actions/user";
 
-import { useToast } from "@/components/ui/use-toast";
-
 import { useStatusToast } from "@/hooks/useStatusToast";
 
 import { ArticleType } from "@/types/article";
 
 export const useArticleBookmark = ({ article }: { article: ArticleType }) => {
-  const { toast } = useToast();
   const { successToast, failToast } = useStatusToast();
   const [bookmarkId, setBookmarkId] = useState<string | undefined>(
     article.bookmarkId
@@ -111,9 +108,8 @@ export const useArticleBookmark = ({ article }: { article: ArticleType }) => {
         userId: user?.id || "",
       });
       if (!id) {
-        toast({
-          variant: "destructive",
-          title: "Fail: Something went wrong",
+        failToast({
+          description: "Fail: Something went wrong",
         });
         return;
       }
@@ -122,7 +118,7 @@ export const useArticleBookmark = ({ article }: { article: ArticleType }) => {
       });
       setBookmarkId(undefined);
     },
-    [toast, successToast, failToast]
+    [successToast, failToast]
   );
 
   return {
