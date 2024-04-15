@@ -9,7 +9,11 @@ extend(timezone);
 dayjs.tz.setDefault("Asia/Tokyo");
 
 const getDayjsTz = (date?: Dayjs | Date | string | null) => {
-  return dayjs.tz(date);
+  if (!!date) {
+    const convertedDate = new Date(date as Date);
+    return dayjs.tz(convertedDate);
+  }
+  return dayjs.tz();
 };
 
 export const getCurrentDate = () => {
@@ -39,15 +43,14 @@ export const diffDates = (nowUnixTime: number, targetUnixTime: number) => {
 };
 
 export const showDiffDateToCurrentDate = (targetDate: Date) => {
-  // const targetDateUnixTime = targetDate.getTime();
-
-  const targetDateUnixTime = convertUnixTime(getDayjsTz(targetDate.toString()));
+  const convertedTargetDate = getDayjsTz(targetDate);
+  const targetDateUnixTime = convertUnixTime(convertedTargetDate);
   const currentUnixTime = convertUnixTime(getDayjsTz());
   const diffHour = diffHours(currentUnixTime, targetDateUnixTime);
 
   if (diffHour < 24) {
-    return `${diffHour}時間前  (${getDayjsTz(targetDate.toString()).format("YYYY年M月DD日 H時m分")})`;
+    return `${diffHour}時間前  (${convertedTargetDate.format("YYYY年M月DD日 H時m分")})`;
   }
   const date = diffDates(currentUnixTime, targetDateUnixTime);
-  return `${date % 24}日前  (${getDayjsTz(targetDate.toString())})`;
+  return `${date % 24}日前  (${convertedTargetDate.format("YYYY年M月DD日 H時m分")})`;
 };

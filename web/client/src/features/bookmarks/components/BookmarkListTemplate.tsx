@@ -6,6 +6,7 @@ import { LanguageStatus } from "@/types/language";
 
 import { BookmarkLanguageTabMenu } from "./BookmarkLanguageTabMenu";
 import { BookmarkList } from "./BookmarkList";
+import { CreateBookmarkDialog } from "./CreateBookmarkDialog";
 import { fetchBookmarkListAPI } from "../actions/bookmark";
 
 type ArticleListProps = {
@@ -19,7 +20,7 @@ export const BookmarkListTemplate: FC<ArticleListProps> = async ({
   keyword,
   platformIdList,
 }: ArticleListProps) => {
-  const bookmarks = await fetchBookmarkListAPI({
+  const res = await fetchBookmarkListAPI({
     languageStatus: languageStatus.toString(),
     keyword,
     platformIdList,
@@ -28,6 +29,7 @@ export const BookmarkListTemplate: FC<ArticleListProps> = async ({
   return (
     <div className="w-auto">
       <h1 className="mb-4 mt-8 text-2xl font-bold text-gray-800">Read Later</h1>
+      <CreateBookmarkDialog user={user} />
       <div className="w-full border-b-2 bg-white py-4">
         <BookmarkLanguageTabMenu
           languageStatus={languageStatus}
@@ -37,7 +39,7 @@ export const BookmarkListTemplate: FC<ArticleListProps> = async ({
       {languageStatus === 1 && (
         <BookmarkList
           user={user}
-          initialBookmarks={bookmarks}
+          initialBookmarks={res.data.bookmarks}
           languageStatus={languageStatus}
           keyword={keyword}
           platformIdList={platformIdList}
@@ -47,7 +49,7 @@ export const BookmarkListTemplate: FC<ArticleListProps> = async ({
       {languageStatus === 2 && (
         <BookmarkList
           user={user}
-          initialBookmarks={bookmarks}
+          initialBookmarks={res.data.bookmarks}
           languageStatus={languageStatus}
           keyword={keyword}
           platformIdList={platformIdList}

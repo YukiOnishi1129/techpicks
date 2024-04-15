@@ -1,4 +1,4 @@
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 import { getArticles } from "@/features/articles/repository/article";
 
@@ -24,15 +24,26 @@ export async function GET(req: NextRequest) {
     offset: parseInt(offset || "1"),
     tab: tab,
   });
-  return Response.json(
-    { articles: articles, message: "success" },
+
+  if (articles.length === 0) {
+    return NextResponse.json(
+      {
+        articles: [],
+        message: "No articles found",
+      },
+      {
+        status: 404,
+      }
+    );
+  }
+
+  return NextResponse.json(
+    {
+      articles: articles,
+      message: "success",
+    },
     {
       status: 200,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-        "Access-Control-Allow-Headers": "Content-Type, Authorization",
-      },
     }
   );
 }

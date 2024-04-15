@@ -4,7 +4,6 @@ import Link from "next/link";
 import { FC, useCallback, useState } from "react";
 import { FcBookmark } from "react-icons/fc";
 import { MdOutlineBookmarkAdd } from "react-icons/md";
-import { uuid } from "uuidv4";
 
 import {
   createBookmark,
@@ -80,18 +79,20 @@ const ArticleContent = ({
 
   const handleAddBookmark = useCallback(async () => {
     if (!user) return;
-    const uniqueId = uuid();
     const id = await createBookmark({
-      id: uniqueId,
       title: article.title,
       description: article.description,
       articleId: article.id,
       articleUrl: article.articleUrl,
       publishedAt: article.publishedAt,
       thumbnailURL: article.thumbnailURL,
-      isRead: false,
-      userId: user.id,
       platformId: article.platform.id,
+      isRead: false,
+      isEng: article.platform.isEng,
+      userId: user.id,
+      platformName: article.platform.name,
+      platformUrl: article.platform.siteUrl,
+      platformFaviconUrl: article.platform.faviconUrl,
     });
     setBookmarkId(id);
   }, [article, user]);

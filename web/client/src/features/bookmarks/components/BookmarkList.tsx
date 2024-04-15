@@ -10,6 +10,7 @@ import { LanguageStatus } from "@/types/language";
 
 import { BookmarkCard } from "./BookmarkCard";
 import { BookmarkDetailSheet } from "./BookmarkDetailSheet";
+import { FetchBookmarkListAPIResponse } from "../actions/bookmark";
 
 type Props = {
   user: User | undefined;
@@ -27,7 +28,7 @@ type Props = {
     keyword?: string;
     offset: string;
     platformIdList: Array<string>;
-  }) => Promise<BookmarkType[]>;
+  }) => Promise<FetchBookmarkListAPIResponse>;
 };
 
 export const BookmarkList: FC<Props> = ({
@@ -49,15 +50,15 @@ export const BookmarkList: FC<Props> = ({
 
   const loadMore = useCallback(
     async (offset: number) => {
-      const newBookmarks = await fetchBookmarks({
+      const res = await fetchBookmarks({
         offset: offset.toString(),
         keyword: keyword,
         languageStatus: languageStatus.toString(),
         platformIdList: platformIdList,
       });
-      setBookmarks((prev) => [...prev, ...newBookmarks]);
+      setBookmarks((prev) => [...prev, ...res.data.bookmarks]);
 
-      const count = newBookmarks.length;
+      const count = res.data.bookmarks.length;
       setHashMore(count > 0);
     },
     [fetchBookmarks, languageStatus, keyword, platformIdList]

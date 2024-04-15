@@ -8,6 +8,7 @@ import { ArticleTabType, ArticleType } from "@/types/article";
 import { LanguageStatus } from "@/types/language";
 
 import { ArticleCardWrapper } from "./ArticleCardWrapper";
+import { FetchArticlesAPIResponse } from "../actions/article";
 
 type Props = {
   user: User | undefined;
@@ -27,7 +28,7 @@ type Props = {
     offset: string;
     platformIdList: Array<string>;
     tab: ArticleTabType;
-  }) => Promise<ArticleType[]>;
+  }) => Promise<FetchArticlesAPIResponse>;
 };
 
 export function ArticleList({
@@ -49,16 +50,16 @@ export function ArticleList({
 
   const loadMore = useCallback(
     async (offset: number) => {
-      const newArticles = await fetchArticles({
+      const res = await fetchArticles({
         offset: offset.toString(),
         keyword: keyword,
         languageStatus: languageStatus.toString(),
         platformIdList: platformIdList,
         tab: tab,
       });
-      setArticles((prev) => [...prev, ...newArticles]);
+      setArticles((prev) => [...prev, ...res.data.articles]);
 
-      const count = newArticles.length;
+      const count = res.data.articles.length;
       setHashMore(count > 0);
     },
     [fetchArticles, languageStatus, keyword, platformIdList, tab]

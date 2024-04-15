@@ -1,8 +1,20 @@
 "use server";
 
+import { headers } from "next/headers";
+
+import { getFetch } from "@/lib/fetch";
+
 import { ArticleTabType, ArticleType } from "@/types/article";
 
-export const fetchArticleAPI = async ({
+export type FetchArticlesAPIResponse = {
+  data: {
+    articles: ArticleType[];
+    message: string;
+  };
+  status: number;
+};
+
+export const fetchArticlesAPI = async ({
   languageStatus,
   keyword,
   offset = "1",
@@ -14,7 +26,7 @@ export const fetchArticleAPI = async ({
   offset?: string;
   platformIdList: Array<string>;
   tab: ArticleTabType;
-}) => {
+}): Promise<FetchArticlesAPIResponse> => {
   let url = `http://localhost:80/api/articles/?offset=${offset}&tab=${tab}`;
   if (languageStatus) {
     url += `&languageStatus=${languageStatus}`;
@@ -28,14 +40,53 @@ export const fetchArticleAPI = async ({
       .join("");
     url += platformIdPath;
   }
-  const response = await fetch(url, {
-    headers: {
-      "Content-Type": "application/json",
-    },
-    next: { tags: ["articles"] },
-    cache: "no-store",
+  const header = headers();
+  const response = await getFetch({
+    url,
+    tagName: "articles",
+    cacheType: "no-store",
   });
   const data = await response.json();
+  const status = response.status;
 
-  return data.articles as ArticleType[];
+  return {
+    data: {
+      articles: data.articles as ArticleType[],
+      message: "success",
+    },
+    status,
+  };
+};
+
+export type FetchArticleByArticleAndPlatformUrlAPIResponse = {
+  data: {
+    article: ArticleType | undefined;
+    message: string;
+  };
+  status: number;
+};
+
+export const fetchArticleByArticleAndPlatformUrlAPI = async ({
+  articleUrl,
+  platformUrl,
+}: {
+  articleUrl: string;
+  platformUrl: string;
+}): Promise<FetchArticleByArticleAndPlatformUrlAPIResponse> => {
+  let url = `http://localhost:80/api/articles/article-platform-url?articleUrl=${articleUrl}&platformUrl=${platformUrl}`;
+  const response = await getFetch({
+    url,
+    tagName: "articles/byArticleAndPlatformUrl",
+    cacheType: "no-store",
+  });
+  const data = await response.json();
+  const status = response.status;
+
+  return {
+    data: {
+      article: data.article as ArticleType | undefined,
+      message: "success",
+    },
+    status,
+  };
 };

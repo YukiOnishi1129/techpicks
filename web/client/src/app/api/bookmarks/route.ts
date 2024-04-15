@@ -1,4 +1,4 @@
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 import { getBookmarkList } from "@/features/bookmarks/repository/bookmark";
 
@@ -21,15 +21,70 @@ export async function GET(req: NextRequest) {
     platformIdList: platformIdList,
     offset: parseInt(offset || "1"),
   });
-  return Response.json(
-    { bookmarks: bookmarks, message: "success" },
+
+  return NextResponse.json(
+    {
+      bookmarks: bookmarks,
+      message: "success",
+    },
     {
       status: 200,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-        "Access-Control-Allow-Headers": "Content-Type, Authorization",
-      },
     }
   );
 }
+
+// export async function POST(req: NextRequest) {
+//   const body = await req.json();
+//   const {
+//     title,
+//     description,
+//     articleId,
+//     articleUrl,
+//     publishedAt,
+//     thumbnailURL,
+//     platformId,
+//     platformName,
+//     platformUrl,
+//     platformFaviconUrl,
+//     isEng,
+//   } = body;
+
+//   const user = await getUser();
+
+//   if (!user) {
+//     return NextResponse.json(
+//       {
+//         message: "unauthorized",
+//       },
+//       {
+//         status: 401,
+//       }
+//     );
+//   }
+
+//   const bookmarkId = await createBookmark({
+//     title: title,
+//     description: description,
+//     articleId: articleId,
+//     articleUrl: articleUrl,
+//     publishedAt: publishedAt,
+//     thumbnailURL: thumbnailURL,
+//     isRead: false,
+//     userId: user.id,
+//     platformId: platformId,
+//     platformName: platformName,
+//     platformUrl: platformUrl,
+//     platformFaviconUrl: platformFaviconUrl,
+//     isEng: isEng,
+//   });
+
+//   return NextResponse.json(
+//     {
+//       id: bookmarkId,
+//       message: "success",
+//     },
+//     {
+//       status: 201,
+//     }
+//   );
+// }

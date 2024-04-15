@@ -12,7 +12,7 @@ import { LanguageStatus } from "@/types/language";
 
 import { ArticleLanguageSwitch } from "./ArticleLanguageSwitch";
 import { ArticleList } from "./ArticleList";
-import { fetchArticleAPI } from "../actions/article";
+import { fetchArticlesAPI } from "../actions/article";
 
 type ArticleListTemplateProps = {
   languageStatus: LanguageStatus;
@@ -107,7 +107,7 @@ const ArticleListContent = async ({
   user,
   tab,
 }: ArticleListContentProps) => {
-  const articles = await fetchArticleAPI({
+  const res = await fetchArticlesAPI({
     languageStatus: languageStatus.toString(),
     keyword,
     platformIdList,
@@ -126,23 +126,23 @@ const ArticleListContent = async ({
       {languageStatus === 1 && (
         <ArticleList
           user={user}
-          initialArticles={articles}
+          initialArticles={res.data.articles}
           languageStatus={languageStatus}
           keyword={keyword}
           platformIdList={platformIdList}
           tab={tab}
-          fetchArticles={fetchArticleAPI}
+          fetchArticles={fetchArticlesAPI}
         />
       )}
       {languageStatus === 2 && (
         <ArticleList
           user={user}
-          initialArticles={articles}
+          initialArticles={res.data.articles}
           languageStatus={languageStatus}
           keyword={keyword}
           platformIdList={platformIdList}
           tab={tab}
-          fetchArticles={fetchArticleAPI}
+          fetchArticles={fetchArticlesAPI}
         />
       )}
     </>

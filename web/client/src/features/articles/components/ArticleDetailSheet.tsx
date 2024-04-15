@@ -1,15 +1,9 @@
 "use client";
 import { User } from "@supabase/supabase-js";
 import Link from "next/link";
-import { FC, useState, useCallback } from "react";
+import { FC, useState } from "react";
 import { FcBookmark } from "react-icons/fc";
 import { MdOutlineBookmarkAdd } from "react-icons/md";
-import { uuid } from "uuidv4";
-
-import {
-  createBookmark,
-  deleteBookmark,
-} from "@/features/bookmarks/repository/bookmark";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -28,6 +22,8 @@ import { useParseHtml } from "@/hooks/useParseHtml";
 import { formatShowDateTime } from "@/lib/date";
 
 import { ArticleType } from "@/types/article";
+
+import { useArticleBookmark } from "../hooks/useArticleBookmark";
 
 type ArticleDetailSheetProps = {
   article: ArticleType;
@@ -74,40 +70,8 @@ const ArticleContent = ({
 }) => {
   const imageUrl = useCheckImageExist(article.thumbnailURL);
   const { convertParseHtml } = useParseHtml();
-  const [bookmarkId, setBookmarkId] = useState<string | undefined>(
-    article.bookmarkId
-  );
-
-  const handleAddBookmark = useCallback(async () => {
-    if (!user) return;
-    const uniqueId = uuid();
-    const id = await createBookmark({
-      id: uniqueId,
-      title: article.title,
-      description: article.description,
-      articleId: article.id,
-      articleUrl: article.articleUrl,
-      publishedAt: article.publishedAt,
-      thumbnailURL: article.thumbnailURL,
-      isRead: false,
-      userId: user.id,
-      platformId: article.platform.id,
-    });
-    setBookmarkId(id);
-  }, [article, user]);
-
-  const handleRemoveBookmark = useCallback(
-    async (bookmarkId: string) => {
-      if (!user || !bookmarkId) return;
-
-      await deleteBookmark({
-        bookmarkId: bookmarkId,
-        userId: user.id,
-      });
-      setBookmarkId(undefined);
-    },
-    [user]
-  );
+  const { bookmarkId, handleAddBookmark, handleRemoveBookmark } =
+    useArticleBookmark({ article });
 
   return (
     <>
@@ -174,7 +138,11 @@ const ArticleContent = ({
                 <FcBookmark className="inline-block" size={36} />
               </Button>
             ) : (
-              <Button variant="outline" size="icon" onClick={handleAddBookmark}>
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={() => handleAddBookmark(article.id)}
+              >
                 <MdOutlineBookmarkAdd className="inline-block" size={36} />
               </Button>
             )}

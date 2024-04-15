@@ -1,14 +1,14 @@
 import {
-  Platform as PrismaPlatform,
   Bookmark as PrismaPrismaBookmark,
   Profile as PrismaProfile,
 } from "@prisma/client";
 
+import { OptionalNullable } from "./util";
+
 export type BookmarkType = Omit<
-  PrismaPrismaBookmark,
+  OptionalNullable<PrismaPrismaBookmark>,
   "userId" | "platformId"
 > & {
-  platform?: Omit<PrismaPlatform, "deletedAt">;
   user: Omit<
     PrismaProfile,
     "emailVerifiedAt" | "isSuperAdmin" | "provider" | "deletedAt"

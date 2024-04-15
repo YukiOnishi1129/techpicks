@@ -1,10 +1,10 @@
 "use client";
-import { Label } from "@radix-ui/react-label";
+
 import { Loader } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { FC, useCallback, useState } from "react";
-import { z } from "zod";
 
+import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 
 import { ArticleTabType } from "@/types/article";
@@ -16,17 +16,13 @@ type ArticleLanguageSwitchProps = {
   tab: ArticleTabType;
 };
 
-const FormSchema = z.object({
-  is_eng: z.boolean(),
-});
-
 export const ArticleLanguageSwitch: FC<ArticleLanguageSwitchProps> = ({
   languageStatus,
   keyword,
   tab,
 }: ArticleLanguageSwitchProps) => {
   const switchLabel = languageStatus === 1 ? "Japanese" : "English";
-  const [isEng, setIsEng] = useState(languageStatus === 2);
+  const [isEng, setIsEng] = useState(switchLabel === "English");
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
