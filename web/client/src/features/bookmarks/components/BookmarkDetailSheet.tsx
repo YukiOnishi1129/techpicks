@@ -40,7 +40,6 @@ export const BookmarkDetailSheet: FC<BookmarkDetailSheetProps> = ({
           onClick={() => setOpen(true)}
           onKeyDown={(e) => {
             if (e.key === "Enter" || e.key === " ") {
-              // Enter or Space で実行
               setOpen(true);
             }
           }}
