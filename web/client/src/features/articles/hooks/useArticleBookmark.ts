@@ -12,10 +12,13 @@ import { getUser } from "@/features/users/actions/user";
 
 import { useToast } from "@/components/ui/use-toast";
 
+import { useStatusToast } from "@/hooks/useStatusToast";
+
 import { ArticleType } from "@/types/article";
 
 export const useArticleBookmark = ({ article }: { article: ArticleType }) => {
   const { toast } = useToast();
+  const { successToast, failToast } = useStatusToast();
   const [bookmarkId, setBookmarkId] = useState<string | undefined>(
     article.bookmarkId
   );
@@ -26,8 +29,7 @@ export const useArticleBookmark = ({ article }: { article: ArticleType }) => {
         articleId: articleId,
       });
       if (data?.count && data.count > 0) {
-        toast({
-          variant: "destructive",
+        failToast({
           title: "Fail: This article is already bookmarked",
         });
         return;
@@ -35,8 +37,7 @@ export const useArticleBookmark = ({ article }: { article: ArticleType }) => {
 
       const user = await getUser();
       if (!user) {
-        toast({
-          variant: "destructive",
+        failToast({
           title: "Fail: Please login to bookmark this article",
         });
         return;
@@ -58,20 +59,18 @@ export const useArticleBookmark = ({ article }: { article: ArticleType }) => {
         platformFaviconUrl: article.platform.faviconUrl,
       });
       if (!id) {
-        toast({
-          variant: "destructive",
+        failToast({
           title: "Fail: Something went wrong",
         });
         return;
       }
 
-      toast({
+      successToast({
         title: "Success: bookmarked",
-        className: "bg-green-700 text-white font-bold",
       });
       setBookmarkId(id);
     },
-    [article, toast]
+    [article, successToast, failToast]
   );
 
   const handleRemoveBookmark = useCallback(
@@ -81,22 +80,19 @@ export const useArticleBookmark = ({ article }: { article: ArticleType }) => {
         bookmarkId: bookmarkId,
       });
       if (res.status === 401) {
-        toast({
-          variant: "destructive",
+        failToast({
           title: "Fail: Unauthorized",
         });
         return;
       }
       if (res.status !== 200) {
-        toast({
-          variant: "destructive",
+        failToast({
           title: "Fail: Something went wrong",
         });
         return;
       }
       if (!res.data?.count) {
-        toast({
-          variant: "destructive",
+        failToast({
           title: "Fail: Bookmark not found",
         });
         return;
@@ -104,8 +100,7 @@ export const useArticleBookmark = ({ article }: { article: ArticleType }) => {
 
       const user = await getUser();
       if (!user) {
-        toast({
-          variant: "destructive",
+        failToast({
           title: "Fail: Please login to remove bookmark",
         });
         return;
@@ -122,13 +117,12 @@ export const useArticleBookmark = ({ article }: { article: ArticleType }) => {
         });
         return;
       }
-      toast({
+      successToast({
         title: "Success: remove bookmarked",
-        className: "bg-green-700 text-white font-bold",
       });
       setBookmarkId(undefined);
     },
-    [toast]
+    [toast, successToast, failToast]
   );
 
   return {
