@@ -67,6 +67,7 @@ export const useArticleBookmark = ({ article }: { article: ArticleType }) => {
 
       toast({
         title: "Success: bookmarked",
+        className: "bg-green-700 text-white font-bold",
       });
       setBookmarkId(id);
     },
@@ -123,6 +124,7 @@ export const useArticleBookmark = ({ article }: { article: ArticleType }) => {
       }
       toast({
         title: "Success: remove bookmarked",
+        className: "bg-green-700 text-white font-bold",
       });
       setBookmarkId(undefined);
     },
