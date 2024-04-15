@@ -6,9 +6,9 @@ export const useStatusToast = () => {
   const { toast } = useToast();
 
   const successToast = useCallback(
-    ({ title, description }: { title: string; description?: string }) => {
+    ({ description }: { description: string }) => {
       toast({
-        title,
+        title: "SUCCESS",
         description,
         className: "bg-green-700 text-white font-bold",
       });
@@ -16,11 +16,22 @@ export const useStatusToast = () => {
     [toast]
   );
 
+  const warnToast = useCallback(
+    ({ description }: { description: string }) => {
+      toast({
+        title: "WARNING",
+        description,
+        className: "bg-amber-500 text-black font-bold",
+      });
+    },
+    [toast]
+  );
+
   const failToast = useCallback(
-    ({ title, description }: { title: string; description?: string }) => {
+    ({ description }: { description: string }) => {
       toast({
         variant: "destructive",
-        title,
+        title: "FAIL",
         description,
         className: "font-bold",
       });
@@ -28,5 +39,5 @@ export const useStatusToast = () => {
     [toast]
   );
 
-  return { successToast, failToast };
+  return { successToast, warnToast, failToast };
 };

@@ -30,7 +30,7 @@ export const useArticleBookmark = ({ article }: { article: ArticleType }) => {
       });
       if (data?.count && data.count > 0) {
         failToast({
-          title: "Fail: This article is already bookmarked",
+          description: "Fail: This article is already bookmarked",
         });
         return;
       }
@@ -38,7 +38,7 @@ export const useArticleBookmark = ({ article }: { article: ArticleType }) => {
       const user = await getUser();
       if (!user) {
         failToast({
-          title: "Fail: Please login to bookmark this article",
+          description: "Fail: Please login to bookmark this article",
         });
         return;
       }
@@ -60,13 +60,13 @@ export const useArticleBookmark = ({ article }: { article: ArticleType }) => {
       });
       if (!id) {
         failToast({
-          title: "Fail: Something went wrong",
+          description: "Fail: Something went wrong",
         });
         return;
       }
 
       successToast({
-        title: "Success: bookmarked",
+        description: "Add bookmark",
       });
       setBookmarkId(id);
     },
@@ -81,19 +81,19 @@ export const useArticleBookmark = ({ article }: { article: ArticleType }) => {
       });
       if (res.status === 401) {
         failToast({
-          title: "Fail: Unauthorized",
+          description: "Fail: Unauthorized",
         });
         return;
       }
       if (res.status !== 200) {
         failToast({
-          title: "Fail: Something went wrong",
+          description: "Fail: Something went wrong",
         });
         return;
       }
       if (!res.data?.count) {
         failToast({
-          title: "Fail: Bookmark not found",
+          description: "Fail: Bookmark not found",
         });
         return;
       }
@@ -101,7 +101,7 @@ export const useArticleBookmark = ({ article }: { article: ArticleType }) => {
       const user = await getUser();
       if (!user) {
         failToast({
-          title: "Fail: Please login to remove bookmark",
+          description: "Fail: Please login to remove bookmark",
         });
         return;
       }
@@ -118,7 +118,7 @@ export const useArticleBookmark = ({ article }: { article: ArticleType }) => {
         return;
       }
       successToast({
-        title: "Success: remove bookmarked",
+        description: "Remove bookmark",
       });
       setBookmarkId(undefined);
     },
