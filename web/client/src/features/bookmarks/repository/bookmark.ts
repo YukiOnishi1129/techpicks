@@ -28,7 +28,7 @@ export const getBookmarkList = async ({
   platformIdList,
   offset = 1,
   sort = "desc",
-  sortColum = "publishedAt",
+  sortColum = "createdAt",
 }: GetBookmarkList) => {
   const user = await getUser();
   let where = {};
@@ -50,17 +50,13 @@ export const getBookmarkList = async ({
           ],
         },
         {
-          platform: {
-            isEng: languageStatus === 2,
-          },
+          isEng: languageStatus === 2,
         },
       ],
     };
   } else {
     where = {
-      platform: {
-        isEng: languageStatus === 2,
-      },
+      isEng: languageStatus === 2,
     };
   }
 
@@ -87,9 +83,6 @@ export const getBookmarkList = async ({
         {
           createdAt: "desc",
         },
-        {
-          publishedAt: "desc",
-        },
       ],
       include: {
         profile: {
@@ -98,18 +91,6 @@ export const getBookmarkList = async ({
             name: true,
             email: true,
             image: true,
-            createdAt: true,
-            updatedAt: true,
-          },
-        },
-        platform: {
-          select: {
-            id: true,
-            name: true,
-            siteUrl: true,
-            faviconUrl: true,
-            platformType: true,
-            isEng: true,
             createdAt: true,
             updatedAt: true,
           },

@@ -44,11 +44,9 @@ export const BookmarkCard: FC<BookmarkCardProps> = ({
               {bookmark.platformName}
             </p>
           </div>
-          {bookmark.publishedAt && (
-            <p className="flex pt-2 text-sm">
-              {showDiffDateToCurrentDate(bookmark.publishedAt)}
-            </p>
-          )}
+          <p className="flex pt-2 text-sm">
+            {`登録: ${showDiffDateToCurrentDate(bookmark.createdAt)}`}
+          </p>
         </div>
       </div>
     </div>

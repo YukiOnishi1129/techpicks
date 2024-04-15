@@ -84,7 +84,7 @@ export const fetchArticleByArticleAndPlatformUrlAPI = async ({
 
   return {
     data: {
-      article: data.articles as ArticleType | undefined,
+      article: data.article as ArticleType | undefined,
       message: "success",
     },
     status,
