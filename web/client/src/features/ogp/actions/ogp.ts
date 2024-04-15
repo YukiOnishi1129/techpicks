@@ -17,6 +17,7 @@ const allowedTags = [
   "apple-touch-icon",
   "shortcut icon",
   "og:site_name",
+  "application-name",
 ];
 
 export const getOgpData = async (url: string) => {
@@ -59,7 +60,7 @@ export const getOgpData = async (url: string) => {
 
   const siteUrl = await getDomainUrl(url);
 
-  const siteName = objectMap["og:site_name"];
+  const siteName = objectMap["og:site_name"] || objectMap["application-name"];
 
   const imageSrc = objectMap["og:image"];
 
