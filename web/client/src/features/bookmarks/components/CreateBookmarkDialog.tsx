@@ -38,10 +38,8 @@ import { Input } from "@/components/ui/input";
 
 import { OgpType } from "@/types/ogp";
 
-import {
-  createBookmarkAPI,
-  fetchBookmarkCountByArticleUrl,
-} from "../actions/bookmark";
+import { fetchBookmarkCountByArticleUrlAPI } from "../actions/bookmark";
+import { createBookmark } from "../repository/bookmark";
 
 type CreateBookmarkDialogProps = {
   user: User | undefined;
@@ -84,13 +82,13 @@ export const CreateBookmarkDialog: FC<CreateBookmarkDialogProps> = ({
     if (!user) return;
     // 1. check article is already bookmarked
     const url = form.getValues("url");
-    const countResponse = await fetchBookmarkCountByArticleUrl({
+    const countResponse = await fetchBookmarkCountByArticleUrlAPI({
       articleUrl: url,
     });
+    if (countResponse.status !== 200) return;
     const count = countResponse.data?.count;
-    if (countResponse.status !== 200 || !count) return;
     // TODO: if count > 0, show error message
-    if (count > 0) return;
+    if (count != undefined && count > 0) return;
 
     // 2. If same article url is in article table, register that date to bookmark table.
     const articleResponse = await fetchArticleByArticleAndPlatformUrlAPI({
@@ -100,12 +98,14 @@ export const CreateBookmarkDialog: FC<CreateBookmarkDialogProps> = ({
 
     if (articleResponse.status === 200 && articleResponse.data?.article) {
       const article = articleResponse.data.article;
-      const createResponse = await createBookmarkAPI({
+      const createResponse = await createBookmark({
         title: article.title,
         description: article.description,
         articleId: article.id,
         articleUrl: article.articleUrl,
         thumbnailURL: article.thumbnailURL,
+        isRead: false,
+        userId: user?.id || "",
         platformId: article.platform.id,
         platformName: article.platform.name,
         platformUrl: article.platform.siteUrl,
@@ -116,11 +116,13 @@ export const CreateBookmarkDialog: FC<CreateBookmarkDialogProps> = ({
       return;
     }
     // 3. If not, get ogp data and register that data to article table and bookmark table.
-    const res = await createBookmarkAPI({
+    const id = await createBookmark({
       title: ogpData?.title || "",
       description: ogpData?.description || "",
       articleUrl: url,
       thumbnailURL: ogpData?.image || "",
+      isRead: false,
+      userId: user?.id || "",
       platformName: ogpData?.siteName || "",
       platformUrl: ogpData?.siteUrl || "",
       platformFaviconUrl: ogpData?.favIconImage || "",

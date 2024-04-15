@@ -1,6 +1,6 @@
 "use server";
 
-import { deleteFetch, getFetch, postFetch } from "@/lib/fetch";
+import { getFetch } from "@/lib/fetch";
 
 import { BookmarkType } from "@/types/bookmark";
 
@@ -88,7 +88,7 @@ export const fetchBookmarkByIdCountAPI = async ({
 
   return {
     data: {
-      count: data?.count as number | undefined,
+      count: data?.count as number,
       message: data.message as string,
     },
     status,
@@ -128,7 +128,7 @@ export const fetchBookmarkCountByArticleIdAPI = async ({
  * @param {articleUrl: string}
  * @returns
  */
-export const fetchBookmarkCountByArticleUrl = async ({
+export const fetchBookmarkCountByArticleUrlAPI = async ({
   articleUrl,
 }: {
   articleUrl: string;
@@ -154,109 +154,110 @@ export const fetchBookmarkCountByArticleUrl = async ({
 /**
  * Create Bookmark API
  */
-type CreateBookmarkAPIRequest = {
-  title: string;
-  description: string;
-  articleId?: string;
-  articleUrl: string;
-  publishedAt?: Date;
-  thumbnailURL: string;
-  platformId?: string;
-  platformName?: string;
-  platformUrl?: string;
-  platformFaviconUrl?: string;
-  isEng: boolean;
-};
+// type CreateBookmarkAPIRequest = {
+//   title: string;
+//   description: string;
+//   articleId?: string;
+//   articleUrl: string;
+//   publishedAt?: Date;
+//   thumbnailURL: string;
+//   platformId?: string;
+//   platformName?: string;
+//   platformUrl?: string;
+//   platformFaviconUrl?: string;
+//   isEng: boolean;
+// };
 
-type CreateBookmarkAPIResponse = {
-  data: {
-    id: string;
-    message: string;
-  };
-  status: number;
-};
+// type CreateBookmarkAPIResponse = {
+//   data: {
+//     id: string;
+//     message: string;
+//   };
+//   status: number;
+// };
 
 /**
  * Create Bookmark API
  * @param {CreateBookmarkAPIRequest}
  * @returns
  */
-export const createBookmarkAPI = async ({
-  title,
-  description,
-  articleId,
-  articleUrl,
-  publishedAt,
-  thumbnailURL,
-  platformId,
-  platformName,
-  platformUrl,
-  platformFaviconUrl,
-  isEng,
-}: CreateBookmarkAPIRequest): Promise<CreateBookmarkAPIResponse> => {
-  let url = `http://localhost:80/api/bookmarks/`;
-  const response = await postFetch({
-    url,
-    tagName: "bookmarks/create",
-    body: {
-      title,
-      description,
-      articleId,
-      articleUrl,
-      publishedAt,
-      thumbnailURL,
-      platformId,
-      platformName,
-      platformUrl,
-      platformFaviconUrl,
-      isEng,
-    },
-    cacheType: "no-store",
-  });
-  const data = await response.json();
-  const status = response.status;
+// export const createBookmarkAPI = async ({
+//   title,
+//   description,
+//   articleId,
+//   articleUrl,
+//   publishedAt,
+//   thumbnailURL,
+//   platformId,
+//   platformName,
+//   platformUrl,
+//   platformFaviconUrl,
+//   isEng,
+// }: CreateBookmarkAPIRequest): Promise<CreateBookmarkAPIResponse> => {
+//   let url = `http://localhost:80/api/bookmarks/`;
+//   const response = await postFetch({
+//     url,
+//     body: {
+//       title,
+//       description,
+//       articleId,
+//       articleUrl,
+//       publishedAt,
+//       thumbnailURL,
+//       platformId,
+//       platformName,
+//       platformUrl,
+//       platformFaviconUrl,
+//       isEng,
+//     },
+//   });
+//   const data = await response.json();
+//   const status = response.status;
 
-  return {
-    data: {
-      id: data.id as string,
-      message: data.message as string,
-    },
-    status,
-  };
-};
+//   console.log("🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥");
+//   console.log(data);
 
-/**
- * Delete Bookmark API
- */
-type DeleteBookmarkAPIResponse = {
-  data: {
-    message: string;
-  };
-  status: number;
-};
+//   return {
+//     data: {
+//       id: data.id as string,
+//       message: data.message as string,
+//     },
+//     status,
+//   };
+// };
 
-/**
- * Delete Bookmark API
- * @param {bookmarkId: string}
- * @returns
- */
-export const deleteBookmarkAPI = async ({
-  bookmarkId,
-}: {
-  bookmarkId: string;
-}): Promise<DeleteBookmarkAPIResponse> => {
-  let url = `http://localhost:80/api/bookmarks/${bookmarkId}`;
-  const response = await deleteFetch({
-    url,
-    tagName: "bookmarks/delete",
-    cacheType: "no-store",
-  });
-  const data = await response.json();
-  const status = response.status;
-  return {
-    data: {
-      message: data.message as string,
-    },
-    status,
-  };
-};
+// /**
+//  * Delete Bookmark API
+//  */
+// type DeleteBookmarkAPIResponse = {
+//   data: {
+//     message: string;
+//   };
+//   status: number;
+// };
+
+// /**
+//  * Delete Bookmark API
+//  * @param {bookmarkId: string}
+//  * @returns
+//  */
+// export const deleteBookmarkAPI = async ({
+//   bookmarkId,
+// }: {
+//   bookmarkId: string;
+// }): Promise<DeleteBookmarkAPIResponse> => {
+//   let url = `http://localhost:80/api/bookmarks/${bookmarkId}`;
+//   const response = await deleteFetch({
+//     url,
+//     tagName: "bookmarks/delete",
+//     cacheType: "no-store",
+//   });
+//   const data = await response.json();
+//   const status = response.status;
+//   return {
+//     data: {
+//       message: data.message as string,
+//     },
+//     status,
+//   };
+// };

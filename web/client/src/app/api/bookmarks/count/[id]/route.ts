@@ -1,9 +1,12 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 import { getBookmarkCountById } from "@/features/bookmarks/repository/bookmark";
 import { getUser } from "@/features/users/actions/user";
 
-export const GET = async ({ params }: { params: { id: string } }) => {
+export const GET = async (
+  res: NextRequest,
+  { params }: { params: { id: string } }
+) => {
   const { id } = params;
   const user = await getUser();
 
@@ -25,11 +28,11 @@ export const GET = async ({ params }: { params: { id: string } }) => {
 
   return NextResponse.json(
     {
-      const: count,
+      count: count,
       message: "success",
     },
     {
-      status: 204,
+      status: 200,
     }
   );
 };

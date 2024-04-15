@@ -1,10 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import {
-  createBookmark,
-  getBookmarkList,
-} from "@/features/bookmarks/repository/bookmark";
-import { getUser } from "@/features/users/actions/user";
+import { getBookmarkList } from "@/features/bookmarks/repository/bookmark";
 
 import { LanguageStatus } from "@/types/language";
 
@@ -37,58 +33,58 @@ export async function GET(req: NextRequest) {
   );
 }
 
-export async function POST(req: NextRequest) {
-  const body = await req.json();
-  const {
-    title,
-    description,
-    articleId,
-    articleUrl,
-    publishedAt,
-    thumbnailURL,
-    platformId,
-    platformName,
-    platformUrl,
-    platformFaviconUrl,
-    isEng,
-  } = body;
+// export async function POST(req: NextRequest) {
+//   const body = await req.json();
+//   const {
+//     title,
+//     description,
+//     articleId,
+//     articleUrl,
+//     publishedAt,
+//     thumbnailURL,
+//     platformId,
+//     platformName,
+//     platformUrl,
+//     platformFaviconUrl,
+//     isEng,
+//   } = body;
 
-  const user = await getUser();
+//   const user = await getUser();
 
-  if (!user) {
-    return NextResponse.json(
-      {
-        message: "unauthorized",
-      },
-      {
-        status: 401,
-      }
-    );
-  }
+//   if (!user) {
+//     return NextResponse.json(
+//       {
+//         message: "unauthorized",
+//       },
+//       {
+//         status: 401,
+//       }
+//     );
+//   }
 
-  const bookmarkId = await createBookmark({
-    title: title,
-    description: description,
-    articleId: articleId,
-    articleUrl: articleUrl,
-    publishedAt: publishedAt,
-    thumbnailURL: thumbnailURL,
-    isRead: false,
-    userId: user.id,
-    platformId: platformId,
-    platformName: platformName,
-    platformUrl: platformUrl,
-    platformFaviconUrl: platformFaviconUrl,
-    isEng: isEng,
-  });
+//   const bookmarkId = await createBookmark({
+//     title: title,
+//     description: description,
+//     articleId: articleId,
+//     articleUrl: articleUrl,
+//     publishedAt: publishedAt,
+//     thumbnailURL: thumbnailURL,
+//     isRead: false,
+//     userId: user.id,
+//     platformId: platformId,
+//     platformName: platformName,
+//     platformUrl: platformUrl,
+//     platformFaviconUrl: platformFaviconUrl,
+//     isEng: isEng,
+//   });
 
-  return NextResponse.json(
-    {
-      id: bookmarkId,
-      message: "success",
-    },
-    {
-      status: 201,
-    }
-  );
-}
+//   return NextResponse.json(
+//     {
+//       id: bookmarkId,
+//       message: "success",
+//     },
+//     {
+//       status: 201,
+//     }
+//   );
+// }

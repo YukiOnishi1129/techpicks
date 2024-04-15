@@ -22,7 +22,7 @@ export async function GET(req: NextRequest) {
 
   const count = await getBookmarkCountByArticleId({
     articleId: articleId || "",
-    userId: user?.id || "",
+    userId: user.id,
   });
 
   return NextResponse.json(

@@ -339,12 +339,13 @@ export const deleteBookmark = async ({
   userId,
 }: DeleteBookmarkDTO) => {
   try {
-    await prisma.bookmark.delete({
+    const data = await prisma.bookmark.delete({
       where: {
         id: bookmarkId,
         userId: userId,
       },
     });
+    return data.id;
   } catch (err) {
     throw new Error(`Failed to delete bookmark: ${err}`);
   }
