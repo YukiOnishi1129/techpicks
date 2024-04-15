@@ -1,43 +1,29 @@
 import { useCallback } from "react";
-
-import { useToast } from "@/components/ui/use-toast";
+import { toast } from "sonner";
 
 export const useStatusToast = () => {
-  const { toast } = useToast();
-
   const successToast = useCallback(
     ({ description }: { description: string }) => {
-      toast({
-        title: "SUCCESS",
+      toast.success("SUCCESS", {
         description,
         className: "bg-green-700 text-white font-bold",
       });
     },
-    [toast]
+    []
   );
 
-  const warnToast = useCallback(
-    ({ description }: { description: string }) => {
-      toast({
-        title: "WARNING",
-        description,
-        className: "bg-amber-500 text-black font-bold",
-      });
-    },
-    [toast]
-  );
+  const warnToast = useCallback(({ description }: { description: string }) => {
+    toast.warning("WARNING", {
+      description,
+      className: "bg-amber-500 text-black font-bold",
+    });
+  }, []);
 
-  const failToast = useCallback(
-    ({ description }: { description: string }) => {
-      toast({
-        variant: "destructive",
-        title: "FAIL",
-        description,
-        className: "font-bold",
-      });
-    },
-    [toast]
-  );
+  const failToast = useCallback(({ description }: { description: string }) => {
+    toast.error("FAIL", {
+      description,
+    });
+  }, []);
 
   return { successToast, warnToast, failToast };
 };
