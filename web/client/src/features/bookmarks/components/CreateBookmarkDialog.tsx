@@ -64,9 +64,11 @@ export const CreateBookmarkDialog: FC<CreateBookmarkDialogProps> = ({
   const [isPending, startTransition] = useTransition();
   const { successToast, failToast } = useStatusToast();
   const FormSchema = z.object({
-    url: z.string().min(1, {
-      message: "Please enter a valid URL",
-    }),
+    url: z
+      .string({
+        required_error: "Please enter the URL",
+      })
+      .url({ message: "Invalid URL" }),
   });
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -83,7 +85,7 @@ export const CreateBookmarkDialog: FC<CreateBookmarkDialogProps> = ({
   const onSubmit = useCallback(async (data: z.infer<typeof FormSchema>) => {
     startTransition(async () => {
       const ogp = await getOgpData(data.url);
-      setOgpData(ogp);
+      if (ogp) setOgpData(ogp);
     });
   }, []);
 

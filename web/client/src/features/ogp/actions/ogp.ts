@@ -2,6 +2,8 @@
 
 import { parse } from "node-html-parser";
 
+import { checkHTTPUrl } from "@/lib/check";
+
 import { OgpType } from "@/types/ogp";
 
 const allowedTags = [
@@ -21,6 +23,8 @@ const allowedTags = [
 ];
 
 export const getOgpData = async (url: string) => {
+  if (!checkHTTPUrl(url)) return;
+
   const encodeUri = encodeURI(url);
 
   const res = await fetch(encodeUri, {

@@ -21,3 +21,9 @@ export const checkJapaneseArticle = ({
 }): boolean => {
   return checkJapaneseText(title) || checkJapaneseText(description);
 };
+
+export const checkHTTPUrl = (url: string): boolean => {
+  const regeHTTP = "^(http|https)://";
+  const rege = new RegExp(regeHTTP, "gmi");
+  return rege.test(url);
+};
