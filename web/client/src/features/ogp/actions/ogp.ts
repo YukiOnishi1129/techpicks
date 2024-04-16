@@ -57,7 +57,7 @@ export const getOgpData = async (url: string) => {
     objectMap["og:title"] ||
     objectMap["twitter:title"] ||
     root.querySelector("title")?.innerText ||
-    url;
+    "";
 
   const description =
     objectMap["og:description"] || objectMap["description"] || "";
@@ -102,10 +102,7 @@ const getDomainUrl = async (url: string) => {
 };
 
 const setFaviconUrl = async (url: string, faviconUrl: string) => {
-  const str = "http";
-  if (!str.indexOf(faviconUrl)) {
-    return faviconUrl;
-  }
+  if (checkHTTPUrl(faviconUrl)) return faviconUrl;
   const { protocol, host } = new URL(url);
   return new URL(faviconUrl, `${protocol}//${host}`).toString();
 };
