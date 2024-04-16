@@ -75,6 +75,11 @@ export const CreateBookmarkDialog: FC<CreateBookmarkDialogProps> = ({
     },
   });
 
+  const resetDialog = useCallback(() => {
+    form.reset();
+    setOgpData(null);
+  }, [form]);
+
   const onSubmit = useCallback(async (data: z.infer<typeof FormSchema>) => {
     startTransition(async () => {
       const ogp = await getOgpData(data.url);
@@ -149,6 +154,7 @@ export const CreateBookmarkDialog: FC<CreateBookmarkDialogProps> = ({
       });
       await serverRevalidateBookmark();
       router.replace(`/bookmark/?languageStatus=${languageStatus}`);
+      resetDialog();
       setOpen(false);
       return;
     }
@@ -180,15 +186,25 @@ export const CreateBookmarkDialog: FC<CreateBookmarkDialogProps> = ({
     });
     await serverRevalidateBookmark();
     router.replace(`/bookmark/?languageStatus=${languageStatus}`);
+    resetDialog();
     setOpen(false);
-  }, [form, router, languageStatus, failToast, successToast, user, ogpData]);
+  }, [
+    form,
+    router,
+    languageStatus,
+    resetDialog,
+    failToast,
+    successToast,
+    user,
+    ogpData,
+  ]);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button>{"Add new article"}</Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent onCloseAutoFocus={resetDialog}>
         <DialogHeader>
           <DialogTitle>{"Add New Bookmark Article"}</DialogTitle>
         </DialogHeader>
@@ -256,7 +272,7 @@ export const CreateBookmarkDialog: FC<CreateBookmarkDialogProps> = ({
           </div>
         )}
         <DialogClose>
-          <Button>{"Close"}</Button>
+          <Button onClick={resetDialog}>{"Close"}</Button>
         </DialogClose>
       </DialogContent>
     </Dialog>
