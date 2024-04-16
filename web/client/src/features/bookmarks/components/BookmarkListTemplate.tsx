@@ -29,7 +29,7 @@ export const BookmarkListTemplate: FC<ArticleListProps> = async ({
   return (
     <div className="w-auto">
       <h1 className="mb-4 mt-8 text-2xl font-bold text-gray-800">Read Later</h1>
-      <CreateBookmarkDialog user={user} />
+      <CreateBookmarkDialog user={user} languageStatus={languageStatus} />
       <div className="w-full border-b-2 bg-white py-4">
         <BookmarkLanguageTabMenu
           languageStatus={languageStatus}

@@ -1,8 +1,10 @@
 "use client";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import { User } from "@supabase/supabase-js";
 import { Loader } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   useCallback,
   useState,
@@ -40,19 +42,25 @@ import { useStatusToast } from "@/hooks/useStatusToast";
 
 import { checkJapaneseArticle } from "@/lib/check";
 
+import { LanguageStatus } from "@/types/language";
 import { OgpType } from "@/types/ogp";
 
 import { fetchBookmarkCountByArticleUrlAPI } from "../actions/bookmark";
+import { serverRevalidateBookmark } from "../actions/serverAction";
 import { createBookmark } from "../repository/bookmark";
 
 type CreateBookmarkDialogProps = {
   user: User | undefined;
+  languageStatus: LanguageStatus;
 };
 
 export const CreateBookmarkDialog: FC<CreateBookmarkDialogProps> = ({
   user,
+  languageStatus,
 }: CreateBookmarkDialogProps) => {
+  const router = useRouter();
   const [ogpData, setOgpData] = useState<OgpType | null>(null);
+  const [open, setOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
   const { successToast, failToast } = useStatusToast();
   const FormSchema = z.object({
@@ -139,6 +147,9 @@ export const CreateBookmarkDialog: FC<CreateBookmarkDialogProps> = ({
       successToast({
         description: "Success: add bookmark",
       });
+      await serverRevalidateBookmark();
+      router.replace(`/bookmark/?languageStatus=${languageStatus}`);
+      setOpen(false);
       return;
     }
     // 3. If not, get ogp data and register that data to article table and bookmark table.
@@ -167,10 +178,13 @@ export const CreateBookmarkDialog: FC<CreateBookmarkDialogProps> = ({
     successToast({
       description: "Success: add bookmark",
     });
-  }, [form, failToast, successToast, user, ogpData]);
+    await serverRevalidateBookmark();
+    router.replace(`/bookmark/?languageStatus=${languageStatus}`);
+    setOpen(false);
+  }, [form, router, languageStatus, failToast, successToast, user, ogpData]);
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button>{"Add new article"}</Button>
       </DialogTrigger>
