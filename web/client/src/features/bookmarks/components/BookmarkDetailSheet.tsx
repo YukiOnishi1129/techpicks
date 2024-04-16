@@ -33,7 +33,7 @@ export const BookmarkDetailSheet: FC<BookmarkDetailSheetProps> = ({
 
   return (
     <Sheet>
-      <SheetTrigger>
+      <SheetTrigger className="w-full">
         <div
           role="button"
           tabIndex={1}
