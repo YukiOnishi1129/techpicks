@@ -34,7 +34,6 @@ import {
   FormItem,
   FormLabel,
   FormControl,
-  FormDescription,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -100,6 +99,7 @@ export const CreateBookmarkDialog: FC<CreateBookmarkDialogProps> = ({
   );
 
   const handleAddSubmit = useCallback(async () => {
+    console.log("🔥🔥🔥🔥🔥🔥");
     startOgpPending(async () => {
       if (!user) {
         failToast({
@@ -218,16 +218,17 @@ export const CreateBookmarkDialog: FC<CreateBookmarkDialogProps> = ({
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
-              className="w-2/3 space-y-6"
+              className="w-full space-y-6"
             >
               <FormField
                 control={form.control}
                 name="url"
                 render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Article url</FormLabel>
+                  <FormItem className="w-full">
+                    <FormLabel className="font-bold">URL</FormLabel>
                     <FormControl>
                       <Input
+                        className="block w-full"
                         placeholder="https://example.com"
                         type="url"
                         pattern="https://.*|http://.*"
@@ -235,11 +236,6 @@ export const CreateBookmarkDialog: FC<CreateBookmarkDialogProps> = ({
                         {...field}
                       />
                     </FormControl>
-                    <FormDescription>
-                      {
-                        "Please enter the URL of the article you want to bookmark"
-                      }
-                    </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -247,24 +243,26 @@ export const CreateBookmarkDialog: FC<CreateBookmarkDialogProps> = ({
             </form>
           </Form>
         </div>
+
         {isPending && <Loader />}
         {!isPending && ogpData && (
-          <div className="mt-8 w-full">
-            <div className="flex h-[200px] w-full justify-around overflow-y-scroll">
-              <div className="w-2/5">
+          <div className="mt-4 w-full">
+            <h3 className="text-lg font-bold">PREVIEW</h3>
+            <div className="mt-4 flex  w-full justify-around overflow-y-scroll">
+              <div className="w-1/3">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={ogpData.image} alt="" />
               </div>
-              <div className="w-2/5">
-                <h3>{ogpData.title}</h3>
-                <p className="overflow-hidden truncate">
-                  {ogpData.description}
-                </p>
+              <div className="w-3/5">
+                <h3 className="line-clamp-2 h-12 w-full text-base font-bold leading-6">
+                  {ogpData.title}
+                </h3>
 
-                <div>
+                <div className="mt-4 flex cursor-pointer items-center space-x-2 hover:underline">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img className="size-6" src={ogpData.faviconImage} alt="" />
-                  <span>
+
+                  <span className="text-sm">
                     <Link href={ogpData.siteUrl} target="_blank">
                       {ogpData.siteName}
                     </Link>
@@ -272,23 +270,24 @@ export const CreateBookmarkDialog: FC<CreateBookmarkDialogProps> = ({
                 </div>
               </div>
             </div>
-            <div className="mt-4">
-              {isOgpPending ? (
-                <Button disabled>
-                  <ReloadIcon className="mr-2 size-4 animate-spin" />
-                  Please wait
-                </Button>
-              ) : (
-                <Button disabled={isOgpPending} onClick={handleAddSubmit}>
-                  {"Add bookmark"}
-                </Button>
-              )}
-            </div>
           </div>
         )}
-        <DialogClose>
-          <Button onClick={resetDialog}>{"Close"}</Button>
-        </DialogClose>
+
+        <div className="mt-4 flex w-full justify-start space-x-4">
+          {isOgpPending ? (
+            <Button disabled>
+              <ReloadIcon className="mr-2 size-4 animate-spin" />
+              PLEASE WAIT
+            </Button>
+          ) : (
+            <Button disabled={!ogpData} onClick={handleAddSubmit}>
+              {"ADD BOOKMARK"}
+            </Button>
+          )}
+          <DialogClose>
+            <Button onClick={resetDialog}>{"CLOSE"}</Button>
+          </DialogClose>
+        </div>
       </DialogContent>
     </Dialog>
   );
