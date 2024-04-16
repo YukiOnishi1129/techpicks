@@ -1,6 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { ReloadIcon } from "@radix-ui/react-icons";
 import { User } from "@supabase/supabase-js";
 import { Loader } from "lucide-react";
 import Link from "next/link";
@@ -62,6 +63,7 @@ export const CreateBookmarkDialog: FC<CreateBookmarkDialogProps> = ({
   const [ogpData, setOgpData] = useState<OgpType | null>(null);
   const [open, setOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
+  const [isOgpPending, startOgpPending] = useTransition();
   const { successToast, failToast } = useStatusToast();
   const FormSchema = z.object({
     url: z
@@ -98,52 +100,85 @@ export const CreateBookmarkDialog: FC<CreateBookmarkDialogProps> = ({
   );
 
   const handleAddSubmit = useCallback(async () => {
-    if (!user) {
-      failToast({
-        description: "Fail: Please login to bookmark this article",
+    startOgpPending(async () => {
+      if (!user) {
+        failToast({
+          description: "Fail: Please login to bookmark this article",
+        });
+        return;
+      }
+      // 1. check article is already bookmarked
+      const url = form.getValues("url");
+      const countResponse = await fetchBookmarkCountByArticleUrlAPI({
+        articleUrl: url,
       });
-      return;
-    }
-    // 1. check article is already bookmarked
-    const url = form.getValues("url");
-    const countResponse = await fetchBookmarkCountByArticleUrlAPI({
-      articleUrl: url,
-    });
-    if (countResponse.status !== 200) {
-      failToast({
-        description: "Fail: fetch bookmark count failed",
-      });
-      return;
-    }
-    const count = countResponse.data?.count;
-    if (count != undefined && count > 0) {
-      failToast({
-        description: "Fail: This article is already bookmarked",
-      });
-      return;
-    }
+      if (countResponse.status !== 200) {
+        failToast({
+          description: "Fail: fetch bookmark count failed",
+        });
+        return;
+      }
+      const count = countResponse.data?.count;
+      if (count != undefined && count > 0) {
+        failToast({
+          description: "Fail: This article is already bookmarked",
+        });
+        return;
+      }
 
-    // 2. If same article url is in article table, register that date to bookmark table.
-    const articleResponse = await fetchArticleByArticleAndPlatformUrlAPI({
-      articleUrl: url,
-      platformUrl: ogpData?.siteUrl || "",
-    });
+      // 2. If same article url is in article table, register that date to bookmark table.
+      const articleResponse = await fetchArticleByArticleAndPlatformUrlAPI({
+        articleUrl: url,
+        platformUrl: ogpData?.siteUrl || "",
+      });
 
-    if (articleResponse.status === 200 && articleResponse.data?.article) {
-      const article = articleResponse.data.article;
+      if (articleResponse.status === 200 && articleResponse.data?.article) {
+        const article = articleResponse.data.article;
+        const id = await createBookmark({
+          title: article.title,
+          description: article.description,
+          articleId: article.id,
+          articleUrl: article.articleUrl,
+          thumbnailURL: article.thumbnailURL,
+          isRead: false,
+          userId: user?.id || "",
+          platformId: article.platform.id,
+          platformName: article.platform.name,
+          platformUrl: article.platform.siteUrl,
+          platformFaviconUrl: article.platform.faviconUrl,
+          isEng: article.platform.isEng,
+        });
+        if (!id) {
+          failToast({
+            description: "Fail: add bookmark failed",
+          });
+          return;
+        }
+        successToast({
+          description: "Success: add bookmark",
+        });
+        await serverRevalidateBookmark();
+        router.replace(`/bookmark/?languageStatus=${languageStatus}`);
+        resetDialog();
+        setOpen(false);
+        return;
+      }
+      // 3. If not, get ogp data and register that data to article table and bookmark table.
+      const isEng = !checkJapaneseArticle({
+        title: ogpData?.title || "",
+        description: ogpData?.description || "",
+      });
       const id = await createBookmark({
-        title: article.title,
-        description: article.description,
-        articleId: article.id,
-        articleUrl: article.articleUrl,
-        thumbnailURL: article.thumbnailURL,
+        title: ogpData?.title || "",
+        description: ogpData?.description || "",
+        articleUrl: url,
+        thumbnailURL: ogpData?.image || "",
         isRead: false,
         userId: user?.id || "",
-        platformId: article.platform.id,
-        platformName: article.platform.name,
-        platformUrl: article.platform.siteUrl,
-        platformFaviconUrl: article.platform.faviconUrl,
-        isEng: article.platform.isEng,
+        platformName: ogpData?.siteName || "",
+        platformUrl: ogpData?.siteUrl || "",
+        platformFaviconUrl: ogpData?.faviconImage || "",
+        isEng: isEng,
       });
       if (!id) {
         failToast({
@@ -158,38 +193,7 @@ export const CreateBookmarkDialog: FC<CreateBookmarkDialogProps> = ({
       router.replace(`/bookmark/?languageStatus=${languageStatus}`);
       resetDialog();
       setOpen(false);
-      return;
-    }
-    // 3. If not, get ogp data and register that data to article table and bookmark table.
-    const isEng = !checkJapaneseArticle({
-      title: ogpData?.title || "",
-      description: ogpData?.description || "",
     });
-    const id = await createBookmark({
-      title: ogpData?.title || "",
-      description: ogpData?.description || "",
-      articleUrl: url,
-      thumbnailURL: ogpData?.image || "",
-      isRead: false,
-      userId: user?.id || "",
-      platformName: ogpData?.siteName || "",
-      platformUrl: ogpData?.siteUrl || "",
-      platformFaviconUrl: ogpData?.faviconImage || "",
-      isEng: isEng,
-    });
-    if (!id) {
-      failToast({
-        description: "Fail: add bookmark failed",
-      });
-      return;
-    }
-    successToast({
-      description: "Success: add bookmark",
-    });
-    await serverRevalidateBookmark();
-    router.replace(`/bookmark/?languageStatus=${languageStatus}`);
-    resetDialog();
-    setOpen(false);
   }, [
     form,
     router,
@@ -269,7 +273,16 @@ export const CreateBookmarkDialog: FC<CreateBookmarkDialogProps> = ({
               </div>
             </div>
             <div className="mt-4">
-              <Button onClick={handleAddSubmit}>{"Add bookmark"}</Button>
+              {isOgpPending ? (
+                <Button disabled>
+                  <ReloadIcon className="mr-2 size-4 animate-spin" />
+                  Please wait
+                </Button>
+              ) : (
+                <Button disabled={isOgpPending} onClick={handleAddSubmit}>
+                  {"Add bookmark"}
+                </Button>
+              )}
             </div>
           </div>
         )}
