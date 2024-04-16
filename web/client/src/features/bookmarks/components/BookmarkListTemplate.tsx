@@ -36,26 +36,14 @@ export const BookmarkListTemplate: FC<ArticleListProps> = async ({
           keyword={keyword}
         />
       </div>
-      {languageStatus === 1 && (
-        <BookmarkList
-          user={user}
-          initialBookmarks={res.data.bookmarks}
-          languageStatus={languageStatus}
-          keyword={keyword}
-          platformIdList={platformIdList}
-          fetchBookmarks={fetchBookmarkListAPI}
-        />
-      )}
-      {languageStatus === 2 && (
-        <BookmarkList
-          user={user}
-          initialBookmarks={res.data.bookmarks}
-          languageStatus={languageStatus}
-          keyword={keyword}
-          platformIdList={platformIdList}
-          fetchBookmarks={fetchBookmarkListAPI}
-        />
-      )}
+      <BookmarkList
+        user={user}
+        initialBookmarks={res.data.bookmarks}
+        languageStatus={languageStatus}
+        keyword={keyword}
+        platformIdList={platformIdList}
+        fetchBookmarks={fetchBookmarkListAPI}
+      />
     </div>
   );
 };
