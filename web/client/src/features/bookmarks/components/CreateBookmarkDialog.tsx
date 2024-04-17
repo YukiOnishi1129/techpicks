@@ -1,8 +1,11 @@
 "use client";
+
 import { zodResolver } from "@hookform/resolvers/zod";
+import { ReloadIcon } from "@radix-ui/react-icons";
 import { User } from "@supabase/supabase-js";
 import { Loader } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   useCallback,
   useState,
@@ -31,7 +34,6 @@ import {
   FormItem,
   FormLabel,
   FormControl,
-  FormDescription,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -40,25 +42,34 @@ import { useStatusToast } from "@/hooks/useStatusToast";
 
 import { checkJapaneseArticle } from "@/lib/check";
 
+import { LanguageStatus } from "@/types/language";
 import { OgpType } from "@/types/ogp";
 
 import { fetchBookmarkCountByArticleUrlAPI } from "../actions/bookmark";
+import { serverRevalidateBookmark } from "../actions/serverAction";
 import { createBookmark } from "../repository/bookmark";
 
 type CreateBookmarkDialogProps = {
   user: User | undefined;
+  languageStatus: LanguageStatus;
 };
 
 export const CreateBookmarkDialog: FC<CreateBookmarkDialogProps> = ({
   user,
+  languageStatus,
 }: CreateBookmarkDialogProps) => {
+  const router = useRouter();
   const [ogpData, setOgpData] = useState<OgpType | null>(null);
+  const [open, setOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
+  const [isOgpPending, startOgpPending] = useTransition();
   const { successToast, failToast } = useStatusToast();
   const FormSchema = z.object({
-    url: z.string().min(1, {
-      message: "Please enter a valid URL",
-    }),
+    url: z
+      .string({
+        required_error: "Please enter the URL",
+      })
+      .url({ message: "Invalid URL" }),
   });
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -67,10 +78,15 @@ export const CreateBookmarkDialog: FC<CreateBookmarkDialogProps> = ({
     },
   });
 
+  const resetDialog = useCallback(() => {
+    form.reset();
+    setOgpData(null);
+  }, [form]);
+
   const onSubmit = useCallback(async (data: z.infer<typeof FormSchema>) => {
     startTransition(async () => {
       const ogp = await getOgpData(data.url);
-      setOgpData(ogp);
+      if (ogp) setOgpData(ogp);
     });
   }, []);
 
@@ -83,52 +99,86 @@ export const CreateBookmarkDialog: FC<CreateBookmarkDialogProps> = ({
   );
 
   const handleAddSubmit = useCallback(async () => {
-    if (!user) {
-      failToast({
-        description: "Fail: Please login to bookmark this article",
+    console.log("🔥🔥🔥🔥🔥🔥");
+    startOgpPending(async () => {
+      if (!user) {
+        failToast({
+          description: "Fail: Please login to bookmark this article",
+        });
+        return;
+      }
+      // 1. check article is already bookmarked
+      const url = form.getValues("url");
+      const countResponse = await fetchBookmarkCountByArticleUrlAPI({
+        articleUrl: url,
       });
-      return;
-    }
-    // 1. check article is already bookmarked
-    const url = form.getValues("url");
-    const countResponse = await fetchBookmarkCountByArticleUrlAPI({
-      articleUrl: url,
-    });
-    if (countResponse.status !== 200) {
-      failToast({
-        description: "Fail: fetch bookmark count failed",
-      });
-      return;
-    }
-    const count = countResponse.data?.count;
-    if (count != undefined && count > 0) {
-      failToast({
-        description: "Fail: This article is already bookmarked",
-      });
-      return;
-    }
+      if (countResponse.status !== 200) {
+        failToast({
+          description: "Fail: fetch bookmark count failed",
+        });
+        return;
+      }
+      const count = countResponse.data?.count;
+      if (count != undefined && count > 0) {
+        failToast({
+          description: "Fail: This article is already bookmarked",
+        });
+        return;
+      }
 
-    // 2. If same article url is in article table, register that date to bookmark table.
-    const articleResponse = await fetchArticleByArticleAndPlatformUrlAPI({
-      articleUrl: url,
-      platformUrl: ogpData?.siteUrl || "",
-    });
+      // 2. If same article url is in article table, register that date to bookmark table.
+      const articleResponse = await fetchArticleByArticleAndPlatformUrlAPI({
+        articleUrl: url,
+        platformUrl: ogpData?.siteUrl || "",
+      });
 
-    if (articleResponse.status === 200 && articleResponse.data?.article) {
-      const article = articleResponse.data.article;
+      if (articleResponse.status === 200 && articleResponse.data?.article) {
+        const article = articleResponse.data.article;
+        const id = await createBookmark({
+          title: article.title,
+          description: article.description,
+          articleId: article.id,
+          articleUrl: article.articleUrl,
+          thumbnailURL: article.thumbnailURL,
+          isRead: false,
+          userId: user?.id || "",
+          platformId: article.platform.id,
+          platformName: article.platform.name,
+          platformUrl: article.platform.siteUrl,
+          platformFaviconUrl: article.platform.faviconUrl,
+          isEng: article.platform.isEng,
+        });
+        if (!id) {
+          failToast({
+            description: "Fail: add bookmark failed",
+          });
+          return;
+        }
+        successToast({
+          description: "Success: add bookmark",
+        });
+        await serverRevalidateBookmark();
+        router.replace(`/bookmark/?languageStatus=${languageStatus}`);
+        resetDialog();
+        setOpen(false);
+        return;
+      }
+      // 3. If not, get ogp data and register that data to article table and bookmark table.
+      const isEng = !checkJapaneseArticle({
+        title: ogpData?.title || "",
+        description: ogpData?.description || "",
+      });
       const id = await createBookmark({
-        title: article.title,
-        description: article.description,
-        articleId: article.id,
-        articleUrl: article.articleUrl,
-        thumbnailURL: article.thumbnailURL,
+        title: ogpData?.title || "",
+        description: ogpData?.description || "",
+        articleUrl: url,
+        thumbnailURL: ogpData?.image || "",
         isRead: false,
         userId: user?.id || "",
-        platformId: article.platform.id,
-        platformName: article.platform.name,
-        platformUrl: article.platform.siteUrl,
-        platformFaviconUrl: article.platform.faviconUrl,
-        isEng: article.platform.isEng,
+        platformName: ogpData?.siteName || "",
+        platformUrl: ogpData?.siteUrl || "",
+        platformFaviconUrl: ogpData?.faviconImage || "",
+        isEng: isEng,
       });
       if (!id) {
         failToast({
@@ -139,42 +189,28 @@ export const CreateBookmarkDialog: FC<CreateBookmarkDialogProps> = ({
       successToast({
         description: "Success: add bookmark",
       });
-      return;
-    }
-    // 3. If not, get ogp data and register that data to article table and bookmark table.
-    const isEng = !checkJapaneseArticle({
-      title: ogpData?.title || "",
-      description: ogpData?.description || "",
+      await serverRevalidateBookmark();
+      router.replace(`/bookmark/?languageStatus=${languageStatus}`);
+      resetDialog();
+      setOpen(false);
     });
-    const id = await createBookmark({
-      title: ogpData?.title || "",
-      description: ogpData?.description || "",
-      articleUrl: url,
-      thumbnailURL: ogpData?.image || "",
-      isRead: false,
-      userId: user?.id || "",
-      platformName: ogpData?.siteName || "",
-      platformUrl: ogpData?.siteUrl || "",
-      platformFaviconUrl: ogpData?.faviconImage || "",
-      isEng: isEng,
-    });
-    if (!id) {
-      failToast({
-        description: "Fail: add bookmark failed",
-      });
-      return;
-    }
-    successToast({
-      description: "Success: add bookmark",
-    });
-  }, [form, failToast, successToast, user, ogpData]);
+  }, [
+    form,
+    router,
+    languageStatus,
+    resetDialog,
+    failToast,
+    successToast,
+    user,
+    ogpData,
+  ]);
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button>{"Add new article"}</Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent onCloseAutoFocus={resetDialog}>
         <DialogHeader>
           <DialogTitle>{"Add New Bookmark Article"}</DialogTitle>
         </DialogHeader>
@@ -182,16 +218,17 @@ export const CreateBookmarkDialog: FC<CreateBookmarkDialogProps> = ({
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
-              className="w-2/3 space-y-6"
+              className="w-full space-y-6"
             >
               <FormField
                 control={form.control}
                 name="url"
                 render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Article url</FormLabel>
+                  <FormItem className="w-full">
+                    <FormLabel className="font-bold">URL</FormLabel>
                     <FormControl>
                       <Input
+                        className="block w-full"
                         placeholder="https://example.com"
                         type="url"
                         pattern="https://.*|http://.*"
@@ -199,11 +236,6 @@ export const CreateBookmarkDialog: FC<CreateBookmarkDialogProps> = ({
                         {...field}
                       />
                     </FormControl>
-                    <FormDescription>
-                      {
-                        "Please enter the URL of the article you want to bookmark"
-                      }
-                    </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -211,24 +243,26 @@ export const CreateBookmarkDialog: FC<CreateBookmarkDialogProps> = ({
             </form>
           </Form>
         </div>
+
         {isPending && <Loader />}
         {!isPending && ogpData && (
-          <div className="mt-8 w-full">
-            <div className="flex h-[200px] w-full justify-around overflow-y-scroll">
-              <div className="w-2/5">
+          <div className="mt-4 w-full">
+            <h3 className="text-lg font-bold">PREVIEW</h3>
+            <div className="mt-4 flex  w-full justify-around overflow-y-scroll">
+              <div className="w-1/3">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={ogpData.image} alt="" />
               </div>
-              <div className="w-2/5">
-                <h3>{ogpData.title}</h3>
-                <p className="overflow-hidden truncate">
-                  {ogpData.description}
-                </p>
+              <div className="w-3/5">
+                <h3 className="line-clamp-2 h-12 w-full text-base font-bold leading-6">
+                  {ogpData.title}
+                </h3>
 
-                <div>
+                <div className="mt-4 flex cursor-pointer items-center space-x-2 hover:underline">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img className="size-6" src={ogpData.faviconImage} alt="" />
-                  <span>
+
+                  <span className="text-sm">
                     <Link href={ogpData.siteUrl} target="_blank">
                       {ogpData.siteName}
                     </Link>
@@ -236,14 +270,24 @@ export const CreateBookmarkDialog: FC<CreateBookmarkDialogProps> = ({
                 </div>
               </div>
             </div>
-            <div className="mt-4">
-              <Button onClick={handleAddSubmit}>{"Add bookmark"}</Button>
-            </div>
           </div>
         )}
-        <DialogClose>
-          <Button>{"Close"}</Button>
-        </DialogClose>
+
+        <div className="mt-4 flex w-full justify-start space-x-4">
+          {isOgpPending ? (
+            <Button disabled>
+              <ReloadIcon className="mr-2 size-4 animate-spin" />
+              PLEASE WAIT
+            </Button>
+          ) : (
+            <Button disabled={!ogpData} onClick={handleAddSubmit}>
+              {"ADD BOOKMARK"}
+            </Button>
+          )}
+          <DialogClose>
+            <Button onClick={resetDialog}>{"CLOSE"}</Button>
+          </DialogClose>
+        </div>
       </DialogContent>
     </Dialog>
   );

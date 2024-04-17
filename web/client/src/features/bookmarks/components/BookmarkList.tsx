@@ -91,6 +91,10 @@ export const BookmarkList: FC<Props> = ({
   }, [hashMore]);
 
   useEffect(() => {
+    setBookmarks(initialBookmarks);
+  }, [initialBookmarks]);
+
+  useEffect(() => {
     if (offset > 1) {
       loadMore(offset);
     }

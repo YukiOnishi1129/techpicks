@@ -2,6 +2,8 @@
 
 import { parse } from "node-html-parser";
 
+import { checkHTTPUrl } from "@/lib/check";
+
 import { OgpType } from "@/types/ogp";
 
 const allowedTags = [
@@ -21,6 +23,8 @@ const allowedTags = [
 ];
 
 export const getOgpData = async (url: string) => {
+  if (!checkHTTPUrl(url)) return;
+
   const encodeUri = encodeURI(url);
 
   const res = await fetch(encodeUri, {
@@ -53,7 +57,7 @@ export const getOgpData = async (url: string) => {
     objectMap["og:title"] ||
     objectMap["twitter:title"] ||
     root.querySelector("title")?.innerText ||
-    url;
+    "";
 
   const description =
     objectMap["og:description"] || objectMap["description"] || "";
@@ -98,10 +102,7 @@ const getDomainUrl = async (url: string) => {
 };
 
 const setFaviconUrl = async (url: string, faviconUrl: string) => {
-  const str = "http";
-  if (!str.indexOf(faviconUrl)) {
-    return faviconUrl;
-  }
+  if (checkHTTPUrl(faviconUrl)) return faviconUrl;
   const { protocol, host } = new URL(url);
   return new URL(faviconUrl, `${protocol}//${host}`).toString();
 };
