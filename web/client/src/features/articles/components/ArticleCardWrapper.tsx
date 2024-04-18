@@ -1,16 +1,13 @@
 "use client";
 import { User } from "@supabase/supabase-js";
 import { FC } from "react";
-import { FcBookmark } from "react-icons/fc";
 // import { uuid } from "uuidv4";
-
-import { Button } from "@/components/ui/button";
 
 import { ArticleType } from "@/types/article";
 
 import { ArticleCard } from "./ArticleCard";
 import { ArticleDetailSheet } from "./ArticleDetailSheet";
-import { AddBookmarkTooltip } from "./Tooltip/AddBookmarkTooptip";
+import { AddBookmarkTooltip, DeleteBookmarkTooltip } from "./Tooltip";
 import { useArticleBookmark } from "../hooks/useArticleBookmark";
 
 type ArticleCardWrapperProps = {
@@ -32,22 +29,19 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
       </ArticleDetailSheet>
       <div className="flex size-8 items-center justify-center rounded-full bg-white px-8 py-4">
         {user && (
-          <div>
+          <>
             {bookmarkId ? (
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => handleRemoveBookmark(bookmarkId)}
-              >
-                <FcBookmark className="inline-block" size={36} />
-              </Button>
+              <DeleteBookmarkTooltip
+                bookmarkId={bookmarkId}
+                handleRemoveBookmark={handleRemoveBookmark}
+              />
             ) : (
               <AddBookmarkTooltip
                 articleId={article.id}
                 handleAddBookmark={handleAddBookmark}
               />
             )}
-          </div>
+          </>
         )}
       </div>
     </div>
