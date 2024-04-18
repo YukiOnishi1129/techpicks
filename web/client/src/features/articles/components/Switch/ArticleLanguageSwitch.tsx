@@ -1,11 +1,9 @@
 "use client";
 
-import { Loader } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { FC, useCallback, useState } from "react";
 
-import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
+import { LanguageSwitch } from "@/components/ui/switch";
 
 import { ArticleTabType } from "@/types/article";
 import { LanguageStatus } from "@/types/language";
@@ -42,14 +40,11 @@ export const ArticleLanguageSwitch: FC<ArticleLanguageSwitchProps> = ({
   );
 
   return (
-    <div className="flex items-center justify-end space-x-2">
-      {isLoading ? (
-        <Loader />
-      ) : (
-        <Switch id="airplane-mode" checked={isEng} onCheckedChange={onChange} />
-      )}
-
-      <Label htmlFor="airplane-mode">{switchLabel}</Label>
-    </div>
+    <LanguageSwitch
+      isEng={isEng}
+      isLoading={isLoading}
+      label={switchLabel}
+      onCheckedChange={onChange}
+    />
   );
 };

@@ -10,8 +10,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ArticleTabType } from "@/types/article";
 import { LanguageStatus } from "@/types/language";
 
-import { ArticleLanguageSwitch } from "./ArticleLanguageSwitch";
 import { ArticleList } from "./ArticleList";
+import { ArticleLanguageSwitch } from "./Switch";
 import { fetchArticlesAPI } from "../actions/article";
 
 type ArticleListTemplateProps = {
@@ -123,28 +123,15 @@ const ArticleListContent = async ({
         />
       </div>
 
-      {languageStatus === 1 && (
-        <ArticleList
-          user={user}
-          initialArticles={res.data.articles}
-          languageStatus={languageStatus}
-          keyword={keyword}
-          platformIdList={platformIdList}
-          tab={tab}
-          fetchArticles={fetchArticlesAPI}
-        />
-      )}
-      {languageStatus === 2 && (
-        <ArticleList
-          user={user}
-          initialArticles={res.data.articles}
-          languageStatus={languageStatus}
-          keyword={keyword}
-          platformIdList={platformIdList}
-          tab={tab}
-          fetchArticles={fetchArticlesAPI}
-        />
-      )}
+      <ArticleList
+        user={user}
+        initialArticles={res.data.articles}
+        languageStatus={languageStatus}
+        keyword={keyword}
+        platformIdList={platformIdList}
+        tab={tab}
+        fetchArticles={fetchArticlesAPI}
+      />
     </>
   );
 };

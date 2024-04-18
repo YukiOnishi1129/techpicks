@@ -45,9 +45,9 @@ import { checkJapaneseArticle } from "@/lib/check";
 import { LanguageStatus } from "@/types/language";
 import { OgpType } from "@/types/ogp";
 
-import { fetchBookmarkCountByArticleUrlAPI } from "../actions/bookmark";
-import { serverRevalidateBookmark } from "../actions/serverAction";
-import { createBookmark } from "../repository/bookmark";
+import { fetchBookmarkCountByArticleUrlAPI } from "../../actions/bookmark";
+import { serverRevalidateBookmark } from "../../actions/serverAction";
+import { createBookmark } from "../../repository/bookmark";
 
 type CreateBookmarkDialogProps = {
   user: User | undefined;
@@ -99,7 +99,6 @@ export const CreateBookmarkDialog: FC<CreateBookmarkDialogProps> = ({
   );
 
   const handleAddSubmit = useCallback(async () => {
-    console.log("🔥🔥🔥🔥🔥🔥");
     startOgpPending(async () => {
       if (!user) {
         failToast({

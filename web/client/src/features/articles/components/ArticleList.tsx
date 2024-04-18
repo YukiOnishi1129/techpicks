@@ -92,6 +92,10 @@ export function ArticleList({
   }, [hashMore]);
 
   useEffect(() => {
+    setArticles(initialArticles);
+  }, [initialArticles]);
+
+  useEffect(() => {
     if (offset > 1) {
       loadMore(offset);
     }
@@ -110,11 +114,9 @@ export function ArticleList({
       ) : (
         <div className="m-auto h-[700px] overflow-y-scroll md:h-[600px]">
           {flatArticles.map((article) => (
-            <ArticleCardWrapper
-              key={article.id}
-              article={article}
-              user={user}
-            />
+            <div key={article.id} className="mb-4">
+              <ArticleCardWrapper article={article} user={user} />
+            </div>
           ))}
           <div ref={observerTarget}>
             {hashMore && (

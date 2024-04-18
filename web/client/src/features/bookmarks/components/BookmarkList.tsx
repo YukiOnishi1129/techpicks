@@ -8,8 +8,7 @@ import { Loader } from "@/components/ui/loader";
 import { BookmarkType } from "@/types/bookmark";
 import { LanguageStatus } from "@/types/language";
 
-import { BookmarkCard } from "./BookmarkCard";
-import { BookmarkDetailSheet } from "./BookmarkDetailSheet";
+import { BookmarkCardWrapper } from "./BookmarkCardWrapper";
 import { FetchBookmarkListAPIResponse } from "../actions/bookmark";
 
 type Props = {
@@ -103,10 +102,8 @@ export const BookmarkList: FC<Props> = ({
   return (
     <div className="m-auto h-[700px] overflow-y-scroll md:h-[600px]">
       {flatBookmarks.map((bookmark) => (
-        <div key={bookmark.id} className="border-t-2 py-8">
-          <BookmarkDetailSheet bookmark={bookmark}>
-            <BookmarkCard bookmark={bookmark} />
-          </BookmarkDetailSheet>
+        <div key={bookmark.id} className="mb-8">
+          <BookmarkCardWrapper bookmark={bookmark} />
         </div>
       ))}
       <div ref={observerTarget}>

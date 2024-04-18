@@ -35,9 +35,13 @@ export const ArticleCard: FC<ArticleCardProps> = ({
         </div>
 
         <div className="mt-4 md:mt-0 md:w-[65%]">
-          <h3 className="mb-8 line-clamp-3 text-left text-lg font-bold tracking-wide md:w-4/5 md:text-xl">
+          <h3 className="line-clamp-3 text-left text-lg font-bold tracking-wide md:w-full md:text-xl">
             {article.title}
           </h3>
+
+          <p className="flex pt-2 text-sm">
+            {showDiffDateToCurrentDate(article.publishedAt)}
+          </p>
 
           <div className="flex w-full items-center pt-2 md:w-4/5">
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -62,9 +66,6 @@ export const ArticleCard: FC<ArticleCardProps> = ({
                 </p>
               ))}
           </div>
-          <p className="flex pt-4 text-sm">
-            {showDiffDateToCurrentDate(article.publishedAt)}
-          </p>
         </div>
       </div>
     </div>
