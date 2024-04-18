@@ -10,8 +10,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ArticleTabType } from "@/types/article";
 import { LanguageStatus } from "@/types/language";
 
-import { ArticleLanguageSwitch } from "./ArticleLanguageSwitch";
 import { ArticleList } from "./ArticleList";
+import { ArticleLanguageSwitch } from "./Switch";
 import { fetchArticlesAPI } from "../actions/article";
 
 type ArticleListTemplateProps = {
