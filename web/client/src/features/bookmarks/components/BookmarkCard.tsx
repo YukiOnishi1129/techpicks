@@ -32,11 +32,15 @@ export const BookmarkCard: FC<BookmarkCardProps> = ({
         </div>
 
         <div className="mt-4 md:mt-0 md:w-[65%]">
-          <h3 className="mb-8 line-clamp-3 w-4/5  pt-2 text-left text-lg font-bold tracking-wide md:text-xl">
+          <h3 className="line-clamp-3  pt-2 text-left text-lg font-bold tracking-wide md:text-xl">
             {bookmark.title}
           </h3>
 
-          <div className="flex w-full items-center pt-2 md:w-4/5">
+          <p className="flex pt-2 text-sm">
+            {`登録: ${showDiffDateToCurrentDate(bookmark.createdAt)}`}
+          </p>
+
+          <div className="flex w-full items-center pt-2">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               className="mr-2 inline-block size-[24px]"
@@ -47,9 +51,6 @@ export const BookmarkCard: FC<BookmarkCardProps> = ({
               {bookmark.platformName}
             </p>
           </div>
-          <p className="flex pt-2 text-sm">
-            {`登録: ${showDiffDateToCurrentDate(bookmark.createdAt)}`}
-          </p>
         </div>
       </div>
     </div>
