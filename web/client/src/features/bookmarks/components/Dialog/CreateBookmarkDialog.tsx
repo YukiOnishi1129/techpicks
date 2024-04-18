@@ -99,7 +99,6 @@ export const CreateBookmarkDialog: FC<CreateBookmarkDialogProps> = ({
   );
 
   const handleAddSubmit = useCallback(async () => {
-    console.log("🔥🔥🔥🔥🔥🔥");
     startOgpPending(async () => {
       if (!user) {
         failToast({
