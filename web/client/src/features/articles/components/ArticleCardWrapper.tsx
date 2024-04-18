@@ -2,7 +2,6 @@
 import { User } from "@supabase/supabase-js";
 import { FC } from "react";
 import { FcBookmark } from "react-icons/fc";
-import { MdOutlineBookmarkAdd } from "react-icons/md";
 // import { uuid } from "uuidv4";
 
 import { Button } from "@/components/ui/button";
@@ -11,6 +10,7 @@ import { ArticleType } from "@/types/article";
 
 import { ArticleCard } from "./ArticleCard";
 import { ArticleDetailSheet } from "./ArticleDetailSheet";
+import { AddBookmarkTooltip } from "./Tooltip/AddBookmarkTooptip";
 import { useArticleBookmark } from "../hooks/useArticleBookmark";
 
 type ArticleCardWrapperProps = {
@@ -26,14 +26,11 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
     useArticleBookmark({ article });
 
   return (
-    <div key={article.id} className="relative py-2">
-      <div className="pb-12">
-        <ArticleDetailSheet article={article} user={user}>
-          <ArticleCard article={article} user={user} />
-        </ArticleDetailSheet>
-      </div>
-
-      <div className="absolute right-5 top-0 flex size-8 items-center justify-center rounded-full bg-white py-8 md:right-12">
+    <div key={article.id} className="mb-4 rounded-2xl border-2 md:py-2">
+      <ArticleDetailSheet article={article} user={user}>
+        <ArticleCard article={article} user={user} />
+      </ArticleDetailSheet>
+      <div className="flex size-8 items-center justify-center rounded-full bg-white px-8 py-4">
         {user && (
           <div>
             {bookmarkId ? (
@@ -45,13 +42,10 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
                 <FcBookmark className="inline-block" size={36} />
               </Button>
             ) : (
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => handleAddBookmark(article.id)}
-              >
-                <MdOutlineBookmarkAdd className="inline-block" size={36} />
-              </Button>
+              <AddBookmarkTooltip
+                articleId={article.id}
+                handleAddBookmark={handleAddBookmark}
+              />
             )}
           </div>
         )}
