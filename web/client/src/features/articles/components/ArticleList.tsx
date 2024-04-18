@@ -92,6 +92,10 @@ export function ArticleList({
   }, [hashMore]);
 
   useEffect(() => {
+    setArticles(initialArticles);
+  }, [initialArticles]);
+
+  useEffect(() => {
     if (offset > 1) {
       loadMore(offset);
     }

@@ -123,28 +123,15 @@ const ArticleListContent = async ({
         />
       </div>
 
-      {languageStatus === 1 && (
-        <ArticleList
-          user={user}
-          initialArticles={res.data.articles}
-          languageStatus={languageStatus}
-          keyword={keyword}
-          platformIdList={platformIdList}
-          tab={tab}
-          fetchArticles={fetchArticlesAPI}
-        />
-      )}
-      {languageStatus === 2 && (
-        <ArticleList
-          user={user}
-          initialArticles={res.data.articles}
-          languageStatus={languageStatus}
-          keyword={keyword}
-          platformIdList={platformIdList}
-          tab={tab}
-          fetchArticles={fetchArticlesAPI}
-        />
-      )}
+      <ArticleList
+        user={user}
+        initialArticles={res.data.articles}
+        languageStatus={languageStatus}
+        keyword={keyword}
+        platformIdList={platformIdList}
+        tab={tab}
+        fetchArticles={fetchArticlesAPI}
+      />
     </>
   );
 };
