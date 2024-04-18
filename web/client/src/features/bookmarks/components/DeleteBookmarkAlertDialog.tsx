@@ -1,3 +1,5 @@
+import { DeleteBookmarkTooltip } from "@/features/articles/components/Tooltip";
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -9,19 +11,26 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Button } from "@/components/ui/button";
+
+import { useBookmark } from "../hooks/useBookmark";
 
 type DeleteBookmarkAlertDialogProps = {
   bookmarkTitle: string;
+  bookmarkId: string;
 };
 
 export function DeleteBookmarkAlertDialog({
   bookmarkTitle,
+  bookmarkId,
 }: DeleteBookmarkAlertDialogProps) {
+  const { handleRemoveBookmark } = useBookmark();
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant="outline">Show Dialog</Button>
+        <DeleteBookmarkTooltip
+          bookmarkId={bookmarkId}
+          handleRemoveBookmark={handleRemoveBookmark}
+        />
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
