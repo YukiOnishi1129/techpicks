@@ -1,4 +1,4 @@
-import { DeleteBookmarkTooltip } from "@/features/articles/components/Tooltip";
+import { FcBookmark } from "react-icons/fc";
 
 import {
   AlertDialog,
@@ -11,8 +11,14 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
-import { useBookmark } from "../hooks/useBookmark";
+import { useBookmark } from "../../hooks/useBookmark";
 
 type DeleteBookmarkAlertDialogProps = {
   bookmarkTitle: string;
@@ -26,12 +32,18 @@ export function DeleteBookmarkAlertDialog({
   const { handleRemoveBookmark } = useBookmark();
   return (
     <AlertDialog>
-      <AlertDialogTrigger asChild>
-        <DeleteBookmarkTooltip
-          bookmarkId={bookmarkId}
-          handleRemoveBookmark={handleRemoveBookmark}
-        />
-      </AlertDialogTrigger>
+      <TooltipProvider>
+        <Tooltip>
+          <AlertDialogTrigger asChild>
+            <TooltipTrigger>
+              <FcBookmark className="inline-block" size={36} />
+            </TooltipTrigger>
+          </AlertDialogTrigger>
+          <TooltipContent className="px-4 py-3 font-semibold">
+            <p>Delete bookmark</p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
@@ -45,8 +57,10 @@ export function DeleteBookmarkAlertDialog({
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction>Delete</AlertDialogAction>
+          <AlertDialogCancel>CANCEL</AlertDialogCancel>
+          <AlertDialogAction onClick={() => handleRemoveBookmark(bookmarkId)}>
+            DELETE
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

@@ -45,9 +45,9 @@ import { checkJapaneseArticle } from "@/lib/check";
 import { LanguageStatus } from "@/types/language";
 import { OgpType } from "@/types/ogp";
 
-import { fetchBookmarkCountByArticleUrlAPI } from "../actions/bookmark";
-import { serverRevalidateBookmark } from "../actions/serverAction";
-import { createBookmark } from "../repository/bookmark";
+import { fetchBookmarkCountByArticleUrlAPI } from "../../actions/bookmark";
+import { serverRevalidateBookmark } from "../../actions/serverAction";
+import { createBookmark } from "../../repository/bookmark";
 
 type CreateBookmarkDialogProps = {
   user: User | undefined;

@@ -6,7 +6,7 @@ import { LanguageStatus } from "@/types/language";
 
 import { BookmarkLanguageTabMenu } from "./BookmarkLanguageTabMenu";
 import { BookmarkList } from "./BookmarkList";
-import { CreateBookmarkDialog } from "./CreateBookmarkDialog";
+import { CreateBookmarkDialog } from "./Dialog";
 import { fetchBookmarkListAPI } from "../actions/bookmark";
 
 type ArticleListProps = {

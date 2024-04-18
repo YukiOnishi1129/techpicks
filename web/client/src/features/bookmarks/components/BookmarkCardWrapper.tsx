@@ -6,6 +6,7 @@ import { BookmarkType } from "@/types/bookmark";
 
 import { BookmarkCard } from "./BookmarkCard";
 import { BookmarkDetailSheet } from "./BookmarkDetailSheet";
+import { DeleteBookmarkAlertDialog } from "./Dialog";
 
 type BookmarkCardWrapperProps = {
   bookmark: BookmarkType;
@@ -19,7 +20,12 @@ export const BookmarkCardWrapper: FC<BookmarkCardWrapperProps> = ({
       <BookmarkDetailSheet bookmark={bookmark}>
         <BookmarkCard bookmark={bookmark} />
       </BookmarkDetailSheet>
-      <div className="flex size-8 items-center justify-center rounded-full bg-white px-8 py-4"></div>
+      <div className="flex size-8 items-center justify-center rounded-full bg-white px-8 py-4">
+        <DeleteBookmarkAlertDialog
+          bookmarkId={bookmark.id}
+          bookmarkTitle={bookmark.title}
+        />
+      </div>
     </div>
   );
 };
