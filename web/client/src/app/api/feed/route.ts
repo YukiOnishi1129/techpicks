@@ -5,7 +5,11 @@ import { NextRequest, NextResponse } from "next/server";
 import { getFeed } from "@/features/feed/repository/feed";
 
 export async function GET(req: NextRequest) {
-  const feeds = await getFeed();
+  const searchParams = req.nextUrl.searchParams;
+  const offset = searchParams.get("offset");
+  const feeds = await getFeed({
+    offset: parseInt(offset || "1"),
+  });
 
   if (!feeds) {
     return NextResponse.json(

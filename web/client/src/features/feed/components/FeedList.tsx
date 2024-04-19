@@ -11,7 +11,11 @@ import { FetchFeedsAPIResponse } from "../actions/feed";
 
 type FeedListProps = {
   initialFeeds: Array<FeedType>;
-  fetchFeedsAPI: () => Promise<FetchFeedsAPIResponse>;
+  fetchFeedsAPI: ({
+    offset,
+  }: {
+    offset?: string;
+  }) => Promise<FetchFeedsAPIResponse>;
 };
 
 export const FeedList: FC<FeedListProps> = async ({
@@ -28,7 +32,7 @@ export const FeedList: FC<FeedListProps> = async ({
 
   const loadMore = useCallback(
     async (offset: number) => {
-      const res = await fetchFeedsAPI();
+      const res = await fetchFeedsAPI({ offset: offset.toString() });
       setFeeds((prev) => [...prev, ...res.data.feeds]);
 
       const count = res.data.feeds.length;

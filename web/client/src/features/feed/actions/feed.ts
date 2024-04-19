@@ -12,8 +12,12 @@ export type FetchFeedsAPIResponse = {
   status: number;
 };
 
-export const fetchFeedsAPI = async (): Promise<FetchFeedsAPIResponse> => {
-  const url = `http://localhost:80/api/feed`;
+export const fetchFeedsAPI = async ({
+  offset = "1",
+}: {
+  offset?: string;
+}): Promise<FetchFeedsAPIResponse> => {
+  const url = `http://localhost:80/api/feed?offset=${offset}`;
   const response = await getFetch({
     url,
     tagName: "feed",

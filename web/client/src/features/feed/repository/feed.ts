@@ -4,9 +4,17 @@ import prisma from "@/lib/prisma";
 
 import { FeedType } from "@/types/feed";
 
-export const getFeed = async () => {
+const LIMIT = 20;
+
+export type GetFeedParams = {
+  offset?: number;
+};
+
+export const getFeed = async ({ offset = 1 }: GetFeedParams) => {
   try {
     const res = await prisma.feed.findMany({
+      take: 20,
+      skip: (offset - 1) * LIMIT,
       where: {
         deletedAt: null,
       },
