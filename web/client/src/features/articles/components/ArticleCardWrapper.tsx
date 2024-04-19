@@ -1,7 +1,6 @@
 "use client";
 import { User } from "@supabase/supabase-js";
 import { FC } from "react";
-// import { uuid } from "uuidv4";
 
 import { ArticleType } from "@/types/article";
 

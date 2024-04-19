@@ -6,6 +6,7 @@ import { Loader } from "@/components/ui/loader";
 
 import { FeedType } from "@/types/feed";
 
+import { FeedCardWrapper } from "./FeedCardWrapper";
 import { FetchFeedsAPIResponse } from "../actions/feed";
 
 type FeedListProps = {
@@ -86,7 +87,7 @@ export const FeedList: FC<FeedListProps> = async ({
         <div className="m-auto h-[700px] overflow-y-scroll md:h-[600px]">
           {flatFeeds.map((feed) => (
             <div key={feed.id} className="mb-4">
-              {/* <ArticleCardWrapper article={article} user={user} /> */}
+              <FeedCardWrapper feed={feed} />
             </div>
           ))}
           <div ref={observerTarget}>
