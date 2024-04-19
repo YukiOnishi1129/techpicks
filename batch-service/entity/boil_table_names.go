@@ -9,6 +9,8 @@ var TableNames = struct {
 	Categories           string
 	FeedArticleRelations string
 	Feeds                string
+	MyFeedLists          string
+	MyFeeds              string
 	Platforms            string
 	Profiles             string
 }{
@@ -17,6 +19,8 @@ var TableNames = struct {
 	Categories:           "categories",
 	FeedArticleRelations: "feed_article_relations",
 	Feeds:                "feeds",
+	MyFeedLists:          "my_feed_lists",
+	MyFeeds:              "my_feeds",
 	Platforms:            "platforms",
 	Profiles:             "profiles",
 }

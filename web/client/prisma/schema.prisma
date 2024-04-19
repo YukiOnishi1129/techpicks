@@ -13,6 +13,38 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model MyFeed {
+  id           String   @id @default(uuid())
+  userId       String @map("user_id")
+  myFeedListId String @map("my_feed_list_id")
+  feedId       String @map("feed_id")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  profile      Profile  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  myFeedList   MyFeedList  @relation(fields: [myFeedListId], references: [id], onDelete: Cascade)
+  feed         Feed  @relation(fields: [feedId], references: [id], onDelete: Cascade)
+
+  @@map("my_feeds")
+
+
+}
+
+model MyFeedList {
+  id           String   @id @default(uuid())
+  userId       String @map("user_id")
+  title        String
+  description  String
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+  myFeeds      MyFeed[]
+
+  profile      Profile  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("my_feed_lists")
+
+}
+
 model Bookmark {
   id           String   @id @default(uuid())
   userId       String @map("user_id")
@@ -51,7 +83,9 @@ model Profile {
   createdAt     DateTime @default(now()) @map("created_at")
   updatedAt     DateTime @updatedAt @map("updated_at")
   deletedAt     DateTime? @map("deleted_at")
-  bookmarks      Bookmark[]
+  bookmarks     Bookmark[]
+  myFeedLists   MyFeedList[]
+  myFeeds       MyFeed[]
 
   @@map("profiles")
 }
@@ -105,6 +139,7 @@ model Feed {
 
   platform     Platform  @relation(fields: [platformId], references: [id], onDelete: Cascade)
   category     Category  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  myFeeds      MyFeed[]
 
   feedArticleRelatoins FeedArticleRelation[]
 
