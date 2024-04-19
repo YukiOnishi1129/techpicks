@@ -7,17 +7,36 @@ import { FeedType } from "@/types/feed";
 export const getFeed = async () => {
   try {
     const res = await prisma.feed.findMany({
-      orderBy: {
-        platform: {
-          platformType: "asc",
-          isEng: "asc",
-          name: "asc",
-        },
-        category: {
-          type: "asc",
-          name: "asc",
-        },
+      where: {
+        deletedAt: null,
       },
+      orderBy: [
+        {
+          platform: {
+            platformType: "asc",
+          },
+        },
+        {
+          platform: {
+            isEng: "asc",
+          },
+        },
+        {
+          platform: {
+            name: "asc",
+          },
+        },
+        {
+          category: {
+            type: "asc",
+          },
+        },
+        {
+          category: {
+            name: "asc",
+          },
+        },
+      ],
       include: {
         category: true,
         platform: true,
@@ -26,7 +45,12 @@ export const getFeed = async () => {
 
     const feeds: Array<FeedType> = res.map((feed) => {
       const resFeed: FeedType = {
-        ...feed,
+        id: feed.id,
+        name: feed.name,
+        siteUrl: feed.siteUrl,
+        isTrending: feed.isTrending,
+        createdAt: feed.createdAt,
+        updatedAt: feed.updatedAt,
         category: feed.category,
         platform: feed.platform,
       };
