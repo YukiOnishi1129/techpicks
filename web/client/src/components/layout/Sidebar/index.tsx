@@ -24,7 +24,7 @@ export function Sidebar() {
           </h2>
           <div className="space-y-1 pl-8">
             <div>
-              <Link href="/feed">All</Link>
+              <Link href="/myfeed-list">All</Link>
             </div>
           </div>
         </div>

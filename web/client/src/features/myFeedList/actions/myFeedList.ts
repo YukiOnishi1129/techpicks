@@ -12,7 +12,7 @@ export type FetchMyFeedListAPIResponse = {
   status: number;
 };
 
-export const fetchMyFeedList = async () => {
+export const fetchMyFeedListAPI = async () => {
   const url = `http://localhost:80/api/myfeed-list`;
   const response = await getFetch({
     url,
@@ -26,20 +26,19 @@ export const fetchMyFeedList = async () => {
     return {
       data: {
         myFeedLists: [],
-        message: "unauthorized",
+        message: data.message as string,
       },
       status: status,
     };
   }
-  if (status === 200) {
-    return {
-      data: {
-        myFeedLists: data.myFeedLists as MyFeedListType[],
-        message: "success",
-      },
-      status: status,
-    };
-  }
+
+  return {
+    data: {
+      myFeedLists: data.myFeedLists as MyFeedListType[],
+      message: data.message as string,
+    },
+    status: status,
+  };
 };
 
 export type FetchMyFeedListByIdAPIResponse = {
