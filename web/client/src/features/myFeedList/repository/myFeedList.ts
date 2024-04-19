@@ -4,7 +4,6 @@
 import { v4 as uuidv4 } from "uuid";
 
 import { MyFeedListType } from "@/types/myFeedList";
-// eslint-disable-next-line import/named
 
 type GetMyFeedList = {
   userId: string;
@@ -116,11 +115,17 @@ export const getMyFeedList = async ({ userId }: GetMyFeedList) => {
   }
 };
 
-export const getMyFeedListById = async (id: string) => {
+type GetMyFeedListById = {
+  id: string;
+  userId: string;
+};
+
+export const getMyFeedListById = async ({ id, userId }: GetMyFeedListById) => {
   try {
     const myFeedList = await prisma.myFeedList.findUnique({
       where: {
         id: id,
+        userId: userId,
       },
       include: {
         myFeeds: {
