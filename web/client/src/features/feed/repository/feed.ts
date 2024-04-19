@@ -48,6 +48,23 @@ export const getFeedById = async (id: string) => {
       include: {
         category: true,
         platform: true,
+        feedArticleRelatoins: {
+          select: {
+            article: {
+              select: {
+                id: true,
+                title: true,
+                description: true,
+                articleUrl: true,
+                publishedAt: true,
+                thumbnailURL: true,
+                isPrivate: true,
+                createdAt: true,
+                updatedAt: true,
+              },
+            },
+          },
+        },
       },
     });
 
@@ -61,6 +78,19 @@ export const getFeedById = async (id: string) => {
       updatedAt: res.updatedAt,
       category: res.category,
       platform: res.platform,
+      articles: res.feedArticleRelatoins.map((feedArticleRelatoins) => {
+        return {
+          id: feedArticleRelatoins.article.id,
+          title: feedArticleRelatoins.article.title,
+          description: feedArticleRelatoins.article.description,
+          articleUrl: feedArticleRelatoins.article.articleUrl,
+          publishedAt: feedArticleRelatoins.article.publishedAt,
+          thumbnailURL: feedArticleRelatoins.article.thumbnailURL,
+          isPrivate: feedArticleRelatoins.article.isPrivate,
+          createdAt: feedArticleRelatoins.article.createdAt,
+          updatedAt: feedArticleRelatoins.article.updatedAt,
+        };
+      }),
     };
 
     return resFeed;
