@@ -118,10 +118,12 @@ var FeedRels = struct {
 	Category             string
 	Platform             string
 	FeedArticleRelations string
+	MyFeeds              string
 }{
 	Category:             "Category",
 	Platform:             "Platform",
 	FeedArticleRelations: "FeedArticleRelations",
+	MyFeeds:              "MyFeeds",
 }
 
 // feedR is where relationships are stored.
@@ -129,6 +131,7 @@ type feedR struct {
 	Category             *Category                `boil:"Category" json:"Category" toml:"Category" yaml:"Category"`
 	Platform             *Platform                `boil:"Platform" json:"Platform" toml:"Platform" yaml:"Platform"`
 	FeedArticleRelations FeedArticleRelationSlice `boil:"FeedArticleRelations" json:"FeedArticleRelations" toml:"FeedArticleRelations" yaml:"FeedArticleRelations"`
+	MyFeeds              MyFeedSlice              `boil:"MyFeeds" json:"MyFeeds" toml:"MyFeeds" yaml:"MyFeeds"`
 }
 
 // NewStruct creates a new relationship struct
@@ -155,6 +158,13 @@ func (r *feedR) GetFeedArticleRelations() FeedArticleRelationSlice {
 		return nil
 	}
 	return r.FeedArticleRelations
+}
+
+func (r *feedR) GetMyFeeds() MyFeedSlice {
+	if r == nil {
+		return nil
+	}
+	return r.MyFeeds
 }
 
 // feedL is where Load methods for each relationship are stored.
@@ -507,6 +517,20 @@ func (o *Feed) FeedArticleRelations(mods ...qm.QueryMod) feedArticleRelationQuer
 	)
 
 	return FeedArticleRelations(queryMods...)
+}
+
+// MyFeeds retrieves all the my_feed's MyFeeds with an executor.
+func (o *Feed) MyFeeds(mods ...qm.QueryMod) myFeedQuery {
+	var queryMods []qm.QueryMod
+	if len(mods) != 0 {
+		queryMods = append(queryMods, mods...)
+	}
+
+	queryMods = append(queryMods,
+		qm.Where("\"my_feeds\".\"feed_id\"=?", o.ID),
+	)
+
+	return MyFeeds(queryMods...)
 }
 
 // LoadCategory allows an eager lookup of values, cached into the
@@ -862,6 +886,119 @@ func (feedL) LoadFeedArticleRelations(ctx context.Context, e boil.ContextExecuto
 	return nil
 }
 
+// LoadMyFeeds allows an eager lookup of values, cached into the
+// loaded structs of the objects. This is for a 1-M or N-M relationship.
+func (feedL) LoadMyFeeds(ctx context.Context, e boil.ContextExecutor, singular bool, maybeFeed interface{}, mods queries.Applicator) error {
+	var slice []*Feed
+	var object *Feed
+
+	if singular {
+		var ok bool
+		object, ok = maybeFeed.(*Feed)
+		if !ok {
+			object = new(Feed)
+			ok = queries.SetFromEmbeddedStruct(&object, &maybeFeed)
+			if !ok {
+				return errors.New(fmt.Sprintf("failed to set %T from embedded struct %T", object, maybeFeed))
+			}
+		}
+	} else {
+		s, ok := maybeFeed.(*[]*Feed)
+		if ok {
+			slice = *s
+		} else {
+			ok = queries.SetFromEmbeddedStruct(&slice, maybeFeed)
+			if !ok {
+				return errors.New(fmt.Sprintf("failed to set %T from embedded struct %T", slice, maybeFeed))
+			}
+		}
+	}
+
+	args := make(map[interface{}]struct{})
+	if singular {
+		if object.R == nil {
+			object.R = &feedR{}
+		}
+		args[object.ID] = struct{}{}
+	} else {
+		for _, obj := range slice {
+			if obj.R == nil {
+				obj.R = &feedR{}
+			}
+			args[obj.ID] = struct{}{}
+		}
+	}
+
+	if len(args) == 0 {
+		return nil
+	}
+
+	argsSlice := make([]interface{}, len(args))
+	i := 0
+	for arg := range args {
+		argsSlice[i] = arg
+		i++
+	}
+
+	query := NewQuery(
+		qm.From(`my_feeds`),
+		qm.WhereIn(`my_feeds.feed_id in ?`, argsSlice...),
+	)
+	if mods != nil {
+		mods.Apply(query)
+	}
+
+	results, err := query.QueryContext(ctx, e)
+	if err != nil {
+		return errors.Wrap(err, "failed to eager load my_feeds")
+	}
+
+	var resultSlice []*MyFeed
+	if err = queries.Bind(results, &resultSlice); err != nil {
+		return errors.Wrap(err, "failed to bind eager loaded slice my_feeds")
+	}
+
+	if err = results.Close(); err != nil {
+		return errors.Wrap(err, "failed to close results in eager load on my_feeds")
+	}
+	if err = results.Err(); err != nil {
+		return errors.Wrap(err, "error occurred during iteration of eager loaded relations for my_feeds")
+	}
+
+	if len(myFeedAfterSelectHooks) != 0 {
+		for _, obj := range resultSlice {
+			if err := obj.doAfterSelectHooks(ctx, e); err != nil {
+				return err
+			}
+		}
+	}
+	if singular {
+		object.R.MyFeeds = resultSlice
+		for _, foreign := range resultSlice {
+			if foreign.R == nil {
+				foreign.R = &myFeedR{}
+			}
+			foreign.R.Feed = object
+		}
+		return nil
+	}
+
+	for _, foreign := range resultSlice {
+		for _, local := range slice {
+			if local.ID == foreign.FeedID {
+				local.R.MyFeeds = append(local.R.MyFeeds, foreign)
+				if foreign.R == nil {
+					foreign.R = &myFeedR{}
+				}
+				foreign.R.Feed = local
+				break
+			}
+		}
+	}
+
+	return nil
+}
+
 // SetCategory of the feed to the related item.
 // Sets o.R.Category to related.
 // Adds o to related.R.Feeds.
@@ -1000,6 +1137,59 @@ func (o *Feed) AddFeedArticleRelations(ctx context.Context, exec boil.ContextExe
 	for _, rel := range related {
 		if rel.R == nil {
 			rel.R = &feedArticleRelationR{
+				Feed: o,
+			}
+		} else {
+			rel.R.Feed = o
+		}
+	}
+	return nil
+}
+
+// AddMyFeeds adds the given related objects to the existing relationships
+// of the feed, optionally inserting them as new records.
+// Appends related to o.R.MyFeeds.
+// Sets related.R.Feed appropriately.
+func (o *Feed) AddMyFeeds(ctx context.Context, exec boil.ContextExecutor, insert bool, related ...*MyFeed) error {
+	var err error
+	for _, rel := range related {
+		if insert {
+			rel.FeedID = o.ID
+			if err = rel.Insert(ctx, exec, boil.Infer()); err != nil {
+				return errors.Wrap(err, "failed to insert into foreign table")
+			}
+		} else {
+			updateQuery := fmt.Sprintf(
+				"UPDATE \"my_feeds\" SET %s WHERE %s",
+				strmangle.SetParamNames("\"", "\"", 1, []string{"feed_id"}),
+				strmangle.WhereClause("\"", "\"", 2, myFeedPrimaryKeyColumns),
+			)
+			values := []interface{}{o.ID, rel.ID}
+
+			if boil.IsDebug(ctx) {
+				writer := boil.DebugWriterFrom(ctx)
+				fmt.Fprintln(writer, updateQuery)
+				fmt.Fprintln(writer, values)
+			}
+			if _, err = exec.ExecContext(ctx, updateQuery, values...); err != nil {
+				return errors.Wrap(err, "failed to update foreign table")
+			}
+
+			rel.FeedID = o.ID
+		}
+	}
+
+	if o.R == nil {
+		o.R = &feedR{
+			MyFeeds: related,
+		}
+	} else {
+		o.R.MyFeeds = append(o.R.MyFeeds, related...)
+	}
+
+	for _, rel := range related {
+		if rel.R == nil {
+			rel.R = &myFeedR{
 				Feed: o,
 			}
 		} else {
