@@ -4,7 +4,15 @@ import { getFetch } from "@/lib/fetch";
 
 import { FeedType } from "@/types/feed";
 
-export const fetchFeedsAPI = async () => {
+export type FetchFeedsAPIResponse = {
+  data: {
+    feeds: FeedType[];
+    message: string;
+  };
+  status: number;
+};
+
+export const fetchFeedsAPI = async (): Promise<FetchFeedsAPIResponse> => {
   const url = `http://localhost:80/api/feed`;
   const response = await getFetch({
     url,
@@ -23,7 +31,17 @@ export const fetchFeedsAPI = async () => {
   };
 };
 
-export const fetchFeedByIdAPI = async (id: string) => {
+type FetchFeedByIdAPIResponse = {
+  data: {
+    feed: FeedType | undefined;
+    message: string;
+  };
+  status: number;
+};
+
+export const fetchFeedByIdAPI = async (
+  id: string
+): Promise<FetchFeedByIdAPIResponse> => {
   const url = `http://localhost:80/api/feed/${id}`;
   const response = await getFetch({
     url,
