@@ -3,6 +3,8 @@
 // eslint-disable-next-line import/named
 import { v4 as uuidv4 } from "uuid";
 
+import prisma from "@/lib/prisma";
+
 import { MyFeedListType } from "@/types/myFeedList";
 
 type GetMyFeedList = {

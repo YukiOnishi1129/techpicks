@@ -1,3 +1,4 @@
+import { CreateMyFeedListDialog } from "./Dialog";
 import { fetchMyFeedListAPI } from "../actions/myFeedList";
 
 export const MyFeedListTemplate = async () => {
@@ -11,7 +12,7 @@ export const MyFeedListTemplate = async () => {
 
       {/* Create New Feed Folder */}
       <div className="w-full border-b-2 bg-white py-4">
-        {myFeedLists ? (
+        {myFeedLists.length ? (
           <div>
             {myFeedLists.map((myFeedList) => {
               return (
@@ -22,7 +23,9 @@ export const MyFeedListTemplate = async () => {
             })}
           </div>
         ) : (
-          <div>{/* TODO: create new feed */}</div>
+          <div>
+            <CreateMyFeedListDialog />
+          </div>
         )}
       </div>
     </div>
