@@ -1693,5 +1693,16 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FaviconURL:      "https://frontier-assets.toptal.com/1fafc84237661afb2281.png",
 			IsEng:           true,
 		},
+		{
+			PlatformName:    "Findy",
+			FeedName:        "Findy",
+			seedCategoryID:  1,
+			RssURL:          "https://tech.findy.co.jp/rss",
+			PlatformSiteURL: "https://tech.findy.co.jp/",
+			FeedSiteURL:     "https://tech.findy.co.jp/",
+			PlatformType:    domain.PlatformTypeCompany,
+			FaviconURL:      "https://tech.findy.co.jp/icon/favicon",
+			IsEng:           false,
+		},
 	}
 }
