@@ -38,3 +38,33 @@ export const getFeed = async () => {
     throw new Error("Failed to get feed");
   }
 };
+
+export const getFeedById = async (id: string) => {
+  try {
+    const res = await prisma.feed.findUnique({
+      where: {
+        id: id,
+      },
+      include: {
+        category: true,
+        platform: true,
+      },
+    });
+
+    if (!res) throw new Error(`My feed list not found`);
+    const resFeed: FeedType = {
+      id: res.id,
+      name: res.name,
+      siteUrl: res.siteUrl,
+      isTrending: res.isTrending,
+      createdAt: res.createdAt,
+      updatedAt: res.updatedAt,
+      category: res.category,
+      platform: res.platform,
+    };
+
+    return resFeed;
+  } catch (err) {
+    throw new Error(`Failed to get feed by id: ${err}`);
+  }
+};
