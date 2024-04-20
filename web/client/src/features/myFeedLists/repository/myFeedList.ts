@@ -18,7 +18,7 @@ export const getMyFeedList = async ({ userId }: GetMyFeedList) => {
         userId: userId,
       },
       orderBy: {
-        createdAt: "desc",
+        createdAt: "asc",
       },
       include: {
         myFeeds: {
@@ -27,6 +27,8 @@ export const getMyFeedList = async ({ userId }: GetMyFeedList) => {
               select: {
                 id: true,
                 name: true,
+                description: true,
+                thumbnailUrl: true,
                 siteUrl: true,
                 rssUrl: true,
                 isTrending: true,
@@ -90,6 +92,8 @@ export const getMyFeedList = async ({ userId }: GetMyFeedList) => {
           return {
             id: myFeed.feed.id,
             name: myFeed.feed.name,
+            description: myFeed.feed.description,
+            thumbnailUrl: myFeed.feed.thumbnailUrl,
             siteUrl: myFeed.feed.siteUrl,
             rssUrl: myFeed.feed.rssUrl,
             isTrending: myFeed.feed.isTrending,
@@ -136,6 +140,8 @@ export const getMyFeedListById = async ({ id, userId }: GetMyFeedListById) => {
               select: {
                 id: true,
                 name: true,
+                description: true,
+                thumbnailUrl: true,
                 siteUrl: true,
                 rssUrl: true,
                 isTrending: true,
@@ -203,6 +209,8 @@ export const getMyFeedListById = async ({ id, userId }: GetMyFeedListById) => {
         return {
           id: myFeed.feed.id,
           name: myFeed.feed.name,
+          description: myFeed.feed.description,
+          thumbnailUrl: myFeed.feed.thumbnailUrl,
           siteUrl: myFeed.feed.siteUrl,
           rssUrl: myFeed.feed.rssUrl,
           isTrending: myFeed.feed.isTrending,

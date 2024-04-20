@@ -4,12 +4,14 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Loader } from "@/components/ui/loader";
 
 import { FeedType } from "@/types/feed";
+import { MyFeedListType } from "@/types/myFeedList";
 
 import { FeedCardWrapper } from "./FeedCardWrapper";
 import { FetchFeedsAPIResponse } from "../actions/feed";
 
 type FeedListProps = {
   initialFeeds: Array<FeedType>;
+  myFeedLists: Array<MyFeedListType>;
   fetchFeedsAPI: ({
     offset,
   }: {
@@ -17,7 +19,11 @@ type FeedListProps = {
   }) => Promise<FetchFeedsAPIResponse>;
 };
 
-export function FeedList({ initialFeeds, fetchFeedsAPI }: FeedListProps) {
+export function FeedList({
+  initialFeeds,
+  myFeedLists,
+  fetchFeedsAPI,
+}: FeedListProps) {
   const observerTarget = useRef(null);
 
   const [feeds, setFeeds] = useState<FeedType[]>(initialFeeds);
@@ -87,7 +93,7 @@ export function FeedList({ initialFeeds, fetchFeedsAPI }: FeedListProps) {
         <div className="m-auto h-[700px] overflow-y-scroll md:h-[600px]">
           {flatFeeds.map((feed) => (
             <div key={feed.id} className="mb-4">
-              <FeedCardWrapper feed={feed} />
+              <FeedCardWrapper feed={feed} myFeedLists={myFeedLists} />
             </div>
           ))}
           <div ref={observerTarget}>

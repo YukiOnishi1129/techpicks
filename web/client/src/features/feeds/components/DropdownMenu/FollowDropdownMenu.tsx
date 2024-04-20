@@ -1,5 +1,4 @@
 "use client";
-import * as React from "react";
 
 import { CreateMyFeedListDialog } from "@/features/myFeedLists/components/Dialog";
 
@@ -12,11 +11,19 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-export function FollowDropdownMenu() {
-  const [open, setOpen] = React.useState(false);
+import { MyFeedListType } from "@/types/myFeedList";
 
+type FollowDropdownMenuProps = {
+  feedId: string;
+  myFeedLists: Array<MyFeedListType>;
+};
+
+export async function FollowDropdownMenu({
+  feedId,
+  myFeedLists,
+}: FollowDropdownMenuProps) {
   return (
-    <DropdownMenu open={open} onOpenChange={setOpen}>
+    <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button
           variant="outline"
@@ -26,19 +33,59 @@ export function FollowDropdownMenu() {
           {"FOLLOW"}
         </Button>
       </DropdownMenuTrigger>
+
       <DropdownMenuContent align="end" className="w-[200px]">
-        <DropdownMenuLabel>Actions</DropdownMenuLabel>
+        <DropdownMenuLabel>{feedId}</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <>
-          <DropdownMenuLabel>Assign to...</DropdownMenuLabel>
-          <DropdownMenuSeparator />
-          <DropdownMenuLabel>Set due date...</DropdownMenuLabel>
-          <DropdownMenuSeparator />
-          <DropdownMenuLabel>
-            <CreateMyFeedListDialog />
-          </DropdownMenuLabel>
-        </>
+
+        {myFeedLists.length &&
+          myFeedLists.map((myFeedList) => (
+            <div key={`${feedId}-${myFeedList.id}`}>
+              <DropdownMenuLabel>{myFeedList.title}</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+            </div>
+          ))}
+        <DropdownMenuLabel>
+          <CreateMyFeedListDialog />
+        </DropdownMenuLabel>
       </DropdownMenuContent>
     </DropdownMenu>
   );
 }
+
+// const FollowDropdownMenuContent = () => {
+//   const { fetchClientMyFeedListAPI } = useMyFeedListAPI();
+//   const [myFeedLists, setMyFeedLists] = useState<Array<MyFeedListType>>([]);
+
+//   const fetchMyFeedLists = useCallback(async () => {
+//     const res = await fetchClientMyFeedListAPI();
+//     setMyFeedLists(res.data.myFeedLists);
+//   }, [fetchClientMyFeedListAPI]);
+
+//   useEffect(() => {
+//     fetchMyFeedLists();
+//   }, [fetchMyFeedLists]);
+
+//   return (
+//     <DropdownMenuContent align="end" className="w-[200px]">
+//       <DropdownMenuLabel>Actions</DropdownMenuLabel>
+//       <DropdownMenuSeparator />
+
+//       <>
+//         {myFeedLists.length &&
+//           myFeedLists.map((myFeedList) => (
+//             <>
+//               <DropdownMenuLabel key={myFeedList.id}>
+//                 {myFeedList.title}
+//               </DropdownMenuLabel>
+//               <DropdownMenuSeparator />
+//             </>
+//           ))}
+
+//         <DropdownMenuLabel>
+//           <CreateMyFeedListDialog />
+//         </DropdownMenuLabel>
+//       </>
+//     </DropdownMenuContent>
+//   );
+// };

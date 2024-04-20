@@ -21,3 +21,19 @@ export type MyFeedListType = Omit<PrismaMyFeedList, "userId"> & {
     updatedAt: Date;
   };
 };
+
+export type FetchMyFeedListAPIResponse = {
+  data: {
+    myFeedLists: MyFeedListType[];
+    message: string;
+  };
+  status: number;
+};
+
+export type FetchMyFeedListByIdAPIResponse = {
+  data: {
+    myFeedList?: MyFeedListType;
+    message: string;
+  };
+  status: number;
+};

@@ -48,10 +48,34 @@ type CreateMyFeedListDialogProps = {};
 export const CreateMyFeedListDialog: FC<
   CreateMyFeedListDialogProps
 > = ({}: CreateMyFeedListDialogProps) => {
-  const router = useRouter();
-  const { successToast, failToast } = useStatusToast();
   const [open, setOpen] = useState(false);
+
+  const handleCloseDialog = useCallback(() => {
+    setOpen(false);
+  }, []);
+
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <Button>{"Create my feed folder"}</Button>
+      </DialogTrigger>
+      {open && (
+        <CreateMyFeedListDialogContent handleCloseDialog={handleCloseDialog} />
+      )}
+    </Dialog>
+  );
+};
+
+type CreateMyFeedListDialogContentProps = {
+  handleCloseDialog: () => void;
+};
+
+const CreateMyFeedListDialogContent: FC<CreateMyFeedListDialogContentProps> = ({
+  handleCloseDialog,
+}: CreateMyFeedListDialogContentProps) => {
+  const { successToast, failToast } = useStatusToast();
   const [isPending, startTransition] = useTransition();
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -92,85 +116,80 @@ export const CreateMyFeedListDialog: FC<
       await serverRevalidateFeed();
       router.replace("/feed");
       resetDialog();
-      setOpen(false);
+      handleCloseDialog();
     });
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button>{"Create my feed folder"}</Button>
-      </DialogTrigger>
-      <DialogContent onCloseAutoFocus={resetDialog}>
-        <DialogHeader>
-          <DialogTitle>{"Create My Feed Folder"}</DialogTitle>
-        </DialogHeader>
+    <DialogContent onCloseAutoFocus={resetDialog}>
+      <DialogHeader>
+        <DialogTitle>{"Create My Feed Folder"}</DialogTitle>
+      </DialogHeader>
 
-        <div>
-          <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(onSubmit)}
-              className="w-full space-y-6"
-            >
-              <FormField
-                control={form.control}
-                name="title"
-                render={({ field }) => (
-                  <FormItem className="w-full">
-                    <FormLabel className="font-bold">TITLE</FormLabel>
-                    <FormControl>
-                      <Input
-                        className="block w-full"
-                        placeholder="Feed Folder Title"
-                        type="text"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="description"
-                render={({ field }) => (
-                  <FormItem className="w-full">
-                    <FormLabel className="font-bold">DESCRIPTION</FormLabel>
-                    <FormControl>
-                      <Input
-                        className="block w-full"
-                        placeholder="Feed Folder Description"
-                        type="text"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              {isPending ? (
-                <Button disabled>
-                  <ReloadIcon className="mr-2 size-4 animate-spin" />
-                  PLEASE WAIT
-                </Button>
-              ) : (
-                <Button
-                  disabled={!form.formState.isValid || isPending}
-                  type="submit"
-                >
-                  {"CREATE MY FEED FOLDER"}
-                </Button>
+      <div>
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="w-full space-y-6"
+          >
+            <FormField
+              control={form.control}
+              name="title"
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  <FormLabel className="font-bold">TITLE</FormLabel>
+                  <FormControl>
+                    <Input
+                      className="block w-full"
+                      placeholder="Feed Folder Title"
+                      type="text"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
               )}
-            </form>
-          </Form>
-        </div>
+            />
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  <FormLabel className="font-bold">DESCRIPTION</FormLabel>
+                  <FormControl>
+                    <Input
+                      className="block w-full"
+                      placeholder="Feed Folder Description"
+                      type="text"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            {isPending ? (
+              <Button disabled>
+                <ReloadIcon className="mr-2 size-4 animate-spin" />
+                PLEASE WAIT
+              </Button>
+            ) : (
+              <Button
+                disabled={!form.formState.isValid || isPending}
+                type="submit"
+              >
+                {"CREATE MY FEED FOLDER"}
+              </Button>
+            )}
+          </form>
+        </Form>
+      </div>
 
-        <div className="mt-4 flex w-full justify-start space-x-4">
-          <DialogClose>
-            <Button onClick={resetDialog}>{"CLOSE"}</Button>
-          </DialogClose>
-        </div>
-      </DialogContent>
-    </Dialog>
+      <div className="mt-4 flex w-full justify-start space-x-4">
+        <DialogClose asChild>
+          <Button onClick={resetDialog}>{"CLOSE"}</Button>
+        </DialogClose>
+      </div>
+    </DialogContent>
   );
 };

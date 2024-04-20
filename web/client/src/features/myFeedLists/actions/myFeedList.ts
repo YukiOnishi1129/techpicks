@@ -2,54 +2,45 @@
 
 import { getFetch } from "@/lib/fetch";
 
-import { MyFeedListType } from "@/types/myFeedList";
+import {
+  FetchMyFeedListAPIResponse,
+  FetchMyFeedListByIdAPIResponse,
+  MyFeedListType,
+} from "@/types/myFeedList";
 
-export type FetchMyFeedListAPIResponse = {
-  data: {
-    myFeedLists: MyFeedListType[];
-    message: string;
-  };
-  status: number;
-};
+export const fetchMyFeedListAPI =
+  async (): Promise<FetchMyFeedListAPIResponse> => {
+    const url = `http://localhost:80/api/myfeed-lists`;
+    const response = await getFetch({
+      url,
+      tagName: "myfeed-list",
+      cacheType: "no-store",
+    });
+    const data = await response.json();
+    const status = response.status;
 
-export const fetchMyFeedListAPI = async () => {
-  const url = `http://localhost:80/api/myfeed-lists`;
-  const response = await getFetch({
-    url,
-    tagName: "myfeed-list",
-    cacheType: "no-store",
-  });
-  const data = await response.json();
-  const status = response.status;
+    if (status === 401) {
+      return {
+        data: {
+          myFeedLists: [],
+          message: data.message as string,
+        },
+        status: status,
+      };
+    }
 
-  if (status === 401) {
     return {
       data: {
-        myFeedLists: [],
+        myFeedLists: data.myFeedLists as MyFeedListType[],
         message: data.message as string,
       },
       status: status,
     };
-  }
-
-  return {
-    data: {
-      myFeedLists: data.myFeedLists as MyFeedListType[],
-      message: data.message as string,
-    },
-    status: status,
   };
-};
 
-export type FetchMyFeedListByIdAPIResponse = {
-  data: {
-    myFeedList?: MyFeedListType;
-    message: string;
-  };
-  status: number;
-};
-
-export const fetchMyFeedListById = async (id: string) => {
+export const fetchMyFeedListById = async (
+  id: string
+): Promise<FetchMyFeedListByIdAPIResponse> => {
   const url = `http://localhost:80/api/myfeed-lists/${id}`;
   const response = await getFetch({
     url,
