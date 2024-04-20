@@ -11,7 +11,7 @@ export const LanguageBadge: FC<PlatformTypeBadgeProps> = ({
 }: PlatformTypeBadgeProps) => {
   const typeName = isEng ? "English" : "Japanese";
   return (
-    <Badge variant="secondary" className="text-base">
+    <Badge variant="secondary" className="text-xs md:text-base">
       {typeName}
     </Badge>
   );

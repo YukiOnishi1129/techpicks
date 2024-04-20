@@ -5,7 +5,10 @@ import { FC, useState } from "react";
 import { FcBookmark } from "react-icons/fc";
 import { MdOutlineBookmarkAdd } from "react-icons/md";
 
-import { PlatformNameBadge } from "@/components/ui/badge";
+import {
+  FeedCategoryNameBadge,
+  PlatformNameBadge,
+} from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -115,9 +118,7 @@ const ArticleContent = ({
                 href={feed.siteUrl}
                 target="_blank"
               >
-                <span className="rounded-lg bg-yellow-600 px-2 py-1 text-xs font-bold text-white md:text-base">
-                  {feed.category.name}
-                </span>
+                <FeedCategoryNameBadge name={feed.category.name} />
               </Link>
             ))}
 

@@ -25,7 +25,7 @@ export const PlatformTypeBadge: FC<PlatformTypeBadgeProps> = ({
       break;
   }
   return (
-    <Badge variant="default" className="text-base">
+    <Badge variant="default" className="text-xs md:text-base">
       {typeName}
     </Badge>
   );
