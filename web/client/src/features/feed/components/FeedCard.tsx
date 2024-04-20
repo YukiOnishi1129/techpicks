@@ -2,6 +2,9 @@
 
 import { FC } from "react";
 
+import { LanguageBadge } from "@/components/ui/badge/LangaugeBadge";
+import { PlatformTypeBadge } from "@/components/ui/badge/PlatformTypeBadge";
+
 import { useCheckImageExist } from "@/hooks/useImage";
 
 import { FeedType } from "@/types/feed";
@@ -32,16 +35,15 @@ export const FeedCard: FC<FeedCardProps> = ({ feed }: FeedCardProps) => {
           </h3>
 
           <div className="flex w-full items-center pt-2 md:w-4/5">
-            <p className="inline-block rounded-lg bg-sky-500 px-2 py-1 text-xs font-bold text-white md:text-base">
-              {feed.platform.name}
-            </p>
+            <div>
+              <PlatformTypeBadge platformType={feed.platform.platformType} />
+            </div>
+            <div className="ml-2">
+              <LanguageBadge isEng={feed.platform.isEng} />
+            </div>
           </div>
 
-          {/* <div className="ml-[32px] flex w-full flex-wrap pt-2">
-            <p className="mb-2 mr-2 inline-block rounded-lg bg-yellow-600 px-2 py-1 text-xs font-bold text-white md:text-base">
-              {feed.category.name}
-            </p>
-          </div> */}
+          {/* TODO: description */}
         </div>
       </div>
     </div>
