@@ -3,10 +3,11 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import { useRouter } from "next/navigation";
-import { useCallback, useState, useTransition } from "react";
+import { FC, useCallback, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
+import { serverRevalidateFeed } from "@/features/feeds/actions/serverAction";
 import { getUser } from "@/features/users/actions/user";
 
 import { Button } from "@/components/ui/button";
@@ -42,7 +43,11 @@ const FormSchema = z.object({
   description: z.string().optional(),
 });
 
-export const CreateMyFeedListDialog = () => {
+type CreateMyFeedListDialogProps = {};
+
+export const CreateMyFeedListDialog: FC<
+  CreateMyFeedListDialogProps
+> = ({}: CreateMyFeedListDialogProps) => {
   const router = useRouter();
   const { successToast, failToast } = useStatusToast();
   const [open, setOpen] = useState(false);
@@ -84,19 +89,21 @@ export const CreateMyFeedListDialog = () => {
       successToast({
         description: "Successfully created new feed folder",
       });
-      router.push("/feed");
+      await serverRevalidateFeed();
+      router.replace("/feed");
       resetDialog();
+      setOpen(false);
     });
   };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>{"Create new feed folder"}</Button>
+        <Button>{"Create my feed folder"}</Button>
       </DialogTrigger>
       <DialogContent onCloseAutoFocus={resetDialog}>
         <DialogHeader>
-          <DialogTitle>{"Create New Deed Folder"}</DialogTitle>
+          <DialogTitle>{"Create My Feed Folder"}</DialogTitle>
         </DialogHeader>
 
         <div>
@@ -151,7 +158,7 @@ export const CreateMyFeedListDialog = () => {
                   disabled={!form.formState.isValid || isPending}
                   type="submit"
                 >
-                  {"CREATE FEED FOLDER"}
+                  {"CREATE MY FEED FOLDER"}
                 </Button>
               )}
             </form>

@@ -1,6 +1,7 @@
 "use client";
 import * as React from "react";
-import { GoPlus } from "react-icons/go";
+
+import { CreateMyFeedListDialog } from "@/features/myFeedLists/components/Dialog";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -11,18 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-const labels = [
-  "feature",
-  "bug",
-  "enhancement",
-  "documentation",
-  "design",
-  "question",
-  "maintenance",
-];
-
 export function FollowDropdownMenu() {
-  const [label, setLabel] = React.useState("feature");
   const [open, setOpen] = React.useState(false);
 
   return (
@@ -40,11 +30,8 @@ export function FollowDropdownMenu() {
           <DropdownMenuSeparator />
           <DropdownMenuLabel>Set due date...</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuLabel className="text-emerald-500">
-            <Button variant="ghost" size="sm" className="p-0">
-              <GoPlus />
-              NEW FEED FOLDER
-            </Button>
+          <DropdownMenuLabel>
+            <CreateMyFeedListDialog />
           </DropdownMenuLabel>
         </>
       </DropdownMenuContent>

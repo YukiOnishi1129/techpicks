@@ -9,6 +9,9 @@ export const MyFeedListTemplate = async () => {
       <h1 className="mb-4 mt-8 text-2xl font-bold text-gray-800">
         Personal Feed List
       </h1>
+      <div>
+        <CreateMyFeedListDialog />
+      </div>
 
       {/* Create New Feed Folder */}
       <div className="w-full border-b-2 bg-white py-4">
