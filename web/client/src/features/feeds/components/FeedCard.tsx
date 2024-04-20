@@ -2,8 +2,7 @@
 
 import { FC } from "react";
 
-import { LanguageBadge } from "@/components/ui/badge/LangaugeBadge";
-import { PlatformTypeBadge } from "@/components/ui/badge/PlatformTypeBadge";
+import { LanguageBadge, PlatformTypeBadge } from "@/components/ui/badge";
 
 import { useCheckImageExist } from "@/hooks/useImage";
 

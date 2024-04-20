@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { FC, useState } from "react";
 
-import { PlatformNameBadge } from "@/components/ui/badge/PlatformNameBadge";
+import { PlatformNameBadge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,

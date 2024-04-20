@@ -3,7 +3,7 @@
 import { User } from "@supabase/supabase-js";
 import { FC } from "react";
 
-import { PlatformNameBadge } from "@/components/ui/badge/PlatformNameBadge";
+import { PlatformNameBadge } from "@/components/ui/badge";
 
 import { useCheckImageExist } from "@/hooks/useImage";
 

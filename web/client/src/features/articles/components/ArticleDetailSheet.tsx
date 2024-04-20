@@ -5,7 +5,7 @@ import { FC, useState } from "react";
 import { FcBookmark } from "react-icons/fc";
 import { MdOutlineBookmarkAdd } from "react-icons/md";
 
-import { PlatformNameBadge } from "@/components/ui/badge/PlatformNameBadge";
+import { PlatformNameBadge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
