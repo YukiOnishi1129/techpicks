@@ -2,6 +2,11 @@
 
 import { FC } from "react";
 
+import { createMyFeed } from "@/features/myFeeds/repository/myFeed";
+import { getUser } from "@/features/users/actions/user";
+
+import { useStatusToast } from "@/hooks/useStatusToast";
+
 import { FeedType } from "@/types/feed";
 import { MyFeedListType } from "@/types/myFeedList";
 
@@ -17,12 +22,43 @@ export const FeedCardWrapper: FC<FeedCardWrapperProps> = ({
   feed,
   myFeedLists,
 }: FeedCardWrapperProps) => {
+  const { successToast, failToast } = useStatusToast();
+
+  const handleCreateMyFeed = async (myFeedListId: string) => {
+    const user = await getUser();
+    if (!user) {
+      failToast({
+        description: "Please sign in to follow the feed",
+      });
+      return;
+    }
+    const id = await createMyFeed({
+      userId: user.id,
+      myFeedListId,
+      feedId: feed.id,
+    });
+
+    if (!id) {
+      failToast({
+        description: "Failed to follow the feed",
+      });
+      return;
+    }
+    successToast({
+      description: "Successfully followed the feed",
+    });
+  };
+
   return (
     <div key={feed.id} className="mb-4 rounded-2xl border-2 md:py-2">
       <div className="w-full rounded md:relative">
         <FeedCard feed={feed} />
         <div className="right-4 top-0 md:absolute">
-          <FollowDropdownMenu feedId={feed.id} myFeedLists={myFeedLists} />
+          <FollowDropdownMenu
+            feedId={feed.id}
+            myFeedLists={myFeedLists}
+            handleCreateMyFeed={handleCreateMyFeed}
+          />
         </div>
       </div>
     </div>

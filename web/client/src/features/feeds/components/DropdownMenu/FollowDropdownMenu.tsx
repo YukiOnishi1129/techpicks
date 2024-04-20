@@ -16,11 +16,13 @@ import { MyFeedListType } from "@/types/myFeedList";
 type FollowDropdownMenuProps = {
   feedId: string;
   myFeedLists: Array<MyFeedListType>;
+  handleCreateMyFeed: (myFeedListId: string) => Promise<void>;
 };
 
 export async function FollowDropdownMenu({
   feedId,
   myFeedLists,
+  handleCreateMyFeed,
 }: FollowDropdownMenuProps) {
   return (
     <DropdownMenu>
@@ -35,13 +37,22 @@ export async function FollowDropdownMenu({
       </DropdownMenuTrigger>
 
       <DropdownMenuContent align="end" className="w-[200px]">
-        <DropdownMenuLabel>{feedId}</DropdownMenuLabel>
         <DropdownMenuSeparator />
 
         {myFeedLists.length &&
           myFeedLists.map((myFeedList) => (
             <div key={`${feedId}-${myFeedList.id}`}>
-              <DropdownMenuLabel>{myFeedList.title}</DropdownMenuLabel>
+              <div>
+                <span>{myFeedList.title}</span>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="border-emerald-500 font-bold text-emerald-500 hover:text-emerald-600"
+                  onClick={() => handleCreateMyFeed(myFeedList.id)}
+                >
+                  ADD
+                </Button>
+              </div>
               <DropdownMenuSeparator />
             </div>
           ))}
@@ -52,40 +63,3 @@ export async function FollowDropdownMenu({
     </DropdownMenu>
   );
 }
-
-// const FollowDropdownMenuContent = () => {
-//   const { fetchClientMyFeedListAPI } = useMyFeedListAPI();
-//   const [myFeedLists, setMyFeedLists] = useState<Array<MyFeedListType>>([]);
-
-//   const fetchMyFeedLists = useCallback(async () => {
-//     const res = await fetchClientMyFeedListAPI();
-//     setMyFeedLists(res.data.myFeedLists);
-//   }, [fetchClientMyFeedListAPI]);
-
-//   useEffect(() => {
-//     fetchMyFeedLists();
-//   }, [fetchMyFeedLists]);
-
-//   return (
-//     <DropdownMenuContent align="end" className="w-[200px]">
-//       <DropdownMenuLabel>Actions</DropdownMenuLabel>
-//       <DropdownMenuSeparator />
-
-//       <>
-//         {myFeedLists.length &&
-//           myFeedLists.map((myFeedList) => (
-//             <>
-//               <DropdownMenuLabel key={myFeedList.id}>
-//                 {myFeedList.title}
-//               </DropdownMenuLabel>
-//               <DropdownMenuSeparator />
-//             </>
-//           ))}
-
-//         <DropdownMenuLabel>
-//           <CreateMyFeedListDialog />
-//         </DropdownMenuLabel>
-//       </>
-//     </DropdownMenuContent>
-//   );
-// };
