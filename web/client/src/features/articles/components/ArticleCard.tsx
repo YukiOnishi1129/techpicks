@@ -3,6 +3,8 @@
 import { User } from "@supabase/supabase-js";
 import { FC } from "react";
 
+import { PlatformNameBadge } from "@/components/ui/badge/PlatformNameBadge";
+
 import { useCheckImageExist } from "@/hooks/useImage";
 
 import { showDiffDateToCurrentDate } from "@/lib/date";
@@ -50,9 +52,9 @@ export const ArticleCard: FC<ArticleCardProps> = ({
               src={article.platform.faviconUrl}
               alt=""
             />
-            <p className="inline-block rounded-lg bg-sky-500 px-2 py-1 text-xs font-bold text-white md:text-base">
-              {article.platform.name}
-            </p>
+            <div>
+              <PlatformNameBadge name={article.platform.name} />
+            </div>
           </div>
 
           <div className="ml-[32px] flex w-full flex-wrap pt-2">

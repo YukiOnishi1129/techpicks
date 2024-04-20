@@ -5,6 +5,7 @@ import { FC, useState } from "react";
 import { FcBookmark } from "react-icons/fc";
 import { MdOutlineBookmarkAdd } from "react-icons/md";
 
+import { PlatformNameBadge } from "@/components/ui/badge/PlatformNameBadge";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -103,9 +104,7 @@ const ArticleContent = ({
             href={article.platform?.siteUrl || ""}
             target="_blank"
           >
-            <span className="rounded-lg bg-sky-500 px-2 py-1 text-xs font-bold text-white md:text-base">
-              {article.platform?.name || ""}
-            </span>
+            <PlatformNameBadge name={article.platform.name} />
           </Link>
 
           {article.feeds.length > 0 &&

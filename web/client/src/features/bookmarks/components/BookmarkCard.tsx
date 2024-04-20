@@ -1,6 +1,8 @@
 "use client";
 import { FC } from "react";
 
+import { PlatformNameBadge } from "@/components/ui/badge/PlatformNameBadge";
+
 import { useCheckImageExist } from "@/hooks/useImage";
 
 import { showDiffDateToCurrentDate } from "@/lib/date";
@@ -47,9 +49,7 @@ export const BookmarkCard: FC<BookmarkCardProps> = ({
               src={faviconUrl}
               alt=""
             />
-            <p className="inline-block rounded-lg  bg-sky-500 px-2 py-1 text-xs font-bold text-white md:text-base">
-              {bookmark.platformName}
-            </p>
+            <PlatformNameBadge name={bookmark.platformName || ""} />
           </div>
         </div>
       </div>

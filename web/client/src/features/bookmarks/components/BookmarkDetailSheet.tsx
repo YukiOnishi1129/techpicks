@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { FC, useState } from "react";
 
+import { PlatformNameBadge } from "@/components/ui/badge/PlatformNameBadge";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -88,9 +89,7 @@ const BookmarkContent = ({ bookmark }: { bookmark: BookmarkType }) => {
             href={bookmark?.platformUrl || ""}
             target="_blank"
           >
-            <span className="rounded-lg bg-sky-500 px-2 py-1 text-xs font-bold text-white md:text-base">
-              {bookmark?.platformName || ""}
-            </span>
+            <PlatformNameBadge name={bookmark.platformName || ""} />
           </Link>
 
           <span className="pl-2 text-sm">
