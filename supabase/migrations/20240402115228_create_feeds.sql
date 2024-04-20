@@ -5,6 +5,8 @@ CREATE TABLE feeds
 (
     id uuid NOT NULL DEFAULT uuid_generate_v4(),
     name VARCHAR(255) NOT NULL,
+    description TEXT NOT NULL,
+    thumbnail_url TEXT NOT NULL,
     platform_id uuid NOT NULL,
     category_id uuid NOT NULL,
     site_url TEXT NOT NULL,

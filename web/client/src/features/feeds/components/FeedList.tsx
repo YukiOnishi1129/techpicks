@@ -93,7 +93,6 @@ export function FeedList({ initialFeeds, fetchFeedsAPI }: FeedListProps) {
           <div ref={observerTarget}>
             {hashMore && (
               <div className="flex justify-center py-4">
-                aaaaaaa
                 <Loader />
               </div>
             )}

@@ -14,15 +14,16 @@ type FeedCardProps = {
 };
 
 export const FeedCard: FC<FeedCardProps> = ({ feed }: FeedCardProps) => {
-  const imageUrl = useCheckImageExist(feed.platform.faviconUrl);
+  const imageUrl = useCheckImageExist(feed.thumbnailUrl);
+  const faviconUrl = useCheckImageExist(feed.platform.faviconUrl);
   return (
     <div className="relative w-full cursor-pointer rounded">
       <div className="justify-around md:flex">
         <div className="flex justify-center md:w-[30%]">
-          <div className="w-full  md:h-36 md:w-48">
+          <div className="w-full md:h-36 md:w-48">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              className="h-full rounded-lg border-2 object-cover object-center shadow-md"
+              className="mx-auto h-full rounded-lg border-2 object-cover object-center shadow-md"
               src={imageUrl}
               alt=""
             />
@@ -31,6 +32,12 @@ export const FeedCard: FC<FeedCardProps> = ({ feed }: FeedCardProps) => {
 
         <div className="mt-4 md:mt-0 md:w-[65%]">
           <h3 className="line-clamp-3 text-left text-lg font-bold tracking-wide md:w-full md:text-xl">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              className="mr-2 inline-block size-[24px]"
+              src={faviconUrl}
+              alt=""
+            />
             {feed.name}
           </h3>
 
@@ -44,6 +51,9 @@ export const FeedCard: FC<FeedCardProps> = ({ feed }: FeedCardProps) => {
           </div>
 
           {/* TODO: description */}
+          <div className="mt-2">
+            <p className="text-sm">{feed.description}</p>
+          </div>
         </div>
       </div>
     </div>

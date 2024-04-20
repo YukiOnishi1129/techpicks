@@ -55,6 +55,8 @@ export const getFeed = async ({ offset = 1 }: GetFeedParams) => {
       const resFeed: FeedType = {
         id: feed.id,
         name: feed.name,
+        description: feed.description,
+        thumbnailUrl: feed.thumbnailUrl,
         siteUrl: feed.siteUrl,
         isTrending: feed.isTrending,
         createdAt: feed.createdAt,
@@ -104,6 +106,8 @@ export const getFeedById = async (id: string) => {
     const resFeed: FeedType = {
       id: res.id,
       name: res.name,
+      description: res.description,
+      thumbnailUrl: res.thumbnailUrl,
       siteUrl: res.siteUrl,
       isTrending: res.isTrending,
       createdAt: res.createdAt,
