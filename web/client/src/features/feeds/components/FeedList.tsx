@@ -1,5 +1,5 @@
 "use client";
-import { FC, useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import { Loader } from "@/components/ui/loader";
 
@@ -17,10 +17,7 @@ type FeedListProps = {
   }) => Promise<FetchFeedsAPIResponse>;
 };
 
-export const FeedList: FC<FeedListProps> = async ({
-  initialFeeds,
-  fetchFeedsAPI,
-}: FeedListProps) => {
+export function FeedList({ initialFeeds, fetchFeedsAPI }: FeedListProps) {
   const observerTarget = useRef(null);
 
   const [feeds, setFeeds] = useState<FeedType[]>(initialFeeds);
@@ -105,4 +102,4 @@ export const FeedList: FC<FeedListProps> = async ({
       )}
     </>
   );
-};
+}
