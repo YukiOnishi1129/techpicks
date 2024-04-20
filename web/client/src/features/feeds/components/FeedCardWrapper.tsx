@@ -2,6 +2,8 @@
 
 import { FC } from "react";
 
+import { Button } from "@/components/ui/button";
+
 import { FeedType } from "@/types/feed";
 
 import { FeedCard } from "./FeedCard";
@@ -15,7 +17,12 @@ export const FeedCardWrapper: FC<FeedCardWrapperProps> = ({
 }: FeedCardWrapperProps) => {
   return (
     <div key={feed.id} className="mb-4 rounded-2xl border-2 md:py-2">
-      <FeedCard feed={feed} />
+      <div className="w-full rounded md:relative">
+        <FeedCard feed={feed} />
+        <div className="right-4 top-0 md:absolute">
+          <Button variant="outline">FOLLOW</Button>
+        </div>
+      </div>
     </div>
   );
 };

@@ -30,7 +30,7 @@ export const FeedCard: FC<FeedCardProps> = ({ feed }: FeedCardProps) => {
         </div>
 
         <div className="mt-4 md:mt-0 md:w-[65%]">
-          <h3 className="line-clamp-3 text-left text-lg font-bold tracking-wide md:w-full md:text-xl">
+          <h3 className="line-clamp-3 text-left text-lg font-bold tracking-wide md:w-3/5 md:text-xl">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               className="mr-2 inline-block size-[24px]"
