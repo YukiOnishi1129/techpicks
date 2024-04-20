@@ -1,5 +1,7 @@
 "use client";
 
+import { FC, useMemo } from "react";
+
 import { CreateMyFeedListDialog } from "@/features/myFeedLists/components/Dialog";
 
 import { Button } from "@/components/ui/button";
@@ -41,20 +43,12 @@ export async function FollowDropdownMenu({
 
         {myFeedLists.length &&
           myFeedLists.map((myFeedList) => (
-            <div key={`${feedId}-${myFeedList.id}`}>
-              <div>
-                <span>{myFeedList.title}</span>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="border-emerald-500 font-bold text-emerald-500 hover:text-emerald-600"
-                  onClick={() => handleCreateMyFeed(myFeedList.id)}
-                >
-                  ADD
-                </Button>
-              </div>
-              <DropdownMenuSeparator />
-            </div>
+            <TargetFollowMyFeedList
+              key={`${feedId}-${myFeedList.id}`}
+              feedId={feedId}
+              myFeedList={myFeedList}
+              handleCreateMyFeed={handleCreateMyFeed}
+            />
           ))}
         <DropdownMenuLabel>
           <CreateMyFeedListDialog />
@@ -63,3 +57,46 @@ export async function FollowDropdownMenu({
     </DropdownMenu>
   );
 }
+
+type TargetFollowMyFeedListProps = {
+  feedId: string;
+  myFeedList: MyFeedListType;
+  handleCreateMyFeed: (myFeedListId: string) => Promise<void>;
+};
+
+const TargetFollowMyFeedList: FC<TargetFollowMyFeedListProps> = ({
+  feedId,
+  myFeedList,
+  handleCreateMyFeed,
+}: TargetFollowMyFeedListProps) => {
+  const isFollowed = useMemo(
+    () => myFeedList.feeds.some((feed) => feed.id === feedId),
+    [feedId, myFeedList.feeds]
+  );
+  return (
+    <div>
+      <div className="flex items-center justify-between">
+        <p className="ml-2 w-1/2 truncate">{myFeedList.title}</p>
+        {isFollowed ? (
+          <Button
+            variant="outline"
+            size="sm"
+            className="border-emerald-500 font-bold text-emerald-500 hover:text-emerald-600"
+          >
+            ADDED
+          </Button>
+        ) : (
+          <Button
+            variant="outline"
+            size="sm"
+            className="border-emerald-500 font-bold text-emerald-500 hover:text-emerald-600"
+            onClick={() => handleCreateMyFeed(myFeedList.id)}
+          >
+            ADD
+          </Button>
+        )}
+      </div>
+      <DropdownMenuSeparator />
+    </div>
+  );
+};
