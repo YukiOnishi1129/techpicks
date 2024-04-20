@@ -18,7 +18,11 @@ export function FollowDropdownMenu() {
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="sm">
+        <Button
+          variant="outline"
+          size="sm"
+          className="border-emerald-500 font-bold text-emerald-500 hover:text-emerald-600"
+        >
           {"FOLLOW"}
         </Button>
       </DropdownMenuTrigger>
