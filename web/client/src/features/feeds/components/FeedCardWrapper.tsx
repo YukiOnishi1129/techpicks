@@ -2,6 +2,7 @@
 
 import { FC } from "react";
 
+import { fetchMyFeedCountByMyFeedListIdAPI } from "@/features/myFeeds/actions/myFeed";
 import { createMyFeed } from "@/features/myFeeds/repository/myFeed";
 import { getUser } from "@/features/users/actions/user";
 
@@ -25,6 +26,15 @@ export const FeedCardWrapper: FC<FeedCardWrapperProps> = ({
   const { successToast, failToast } = useStatusToast();
 
   const handleCreateMyFeed = async (myFeedListId: string) => {
+    const res = await fetchMyFeedCountByMyFeedListIdAPI({
+      myFeedListId,
+    });
+    if (res.data?.count && res.data.count > 0) {
+      failToast({
+        description: "You are already following the feed",
+      });
+      return;
+    }
     const user = await getUser();
     if (!user) {
       failToast({

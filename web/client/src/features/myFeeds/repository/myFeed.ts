@@ -3,6 +3,26 @@
 // eslint-disable-next-line import/named
 import { v4 as uuidv4 } from "uuid";
 
+export const getMyFeedCountByMyFeedListId = async ({
+  myFeedListId,
+  userId,
+}: {
+  myFeedListId: string;
+  userId: string;
+}) => {
+  try {
+    const data = await prisma.myFeed.count({
+      where: {
+        myFeedListId: myFeedListId,
+        userId: userId,
+      },
+    });
+    return data;
+  } catch (err) {
+    throw new Error(`Failed to get my feed count: ${err}`);
+  }
+};
+
 type createMyFeed = {
   userId: string;
   myFeedListId: string;
