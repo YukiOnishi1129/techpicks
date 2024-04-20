@@ -2,10 +2,9 @@
 
 import { FC } from "react";
 
-import { Button } from "@/components/ui/button";
-
 import { FeedType } from "@/types/feed";
 
+import { FollowDropdownMenu } from "./DropdownMenu";
 import { FeedCard } from "./FeedCard";
 
 type FeedCardWrapperProps = {
@@ -20,7 +19,7 @@ export const FeedCardWrapper: FC<FeedCardWrapperProps> = ({
       <div className="w-full rounded md:relative">
         <FeedCard feed={feed} />
         <div className="right-4 top-0 md:absolute">
-          <Button variant="outline">FOLLOW</Button>
+          <FollowDropdownMenu />
         </div>
       </div>
     </div>
