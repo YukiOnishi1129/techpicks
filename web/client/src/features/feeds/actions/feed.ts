@@ -17,10 +17,10 @@ export const fetchFeedsAPI = async ({
 }: {
   offset?: string;
 }): Promise<FetchFeedsAPIResponse> => {
-  const url = `http://localhost:80/api/feed?offset=${offset}`;
+  const url = `http://localhost:80/api/feeds?offset=${offset}`;
   const response = await getFetch({
     url,
-    tagName: "feed",
+    tagName: "feeds",
     cacheType: "no-store",
   });
   const data = await response.json();
@@ -46,7 +46,7 @@ type FetchFeedByIdAPIResponse = {
 export const fetchFeedByIdAPI = async (
   id: string
 ): Promise<FetchFeedByIdAPIResponse> => {
-  const url = `http://localhost:80/api/feed/${id}`;
+  const url = `http://localhost:80/api/feeds/${id}`;
   const response = await getFetch({
     url,
     tagName: "feed",

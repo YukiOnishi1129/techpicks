@@ -2,7 +2,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 
-import { getFeedById } from "@/features/feed/repository/feed";
+import { getFeedById } from "@/features/feeds/repository/feed";
 
 export const GET = async (
   res: NextRequest,

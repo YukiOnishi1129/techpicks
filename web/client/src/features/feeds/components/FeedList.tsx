@@ -1,5 +1,4 @@
 "use client";
-
 import { FC, useCallback, useEffect, useRef, useState } from "react";
 
 import { Loader } from "@/components/ui/loader";
@@ -97,6 +96,7 @@ export const FeedList: FC<FeedListProps> = async ({
           <div ref={observerTarget}>
             {hashMore && (
               <div className="flex justify-center py-4">
+                aaaaaaa
                 <Loader />
               </div>
             )}

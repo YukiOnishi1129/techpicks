@@ -13,7 +13,7 @@ export type FetchMyFeedListAPIResponse = {
 };
 
 export const fetchMyFeedListAPI = async () => {
-  const url = `http://localhost:80/api/myfeed-list`;
+  const url = `http://localhost:80/api/myfeed-lists`;
   const response = await getFetch({
     url,
     tagName: "myfeed-list",
@@ -50,7 +50,7 @@ export type FetchMyFeedListByIdAPIResponse = {
 };
 
 export const fetchMyFeedListById = async (id: string) => {
-  const url = `http://localhost:80/api/myfeed-list/${id}`;
+  const url = `http://localhost:80/api/myfeed-lists/${id}`;
   const response = await getFetch({
     url,
     tagName: "myfeed-list",
