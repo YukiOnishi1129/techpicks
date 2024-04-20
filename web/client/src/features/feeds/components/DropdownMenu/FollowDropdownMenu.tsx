@@ -17,25 +17,40 @@ import { MyFeedListType } from "@/types/myFeedList";
 
 type FollowDropdownMenuProps = {
   feedId: string;
+  isFollowing: boolean | undefined;
   myFeedLists: Array<MyFeedListType>;
   handleCreateMyFeed: (myFeedListId: string) => Promise<void>;
 };
 
 export async function FollowDropdownMenu({
   feedId,
+  isFollowing,
   myFeedLists,
   handleCreateMyFeed,
 }: FollowDropdownMenuProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button
-          variant="outline"
-          size="sm"
-          className="border-emerald-500 font-bold text-emerald-500 hover:text-emerald-600"
-        >
-          {"FOLLOW"}
-        </Button>
+        {isFollowing ? (
+          <Button
+            variant="outline"
+            size="sm"
+            className="group relative font-bold "
+          >
+            <span className="w-full group-hover:invisible">{"FOLLOWING"}</span>
+            <span className="invisible absolute w-full group-hover:visible">
+              {"EDIT"}
+            </span>
+          </Button>
+        ) : (
+          <Button
+            variant="outline"
+            size="sm"
+            className="border-emerald-500 font-bold text-emerald-500 hover:text-emerald-600"
+          >
+            {"FOLLOW"}
+          </Button>
+        )}
       </DropdownMenuTrigger>
 
       <DropdownMenuContent align="end" className="w-[200px]">

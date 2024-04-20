@@ -13,6 +13,7 @@ import { MyFeedListType } from "@/types/myFeedList";
 
 import { FollowDropdownMenu } from "./DropdownMenu";
 import { FeedCard } from "./FeedCard";
+import { serverRevalidateFeed } from "../actions/serverAction";
 
 type FeedCardWrapperProps = {
   feed: FeedType;
@@ -57,6 +58,7 @@ export const FeedCardWrapper: FC<FeedCardWrapperProps> = ({
     successToast({
       description: "Successfully followed the feed",
     });
+    await serverRevalidateFeed();
   };
 
   return (
@@ -66,6 +68,7 @@ export const FeedCardWrapper: FC<FeedCardWrapperProps> = ({
         <div className="right-4 top-0 md:absolute">
           <FollowDropdownMenu
             feedId={feed.id}
+            isFollowing={feed.isFollowing}
             myFeedLists={myFeedLists}
             handleCreateMyFeed={handleCreateMyFeed}
           />

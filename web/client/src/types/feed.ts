@@ -3,6 +3,7 @@ import {
   Feed as PrismaFeed,
   Category as PrismaCategory,
   Article as PrismaArticle,
+  MyFeed as PrismaMyFeed,
 } from "@prisma/client";
 
 export type FeedType = Omit<
@@ -12,4 +13,6 @@ export type FeedType = Omit<
   category: Omit<PrismaCategory, "deletedAt">;
   platform: Omit<PrismaPlatform, "deletedAt">;
   articles?: Array<Omit<PrismaArticle, "platformId">>;
+  myFeeds?: Array<PrismaMyFeed>;
+  isFollowing?: boolean;
 };

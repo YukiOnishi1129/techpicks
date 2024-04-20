@@ -137,6 +137,8 @@ export const getArticles = async ({
               select: {
                 id: true,
                 name: true,
+                description: true,
+                thumbnailUrl: true,
                 siteUrl: true,
                 rssUrl: true,
                 isTrending: true,
@@ -210,6 +212,8 @@ export const getArticles = async ({
           return {
             id: feed.feed.id,
             name: feed.feed.name,
+            description: feed.feed.description,
+            thumbnailUrl: feed.feed.thumbnailUrl,
             siteUrl: feed.feed.siteUrl,
             rssUrl: feed.feed.rssUrl,
             isTrending: feed.feed.isTrending,
@@ -265,6 +269,8 @@ export const getArticleByArticleAndPlatformUrl = async ({
               select: {
                 id: true,
                 name: true,
+                description: true,
+                thumbnailUrl: true,
                 siteUrl: true,
                 rssUrl: true,
                 isTrending: true,
@@ -340,6 +346,8 @@ export const getArticleByArticleAndPlatformUrl = async ({
         return {
           id: feed.feed.id,
           name: feed.feed.name,
+          description: feed.feed.description,
+          thumbnailUrl: feed.feed.thumbnailUrl,
           siteUrl: feed.feed.siteUrl,
           rssUrl: feed.feed.rssUrl,
           isTrending: feed.feed.isTrending,

@@ -7,10 +7,11 @@ import { FeedType } from "@/types/feed";
 const LIMIT = 20;
 
 export type GetFeedParams = {
+  userId?: string;
   offset?: number;
 };
 
-export const getFeed = async ({ offset = 1 }: GetFeedParams) => {
+export const getFeed = async ({ userId, offset = 1 }: GetFeedParams) => {
   try {
     const res = await prisma.feed.findMany({
       take: 20,
@@ -48,6 +49,11 @@ export const getFeed = async ({ offset = 1 }: GetFeedParams) => {
       include: {
         category: true,
         platform: true,
+        myFeeds: {
+          where: {
+            userId: userId,
+          },
+        },
       },
     });
 
@@ -63,6 +69,8 @@ export const getFeed = async ({ offset = 1 }: GetFeedParams) => {
         updatedAt: feed.updatedAt,
         category: feed.category,
         platform: feed.platform,
+        myFeeds: feed.myFeeds,
+        isFollowing: feed.myFeeds.length > 0,
       };
       return resFeed;
     });
