@@ -43,11 +43,13 @@ const FormSchema = z.object({
   description: z.string().optional(),
 });
 
-type CreateMyFeedListDialogProps = {};
+type CreateMyFeedListDialogProps = {
+  handleCreateMyFeed?: (myFeedListId: string) => Promise<boolean>;
+};
 
-export const CreateMyFeedListDialog: FC<
-  CreateMyFeedListDialogProps
-> = ({}: CreateMyFeedListDialogProps) => {
+export const CreateMyFeedListDialog: FC<CreateMyFeedListDialogProps> = ({
+  handleCreateMyFeed,
+}: CreateMyFeedListDialogProps) => {
   const [open, setOpen] = useState(false);
 
   const handleCloseDialog = useCallback(() => {
@@ -60,7 +62,10 @@ export const CreateMyFeedListDialog: FC<
         <Button>{"Create my feed folder"}</Button>
       </DialogTrigger>
       {open && (
-        <CreateMyFeedListDialogContent handleCloseDialog={handleCloseDialog} />
+        <CreateMyFeedListDialogContent
+          handleCloseDialog={handleCloseDialog}
+          handleCreateMyFeed={handleCreateMyFeed}
+        />
       )}
     </Dialog>
   );
@@ -68,10 +73,12 @@ export const CreateMyFeedListDialog: FC<
 
 type CreateMyFeedListDialogContentProps = {
   handleCloseDialog: () => void;
+  handleCreateMyFeed?: (myFeedListId: string) => Promise<boolean>;
 };
 
 const CreateMyFeedListDialogContent: FC<CreateMyFeedListDialogContentProps> = ({
   handleCloseDialog,
+  handleCreateMyFeed,
 }: CreateMyFeedListDialogContentProps) => {
   const { successToast, failToast } = useStatusToast();
   const [isPending, startTransition] = useTransition();
@@ -89,36 +96,53 @@ const CreateMyFeedListDialogContent: FC<CreateMyFeedListDialogContentProps> = ({
     form.reset();
   }, [form]);
 
-  const onSubmit = async (data: z.infer<typeof FormSchema>) => {
-    startTransition(async () => {
-      const user = await getUser();
+  const onSubmit = useCallback(
+    async (data: z.infer<typeof FormSchema>) => {
+      startTransition(async () => {
+        const user = await getUser();
 
-      if (!user) {
-        failToast({
-          description: "Please login to create a new feed folder",
+        if (!user) {
+          failToast({
+            description: "Please login to create a new feed folder",
+          });
+          return;
+        }
+        const id = await createMyFeedList({
+          title: data.title,
+          description: data?.description ?? "",
+          userId: user?.id,
         });
-        return;
-      }
-      const id = await createMyFeedList({
-        title: data.title,
-        description: data?.description ?? "",
-        userId: user?.id,
-      });
-      if (!id) {
-        failToast({
-          description: "Failed to create new feed folder",
+        if (!id) {
+          failToast({
+            description: "Failed to create new feed folder",
+          });
+          return;
+        }
+        successToast({
+          description: "Successfully created new feed folder",
         });
-        return;
-      }
-      successToast({
-        description: "Successfully created new feed folder",
+        if (handleCreateMyFeed !== undefined) {
+          await handleCreateMyFeed(id);
+          resetDialog();
+          handleCloseDialog();
+          return;
+        }
+        await serverRevalidateFeed();
+        router.replace("/feed");
+        resetDialog();
+        handleCloseDialog();
       });
-      await serverRevalidateFeed();
-      router.replace("/feed");
-      resetDialog();
-      handleCloseDialog();
-    });
-  };
+    },
+    [
+      failToast,
+      handleCreateMyFeed,
+      resetDialog,
+      router,
+      startTransition,
+      successToast,
+      handleCloseDialog,
+    ]
+  );
 
   return (
     <DialogContent onCloseAutoFocus={resetDialog}>

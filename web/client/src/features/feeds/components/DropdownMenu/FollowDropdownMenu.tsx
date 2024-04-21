@@ -77,7 +77,7 @@ export async function FollowDropdownMenu({
             />
           ))}
         <DropdownMenuLabel>
-          <CreateMyFeedListDialog />
+          <CreateMyFeedListDialog handleCreateMyFeed={handleCreateMyFeed} />
         </DropdownMenuLabel>
       </DropdownMenuContent>
     </DropdownMenu>

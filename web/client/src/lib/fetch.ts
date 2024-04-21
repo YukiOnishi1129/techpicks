@@ -26,7 +26,6 @@ type PostFetchArgs = {
 };
 
 export const postFetch = async ({ url, body }: PostFetchArgs) => {
-  console.log(url);
   return fetch(url, {
     method: "POST",
     headers: {
