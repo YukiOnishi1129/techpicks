@@ -10,6 +10,7 @@ export type MyFeedListType = Omit<PrismaMyFeedList, "userId"> & {
     Omit<PrismaFeed, "platformId" | "categoryId" | "rssUrl" | "deletedAt"> & {
       category: Omit<PrismaCategory, "deletedAt">;
       platform: Omit<PrismaPlatform, "deletedAt">;
+      myFeedId: string;
     }
   >;
   profile: {

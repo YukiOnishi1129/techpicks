@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, useMemo, useState } from "react";
+import { FC, useCallback, useMemo, useState } from "react";
 
 import { CreateMyFeedListDialog } from "@/features/myFeedLists/components/Dialog";
 
@@ -20,6 +20,10 @@ type FollowDropdownMenuProps = {
   isFollowing: boolean | undefined;
   myFeedLists: Array<MyFeedListType>;
   handleCreateMyFeed: (myFeedListId: string) => Promise<boolean>;
+  handleRemoveMyFeed: (
+    myFeedId: string,
+    myFeedListId: string
+  ) => Promise<boolean>;
 };
 
 export async function FollowDropdownMenu({
@@ -27,6 +31,7 @@ export async function FollowDropdownMenu({
   isFollowing,
   myFeedLists,
   handleCreateMyFeed,
+  handleRemoveMyFeed,
 }: FollowDropdownMenuProps) {
   const sortedMyFeedLists = myFeedLists.sort((prev, next) => {
     if (prev.createdAt < next.createdAt) return -1;
@@ -68,6 +73,7 @@ export async function FollowDropdownMenu({
               feedId={feedId}
               myFeedList={myFeedList}
               handleCreateMyFeed={handleCreateMyFeed}
+              handleRemoveMyFeed={handleRemoveMyFeed}
             />
           ))}
         <DropdownMenuLabel>
@@ -82,12 +88,17 @@ type TargetFollowMyFeedListProps = {
   feedId: string;
   myFeedList: MyFeedListType;
   handleCreateMyFeed: (myFeedListId: string) => Promise<boolean>;
+  handleRemoveMyFeed: (
+    myFeedId: string,
+    myFeedListId: string
+  ) => Promise<boolean>;
 };
 
 const TargetFollowMyFeedList: FC<TargetFollowMyFeedListProps> = ({
   feedId,
   myFeedList,
   handleCreateMyFeed,
+  handleRemoveMyFeed,
 }: TargetFollowMyFeedListProps) => {
   const isFollowed = useMemo(
     () => myFeedList.feeds.some((feed) => feed.id === feedId),
@@ -95,10 +106,26 @@ const TargetFollowMyFeedList: FC<TargetFollowMyFeedListProps> = ({
   );
   const [isAddedMyFeed, setIsAddedMyFeed] = useState(isFollowed);
 
-  const onCreateMyFeed = async (myFeedListId: string) => {
-    const isSuccess = await handleCreateMyFeed(myFeedListId);
-    if (isSuccess) setIsAddedMyFeed(true);
-  };
+  const targetMyFeedId = useMemo(() => {
+    const targetFeed = myFeedList.feeds.find((feed) => feed.id === feedId);
+    return targetFeed?.myFeedId;
+  }, [feedId, myFeedList.feeds]);
+
+  const onCreateMyFeed = useCallback(
+    async (myFeedListId: string) => {
+      const isSuccess = await handleCreateMyFeed(myFeedListId);
+      if (isSuccess) setIsAddedMyFeed(true);
+    },
+    [handleCreateMyFeed]
+  );
+
+  const onRemoveMyFeed = useCallback(
+    async (myFeedId: string, myFeedListId: string) => {
+      const isSuccess = await handleRemoveMyFeed(myFeedId, myFeedListId);
+      if (isSuccess) setIsAddedMyFeed(false);
+    },
+    [handleRemoveMyFeed]
+  );
 
   return (
     <div>
@@ -109,6 +136,7 @@ const TargetFollowMyFeedList: FC<TargetFollowMyFeedListProps> = ({
             variant="outline"
             size="sm"
             className="group relative border-emerald-500 bg-emerald-500 font-bold text-white hover:border-red-600 hover:text-red-600"
+            onClick={() => onRemoveMyFeed(targetMyFeedId || "", myFeedList.id)}
           >
             <span className="w-full group-hover:invisible">{"ADDED"}</span>
             <span className="invisible absolute w-full group-hover:visible">

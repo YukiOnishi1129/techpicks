@@ -22,7 +22,11 @@ export const getMyFeedList = async ({ userId }: GetMyFeedList) => {
       },
       include: {
         myFeeds: {
+          where: {
+            userId: userId,
+          },
           select: {
+            id: true,
             feed: {
               select: {
                 id: true,
@@ -110,6 +114,7 @@ export const getMyFeedList = async ({ userId }: GetMyFeedList) => {
               createdAt: myFeed.feed.platform.createdAt,
               updatedAt: myFeed.feed.platform.updatedAt,
             },
+            myFeedId: myFeed.id,
           };
         }),
       };
@@ -135,7 +140,11 @@ export const getMyFeedListById = async ({ id, userId }: GetMyFeedListById) => {
       },
       include: {
         myFeeds: {
+          where: {
+            userId: userId,
+          },
           select: {
+            id: true,
             feed: {
               select: {
                 id: true,
@@ -233,6 +242,7 @@ export const getMyFeedListById = async ({ id, userId }: GetMyFeedListById) => {
             createdAt: myFeed.feed.platform.createdAt,
             updatedAt: myFeed.feed.platform.updatedAt,
           },
+          myFeedId: myFeed.id,
         };
       }),
     };

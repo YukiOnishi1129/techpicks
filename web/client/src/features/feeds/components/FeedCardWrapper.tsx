@@ -31,96 +31,110 @@ export const FeedCardWrapper: FC<FeedCardWrapperProps> = ({
     feed.isFollowing || false
   );
 
-  const [showMyFeedLists, setShowMyFeedLists] = useState(myFeedLists);
+  const [showFeed, setShowFeed] = useState<FeedType>(feed);
 
-  const handleCreateMyFeed = async (myFeedListId: string) => {
-    const res = await fetchMyFeedCountByMyFeedListIdAndFeedIdAPI({
-      feedId: feed.id,
-      myFeedListId,
-    });
-    if (res.data?.count && res.data.count > 0) {
-      failToast({
-        description: "You are already following the feed",
-      });
-      return false;
-    }
-    const user = await getUser();
-    if (!user) {
-      failToast({
-        description: "Please sign in to follow the feed",
-      });
-      return false;
-    }
-    const data = await createMyFeed({
-      userId: user.id,
-      myFeedListId,
-      feedId: feed.id,
-    });
-
-    if (!data) {
-      failToast({
-        description: "Failed to follow the feed",
-      });
-      return false;
-    }
-    successToast({
-      description: "Successfully followed the feed",
-    });
-    setIsFollowing(true);
-    const updateMyFeedList = showMyFeedLists.find(
-      (myFeedList) => myFeedList.id === myFeedListId
-    );
-    if (updateMyFeedList) {
-      const newMyFeedList: MyFeedListType = {
-        ...updateMyFeedList,
-        feeds: [
-          ...updateMyFeedList.feeds,
-          {
-            id: feed.id,
-            name: feed.name,
-            description: feed.description,
-            thumbnailUrl: feed.thumbnailUrl,
-            siteUrl: feed.siteUrl,
-            isTrending: feed.isTrending,
-            createdAt: feed.createdAt,
-            updatedAt: feed.updatedAt,
-            category: {
-              id: feed.category.id,
-              type: feed.category.type,
-              name: feed.category.name,
-              createdAt: feed.category.createdAt,
-              updatedAt: feed.category.updatedAt,
-            },
-            platform: {
-              id: feed.platform.id,
-              name: feed.platform.name,
-              siteUrl: feed.platform.siteUrl,
-              faviconUrl: feed.platform.faviconUrl,
-              platformType: feed.platform.platformType,
-              isEng: feed.platform.isEng,
-              createdAt: feed.platform.createdAt,
-              updatedAt: feed.platform.updatedAt,
-            },
-          },
-        ],
+  const [showMyFeedLists, setShowMyFeedLists] = useState<Array<MyFeedListType>>(
+    myFeedLists.map((myFeedList) => {
+      return {
+        ...myFeedList,
+        feeds: myFeedList.feeds.filter((myFeed) => myFeed.id === feed.id),
       };
-      setShowMyFeedLists((prev) => [
-        ...prev.filter((myFeedList) => myFeedList.id !== myFeedListId),
-        newMyFeedList,
-      ]);
-    }
-    return true;
-  };
+    })
+  );
 
-  const handleRemoveMyFeed = useCallback(
-    async (myFeedId: string, myFeedListId: string) => {
-      // check count myFeed by myFeedId
+  const handleCreateMyFeed = useCallback(
+    async (myFeedListId: string) => {
+      const res = await fetchMyFeedCountByMyFeedListIdAndFeedIdAPI({
+        feedId: showFeed.id,
+        myFeedListId,
+      });
+      if (res.data?.count && res.data.count > 0) {
+        failToast({
+          description: "You are already following the feed",
+        });
+        return false;
+      }
       const user = await getUser();
       if (!user) {
         failToast({
           description: "Please sign in to follow the feed",
         });
-        return;
+        return false;
+      }
+      const data = await createMyFeed({
+        userId: user.id,
+        myFeedListId,
+        feedId: showFeed.id,
+      });
+
+      if (!data) {
+        failToast({
+          description: "Failed to follow the feed",
+        });
+        return false;
+      }
+      successToast({
+        description: "Successfully followed the feed",
+      });
+
+      if (!isFollowing) setIsFollowing(true);
+      const targetMyFeedList = showMyFeedLists.find(
+        (myFeedList) => myFeedList.id === myFeedListId
+      );
+      if (targetMyFeedList) {
+        const newMyFeedList: MyFeedListType = {
+          ...targetMyFeedList,
+          feeds: [
+            ...targetMyFeedList.feeds,
+            {
+              id: showFeed.id,
+              name: showFeed.name,
+              description: showFeed.description,
+              thumbnailUrl: showFeed.thumbnailUrl,
+              siteUrl: showFeed.siteUrl,
+              isTrending: showFeed.isTrending,
+              createdAt: showFeed.createdAt,
+              updatedAt: showFeed.updatedAt,
+              category: {
+                id: showFeed.category.id,
+                type: showFeed.category.type,
+                name: showFeed.category.name,
+                createdAt: showFeed.category.createdAt,
+                updatedAt: showFeed.category.updatedAt,
+              },
+              platform: {
+                id: showFeed.platform.id,
+                name: showFeed.platform.name,
+                siteUrl: showFeed.platform.siteUrl,
+                faviconUrl: showFeed.platform.faviconUrl,
+                platformType: showFeed.platform.platformType,
+                isEng: showFeed.platform.isEng,
+                createdAt: showFeed.platform.createdAt,
+                updatedAt: showFeed.platform.updatedAt,
+              },
+              myFeedId: data.id,
+            },
+          ],
+        };
+        setShowMyFeedLists((prev) => [
+          ...prev.filter((myFeedList) => myFeedList.id !== myFeedListId),
+          newMyFeedList,
+        ]);
+      }
+      return true;
+    },
+    [failToast, showFeed, isFollowing, successToast, showMyFeedLists]
+  );
+
+  const handleRemoveMyFeed = useCallback(
+    async (myFeedId: string, myFeedListId: string) => {
+      // TODO: check count myFeed by myFeedId
+      const user = await getUser();
+      if (!user) {
+        failToast({
+          description: "Please sign in to follow the feed",
+        });
+        return false;
       }
       const data = await deleteMyFeed({
         id: myFeedId,
@@ -131,28 +145,57 @@ export const FeedCardWrapper: FC<FeedCardWrapperProps> = ({
         failToast({
           description: "Failed to unfollow the feed",
         });
-        return;
+        return false;
       }
       successToast({
         description: "Successfully unfollowed the feed",
       });
-      // count myFeedLists
-      // if count is 0, isFollowing = false
-      // else not
+
+      // state update
+      // remove feed from myFeedList
+      const targetMyFeedList = showMyFeedLists.find(
+        (myFeedList) => myFeedList.id === myFeedListId
+      );
+      if (targetMyFeedList) {
+        const newMyFeedList: MyFeedListType = {
+          ...targetMyFeedList,
+          feeds: targetMyFeedList.feeds.filter(
+            (myFeed) => myFeed.id !== showFeed.id
+          ),
+        };
+        setShowMyFeedLists((prev) => [
+          ...prev.filter((myFeedList) => myFeedList.id !== myFeedListId),
+          newMyFeedList,
+        ]);
+      }
+
+      if (showFeed?.myFeeds) {
+        const newFeed: FeedType = {
+          ...showFeed,
+          myFeeds: showFeed.myFeeds.filter((myFeed) => myFeed.id !== myFeedId),
+        };
+        setShowFeed(newFeed);
+        if (!newFeed?.myFeeds || newFeed.myFeeds.length === 0) {
+          setIsFollowing(false);
+        }
+      }
+
+      return true;
     },
-    [successToast, failToast]
+    [successToast, failToast, showMyFeedLists, showFeed]
   );
 
   return (
-    <div key={feed.id} className="mb-4 rounded-2xl border-2 md:py-2">
+    <div key={showFeed.id} className="mb-4 rounded-2xl border-2 md:py-2">
       <div className="w-full rounded md:relative">
-        <FeedCard feed={feed} />
+        <FeedCard feed={showFeed} />
         <div className="right-4 top-0 md:absolute">
           <FollowDropdownMenu
-            feedId={feed.id}
+            feedId={showFeed.id}
             isFollowing={isFollowing}
             myFeedLists={showMyFeedLists}
             handleCreateMyFeed={handleCreateMyFeed}
+            handleRemoveMyFeed={handleRemoveMyFeed}
           />
         </div>
       </div>
