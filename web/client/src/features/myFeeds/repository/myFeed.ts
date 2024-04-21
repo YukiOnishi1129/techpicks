@@ -110,22 +110,22 @@ export const createMyFeed = async (dto: createMyFeedDTO) => {
         feedId: dto.feedId,
       },
     });
-    return data.id;
+    return data;
   } catch (err) {
     throw new Error(`Failed to create my feed list: ${err}`);
   }
 };
 
 type deleteMyFeedDTO = {
-  feedId: string;
+  id: string;
   userId: string;
 };
 
-export const deleteMyFeed = async ({ feedId, userId }: deleteMyFeedDTO) => {
+export const deleteMyFeed = async ({ id, userId }: deleteMyFeedDTO) => {
   try {
     const data = await prisma.myFeed.delete({
       where: {
-        id: feedId,
+        id: id,
         userId: userId,
       },
     });

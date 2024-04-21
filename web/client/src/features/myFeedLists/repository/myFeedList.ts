@@ -216,7 +216,13 @@ export const getMyFeedListById = async ({ id, userId }: GetMyFeedListById) => {
           isTrending: myFeed.feed.isTrending,
           createdAt: myFeed.feed.createdAt,
           updatedAt: myFeed.feed.updatedAt,
-          category: myFeed.feed.category,
+          category: {
+            id: myFeed.feed.category.id,
+            name: myFeed.feed.category.name,
+            type: myFeed.feed.category.type,
+            createdAt: myFeed.feed.category.createdAt,
+            updatedAt: myFeed.feed.category.updatedAt,
+          },
           platform: {
             id: myFeed.feed.platform.id,
             name: myFeed.feed.platform.name,

@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, useCallback } from "react";
+import { FC, useCallback, useState } from "react";
 
 import { fetchMyFeedCountByMyFeedListIdAndFeedIdAPI } from "@/features/myFeeds/actions/myFeed";
 import {
@@ -16,7 +16,6 @@ import { MyFeedListType } from "@/types/myFeedList";
 
 import { FollowDropdownMenu } from "./DropdownMenu";
 import { FeedCard } from "./FeedCard";
-import { serverRevalidateFeed } from "../actions/serverAction";
 
 type FeedCardWrapperProps = {
   feed: FeedType;
@@ -28,6 +27,11 @@ export const FeedCardWrapper: FC<FeedCardWrapperProps> = ({
   myFeedLists,
 }: FeedCardWrapperProps) => {
   const { successToast, failToast } = useStatusToast();
+  const [isFollowing, setIsFollowing] = useState<boolean>(
+    feed.isFollowing || false
+  );
+
+  const [showMyFeedLists, setShowMyFeedLists] = useState(myFeedLists);
 
   const handleCreateMyFeed = async (myFeedListId: string) => {
     const res = await fetchMyFeedCountByMyFeedListIdAndFeedIdAPI({
@@ -38,35 +42,79 @@ export const FeedCardWrapper: FC<FeedCardWrapperProps> = ({
       failToast({
         description: "You are already following the feed",
       });
-      return;
+      return false;
     }
     const user = await getUser();
     if (!user) {
       failToast({
         description: "Please sign in to follow the feed",
       });
-      return;
+      return false;
     }
-    const id = await createMyFeed({
+    const data = await createMyFeed({
       userId: user.id,
       myFeedListId,
       feedId: feed.id,
     });
 
-    if (!id) {
+    if (!data) {
       failToast({
         description: "Failed to follow the feed",
       });
-      return;
+      return false;
     }
     successToast({
       description: "Successfully followed the feed",
     });
-    await serverRevalidateFeed();
+    setIsFollowing(true);
+    const updateMyFeedList = showMyFeedLists.find(
+      (myFeedList) => myFeedList.id === myFeedListId
+    );
+    if (updateMyFeedList) {
+      const newMyFeedList: MyFeedListType = {
+        ...updateMyFeedList,
+        feeds: [
+          ...updateMyFeedList.feeds,
+          {
+            id: feed.id,
+            name: feed.name,
+            description: feed.description,
+            thumbnailUrl: feed.thumbnailUrl,
+            siteUrl: feed.siteUrl,
+            isTrending: feed.isTrending,
+            createdAt: feed.createdAt,
+            updatedAt: feed.updatedAt,
+            category: {
+              id: feed.category.id,
+              type: feed.category.type,
+              name: feed.category.name,
+              createdAt: feed.category.createdAt,
+              updatedAt: feed.category.updatedAt,
+            },
+            platform: {
+              id: feed.platform.id,
+              name: feed.platform.name,
+              siteUrl: feed.platform.siteUrl,
+              faviconUrl: feed.platform.faviconUrl,
+              platformType: feed.platform.platformType,
+              isEng: feed.platform.isEng,
+              createdAt: feed.platform.createdAt,
+              updatedAt: feed.platform.updatedAt,
+            },
+          },
+        ],
+      };
+      setShowMyFeedLists((prev) => [
+        ...prev.filter((myFeedList) => myFeedList.id !== myFeedListId),
+        newMyFeedList,
+      ]);
+    }
+    return true;
   };
 
   const handleRemoveMyFeed = useCallback(
-    async (myFeedListId: string) => {
+    async (myFeedId: string, myFeedListId: string) => {
+      // check count myFeed by myFeedId
       const user = await getUser();
       if (!user) {
         failToast({
@@ -75,7 +123,7 @@ export const FeedCardWrapper: FC<FeedCardWrapperProps> = ({
         return;
       }
       const data = await deleteMyFeed({
-        feedId: feed.id,
+        id: myFeedId,
         userId: user.id,
       });
 
@@ -88,9 +136,11 @@ export const FeedCardWrapper: FC<FeedCardWrapperProps> = ({
       successToast({
         description: "Successfully unfollowed the feed",
       });
-      await serverRevalidateFeed();
+      // count myFeedLists
+      // if count is 0, isFollowing = false
+      // else not
     },
-    [successToast, failToast, feed.id]
+    [successToast, failToast]
   );
 
   return (
@@ -100,8 +150,8 @@ export const FeedCardWrapper: FC<FeedCardWrapperProps> = ({
         <div className="right-4 top-0 md:absolute">
           <FollowDropdownMenu
             feedId={feed.id}
-            isFollowing={feed.isFollowing}
-            myFeedLists={myFeedLists}
+            isFollowing={isFollowing}
+            myFeedLists={showMyFeedLists}
             handleCreateMyFeed={handleCreateMyFeed}
           />
         </div>
