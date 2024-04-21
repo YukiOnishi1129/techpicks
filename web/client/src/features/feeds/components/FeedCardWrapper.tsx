@@ -1,9 +1,12 @@
 "use client";
 
-import { FC } from "react";
+import { FC, useCallback } from "react";
 
-import { fetchMyFeedCountByMyFeedListIdAPI } from "@/features/myFeeds/actions/myFeed";
-import { createMyFeed } from "@/features/myFeeds/repository/myFeed";
+import { fetchMyFeedCountByMyFeedListIdAndFeedIdAPI } from "@/features/myFeeds/actions/myFeed";
+import {
+  createMyFeed,
+  deleteMyFeed,
+} from "@/features/myFeeds/repository/myFeed";
 import { getUser } from "@/features/users/actions/user";
 
 import { useStatusToast } from "@/hooks/useStatusToast";
@@ -27,7 +30,8 @@ export const FeedCardWrapper: FC<FeedCardWrapperProps> = ({
   const { successToast, failToast } = useStatusToast();
 
   const handleCreateMyFeed = async (myFeedListId: string) => {
-    const res = await fetchMyFeedCountByMyFeedListIdAPI({
+    const res = await fetchMyFeedCountByMyFeedListIdAndFeedIdAPI({
+      feedId: feed.id,
       myFeedListId,
     });
     if (res.data?.count && res.data.count > 0) {
@@ -60,6 +64,34 @@ export const FeedCardWrapper: FC<FeedCardWrapperProps> = ({
     });
     await serverRevalidateFeed();
   };
+
+  const handleRemoveMyFeed = useCallback(
+    async (myFeedListId: string) => {
+      const user = await getUser();
+      if (!user) {
+        failToast({
+          description: "Please sign in to follow the feed",
+        });
+        return;
+      }
+      const data = await deleteMyFeed({
+        feedId: feed.id,
+        userId: user.id,
+      });
+
+      if (!data) {
+        failToast({
+          description: "Failed to unfollow the feed",
+        });
+        return;
+      }
+      successToast({
+        description: "Successfully unfollowed the feed",
+      });
+      await serverRevalidateFeed();
+    },
+    [successToast, failToast, feed.id]
+  );
 
   return (
     <div key={feed.id} className="mb-4 rounded-2xl border-2 md:py-2">

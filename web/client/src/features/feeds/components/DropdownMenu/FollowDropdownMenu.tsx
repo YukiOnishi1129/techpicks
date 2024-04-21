@@ -96,9 +96,12 @@ const TargetFollowMyFeedList: FC<TargetFollowMyFeedListProps> = ({
           <Button
             variant="outline"
             size="sm"
-            className="border-emerald-500 font-bold text-emerald-500 hover:text-emerald-600"
+            className="group relative border-emerald-500 bg-emerald-500 font-bold text-white hover:border-red-600 hover:text-red-600"
           >
-            ADDED
+            <span className="w-full group-hover:invisible">{"ADDED"}</span>
+            <span className="invisible absolute w-full group-hover:visible">
+              {"REMOVE"}
+            </span>
           </Button>
         ) : (
           <Button
