@@ -18,15 +18,21 @@ export const getMyFeedList = async ({ userId }: GetMyFeedList) => {
         userId: userId,
       },
       orderBy: {
-        createdAt: "desc",
+        createdAt: "asc",
       },
       include: {
         myFeeds: {
+          where: {
+            userId: userId,
+          },
           select: {
+            id: true,
             feed: {
               select: {
                 id: true,
                 name: true,
+                description: true,
+                thumbnailUrl: true,
                 siteUrl: true,
                 rssUrl: true,
                 isTrending: true,
@@ -90,6 +96,8 @@ export const getMyFeedList = async ({ userId }: GetMyFeedList) => {
           return {
             id: myFeed.feed.id,
             name: myFeed.feed.name,
+            description: myFeed.feed.description,
+            thumbnailUrl: myFeed.feed.thumbnailUrl,
             siteUrl: myFeed.feed.siteUrl,
             rssUrl: myFeed.feed.rssUrl,
             isTrending: myFeed.feed.isTrending,
@@ -106,6 +114,7 @@ export const getMyFeedList = async ({ userId }: GetMyFeedList) => {
               createdAt: myFeed.feed.platform.createdAt,
               updatedAt: myFeed.feed.platform.updatedAt,
             },
+            myFeedId: myFeed.id,
           };
         }),
       };
@@ -131,11 +140,17 @@ export const getMyFeedListById = async ({ id, userId }: GetMyFeedListById) => {
       },
       include: {
         myFeeds: {
+          where: {
+            userId: userId,
+          },
           select: {
+            id: true,
             feed: {
               select: {
                 id: true,
                 name: true,
+                description: true,
+                thumbnailUrl: true,
                 siteUrl: true,
                 rssUrl: true,
                 isTrending: true,
@@ -203,12 +218,20 @@ export const getMyFeedListById = async ({ id, userId }: GetMyFeedListById) => {
         return {
           id: myFeed.feed.id,
           name: myFeed.feed.name,
+          description: myFeed.feed.description,
+          thumbnailUrl: myFeed.feed.thumbnailUrl,
           siteUrl: myFeed.feed.siteUrl,
           rssUrl: myFeed.feed.rssUrl,
           isTrending: myFeed.feed.isTrending,
           createdAt: myFeed.feed.createdAt,
           updatedAt: myFeed.feed.updatedAt,
-          category: myFeed.feed.category,
+          category: {
+            id: myFeed.feed.category.id,
+            name: myFeed.feed.category.name,
+            type: myFeed.feed.category.type,
+            createdAt: myFeed.feed.category.createdAt,
+            updatedAt: myFeed.feed.category.updatedAt,
+          },
           platform: {
             id: myFeed.feed.platform.id,
             name: myFeed.feed.platform.name,
@@ -219,6 +242,7 @@ export const getMyFeedListById = async ({ id, userId }: GetMyFeedListById) => {
             createdAt: myFeed.feed.platform.createdAt,
             updatedAt: myFeed.feed.platform.updatedAt,
           },
+          myFeedId: myFeed.id,
         };
       }),
     };

@@ -2,7 +2,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 
-import { getMyFeedListById } from "@/features/myFeedList/repository/myFeedList";
+import { getMyFeedListById } from "@/features/myFeedLists/repository/myFeedList";
 import { getUser } from "@/features/users/actions/user";
 
 export const GET = async (

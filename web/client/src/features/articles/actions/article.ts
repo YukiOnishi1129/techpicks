@@ -1,7 +1,5 @@
 "use server";
 
-import { headers } from "next/headers";
-
 import { getFetch } from "@/lib/fetch";
 
 import { ArticleTabType, ArticleType } from "@/types/article";
@@ -40,7 +38,6 @@ export const fetchArticlesAPI = async ({
       .join("");
     url += platformIdPath;
   }
-  const header = headers();
   const response = await getFetch({
     url,
     tagName: "articles",

@@ -79,7 +79,7 @@ const ArticleContent = ({
 
   const handleAddBookmark = useCallback(async () => {
     if (!user) return;
-    const id = await createBookmark({
+    const data = await createBookmark({
       title: article.title,
       description: article.description,
       articleId: article.id,
@@ -94,7 +94,7 @@ const ArticleContent = ({
       platformUrl: article.platform.siteUrl,
       platformFaviconUrl: article.platform.faviconUrl,
     });
-    setBookmarkId(id);
+    setBookmarkId(data.id);
   }, [article, user]);
 
   const handleRemoveBookmark = useCallback(

@@ -3,6 +3,11 @@
 import { User } from "@supabase/supabase-js";
 import { FC } from "react";
 
+import {
+  FeedCategoryNameBadge,
+  PlatformNameBadge,
+} from "@/components/ui/badge";
+
 import { useCheckImageExist } from "@/hooks/useImage";
 
 import { showDiffDateToCurrentDate } from "@/lib/date";
@@ -50,20 +55,20 @@ export const ArticleCard: FC<ArticleCardProps> = ({
               src={article.platform.faviconUrl}
               alt=""
             />
-            <p className="inline-block rounded-lg bg-sky-500 px-2 py-1 text-xs font-bold text-white md:text-base">
-              {article.platform.name}
-            </p>
+            <div>
+              <PlatformNameBadge name={article.platform.name} />
+            </div>
           </div>
 
           <div className="ml-[32px] flex w-full flex-wrap pt-2">
             {article.feeds.length > 0 &&
               article.feeds.map((feed) => (
-                <p
+                <div
                   key={`${feed.id}-${feed.category.id}`}
-                  className="mb-2 mr-2 inline-block rounded-lg bg-yellow-600 px-2 py-1 text-xs font-bold text-white md:text-base"
+                  className="mb-2 mr-2 "
                 >
-                  {feed.category.name}
-                </p>
+                  <FeedCategoryNameBadge name={feed.category.name} />
+                </div>
               ))}
           </div>
         </div>
