@@ -40,7 +40,7 @@ export const useArticleBookmark = ({ article }: { article: ArticleType }) => {
         return;
       }
 
-      const id = await createBookmark({
+      const newData = await createBookmark({
         title: article.title,
         description: article.description,
         articleId: article.id,
@@ -55,7 +55,7 @@ export const useArticleBookmark = ({ article }: { article: ArticleType }) => {
         platformUrl: article.platform.siteUrl,
         platformFaviconUrl: article.platform.faviconUrl,
       });
-      if (!id) {
+      if (!newData) {
         failToast({
           description: "Fail: Something went wrong",
         });
@@ -65,7 +65,7 @@ export const useArticleBookmark = ({ article }: { article: ArticleType }) => {
       successToast({
         description: "Add bookmark",
       });
-      setBookmarkId(id);
+      setBookmarkId(newData.id);
     },
     [article, successToast, failToast]
   );
