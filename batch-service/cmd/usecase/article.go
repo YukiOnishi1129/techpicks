@@ -54,7 +54,6 @@ func (au *ArticleUsecase) BatchCreateArticles(ctx context.Context) error {
 				defer wg.Done()
 				// transaction
 				tx, err := au.db.BeginTx(ctx, nil)
-				log.Printf("【begin transaction】:feed: %s,  article: %s", f.Name, r.Title)
 				if err != nil {
 					log.Printf("【error begin transaction】: %s", err)
 					return
@@ -79,7 +78,6 @@ func (au *ArticleUsecase) BatchCreateArticles(ctx context.Context) error {
 					if res.isCreatedFeedArticleRelation {
 						farCount++
 					}
-					log.Printf("【commit transaction】:feed: %s,  article: %s", f.Name, r.Title)
 					//commit
 					err := tx.Commit()
 					if err != nil {
