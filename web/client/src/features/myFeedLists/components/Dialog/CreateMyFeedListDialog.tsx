@@ -44,11 +44,11 @@ const FormSchema = z.object({
 });
 
 type CreateMyFeedListDialogProps = {
-  handleCreateMyFeed?: (myFeedListId: string) => Promise<boolean>;
+  handleCreatedMyFeedLists?: (myFeedId: string) => Promise<void>;
 };
 
 export const CreateMyFeedListDialog: FC<CreateMyFeedListDialogProps> = ({
-  handleCreateMyFeed,
+  handleCreatedMyFeedLists,
 }: CreateMyFeedListDialogProps) => {
   const [open, setOpen] = useState(false);
 
@@ -64,7 +64,7 @@ export const CreateMyFeedListDialog: FC<CreateMyFeedListDialogProps> = ({
       {open && (
         <CreateMyFeedListDialogContent
           handleCloseDialog={handleCloseDialog}
-          handleCreateMyFeed={handleCreateMyFeed}
+          handleCreatedMyFeedLists={handleCreatedMyFeedLists}
         />
       )}
     </Dialog>
@@ -73,12 +73,12 @@ export const CreateMyFeedListDialog: FC<CreateMyFeedListDialogProps> = ({
 
 type CreateMyFeedListDialogContentProps = {
   handleCloseDialog: () => void;
-  handleCreateMyFeed?: (myFeedListId: string) => Promise<boolean>;
+  handleCreatedMyFeedLists?: (myFeedId: string) => Promise<void>;
 };
 
 const CreateMyFeedListDialogContent: FC<CreateMyFeedListDialogContentProps> = ({
   handleCloseDialog,
-  handleCreateMyFeed,
+  handleCreatedMyFeedLists,
 }: CreateMyFeedListDialogContentProps) => {
   const { successToast, failToast } = useStatusToast();
   const [isPending, startTransition] = useTransition();
@@ -107,12 +107,12 @@ const CreateMyFeedListDialogContent: FC<CreateMyFeedListDialogContentProps> = ({
           });
           return;
         }
-        const id = await createMyFeedList({
+        const createdId = await createMyFeedList({
           title: data.title,
           description: data?.description ?? "",
           userId: user?.id,
         });
-        if (!id) {
+        if (!createdId) {
           failToast({
             description: "Failed to create new feed folder",
           });
@@ -121,8 +121,8 @@ const CreateMyFeedListDialogContent: FC<CreateMyFeedListDialogContentProps> = ({
         successToast({
           description: "Successfully created new feed folder",
         });
-        if (handleCreateMyFeed !== undefined) {
-          await handleCreateMyFeed(id);
+        if (handleCreatedMyFeedLists !== undefined) {
+          await handleCreatedMyFeedLists(createdId);
           resetDialog();
           handleCloseDialog();
           return;
@@ -135,7 +135,7 @@ const CreateMyFeedListDialogContent: FC<CreateMyFeedListDialogContentProps> = ({
     },
     [
       failToast,
-      handleCreateMyFeed,
+      handleCreatedMyFeedLists,
       resetDialog,
       router,
       startTransition,

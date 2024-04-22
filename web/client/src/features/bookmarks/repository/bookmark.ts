@@ -304,7 +304,7 @@ export const createBookmark = async (dto: CreateBookmarkDTO) => {
         isEng: dto.isEng,
       },
     });
-    return data.id;
+    return data;
   } catch (err) {
     throw new Error(`Failed to create bookmark: ${err}`);
   }

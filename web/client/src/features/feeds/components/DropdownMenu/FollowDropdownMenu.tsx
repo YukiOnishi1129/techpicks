@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, useCallback, useMemo, useState } from "react";
+import { FC, useCallback, useMemo } from "react";
 
 import { CreateMyFeedListDialog } from "@/features/myFeedLists/components/Dialog";
 
@@ -19,11 +19,12 @@ type FollowDropdownMenuProps = {
   feedId: string;
   isFollowing: boolean | undefined;
   myFeedLists: Array<MyFeedListType>;
-  handleCreateMyFeed: (myFeedListId: string) => Promise<boolean>;
+  handleCreateMyFeed: (myFeedListId: string) => Promise<string | undefined>;
   handleRemoveMyFeed: (
     myFeedId: string,
     myFeedListId: string
-  ) => Promise<boolean>;
+  ) => Promise<string | undefined>;
+  handleCreatedMyFeedLists: (myFeedId: string) => Promise<void>;
 };
 
 export async function FollowDropdownMenu({
@@ -32,6 +33,7 @@ export async function FollowDropdownMenu({
   myFeedLists,
   handleCreateMyFeed,
   handleRemoveMyFeed,
+  handleCreatedMyFeedLists,
 }: FollowDropdownMenuProps) {
   const sortedMyFeedLists = myFeedLists.sort((prev, next) => {
     if (prev.createdAt < next.createdAt) return -1;
@@ -65,19 +67,23 @@ export async function FollowDropdownMenu({
 
       <DropdownMenuContent align="end" className="w-[200px]">
         <DropdownMenuSeparator />
+        <div className="max-h-[200px] overflow-y-auto">
+          {sortedMyFeedLists.length &&
+            sortedMyFeedLists.map((myFeedList) => (
+              <TargetFollowMyFeedList
+                key={`${feedId}-${myFeedList.id}`}
+                feedId={feedId}
+                myFeedList={myFeedList}
+                handleCreateMyFeed={handleCreateMyFeed}
+                handleRemoveMyFeed={handleRemoveMyFeed}
+              />
+            ))}
+        </div>
 
-        {sortedMyFeedLists.length &&
-          sortedMyFeedLists.map((myFeedList) => (
-            <TargetFollowMyFeedList
-              key={`${feedId}-${myFeedList.id}`}
-              feedId={feedId}
-              myFeedList={myFeedList}
-              handleCreateMyFeed={handleCreateMyFeed}
-              handleRemoveMyFeed={handleRemoveMyFeed}
-            />
-          ))}
         <DropdownMenuLabel>
-          <CreateMyFeedListDialog handleCreateMyFeed={handleCreateMyFeed} />
+          <CreateMyFeedListDialog
+            handleCreatedMyFeedLists={handleCreatedMyFeedLists}
+          />
         </DropdownMenuLabel>
       </DropdownMenuContent>
     </DropdownMenu>
@@ -87,11 +93,11 @@ export async function FollowDropdownMenu({
 type TargetFollowMyFeedListProps = {
   feedId: string;
   myFeedList: MyFeedListType;
-  handleCreateMyFeed: (myFeedListId: string) => Promise<boolean>;
+  handleCreateMyFeed: (myFeedListId: string) => Promise<string | undefined>;
   handleRemoveMyFeed: (
     myFeedId: string,
     myFeedListId: string
-  ) => Promise<boolean>;
+  ) => Promise<string | undefined>;
 };
 
 const TargetFollowMyFeedList: FC<TargetFollowMyFeedListProps> = ({
@@ -104,7 +110,6 @@ const TargetFollowMyFeedList: FC<TargetFollowMyFeedListProps> = ({
     () => myFeedList.feeds.some((feed) => feed.id === feedId),
     [feedId, myFeedList.feeds]
   );
-  const [isAddedMyFeed, setIsAddedMyFeed] = useState(isFollowed);
 
   const targetMyFeedId = useMemo(() => {
     const targetFeed = myFeedList.feeds.find((feed) => feed.id === feedId);
@@ -113,16 +118,14 @@ const TargetFollowMyFeedList: FC<TargetFollowMyFeedListProps> = ({
 
   const onCreateMyFeed = useCallback(
     async (myFeedListId: string) => {
-      const isSuccess = await handleCreateMyFeed(myFeedListId);
-      if (isSuccess) setIsAddedMyFeed(true);
+      await handleCreateMyFeed(myFeedListId);
     },
     [handleCreateMyFeed]
   );
 
   const onRemoveMyFeed = useCallback(
     async (myFeedId: string, myFeedListId: string) => {
-      const isSuccess = await handleRemoveMyFeed(myFeedId, myFeedListId);
-      if (isSuccess) setIsAddedMyFeed(false);
+      await handleRemoveMyFeed(myFeedId, myFeedListId);
     },
     [handleRemoveMyFeed]
   );
@@ -131,7 +134,7 @@ const TargetFollowMyFeedList: FC<TargetFollowMyFeedListProps> = ({
     <div>
       <div className="flex items-center justify-between">
         <p className="ml-2 w-1/2 truncate">{myFeedList.title}</p>
-        {isAddedMyFeed ? (
+        {isFollowed ? (
           <Button
             variant="outline"
             size="sm"

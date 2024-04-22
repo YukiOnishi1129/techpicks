@@ -133,7 +133,7 @@ export const CreateBookmarkDialog: FC<CreateBookmarkDialogProps> = ({
 
       if (articleResponse.status === 200 && articleResponse.data?.article) {
         const article = articleResponse.data.article;
-        const id = await createBookmark({
+        const data = await createBookmark({
           title: article.title,
           description: article.description,
           articleId: article.id,
@@ -147,7 +147,7 @@ export const CreateBookmarkDialog: FC<CreateBookmarkDialogProps> = ({
           platformFaviconUrl: article.platform.faviconUrl,
           isEng: article.platform.isEng,
         });
-        if (!id) {
+        if (!data) {
           failToast({
             description: "Fail: add bookmark failed",
           });
