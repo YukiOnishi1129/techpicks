@@ -24,6 +24,7 @@ func GetRSS(rssURL string) ([]RSS, error) {
 
 	feed, err := fp.ParseURLWithContext(rssURL, ctx)
 	if err != nil {
+		println(fmt.Sprintf("error: %s\n", err))
 		return nil, err
 	}
 	items := feed.Items

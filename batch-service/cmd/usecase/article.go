@@ -43,7 +43,7 @@ func (au *ArticleUsecase) BatchCreateArticles(ctx context.Context) error {
 		// get rss
 		rss, err := GetRSS(f.RSSURL)
 		if err != nil {
-			log.Printf("【error get rss】: %s", f.Name)
+			log.Printf("【error get rss】: %s, %v", f.Name, err)
 			continue
 		}
 		wg := new(sync.WaitGroup)
