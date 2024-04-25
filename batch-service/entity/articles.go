@@ -30,7 +30,7 @@ type Article struct {
 	Description  string      `boil:"description" json:"description" toml:"description" yaml:"description"`
 	ArticleURL   string      `boil:"article_url" json:"article_url" toml:"article_url" yaml:"article_url"`
 	PublishedAt  time.Time   `boil:"published_at" json:"published_at" toml:"published_at" yaml:"published_at"`
-	Authorname   null.String `boil:"authorname" json:"authorname,omitempty" toml:"authorname" yaml:"authorname,omitempty"`
+	AuthorName   null.String `boil:"author_name" json:"author_name,omitempty" toml:"author_name" yaml:"author_name,omitempty"`
 	Tags         null.String `boil:"tags" json:"tags,omitempty" toml:"tags" yaml:"tags,omitempty"`
 	ThumbnailURL string      `boil:"thumbnail_url" json:"thumbnail_url" toml:"thumbnail_url" yaml:"thumbnail_url"`
 	IsPrivate    bool        `boil:"is_private" json:"is_private" toml:"is_private" yaml:"is_private"`
@@ -48,7 +48,7 @@ var ArticleColumns = struct {
 	Description  string
 	ArticleURL   string
 	PublishedAt  string
-	Authorname   string
+	AuthorName   string
 	Tags         string
 	ThumbnailURL string
 	IsPrivate    string
@@ -61,7 +61,7 @@ var ArticleColumns = struct {
 	Description:  "description",
 	ArticleURL:   "article_url",
 	PublishedAt:  "published_at",
-	Authorname:   "authorname",
+	AuthorName:   "author_name",
 	Tags:         "tags",
 	ThumbnailURL: "thumbnail_url",
 	IsPrivate:    "is_private",
@@ -76,7 +76,7 @@ var ArticleTableColumns = struct {
 	Description  string
 	ArticleURL   string
 	PublishedAt  string
-	Authorname   string
+	AuthorName   string
 	Tags         string
 	ThumbnailURL string
 	IsPrivate    string
@@ -89,7 +89,7 @@ var ArticleTableColumns = struct {
 	Description:  "articles.description",
 	ArticleURL:   "articles.article_url",
 	PublishedAt:  "articles.published_at",
-	Authorname:   "articles.authorname",
+	AuthorName:   "articles.author_name",
 	Tags:         "articles.tags",
 	ThumbnailURL: "articles.thumbnail_url",
 	IsPrivate:    "articles.is_private",
@@ -213,7 +213,7 @@ var ArticleWhere = struct {
 	Description  whereHelperstring
 	ArticleURL   whereHelperstring
 	PublishedAt  whereHelpertime_Time
-	Authorname   whereHelpernull_String
+	AuthorName   whereHelpernull_String
 	Tags         whereHelpernull_String
 	ThumbnailURL whereHelperstring
 	IsPrivate    whereHelperbool
@@ -226,7 +226,7 @@ var ArticleWhere = struct {
 	Description:  whereHelperstring{field: "\"articles\".\"description\""},
 	ArticleURL:   whereHelperstring{field: "\"articles\".\"article_url\""},
 	PublishedAt:  whereHelpertime_Time{field: "\"articles\".\"published_at\""},
-	Authorname:   whereHelpernull_String{field: "\"articles\".\"authorname\""},
+	AuthorName:   whereHelpernull_String{field: "\"articles\".\"author_name\""},
 	Tags:         whereHelpernull_String{field: "\"articles\".\"tags\""},
 	ThumbnailURL: whereHelperstring{field: "\"articles\".\"thumbnail_url\""},
 	IsPrivate:    whereHelperbool{field: "\"articles\".\"is_private\""},
@@ -292,9 +292,9 @@ func (r *articleR) GetTrendArticles() TrendArticleSlice {
 type articleL struct{}
 
 var (
-	articleAllColumns            = []string{"id", "platform_id", "title", "description", "article_url", "published_at", "authorname", "tags", "thumbnail_url", "is_private", "created_at", "updated_at"}
+	articleAllColumns            = []string{"id", "platform_id", "title", "description", "article_url", "published_at", "author_name", "tags", "thumbnail_url", "is_private", "created_at", "updated_at"}
 	articleColumnsWithoutDefault = []string{"platform_id", "title", "description", "article_url", "published_at", "thumbnail_url"}
-	articleColumnsWithDefault    = []string{"id", "authorname", "tags", "is_private", "created_at", "updated_at"}
+	articleColumnsWithDefault    = []string{"id", "author_name", "tags", "is_private", "created_at", "updated_at"}
 	articlePrimaryKeyColumns     = []string{"id"}
 	articleGeneratedColumns      = []string{}
 )

@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"github.com/YukiOnishi1129/techpicks/batch-service/domain"
 	"github.com/YukiOnishi1129/techpicks/batch-service/infrastructure/rss/repository"
+	"github.com/volatiletech/null/v8"
 	"log"
 	"strconv"
 	"sync"
@@ -161,6 +162,12 @@ func createArticle(ctx context.Context, tx *sql.Tx, f *entity.Feed, r repository
 		ArticleURL:   r.Link,
 		PublishedAt:  publishedAt,
 		IsPrivate:    false,
+	}
+	if r.AuthorName != "" {
+		article.AuthorName = null.StringFrom(r.AuthorName)
+	}
+	if r.Tags != "" {
+		article.Tags = null.StringFrom(r.Tags)
 	}
 	err := article.Insert(ctx, tx, boil.Infer())
 	if err != nil {
