@@ -10,10 +10,13 @@ import (
 )
 
 type RSSRepository struct {
+	rssClient *gofeed.Parser
 }
 
-func NewRSSRepository() *RSSRepository {
-	return &RSSRepository{}
+func NewRSSRepository(client *gofeed.Parser) *RSSRepository {
+	return &RSSRepository{
+		rssClient: client,
+	}
 }
 
 type RSS struct {
@@ -27,9 +30,8 @@ type RSS struct {
 func (rr *RSSRepository) GetRSS(rssURL string) ([]RSS, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
-	fp := gofeed.NewParser()
 
-	feed, err := fp.ParseURLWithContext(rssURL, ctx)
+	feed, err := rr.rssClient.ParseURLWithContext(rssURL, ctx)
 	if err != nil {
 		println(fmt.Sprintf("error: %s\n", err))
 		return nil, err

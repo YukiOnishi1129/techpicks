@@ -7,6 +7,7 @@ import (
 	"github.com/YukiOnishi1129/techpicks/batch-service/database"
 	"github.com/YukiOnishi1129/techpicks/batch-service/infrastructure/rss/repository"
 	"github.com/joho/godotenv"
+	"github.com/mmcdole/gofeed"
 	"log"
 )
 
@@ -31,7 +32,7 @@ func main() {
 		}
 	}(db)
 
-	rr := repository.NewRSSRepository()
+	rr := repository.NewRSSRepository(gofeed.NewParser())
 
 	u := usecase.NewUsecase(&usecase.Param{
 		Db: db,
