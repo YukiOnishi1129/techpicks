@@ -3,7 +3,10 @@ package usecase
 import (
 	"context"
 	"database/sql"
+	"github.com/YukiOnishi1129/techpicks/batch-service/domain"
+	"github.com/YukiOnishi1129/techpicks/batch-service/infrastructure/rss/repository"
 	"log"
+	"strconv"
 	"sync"
 	"time"
 
@@ -19,18 +22,23 @@ type ArticleUsecaseInterface interface {
 
 type ArticleUsecase struct {
 	db *sql.DB
+	rr *repository.RSSRepository
 }
 
-func NewArticleUsecase(db *sql.DB) *ArticleUsecase {
+func NewArticleUsecase(db *sql.DB, rr *repository.RSSRepository) *ArticleUsecase {
 	return &ArticleUsecase{
 		db: db,
+		rr: rr,
 	}
 }
 
 func (au *ArticleUsecase) BatchCreateArticles(ctx context.Context) error {
 	now := time.Now()
+	platformTypes := make([]interface{}, 2)
+	platformTypes[0] = strconv.Itoa(int(domain.PlatformTypeSite))
+	platformTypes[1] = strconv.Itoa(int(domain.PlatformTypeSummary))
 	log.Printf("【start BatchCreateArticles】")
-	feeds, err := entity.Feeds(qm.Where("deleted_at IS NULL"), qm.And("trend_platform_type = ?", 0), qm.OrderBy("created_at")).All(ctx, au.db)
+	feeds, err := entity.Feeds(qm.Where("feeds.deleted_at IS NULL"), qm.And("feeds.trend_platform_type = ?", 0), qm.InnerJoin("platforms on feeds.platform_id = platforms.id"), qm.WhereIn("platforms.platform_type IN ?", platformTypes...), qm.OrderBy("feeds.created_at asc")).All(ctx, au.db)
 	if err != nil {
 		log.Printf("【error get feeds】: %s", err)
 		return err
@@ -41,7 +49,7 @@ func (au *ArticleUsecase) BatchCreateArticles(ctx context.Context) error {
 		aCount := 0
 		farCount := 0
 		// get rss
-		rss, err := GetRSS(f.RSSURL)
+		rss, err := au.rr.GetRSS(f.RSSURL)
 		if err != nil {
 			log.Printf("【error get rss】: %s, %v", f.Name, err)
 			continue
@@ -109,7 +117,7 @@ type CreateArticleResponse struct {
 	err                          error
 }
 
-func createArticle(ctx context.Context, tx *sql.Tx, f *entity.Feed, r RSS) CreateArticleResponse {
+func createArticle(ctx context.Context, tx *sql.Tx, f *entity.Feed, r repository.RSS) CreateArticleResponse {
 
 	isSkip := false
 	isCreatedFeedArticleRelation := false

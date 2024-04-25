@@ -3,11 +3,11 @@ package main
 import (
 	"context"
 	"database/sql"
-	"log"
-
-	"github.com/YukiOnishi1129/techpicks/batch-service/cmd/usecase"
+	"github.com/YukiOnishi1129/techpicks/batch-service/cmd/article-site-and-summary-crawler/usecase"
 	"github.com/YukiOnishi1129/techpicks/batch-service/database"
+	"github.com/YukiOnishi1129/techpicks/batch-service/infrastructure/rss/repository"
 	"github.com/joho/godotenv"
+	"log"
 )
 
 func main() {
@@ -31,7 +31,9 @@ func main() {
 		}
 	}(db)
 
-	au := usecase.NewArticleUsecase(db)
+	rr := repository.NewRSSRepository()
+
+	au := usecase.NewArticleUsecase(db, rr)
 
 	err = au.BatchCreateArticles(ctx)
 	if err != nil {

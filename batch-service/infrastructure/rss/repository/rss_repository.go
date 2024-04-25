@@ -1,4 +1,4 @@
-package usecase
+package repository
 
 import (
 	"context"
@@ -9,6 +9,13 @@ import (
 	"time"
 )
 
+type RSSRepository struct {
+}
+
+func NewRSSRepository() *RSSRepository {
+	return &RSSRepository{}
+}
+
 type RSS struct {
 	Title       string
 	Link        string
@@ -17,7 +24,7 @@ type RSS struct {
 	ImageURL    string
 }
 
-func GetRSS(rssURL string) ([]RSS, error) {
+func (rr *RSSRepository) GetRSS(rssURL string) ([]RSS, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	fp := gofeed.NewParser()

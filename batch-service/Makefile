@@ -14,5 +14,5 @@ test-single:
 seed:
 	go run ./database/seed/main.go
 
-create-article-batch:
-	go run ./cmd/main.go
+create-article-site-and-summary-crawler:
+	go run ./cmd/article-site-and-summary-crawler/main.go
