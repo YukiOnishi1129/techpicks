@@ -1,8 +1,9 @@
 package seeders
 
 import (
-	"github.com/YukiOnishi1129/techpicks/batch-service/domain"
 	"time"
+
+	"github.com/YukiOnishi1129/techpicks/batch-service/domain"
 )
 
 type seedPlatformFeed struct {
@@ -16,9 +17,7 @@ type seedPlatformFeed struct {
 	PlatformType      domain.PlatformType
 	FaviconURL        string
 	IsEng             bool
-	IsTrending        bool
 	RssURL            string
-	ApiURL            string
 	FeedFetchType     domain.FeedFetchType
 	TrendPlatformType *domain.TrendPlatformType
 	DeletedAt         *time.Time
@@ -38,14 +37,12 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:     "https://cdn.qiita.com/assets/qiita-ogp-3b6fcfdd74755a85107071ffc3155898.png",
 			seedCategoryID:    2,
 			RssURL:            "https://qiita.com/popular-items/feed.atom",
-			ApiURL:            "",
 			PlatformSiteURL:   "https://qiita.com/",
 			FeedSiteURL:       "https://qiita.com/trend",
 			PlatformType:      domain.PlatformTypeSite,
 			FaviconURL:        "https://cdn.qiita.com/assets/favicons/public/apple-touch-icon-ec5ba42a24ae923f16825592efdc356f.png",
 			FeedFetchType:     domain.FeedFetchTypeRSSAndAPI,
 			IsEng:             false,
-			IsTrending:        true,
 			TrendPlatformType: &qiitaTrendType,
 		},
 		{
@@ -55,14 +52,12 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:     "https://static.zenn.studio/images/logo-only-dark.png",
 			seedCategoryID:    2,
 			RssURL:            "https://zenn.dev/feed",
-			ApiURL:            "",
 			PlatformSiteURL:   "https://zenn.dev/",
 			FeedSiteURL:       "https://zenn.dev/",
 			PlatformType:      domain.PlatformTypeSite,
 			FaviconURL:        "https://static.zenn.studio/images/logo-transparent.png",
 			FeedFetchType:     domain.FeedFetchTypeRSSAndAPI,
 			IsEng:             false,
-			IsTrending:        true,
 			TrendPlatformType: &zennTrendType,
 		},
 		{
@@ -72,14 +67,12 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:     "https://b.st-hatena.com/d9924dc3407fa42ac2383d043f05c83ecfe06b2b/images/v4/public/apple-touch-icon-precomposed.png",
 			seedCategoryID:    2,
 			RssURL:            "https://b.hatena.ne.jp/hotentry/it.rss",
-			ApiURL:            "",
 			PlatformSiteURL:   "https://b.hatena.ne.jp/",
 			FeedSiteURL:       "https://b.hatena.ne.jp/hotentry/it",
 			PlatformType:      domain.PlatformTypeSummary,
 			FaviconURL:        "https://b.st-hatena.com/9912ec0e0fc8f818cf97c46ebfa93196dc945692/images/v4/public/gh-logo@2x.png",
 			FeedFetchType:     domain.FeedFetchTypeRSSAndAPI,
 			IsEng:             false,
-			IsTrending:        true,
 			TrendPlatformType: &hatenaTrendType,
 		},
 		{
@@ -89,14 +82,12 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:     "https://dev-to-uploads.s3.amazonaws.com/uploads/articles/8lvvnvil0m75nw7yi6iz.jpg",
 			seedCategoryID:    1,
 			RssURL:            "https://dev.to/feed",
-			ApiURL:            "https://dev.to/api/articles?top=7",
 			PlatformSiteURL:   "https://dev.to/",
 			FeedSiteURL:       "https://dev.to/",
 			PlatformType:      domain.PlatformTypeSite,
 			FaviconURL:        "https://dev-to.s3.us-east-2.amazonaws.com/favicon.ico",
 			FeedFetchType:     domain.FeedFetchTypeAPI,
 			IsEng:             true,
-			IsTrending:        true,
 			TrendPlatformType: &devCommunityTrendType,
 		},
 		{
@@ -106,7 +97,6 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://i0.wp.com/alistapart.com/wp-content/uploads/2019/03/cropped-icon_navigation-laurel-512.jpg?fit=512%2C512&ssl=1",
 			seedCategoryID:  1,
 			RssURL:          "https://alistapart.com/main/feed/",
-			ApiURL:          "",
 			PlatformSiteURL: "https://alistapart.com/",
 			FeedSiteURL:     "https://alistapart.com/",
 			PlatformType:    domain.PlatformTypeSite,
@@ -122,7 +112,6 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://davidwalsh.name/wp-content/themes/punky/images/logo.png",
 			seedCategoryID:  1,
 			RssURL:          "https://davidwalsh.name/feed/atom",
-			ApiURL:          "",
 			PlatformSiteURL: "https://davidwalsh.name/",
 			FeedSiteURL:     "https://davidwalsh.name/",
 			PlatformType:    domain.PlatformTypeSite,
@@ -137,7 +126,6 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://www.jackfranklin.co.uk/images/favicon/apple-touch-icon.png",
 			seedCategoryID:  1,
 			RssURL:          "https://www.jackfranklin.co.uk/feed.xml",
-			ApiURL:          "",
 			PlatformSiteURL: "https://www.jackfranklin.co.uk/",
 			FeedSiteURL:     "https://www.jackfranklin.co.uk/blog/",
 			PlatformType:    domain.PlatformTypeSite,
@@ -152,7 +140,6 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://cdn.sstatic.net/Sites/stackoverflow/Img/apple-touch-icon@2.png?v=73d79a89bded",
 			seedCategoryID:  1,
 			RssURL:          "https://stackoverflow.com/feeds",
-			ApiURL:          "",
 			PlatformSiteURL: "https://stackoverflow.com/",
 			FeedSiteURL:     "https://stackoverflow.com/",
 			PlatformType:    domain.PlatformTypeSite,
@@ -168,7 +155,6 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://cdn.freecodecamp.org/platform/universal/fcc_meta_1920X1080-indigo.png",
 			seedCategoryID:  1,
 			RssURL:          "https://www.freecodecamp.org/news/rss/",
-			ApiURL:          "",
 			PlatformSiteURL: "https://www.freecodecamp.org/",
 			FeedSiteURL:     "https://www.freecodecamp.org/news/",
 			PlatformType:    domain.PlatformTypeSite,
@@ -183,7 +169,6 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://cdn-ssl-devio-img.classmethod.jp/wp-content/uploads/2018/11/eyecatch_developers.io_1200x630.jpeg",
 			seedCategoryID:  1,
 			RssURL:          "https://dev.classmethod.jp/feed/",
-			ApiURL:          "",
 			PlatformSiteURL: "https://dev.classmethod.jp/",
 			FeedSiteURL:     "https://dev.classmethod.jp/",
 			PlatformType:    domain.PlatformTypeSite,
@@ -198,7 +183,6 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://www.google.co.jp/images/branding/googleg/1x/googleg_standard_color_128dp.png",
 			seedCategoryID:  1,
 			RssURL:          "https://developers-jp.googleblog.com/atom.xml",
-			ApiURL:          "",
 			PlatformSiteURL: "https://developers-jp.googleblog.com/",
 			FeedSiteURL:     "https://developers-jp.googleblog.com/",
 			PlatformType:    domain.PlatformTypeCompany,
@@ -213,7 +197,6 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://d2v9k5u4v94ulw.cloudfront.net/small_light(dw=1200,da=l,ds=s,cc=FFFFFF,of=webp)/assets/images/11573553/original/eaebee03-e376-44b1-bab6-eb67ae93cb04?1671605362",
 			seedCategoryID:  1,
 			RssURL:          "https://www.wantedly.com/stories/s/rakuma/rss.xml",
-			ApiURL:          "",
 			PlatformSiteURL: "https://www.wantedly.com/stories/s/rakuma",
 			FeedSiteURL:     "https://www.wantedly.com/stories/s/rakuma",
 			PlatformType:    domain.PlatformTypeCompany,
@@ -228,7 +211,6 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://www.cyberagent.co.jp/files/user/img/common/ogp/ogimage.png",
 			seedCategoryID:  1,
 			RssURL:          "https://developers.cyberagent.co.jp/blog/feed/",
-			ApiURL:          "",
 			PlatformSiteURL: "https://developers.cyberagent.co.jp/",
 			FeedSiteURL:     "https://developers.cyberagent.co.jp/blog/",
 			PlatformType:    domain.PlatformTypeCompany,
@@ -243,7 +225,6 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://about.paypay.ne.jp/uploads/2022/04/corporate_ogp.png",
 			seedCategoryID:  1,
 			RssURL:          "https://blog.paypay.ne.jp/category/engineering/feed/",
-			ApiURL:          "",
 			PlatformSiteURL: "https://blog.paypay.ne.jp/",
 			FeedSiteURL:     "https://blog.paypay.ne.jp/category/engineering/",
 			PlatformType:    domain.PlatformTypeCompany,
@@ -258,7 +239,6 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://engineering.mercari.com//img/ogp/ogp_a.jpg",
 			seedCategoryID:  1,
 			RssURL:          "https://engineering.mercari.com/blog/feed.xml",
-			ApiURL:          "",
 			PlatformSiteURL: "https://engineering.mercari.com/",
 			FeedSiteURL:     "https://engineering.mercari.com/blog/",
 			PlatformType:    domain.PlatformTypeCompany,
@@ -273,7 +253,6 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://cdn.image.st-hatena.com/image/scale/622a7a3ca97d84ae19b7c3cee3a987a361f8fb65/backend=imager;enlarge=0;height=1000;version=1;width=1200/https%3A%2F%2Fcdn.user.blog.st-hatena.com%2Fdefault_entry_og_image%2F93285241%2F1621227757889583",
 			seedCategoryID:  1,
 			RssURL:          "https://engineers.ntt.com/feed",
-			ApiURL:          "",
 			PlatformSiteURL: "https://engineers.ntt.com/",
 			FeedSiteURL:     "https://engineers.ntt.com/",
 			PlatformType:    domain.PlatformTypeCompany,
@@ -288,7 +267,6 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://cdn.qiita.com/assets/qiita-ogp-3b6fcfdd74755a85107071ffc3155898.png",
 			seedCategoryID:  1,
 			RssURL:          "https://blog.qiita.com/feed/",
-			ApiURL:          "",
 			PlatformSiteURL: "https://blog.qiita.com/",
 			FeedSiteURL:     "https://blog.qiita.com/",
 			PlatformType:    domain.PlatformTypeCompany,
@@ -303,7 +281,6 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://cdn.image.st-hatena.com/image/scale/93c02e7921ee4cc02bd26afd9f591bbfacd6253e/backend=imager;enlarge=0;height=1000;version=1;width=1200/https%3A%2F%2Fcdn.user.blog.st-hatena.com%2Fdefault_entry_og_image%2F110495017%2F1514249404572921",
 			seedCategoryID:  1,
 			RssURL:          "https://blog.cybozu.io/feed",
-			ApiURL:          "",
 			PlatformSiteURL: "https://blog.cybozu.io/",
 			FeedSiteURL:     "https://blog.cybozu.io/",
 			PlatformType:    domain.PlatformTypeCompany,
@@ -318,7 +295,6 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://miro.medium.com/v2/resize:fit:1200/1*lNHpX-0s-NUfCc6OxYFXLQ.png",
 			seedCategoryID:  1,
 			RssURL:          "https://mixi-developers.mixi.co.jp/feed",
-			ApiURL:          "",
 			PlatformSiteURL: "https://mixi-developers.mixi.co.jp/",
 			FeedSiteURL:     "https://mixi-developers.mixi.co.jp/",
 			PlatformType:    domain.PlatformTypeCompany,
@@ -333,7 +309,6 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://labs.gree.jp/blog/wp-content/uploads/2019/03/blog_ogp.jpg",
 			seedCategoryID:  1,
 			RssURL:          "https://labs.gree.jp/blog/feed/",
-			ApiURL:          "",
 			PlatformSiteURL: "https://labs.gree.jp/",
 			FeedSiteURL:     "https://labs.gree.jp/blog/",
 			PlatformType:    domain.PlatformTypeCompany,
@@ -348,7 +323,6 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://cdn.image.st-hatena.com/image/scale/1ad4faa3e7226b8dc4d2c7c2c52c197948f09a96/backend=imager;enlarge=0;height=1000;version=1;width=1200/https%3A%2F%2Fcdn.user.blog.st-hatena.com%2Fdefault_entry_og_image%2F51567975%2F1633037350209919",
 			seedCategoryID:  1,
 			RssURL:          "https://techblog.zozo.com/rss",
-			ApiURL:          "",
 			PlatformSiteURL: "https://techblog.zozo.com/",
 			FeedSiteURL:     "https://techblog.zozo.com/",
 			PlatformType:    domain.PlatformTypeCompany,
@@ -363,7 +337,6 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://engineering.dena.com/og.png",
 			seedCategoryID:  1,
 			RssURL:          "https://engineering.dena.com/index.xml",
-			ApiURL:          "",
 			PlatformSiteURL: "https://engineering.dena.com/",
 			FeedSiteURL:     "https://engineering.dena.com/",
 			PlatformType:    domain.PlatformTypeCompany,
@@ -378,7 +351,6 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://blog.recruit.co.jp/rtc/wp-content/themes/pc-rtc-blog.git/library/images/favicon.ico",
 			seedCategoryID:  1,
 			RssURL:          "https://blog.recruit.co.jp/rtc/feed/",
-			ApiURL:          "",
 			PlatformSiteURL: "https://blog.recruit.co.jp/",
 			FeedSiteURL:     "https://blog.recruit.co.jp/rtc/",
 			PlatformType:    domain.PlatformTypeCompany,
@@ -393,7 +365,6 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://dwango.github.io/images/logo.png",
 			seedCategoryID:  1,
 			RssURL:          "https://dwango.github.io/index.xml",
-			ApiURL:          "",
 			PlatformSiteURL: "https://dwango.github.io/",
 			FeedSiteURL:     "https://dwango.github.io/",
 			PlatformType:    domain.PlatformTypeCompany,
@@ -408,7 +379,6 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://cdn.image.st-hatena.com/image/scale/6bfc24bf3dd62203d4c05a87c6891f697842510d/backend=imager;enlarge=0;height=1000;version=1;width=1200/https%3A%2F%2Fcdn.user.blog.st-hatena.com%2Fdefault_entry_og_image%2F157843564%2F1657502198539697",
 			seedCategoryID:  1,
 			RssURL:          "https://buildersbox.corp-sansan.com/rss",
-			ApiURL:          "",
 			PlatformSiteURL: "https://buildersbox.corp-sansan.com/",
 			FeedSiteURL:     "https://buildersbox.corp-sansan.com/",
 			PlatformType:    domain.PlatformTypeCompany,
@@ -423,7 +393,6 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://cdn.image.st-hatena.com/image/scale/8a244bed3a65bbbc5fb6044415fa33278a5f2912/backend=imager;enlarge=0;height=1000;version=1;width=1200/https%3A%2F%2Fcdn.user.blog.st-hatena.com%2Fdefault_entry_og_image%2F154374835%2F1554776372268242",
 			seedCategoryID:  1,
 			RssURL:          "https://times.hrbrain.co.jp/rss",
-			ApiURL:          "",
 			PlatformSiteURL: "https://times.hrbrain.co.jp/",
 			FeedSiteURL:     "https://times.hrbrain.co.jp/",
 			PlatformType:    domain.PlatformTypeCompany,
@@ -438,7 +407,6 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://techblog.lycorp.co.jp/img/OGP-JP.png",
 			seedCategoryID:  1,
 			RssURL:          "https://techblog.lycorp.co.jp/ja/feed/index.xml",
-			ApiURL:          "",
 			PlatformSiteURL: "https://techblog.lycorp.co.jp/",
 			FeedSiteURL:     "https://techblog.lycorp.co.jp/ja",
 			PlatformType:    domain.PlatformTypeCompany,
@@ -453,7 +421,6 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://cdn.image.st-hatena.com/image/scale/fb8117a960272abce71afeaa65d26ca0fbf37540/backend=imager;enlarge=0;height=1000;version=1;width=1200/https%3A%2F%2Fcdn.user.blog.st-hatena.com%2Fdefault_entry_og_image%2F158937347%2F1671616468252707",
 			seedCategoryID:  1,
 			RssURL:          "https://tech.sme.co.jp/rss",
-			ApiURL:          "",
 			PlatformSiteURL: "https://tech.sme.co.jp/",
 			FeedSiteURL:     "https://tech.sme.co.jp/",
 			PlatformType:    domain.PlatformTypeCompany,
@@ -468,7 +435,6 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://1.www.s81c.com/common/images/ibm-leadspace-1200x627.jpg",
 			seedCategoryID:  1,
 			RssURL:          "https://www.ibm.com/blogs/solutions/jp-ja/feed/atom/",
-			ApiURL:          "",
 			PlatformSiteURL: "https://www.ibm.com/",
 			FeedSiteURL:     "https://www.ibm.com/blogs/solutions/jp-ja/",
 			PlatformType:    domain.PlatformTypeCompany,
@@ -483,7 +449,6 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://cdn.image.st-hatena.com/image/scale/b0e74e9906adf65759a488c0a784d12c3175c45b/backend=imager;enlarge=0;height=1000;version=1;width=1200/https%3A%2F%2Fcdn.user.blog.st-hatena.com%2Fdefault_entry_og_image%2F157288706%2F1669774223105431",
 			seedCategoryID:  1,
 			RssURL:          "https://kaminashi-developer.hatenablog.jp/rss",
-			ApiURL:          "",
 			PlatformSiteURL: "https://kaminashi-developer.hatenablog.jp/",
 			FeedSiteURL:     "https://kaminashi-developer.hatenablog.jp/",
 			PlatformType:    domain.PlatformTypeCompany,
@@ -498,7 +463,6 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://cdn.image.st-hatena.com/image/scale/eb26db6069074009224581f096a5035c92a009eb/backend=imager;enlarge=0;height=1000;version=1;width=1200/https%3A%2F%2Fcdn.user.blog.st-hatena.com%2Fdefault_entry_og_image%2F154574578%2F1589786066779907",
 			seedCategoryID:  1,
 			RssURL:          "https://tech.andpad.co.jp/rss",
-			ApiURL:          "",
 			PlatformSiteURL: "https://tech.andpad.co.jp/",
 			FeedSiteURL:     "https://tech.andpad.co.jp/",
 			PlatformType:    domain.PlatformTypeCompany,
@@ -513,7 +477,6 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://cdn.image.st-hatena.com/image/scale/8db2da894b46422604c66082b5654897da03e32a/backend=imager;enlarge=0;height=1000;version=1;width=1200/https%3A%2F%2Fcdn.user.blog.st-hatena.com%2Fdefault_entry_og_image%2F156807968%2F1697054382687926",
 			seedCategoryID:  1,
 			RssURL:          "https://techblog.gaudiy.com/rss",
-			ApiURL:          "",
 			PlatformSiteURL: "https://techblog.gaudiy.com/",
 			FeedSiteURL:     "https://techblog.gaudiy.com/",
 			PlatformType:    domain.PlatformTypeCompany,
@@ -528,7 +491,6 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://a0.awsstatic.com/libra-css/images/logos/aws_logo_smile_179x109.png",
 			seedCategoryID:  1,
 			RssURL:          "https://aws.amazon.com/jp/blogs/news/feed/",
-			ApiURL:          "",
 			PlatformSiteURL: "https://aws.amazon.com/",
 			FeedSiteURL:     "https://aws.amazon.com/jp/blogs/news/",
 			PlatformType:    domain.PlatformTypeCompany,
@@ -543,7 +505,6 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://a0.awsstatic.com/libra-css/images/logos/aws_logo_smile_179x109.png",
 			seedCategoryID:  1,
 			RssURL:          "https://aws.amazon.com/jp/blogs/startup/feed/",
-			ApiURL:          "",
 			PlatformSiteURL: "https://aws.amazon.com/",
 			FeedSiteURL:     "https://aws.amazon.com/jp/blogs/startup/",
 			PlatformType:    domain.PlatformTypeCompany,
@@ -558,7 +519,6 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://cdn.image.st-hatena.com/image/scale/1e24ea6e97b140a779a78a6f77a72d6a6e996ffc/backend=imager;enlarge=0;height=1000;version=1;width=1200/https%3A%2F%2Fcdn.user.blog.st-hatena.com%2Fdefault_entry_og_image%2F29440%2F1690850324393740",
 			seedCategoryID:  1,
 			RssURL:          "https://tech.layerx.co.jp/rss",
-			ApiURL:          "",
 			PlatformSiteURL: "https://tech.layerx.co.jp/",
 			FeedSiteURL:     "https://tech.layerx.co.jp/",
 			PlatformType:    domain.PlatformTypeCompany,
@@ -573,7 +533,6 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://cdn.image.st-hatena.com/image/scale/182788fbc5de20fd367b9813eac80a93f431f332/backend=imager;enlarge=0;height=1000;version=1;width=1200/https%3A%2F%2Fcdn.user.blog.st-hatena.com%2Fdefault_entry_og_image%2F158846028%2F1660112173520838",
 			seedCategoryID:  1,
 			RssURL:          "https://tech.up-sider.com/rss",
-			ApiURL:          "",
 			PlatformSiteURL: "https://tech.up-sider.com/",
 			FeedSiteURL:     "https://tech.up-sider.com/",
 			PlatformType:    domain.PlatformTypeCompany,
@@ -588,7 +547,6 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://cdn.image.st-hatena.com/image/scale/9f4be164cdc32334865881b7f8124bdf6a5a436c/backend=imager;enlarge=0;height=1000;version=1;width=1200/https%3A%2F%2Fcdn.user.blog.st-hatena.com%2Fdefault_entry_og_image%2F159376513%2F1709270017315899",
 			seedCategoryID:  1,
 			RssURL:          "https://caddi.tech/rss",
-			ApiURL:          "",
 			PlatformSiteURL: "https://caddi.tech/",
 			FeedSiteURL:     "https://caddi.tech/",
 			PlatformType:    domain.PlatformTypeCompany,
@@ -603,7 +561,6 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://cdn.image.st-hatena.com/image/scale/44e2f1cd375b3094801dc574150c8eb832da6e99/backend=imager;enlarge=0;height=1000;version=1;width=1200/https%3A%2F%2Fcdn.user.blog.st-hatena.com%2Fdefault_entry_og_image%2F157994487%2F1663747659382551",
 			seedCategoryID:  1,
 			RssURL:          "https://tech.uzabase.com/rss/category/Blog",
-			ApiURL:          "",
 			PlatformSiteURL: "https://tech.uzabase.com/",
 			FeedSiteURL:     "https://tech.uzabase.com/archive/category/Blog",
 			PlatformType:    domain.PlatformTypeCompany,
@@ -618,7 +575,6 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://cdn.image.st-hatena.com/image/scale/dc2fba68e09e63196065a56236b211a796b9e343/backend=imager;enlarge=0;height=1000;version=1;width=1200/https%3A%2F%2Fcdn.user.blog.st-hatena.com%2Fdefault_entry_og_image%2F153078222%2F1614340287711564",
 			seedCategoryID:  1,
 			RssURL:          "https://devblog.thebase.in/rss",
-			ApiURL:          "",
 			PlatformSiteURL: "https://devblog.thebase.in/",
 			FeedSiteURL:     "https://devblog.thebase.in/",
 			PlatformType:    domain.PlatformTypeCompany,
@@ -633,7 +589,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://cdn.image.st-hatena.com/image/scale/184a7bf05f5c811949943e163ca4c5ff1cbf64df/backend=imager;enlarge=0;height=1000;version=1;width=1200/https%3A%2F%2Fcdn.user.blog.st-hatena.com%2Fdefault_entry_og_image%2F155704439%2F158718819466986",
 			seedCategoryID:  1,
 			RssURL:          "https://tech.timee.co.jp/rss",
-			ApiURL:          "",
+
 			PlatformSiteURL: "https://tech.timee.co.jp/",
 			FeedSiteURL:     "https://tech.timee.co.jp/",
 			PlatformType:    domain.PlatformTypeCompany,
@@ -648,7 +604,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://cdn.image.st-hatena.com/image/scale/3b8ea1810a825c4fd905888379c854f7697e055b/backend=imager;enlarge=0;height=1000;version=1;width=1200/https%3A%2F%2Fcdn.user.blog.st-hatena.com%2Fdefault_entry_og_image%2F70728728%2F1633074720678305",
 			seedCategoryID:  1,
 			RssURL:          "https://developer.hatenastaff.com/rss",
-			ApiURL:          "",
+
 			PlatformSiteURL: "https://developer.hatenastaff.com/",
 			FeedSiteURL:     "https://developer.hatenastaff.com/",
 			PlatformType:    domain.PlatformTypeCompany,
@@ -663,7 +619,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://cdn.image.st-hatena.com/image/scale/3d3b3c184e068231cc1cb8402f39278971367731/backend=imager;enlarge=0;height=1000;version=1;width=1200/https%3A%2F%2Fcdn.user.blog.st-hatena.com%2Fdefault_entry_og_image%2F158909383%2F1667877695816130",
 			seedCategoryID:  1,
 			RssURL:          "https://moneyforward-dev.jp/rss",
-			ApiURL:          "",
+
 			PlatformSiteURL: "https://moneyforward-dev.jp/",
 			FeedSiteURL:     "https://moneyforward-dev.jp/",
 			PlatformType:    domain.PlatformTypeCompany,
@@ -678,7 +634,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://cdn.image.st-hatena.com/image/scale/8dff70a8ddbba20681923393bbd3869338a78f6d/backend=imager;enlarge=0;height=1000;version=1;width=1200/https%3A%2F%2Fcdn.user.blog.st-hatena.com%2Fdefault_entry_og_image%2F155500129%2F1577143393788739",
 			seedCategoryID:  1,
 			RssURL:          "https://inside.pixiv.blog/rss",
-			ApiURL:          "",
+
 			PlatformSiteURL: "https://inside.pixiv.blog/",
 			FeedSiteURL:     "https://inside.pixiv.blog/",
 			PlatformType:    domain.PlatformTypeCompany,
@@ -693,7 +649,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://cdn.image.st-hatena.com/image/scale/82b2744413fef2d9821bdfd7b39cfb5b47fac095/backend=imager;enlarge=0;height=1000;version=1;width=1200/https%3A%2F%2Fcdn.user.blog.st-hatena.com%2Fdefault_entry_og_image%2F115761273%2F1514195728888882",
 			seedCategoryID:  1,
 			RssURL:          "https://tech.speee.jp/rss",
-			ApiURL:          "",
+
 			PlatformSiteURL: "https://tech.speee.jp/",
 			FeedSiteURL:     "https://tech.speee.jp/",
 			PlatformType:    domain.PlatformTypeCompany,
@@ -708,7 +664,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://gunosy.co.jp/img/Gunosy_ogp.png",
 			seedCategoryID:  1,
 			RssURL:          "https://tech.gunosy.io/rss",
-			ApiURL:          "",
+
 			PlatformSiteURL: "https://tech.gunosy.io/",
 			FeedSiteURL:     "https://tech.gunosy.io/",
 			PlatformType:    domain.PlatformTypeCompany,
@@ -723,7 +679,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://cdn.image.st-hatena.com/image/scale/17bd9c23f05610c2383f43fe589ff7e0f9383f62/backend=imager;enlarge=0;height=1000;version=1;width=1200/https%3A%2F%2Fcdn.user.blog.st-hatena.com%2Fdefault_entry_og_image%2F6628210%2F1516165995781773",
 			seedCategoryID:  1,
 			RssURL:          "https://techlife.cookpad.com/rss",
-			ApiURL:          "",
+
 			PlatformSiteURL: "https://techlife.cookpad.com/",
 			FeedSiteURL:     "https://techlife.cookpad.com/",
 			PlatformType:    domain.PlatformTypeCompany,
@@ -738,7 +694,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://d2v9k5u4v94ulw.cloudfront.net/small_light(dw=1200,da=l,ds=s,cc=FFFFFF,of=webp)/assets/images/17615726/original/781259bb-6cdc-4d93-8d2f-75291ed1f303?1713229870",
 			seedCategoryID:  1,
 			RssURL:          "https://www.wantedly.com/stories/s/wantedly_engineers/rss.xml",
-			ApiURL:          "",
+
 			PlatformSiteURL: "https://www.wantedly.com/",
 			FeedSiteURL:     "https://www.wantedly.com/stories/s/wantedly_engineers",
 			PlatformType:    domain.PlatformTypeCompany,
@@ -753,7 +709,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://cdn.image.st-hatena.com/image/scale/806b22fb519f9f2b74577ceae826ae03c8e941dd/backend=imager;enlarge=0;height=1000;version=1;width=1200/https%3A%2F%2Fcdn.user.blog.st-hatena.com%2Fdefault_entry_og_image%2F103165225%2F1519263533220245",
 			seedCategoryID:  1,
 			RssURL:          "https://tech-blog.abeja.asia/rss",
-			ApiURL:          "",
+
 			PlatformSiteURL: "https://tech-blog.abeja.asia/",
 			FeedSiteURL:     "https://tech-blog.abeja.asia/",
 			PlatformType:    domain.PlatformTypeCompany,
@@ -768,7 +724,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://cdn.image.st-hatena.com/image/scale/dd0d8f369de16882ea9c6c43c8d7072a13c86761/backend=imager;enlarge=0;height=1000;version=1;width=1200/https%3A%2F%2Fcdn.user.blog.st-hatena.com%2Fdefault_entry_og_image%2F150280505%2F1673597439835304",
 			seedCategoryID:  1,
 			RssURL:          "https://tech.appbrew.io/rss",
-			ApiURL:          "",
+
 			PlatformSiteURL: "https://tech.appbrew.io/",
 			FeedSiteURL:     "https://tech.appbrew.io/",
 			PlatformType:    domain.PlatformTypeCompany,
@@ -783,7 +739,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://cdn-images-1.medium.com/max/1200/1*4nQvYibd3aHYOp1xrvmfMQ.png",
 			seedCategoryID:  1,
 			RssURL:          "https://medium.com/feed/eureka-engineering",
-			ApiURL:          "",
+
 			PlatformSiteURL: "https://medium.com/eureka-engineering/",
 			FeedSiteURL:     "https://medium.com/eureka-engineering/",
 			PlatformType:    domain.PlatformTypeCompany,
@@ -798,7 +754,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://cdn-images-1.medium.com/max/1200/1*MlNQKg-sieBGW5prWoe9HQ.jpeg",
 			seedCategoryID:  1,
 			RssURL:          "https://medium.com/feed/airbnb-engineering",
-			ApiURL:          "",
+
 			PlatformSiteURL: "https://medium.com/airbnb-engineering/",
 			FeedSiteURL:     "https://medium.com/airbnb-engineering/",
 			PlatformType:    domain.PlatformTypeCompany,
@@ -813,7 +769,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://blog.developer.atlassian.com/wp-content/uploads/2019/02/cropped-Atlassian-Developer@2x-blue-rgb-270x270.png",
 			seedCategoryID:  1,
 			RssURL:          "https://blog.developer.atlassian.com/feed/",
-			ApiURL:          "",
+
 			PlatformSiteURL: "https://blog.developer.atlassian.com/",
 			FeedSiteURL:     "https://blog.developer.atlassian.com/",
 			PlatformType:    domain.PlatformTypeCompany,
@@ -828,7 +784,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://www.docker.com/wp-content/uploads/2022/12/Docker-Temporary-Image-Social-Thumbnail-1200x630-1.png",
 			seedCategoryID:  1,
 			RssURL:          "https://www.docker.com/feed/",
-			ApiURL:          "",
+
 			PlatformSiteURL: "https://www.docker.com/",
 			FeedSiteURL:     "https://www.docker.com/blog/",
 			PlatformType:    domain.PlatformTypeCompany,
@@ -843,7 +799,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://engineering.fb.com/wp-content/themes/code-fb-com/img/default_feature.jpg",
 			seedCategoryID:  1,
 			RssURL:          "https://engineering.fb.com/feed/",
-			ApiURL:          "",
+
 			PlatformSiteURL: "https://engineering.fb.com/",
 			FeedSiteURL:     "https://engineering.fb.com/",
 			PlatformType:    domain.PlatformTypeCompany,
@@ -858,7 +814,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://github.blog/wp-content/uploads/2019/03/engineering-social.png?fit=1201%2C630",
 			seedCategoryID:  1,
 			RssURL:          "https://github.blog/category/engineering/feed/",
-			ApiURL:          "",
+
 			PlatformSiteURL: "https://github.blog/",
 			FeedSiteURL:     "https://github.blog/category/engineering/",
 			PlatformType:    domain.PlatformTypeCompany,
@@ -873,7 +829,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://www.gstatic.com/dgc_blog/images/meta.png",
 			seedCategoryID:  1,
 			RssURL:          "https://www.blogger.com/feeds/596098824972435195/posts/default",
-			ApiURL:          "",
+
 			PlatformSiteURL: "https://developers.googleblog.com/",
 			FeedSiteURL:     "https://developers.googleblog.com/",
 			PlatformType:    domain.PlatformTypeCompany,
@@ -888,7 +844,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://cdn-images-1.medium.com/max/1200/1*CPgwLHR6jno_tOmF0--7eg.jpeg",
 			seedCategoryID:  1,
 			RssURL:          "https://instagram-engineering.com/feed",
-			ApiURL:          "",
+
 			PlatformSiteURL: "https://instagram-engineering.com/",
 			FeedSiteURL:     "https://instagram-engineering.com/",
 			PlatformType:    domain.PlatformTypeCompany,
@@ -903,7 +859,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://cdn-images-1.medium.com/max/1200/1*ty4NvNrGg4ReETxqU2N3Og.png",
 			seedCategoryID:  1,
 			RssURL:          "https://netflixtechblog.com/feed",
-			ApiURL:          "",
+
 			PlatformSiteURL: "https://netflixtechblog.com/",
 			FeedSiteURL:     "https://netflixtechblog.com/",
 			PlatformType:    domain.PlatformTypeCompany,
@@ -918,7 +874,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://cdn-images-1.medium.com/max/1200/1*7gvURHIXUXK4Y-aSaqJONQ.png",
 			seedCategoryID:  1,
 			RssURL:          "https://medium.com/feed/paypal-tech",
-			ApiURL:          "",
+
 			PlatformSiteURL: "https://medium.com/paypal-tech/",
 			FeedSiteURL:     "https://medium.com/paypal-tech/",
 			PlatformType:    domain.PlatformTypeCompany,
@@ -933,7 +889,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://engineering.salesforce.com/wp-content/uploads/2022/06/See-whats-happening-beyond-the-cloud.png",
 			seedCategoryID:  1,
 			RssURL:          "https://engineering.salesforce.com/feed/",
-			ApiURL:          "",
+
 			PlatformSiteURL: "https://engineering.salesforce.com/",
 			FeedSiteURL:     "https://engineering.salesforce.com/",
 			PlatformType:    domain.PlatformTypeCompany,
@@ -948,7 +904,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://cdn-images-1.medium.com/max/1200/1*RKOMNTxW2hAU9UzlW6OLHg.png",
 			seedCategoryID:  1,
 			RssURL:          "https://medium.com/feed/zoom-developer-blog",
-			ApiURL:          "",
+
 			PlatformSiteURL: "https://medium.com/zoom-developer-blog/",
 			FeedSiteURL:     "https://medium.com/zoom-developer-blog/",
 			PlatformType:    domain.PlatformTypeCompany,
@@ -963,7 +919,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://blog.asana.com/wp-content/post-images/Blog-home-metadata-2021-3.png",
 			seedCategoryID:  1,
 			RssURL:          "https://blog.asana.com/category/eng/feed/",
-			ApiURL:          "",
+
 			PlatformSiteURL: "https://blog.asana.com/category/eng/",
 			FeedSiteURL:     "https://blog.asana.com/category/eng/",
 			PlatformType:    domain.PlatformTypeCompany,
@@ -978,7 +934,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://engineering.mercari.com/favicons/android-chrome-512x512.png",
 			seedCategoryID:  1,
 			RssURL:          "https://engineering.mercari.com/en/blog/feed.xml",
-			ApiURL:          "",
+
 			PlatformSiteURL: "https://engineering.mercari.com/en/blog/",
 			FeedSiteURL:     "https://engineering.mercari.com/en/blog/",
 			PlatformType:    domain.PlatformTypeCompany,
@@ -993,7 +949,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://cdn.image.st-hatena.com/image/scale/5de6581bb84aa8f4c571bf21096175fdc464a4cd/backend=imager;enlarge=0;height=1000;version=1;width=1200/https%3A%2F%2Fcdn.user.blog.st-hatena.com%2Fdefault_entry_og_image%2F159033270%2F1677230915741336",
 			seedCategoryID:  1,
 			RssURL:          "https://tech.route06.co.jp/feed",
-			ApiURL:          "",
+
 			PlatformSiteURL: "https://tech.route06.co.jp/",
 			FeedSiteURL:     "https://tech.route06.co.jp/",
 			PlatformType:    domain.PlatformTypeCompany,
@@ -1008,7 +964,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://cdn.image.st-hatena.com/image/scale/0d821cf3fd1372237caf085d5dc080ef49fb6670/backend=imager;enlarge=0;height=1000;version=1;width=1200/https%3A%2F%2Fcdn.user.blog.st-hatena.com%2Fdefault_entry_og_image%2F125757465%2F168916493131424",
 			seedCategoryID:  1,
 			RssURL:          "https://blog.studysapuri.jp/rss",
-			ApiURL:          "",
+
 			PlatformSiteURL: "https://blog.studysapuri.jp/",
 			FeedSiteURL:     "https://blog.studysapuri.jp/",
 			PlatformType:    domain.PlatformTypeCompany,
@@ -1023,7 +979,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://menthas.com/apple-touch-icon.png",
 			seedCategoryID:  2,
 			RssURL:          "https://menthas.com/all/rss",
-			ApiURL:          "",
+
 			PlatformSiteURL: "https://menthas.com/",
 			FeedSiteURL:     "https://menthas.com/",
 			PlatformType:    domain.PlatformTypeSummary,
@@ -1038,7 +994,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://menthas.com/apple-touch-icon.png",
 			seedCategoryID:  4,
 			RssURL:          "https://menthas.com/programming/rss",
-			ApiURL:          "",
+
 			PlatformSiteURL: "https://menthas.com/",
 			FeedSiteURL:     "https://menthas.com/programming/",
 			PlatformType:    domain.PlatformTypeSummary,
@@ -1053,7 +1009,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://menthas.com/apple-touch-icon.png",
 			seedCategoryID:  5,
 			RssURL:          "https://menthas.com/javascript/rss",
-			ApiURL:          "",
+
 			PlatformSiteURL: "https://menthas.com/",
 			FeedSiteURL:     "https://menthas.com/javascript/",
 			PlatformType:    domain.PlatformTypeSummary,
@@ -1068,7 +1024,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://menthas.com/apple-touch-icon.png",
 			seedCategoryID:  25,
 			RssURL:          "https://menthas.com/infrastructure/rss",
-			ApiURL:          "",
+
 			PlatformSiteURL: "https://menthas.com/",
 			FeedSiteURL:     "https://menthas.com/infrastructure/",
 			PlatformType:    domain.PlatformTypeSummary,
@@ -1083,7 +1039,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://storage.googleapis.com/zenn-user-upload/topics/489b9436a3.png",
 			seedCategoryID:  18,
 			RssURL:          "https://zenn.dev/topics/react/feed",
-			ApiURL:          "",
+
 			PlatformSiteURL: "https://zenn.dev/",
 			FeedSiteURL:     "https://zenn.dev/topics/react/",
 			PlatformType:    domain.PlatformTypeSite,
@@ -1098,7 +1054,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://storage.googleapis.com/zenn-user-upload/topics/d87ff27d89.png",
 			seedCategoryID:  18,
 			RssURL:          "https://zenn.dev/topics/nextjs/feed",
-			ApiURL:          "",
+
 			PlatformSiteURL: "https://zenn.dev/",
 			FeedSiteURL:     "https://zenn.dev/topics/nextjs/",
 			PlatformType:    domain.PlatformTypeSite,
@@ -1113,7 +1069,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://storage.googleapis.com/zenn-user-upload/topics/658126d68f.png",
 			seedCategoryID:  26,
 			RssURL:          "https://zenn.dev/topics/reactnative/feed",
-			ApiURL:          "",
+
 			PlatformSiteURL: "https://zenn.dev/",
 			FeedSiteURL:     "https://zenn.dev/topics/reactnative/",
 			PlatformType:    domain.PlatformTypeSite,
@@ -1128,7 +1084,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://storage.googleapis.com/zenn-user-upload/topics/64acd76870.png",
 			seedCategoryID:  5,
 			RssURL:          "https://zenn.dev/topics/javascript/feed",
-			ApiURL:          "",
+
 			PlatformSiteURL: "https://zenn.dev/",
 			FeedSiteURL:     "https://zenn.dev/topics/javascript/",
 			PlatformType:    domain.PlatformTypeSite,
@@ -1143,7 +1099,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://storage.googleapis.com/zenn-user-upload/topics/f13e758fdb.png",
 			seedCategoryID:  6,
 			RssURL:          "https://zenn.dev/topics/typescript/feed",
-			ApiURL:          "",
+
 			PlatformSiteURL: "https://zenn.dev/",
 			FeedSiteURL:     "https://zenn.dev/topics/typescript/",
 			PlatformType:    domain.PlatformTypeSite,
@@ -1158,7 +1114,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://storage.googleapis.com/zenn-user-upload/topics/54d1e3ddea.png",
 			seedCategoryID:  22,
 			RssURL:          "https://zenn.dev/topics/nodejs/feed",
-			ApiURL:          "",
+
 			PlatformSiteURL: "https://zenn.dev/",
 			FeedSiteURL:     "https://zenn.dev/topics/nodejs/",
 			PlatformType:    domain.PlatformTypeSite,
@@ -1173,7 +1129,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://storage.googleapis.com/zenn-user-upload/topics/8b677725c8.png",
 			seedCategoryID:  9,
 			RssURL:          "https://zenn.dev/topics/go/feed",
-			ApiURL:          "",
+
 			PlatformSiteURL: "https://zenn.dev/",
 			FeedSiteURL:     "https://zenn.dev/topics/go/",
 			PlatformType:    domain.PlatformTypeSite,
@@ -1188,7 +1144,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://storage.googleapis.com/zenn-user-upload/topics/dc1922748b.png",
 			seedCategoryID:  28,
 			RssURL:          "https://zenn.dev/topics/aws/feed",
-			ApiURL:          "",
+
 			PlatformSiteURL: "https://zenn.dev/",
 			FeedSiteURL:     "https://zenn.dev/topics/aws/",
 			PlatformType:    domain.PlatformTypeSite,
@@ -1203,7 +1159,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://storage.googleapis.com/zenn-user-upload/topics/90aad273f0.png",
 			seedCategoryID:  29,
 			RssURL:          "https://zenn.dev/topics/gcp/feed",
-			ApiURL:          "",
+
 			PlatformSiteURL: "https://zenn.dev/",
 			FeedSiteURL:     "https://zenn.dev/topics/gcp/",
 			PlatformType:    domain.PlatformTypeSite,
@@ -1218,7 +1174,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://storage.googleapis.com/zenn-user-upload/topics/01c7f20365.png",
 			seedCategoryID:  31,
 			RssURL:          "https://zenn.dev/topics/docker/feed",
-			ApiURL:          "",
+
 			PlatformSiteURL: "https://zenn.dev/",
 			FeedSiteURL:     "https://zenn.dev/topics/docker/",
 			PlatformType:    domain.PlatformTypeSite,
@@ -1233,7 +1189,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://storage.googleapis.com/zenn-user-upload/topics/d3a7f336d2.png",
 			seedCategoryID:  36,
 			RssURL:          "https://zenn.dev/topics/graphql/feed",
-			ApiURL:          "",
+
 			PlatformSiteURL: "https://zenn.dev/",
 			FeedSiteURL:     "https://zenn.dev/topics/graphql/",
 			PlatformType:    domain.PlatformTypeSite,
@@ -1248,7 +1204,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://storage.googleapis.com/zenn-user-upload/topics/3a8fd1cede.png",
 			seedCategoryID:  37,
 			RssURL:          "https://zenn.dev/topics/github/feed",
-			ApiURL:          "",
+
 			PlatformSiteURL: "https://zenn.dev/",
 			FeedSiteURL:     "https://zenn.dev/topics/github/",
 			PlatformType:    domain.PlatformTypeSite,
@@ -1263,7 +1219,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://storage.googleapis.com/zenn-user-upload/topics/da1b8cf8f6.jpeg",
 			seedCategoryID:  40,
 			RssURL:          "https://zenn.dev/topics/githubactions/feed",
-			ApiURL:          "",
+
 			PlatformSiteURL: "https://zenn.dev/",
 			FeedSiteURL:     "https://zenn.dev/topics/githubactions/",
 			PlatformType:    domain.PlatformTypeSite,
@@ -1278,7 +1234,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://storage.googleapis.com/zenn-user-upload/topics/2bb6923651.png",
 			seedCategoryID:  41,
 			RssURL:          "https://zenn.dev/topics/chatgpt/feed",
-			ApiURL:          "",
+
 			PlatformSiteURL: "https://zenn.dev/",
 			FeedSiteURL:     "https://zenn.dev/topics/chatgpt/",
 			PlatformType:    domain.PlatformTypeSite,
@@ -1293,7 +1249,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://storage.googleapis.com/zenn-user-upload/topics/604d5b83b5.jpeg",
 			seedCategoryID:  42,
 			RssURL:          "https://zenn.dev/topics/個人開発/feed",
-			ApiURL:          "",
+
 			PlatformSiteURL: "https://zenn.dev/",
 			FeedSiteURL:     "https://zenn.dev/topics/個人開発/",
 			PlatformType:    domain.PlatformTypeSite,
@@ -1308,7 +1264,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://storage.googleapis.com/zenn-user-upload/topics/d766db09a2.jpeg",
 			seedCategoryID:  43,
 			RssURL:          "https://zenn.dev/topics/frontend/feed",
-			ApiURL:          "",
+
 			PlatformSiteURL: "https://zenn.dev/",
 			FeedSiteURL:     "https://zenn.dev/topics/frontend/",
 			PlatformType:    domain.PlatformTypeSite,
@@ -1323,7 +1279,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://storage.googleapis.com/zenn-user-upload/topics/902109da93.jpeg",
 			seedCategoryID:  44,
 			RssURL:          "https://zenn.dev/topics/test/feed",
-			ApiURL:          "",
+
 			PlatformSiteURL: "https://zenn.dev/",
 			FeedSiteURL:     "https://zenn.dev/topics/test/",
 			PlatformType:    domain.PlatformTypeSite,
@@ -1338,7 +1294,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://cdn.hashnode.com/res/hashnode/image/upload/v1513321478077/ByCWNxZMf.png",
 			seedCategoryID:  18,
 			RssURL:          "https://hashnode.com/n/reactjs/rss",
-			ApiURL:          "",
+
 			PlatformSiteURL: "https://hashnode.com/",
 			FeedSiteURL:     "https://hashnode.com/n/reactjs/",
 			PlatformType:    domain.PlatformTypeSite,
@@ -1353,7 +1309,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://cdn.hashnode.com/res/hashnode/image/upload/v1651122498709/FQjch0sgd.png",
 			seedCategoryID:  20,
 			RssURL:          "https://hashnode.com/n/nextjs/rss",
-			ApiURL:          "",
+
 			PlatformSiteURL: "https://hashnode.com/",
 			FeedSiteURL:     "https://hashnode.com/n/nextjs/",
 			PlatformType:    domain.PlatformTypeSite,
@@ -1368,7 +1324,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://cdn.hashnode.com/res/hashnode/image/upload/v1513321478077/ByCWNxZMf.png",
 			seedCategoryID:  26,
 			RssURL:          "https://hashnode.com/n/react-native/rss",
-			ApiURL:          "",
+
 			PlatformSiteURL: "https://hashnode.com/",
 			FeedSiteURL:     "https://hashnode.com/n/react-native/",
 			PlatformType:    domain.PlatformTypeSite,
@@ -1383,7 +1339,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://cdn.hashnode.com/res/hashnode/image/upload/v1515394575880/SkuMI5gEM.jpeg",
 			seedCategoryID:  45,
 			RssURL:          "https://hashnode.com/n/expo/rss",
-			ApiURL:          "",
+
 			PlatformSiteURL: "https://hashnode.com/",
 			FeedSiteURL:     "https://hashnode.com/n/expo/",
 			PlatformType:    domain.PlatformTypeSite,
@@ -1398,7 +1354,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://cdn.hashnode.com/res/hashnode/image/upload/v1607322143407/LsbeyUL86.png",
 			seedCategoryID:  22,
 			RssURL:          "https://hashnode.com/n/nodejs/rss",
-			ApiURL:          "",
+
 			PlatformSiteURL: "https://hashnode.com/",
 			FeedSiteURL:     "https://hashnode.com/n/nodejs/",
 			PlatformType:    domain.PlatformTypeSite,
@@ -1413,7 +1369,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://cdn.hashnode.com/res/hashnode/image/upload/v1607081795383/tEjUv8e8s.png",
 			seedCategoryID:  6,
 			RssURL:          "https://hashnode.com/n/typescript/rss",
-			ApiURL:          "",
+
 			PlatformSiteURL: "https://hashnode.com/",
 			FeedSiteURL:     "https://hashnode.com/n/typescript/",
 			PlatformType:    domain.PlatformTypeSite,
@@ -1428,7 +1384,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://cdn.hashnode.com/res/hashnode/image/upload/v1534512687168/S1D40rVLm.png",
 			seedCategoryID:  9,
 			RssURL:          "https://hashnode.com/n/go/rss",
-			ApiURL:          "",
+
 			PlatformSiteURL: "https://hashnode.com/",
 			FeedSiteURL:     "https://hashnode.com/n/go/",
 			PlatformType:    domain.PlatformTypeSite,
@@ -1444,7 +1400,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://cdn.hashnode.com/res/hashnode/image/upload/v1607508501076/CYQAUOwqq.png",
 			seedCategoryID:  28,
 			RssURL:          "https://hashnode.com/n/aws/rss",
-			ApiURL:          "",
+
 			PlatformSiteURL: "https://hashnode.com/",
 			FeedSiteURL:     "https://hashnode.com/n/aws/",
 			PlatformType:    domain.PlatformTypeSite,
@@ -1459,7 +1415,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://www.gstatic.com/devrel-devsite/prod/v18deffdce717053d2574d396ca1a06d6589d5eab7eb54fc25710e3ed98d4a3ba/cloud/images/social-icon-google-cloud-1200-630.png",
 			seedCategoryID:  29,
 			RssURL:          "https://hashnode.com/n/gcp/rss",
-			ApiURL:          "",
+
 			PlatformSiteURL: "https://hashnode.com/",
 			FeedSiteURL:     "https://hashnode.com/n/gcp/",
 			PlatformType:    domain.PlatformTypeSite,
@@ -1474,7 +1430,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://cdn.hashnode.com/res/hashnode/image/upload/ryxk99vk41tdn8bo28m4/1453789075.png?w=200&h=200&fit=crop&crop=entropy&auto=compress,format&format=webp&auto=compress,format&format=webp",
 			seedCategoryID:  31,
 			RssURL:          "https://hashnode.com/n/docker/rss",
-			ApiURL:          "",
+
 			PlatformSiteURL: "https://hashnode.com/",
 			FeedSiteURL:     "https://hashnode.com/n/docker/",
 			PlatformType:    domain.PlatformTypeSite,
@@ -1489,7 +1445,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://cdn.hashnode.com/res/hashnode/image/upload/xszq3zb8t6rmgg6regon/1450619295.png?w=200&h=200&fit=crop&crop=entropy&auto=compress,format&format=webp&auto=compress,format&format=webp",
 			seedCategoryID:  44,
 			RssURL:          "https://hashnode.com/n/testing/rss",
-			ApiURL:          "",
+
 			PlatformSiteURL: "https://hashnode.com/",
 			FeedSiteURL:     "https://hashnode.com/n/testing/",
 			PlatformType:    domain.PlatformTypeSite,
@@ -1504,7 +1460,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://cdn.hashnode.com/res/hashnode/image/upload/qbofja8kwx8cw8nuyaqg/1475235506.jpg?w=200&h=200&fit=crop&crop=entropy&auto=compress,format&format=webp&auto=compress,format&format=webp",
 			seedCategoryID:  36,
 			RssURL:          "https://hashnode.com/n/graphql/rss",
-			ApiURL:          "",
+
 			PlatformSiteURL: "https://hashnode.com/",
 			FeedSiteURL:     "https://hashnode.com/n/graphql/",
 			PlatformType:    domain.PlatformTypeSite,
@@ -1519,7 +1475,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://cdn.hashnode.com/res/hashnode/image/upload/v1611242155728/W3_BYVVVh.png",
 			seedCategoryID:  43,
 			RssURL:          "https://hashnode.com/n/frontend-development/rss",
-			ApiURL:          "",
+
 			PlatformSiteURL: "https://hashnode.com/",
 			FeedSiteURL:     "https://hashnode.com/n/frontend-development/",
 			PlatformType:    domain.PlatformTypeSite,
@@ -1534,7 +1490,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://cdn.hashnode.com/res/hashnode/image/upload/vdxecajl3uwbprclsctm/1450469658.jpg",
 			seedCategoryID:  4,
 			RssURL:          "https://hashnode.com/n/web-development/rss",
-			ApiURL:          "",
+
 			PlatformSiteURL: "https://hashnode.com/",
 			FeedSiteURL:     "https://hashnode.com/n/web-development/",
 			PlatformType:    domain.PlatformTypeSite,
@@ -1549,7 +1505,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://cdn.hashnode.com/res/hashnode/image/upload/v1611242155728/W3_BYVVVh.png",
 			seedCategoryID:  41,
 			RssURL:          "https://hashnode.com/n/chatgpt/rss",
-			ApiURL:          "",
+
 			PlatformSiteURL: "https://hashnode.com/",
 			FeedSiteURL:     "https://hashnode.com/n/chatgpt/",
 			PlatformType:    domain.PlatformTypeSite,
@@ -1564,7 +1520,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://cdn.hashnode.com/res/hashnode/image/upload/v1554321431158/MqVqSHr8Q.jpeg",
 			seedCategoryID:  4,
 			RssURL:          "https://hashnode.com/n/developer/rss",
-			ApiURL:          "",
+
 			PlatformSiteURL: "https://hashnode.com/",
 			FeedSiteURL:     "https://hashnode.com/n/developer/",
 			PlatformType:    domain.PlatformTypeSite,
@@ -1579,7 +1535,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://cdn.hashnode.com/res/hashnode/image/upload/cnvm0znfqcrwelhgtblb/1496913014.png",
 			seedCategoryID:  46,
 			RssURL:          "https://hashnode.com/n/devops/rss",
-			ApiURL:          "",
+
 			PlatformSiteURL: "https://hashnode.com/",
 			FeedSiteURL:     "https://hashnode.com/n/devops/",
 			PlatformType:    domain.PlatformTypeSite,
@@ -1594,7 +1550,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://blog.logrocket.com/wp-content/uploads/2019/05/logrocket-blog.jpg",
 			seedCategoryID:  1,
 			RssURL:          "https://blog.logrocket.com/feed/",
-			ApiURL:          "",
+
 			PlatformSiteURL: "https://blog.logrocket.com/",
 			FeedSiteURL:     "https://blog.logrocket.com/",
 			PlatformType:    domain.PlatformTypeCompany,
@@ -1609,7 +1565,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://future-architect.github.io/ogp_techblog.jpg",
 			seedCategoryID:  1,
 			RssURL:          "https://future-architect.github.io/atom.xml",
-			ApiURL:          "",
+
 			PlatformSiteURL: "https://future-architect.github.io/",
 			FeedSiteURL:     "https://future-architect.github.io/",
 			PlatformType:    domain.PlatformTypeCompany,
@@ -1624,7 +1580,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://bs-uploads.toptal.io/blackfish-uploads/components/seo/5791128/og_image/optimized/og-image-blog__1_-abdd426549359282c6f486ee85a2ee54.png",
 			seedCategoryID:  1,
 			RssURL:          "https://www.toptal.com/blog.rss",
-			ApiURL:          "",
+
 			PlatformSiteURL: "https://www.toptal.com/",
 			FeedSiteURL:     "https://www.toptal.com/blog/",
 			PlatformType:    domain.PlatformTypeSite,
@@ -1639,7 +1595,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://bs-uploads.toptal.io/blackfish-uploads/components/seo/7986388/og_image/optimized/og-image-blog-eng-6e8019eb50758008cce1bad8ec85a209.png",
 			seedCategoryID:  47,
 			RssURL:          "https://www.toptal.com/developers/blog.rss",
-			ApiURL:          "",
+
 			PlatformSiteURL: "https://www.toptal.com/",
 			FeedSiteURL:     "https://www.toptal.com/developers/blog/",
 			PlatformType:    domain.PlatformTypeSite,
@@ -1654,7 +1610,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://bs-uploads.toptal.io/blackfish-uploads/components/seo/8158028/og_image/optimized/og-image-blog-des-9882e3585454bca06bd731e0af338cad.png",
 			seedCategoryID:  48,
 			RssURL:          "https://www.toptal.com/designers/blog.rss",
-			ApiURL:          "",
+
 			PlatformSiteURL: "https://www.toptal.com/",
 			FeedSiteURL:     "https://www.toptal.com/designers/blog/",
 			PlatformType:    domain.PlatformTypeSite,
@@ -1669,7 +1625,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://bs-uploads.toptal.io/blackfish-uploads/components/seo/5784432/og_image/optimized/og-image-blog-fin-471dbaa1d493889fc7084cbca025a472.png",
 			seedCategoryID:  49,
 			RssURL:          "https://www.toptal.com/finance/blog.rss",
-			ApiURL:          "",
+
 			PlatformSiteURL: "https://www.toptal.com/",
 			FeedSiteURL:     "https://www.toptal.com/finance/blog/",
 			PlatformType:    domain.PlatformTypeSite,
@@ -1684,7 +1640,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://bs-uploads.toptal.io/blackfish-uploads/components/seo/5784441/og_image/optimized/og-image-blog-pm-fb78e752065de4d23ae27c6a3b4c01a4.png",
 			seedCategoryID:  50,
 			RssURL:          "https://www.toptal.com/project-managers/blog.rss",
-			ApiURL:          "",
+
 			PlatformSiteURL: "https://www.toptal.com/",
 			FeedSiteURL:     "https://www.toptal.com/project-managers/blog/",
 			PlatformType:    domain.PlatformTypeSite,
@@ -1699,7 +1655,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://bs-uploads.toptal.io/blackfish-uploads/components/seo/5866178/og_image/optimized/og-image-blog-pdm-bc89810d98a4299f54c3fa67d8d44cbd.png",
 			seedCategoryID:  51,
 			RssURL:          "https://www.toptal.com/product-managers/blog.rss",
-			ApiURL:          "",
+
 			PlatformSiteURL: "https://www.toptal.com/",
 			FeedSiteURL:     "https://www.toptal.com/product-managers/blog/",
 			PlatformType:    domain.PlatformTypeSite,
@@ -1714,7 +1670,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://cdn.image.st-hatena.com/image/scale/6d855d5698586228d443149665e3097dcfc30c8e/backend=imager;enlarge=0;height=1000;version=1;width=1200/https%3A%2F%2Fcdn.user.blog.st-hatena.com%2Fdefault_entry_og_image%2F94582793%2F1710244091931727",
 			seedCategoryID:  1,
 			RssURL:          "https://tech.findy.co.jp/rss",
-			ApiURL:          "",
+
 			PlatformSiteURL: "https://tech.findy.co.jp/",
 			FeedSiteURL:     "https://tech.findy.co.jp/",
 			PlatformType:    domain.PlatformTypeCompany,
@@ -1729,7 +1685,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://news.ycombinator.com/y18.svg",
 			seedCategoryID:  2,
 			RssURL:          "https://news.ycombinator.com/rss",
-			ApiURL:          "",
+
 			PlatformSiteURL: "https://news.ycombinator.com/",
 			FeedSiteURL:     "https://news.ycombinator.com/",
 			PlatformType:    domain.PlatformTypeSummary,
@@ -1744,7 +1700,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://www.techmeme.com/m/config/tech/iicon.gif",
 			seedCategoryID:  2,
 			RssURL:          "https://www.techmeme.com/feed.xml",
-			ApiURL:          "",
+
 			PlatformSiteURL: "https://techmeme.com/",
 			FeedSiteURL:     "https://techmeme.com/",
 			PlatformType:    domain.PlatformTypeSite,
@@ -1759,7 +1715,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://media.wired.com/photos/615e2b8ce78a8cd913bbaa76/16:9/w_1280,c_limit/wired_bug.jpg",
 			seedCategoryID:  2,
 			RssURL:          "https://www.wired.com/feed/rss",
-			ApiURL:          "",
+
 			PlatformSiteURL: "https://www.wired.com/",
 			FeedSiteURL:     "https://www.wired.com/",
 			PlatformType:    domain.PlatformTypeSite,
@@ -1774,7 +1730,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://cdn.user.blog.st-hatena.com/default_entry_og_image/51907959/1518583134492221",
 			seedCategoryID:  1,
 			RssURL:          "https://tech.smarthr.jp/rss",
-			ApiURL:          "",
+
 			PlatformSiteURL: "https://tech.smarthr.jp/",
 			FeedSiteURL:     "https://tech.smarthr.jp/",
 			PlatformType:    domain.PlatformTypeCompany,
@@ -1789,7 +1745,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://cdn.user.blog.st-hatena.com/default_entry_og_image/158491034/1633396648613392",
 			seedCategoryID:  1,
 			RssURL:          "https://blog.g-gen.co.jp/rss",
-			ApiURL:          "",
+
 			PlatformSiteURL: "https://blog.g-gen.co.jp/",
 			FeedSiteURL:     "https://blog.g-gen.co.jp/",
 			PlatformType:    domain.PlatformTypeCompany,
@@ -1804,7 +1760,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://knowledge.sakura.ad.jp/wp-content/themes/sakunare/assets/images/common/ogp.png",
 			seedCategoryID:  1,
 			RssURL:          "https://knowledge.sakura.ad.jp/feed/",
-			ApiURL:          "",
+
 			PlatformSiteURL: "https://knowledge.sakura.ad.jp/",
 			FeedSiteURL:     "https://knowledge.sakura.ad.jp/",
 			PlatformType:    domain.PlatformTypeCompany,
@@ -1819,7 +1775,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://goodpatch.com/assets/ogp.png",
 			seedCategoryID:  1,
 			RssURL:          "https://goodpatch.com/blog/feed/",
-			ApiURL:          "",
+
 			PlatformSiteURL: "https://goodpatch.com/blog/",
 			FeedSiteURL:     "https://goodpatch.com/blog/",
 			PlatformType:    domain.PlatformTypeCompany,
@@ -1834,7 +1790,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://cfl.dropboxstatic.com/static/metaserver/static/images/logo_catalog/dropbox_opengraph_image%402x.png",
 			seedCategoryID:  1,
 			RssURL:          "https://dropbox.tech/feed",
-			ApiURL:          "",
+
 			PlatformSiteURL: "https://dropbox.tech/",
 			FeedSiteURL:     "https://dropbox.tech/",
 			PlatformType:    domain.PlatformTypeCompany,

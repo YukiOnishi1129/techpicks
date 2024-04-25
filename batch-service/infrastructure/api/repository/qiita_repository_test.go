@@ -5,15 +5,17 @@ import "testing"
 func TestQiitaRepository_GetQiitaArticles(t *testing.T) {
 	t.Parallel()
 	tests := []struct {
-		id string
+		name string
+		id   string
 	}{
 		{
-			id: "2fcda5a350bd3655e676",
+			name: "Success: GetQiitaArticles",
+			id:   "2fcda5a350bd3655e676",
 		},
 	}
 
 	for _, tt := range tests {
-		t.Run(tt.id, func(t *testing.T) {
+		t.Run(tt.name, func(t *testing.T) {
 			qr := NewQiitaRepository()
 			data, err := qr.GetQiitaArticles(tt.id)
 			if err != nil {

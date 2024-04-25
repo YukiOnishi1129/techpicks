@@ -5,17 +5,19 @@ import "testing"
 func TestHatenaRepository_GetHatenaArticles(t *testing.T) {
 	t.Parallel()
 	tests := []struct {
-		targetUrl string
+		name      string
+		targetURL string
 	}{
 		{
-			targetUrl: "https://zenn.dev/yukionishi/articles/4c02ece789c34daadda5",
+			name:      "Success: GetHatenaArticles",
+			targetURL: "https://zenn.dev/yukionishi/articles/4c02ece789c34daadda5",
 		},
 	}
 
 	for _, tt := range tests {
-		t.Run(tt.targetUrl, func(t *testing.T) {
+		t.Run(tt.name, func(t *testing.T) {
 			hr := NewHatenaRepository()
-			count, err := hr.GetHatenaArticles(tt.targetUrl)
+			count, err := hr.GetHatenaArticles(tt.targetURL)
 			if err != nil {
 				t.Errorf("failed to get hatena articles: %v", err)
 			}

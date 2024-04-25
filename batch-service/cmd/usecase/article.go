@@ -41,7 +41,7 @@ func (au *ArticleUsecase) BatchCreateArticles(ctx context.Context) error {
 		aCount := 0
 		farCount := 0
 		// get rss
-		rss, err := GetRSS(f.RSSURL.String)
+		rss, err := GetRSS(f.RSSURL)
 		if err != nil {
 			log.Printf("【error get rss】: %s, %v", f.Name, err)
 			continue

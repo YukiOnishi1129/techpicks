@@ -16,8 +16,8 @@ func NewHatenaRepository() *HatenaRepository {
 type HatenaItem struct {
 }
 
-func (hr *HatenaRepository) GetHatenaArticles(targetUrl string) (int, error) {
-	url := fmt.Sprintf("https://bookmark.hatenaapis.com/count/entry?url=%s", targetUrl)
+func (hr *HatenaRepository) GetHatenaArticles(targetURL string) (int, error) {
+	url := fmt.Sprintf("https://bookmark.hatenaapis.com/count/entry?url=%s", targetURL)
 	resp, err := http.Get(url)
 	if err != nil {
 		return 0, err

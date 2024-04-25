@@ -15,7 +15,6 @@ type Feed struct {
 	ID                string
 	Name              string
 	RssURL            string
-	ApiURL            string
 	FeedFetchType     FeedFetchType
 	TrendPlatformType TrendPlatformType
 	Platform          Platform

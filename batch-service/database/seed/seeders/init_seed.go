@@ -66,10 +66,8 @@ func (is *InitSeed) SeedInitData(ctx context.Context) error {
 							FeedDescription: sp.FeedDescription,
 							FeedThumbnail:   sp.FeedThumbnail,
 							RssURL:          sp.RssURL,
-							ApiURL:          sp.ApiURL,
 							FeedFetchType:   sp.FeedFetchType,
 							FeedSiteURL:     sp.FeedSiteURL,
-							IsTrending:      sp.IsTrending,
 							DeletedAt:       sp.DeletedAt,
 						}
 						if sp.TrendPlatformType != nil {
@@ -104,10 +102,8 @@ func (is *InitSeed) SeedInitData(ctx context.Context) error {
 					FeedDescription: sp.FeedDescription,
 					FeedThumbnail:   sp.FeedThumbnail,
 					RssURL:          sp.RssURL,
-					ApiURL:          sp.ApiURL,
 					FeedFetchType:   sp.FeedFetchType,
 					FeedSiteURL:     sp.FeedSiteURL,
-					IsTrending:      sp.IsTrending,
 					DeletedAt:       sp.DeletedAt,
 				}
 				if sp.TrendPlatformType != nil {
@@ -163,11 +159,9 @@ type createFeedArg struct {
 	FeedDescription   string
 	FeedThumbnail     string
 	RssURL            string
-	ApiURL            string
 	FeedFetchType     domain.FeedFetchType
 	TrendPlatformType domain.TrendPlatformType
 	FeedSiteURL       string
-	IsTrending        bool
 	DeletedAt         *time.Time
 }
 
@@ -178,12 +172,10 @@ func createFeed(ctx context.Context, tx *sql.Tx, arg createFeedArg) error {
 		Name:              arg.FeedName,
 		Description:       arg.FeedDescription,
 		ThumbnailURL:      arg.FeedThumbnail,
-		RSSURL:            null.StringFrom(arg.RssURL),
-		APIURL:            null.StringFrom(arg.ApiURL),
+		RSSURL:            arg.RssURL,
 		FeedFetchType:     int(arg.FeedFetchType),
 		TrendPlatformType: int(arg.TrendPlatformType),
 		SiteURL:           arg.FeedSiteURL,
-		IsTrending:        arg.IsTrending,
 		PlatformID:        arg.PlatformID,
 		CategoryID:        arg.CategoryID,
 	}
