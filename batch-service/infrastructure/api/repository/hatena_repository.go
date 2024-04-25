@@ -24,7 +24,7 @@ func (hr *HatenaRepository) GetHatenaArticles(targetURL string) (int, error) {
 		return 0, err
 	}
 	defer func(Body io.ReadCloser) {
-		err := Body.Close()
+		err = Body.Close()
 		if err != nil {
 			log.Fatalf("failed to close body: %v", err)
 		}

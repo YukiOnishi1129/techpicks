@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 )
 
@@ -26,7 +27,12 @@ func (qr *QiitaRepository) GetQiitaArticles(id string) (QiitaItem, error) {
 	if err != nil {
 		return QiitaItem{}, err
 	}
-	defer resp.Body.Close()
+	defer func(Body io.ReadCloser) {
+		err = Body.Close()
+		if err != nil {
+			log.Fatalf("failed to close body: %v", err)
+		}
+	}(resp.Body)
 
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
