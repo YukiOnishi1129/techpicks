@@ -60,7 +60,7 @@ func convertDBtoFeedArticleRelationDomain(far *entity.FeedArticleRelation) domai
 		Feed: domain.Feed{
 			ID:     far.R.Feed.ID,
 			Name:   far.R.Feed.Name,
-			RssURL: far.R.Feed.RSSURL,
+			RssURL: far.R.Feed.RSSURL.String,
 			Platform: domain.Platform{
 				ID:           far.R.Feed.R.Platform.ID,
 				Name:         far.R.Feed.R.Platform.Name,

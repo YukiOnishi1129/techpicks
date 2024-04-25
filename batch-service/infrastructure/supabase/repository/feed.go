@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"github.com/YukiOnishi1129/techpicks/batch-service/domain"
 	"github.com/YukiOnishi1129/techpicks/batch-service/entity"
+	"github.com/volatiletech/null/v8"
 	"github.com/volatiletech/sqlboiler/v4/boil"
 	"github.com/volatiletech/sqlboiler/v4/queries/qm"
 )
@@ -51,7 +52,7 @@ func (fr *FeedRepository) GetFeed(ctx context.Context, id string) (domain.Feed, 
 func (fr *FeedRepository) CreateFeed(ctx context.Context, arg domain.CreateFeedInputDTO) (feedID string, err error) {
 	f := entity.Feed{
 		Name:       arg.Name,
-		RSSURL:     arg.RssURL,
+		RSSURL:     null.StringFrom(arg.RssURL),
 		PlatformID: arg.PlatformID,
 		CategoryID: arg.CategoryID,
 	}
@@ -66,7 +67,7 @@ func convertDBtoFeedDomain(f *entity.Feed) domain.Feed {
 	return domain.Feed{
 		ID:     f.ID,
 		Name:   f.Name,
-		RssURL: f.RSSURL,
+		RssURL: f.RSSURL.String,
 		Platform: domain.Platform{
 			ID:           f.R.Platform.ID,
 			Name:         f.R.Platform.Name,
