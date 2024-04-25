@@ -33,9 +33,12 @@ func main() {
 
 	rr := repository.NewRSSRepository()
 
-	au := usecase.NewArticleUsecase(db, rr)
+	u := usecase.NewUsecase(&usecase.Param{
+		Db: db,
+		Rr: rr,
+	})
 
-	err = au.BatchCreateArticles(ctx)
+	err = u.BatchCrawlArticleContents(ctx)
 	if err != nil {
 		log.Fatalf("Failed to create articles: %v", err)
 		return
