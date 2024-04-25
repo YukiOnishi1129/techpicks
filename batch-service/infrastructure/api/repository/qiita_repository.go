@@ -5,15 +5,7 @@ import (
 	"fmt"
 	"io"
 	"log"
-	"net/http"
 )
-
-type QiitaRepository struct {
-}
-
-func NewQiitaRepository() *QiitaRepository {
-	return &QiitaRepository{}
-}
 
 type QiitaItem struct {
 	ID         string `json:"id"`
@@ -21,9 +13,9 @@ type QiitaItem struct {
 	LikesCount int    `json:"likes_count"`
 }
 
-func (qr *QiitaRepository) GetQiitaArticles(id string) (QiitaItem, error) {
-	url := fmt.Sprintf("https://qiita.com/api/v2/items/%s", id)
-	resp, err := http.Get(url)
+func (r *Repository) GetQiitaArticles(id string) (QiitaItem, error) {
+	url := fmt.Sprintf("%sitems/%s", r.apiClient.GetQiitaBaseURL(), id)
+	resp, err := r.apiClient.GetClient().Get(url)
 	if err != nil {
 		return QiitaItem{}, err
 	}

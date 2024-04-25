@@ -1,6 +1,9 @@
 package repository
 
-import "testing"
+import (
+	"github.com/YukiOnishi1129/techpicks/batch-service/infrastructure/api/client"
+	"testing"
+)
 
 func TestHatenaRepository_GetHatenaArticles(t *testing.T) {
 	t.Parallel()
@@ -16,8 +19,11 @@ func TestHatenaRepository_GetHatenaArticles(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			hr := NewHatenaRepository()
-			count, err := hr.GetHatenaArticles(tt.targetURL)
+			apiClient := client.NewAPIClient()
+			r := NewRepository(&Params{
+				APIClient: apiClient,
+			})
+			count, err := r.GetHatenaArticles(tt.targetURL)
 			if err != nil {
 				t.Errorf("failed to get hatena articles: %v", err)
 			}

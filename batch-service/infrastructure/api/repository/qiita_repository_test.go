@@ -1,6 +1,9 @@
 package repository
 
-import "testing"
+import (
+	"github.com/YukiOnishi1129/techpicks/batch-service/infrastructure/api/client"
+	"testing"
+)
 
 func TestQiitaRepository_GetQiitaArticles(t *testing.T) {
 	t.Parallel()
@@ -16,8 +19,11 @@ func TestQiitaRepository_GetQiitaArticles(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			qr := NewQiitaRepository()
-			data, err := qr.GetQiitaArticles(tt.id)
+			apiClient := client.NewAPIClient()
+			r := NewRepository(&Params{
+				APIClient: apiClient,
+			})
+			data, err := r.GetQiitaArticles(tt.id)
 			if err != nil {
 				t.Errorf("failed to get qiita articles: %v", err)
 			}

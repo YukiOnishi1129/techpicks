@@ -2,17 +2,10 @@ package repository
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"log"
-	"net/http"
 )
-
-type DevCommunityRepository struct {
-}
-
-func NewDevCommunityRepository() *DevCommunityRepository {
-	return &DevCommunityRepository{}
-}
 
 type DevCommunityItem struct {
 	Title                string           `json:"title"`
@@ -29,12 +22,12 @@ type DevCommunityUser struct {
 	UserName string `json:"username"`
 }
 
-func (dcr *DevCommunityRepository) GetDevCommunityArticles(tag *string) ([]DevCommunityItem, error) {
-	url := "https://dev.to/api/articles?top=7"
+func (r *Repository) GetDevCommunityArticles(tag *string) ([]DevCommunityItem, error) {
+	url := fmt.Sprintf("%sarticles?top=7", r.apiClient.GetDevCommunityURL())
 	if tag != nil {
-		url += "&tag=" + *tag
+		url = fmt.Sprintf("url&tag=%s", *tag)
 	}
-	resp, err := http.Get(url)
+	resp, err := r.apiClient.GetClient().Get(url)
 	if err != nil {
 		return nil, err
 	}

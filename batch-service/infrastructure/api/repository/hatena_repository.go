@@ -4,22 +4,14 @@ import (
 	"fmt"
 	"io"
 	"log"
-	"net/http"
 )
-
-type HatenaRepository struct {
-}
-
-func NewHatenaRepository() *HatenaRepository {
-	return &HatenaRepository{}
-}
 
 type HatenaItem struct {
 }
 
-func (hr *HatenaRepository) GetHatenaArticles(targetURL string) (int, error) {
-	url := fmt.Sprintf("https://bookmark.hatenaapis.com/count/entry?url=%s", targetURL)
-	resp, err := http.Get(url)
+func (r *Repository) GetHatenaArticles(targetURL string) (int, error) {
+	url := fmt.Sprintf("%sentry?url=%s", r.apiClient.GetHatenaBaseURL(), targetURL)
+	resp, err := r.apiClient.GetClient().Get(url)
 	if err != nil {
 		return 0, err
 	}

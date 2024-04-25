@@ -1,6 +1,9 @@
 package repository
 
-import "testing"
+import (
+	"github.com/YukiOnishi1129/techpicks/batch-service/infrastructure/api/client"
+	"testing"
+)
 
 func TestDevCommunityRepository_GetDevCommunityArticles(t *testing.T) {
 	t.Parallel()
@@ -16,8 +19,11 @@ func TestDevCommunityRepository_GetDevCommunityArticles(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			dcr := NewDevCommunityRepository()
-			data, err := dcr.GetDevCommunityArticles(tt.tag)
+			apiClient := client.NewAPIClient()
+			r := NewRepository(&Params{
+				APIClient: apiClient,
+			})
+			data, err := r.GetDevCommunityArticles(tt.tag)
 			if err != nil {
 				t.Errorf("failed to get dev community articles: %v", err)
 			}

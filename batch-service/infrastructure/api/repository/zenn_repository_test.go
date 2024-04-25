@@ -1,6 +1,9 @@
 package repository
 
-import "testing"
+import (
+	"github.com/YukiOnishi1129/techpicks/batch-service/infrastructure/api/client"
+	"testing"
+)
 
 func TestZennRepository_GetZennArticles(t *testing.T) {
 	t.Parallel()
@@ -16,8 +19,11 @@ func TestZennRepository_GetZennArticles(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			zr := NewZennRepository()
-			data, err := zr.GetZennArticles(tt.userName)
+			apiClient := client.NewAPIClient()
+			r := NewRepository(&Params{
+				APIClient: apiClient,
+			})
+			data, err := r.GetZennArticles(tt.userName)
 			if err != nil {
 				t.Errorf("failed to get zenn articles: %v", err)
 			}

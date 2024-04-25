@@ -5,15 +5,7 @@ import (
 	"fmt"
 	"io"
 	"log"
-	"net/http"
 )
-
-type ZennRepository struct {
-}
-
-func NewZennRepository() *ZennRepository {
-	return &ZennRepository{}
-}
 
 type ZennResponse struct {
 	Articles []ZennItem `json:"articles"`
@@ -26,9 +18,9 @@ type ZennItem struct {
 	Slug       string `json:"slug"`
 }
 
-func (zr *ZennRepository) GetZennArticles(userName string) (ZennResponse, error) {
-	url := fmt.Sprintf("https://zenn.dev/api/articles/?username=%s&order=latest", userName)
-	resp, err := http.Get(url)
+func (r *Repository) GetZennArticles(userName string) (ZennResponse, error) {
+	url := fmt.Sprintf("%sarticles/?username=%s&order=latest", r.apiClient.GetZennBaseURL(), userName)
+	resp, err := r.apiClient.GetClient().Get(url)
 	if err != nil {
 		return ZennResponse{}, err
 	}
