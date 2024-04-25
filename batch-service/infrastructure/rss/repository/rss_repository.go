@@ -4,20 +4,9 @@ import (
 	"context"
 	"fmt"
 	"github.com/Songmu/go-httpdate"
-	"github.com/mmcdole/gofeed"
 	"github.com/otiai10/opengraph"
 	"time"
 )
-
-type RSSRepository struct {
-	rssClient *gofeed.Parser
-}
-
-func NewRSSRepository(client *gofeed.Parser) *RSSRepository {
-	return &RSSRepository{
-		rssClient: client,
-	}
-}
 
 type RSS struct {
 	Title       string
@@ -27,11 +16,11 @@ type RSS struct {
 	ImageURL    string
 }
 
-func (rr *RSSRepository) GetRSS(rssURL string) ([]RSS, error) {
+func (r *Repository) GetRSS(rssURL string) ([]RSS, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	feed, err := rr.rssClient.ParseURLWithContext(rssURL, ctx)
+	feed, err := r.rssClient.GetRSSClient().ParseURLWithContext(rssURL, ctx)
 	if err != nil {
 		println(fmt.Sprintf("error: %s\n", err))
 		return nil, err
