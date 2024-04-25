@@ -6,9 +6,6 @@ import (
 	"log"
 )
 
-type HatenaItem struct {
-}
-
 func (r *Repository) GetHatenaArticles(targetURL string) (int, error) {
 	url := fmt.Sprintf("%scount/entry?url=%s", r.apiClient.GetHatenaBaseURL(), targetURL)
 	resp, err := r.apiClient.GetClient().Get(url)

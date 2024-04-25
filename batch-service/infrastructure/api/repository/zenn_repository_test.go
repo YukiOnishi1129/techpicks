@@ -8,12 +8,10 @@ import (
 func TestZennRepository_GetZennArticles(t *testing.T) {
 	t.Parallel()
 	tests := []struct {
-		name     string
-		userName string
+		name string
 	}{
 		{
-			name:     "Success: GetZennArticles",
-			userName: "yukionishi",
+			name: "Success: GetZennArticles",
 		},
 	}
 
@@ -23,7 +21,7 @@ func TestZennRepository_GetZennArticles(t *testing.T) {
 			r := NewRepository(&Params{
 				APIClient: apiClient,
 			})
-			data, err := r.GetZennArticles(tt.userName)
+			data, err := r.GetZennArticles()
 			if err != nil {
 				t.Errorf("failed to get zenn articles: %v", err)
 			}

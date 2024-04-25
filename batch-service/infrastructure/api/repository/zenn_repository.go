@@ -12,14 +12,16 @@ type ZennResponse struct {
 }
 
 type ZennItem struct {
-	ID         int    `json:"id"`
-	Title      string `json:"title"`
-	LikedCount int    `json:"liked_count"`
-	Slug       string `json:"slug"`
+	ID          int    `json:"id"`
+	Title       string `json:"title"`
+	LikedCount  int    `json:"liked_count"`
+	PublishedAt string `json:"published_at"`
+	Slug        string `json:"slug"`
+	Path        string `json:"path"`
 }
 
-func (r *Repository) GetZennArticles(userName string) (ZennResponse, error) {
-	url := fmt.Sprintf("%sarticles/?username=%s&order=latest", r.apiClient.GetZennBaseURL(), userName)
+func (r *Repository) GetZennArticles() (ZennResponse, error) {
+	url := fmt.Sprintf("%sarticles/", r.apiClient.GetZennBaseURL())
 	resp, err := r.apiClient.GetClient().Get(url)
 	if err != nil {
 		return ZennResponse{}, err
