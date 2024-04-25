@@ -59,18 +59,23 @@ func (is *InitSeed) SeedInitData(ctx context.Context) error {
 				if p != nil {
 					f, _ := entity.Feeds(qm.Where("rss_url = ?", sp.RssURL)).One(ctx, tx)
 					if f == nil {
-
-						err = createFeed(ctx, tx, createFeedArg{
+						arg := createFeedArg{
 							PlatformID:      p.ID,
 							CategoryID:      categoryIDStr,
 							FeedName:        sp.FeedName,
 							FeedDescription: sp.FeedDescription,
 							FeedThumbnail:   sp.FeedThumbnail,
 							RssURL:          sp.RssURL,
+							ApiURL:          sp.ApiURL,
+							FeedFetchType:   sp.FeedFetchType,
 							FeedSiteURL:     sp.FeedSiteURL,
 							IsTrending:      sp.IsTrending,
 							DeletedAt:       sp.DeletedAt,
-						})
+						}
+						if sp.TrendPlatformType != nil {
+							arg.TrendPlatformType = *sp.TrendPlatformType
+						}
+						err = createFeed(ctx, tx, arg)
 						if err != nil {
 							return err
 						}
@@ -92,17 +97,23 @@ func (is *InitSeed) SeedInitData(ctx context.Context) error {
 					return err
 				}
 
-				err = createFeed(ctx, tx, createFeedArg{
+				arg := createFeedArg{
 					PlatformID:      platformID.String(),
 					CategoryID:      categoryIDStr,
 					FeedName:        sp.FeedName,
 					FeedDescription: sp.FeedDescription,
 					FeedThumbnail:   sp.FeedThumbnail,
 					RssURL:          sp.RssURL,
+					ApiURL:          sp.ApiURL,
+					FeedFetchType:   sp.FeedFetchType,
 					FeedSiteURL:     sp.FeedSiteURL,
 					IsTrending:      sp.IsTrending,
 					DeletedAt:       sp.DeletedAt,
-				})
+				}
+				if sp.TrendPlatformType != nil {
+					arg.TrendPlatformType = *sp.TrendPlatformType
+				}
+				err = createFeed(ctx, tx, arg)
 				if err != nil {
 					return err
 				}
@@ -146,29 +157,35 @@ func createPlatform(ctx context.Context, tx *sql.Tx, arg createPlatformArg) erro
 }
 
 type createFeedArg struct {
-	PlatformID      string
-	CategoryID      string
-	FeedName        string
-	FeedDescription string
-	FeedThumbnail   string
-	RssURL          string
-	FeedSiteURL     string
-	IsTrending      bool
-	DeletedAt       *time.Time
+	PlatformID        string
+	CategoryID        string
+	FeedName          string
+	FeedDescription   string
+	FeedThumbnail     string
+	RssURL            string
+	ApiURL            string
+	FeedFetchType     domain.FeedFetchType
+	TrendPlatformType domain.TrendPlatformType
+	FeedSiteURL       string
+	IsTrending        bool
+	DeletedAt         *time.Time
 }
 
 func createFeed(ctx context.Context, tx *sql.Tx, arg createFeedArg) error {
 	feedID, _ := uuid.NewUUID()
 	feed := entity.Feed{
-		ID:           feedID.String(),
-		Name:         arg.FeedName,
-		Description:  arg.FeedDescription,
-		ThumbnailURL: arg.FeedThumbnail,
-		RSSURL:       arg.RssURL,
-		SiteURL:      arg.FeedSiteURL,
-		IsTrending:   arg.IsTrending,
-		PlatformID:   arg.PlatformID,
-		CategoryID:   arg.CategoryID,
+		ID:                feedID.String(),
+		Name:              arg.FeedName,
+		Description:       arg.FeedDescription,
+		ThumbnailURL:      arg.FeedThumbnail,
+		RSSURL:            null.StringFrom(arg.RssURL),
+		APIURL:            null.StringFrom(arg.ApiURL),
+		FeedFetchType:     int(arg.FeedFetchType),
+		TrendPlatformType: int(arg.TrendPlatformType),
+		SiteURL:           arg.FeedSiteURL,
+		IsTrending:        arg.IsTrending,
+		PlatformID:        arg.PlatformID,
+		CategoryID:        arg.CategoryID,
 	}
 	if arg.DeletedAt != nil {
 		feed.DeletedAt = null.TimeFromPtr(arg.DeletedAt)
