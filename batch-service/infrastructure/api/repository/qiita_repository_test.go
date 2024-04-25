@@ -8,7 +8,7 @@ func TestQiitaRepository_GetQiitaArticles(t *testing.T) {
 		id string
 	}{
 		{
-			id: "901ee2837401750dfdad",
+			id: "2fcda5a350bd3655e676",
 		},
 	}
 
