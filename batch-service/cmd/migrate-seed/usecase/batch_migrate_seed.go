@@ -59,6 +59,7 @@ func (u *Usecase) BatchMigrateSeed(ctx context.Context) error {
 							FeedThumbnail:   sp.FeedThumbnail,
 							RssURL:          sp.RssURL,
 							FeedFetchType:   sp.FeedFetchType,
+							APIQueryParam:   sp.APIQueryParam,
 							FeedSiteURL:     sp.FeedSiteURL,
 							DeletedAt:       sp.DeletedAt,
 						}
@@ -96,6 +97,7 @@ func (u *Usecase) BatchMigrateSeed(ctx context.Context) error {
 					RssURL:          sp.RssURL,
 					FeedFetchType:   sp.FeedFetchType,
 					FeedSiteURL:     sp.FeedSiteURL,
+					APIQueryParam:   sp.APIQueryParam,
 					DeletedAt:       sp.DeletedAt,
 				}
 				if sp.TrendPlatformType != nil {
@@ -153,6 +155,7 @@ type createFeedArg struct {
 	RssURL            string
 	FeedFetchType     domain.FeedFetchType
 	TrendPlatformType domain.TrendPlatformType
+	APIQueryParam     *string
 	FeedSiteURL       string
 	DeletedAt         *time.Time
 }
@@ -170,6 +173,9 @@ func createFeed(ctx context.Context, tx *sql.Tx, arg createFeedArg) error {
 		SiteURL:           arg.FeedSiteURL,
 		PlatformID:        arg.PlatformID,
 		CategoryID:        arg.CategoryID,
+	}
+	if arg.APIQueryParam != nil {
+		feed.APIQueryParam = null.StringFromPtr(arg.APIQueryParam)
 	}
 	if arg.DeletedAt != nil {
 		feed.DeletedAt = null.TimeFromPtr(arg.DeletedAt)

@@ -14,6 +14,7 @@ import (
 	"time"
 
 	"github.com/friendsofgo/errors"
+	"github.com/volatiletech/null/v8"
 	"github.com/volatiletech/sqlboiler/v4/boil"
 	"github.com/volatiletech/sqlboiler/v4/queries"
 	"github.com/volatiletech/sqlboiler/v4/queries/qm"
@@ -23,16 +24,18 @@ import (
 
 // Article is an object representing the database table.
 type Article struct {
-	ID           string    `boil:"id" json:"id" toml:"id" yaml:"id"`
-	PlatformID   string    `boil:"platform_id" json:"platform_id" toml:"platform_id" yaml:"platform_id"`
-	Title        string    `boil:"title" json:"title" toml:"title" yaml:"title"`
-	Description  string    `boil:"description" json:"description" toml:"description" yaml:"description"`
-	ArticleURL   string    `boil:"article_url" json:"article_url" toml:"article_url" yaml:"article_url"`
-	PublishedAt  time.Time `boil:"published_at" json:"published_at" toml:"published_at" yaml:"published_at"`
-	ThumbnailURL string    `boil:"thumbnail_url" json:"thumbnail_url" toml:"thumbnail_url" yaml:"thumbnail_url"`
-	IsPrivate    bool      `boil:"is_private" json:"is_private" toml:"is_private" yaml:"is_private"`
-	CreatedAt    time.Time `boil:"created_at" json:"created_at" toml:"created_at" yaml:"created_at"`
-	UpdatedAt    time.Time `boil:"updated_at" json:"updated_at" toml:"updated_at" yaml:"updated_at"`
+	ID           string      `boil:"id" json:"id" toml:"id" yaml:"id"`
+	PlatformID   string      `boil:"platform_id" json:"platform_id" toml:"platform_id" yaml:"platform_id"`
+	Title        string      `boil:"title" json:"title" toml:"title" yaml:"title"`
+	Description  string      `boil:"description" json:"description" toml:"description" yaml:"description"`
+	ArticleURL   string      `boil:"article_url" json:"article_url" toml:"article_url" yaml:"article_url"`
+	PublishedAt  time.Time   `boil:"published_at" json:"published_at" toml:"published_at" yaml:"published_at"`
+	Authorname   null.String `boil:"authorname" json:"authorname,omitempty" toml:"authorname" yaml:"authorname,omitempty"`
+	Tags         null.String `boil:"tags" json:"tags,omitempty" toml:"tags" yaml:"tags,omitempty"`
+	ThumbnailURL string      `boil:"thumbnail_url" json:"thumbnail_url" toml:"thumbnail_url" yaml:"thumbnail_url"`
+	IsPrivate    bool        `boil:"is_private" json:"is_private" toml:"is_private" yaml:"is_private"`
+	CreatedAt    time.Time   `boil:"created_at" json:"created_at" toml:"created_at" yaml:"created_at"`
+	UpdatedAt    time.Time   `boil:"updated_at" json:"updated_at" toml:"updated_at" yaml:"updated_at"`
 
 	R *articleR `boil:"-" json:"-" toml:"-" yaml:"-"`
 	L articleL  `boil:"-" json:"-" toml:"-" yaml:"-"`
@@ -45,6 +48,8 @@ var ArticleColumns = struct {
 	Description  string
 	ArticleURL   string
 	PublishedAt  string
+	Authorname   string
+	Tags         string
 	ThumbnailURL string
 	IsPrivate    string
 	CreatedAt    string
@@ -56,6 +61,8 @@ var ArticleColumns = struct {
 	Description:  "description",
 	ArticleURL:   "article_url",
 	PublishedAt:  "published_at",
+	Authorname:   "authorname",
+	Tags:         "tags",
 	ThumbnailURL: "thumbnail_url",
 	IsPrivate:    "is_private",
 	CreatedAt:    "created_at",
@@ -69,6 +76,8 @@ var ArticleTableColumns = struct {
 	Description  string
 	ArticleURL   string
 	PublishedAt  string
+	Authorname   string
+	Tags         string
 	ThumbnailURL string
 	IsPrivate    string
 	CreatedAt    string
@@ -80,6 +89,8 @@ var ArticleTableColumns = struct {
 	Description:  "articles.description",
 	ArticleURL:   "articles.article_url",
 	PublishedAt:  "articles.published_at",
+	Authorname:   "articles.authorname",
+	Tags:         "articles.tags",
 	ThumbnailURL: "articles.thumbnail_url",
 	IsPrivate:    "articles.is_private",
 	CreatedAt:    "articles.created_at",
@@ -136,6 +147,56 @@ func (w whereHelpertime_Time) GTE(x time.Time) qm.QueryMod {
 	return qmhelper.Where(w.field, qmhelper.GTE, x)
 }
 
+type whereHelpernull_String struct{ field string }
+
+func (w whereHelpernull_String) EQ(x null.String) qm.QueryMod {
+	return qmhelper.WhereNullEQ(w.field, false, x)
+}
+func (w whereHelpernull_String) NEQ(x null.String) qm.QueryMod {
+	return qmhelper.WhereNullEQ(w.field, true, x)
+}
+func (w whereHelpernull_String) LT(x null.String) qm.QueryMod {
+	return qmhelper.Where(w.field, qmhelper.LT, x)
+}
+func (w whereHelpernull_String) LTE(x null.String) qm.QueryMod {
+	return qmhelper.Where(w.field, qmhelper.LTE, x)
+}
+func (w whereHelpernull_String) GT(x null.String) qm.QueryMod {
+	return qmhelper.Where(w.field, qmhelper.GT, x)
+}
+func (w whereHelpernull_String) GTE(x null.String) qm.QueryMod {
+	return qmhelper.Where(w.field, qmhelper.GTE, x)
+}
+func (w whereHelpernull_String) LIKE(x null.String) qm.QueryMod {
+	return qm.Where(w.field+" LIKE ?", x)
+}
+func (w whereHelpernull_String) NLIKE(x null.String) qm.QueryMod {
+	return qm.Where(w.field+" NOT LIKE ?", x)
+}
+func (w whereHelpernull_String) ILIKE(x null.String) qm.QueryMod {
+	return qm.Where(w.field+" ILIKE ?", x)
+}
+func (w whereHelpernull_String) NILIKE(x null.String) qm.QueryMod {
+	return qm.Where(w.field+" NOT ILIKE ?", x)
+}
+func (w whereHelpernull_String) IN(slice []string) qm.QueryMod {
+	values := make([]interface{}, 0, len(slice))
+	for _, value := range slice {
+		values = append(values, value)
+	}
+	return qm.WhereIn(fmt.Sprintf("%s IN ?", w.field), values...)
+}
+func (w whereHelpernull_String) NIN(slice []string) qm.QueryMod {
+	values := make([]interface{}, 0, len(slice))
+	for _, value := range slice {
+		values = append(values, value)
+	}
+	return qm.WhereNotIn(fmt.Sprintf("%s NOT IN ?", w.field), values...)
+}
+
+func (w whereHelpernull_String) IsNull() qm.QueryMod    { return qmhelper.WhereIsNull(w.field) }
+func (w whereHelpernull_String) IsNotNull() qm.QueryMod { return qmhelper.WhereIsNotNull(w.field) }
+
 type whereHelperbool struct{ field string }
 
 func (w whereHelperbool) EQ(x bool) qm.QueryMod  { return qmhelper.Where(w.field, qmhelper.EQ, x) }
@@ -152,6 +213,8 @@ var ArticleWhere = struct {
 	Description  whereHelperstring
 	ArticleURL   whereHelperstring
 	PublishedAt  whereHelpertime_Time
+	Authorname   whereHelpernull_String
+	Tags         whereHelpernull_String
 	ThumbnailURL whereHelperstring
 	IsPrivate    whereHelperbool
 	CreatedAt    whereHelpertime_Time
@@ -163,6 +226,8 @@ var ArticleWhere = struct {
 	Description:  whereHelperstring{field: "\"articles\".\"description\""},
 	ArticleURL:   whereHelperstring{field: "\"articles\".\"article_url\""},
 	PublishedAt:  whereHelpertime_Time{field: "\"articles\".\"published_at\""},
+	Authorname:   whereHelpernull_String{field: "\"articles\".\"authorname\""},
+	Tags:         whereHelpernull_String{field: "\"articles\".\"tags\""},
 	ThumbnailURL: whereHelperstring{field: "\"articles\".\"thumbnail_url\""},
 	IsPrivate:    whereHelperbool{field: "\"articles\".\"is_private\""},
 	CreatedAt:    whereHelpertime_Time{field: "\"articles\".\"created_at\""},
@@ -227,9 +292,9 @@ func (r *articleR) GetTrendArticles() TrendArticleSlice {
 type articleL struct{}
 
 var (
-	articleAllColumns            = []string{"id", "platform_id", "title", "description", "article_url", "published_at", "thumbnail_url", "is_private", "created_at", "updated_at"}
+	articleAllColumns            = []string{"id", "platform_id", "title", "description", "article_url", "published_at", "authorname", "tags", "thumbnail_url", "is_private", "created_at", "updated_at"}
 	articleColumnsWithoutDefault = []string{"platform_id", "title", "description", "article_url", "published_at", "thumbnail_url"}
-	articleColumnsWithDefault    = []string{"id", "is_private", "created_at", "updated_at"}
+	articleColumnsWithDefault    = []string{"id", "authorname", "tags", "is_private", "created_at", "updated_at"}
 	articlePrimaryKeyColumns     = []string{"id"}
 	articleGeneratedColumns      = []string{}
 )

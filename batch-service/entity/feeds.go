@@ -24,19 +24,20 @@ import (
 
 // Feed is an object representing the database table.
 type Feed struct {
-	ID                string    `boil:"id" json:"id" toml:"id" yaml:"id"`
-	Name              string    `boil:"name" json:"name" toml:"name" yaml:"name"`
-	Description       string    `boil:"description" json:"description" toml:"description" yaml:"description"`
-	ThumbnailURL      string    `boil:"thumbnail_url" json:"thumbnail_url" toml:"thumbnail_url" yaml:"thumbnail_url"`
-	PlatformID        string    `boil:"platform_id" json:"platform_id" toml:"platform_id" yaml:"platform_id"`
-	CategoryID        string    `boil:"category_id" json:"category_id" toml:"category_id" yaml:"category_id"`
-	SiteURL           string    `boil:"site_url" json:"site_url" toml:"site_url" yaml:"site_url"`
-	RSSURL            string    `boil:"rss_url" json:"rss_url" toml:"rss_url" yaml:"rss_url"`
-	FeedFetchType     int       `boil:"feed_fetch_type" json:"feed_fetch_type" toml:"feed_fetch_type" yaml:"feed_fetch_type"`
-	TrendPlatformType int       `boil:"trend_platform_type" json:"trend_platform_type" toml:"trend_platform_type" yaml:"trend_platform_type"`
-	CreatedAt         time.Time `boil:"created_at" json:"created_at" toml:"created_at" yaml:"created_at"`
-	UpdatedAt         time.Time `boil:"updated_at" json:"updated_at" toml:"updated_at" yaml:"updated_at"`
-	DeletedAt         null.Time `boil:"deleted_at" json:"deleted_at,omitempty" toml:"deleted_at" yaml:"deleted_at,omitempty"`
+	ID                string      `boil:"id" json:"id" toml:"id" yaml:"id"`
+	Name              string      `boil:"name" json:"name" toml:"name" yaml:"name"`
+	Description       string      `boil:"description" json:"description" toml:"description" yaml:"description"`
+	ThumbnailURL      string      `boil:"thumbnail_url" json:"thumbnail_url" toml:"thumbnail_url" yaml:"thumbnail_url"`
+	PlatformID        string      `boil:"platform_id" json:"platform_id" toml:"platform_id" yaml:"platform_id"`
+	CategoryID        string      `boil:"category_id" json:"category_id" toml:"category_id" yaml:"category_id"`
+	SiteURL           string      `boil:"site_url" json:"site_url" toml:"site_url" yaml:"site_url"`
+	RSSURL            string      `boil:"rss_url" json:"rss_url" toml:"rss_url" yaml:"rss_url"`
+	APIQueryParam     null.String `boil:"api_query_param" json:"api_query_param,omitempty" toml:"api_query_param" yaml:"api_query_param,omitempty"`
+	FeedFetchType     int         `boil:"feed_fetch_type" json:"feed_fetch_type" toml:"feed_fetch_type" yaml:"feed_fetch_type"`
+	TrendPlatformType int         `boil:"trend_platform_type" json:"trend_platform_type" toml:"trend_platform_type" yaml:"trend_platform_type"`
+	CreatedAt         time.Time   `boil:"created_at" json:"created_at" toml:"created_at" yaml:"created_at"`
+	UpdatedAt         time.Time   `boil:"updated_at" json:"updated_at" toml:"updated_at" yaml:"updated_at"`
+	DeletedAt         null.Time   `boil:"deleted_at" json:"deleted_at,omitempty" toml:"deleted_at" yaml:"deleted_at,omitempty"`
 
 	R *feedR `boil:"-" json:"-" toml:"-" yaml:"-"`
 	L feedL  `boil:"-" json:"-" toml:"-" yaml:"-"`
@@ -51,6 +52,7 @@ var FeedColumns = struct {
 	CategoryID        string
 	SiteURL           string
 	RSSURL            string
+	APIQueryParam     string
 	FeedFetchType     string
 	TrendPlatformType string
 	CreatedAt         string
@@ -65,6 +67,7 @@ var FeedColumns = struct {
 	CategoryID:        "category_id",
 	SiteURL:           "site_url",
 	RSSURL:            "rss_url",
+	APIQueryParam:     "api_query_param",
 	FeedFetchType:     "feed_fetch_type",
 	TrendPlatformType: "trend_platform_type",
 	CreatedAt:         "created_at",
@@ -81,6 +84,7 @@ var FeedTableColumns = struct {
 	CategoryID        string
 	SiteURL           string
 	RSSURL            string
+	APIQueryParam     string
 	FeedFetchType     string
 	TrendPlatformType string
 	CreatedAt         string
@@ -95,6 +99,7 @@ var FeedTableColumns = struct {
 	CategoryID:        "feeds.category_id",
 	SiteURL:           "feeds.site_url",
 	RSSURL:            "feeds.rss_url",
+	APIQueryParam:     "feeds.api_query_param",
 	FeedFetchType:     "feeds.feed_fetch_type",
 	TrendPlatformType: "feeds.trend_platform_type",
 	CreatedAt:         "feeds.created_at",
@@ -113,6 +118,7 @@ var FeedWhere = struct {
 	CategoryID        whereHelperstring
 	SiteURL           whereHelperstring
 	RSSURL            whereHelperstring
+	APIQueryParam     whereHelpernull_String
 	FeedFetchType     whereHelperint
 	TrendPlatformType whereHelperint
 	CreatedAt         whereHelpertime_Time
@@ -127,6 +133,7 @@ var FeedWhere = struct {
 	CategoryID:        whereHelperstring{field: "\"feeds\".\"category_id\""},
 	SiteURL:           whereHelperstring{field: "\"feeds\".\"site_url\""},
 	RSSURL:            whereHelperstring{field: "\"feeds\".\"rss_url\""},
+	APIQueryParam:     whereHelpernull_String{field: "\"feeds\".\"api_query_param\""},
 	FeedFetchType:     whereHelperint{field: "\"feeds\".\"feed_fetch_type\""},
 	TrendPlatformType: whereHelperint{field: "\"feeds\".\"trend_platform_type\""},
 	CreatedAt:         whereHelpertime_Time{field: "\"feeds\".\"created_at\""},
@@ -192,9 +199,9 @@ func (r *feedR) GetMyFeeds() MyFeedSlice {
 type feedL struct{}
 
 var (
-	feedAllColumns            = []string{"id", "name", "description", "thumbnail_url", "platform_id", "category_id", "site_url", "rss_url", "feed_fetch_type", "trend_platform_type", "created_at", "updated_at", "deleted_at"}
+	feedAllColumns            = []string{"id", "name", "description", "thumbnail_url", "platform_id", "category_id", "site_url", "rss_url", "api_query_param", "feed_fetch_type", "trend_platform_type", "created_at", "updated_at", "deleted_at"}
 	feedColumnsWithoutDefault = []string{"name", "description", "thumbnail_url", "platform_id", "category_id", "site_url", "rss_url", "feed_fetch_type"}
-	feedColumnsWithDefault    = []string{"id", "trend_platform_type", "created_at", "updated_at", "deleted_at"}
+	feedColumnsWithDefault    = []string{"id", "api_query_param", "trend_platform_type", "created_at", "updated_at", "deleted_at"}
 	feedPrimaryKeyColumns     = []string{"id"}
 	feedGeneratedColumns      = []string{}
 )

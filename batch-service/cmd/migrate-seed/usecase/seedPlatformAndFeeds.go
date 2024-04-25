@@ -18,6 +18,7 @@ type seedPlatformFeed struct {
 	FaviconURL        string
 	IsEng             bool
 	RssURL            string
+	APIQueryParam     *string
 	FeedFetchType     domain.FeedFetchType
 	TrendPlatformType *domain.TrendPlatformType
 	DeletedAt         *time.Time

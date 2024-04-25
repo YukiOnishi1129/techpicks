@@ -9,6 +9,8 @@ CREATE TABLE articles
     description TEXT NOT NULL,
     article_url TEXT NOT NULL,
     published_at TIMESTAMPTZ NOT NULL,
+    authorName VARCHAR(255),
+    tags TEXT,
     thumbnail_url TEXT NOT NULL,
     is_private BOOLEAN NOT NULL DEFAULT FALSE,
     created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,

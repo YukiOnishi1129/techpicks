@@ -14,6 +14,8 @@ type RSS struct {
 	Description string
 	PublishedAt int
 	ImageURL    string
+	Tags        string
+	AuthorName  string
 }
 
 func (r *Repository) GetRSS(rssURL string) ([]RSS, error) {
@@ -49,6 +51,21 @@ func (r *Repository) GetRSS(rssURL string) ([]RSS, error) {
 			Description: item.Description,
 			PublishedAt: int(t.Unix()),
 			ImageURL:    ogpImageURL,
+		}
+
+		if len(item.Authors) != 0 {
+			rss[i].AuthorName = item.Authors[0].Name
+		}
+		if len(item.Categories) != 0 {
+			tags := ""
+			for i, tag := range item.Categories {
+				if i != 0 {
+					tags = fmt.Sprintf("%s,%s", tags, tag)
+					continue
+				}
+				tags = tag
+			}
+			rss[i].Tags = tags
 		}
 	}
 	return rss, nil
