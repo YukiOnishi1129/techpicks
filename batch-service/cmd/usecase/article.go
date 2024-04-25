@@ -30,7 +30,7 @@ func NewArticleUsecase(db *sql.DB) *ArticleUsecase {
 func (au *ArticleUsecase) BatchCreateArticles(ctx context.Context) error {
 	now := time.Now()
 	log.Printf("【start BatchCreateArticles】")
-	feeds, err := entity.Feeds(qm.Where("deleted_at IS NULL"), qm.OrderBy("created_at")).All(ctx, au.db)
+	feeds, err := entity.Feeds(qm.Where("deleted_at IS NULL"), qm.And("trend_platform_type = ?", 0), qm.OrderBy("created_at")).All(ctx, au.db)
 	if err != nil {
 		log.Printf("【error get feeds】: %s", err)
 		return err
