@@ -16,3 +16,6 @@ seed:
 
 create-article-site-and-summary-crawler:
 	go run ./cmd/article-site-and-summary-crawler/main.go
+
+create-article-company-crawler:
+	go run ./cmd/article-company-crawler/main.go

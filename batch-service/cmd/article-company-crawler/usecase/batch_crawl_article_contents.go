@@ -22,11 +22,14 @@ type BatchCrawlArticleContentsInterface interface {
 
 func (u *Usecase) BatchCrawlArticleContents(ctx context.Context) error {
 	now := time.Now()
-	platformTypes := make([]interface{}, 2)
-	platformTypes[0] = strconv.Itoa(int(domain.PlatformTypeSite))
-	platformTypes[1] = strconv.Itoa(int(domain.PlatformTypeSummary))
 	log.Printf("【start BatchCreateArticles】")
-	feeds, err := entity.Feeds(qm.Where("feeds.deleted_at IS NULL"), qm.And("feeds.trend_platform_type = ?", 0), qm.InnerJoin("platforms on feeds.platform_id = platforms.id"), qm.WhereIn("platforms.platform_type IN ?", platformTypes...), qm.OrderBy("feeds.created_at asc")).All(ctx, u.db)
+	feeds, err := entity.Feeds(
+		qm.Where("feeds.deleted_at IS NULL"),
+		qm.And("feeds.trend_platform_type = ?", 0),
+		qm.InnerJoin("platforms on feeds.platform_id = platforms.id"),
+		qm.Where("platforms.platform_type = ?", strconv.Itoa(int(domain.PlatformTypeCompany))),
+		qm.OrderBy("feeds.created_at asc"),
+	).All(ctx, u.db)
 	if err != nil {
 		log.Printf("【error get feeds】: %s", err)
 		return err
