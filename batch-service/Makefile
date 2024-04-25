@@ -7,6 +7,10 @@ lint:
 test:
 	go test -v ./...
 
+## make test-single name="TestFunctionName"
+test-single:
+	go test -v -run ${name} ./...
+
 seed:
 	go run ./database/seed/main.go
 

@@ -3,6 +3,7 @@ package repository
 import (
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 )
 
@@ -22,7 +23,12 @@ func (hr *HatenaRepository) GetHatenaArticles(targetURL string) (int, error) {
 	if err != nil {
 		return 0, err
 	}
-	defer resp.Body.Close()
+	defer func(Body io.ReadCloser) {
+		err := Body.Close()
+		if err != nil {
+			log.Fatalf("failed to close body: %v", err)
+		}
+	}(resp.Body)
 
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
