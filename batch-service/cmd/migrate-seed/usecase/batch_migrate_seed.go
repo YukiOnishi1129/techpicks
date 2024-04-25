@@ -1,4 +1,4 @@
-package seeders
+package usecase
 
 import (
 	"context"
@@ -14,20 +14,12 @@ import (
 	"github.com/YukiOnishi1129/techpicks/batch-service/domain"
 )
 
-type InitSeedInterface interface {
-	InitSeed(ctx context.Context) error
+type BatchMigrateSeedInterface interface {
+	BatchMigrateSeed(ctx context.Context) error
 }
 
-type InitSeed struct {
-	db *sql.DB
-}
-
-func NewInitSeed(db *sql.DB) *InitSeed {
-	return &InitSeed{db: db}
-}
-
-func (is *InitSeed) SeedInitData(ctx context.Context) error {
-	tx, err := is.db.BeginTx(ctx, nil)
+func (u *Usecase) BatchMigrateSeed(ctx context.Context) error {
+	tx, err := u.db.BeginTx(ctx, nil)
 	if err != nil {
 		return err
 	}

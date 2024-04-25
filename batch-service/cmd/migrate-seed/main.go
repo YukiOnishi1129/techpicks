@@ -2,8 +2,8 @@ package main
 
 import (
 	"context"
+	"github.com/YukiOnishi1129/techpicks/batch-service/cmd/migrate-seed/usecase"
 	"github.com/YukiOnishi1129/techpicks/batch-service/database"
-	"github.com/YukiOnishi1129/techpicks/batch-service/database/seed/seeders"
 	"github.com/joho/godotenv"
 	"log"
 )
@@ -27,11 +27,11 @@ func main() {
 	}
 
 	// do seeder
-	is := seeders.NewInitSeed(db)
+	u := usecase.NewUsecase(db)
 
-	err = is.SeedInitData(ctx)
+	err = u.BatchMigrateSeed(ctx)
 	if err != nil {
-		log.Fatalf("Failed to insert: %v", err)
+		log.Fatalf("Failed to migrate seed: %v", err)
 		return
 	}
 }

@@ -12,7 +12,7 @@ test-single:
 	go test -v -run ${name} ./...
 
 seed:
-	go run ./database/seed/main.go
+	go run ./cmd/migrate-seed/main.go
 
 create-article-site-and-summary-crawler:
 	go run ./cmd/article-site-and-summary-crawler/main.go
