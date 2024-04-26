@@ -7,7 +7,6 @@ import (
 	"github.com/YukiOnishi1129/techpicks/batch-service/internal/crawler"
 	"log"
 	"strconv"
-	"sync"
 	"time"
 
 	"github.com/YukiOnishi1129/techpicks/batch-service/entity"
@@ -46,47 +45,41 @@ func (u *Usecase) BatchCrawlSiteAndSummaryArticleContents(ctx context.Context) e
 			log.Printf("【error get rss】: %s, %v", f.Name, err)
 			continue
 		}
-		wg := new(sync.WaitGroup)
 		for _, r := range rss {
-			wg.Add(1)
-			go func() {
-				defer wg.Done()
-				// transaction
-				tx, err := u.db.BeginTx(ctx, nil)
+			// transaction
+			tx, err := u.db.BeginTx(ctx, nil)
+			if err != nil {
+				log.Printf("【error begin transaction】: %s", err)
+				continue
+			}
+			res, err := crawler.ArticleContentsCrawler(ctx, tx, f, r)
+			if err != nil && res.IsRollback {
+				log.Printf("【error rollback transaction】: %s", err)
+				err = tx.Rollback()
 				if err != nil {
-					log.Printf("【error begin transaction】: %s", err)
-					return
-				}
-				res, err := crawler.ArticleContentsCrawler(ctx, tx, f, r)
-				if err != nil && res.IsRollback {
 					log.Printf("【error rollback transaction】: %s", err)
-					err = tx.Rollback()
-					if err != nil {
-						log.Printf("【error rollback transaction】: %s", err)
-						return
-					}
+					continue
 				}
+			}
+			if err != nil {
+				log.Printf("【error create article】:feed: %s,  article: %s", f.Name, r.Title)
+				continue
+			}
+			if res.IsCommit {
+				if res.IsCreatedArticle {
+					aCount++
+				}
+				if res.IsCreatedFeedArticleRelation {
+					farCount++
+				}
+				//commit
+				err := tx.Commit()
 				if err != nil {
-					log.Printf("【error create article】:feed: %s,  article: %s", f.Name, r.Title)
-					return
+					log.Printf("【error commit transaction】: %s", err)
+					continue
 				}
-				if res.IsCommit {
-					if res.IsCreatedArticle {
-						aCount++
-					}
-					if res.IsCreatedFeedArticleRelation {
-						farCount++
-					}
-					//commit
-					err := tx.Commit()
-					if err != nil {
-						log.Printf("【error commit transaction】: %s", err)
-						return
-					}
-				}
-			}()
+			}
 		}
-		wg.Wait()
 		log.Printf("【end create article】: %s", f.Name)
 		log.Printf("【add article count】: %d", aCount)
 		log.Printf("【add feed_article_relationcount】: %d", farCount)

@@ -24,27 +24,24 @@ func ArticleContentsCrawler(ctx context.Context, tx *sql.Tx, f *entity.Feed, r r
 	isSkip := false
 	isCreatedFeedArticleRelation := false
 	// 1. check article table at article_url
-	articles, _ := entity.Articles(qm.Where("article_url = ?", r.Link), qm.Where("platform_id = ?", f.PlatformID)).All(ctx, tx)
-	if articles != nil {
-		for _, a := range articles {
-			feedArticleRelation, _ := entity.FeedArticleRelations(qm.Where("feed_id = ?", f.ID), qm.Where("article_id = ?", a.ID)).One(ctx, tx)
-			if feedArticleRelation == nil {
-				err := CreateFeedArticleRelation(ctx, tx, CreateFeedArticleRelationArg{
-					FeedID:    f.ID,
-					ArticleID: a.ID,
-				})
-				if err != nil {
-					log.Printf("【error insert feed article relation】: %s", r.Title)
-					return ArticleContentsCrawlerResponse{
-						IsCreatedArticle:             false,
-						IsCreatedFeedArticleRelation: false,
-						IsRollback:                   true,
-						IsCommit:                     false,
-					}, err
-				}
-				isCreatedFeedArticleRelation = true
-				break
+	article, _ := entity.Articles(qm.Where("article_url = ?", r.Link), qm.Where("platform_id = ?", f.PlatformID)).One(ctx, tx)
+	if article != nil {
+		feedArticleRelation, _ := entity.FeedArticleRelations(qm.Where("feed_id = ?", f.ID), qm.Where("article_id = ?", article.ID)).One(ctx, tx)
+		if feedArticleRelation == nil {
+			err := CreateFeedArticleRelation(ctx, tx, CreateFeedArticleRelationArg{
+				FeedID:    f.ID,
+				ArticleID: article.ID,
+			})
+			if err != nil {
+				log.Printf("【error insert feed article relation】: %s", r.Title)
+				return ArticleContentsCrawlerResponse{
+					IsCreatedArticle:             false,
+					IsCreatedFeedArticleRelation: false,
+					IsRollback:                   true,
+					IsCommit:                     false,
+				}, err
 			}
+			isCreatedFeedArticleRelation = true
 		}
 		isSkip = true
 	}

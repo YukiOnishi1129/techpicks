@@ -8,7 +8,6 @@ import (
 	"github.com/volatiletech/sqlboiler/v4/queries/qm"
 	"log"
 	"strings"
-	"sync"
 	"time"
 )
 
@@ -16,7 +15,6 @@ const removePath = "/items/"
 
 func (u *Usecase) qiitaArticleCrawler(ctx context.Context, feed *entity.Feed) error {
 	log.Printf("【start qiita article crawler】: %s", feed.Name)
-
 	fiveHoursAgo := time.Now().Add(-5 * time.Hour).Format("2006-01-02 15:04:05")
 	// idempotency check
 	trendCount, err := entity.TrendArticles(
@@ -42,77 +40,70 @@ func (u *Usecase) qiitaArticleCrawler(ctx context.Context, feed *entity.Feed) er
 		return err
 	}
 
-	wg := new(sync.WaitGroup)
-
 	for _, r := range rss {
-		wg.Add(1)
-		go func() {
-			defer wg.Done()
-			// transaction
-			tx, err := u.db.BeginTx(ctx, nil)
-			if err != nil {
-				log.Printf("【error begin transaction】: %s", err)
-				return
-			}
-			path, err := internal.GetURLPath(r.Link)
-			if err != nil {
-				log.Printf("【error get url path】: %s", err)
-				return
-			}
-			_, qiitaArticleID, ok := strings.Cut(path, removePath)
-			if !ok {
-				log.Printf("【error cut url path】: %s, %s", err, qiitaArticleID)
-				return
-			}
+		// transaction
+		tx, err := u.db.BeginTx(ctx, nil)
+		if err != nil {
+			log.Printf("【error begin transaction】: %s", err)
+			continue
+		}
+		path, err := internal.GetURLPath(r.Link)
+		if err != nil {
+			log.Printf("【error get url path】: %s", err)
+			continue
+		}
+		_, qiitaArticleID, ok := strings.Cut(path, removePath)
+		if !ok {
+			log.Printf("【error cut url path】: %s, %s", err, qiitaArticleID)
+			continue
+		}
 
-			q, err := u.air.GetQiitaArticles(qiitaArticleID)
+		q, err := u.air.GetQiitaArticles(qiitaArticleID)
+		if err != nil {
+			log.Printf("【error get qiita articles api】: %s, %v", feed.Name, err)
+			continue
+		}
+		res, err := crawler.TrendArticleContentsCrawler(ctx, tx, crawler.TrendArticleContentsCrawlerArg{
+			Feed:               feed,
+			ArticleTitle:       r.Title,
+			ArticleURL:         r.Link,
+			ArticleLikeCount:   q.LikesCount,
+			ArticlePublishedAt: r.PublishedAt,
+			ArticleAuthorName:  &r.AuthorName,
+			ArticleTags:        &r.Tags,
+			ArticleOGPImageURL: r.ImageURL,
+		})
+		if err != nil && res.IsRollback {
+			log.Printf("【error rollback transaction】: %s", err)
+			err = tx.Rollback()
 			if err != nil {
-				log.Printf("【error get qiita articles api】: %s, %v", feed.Name, err)
-				return
-			}
-			res, err := crawler.TrendArticleContentsCrawler(ctx, tx, crawler.TrendArticleContentsCrawlerArg{
-				Feed:               feed,
-				ArticleTitle:       r.Title,
-				ArticleURL:         r.Link,
-				ArticleLikeCount:   q.LikesCount,
-				ArticlePublishedAt: r.PublishedAt,
-				ArticleAuthorName:  &r.AuthorName,
-				ArticleTags:        &r.Tags,
-				ArticleOGPImageURL: r.ImageURL,
-			})
-			if err != nil && res.IsRollback {
 				log.Printf("【error rollback transaction】: %s", err)
-				err = tx.Rollback()
-				if err != nil {
-					log.Printf("【error rollback transaction】: %s", err)
-					return
-				}
+				continue
 			}
+		}
 
+		if err != nil {
+			log.Printf("【error create article】:feed: %s,  article: %s", feed.Name, r.Title)
+			continue
+		}
+		if res.IsCommit {
+			if res.IsCreatedArticle {
+				aCount++
+			}
+			if res.IsCreatedFeedArticleRelation {
+				farCount++
+			}
+			if res.IsTrendArticle {
+				taCount++
+			}
+			//commit
+			err := tx.Commit()
 			if err != nil {
-				log.Printf("【error create article】:feed: %s,  article: %s", feed.Name, r.Title)
-				return
+				log.Printf("【error commit transaction】: %s", err)
+				continue
 			}
-			if res.IsCommit {
-				if res.IsCreatedArticle {
-					aCount++
-				}
-				if res.IsCreatedFeedArticleRelation {
-					farCount++
-				}
-				if res.IsTrendArticle {
-					taCount++
-				}
-				//commit
-				err := tx.Commit()
-				if err != nil {
-					log.Printf("【error commit transaction】: %s", err)
-					return
-				}
-			}
-		}()
+		}
 	}
-	wg.Wait()
 	log.Printf("【end qiita article crawler】: %s", feed.Name)
 	log.Printf("【add article count】: %d", aCount)
 	log.Printf("【add feed_article_relationcount】: %d", farCount)
