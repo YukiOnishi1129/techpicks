@@ -19,3 +19,6 @@ create-article-site-and-summary-crawler:
 
 create-article-company-crawler:
 	go run ./cmd/article-company-crawler/main.go
+
+create-trend-article-crawler:
+	go run ./cmd/trend-article-crawler/main.go

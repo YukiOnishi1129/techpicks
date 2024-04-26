@@ -91,7 +91,6 @@ func (u *Usecase) BatchCrawlSiteAndSummaryArticleContents(ctx context.Context) e
 		log.Printf("【end create article】: %s", f.Name)
 		log.Printf("【add article count】: %d", aCount)
 		log.Printf("【add feed_article_relationcount】: %d", farCount)
-
 	}
 	log.Printf("【end BatchCreateArticles】")
 	end := time.Now()

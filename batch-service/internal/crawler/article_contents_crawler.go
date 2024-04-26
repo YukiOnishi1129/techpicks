@@ -29,7 +29,10 @@ func ArticleContentsCrawler(ctx context.Context, tx *sql.Tx, f *entity.Feed, r r
 		for _, a := range articles {
 			feedArticleRelation, _ := entity.FeedArticleRelations(qm.Where("feed_id = ?", f.ID), qm.Where("article_id = ?", a.ID)).One(ctx, tx)
 			if feedArticleRelation == nil {
-				err := createFeedArticleRelation(ctx, tx, f.ID, a.ID)
+				err := CreateFeedArticleRelation(ctx, tx, CreateFeedArticleRelationArg{
+					FeedID:    f.ID,
+					ArticleID: a.ID,
+				})
 				if err != nil {
 					log.Printf("【error insert feed article relation】: %s", r.Title)
 					return ArticleContentsCrawlerResponse{
@@ -56,10 +59,17 @@ func ArticleContentsCrawler(ctx context.Context, tx *sql.Tx, f *entity.Feed, r r
 	// create article and feed_article_relation data
 	// insert article
 	articleID, _ := uuid.NewUUID()
-	err := createArticle(ctx, tx, createArticleArg{
-		ID: articleID.String(),
-		f:  f,
-		r:  r,
+
+	err := CreateArticle(ctx, tx, CreateArticleArg{
+		ID:           articleID.String(),
+		PlatformID:   f.PlatformID,
+		Title:        r.Title,
+		Description:  r.Description,
+		ThumbnailURL: r.ImageURL,
+		ArticleURL:   r.Link,
+		PublishedAt:  r.PublishedAt,
+		AuthorName:   &r.AuthorName,
+		Tags:         &r.Tags,
 	})
 	if err != nil {
 		log.Printf("【error insert article】: %s, err: %v", r.Title, err)
@@ -72,7 +82,10 @@ func ArticleContentsCrawler(ctx context.Context, tx *sql.Tx, f *entity.Feed, r r
 	}
 
 	// insert feed article relation
-	err = createFeedArticleRelation(ctx, tx, f.ID, articleID.String())
+	err = CreateFeedArticleRelation(ctx, tx, CreateFeedArticleRelationArg{
+		FeedID:    f.ID,
+		ArticleID: articleID.String(),
+	})
 	if err != nil {
 		log.Printf("【error insert feed article relation】: %s", r.Title)
 		return ArticleContentsCrawlerResponse{
@@ -92,33 +105,39 @@ func ArticleContentsCrawler(ctx context.Context, tx *sql.Tx, f *entity.Feed, r r
 	}, nil
 }
 
-type createArticleArg struct {
-	ID string
-	f  *entity.Feed
-	r  repository.RSS
+type CreateArticleArg struct {
+	ID           string
+	PlatformID   string
+	Title        string
+	Description  string
+	ThumbnailURL string
+	ArticleURL   string
+	PublishedAt  int
+	AuthorName   *string
+	Tags         *string
 }
 
-func createArticle(ctx context.Context, tx *sql.Tx, arg createArticleArg) error {
-	publishedAt := time.Unix(int64(arg.r.PublishedAt), 0)
-	articleTitle := arg.r.Title
+func CreateArticle(ctx context.Context, tx *sql.Tx, arg CreateArticleArg) error {
+	publishedAt := time.Unix(int64(arg.PublishedAt), 0)
+	articleTitle := arg.Title
 	if len(articleTitle) > 255 {
 		articleTitle = articleTitle[:255]
 	}
 	article := entity.Article{
 		ID:           arg.ID,
-		PlatformID:   arg.f.PlatformID,
+		PlatformID:   arg.PlatformID,
 		Title:        articleTitle,
-		Description:  arg.r.Description,
-		ThumbnailURL: arg.r.ImageURL,
-		ArticleURL:   arg.r.Link,
+		Description:  arg.Description,
+		ThumbnailURL: arg.ThumbnailURL,
+		ArticleURL:   arg.ArticleURL,
 		PublishedAt:  publishedAt,
 		IsPrivate:    false,
 	}
-	if arg.r.AuthorName != "" {
-		article.AuthorName = null.StringFrom(arg.r.AuthorName)
+	if arg.AuthorName != nil {
+		article.AuthorName = null.StringFromPtr(arg.AuthorName)
 	}
-	if arg.r.Tags != "" {
-		article.Tags = null.StringFrom(arg.r.Tags)
+	if arg.Tags != nil {
+		article.Tags = null.StringFromPtr(arg.Tags)
 	}
 	err := article.Insert(ctx, tx, boil.Infer())
 	if err != nil {
@@ -127,12 +146,17 @@ func createArticle(ctx context.Context, tx *sql.Tx, arg createArticleArg) error 
 	return nil
 }
 
-func createFeedArticleRelation(ctx context.Context, tx *sql.Tx, feedID, articleID string) error {
+type CreateFeedArticleRelationArg struct {
+	FeedID    string
+	ArticleID string
+}
+
+func CreateFeedArticleRelation(ctx context.Context, tx *sql.Tx, arg CreateFeedArticleRelationArg) error {
 	feedArticleRelationID, _ := uuid.NewUUID()
 	feedArticleRelation := entity.FeedArticleRelation{
 		ID:        feedArticleRelationID.String(),
-		FeedID:    feedID,
-		ArticleID: articleID,
+		FeedID:    arg.FeedID,
+		ArticleID: arg.ArticleID,
 	}
 	err := feedArticleRelation.Insert(ctx, tx, boil.Infer())
 	if err != nil {
