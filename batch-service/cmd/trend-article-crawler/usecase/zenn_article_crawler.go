@@ -2,7 +2,6 @@ package usecase
 
 import (
 	"context"
-	"database/sql"
 	"fmt"
 	"github.com/YukiOnishi1129/techpicks/batch-service/entity"
 	"github.com/YukiOnishi1129/techpicks/batch-service/internal"
@@ -14,7 +13,7 @@ import (
 	"time"
 )
 
-func (u *Usecase) zennArticleCrawler(ctx context.Context, db *sql.DB, feed *entity.Feed) error {
+func (u *Usecase) zennArticleCrawler(ctx context.Context, feed *entity.Feed) error {
 	log.Printf("【start zenn article crawler】: %s", feed.Name)
 
 	fiveHoursAgo := time.Now().Add(-5 * time.Hour).Format("2006-01-02 15:04:05")
@@ -23,6 +22,10 @@ func (u *Usecase) zennArticleCrawler(ctx context.Context, db *sql.DB, feed *enti
 		qm.Where("platform_id = ?", feed.PlatformID),
 		qm.And("created_at >= ?", fiveHoursAgo),
 	).Count(ctx, u.db)
+	if err != nil {
+		log.Printf("【error get trend article count】: %s", err)
+		return err
+	}
 	if trendCount != 0 {
 		log.Printf("【skip zenn article crawler, because there was data 5 hours ago】")
 		log.Printf("【end zenn article crawler】: %s", feed.Name)
@@ -43,7 +46,7 @@ func (u *Usecase) zennArticleCrawler(ctx context.Context, db *sql.DB, feed *enti
 	for _, z := range res.Articles {
 		wg.Add(1)
 		// transaction
-		tx, err := db.Begin()
+		tx, err := u.db.Begin()
 		if err != nil {
 			log.Printf("【error begin transaction】: %s", err)
 			return err

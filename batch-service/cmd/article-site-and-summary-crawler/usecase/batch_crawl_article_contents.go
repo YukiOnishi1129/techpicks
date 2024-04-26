@@ -49,7 +49,6 @@ func (u *Usecase) BatchCrawlSiteAndSummaryArticleContents(ctx context.Context) e
 		wg := new(sync.WaitGroup)
 		for _, r := range rss {
 			wg.Add(1)
-			r := r
 			go func() {
 				defer wg.Done()
 				// transaction
