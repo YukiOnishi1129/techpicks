@@ -8,6 +8,7 @@ import (
 	"github.com/volatiletech/sqlboiler/v4/boil"
 	"github.com/volatiletech/sqlboiler/v4/queries/qm"
 	"log"
+	"time"
 )
 
 type TrendArticleContentsCrawlerArg struct {
@@ -31,28 +32,40 @@ type TrendArticleContentsCrawlerResponse struct {
 
 func TrendArticleContentsCrawler(ctx context.Context, tx *sql.Tx, arg TrendArticleContentsCrawlerArg) (TrendArticleContentsCrawlerResponse, error) {
 	isCreatedFeedArticleRelation := false
+	IsTrendArticle := false
+	oneHoursAgo := time.Now().Add(-1 * time.Hour).Format("2006-01-02 15:04:05")
 	// 1. check article table at article_url
 	article, _ := entity.Articles(
 		qm.Where("article_url = ?", arg.ArticleURL),
 		qm.Where("platform_id = ?", arg.Feed.PlatformID),
 	).One(ctx, tx)
 	if article != nil {
-		// insert trend_article
-		err := CreateTrendArticle(ctx, tx, CreateTrendArticleArg{
-			ArticleID:  article.ID,
-			PlatformID: arg.Feed.PlatformID,
-			LikeCount:  arg.ArticleLikeCount,
-		})
-		if err != nil {
-			log.Printf("【error insert trend article】: %s", arg.ArticleTitle)
-			return TrendArticleContentsCrawlerResponse{
-				IsTrendArticle:               false,
-				IsCreatedArticle:             false,
-				IsCreatedFeedArticleRelation: false,
-				IsRollback:                   true,
-				IsCommit:                     false,
-			}, err
+		// 2. check trend_article table at article_id
+		count, _ := entity.TrendArticles(
+			qm.Where("article_id = ?", article.ID),
+			qm.Where("platform_id = ?", arg.Feed.PlatformID),
+			qm.And("created_at >= ?", oneHoursAgo),
+		).Count(ctx, tx)
+		if count == 0 {
+			// insert trend_article
+			err := CreateTrendArticle(ctx, tx, CreateTrendArticleArg{
+				ArticleID:  article.ID,
+				PlatformID: arg.Feed.PlatformID,
+				LikeCount:  arg.ArticleLikeCount,
+			})
+			if err != nil {
+				log.Printf("【error insert trend article】: %s", arg.ArticleTitle)
+				return TrendArticleContentsCrawlerResponse{
+					IsTrendArticle:               false,
+					IsCreatedArticle:             false,
+					IsCreatedFeedArticleRelation: false,
+					IsRollback:                   true,
+					IsCommit:                     false,
+				}, err
+			}
+			IsTrendArticle = true
 		}
+
 		// check feed_article_relation table at article_url
 		feedArticleRelation, _ := entity.FeedArticleRelations(
 			qm.Where("feed_id = ?", arg.Feed.ID),
@@ -76,7 +89,7 @@ func TrendArticleContentsCrawler(ctx context.Context, tx *sql.Tx, arg TrendArtic
 			isCreatedFeedArticleRelation = true
 		}
 		return TrendArticleContentsCrawlerResponse{
-			IsTrendArticle:               true,
+			IsTrendArticle:               IsTrendArticle,
 			IsCreatedArticle:             false,
 			IsCreatedFeedArticleRelation: isCreatedFeedArticleRelation,
 			IsRollback:                   false,
