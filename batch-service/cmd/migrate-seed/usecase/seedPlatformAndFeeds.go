@@ -19,7 +19,6 @@ type seedPlatformFeed struct {
 	IsEng             bool
 	RssURL            string
 	APIQueryParam     *string
-	FeedFetchType     domain.FeedFetchType
 	TrendPlatformType *domain.TrendPlatformType
 	DeletedAt         *time.Time
 }
@@ -42,7 +41,6 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:       "https://qiita.com/trend",
 			PlatformType:      domain.PlatformTypeSite,
 			FaviconURL:        "https://cdn.qiita.com/assets/favicons/public/apple-touch-icon-ec5ba42a24ae923f16825592efdc356f.png",
-			FeedFetchType:     domain.FeedFetchTypeRSSAndAPI,
 			IsEng:             false,
 			TrendPlatformType: &qiitaTrendType,
 		},
@@ -57,7 +55,6 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:       "https://zenn.dev/",
 			PlatformType:      domain.PlatformTypeSite,
 			FaviconURL:        "https://static.zenn.studio/images/logo-transparent.png",
-			FeedFetchType:     domain.FeedFetchTypeRSSAndAPI,
 			IsEng:             false,
 			TrendPlatformType: &zennTrendType,
 		},
@@ -72,7 +69,6 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:       "https://b.hatena.ne.jp/hotentry/it",
 			PlatformType:      domain.PlatformTypeSummary,
 			FaviconURL:        "https://b.st-hatena.com/9912ec0e0fc8f818cf97c46ebfa93196dc945692/images/v4/public/gh-logo@2x.png",
-			FeedFetchType:     domain.FeedFetchTypeRSSAndAPI,
 			IsEng:             false,
 			TrendPlatformType: &hatenaTrendType,
 		},
@@ -87,7 +83,6 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:       "https://dev.to/",
 			PlatformType:      domain.PlatformTypeSite,
 			FaviconURL:        "https://dev-to.s3.us-east-2.amazonaws.com/favicon.ico",
-			FeedFetchType:     domain.FeedFetchTypeAPI,
 			IsEng:             true,
 			TrendPlatformType: &devCommunityTrendType,
 		},
@@ -102,9 +97,9 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://alistapart.com/",
 			PlatformType:    domain.PlatformTypeSite,
 			FaviconURL:      "https://i0.wp.com/alistapart.com/wp-content/uploads/2019/03/cropped-icon_navigation-laurel-512.jpg?fit=32%2C32&ssl=1",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           true,
-			DeletedAt:       &deletedAt,
+
+			IsEng:     true,
+			DeletedAt: &deletedAt,
 		},
 		{
 			PlatformName:    "David Walsh Blog",
@@ -117,8 +112,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://davidwalsh.name/",
 			PlatformType:    domain.PlatformTypeSite,
 			FaviconURL:      "https://davidwalsh.name/wp-content/themes/punky/images/logo.png",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           true,
+
+			IsEng: true,
 		},
 		{
 			PlatformName:    "Jack Franklin",
@@ -131,8 +126,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://www.jackfranklin.co.uk/blog/",
 			PlatformType:    domain.PlatformTypeSite,
 			FaviconURL:      "https://www.jackfranklin.co.uk/images/favicon/apple-touch-icon.png",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           true,
+
+			IsEng: true,
 		},
 		{
 			PlatformName:    "Stack Overflow",
@@ -146,8 +141,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			PlatformType:    domain.PlatformTypeSite,
 			FaviconURL:      "https://cdn.sstatic.net/Sites/stackoverflow/Img/favicon.ico?v=ec617d715196",
 			IsEng:           true,
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			DeletedAt:       &deletedAt,
+
+			DeletedAt: &deletedAt,
 		},
 		{
 			PlatformName:    "free code camp",
@@ -160,8 +155,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://www.freecodecamp.org/news/",
 			PlatformType:    domain.PlatformTypeSite,
 			FaviconURL:      "https://cdn.freecodecamp.org/universal/favicons/favicon.ico",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           true,
+
+			IsEng: true,
 		},
 		{
 			PlatformName:    "Developer.io",
@@ -174,8 +169,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://dev.classmethod.jp/",
 			PlatformType:    domain.PlatformTypeSite,
 			FaviconURL:      "https://dev.classmethod.jp/favicon.ico",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           false,
+
+			IsEng: false,
 		},
 		{
 			PlatformName:    "google japan",
@@ -188,8 +183,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://developers-jp.googleblog.com/",
 			PlatformType:    domain.PlatformTypeCompany,
 			FaviconURL:      "https://developers-jp.googleblog.com/favicon.ico",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           false,
+
+			IsEng: false,
 		},
 		{
 			PlatformName:    "楽天　ラクマ事業部",
@@ -202,8 +197,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://www.wantedly.com/stories/s/rakuma",
 			PlatformType:    domain.PlatformTypeCompany,
 			FaviconURL:      "https://www.wantedly.com//favicon.ico",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           false,
+
+			IsEng: false,
 		},
 		{
 			PlatformName:    "CyberAgent",
@@ -216,8 +211,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://developers.cyberagent.co.jp/blog/",
 			PlatformType:    domain.PlatformTypeCompany,
 			FaviconURL:      "https://developers.cyberagent.co.jp/blog/wp-content/uploads/2016/09/cropped-ca-32x32.png",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           false,
+
+			IsEng: false,
 		},
 		{
 			PlatformName:    "paypay",
@@ -230,8 +225,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://blog.paypay.ne.jp/category/engineering/",
 			PlatformType:    domain.PlatformTypeCompany,
 			FaviconURL:      "https://blog.paypay.ne.jp/wp-content/uploads/2020/06/favicon.ico",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           false,
+
+			IsEng: false,
 		},
 		{
 			PlatformName:    "メルカリ",
@@ -244,8 +239,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://engineering.mercari.com/blog/",
 			PlatformType:    domain.PlatformTypeCompany,
 			FaviconURL:      "https://engineering.mercari.com/favicon.ico",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           false,
+
+			IsEng: false,
 		},
 		{
 			PlatformName:    "NTT",
@@ -258,8 +253,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://engineers.ntt.com/",
 			PlatformType:    domain.PlatformTypeCompany,
 			FaviconURL:      "https://engineers.ntt.com/icon/favicon",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           false,
+
+			IsEng: false,
 		},
 		{
 			PlatformName:    "Qiita (企業)",
@@ -272,8 +267,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://blog.qiita.com/",
 			PlatformType:    domain.PlatformTypeCompany,
 			FaviconURL:      "https://blog.qiita.com/wp-content/uploads/fbrfg/apple-touch-icon.png",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           false,
+
+			IsEng: false,
 		},
 		{
 			PlatformName:    "Cybozu",
@@ -286,8 +281,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://blog.cybozu.io/",
 			PlatformType:    domain.PlatformTypeCompany,
 			FaviconURL:      "https://blog.cybozu.io/icon/favicon",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           false,
+
+			IsEng: false,
 		},
 		{
 			PlatformName:    "mixi",
@@ -300,8 +295,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://mixi-developers.mixi.co.jp/",
 			PlatformType:    domain.PlatformTypeCompany,
 			FaviconURL:      "https://miro.medium.com/v2/resize:fill:256:256/1*lNHpX-0s-NUfCc6OxYFXLQ.png",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           false,
+
+			IsEng: false,
 		},
 		{
 			PlatformName:    "GREE",
@@ -314,8 +309,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://labs.gree.jp/blog/",
 			PlatformType:    domain.PlatformTypeCompany,
 			FaviconURL:      "https://labs.gree.jp/blog/wp-content/uploads/2015/01/favicon.png",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           false,
+
+			IsEng: false,
 		},
 		{
 			PlatformName:    "ZOZO",
@@ -328,8 +323,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://techblog.zozo.com/",
 			PlatformType:    domain.PlatformTypeCompany,
 			FaviconURL:      "https://techblog.zozo.com/icon/favicon",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           false,
+
+			IsEng: false,
 		},
 		{
 			PlatformName:    "DeNA",
@@ -342,8 +337,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://engineering.dena.com/",
 			PlatformType:    domain.PlatformTypeCompany,
 			FaviconURL:      "https://engineering.dena.com/favicon.png",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           false,
+
+			IsEng: false,
 		},
 		{
 			PlatformName:    "リクルートテクノロジーズ",
@@ -356,8 +351,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://blog.recruit.co.jp/rtc/",
 			PlatformType:    domain.PlatformTypeCompany,
 			FaviconURL:      "https://blog.recruit.co.jp/rtc/wp-content/themes/pc-rtc-blog.git/library/images/favicon.ico",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           false,
+
+			IsEng: false,
 		},
 		{
 			PlatformName:    "dwango on GitHub",
@@ -370,8 +365,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://dwango.github.io/",
 			PlatformType:    domain.PlatformTypeCompany,
 			FaviconURL:      "https://dwango.github.io/apple-touch-icon-144-precomposed.png",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           false,
+
+			IsEng: false,
 		},
 		{
 			PlatformName:    "SanSan",
@@ -384,8 +379,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://buildersbox.corp-sansan.com/",
 			PlatformType:    domain.PlatformTypeCompany,
 			FaviconURL:      "https://buildersbox.corp-sansan.com/icon/favicon",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           false,
+
+			IsEng: false,
 		},
 		{
 			PlatformName:    "HRBrain",
@@ -398,8 +393,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://times.hrbrain.co.jp/",
 			PlatformType:    domain.PlatformTypeCompany,
 			FaviconURL:      "https://times.hrbrain.co.jp/icon/favicon",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           false,
+
+			IsEng: false,
 		},
 		{
 			PlatformName:    "Lineヤフー",
@@ -412,8 +407,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://techblog.lycorp.co.jp/ja",
 			PlatformType:    domain.PlatformTypeCompany,
 			FaviconURL:      "https://www.lycorp.co.jp/assets/images/favicon.ico",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           false,
+
+			IsEng: false,
 		},
 		{
 			PlatformName:    "Sony Music",
@@ -426,8 +421,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://tech.sme.co.jp/",
 			PlatformType:    domain.PlatformTypeCompany,
 			FaviconURL:      "https://tech.sme.co.jp/icon/favicon",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           false,
+
+			IsEng: false,
 		},
 		{
 			PlatformName:    "IBM",
@@ -440,8 +435,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://www.ibm.com/blogs/solutions/jp-ja/",
 			PlatformType:    domain.PlatformTypeCompany,
 			FaviconURL:      "https://www.ibm.com/favicon.ico",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           false,
+
+			IsEng: false,
 		},
 		{
 			PlatformName:    "カミナシ",
@@ -454,8 +449,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://kaminashi-developer.hatenablog.jp/",
 			PlatformType:    domain.PlatformTypeCompany,
 			FaviconURL:      "https://kaminashi-developer.hatenablog.jp/icon/favicon",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           false,
+
+			IsEng: false,
 		},
 		{
 			PlatformName:    "ANDPAD",
@@ -468,8 +463,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://tech.andpad.co.jp/",
 			PlatformType:    domain.PlatformTypeCompany,
 			FaviconURL:      "https://tech.andpad.co.jp/icon/favicon",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           false,
+
+			IsEng: false,
 		},
 		{
 			PlatformName:    "gaudiy",
@@ -482,8 +477,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://techblog.gaudiy.com/",
 			PlatformType:    domain.PlatformTypeCompany,
 			FaviconURL:      "https://techblog.gaudiy.com/icon/favicon",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           false,
+
+			IsEng: false,
 		},
 		{
 			PlatformName:    "aws amazon web services",
@@ -496,8 +491,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://aws.amazon.com/jp/blogs/news/",
 			PlatformType:    domain.PlatformTypeCompany,
 			FaviconURL:      "https://a0.awsstatic.com/main/images/site/fav/favicon.ico",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           false,
+
+			IsEng: false,
 		},
 		{
 			PlatformName:    "aws startup",
@@ -510,8 +505,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://aws.amazon.com/jp/blogs/startup/",
 			PlatformType:    domain.PlatformTypeCompany,
 			FaviconURL:      "https://a0.awsstatic.com/main/images/site/fav/favicon.ico",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           false,
+
+			IsEng: false,
 		},
 		{
 			PlatformName:    "LayerX",
@@ -524,8 +519,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://tech.layerx.co.jp/",
 			PlatformType:    domain.PlatformTypeCompany,
 			FaviconURL:      "https://tech.layerx.co.jp/icon/favicon",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           false,
+
+			IsEng: false,
 		},
 		{
 			PlatformName:    "UPSIDER",
@@ -538,8 +533,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://tech.up-sider.com/",
 			PlatformType:    domain.PlatformTypeCompany,
 			FaviconURL:      "https://tech.up-sider.com/icon/favicon",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           false,
+
+			IsEng: false,
 		},
 		{
 			PlatformName:    "CADDI",
@@ -552,8 +547,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://caddi.tech/",
 			PlatformType:    domain.PlatformTypeCompany,
 			FaviconURL:      "https://caddi.tech/icon/favicon",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           false,
+
+			IsEng: false,
 		},
 		{
 			PlatformName:    "UZABASE",
@@ -566,8 +561,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://tech.uzabase.com/archive/category/Blog",
 			PlatformType:    domain.PlatformTypeCompany,
 			FaviconURL:      "https://tech.uzabase.com/icon/favicon",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           false,
+
+			IsEng: false,
 		},
 		{
 			PlatformName:    "BASE",
@@ -580,8 +575,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://devblog.thebase.in/",
 			PlatformType:    domain.PlatformTypeCompany,
 			FaviconURL:      "https://devblog.thebase.in/icon/favicon",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           false,
+
+			IsEng: false,
 		},
 		{
 			PlatformName:    "タイミー",
@@ -595,8 +590,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://tech.timee.co.jp/",
 			PlatformType:    domain.PlatformTypeCompany,
 			FaviconURL:      "https://tech.timee.co.jp/icon/favicon",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           false,
+
+			IsEng: false,
 		},
 		{
 			PlatformName:    "はてな開発者ブログ",
@@ -610,8 +605,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://developer.hatenastaff.com/",
 			PlatformType:    domain.PlatformTypeCompany,
 			FaviconURL:      "https://developer.hatenastaff.com/icon/favicon",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           false,
+
+			IsEng: false,
 		},
 		{
 			PlatformName:    "Money Forward",
@@ -625,8 +620,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://moneyforward-dev.jp/",
 			PlatformType:    domain.PlatformTypeCompany,
 			FaviconURL:      "https://moneyforward-dev.jp/icon/favicon",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           false,
+
+			IsEng: false,
 		},
 		{
 			PlatformName:    "pixiv",
@@ -640,8 +635,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://inside.pixiv.blog/",
 			PlatformType:    domain.PlatformTypeCompany,
 			FaviconURL:      "https://inside.pixiv.blog/icon/favicon",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           false,
+
+			IsEng: false,
 		},
 		{
 			PlatformName:    "speee",
@@ -655,8 +650,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://tech.speee.jp/",
 			PlatformType:    domain.PlatformTypeCompany,
 			FaviconURL:      "https://tech.speee.jp/icon/favicon",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           false,
+
+			IsEng: false,
 		},
 		{
 			PlatformName:    "Gunosy",
@@ -670,8 +665,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://tech.gunosy.io/",
 			PlatformType:    domain.PlatformTypeCompany,
 			FaviconURL:      "https://tech.gunosy.io/icon/favicon",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           false,
+
+			IsEng: false,
 		},
 		{
 			PlatformName:    "クックパッド",
@@ -685,8 +680,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://techlife.cookpad.com/",
 			PlatformType:    domain.PlatformTypeCompany,
 			FaviconURL:      "https://techlife.cookpad.com/icon/favicon",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           false,
+
+			IsEng: false,
 		},
 		{
 			PlatformName:    "wantedly",
@@ -700,8 +695,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://www.wantedly.com/stories/s/wantedly_engineers",
 			PlatformType:    domain.PlatformTypeCompany,
 			FaviconURL:      "https://www.wantedly.com//favicon.ico",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           false,
+
+			IsEng: false,
 		},
 		{
 			PlatformName:    "ABEJA",
@@ -715,8 +710,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://tech-blog.abeja.asia/",
 			PlatformType:    domain.PlatformTypeCompany,
 			FaviconURL:      "https://tech-blog.abeja.asia/icon/favicon",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           false,
+
+			IsEng: false,
 		},
 		{
 			PlatformName:    "AppBrew",
@@ -730,8 +725,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://tech.appbrew.io/",
 			PlatformType:    domain.PlatformTypeCompany,
 			FaviconURL:      "https://tech.appbrew.io/icon/favicon",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           false,
+
+			IsEng: false,
 		},
 		{
 			PlatformName:    "エウレカ",
@@ -745,8 +740,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://medium.com/eureka-engineering/",
 			PlatformType:    domain.PlatformTypeCompany,
 			FaviconURL:      "https://miro.medium.com/1*m-R_BkNf1Qjr1YbyOIJY2w.png",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           false,
+
+			IsEng: false,
 		},
 		{
 			PlatformName:    "Airbnb",
@@ -760,8 +755,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://medium.com/airbnb-engineering/",
 			PlatformType:    domain.PlatformTypeCompany,
 			FaviconURL:      "https://miro.medium.com/1*m-R_BkNf1Qjr1YbyOIJY2w.png",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           true,
+
+			IsEng: true,
 		},
 		{
 			PlatformName:    "Atlassian",
@@ -775,8 +770,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://blog.developer.atlassian.com/",
 			PlatformType:    domain.PlatformTypeCompany,
 			FaviconURL:      "https://blog.developer.atlassian.com/wp-content/uploads/2019/02/cropped-Atlassian-Developer@2x-blue-rgb-32x32.png",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           true,
+
+			IsEng: true,
 		},
 		{
 			PlatformName:    "Docker",
@@ -790,8 +785,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://www.docker.com/blog/",
 			PlatformType:    domain.PlatformTypeCompany,
 			FaviconURL:      "https://www.docker.com/wp-content/uploads/2024/02/cropped-docker-logo-favicon-32x32.png",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           true,
+
+			IsEng: true,
 		},
 		{
 			PlatformName:    "Meta",
@@ -805,8 +800,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://engineering.fb.com/",
 			PlatformType:    domain.PlatformTypeCompany,
 			FaviconURL:      "https://engineering.fb.com/wp-content/themes/code-fb-com/favicon.ico",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           true,
+
+			IsEng: true,
 		},
 		{
 			PlatformName:    "GitHub",
@@ -820,8 +815,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://github.blog/category/engineering/",
 			PlatformType:    domain.PlatformTypeCompany,
 			FaviconURL:      "https://github.githubassets.com/favicon.ico",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           true,
+
+			IsEng: true,
 		},
 		{
 			PlatformName:    "Google",
@@ -835,8 +830,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://developers.googleblog.com/",
 			PlatformType:    domain.PlatformTypeCompany,
 			FaviconURL:      "https://developers.googleblog.com/favicon.ico",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           true,
+
+			IsEng: true,
 		},
 		{
 			PlatformName:    "Instagram",
@@ -850,8 +845,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://instagram-engineering.com/",
 			PlatformType:    domain.PlatformTypeCompany,
 			FaviconURL:      "https://miro.medium.com/1*m-R_BkNf1Qjr1YbyOIJY2w.png",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           true,
+
+			IsEng: true,
 		},
 		{
 			PlatformName:    "Netflix",
@@ -865,8 +860,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://netflixtechblog.com/",
 			PlatformType:    domain.PlatformTypeCompany,
 			FaviconURL:      "https://miro.medium.com/1*m-R_BkNf1Qjr1YbyOIJY2w.png",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           true,
+
+			IsEng: true,
 		},
 		{
 			PlatformName:    "PayPal",
@@ -880,8 +875,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://medium.com/paypal-tech/",
 			PlatformType:    domain.PlatformTypeCompany,
 			FaviconURL:      "https://miro.medium.com/1*m-R_BkNf1Qjr1YbyOIJY2w.png",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           true,
+
+			IsEng: true,
 		},
 		{
 			PlatformName:    "Salesforce",
@@ -895,8 +890,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://engineering.salesforce.com/",
 			PlatformType:    domain.PlatformTypeCompany,
 			FaviconURL:      "https://engineering.salesforce.com/wp-content/uploads/2022/05/salesforce-icon.png?w=32",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           true,
+
+			IsEng: true,
 		},
 		{
 			PlatformName:    "Zoom",
@@ -910,8 +905,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://medium.com/zoom-developer-blog/",
 			PlatformType:    domain.PlatformTypeCompany,
 			FaviconURL:      "https://miro.medium.com/1*m-R_BkNf1Qjr1YbyOIJY2w.png",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           true,
+
+			IsEng: true,
 		},
 		{
 			PlatformName:    "Asana",
@@ -925,8 +920,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://blog.asana.com/category/eng/",
 			PlatformType:    domain.PlatformTypeCompany,
 			FaviconURL:      "https://d1gwm4cf8hecp4.cloudfront.net/images/favicons/apple-touch-icon-57x57.png",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           true,
+
+			IsEng: true,
 		},
 		{
 			PlatformName:    "mercari",
@@ -940,8 +935,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://engineering.mercari.com/en/blog/",
 			PlatformType:    domain.PlatformTypeCompany,
 			FaviconURL:      "https://engineering.mercari.com/favicon.ico/",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           true,
+
+			IsEng: true,
 		},
 		{
 			PlatformName:    "ROUTE 06",
@@ -955,8 +950,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://tech.route06.co.jp/",
 			PlatformType:    domain.PlatformTypeCompany,
 			FaviconURL:      "https://tech.route06.co.jp/icon/favicon",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           false,
+
+			IsEng: false,
 		},
 		{
 			PlatformName:    "スタディサプリ",
@@ -970,8 +965,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://blog.studysapuri.jp/",
 			PlatformType:    domain.PlatformTypeCompany,
 			FaviconURL:      "https://blog.studysapuri.jp/icon/favicon",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           false,
+
+			IsEng: false,
 		},
 		{
 			PlatformName:    "Menthas",
@@ -985,8 +980,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://menthas.com/",
 			PlatformType:    domain.PlatformTypeSummary,
 			FaviconURL:      "https://menthas.com/apple-touch-icon.png",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           false,
+
+			IsEng: false,
 		},
 		{
 			PlatformName:    "Menthas",
@@ -1000,8 +995,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://menthas.com/programming/",
 			PlatformType:    domain.PlatformTypeSummary,
 			FaviconURL:      "https://menthas.com/apple-touch-icon.png",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           false,
+
+			IsEng: false,
 		},
 		{
 			PlatformName:    "Menthas",
@@ -1015,8 +1010,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://menthas.com/javascript/",
 			PlatformType:    domain.PlatformTypeSummary,
 			FaviconURL:      "https://menthas.com/apple-touch-icon.png",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           false,
+
+			IsEng: false,
 		},
 		{
 			PlatformName:    "Menthas",
@@ -1030,8 +1025,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://menthas.com/infrastructure/",
 			PlatformType:    domain.PlatformTypeSummary,
 			FaviconURL:      "https://menthas.com/apple-touch-icon.png",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           false,
+
+			IsEng: false,
 		},
 		{
 			PlatformName:    "Zenn",
@@ -1045,8 +1040,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://zenn.dev/topics/react/",
 			PlatformType:    domain.PlatformTypeSite,
 			FaviconURL:      "https://static.zenn.studio/images/logo-transparent.png",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           false,
+
+			IsEng: false,
 		},
 		{
 			PlatformName:    "Zenn",
@@ -1060,8 +1055,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://zenn.dev/topics/nextjs/",
 			PlatformType:    domain.PlatformTypeSite,
 			FaviconURL:      "https://static.zenn.studio/images/logo-transparent.png",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           false,
+
+			IsEng: false,
 		},
 		{
 			PlatformName:    "Zenn",
@@ -1075,8 +1070,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://zenn.dev/topics/reactnative/",
 			PlatformType:    domain.PlatformTypeSite,
 			FaviconURL:      "https://static.zenn.studio/images/logo-transparent.png",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           false,
+
+			IsEng: false,
 		},
 		{
 			PlatformName:    "Zenn",
@@ -1090,8 +1085,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://zenn.dev/topics/javascript/",
 			PlatformType:    domain.PlatformTypeSite,
 			FaviconURL:      "https://static.zenn.studio/images/logo-transparent.png",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           false,
+
+			IsEng: false,
 		},
 		{
 			PlatformName:    "Zenn",
@@ -1105,8 +1100,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://zenn.dev/topics/typescript/",
 			PlatformType:    domain.PlatformTypeSite,
 			FaviconURL:      "https://static.zenn.studio/images/logo-transparent.png",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           false,
+
+			IsEng: false,
 		},
 		{
 			PlatformName:    "Zenn",
@@ -1120,8 +1115,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://zenn.dev/topics/nodejs/",
 			PlatformType:    domain.PlatformTypeSite,
 			FaviconURL:      "https://static.zenn.studio/images/logo-transparent.png",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           false,
+
+			IsEng: false,
 		},
 		{
 			PlatformName:    "Zenn",
@@ -1135,8 +1130,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://zenn.dev/topics/go/",
 			PlatformType:    domain.PlatformTypeSite,
 			FaviconURL:      "https://static.zenn.studio/images/logo-transparent.png",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           false,
+
+			IsEng: false,
 		},
 		{
 			PlatformName:    "Zenn",
@@ -1150,8 +1145,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://zenn.dev/topics/aws/",
 			PlatformType:    domain.PlatformTypeSite,
 			FaviconURL:      "https://static.zenn.studio/images/logo-transparent.png",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           false,
+
+			IsEng: false,
 		},
 		{
 			PlatformName:    "Zenn",
@@ -1165,8 +1160,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://zenn.dev/topics/gcp/",
 			PlatformType:    domain.PlatformTypeSite,
 			FaviconURL:      "https://static.zenn.studio/images/logo-transparent.png",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           false,
+
+			IsEng: false,
 		},
 		{
 			PlatformName:    "Zenn",
@@ -1180,8 +1175,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://zenn.dev/topics/docker/",
 			PlatformType:    domain.PlatformTypeSite,
 			FaviconURL:      "https://static.zenn.studio/images/logo-transparent.png",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           false,
+
+			IsEng: false,
 		},
 		{
 			PlatformName:    "Zenn",
@@ -1195,8 +1190,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://zenn.dev/topics/graphql/",
 			PlatformType:    domain.PlatformTypeSite,
 			FaviconURL:      "https://static.zenn.studio/images/logo-transparent.png",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           false,
+
+			IsEng: false,
 		},
 		{
 			PlatformName:    "Zenn",
@@ -1210,8 +1205,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://zenn.dev/topics/github/",
 			PlatformType:    domain.PlatformTypeSite,
 			FaviconURL:      "https://static.zenn.studio/images/logo-transparent.png",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           false,
+
+			IsEng: false,
 		},
 		{
 			PlatformName:    "Zenn",
@@ -1225,8 +1220,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://zenn.dev/topics/githubactions/",
 			PlatformType:    domain.PlatformTypeSite,
 			FaviconURL:      "https://static.zenn.studio/images/logo-transparent.png",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           false,
+
+			IsEng: false,
 		},
 		{
 			PlatformName:    "Zenn",
@@ -1240,8 +1235,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://zenn.dev/topics/chatgpt/",
 			PlatformType:    domain.PlatformTypeSite,
 			FaviconURL:      "https://static.zenn.studio/images/logo-transparent.png",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           false,
+
+			IsEng: false,
 		},
 		{
 			PlatformName:    "Zenn",
@@ -1255,8 +1250,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://zenn.dev/topics/個人開発/",
 			PlatformType:    domain.PlatformTypeSite,
 			FaviconURL:      "https://static.zenn.studio/images/logo-transparent.png",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           false,
+
+			IsEng: false,
 		},
 		{
 			PlatformName:    "Zenn",
@@ -1270,8 +1265,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://zenn.dev/topics/frontend/",
 			PlatformType:    domain.PlatformTypeSite,
 			FaviconURL:      "https://static.zenn.studio/images/logo-transparent.png",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           false,
+
+			IsEng: false,
 		},
 		{
 			PlatformName:    "Zenn",
@@ -1285,8 +1280,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://zenn.dev/topics/test/",
 			PlatformType:    domain.PlatformTypeSite,
 			FaviconURL:      "https://static.zenn.studio/images/logo-transparent.png",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           false,
+
+			IsEng: false,
 		},
 		{
 			PlatformName:    "Hashnode",
@@ -1300,8 +1295,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://hashnode.com/n/reactjs/",
 			PlatformType:    domain.PlatformTypeSite,
 			FaviconURL:      "https://cdn.hashnode.com/res/hashnode/image/upload/v1611242155728/W3_BYVVVh.png",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           true,
+
+			IsEng: true,
 		},
 		{
 			PlatformName:    "Hashnode",
@@ -1315,8 +1310,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://hashnode.com/n/nextjs/",
 			PlatformType:    domain.PlatformTypeSite,
 			FaviconURL:      "https://cdn.hashnode.com/res/hashnode/image/upload/v1611242155728/W3_BYVVVh.png",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           true,
+
+			IsEng: true,
 		},
 		{
 			PlatformName:    "Hashnode",
@@ -1330,8 +1325,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://hashnode.com/n/react-native/",
 			PlatformType:    domain.PlatformTypeSite,
 			FaviconURL:      "https://cdn.hashnode.com/res/hashnode/image/upload/v1611242155728/W3_BYVVVh.png",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           true,
+
+			IsEng: true,
 		},
 		{
 			PlatformName:    "Hashnode",
@@ -1345,8 +1340,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://hashnode.com/n/expo/",
 			PlatformType:    domain.PlatformTypeSite,
 			FaviconURL:      "https://cdn.hashnode.com/res/hashnode/image/upload/v1611242155728/W3_BYVVVh.png",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           true,
+
+			IsEng: true,
 		},
 		{
 			PlatformName:    "Hashnode",
@@ -1360,8 +1355,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://hashnode.com/n/nodejs/",
 			PlatformType:    domain.PlatformTypeSite,
 			FaviconURL:      "https://cdn.hashnode.com/res/hashnode/image/upload/v1611242155728/W3_BYVVVh.png",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           true,
+
+			IsEng: true,
 		},
 		{
 			PlatformName:    "Hashnode",
@@ -1375,8 +1370,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://hashnode.com/n/typescript/",
 			PlatformType:    domain.PlatformTypeSite,
 			FaviconURL:      "https://cdn.hashnode.com/res/hashnode/image/upload/v1611242155728/W3_BYVVVh.png",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           true,
+
+			IsEng: true,
 		},
 		{
 			PlatformName:    "Hashnode",
@@ -1390,8 +1385,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://hashnode.com/n/go/",
 			PlatformType:    domain.PlatformTypeSite,
 			FaviconURL:      "https://cdn.hashnode.com/res/hashnode/image/upload/v1611242155728/W3_BYVVVh.png",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           true,
+
+			IsEng: true,
 		},
 
 		{
@@ -1406,8 +1401,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://hashnode.com/n/aws/",
 			PlatformType:    domain.PlatformTypeSite,
 			FaviconURL:      "https://cdn.hashnode.com/res/hashnode/image/upload/v1611242155728/W3_BYVVVh.png",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           true,
+
+			IsEng: true,
 		},
 		{
 			PlatformName:    "Hashnode",
@@ -1421,8 +1416,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://hashnode.com/n/gcp/",
 			PlatformType:    domain.PlatformTypeSite,
 			FaviconURL:      "https://cdn.hashnode.com/res/hashnode/image/upload/v1611242155728/W3_BYVVVh.png",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           true,
+
+			IsEng: true,
 		},
 		{
 			PlatformName:    "Hashnode",
@@ -1436,8 +1431,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://hashnode.com/n/docker/",
 			PlatformType:    domain.PlatformTypeSite,
 			FaviconURL:      "https://cdn.hashnode.com/res/hashnode/image/upload/v1611242155728/W3_BYVVVh.png",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           true,
+
+			IsEng: true,
 		},
 		{
 			PlatformName:    "Hashnode",
@@ -1451,8 +1446,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://hashnode.com/n/testing/",
 			PlatformType:    domain.PlatformTypeSite,
 			FaviconURL:      "https://cdn.hashnode.com/res/hashnode/image/upload/v1611242155728/W3_BYVVVh.png",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           true,
+
+			IsEng: true,
 		},
 		{
 			PlatformName:    "Hashnode",
@@ -1466,8 +1461,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://hashnode.com/n/graphql/",
 			PlatformType:    domain.PlatformTypeSite,
 			FaviconURL:      "https://cdn.hashnode.com/res/hashnode/image/upload/v1611242155728/W3_BYVVVh.png",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           true,
+
+			IsEng: true,
 		},
 		{
 			PlatformName:    "Hashnode",
@@ -1481,8 +1476,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://hashnode.com/n/frontend-development/",
 			PlatformType:    domain.PlatformTypeSite,
 			FaviconURL:      "https://cdn.hashnode.com/res/hashnode/image/upload/v1611242155728/W3_BYVVVh.png",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           true,
+
+			IsEng: true,
 		},
 		{
 			PlatformName:    "Hashnode",
@@ -1496,8 +1491,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://hashnode.com/n/web-development/",
 			PlatformType:    domain.PlatformTypeSite,
 			FaviconURL:      "https://cdn.hashnode.com/res/hashnode/image/upload/v1611242155728/W3_BYVVVh.png",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           true,
+
+			IsEng: true,
 		},
 		{
 			PlatformName:    "Hashnode",
@@ -1511,8 +1506,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://hashnode.com/n/chatgpt/",
 			PlatformType:    domain.PlatformTypeSite,
 			FaviconURL:      "https://cdn.hashnode.com/res/hashnode/image/upload/v1611242155728/W3_BYVVVh.png",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           true,
+
+			IsEng: true,
 		},
 		{
 			PlatformName:    "Hashnode",
@@ -1526,8 +1521,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://hashnode.com/n/developer/",
 			PlatformType:    domain.PlatformTypeSite,
 			FaviconURL:      "https://cdn.hashnode.com/res/hashnode/image/upload/v1611242155728/W3_BYVVVh.png",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           true,
+
+			IsEng: true,
 		},
 		{
 			PlatformName:    "Hashnode",
@@ -1541,8 +1536,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://hashnode.com/n/devops/",
 			PlatformType:    domain.PlatformTypeSite,
 			FaviconURL:      "https://cdn.hashnode.com/res/hashnode/image/upload/v1611242155728/W3_BYVVVh.png",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           true,
+
+			IsEng: true,
 		},
 		{
 			PlatformName:    "LogRocket",
@@ -1556,8 +1551,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://blog.logrocket.com/",
 			PlatformType:    domain.PlatformTypeCompany,
 			FaviconURL:      "https://blog.logrocket.com/wp-content/uploads/2019/06/cropped-cropped-favicon-196x196.png?w=192",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           true,
+
+			IsEng: true,
 		},
 		{
 			PlatformName:    "フューチャー技術ブログ",
@@ -1571,8 +1566,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://future-architect.github.io/",
 			PlatformType:    domain.PlatformTypeCompany,
 			FaviconURL:      "https://future-architect.github.io/favicon.ico",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           false,
+
+			IsEng: false,
 		},
 		{
 			PlatformName:    "toptal",
@@ -1586,8 +1581,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://www.toptal.com/blog/",
 			PlatformType:    domain.PlatformTypeSite,
 			FaviconURL:      "https://frontier-assets.toptal.com/1fafc84237661afb2281.png",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           true,
+
+			IsEng: true,
 		},
 		{
 			PlatformName:    "toptal",
@@ -1601,8 +1596,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://www.toptal.com/developers/blog/",
 			PlatformType:    domain.PlatformTypeSite,
 			FaviconURL:      "https://frontier-assets.toptal.com/1fafc84237661afb2281.png",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           true,
+
+			IsEng: true,
 		},
 		{
 			PlatformName:    "toptal",
@@ -1616,8 +1611,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://www.toptal.com/designers/blog/",
 			PlatformType:    domain.PlatformTypeSite,
 			FaviconURL:      "https://frontier-assets.toptal.com/1fafc84237661afb2281.png",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           true,
+
+			IsEng: true,
 		},
 		{
 			PlatformName:    "toptal",
@@ -1631,8 +1626,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://www.toptal.com/finance/blog/",
 			PlatformType:    domain.PlatformTypeSite,
 			FaviconURL:      "https://frontier-assets.toptal.com/1fafc84237661afb2281.png",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           true,
+
+			IsEng: true,
 		},
 		{
 			PlatformName:    "toptal",
@@ -1646,8 +1641,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://www.toptal.com/project-managers/blog/",
 			PlatformType:    domain.PlatformTypeSite,
 			FaviconURL:      "https://frontier-assets.toptal.com/1fafc84237661afb2281.png",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           true,
+
+			IsEng: true,
 		},
 		{
 			PlatformName:    "toptal",
@@ -1661,8 +1656,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://www.toptal.com/product-managers/blog/",
 			PlatformType:    domain.PlatformTypeSite,
 			FaviconURL:      "https://frontier-assets.toptal.com/1fafc84237661afb2281.png",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           true,
+
+			IsEng: true,
 		},
 		{
 			PlatformName:    "Findy",
@@ -1676,8 +1671,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://tech.findy.co.jp/",
 			PlatformType:    domain.PlatformTypeCompany,
 			FaviconURL:      "https://tech.findy.co.jp/icon/favicon",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           false,
+
+			IsEng: false,
 		},
 		{
 			PlatformName:    "Hacker News",
@@ -1691,8 +1686,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://news.ycombinator.com/",
 			PlatformType:    domain.PlatformTypeSummary,
 			FaviconURL:      "https://news.ycombinator.com/y18.svg",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           true,
+
+			IsEng: true,
 		},
 		{
 			PlatformName:    "Techmeme",
@@ -1706,8 +1701,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://techmeme.com/",
 			PlatformType:    domain.PlatformTypeSite,
 			FaviconURL:      "https://techmeme.com/img/favicon.ico",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           true,
+
+			IsEng: true,
 		},
 		{
 			PlatformName:    "WIRED",
@@ -1721,8 +1716,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://www.wired.com/",
 			PlatformType:    domain.PlatformTypeSite,
 			FaviconURL:      "https://www.wired.com/favicon.ico",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           true,
+
+			IsEng: true,
 		},
 		{
 			PlatformName:    "SmartHR",
@@ -1736,8 +1731,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://tech.smarthr.jp/",
 			PlatformType:    domain.PlatformTypeCompany,
 			FaviconURL:      "https://tech.smarthr.jp/icon/favicon",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           false,
+
+			IsEng: false,
 		},
 		{
 			PlatformName:    "G-gen",
@@ -1751,8 +1746,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://blog.g-gen.co.jp/",
 			PlatformType:    domain.PlatformTypeCompany,
 			FaviconURL:      "https://blog.g-gen.co.jp/icon/favicon",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           false,
+
+			IsEng: false,
 		},
 		{
 			PlatformName:    "さくらインターネット",
@@ -1766,8 +1761,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://knowledge.sakura.ad.jp/",
 			PlatformType:    domain.PlatformTypeCompany,
 			FaviconURL:      "https://www.sakura.ad.jp/resource/favicon/sakura_logo.png",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           false,
+
+			IsEng: false,
 		},
 		{
 			PlatformName:    "Goodpatch",
@@ -1781,8 +1776,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://goodpatch.com/blog/",
 			PlatformType:    domain.PlatformTypeCompany,
 			FaviconURL:      "https://goodpatch.com/apple-touch-icon.png",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           false,
+
+			IsEng: false,
 		},
 		{
 			PlatformName:    "Dropbox",
@@ -1796,8 +1791,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedSiteURL:     "https://dropbox.tech/",
 			PlatformType:    domain.PlatformTypeCompany,
 			FaviconURL:      "https://dropbox.tech/cms/content/dam/dropbox/aem/favicon32.ico",
-			FeedFetchType:   domain.FeedFetchTypeRSS,
-			IsEng:           true,
+
+			IsEng: true,
 		},
 		//{
 		//	PlatformName:    "Uber",

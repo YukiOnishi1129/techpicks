@@ -2,20 +2,10 @@ package domain
 
 import "time"
 
-type FeedFetchType int
-
-const (
-	FeedFetchTypeUnknown FeedFetchType = iota
-	FeedFetchTypeRSS
-	FeedFetchTypeAPI
-	FeedFetchTypeRSSAndAPI
-)
-
 type Feed struct {
 	ID                string
 	Name              string
 	RssURL            string
-	FeedFetchType     FeedFetchType
 	TrendPlatformType TrendPlatformType
 	Platform          Platform
 	Category          Category

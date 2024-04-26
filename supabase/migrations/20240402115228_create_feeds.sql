@@ -12,7 +12,6 @@ CREATE TABLE feeds
     site_url TEXT NOT NULL,
     rss_url TEXT NOT NULL,
     api_query_param VARCHAR(255),
-    feed_fetch_type INT NOT NULL,
     trend_platform_type INT NOT NULL DEFAULT 0,
     created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,

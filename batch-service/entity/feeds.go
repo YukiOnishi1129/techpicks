@@ -33,7 +33,6 @@ type Feed struct {
 	SiteURL           string      `boil:"site_url" json:"site_url" toml:"site_url" yaml:"site_url"`
 	RSSURL            string      `boil:"rss_url" json:"rss_url" toml:"rss_url" yaml:"rss_url"`
 	APIQueryParam     null.String `boil:"api_query_param" json:"api_query_param,omitempty" toml:"api_query_param" yaml:"api_query_param,omitempty"`
-	FeedFetchType     int         `boil:"feed_fetch_type" json:"feed_fetch_type" toml:"feed_fetch_type" yaml:"feed_fetch_type"`
 	TrendPlatformType int         `boil:"trend_platform_type" json:"trend_platform_type" toml:"trend_platform_type" yaml:"trend_platform_type"`
 	CreatedAt         time.Time   `boil:"created_at" json:"created_at" toml:"created_at" yaml:"created_at"`
 	UpdatedAt         time.Time   `boil:"updated_at" json:"updated_at" toml:"updated_at" yaml:"updated_at"`
@@ -53,7 +52,6 @@ var FeedColumns = struct {
 	SiteURL           string
 	RSSURL            string
 	APIQueryParam     string
-	FeedFetchType     string
 	TrendPlatformType string
 	CreatedAt         string
 	UpdatedAt         string
@@ -68,7 +66,6 @@ var FeedColumns = struct {
 	SiteURL:           "site_url",
 	RSSURL:            "rss_url",
 	APIQueryParam:     "api_query_param",
-	FeedFetchType:     "feed_fetch_type",
 	TrendPlatformType: "trend_platform_type",
 	CreatedAt:         "created_at",
 	UpdatedAt:         "updated_at",
@@ -85,7 +82,6 @@ var FeedTableColumns = struct {
 	SiteURL           string
 	RSSURL            string
 	APIQueryParam     string
-	FeedFetchType     string
 	TrendPlatformType string
 	CreatedAt         string
 	UpdatedAt         string
@@ -100,7 +96,6 @@ var FeedTableColumns = struct {
 	SiteURL:           "feeds.site_url",
 	RSSURL:            "feeds.rss_url",
 	APIQueryParam:     "feeds.api_query_param",
-	FeedFetchType:     "feeds.feed_fetch_type",
 	TrendPlatformType: "feeds.trend_platform_type",
 	CreatedAt:         "feeds.created_at",
 	UpdatedAt:         "feeds.updated_at",
@@ -119,7 +114,6 @@ var FeedWhere = struct {
 	SiteURL           whereHelperstring
 	RSSURL            whereHelperstring
 	APIQueryParam     whereHelpernull_String
-	FeedFetchType     whereHelperint
 	TrendPlatformType whereHelperint
 	CreatedAt         whereHelpertime_Time
 	UpdatedAt         whereHelpertime_Time
@@ -134,7 +128,6 @@ var FeedWhere = struct {
 	SiteURL:           whereHelperstring{field: "\"feeds\".\"site_url\""},
 	RSSURL:            whereHelperstring{field: "\"feeds\".\"rss_url\""},
 	APIQueryParam:     whereHelpernull_String{field: "\"feeds\".\"api_query_param\""},
-	FeedFetchType:     whereHelperint{field: "\"feeds\".\"feed_fetch_type\""},
 	TrendPlatformType: whereHelperint{field: "\"feeds\".\"trend_platform_type\""},
 	CreatedAt:         whereHelpertime_Time{field: "\"feeds\".\"created_at\""},
 	UpdatedAt:         whereHelpertime_Time{field: "\"feeds\".\"updated_at\""},
@@ -199,8 +192,8 @@ func (r *feedR) GetMyFeeds() MyFeedSlice {
 type feedL struct{}
 
 var (
-	feedAllColumns            = []string{"id", "name", "description", "thumbnail_url", "platform_id", "category_id", "site_url", "rss_url", "api_query_param", "feed_fetch_type", "trend_platform_type", "created_at", "updated_at", "deleted_at"}
-	feedColumnsWithoutDefault = []string{"name", "description", "thumbnail_url", "platform_id", "category_id", "site_url", "rss_url", "feed_fetch_type"}
+	feedAllColumns            = []string{"id", "name", "description", "thumbnail_url", "platform_id", "category_id", "site_url", "rss_url", "api_query_param", "trend_platform_type", "created_at", "updated_at", "deleted_at"}
+	feedColumnsWithoutDefault = []string{"name", "description", "thumbnail_url", "platform_id", "category_id", "site_url", "rss_url"}
 	feedColumnsWithDefault    = []string{"id", "api_query_param", "trend_platform_type", "created_at", "updated_at", "deleted_at"}
 	feedPrimaryKeyColumns     = []string{"id"}
 	feedGeneratedColumns      = []string{}
