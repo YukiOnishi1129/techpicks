@@ -5,7 +5,6 @@ import (
 	"database/sql"
 	"fmt"
 	"github.com/YukiOnishi1129/techpicks/batch-service/entity"
-	"github.com/YukiOnishi1129/techpicks/batch-service/infrastructure/api/repository"
 	"github.com/YukiOnishi1129/techpicks/batch-service/internal"
 	"github.com/YukiOnishi1129/techpicks/batch-service/internal/crawler"
 	"github.com/YukiOnishi1129/techpicks/batch-service/internal/ogp"
@@ -14,21 +13,20 @@ import (
 	"time"
 )
 
-type ArticleContentsCrawlerResponse struct {
-	IsCreatedArticle             bool
-	IsCreatedFeedArticleRelation bool
-	IsRollback                   bool
-	IsCommit                     bool
-}
-
-func zennArticleCrawler(ctx context.Context, db *sql.DB, feed *entity.Feed, zeeArticles []repository.ZennItem) error {
+func (u *Usecase) zennArticleCrawler(ctx context.Context, db *sql.DB, feed *entity.Feed) error {
 	log.Printf("【start zenn article crawler】: %s", feed.Name)
 	aCount := 0
 	farCount := 0
 	taCount := 0
-
 	wg := new(sync.WaitGroup)
-	for _, z := range zeeArticles {
+	// get zenn articles by api
+	res, err := u.air.GetZennArticles()
+	if err != nil {
+		log.Printf("【error get zenn articles】: %s, %v", feed.Name, err)
+		return err
+	}
+
+	for _, z := range res.Articles {
 		wg.Add(1)
 		// transaction
 		tx, err := db.Begin()

@@ -29,22 +29,16 @@ func (u *Usecase) BatchCrawlTrendArticleContents(ctx context.Context) error {
 
 	for _, f := range feeds {
 		log.Printf("【start BatchCrawlTrendArticle】: %s", f.Name)
-
 		switch f.TrendPlatformType {
 		case int(domain.TrendPlatformTypeZenn):
-			// get zenn articles by api
-			res, err := u.air.GetZennArticles()
-			if err != nil {
-				log.Printf("【error get zenn articles】: %s, %v", f.Name, err)
-				continue
-			}
-			err = zennArticleCrawler(ctx, u.db, f, res.Articles)
+			err = u.zennArticleCrawler(ctx, u.db, f)
 			if err != nil {
 				log.Printf("【error zenn article crawler】: %s", err)
 				continue
 			}
 		case int(domain.TrendPlatformTypeQiita):
 			// qiita
+			//err := qiitaArticleCrawler(ctx, u.db, u.air.GetQiitaArticles)
 		case int(domain.TrendPlatformTypeHatena):
 			// hatena
 		case int(domain.TrendPlatformTypeDevCommunity):
