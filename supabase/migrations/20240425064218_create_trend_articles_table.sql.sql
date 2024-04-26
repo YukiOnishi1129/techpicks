@@ -5,6 +5,7 @@ CREATE TABLE trend_articles
 (
     id uuid NOT NULL DEFAULT uuid_generate_v4(),
     article_id uuid NOT NULL,
+    platform_id uuid NOT NULL,
     like_count INT NOT NULL DEFAULT 0,
     created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,

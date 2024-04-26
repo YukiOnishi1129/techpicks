@@ -39,8 +39,9 @@ func TrendArticleContentsCrawler(ctx context.Context, tx *sql.Tx, arg TrendArtic
 	if article != nil {
 		// insert trend_article
 		err := CreateTrendArticle(ctx, tx, CreateTrendArticleArg{
-			ArticleID: article.ID,
-			LikeCount: arg.ArticleLikeCount,
+			ArticleID:  article.ID,
+			PlatformID: arg.Feed.PlatformID,
+			LikeCount:  arg.ArticleLikeCount,
 		})
 		if err != nil {
 			log.Printf("【error insert trend article】: %s", arg.ArticleTitle)
@@ -127,8 +128,9 @@ func TrendArticleContentsCrawler(ctx context.Context, tx *sql.Tx, arg TrendArtic
 
 	// insert trend_article table
 	err = CreateTrendArticle(ctx, tx, CreateTrendArticleArg{
-		ArticleID: articleID.String(),
-		LikeCount: arg.ArticleLikeCount,
+		ArticleID:  articleID.String(),
+		PlatformID: arg.Feed.PlatformID,
+		LikeCount:  arg.ArticleLikeCount,
 	})
 	if err != nil {
 		log.Printf("【error insert trend article】: %s", arg.ArticleTitle)
@@ -153,16 +155,18 @@ func TrendArticleContentsCrawler(ctx context.Context, tx *sql.Tx, arg TrendArtic
 }
 
 type CreateTrendArticleArg struct {
-	ArticleID string
-	LikeCount int
+	ArticleID  string
+	PlatformID string
+	LikeCount  int
 }
 
 func CreateTrendArticle(ctx context.Context, tx *sql.Tx, arg CreateTrendArticleArg) error {
 	trendArticleID, _ := uuid.NewUUID()
 	trendArticle := entity.TrendArticle{
-		ID:        trendArticleID.String(),
-		ArticleID: arg.ArticleID,
-		LikeCount: arg.LikeCount,
+		ID:         trendArticleID.String(),
+		ArticleID:  arg.ArticleID,
+		PlatformID: arg.PlatformID,
+		LikeCount:  arg.LikeCount,
 	}
 	err := trendArticle.Insert(ctx, tx, boil.Infer())
 	if err != nil {

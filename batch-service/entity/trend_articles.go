@@ -23,58 +23,65 @@ import (
 
 // TrendArticle is an object representing the database table.
 type TrendArticle struct {
-	ID        string    `boil:"id" json:"id" toml:"id" yaml:"id"`
-	ArticleID string    `boil:"article_id" json:"article_id" toml:"article_id" yaml:"article_id"`
-	LikeCount int       `boil:"like_count" json:"like_count" toml:"like_count" yaml:"like_count"`
-	CreatedAt time.Time `boil:"created_at" json:"created_at" toml:"created_at" yaml:"created_at"`
-	UpdatedAt time.Time `boil:"updated_at" json:"updated_at" toml:"updated_at" yaml:"updated_at"`
+	ID         string    `boil:"id" json:"id" toml:"id" yaml:"id"`
+	ArticleID  string    `boil:"article_id" json:"article_id" toml:"article_id" yaml:"article_id"`
+	PlatformID string    `boil:"platform_id" json:"platform_id" toml:"platform_id" yaml:"platform_id"`
+	LikeCount  int       `boil:"like_count" json:"like_count" toml:"like_count" yaml:"like_count"`
+	CreatedAt  time.Time `boil:"created_at" json:"created_at" toml:"created_at" yaml:"created_at"`
+	UpdatedAt  time.Time `boil:"updated_at" json:"updated_at" toml:"updated_at" yaml:"updated_at"`
 
 	R *trendArticleR `boil:"-" json:"-" toml:"-" yaml:"-"`
 	L trendArticleL  `boil:"-" json:"-" toml:"-" yaml:"-"`
 }
 
 var TrendArticleColumns = struct {
-	ID        string
-	ArticleID string
-	LikeCount string
-	CreatedAt string
-	UpdatedAt string
+	ID         string
+	ArticleID  string
+	PlatformID string
+	LikeCount  string
+	CreatedAt  string
+	UpdatedAt  string
 }{
-	ID:        "id",
-	ArticleID: "article_id",
-	LikeCount: "like_count",
-	CreatedAt: "created_at",
-	UpdatedAt: "updated_at",
+	ID:         "id",
+	ArticleID:  "article_id",
+	PlatformID: "platform_id",
+	LikeCount:  "like_count",
+	CreatedAt:  "created_at",
+	UpdatedAt:  "updated_at",
 }
 
 var TrendArticleTableColumns = struct {
-	ID        string
-	ArticleID string
-	LikeCount string
-	CreatedAt string
-	UpdatedAt string
+	ID         string
+	ArticleID  string
+	PlatformID string
+	LikeCount  string
+	CreatedAt  string
+	UpdatedAt  string
 }{
-	ID:        "trend_articles.id",
-	ArticleID: "trend_articles.article_id",
-	LikeCount: "trend_articles.like_count",
-	CreatedAt: "trend_articles.created_at",
-	UpdatedAt: "trend_articles.updated_at",
+	ID:         "trend_articles.id",
+	ArticleID:  "trend_articles.article_id",
+	PlatformID: "trend_articles.platform_id",
+	LikeCount:  "trend_articles.like_count",
+	CreatedAt:  "trend_articles.created_at",
+	UpdatedAt:  "trend_articles.updated_at",
 }
 
 // Generated where
 
 var TrendArticleWhere = struct {
-	ID        whereHelperstring
-	ArticleID whereHelperstring
-	LikeCount whereHelperint
-	CreatedAt whereHelpertime_Time
-	UpdatedAt whereHelpertime_Time
+	ID         whereHelperstring
+	ArticleID  whereHelperstring
+	PlatformID whereHelperstring
+	LikeCount  whereHelperint
+	CreatedAt  whereHelpertime_Time
+	UpdatedAt  whereHelpertime_Time
 }{
-	ID:        whereHelperstring{field: "\"trend_articles\".\"id\""},
-	ArticleID: whereHelperstring{field: "\"trend_articles\".\"article_id\""},
-	LikeCount: whereHelperint{field: "\"trend_articles\".\"like_count\""},
-	CreatedAt: whereHelpertime_Time{field: "\"trend_articles\".\"created_at\""},
-	UpdatedAt: whereHelpertime_Time{field: "\"trend_articles\".\"updated_at\""},
+	ID:         whereHelperstring{field: "\"trend_articles\".\"id\""},
+	ArticleID:  whereHelperstring{field: "\"trend_articles\".\"article_id\""},
+	PlatformID: whereHelperstring{field: "\"trend_articles\".\"platform_id\""},
+	LikeCount:  whereHelperint{field: "\"trend_articles\".\"like_count\""},
+	CreatedAt:  whereHelpertime_Time{field: "\"trend_articles\".\"created_at\""},
+	UpdatedAt:  whereHelpertime_Time{field: "\"trend_articles\".\"updated_at\""},
 }
 
 // TrendArticleRels is where relationship names are stored.
@@ -105,8 +112,8 @@ func (r *trendArticleR) GetArticle() *Article {
 type trendArticleL struct{}
 
 var (
-	trendArticleAllColumns            = []string{"id", "article_id", "like_count", "created_at", "updated_at"}
-	trendArticleColumnsWithoutDefault = []string{"article_id"}
+	trendArticleAllColumns            = []string{"id", "article_id", "platform_id", "like_count", "created_at", "updated_at"}
+	trendArticleColumnsWithoutDefault = []string{"article_id", "platform_id"}
 	trendArticleColumnsWithDefault    = []string{"id", "like_count", "created_at", "updated_at"}
 	trendArticlePrimaryKeyColumns     = []string{"id"}
 	trendArticleGeneratedColumns      = []string{}

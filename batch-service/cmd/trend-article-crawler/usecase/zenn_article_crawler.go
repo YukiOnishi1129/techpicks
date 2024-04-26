@@ -8,6 +8,7 @@ import (
 	"github.com/YukiOnishi1129/techpicks/batch-service/internal"
 	"github.com/YukiOnishi1129/techpicks/batch-service/internal/crawler"
 	"github.com/YukiOnishi1129/techpicks/batch-service/internal/ogp"
+	"github.com/volatiletech/sqlboiler/v4/queries/qm"
 	"log"
 	"sync"
 	"time"
@@ -15,6 +16,19 @@ import (
 
 func (u *Usecase) zennArticleCrawler(ctx context.Context, db *sql.DB, feed *entity.Feed) error {
 	log.Printf("【start zenn article crawler】: %s", feed.Name)
+
+	fiveHoursAgo := time.Now().Add(-5 * time.Hour).Format("2006-01-02 15:04:05")
+	// idempotency check
+	trendCount, err := entity.TrendArticles(
+		qm.Where("platform_id = ?", feed.PlatformID),
+		qm.And("created_at >= ?", fiveHoursAgo),
+	).Count(ctx, u.db)
+	if trendCount != 0 {
+		log.Printf("【skip zenn article crawler, because there was data 5 hours ago】")
+		log.Printf("【end zenn article crawler】: %s", feed.Name)
+		return nil
+	}
+
 	aCount := 0
 	farCount := 0
 	taCount := 0
