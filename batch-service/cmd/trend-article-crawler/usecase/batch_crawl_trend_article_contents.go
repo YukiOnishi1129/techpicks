@@ -32,7 +32,6 @@ func (u *Usecase) BatchCrawlTrendArticleContents(ctx context.Context) error {
 				continue
 			}
 		case int(domain.TrendPlatformTypeQiita):
-			// qiita
 			err := u.qiitaArticleCrawler(ctx, f)
 			if err != nil {
 				log.Printf("【error qiita article crawler】: %s", err)
@@ -40,6 +39,11 @@ func (u *Usecase) BatchCrawlTrendArticleContents(ctx context.Context) error {
 			}
 		case int(domain.TrendPlatformTypeHatena):
 			// hatena
+			err = u.hatenaArticleCrawler(ctx, f)
+			if err != nil {
+				log.Printf("【error hatena article crawler】: %s", err)
+				continue
+			}
 		case int(domain.TrendPlatformTypeDevCommunity):
 		// dev community
 		default:
