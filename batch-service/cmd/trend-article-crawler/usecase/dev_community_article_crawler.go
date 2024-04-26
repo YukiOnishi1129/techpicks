@@ -79,7 +79,7 @@ func (u *Usecase) DevCommunityArticleCrawler(ctx context.Context, feed *entity.F
 			if res.IsCreatedFeedArticleRelation {
 				farCount++
 			}
-			if res.IsTrendArticle {
+			if res.IsCreatedTrendArticle {
 				taCount++
 			}
 			//commit

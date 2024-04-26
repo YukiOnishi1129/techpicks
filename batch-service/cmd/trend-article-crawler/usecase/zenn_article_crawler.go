@@ -83,7 +83,7 @@ func (u *Usecase) zennArticleCrawler(ctx context.Context, feed *entity.Feed) err
 			if res.IsCreatedFeedArticleRelation {
 				farCount++
 			}
-			if res.IsTrendArticle {
+			if res.IsCreatedTrendArticle {
 				taCount++
 			}
 			//commit

@@ -79,7 +79,7 @@ func (u *Usecase) hatenaArticleCrawler(ctx context.Context, feed *entity.Feed) e
 			if res.IsCreatedFeedArticleRelation {
 				farCount++
 			}
-			if res.IsTrendArticle {
+			if res.IsCreatedTrendArticle {
 				taCount++
 			}
 			//commit

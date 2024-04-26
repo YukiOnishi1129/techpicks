@@ -93,7 +93,7 @@ func (u *Usecase) qiitaArticleCrawler(ctx context.Context, feed *entity.Feed) er
 			if res.IsCreatedFeedArticleRelation {
 				farCount++
 			}
-			if res.IsTrendArticle {
+			if res.IsCreatedTrendArticle {
 				taCount++
 			}
 			//commit

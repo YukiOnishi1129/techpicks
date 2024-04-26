@@ -32,7 +32,7 @@ func (u *Usecase) BatchCrawlTrendArticleContents(ctx context.Context) error {
 				continue
 			}
 		case int(domain.TrendPlatformTypeQiita):
-			err := u.qiitaArticleCrawler(ctx, f)
+			err = u.qiitaArticleCrawler(ctx, f)
 			if err != nil {
 				log.Printf("【error qiita article crawler】: %s", err)
 				continue
