@@ -42,7 +42,7 @@ func main() {
 		Rr: rr,
 	})
 
-	err = u.BatchCrawlArticleContents(ctx)
+	err = u.BatchCrawlSiteAndSummaryArticleContents(ctx)
 	if err != nil {
 		log.Fatalf("Failed to create articles: %v", err)
 		return
