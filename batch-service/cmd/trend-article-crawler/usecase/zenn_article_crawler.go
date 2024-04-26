@@ -3,12 +3,11 @@ package usecase
 import (
 	"context"
 	"fmt"
+	"github.com/Songmu/go-httpdate"
 	"github.com/YukiOnishi1129/techpicks/batch-service/entity"
-	"github.com/YukiOnishi1129/techpicks/batch-service/internal"
 	"github.com/YukiOnishi1129/techpicks/batch-service/internal/crawler"
 	"github.com/YukiOnishi1129/techpicks/batch-service/internal/ogp"
 	"log"
-	"time"
 )
 
 func (u *Usecase) zennArticleCrawler(ctx context.Context, feed *entity.Feed) error {
@@ -31,7 +30,11 @@ func (u *Usecase) zennArticleCrawler(ctx context.Context, feed *entity.Feed) err
 			return err
 		}
 		articleURL := fmt.Sprintf("https://zenn.dev/articles%s", z.Path)
-		publishedAt := int(time.Time.Unix(internal.StringToTime(z.PublishedAt)))
+		publishedAt, err := httpdate.Str2Time(z.PublishedAt, nil)
+		if err != nil {
+			log.Printf("【error convert published at】: %s", err)
+			return err
+		}
 		ogpImageURL, err := ogp.GetOgpImage(articleURL)
 		if err != nil {
 			log.Printf("【error get ogp image】: %s", err)
@@ -42,7 +45,7 @@ func (u *Usecase) zennArticleCrawler(ctx context.Context, feed *entity.Feed) err
 			ArticleTitle:       z.Title,
 			ArticleURL:         articleURL,
 			ArticleLikeCount:   z.LikedCount,
-			ArticlePublishedAt: publishedAt,
+			ArticlePublishedAt: int(publishedAt.Unix()),
 			ArticleAuthorName:  nil,
 			ArticleTags:        nil,
 			ArticleOGPImageURL: ogpImageURL,
