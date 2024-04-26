@@ -17,6 +17,7 @@ export type ArticleType = Omit<PrismaArticle, "platformId"> & {
   >;
   isBookmarked: boolean;
   bookmarkId?: string;
+  likeCount?: number;
 };
 
 export type ArticleTabType =

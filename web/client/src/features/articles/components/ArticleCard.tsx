@@ -71,6 +71,12 @@ export const ArticleCard: FC<ArticleCardProps> = ({
                 </div>
               ))}
           </div>
+          {article.feeds[0].trendPlatformType !== 0 &&
+            article.likeCount !== undefined && (
+              <div className="flex size-6 items-center justify-center rounded-full text-2xl font-bold ">
+                {article.likeCount}
+              </div>
+            )}
         </div>
       </div>
     </div>

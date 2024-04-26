@@ -78,9 +78,9 @@ export const getArticles = async ({
       where = {
         ...where,
         feedArticleRelatoins: {
-          some: {
+          none: {
             feed: {
-              isTrending: true,
+              trendPlatformType: 0,
             },
           },
         },
@@ -141,7 +141,8 @@ export const getArticles = async ({
                 thumbnailUrl: true,
                 siteUrl: true,
                 rssUrl: true,
-                isTrending: true,
+                apiQueryParam: true,
+                trendPlatformType: true,
                 createdAt: true,
                 updatedAt: true,
                 deletedAt: true,
@@ -180,11 +181,27 @@ export const getArticles = async ({
             userId: userId,
           },
         },
+        trendArticles: {
+          select: {
+            id: true,
+            likeCount: true,
+            createdAt: true,
+            updatedAt: true,
+          },
+          orderBy: {
+            createdAt: "desc",
+          },
+          take: 1,
+        },
       },
     });
 
     const articleList: Array<ArticleType> = res.map((article) => {
       const isBookmarked = article.bookmarks.length > 0;
+      const likeCount =
+        article.trendArticles.length > 0
+          ? article.trendArticles[0].likeCount
+          : undefined;
       return {
         id: article.id,
         title: article.title,
@@ -192,6 +209,8 @@ export const getArticles = async ({
         thumbnailURL: article.thumbnailURL,
         articleUrl: article.articleUrl,
         publishedAt: article.publishedAt,
+        authorName: article.authorName,
+        tags: article.tags,
         isPrivate: article.isPrivate,
         createdAt: article.createdAt,
         updatedAt: article.updatedAt,
@@ -207,6 +226,7 @@ export const getArticles = async ({
           deletedAt: article.platform.deletedAt,
         },
         isBookmarked: isBookmarked,
+        likeCount: likeCount,
         bookmarkId: isBookmarked ? article.bookmarks[0].id : undefined,
         feeds: article.feedArticleRelatoins.map((feed) => {
           return {
@@ -216,7 +236,8 @@ export const getArticles = async ({
             thumbnailUrl: feed.feed.thumbnailUrl,
             siteUrl: feed.feed.siteUrl,
             rssUrl: feed.feed.rssUrl,
-            isTrending: feed.feed.isTrending,
+            apiQueryParam: feed.feed.apiQueryParam,
+            trendPlatformType: feed.feed.trendPlatformType,
             createdAt: feed.feed.createdAt,
             updatedAt: feed.feed.updatedAt,
             deletedAt: feed.feed.deletedAt,
@@ -273,7 +294,8 @@ export const getArticleByArticleAndPlatformUrl = async ({
                 thumbnailUrl: true,
                 siteUrl: true,
                 rssUrl: true,
-                isTrending: true,
+                apiQueryParam: true,
+                trendPlatformType: true,
                 createdAt: true,
                 updatedAt: true,
                 deletedAt: true,
@@ -312,12 +334,28 @@ export const getArticleByArticleAndPlatformUrl = async ({
             userId: userId,
           },
         },
+        trendArticles: {
+          select: {
+            id: true,
+            likeCount: true,
+            createdAt: true,
+            updatedAt: true,
+          },
+          orderBy: {
+            createdAt: "desc",
+          },
+          take: 1,
+        },
       },
     });
 
     if (!article) return;
     const isBookmarked =
       !!article?.bookmarks?.length && article.bookmarks.length > 0;
+    const likeCount =
+      article.trendArticles.length > 0
+        ? article.trendArticles[0].likeCount
+        : undefined;
 
     const resArticle: ArticleType = {
       id: article.id,
@@ -326,6 +364,8 @@ export const getArticleByArticleAndPlatformUrl = async ({
       thumbnailURL: article.thumbnailURL,
       articleUrl: article.articleUrl,
       publishedAt: article.publishedAt,
+      authorName: article.authorName,
+      tags: article.tags,
       isPrivate: article.isPrivate,
       createdAt: article.createdAt,
       updatedAt: article.updatedAt,
@@ -341,6 +381,7 @@ export const getArticleByArticleAndPlatformUrl = async ({
         deletedAt: article.platform.deletedAt,
       },
       isBookmarked: isBookmarked,
+      likeCount: likeCount,
       bookmarkId: isBookmarked ? article.bookmarks[0].id : undefined,
       feeds: article.feedArticleRelatoins.map((feed) => {
         return {
@@ -350,7 +391,8 @@ export const getArticleByArticleAndPlatformUrl = async ({
           thumbnailUrl: feed.feed.thumbnailUrl,
           siteUrl: feed.feed.siteUrl,
           rssUrl: feed.feed.rssUrl,
-          isTrending: feed.feed.isTrending,
+          apiQueryParam: feed.feed.apiQueryParam,
+          trendPlatformType: feed.feed.trendPlatformType,
           createdAt: feed.feed.createdAt,
           updatedAt: feed.feed.updatedAt,
           deletedAt: feed.feed.deletedAt,
