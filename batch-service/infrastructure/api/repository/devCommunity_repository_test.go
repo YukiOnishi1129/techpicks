@@ -7,13 +7,18 @@ import (
 
 func TestDevCommunityRepository_GetDevCommunityArticles(t *testing.T) {
 	t.Parallel()
+	tagReact := "react"
+	tagDummy := "dummy"
 	tests := []struct {
 		name string
 		tag  *string
 	}{
 		{
 			name: "Success: GetDevCommunityArticles",
-			tag:  nil,
+		},
+		{
+			name: "Success: GetDevCommunityArticles with tag",
+			tag:  &tagReact,
 		},
 	}
 

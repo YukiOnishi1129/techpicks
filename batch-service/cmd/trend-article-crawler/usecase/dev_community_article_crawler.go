@@ -5,28 +5,12 @@ import (
 	"github.com/YukiOnishi1129/techpicks/batch-service/entity"
 	"github.com/YukiOnishi1129/techpicks/batch-service/internal"
 	"github.com/YukiOnishi1129/techpicks/batch-service/internal/crawler"
-	"github.com/volatiletech/sqlboiler/v4/queries/qm"
 	"log"
 	"time"
 )
 
 func (u *Usecase) DevCommunityArticleCrawler(ctx context.Context, feed *entity.Feed) error {
 	log.Printf("【start dev community article crawler】: %s", feed.Name)
-	fiveHoursAgo := time.Now().Add(-5 * time.Hour).Format("2006-01-02 15:04:05")
-	// idempotency check
-	trendCount, err := entity.TrendArticles(
-		qm.Where("platform_id = ?", feed.PlatformID),
-		qm.And("created_at >= ?", fiveHoursAgo),
-	).Count(ctx, u.db)
-	if err != nil {
-		log.Printf("【error get trend article count】: %s", err)
-		return err
-	}
-	if trendCount != 0 {
-		log.Printf("【skip dev community article crawler, because there was data 5 hours ago】")
-		log.Printf("【end dev community article crawler】: %s", feed.Name)
-		return nil
-	}
 
 	aCount := 0
 	farCount := 0

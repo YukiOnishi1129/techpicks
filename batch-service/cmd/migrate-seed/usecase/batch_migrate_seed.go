@@ -49,7 +49,7 @@ func (u *Usecase) BatchMigrateSeed(ctx context.Context) error {
 			if sp.seedCategoryID == s.seedCategoryID {
 				p, _ := entity.Platforms(qm.Where("site_url = ?", sp.PlatformSiteURL)).One(ctx, tx)
 				if p != nil {
-					f, _ := entity.Feeds(qm.Where("rss_url = ?", sp.RssURL)).One(ctx, tx)
+					f, _ := entity.Feeds(qm.Where("name = ?", sp.FeedName)).One(ctx, tx)
 					if f == nil {
 						arg := createFeedArg{
 							PlatformID:      p.ID,

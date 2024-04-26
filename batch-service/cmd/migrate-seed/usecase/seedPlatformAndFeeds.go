@@ -29,6 +29,11 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 	zennTrendType := domain.TrendPlatformTypeZenn
 	hatenaTrendType := domain.TrendPlatformTypeHatena
 	devCommunityTrendType := domain.TrendPlatformTypeDevCommunity
+
+	devComReact := "react"
+	devComReactNative := "reactnative"
+	devComNextjs := "nextjs"
+	devComGo := "go"
 	return []seedPlatformFeed{
 		{
 			PlatformName:      "Qiita",
@@ -73,8 +78,8 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			TrendPlatformType: &hatenaTrendType,
 		},
 		{
-			PlatformName:      "dev.to",
-			FeedName:          "dev.to",
+			PlatformName:      "Dev Community",
+			FeedName:          "Dev Community",
 			FeedDescription:   "A constructive and inclusive social network for software developers. With you every step of your journey.",
 			FeedThumbnail:     "https://dev-to-uploads.s3.amazonaws.com/uploads/articles/8lvvnvil0m75nw7yi6iz.jpg",
 			seedCategoryID:    1,
@@ -1872,5 +1877,65 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 		//	FaviconURL:      "https://d3i4yxtzktqr9n.cloudfront.net/ubercom-dynamic/c4de46a6cbd165a9.png",
 		//	IsEng:           true,
 		//},
+		{
+			PlatformName:      "Dev Community",
+			FeedName:          "React | Dev Community",
+			FeedDescription:   "React is a JavaScript library for building user interfaces. Learn what React is all about on DEV.",
+			FeedThumbnail:     "https://dev-to-uploads.s3.amazonaws.com/uploads/articles/8lvvnvil0m75nw7yi6iz.jpg",
+			seedCategoryID:    18,
+			RssURL:            "https://dev.to/feed",
+			PlatformSiteURL:   "https://dev.to/",
+			FeedSiteURL:       "https://dev.to/t/react",
+			PlatformType:      domain.PlatformTypeSite,
+			FaviconURL:        "https://dev-to.s3.us-east-2.amazonaws.com/favicon.ico",
+			IsEng:             true,
+			TrendPlatformType: &devCommunityTrendType,
+			APIQueryParam:     &devComReact,
+		},
+		{
+			PlatformName:      "Dev Community",
+			FeedName:          "ReactNative | Dev Community",
+			FeedDescription:   "React Native is a framework for building native apps using React. Learn what React Native is all about on DEV.",
+			FeedThumbnail:     "https://dev-to-uploads.s3.amazonaws.com/uploads/articles/8lvvnvil0m75nw7yi6iz.jpg",
+			seedCategoryID:    26,
+			RssURL:            "https://dev.to/feed",
+			PlatformSiteURL:   "https://dev.to/",
+			FeedSiteURL:       "https://dev.to/t/reactnative",
+			PlatformType:      domain.PlatformTypeSite,
+			FaviconURL:        "https://dev-to.s3.us-east-2.amazonaws.com/favicon.ico",
+			IsEng:             true,
+			TrendPlatformType: &devCommunityTrendType,
+			APIQueryParam:     &devComReactNative,
+		},
+		{
+			PlatformName:      "Dev Community",
+			FeedName:          "Next.js | Dev Community",
+			FeedDescription:   "Next.js is a React framework that enables functionality such as server-side rendering and generating static websites for React based web applications. Learn what Next.js is all about on DEV.",
+			FeedThumbnail:     "https://dev-to-uploads.s3.amazonaws.com/uploads/articles/8lvvnvil0m75nw7yi6iz.jpg",
+			seedCategoryID:    20,
+			RssURL:            "https://dev.to/feed",
+			PlatformSiteURL:   "https://dev.to/",
+			FeedSiteURL:       "https://dev.to/t/reactnative",
+			PlatformType:      domain.PlatformTypeSite,
+			FaviconURL:        "https://dev-to.s3.us-east-2.amazonaws.com/favicon.ico",
+			IsEng:             true,
+			TrendPlatformType: &devCommunityTrendType,
+			APIQueryParam:     &devComNextjs,
+		},
+		{
+			PlatformName:      "Dev Community",
+			FeedName:          "Go | Dev Community",
+			FeedDescription:   "Go is an open-source programming language that makes it easy to build simple, reliable, and efficient software. Learn what Go is all about on DEV.",
+			FeedThumbnail:     "https://dev-to-uploads.s3.amazonaws.com/uploads/articles/8lvvnvil0m75nw7yi6iz.jpg",
+			seedCategoryID:    9,
+			RssURL:            "https://dev.to/feed",
+			PlatformSiteURL:   "https://dev.to/",
+			FeedSiteURL:       "https://dev.to/t/go",
+			PlatformType:      domain.PlatformTypeSite,
+			FaviconURL:        "https://dev-to.s3.us-east-2.amazonaws.com/favicon.ico",
+			IsEng:             true,
+			TrendPlatformType: &devCommunityTrendType,
+			APIQueryParam:     &devComGo,
+		},
 	}
 }
