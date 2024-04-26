@@ -24,8 +24,8 @@ type DevCommunityUser struct {
 
 func (r *Repository) GetDevCommunityArticles(tag *string) ([]DevCommunityItem, error) {
 	url := fmt.Sprintf("%sarticles?top=7", r.apiClient.GetDevCommunityURL())
-	if tag != nil {
-		url = fmt.Sprintf("url&tag=%s", *tag)
+	if tag != nil || *tag != "" {
+		url = fmt.Sprintf("%s&tag=%s", url, *tag)
 	}
 	resp, err := r.apiClient.GetClient().Get(url)
 	if err != nil {

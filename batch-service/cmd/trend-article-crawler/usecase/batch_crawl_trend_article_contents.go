@@ -45,7 +45,12 @@ func (u *Usecase) BatchCrawlTrendArticleContents(ctx context.Context) error {
 				continue
 			}
 		case int(domain.TrendPlatformTypeDevCommunity):
-		// dev community
+
+			err = u.DevCommunityArticleCrawler(ctx, f)
+			if err != nil {
+				log.Printf("【error dev community article crawler】: %s", err)
+				continue
+			}
 		default:
 			continue
 		}
