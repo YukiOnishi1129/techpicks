@@ -1,4 +1,4 @@
-package seeders
+package usecase
 
 import (
 	"context"
@@ -14,20 +14,12 @@ import (
 	"github.com/YukiOnishi1129/techpicks/batch-service/domain"
 )
 
-type InitSeedInterface interface {
-	InitSeed(ctx context.Context) error
+type BatchMigrateSeedInterface interface {
+	BatchMigrateSeed(ctx context.Context) error
 }
 
-type InitSeed struct {
-	db *sql.DB
-}
-
-func NewInitSeed(db *sql.DB) *InitSeed {
-	return &InitSeed{db: db}
-}
-
-func (is *InitSeed) SeedInitData(ctx context.Context) error {
-	tx, err := is.db.BeginTx(ctx, nil)
+func (u *Usecase) BatchMigrateSeed(ctx context.Context) error {
+	tx, err := u.db.BeginTx(ctx, nil)
 	if err != nil {
 		return err
 	}
@@ -57,20 +49,23 @@ func (is *InitSeed) SeedInitData(ctx context.Context) error {
 			if sp.seedCategoryID == s.seedCategoryID {
 				p, _ := entity.Platforms(qm.Where("site_url = ?", sp.PlatformSiteURL)).One(ctx, tx)
 				if p != nil {
-					f, _ := entity.Feeds(qm.Where("rss_url = ?", sp.RssURL)).One(ctx, tx)
+					f, _ := entity.Feeds(qm.Where("name = ?", sp.FeedName)).One(ctx, tx)
 					if f == nil {
-
-						err = createFeed(ctx, tx, createFeedArg{
+						arg := createFeedArg{
 							PlatformID:      p.ID,
 							CategoryID:      categoryIDStr,
 							FeedName:        sp.FeedName,
 							FeedDescription: sp.FeedDescription,
 							FeedThumbnail:   sp.FeedThumbnail,
 							RssURL:          sp.RssURL,
+							APIQueryParam:   sp.APIQueryParam,
 							FeedSiteURL:     sp.FeedSiteURL,
-							IsTrending:      sp.IsTrending,
 							DeletedAt:       sp.DeletedAt,
-						})
+						}
+						if sp.TrendPlatformType != nil {
+							arg.TrendPlatformType = *sp.TrendPlatformType
+						}
+						err = createFeed(ctx, tx, arg)
 						if err != nil {
 							return err
 						}
@@ -92,7 +87,7 @@ func (is *InitSeed) SeedInitData(ctx context.Context) error {
 					return err
 				}
 
-				err = createFeed(ctx, tx, createFeedArg{
+				arg := createFeedArg{
 					PlatformID:      platformID.String(),
 					CategoryID:      categoryIDStr,
 					FeedName:        sp.FeedName,
@@ -100,9 +95,13 @@ func (is *InitSeed) SeedInitData(ctx context.Context) error {
 					FeedThumbnail:   sp.FeedThumbnail,
 					RssURL:          sp.RssURL,
 					FeedSiteURL:     sp.FeedSiteURL,
-					IsTrending:      sp.IsTrending,
+					APIQueryParam:   sp.APIQueryParam,
 					DeletedAt:       sp.DeletedAt,
-				})
+				}
+				if sp.TrendPlatformType != nil {
+					arg.TrendPlatformType = *sp.TrendPlatformType
+				}
+				err = createFeed(ctx, tx, arg)
 				if err != nil {
 					return err
 				}
@@ -146,29 +145,33 @@ func createPlatform(ctx context.Context, tx *sql.Tx, arg createPlatformArg) erro
 }
 
 type createFeedArg struct {
-	PlatformID      string
-	CategoryID      string
-	FeedName        string
-	FeedDescription string
-	FeedThumbnail   string
-	RssURL          string
-	FeedSiteURL     string
-	IsTrending      bool
-	DeletedAt       *time.Time
+	PlatformID        string
+	CategoryID        string
+	FeedName          string
+	FeedDescription   string
+	FeedThumbnail     string
+	RssURL            string
+	TrendPlatformType domain.TrendPlatformType
+	APIQueryParam     *string
+	FeedSiteURL       string
+	DeletedAt         *time.Time
 }
 
 func createFeed(ctx context.Context, tx *sql.Tx, arg createFeedArg) error {
 	feedID, _ := uuid.NewUUID()
 	feed := entity.Feed{
-		ID:           feedID.String(),
-		Name:         arg.FeedName,
-		Description:  arg.FeedDescription,
-		ThumbnailURL: arg.FeedThumbnail,
-		RSSURL:       arg.RssURL,
-		SiteURL:      arg.FeedSiteURL,
-		IsTrending:   arg.IsTrending,
-		PlatformID:   arg.PlatformID,
-		CategoryID:   arg.CategoryID,
+		ID:                feedID.String(),
+		Name:              arg.FeedName,
+		Description:       arg.FeedDescription,
+		ThumbnailURL:      arg.FeedThumbnail,
+		RSSURL:            arg.RssURL,
+		TrendPlatformType: int(arg.TrendPlatformType),
+		SiteURL:           arg.FeedSiteURL,
+		PlatformID:        arg.PlatformID,
+		CategoryID:        arg.CategoryID,
+	}
+	if arg.APIQueryParam != nil {
+		feed.APIQueryParam = null.StringFromPtr(arg.APIQueryParam)
 	}
 	if arg.DeletedAt != nil {
 		feed.DeletedAt = null.TimeFromPtr(arg.DeletedAt)

@@ -1,10 +1,9 @@
-package usecase
+package repository
 
 import (
 	"context"
 	"fmt"
 	"github.com/Songmu/go-httpdate"
-	"github.com/mmcdole/gofeed"
 	"github.com/otiai10/opengraph"
 	"time"
 )
@@ -15,14 +14,15 @@ type RSS struct {
 	Description string
 	PublishedAt int
 	ImageURL    string
+	Tags        string
+	AuthorName  string
 }
 
-func GetRSS(rssURL string) ([]RSS, error) {
+func (r *Repository) GetRSS(rssURL string) ([]RSS, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
-	fp := gofeed.NewParser()
 
-	feed, err := fp.ParseURLWithContext(rssURL, ctx)
+	feed, err := r.rssClient.GetRSSClient().ParseURLWithContext(rssURL, ctx)
 	if err != nil {
 		println(fmt.Sprintf("error: %s\n", err))
 		return nil, err
@@ -51,6 +51,21 @@ func GetRSS(rssURL string) ([]RSS, error) {
 			Description: item.Description,
 			PublishedAt: int(t.Unix()),
 			ImageURL:    ogpImageURL,
+		}
+
+		if len(item.Authors) != 0 {
+			rss[i].AuthorName = item.Authors[0].Name
+		}
+		if len(item.Categories) != 0 {
+			tags := ""
+			for i, tag := range item.Categories {
+				if i != 0 {
+					tags = fmt.Sprintf("%s,%s", tags, tag)
+					continue
+				}
+				tags = tag
+			}
+			rss[i].Tags = tags
 		}
 	}
 	return rss, nil

@@ -4,9 +4,21 @@ empty:
 lint:
 	golangci-lint run ./...
 
+test:
+	go test -v ./...
+
+## make test-single name="TestFunctionName"
+test-single:
+	go test -v -run ${name} ./...
 
 seed:
-	go run ./database/seed/main.go
+	go run ./cmd/migrate-seed/main.go
 
-create-article-batch:
-	go run ./cmd/main.go
+create-article-site-and-summary-crawler:
+	go run ./cmd/article-site-and-summary-crawler/main.go
+
+create-article-company-crawler:
+	go run ./cmd/article-company-crawler/main.go
+
+create-trend-article-crawler:
+	go run ./cmd/trend-article-crawler/main.go

@@ -24,107 +24,114 @@ import (
 
 // Feed is an object representing the database table.
 type Feed struct {
-	ID           string    `boil:"id" json:"id" toml:"id" yaml:"id"`
-	Name         string    `boil:"name" json:"name" toml:"name" yaml:"name"`
-	Description  string    `boil:"description" json:"description" toml:"description" yaml:"description"`
-	ThumbnailURL string    `boil:"thumbnail_url" json:"thumbnail_url" toml:"thumbnail_url" yaml:"thumbnail_url"`
-	PlatformID   string    `boil:"platform_id" json:"platform_id" toml:"platform_id" yaml:"platform_id"`
-	CategoryID   string    `boil:"category_id" json:"category_id" toml:"category_id" yaml:"category_id"`
-	SiteURL      string    `boil:"site_url" json:"site_url" toml:"site_url" yaml:"site_url"`
-	RSSURL       string    `boil:"rss_url" json:"rss_url" toml:"rss_url" yaml:"rss_url"`
-	IsTrending   bool      `boil:"is_trending" json:"is_trending" toml:"is_trending" yaml:"is_trending"`
-	CreatedAt    time.Time `boil:"created_at" json:"created_at" toml:"created_at" yaml:"created_at"`
-	UpdatedAt    time.Time `boil:"updated_at" json:"updated_at" toml:"updated_at" yaml:"updated_at"`
-	DeletedAt    null.Time `boil:"deleted_at" json:"deleted_at,omitempty" toml:"deleted_at" yaml:"deleted_at,omitempty"`
+	ID                string      `boil:"id" json:"id" toml:"id" yaml:"id"`
+	Name              string      `boil:"name" json:"name" toml:"name" yaml:"name"`
+	Description       string      `boil:"description" json:"description" toml:"description" yaml:"description"`
+	ThumbnailURL      string      `boil:"thumbnail_url" json:"thumbnail_url" toml:"thumbnail_url" yaml:"thumbnail_url"`
+	PlatformID        string      `boil:"platform_id" json:"platform_id" toml:"platform_id" yaml:"platform_id"`
+	CategoryID        string      `boil:"category_id" json:"category_id" toml:"category_id" yaml:"category_id"`
+	SiteURL           string      `boil:"site_url" json:"site_url" toml:"site_url" yaml:"site_url"`
+	RSSURL            string      `boil:"rss_url" json:"rss_url" toml:"rss_url" yaml:"rss_url"`
+	APIQueryParam     null.String `boil:"api_query_param" json:"api_query_param,omitempty" toml:"api_query_param" yaml:"api_query_param,omitempty"`
+	TrendPlatformType int         `boil:"trend_platform_type" json:"trend_platform_type" toml:"trend_platform_type" yaml:"trend_platform_type"`
+	CreatedAt         time.Time   `boil:"created_at" json:"created_at" toml:"created_at" yaml:"created_at"`
+	UpdatedAt         time.Time   `boil:"updated_at" json:"updated_at" toml:"updated_at" yaml:"updated_at"`
+	DeletedAt         null.Time   `boil:"deleted_at" json:"deleted_at,omitempty" toml:"deleted_at" yaml:"deleted_at,omitempty"`
 
 	R *feedR `boil:"-" json:"-" toml:"-" yaml:"-"`
 	L feedL  `boil:"-" json:"-" toml:"-" yaml:"-"`
 }
 
 var FeedColumns = struct {
-	ID           string
-	Name         string
-	Description  string
-	ThumbnailURL string
-	PlatformID   string
-	CategoryID   string
-	SiteURL      string
-	RSSURL       string
-	IsTrending   string
-	CreatedAt    string
-	UpdatedAt    string
-	DeletedAt    string
+	ID                string
+	Name              string
+	Description       string
+	ThumbnailURL      string
+	PlatformID        string
+	CategoryID        string
+	SiteURL           string
+	RSSURL            string
+	APIQueryParam     string
+	TrendPlatformType string
+	CreatedAt         string
+	UpdatedAt         string
+	DeletedAt         string
 }{
-	ID:           "id",
-	Name:         "name",
-	Description:  "description",
-	ThumbnailURL: "thumbnail_url",
-	PlatformID:   "platform_id",
-	CategoryID:   "category_id",
-	SiteURL:      "site_url",
-	RSSURL:       "rss_url",
-	IsTrending:   "is_trending",
-	CreatedAt:    "created_at",
-	UpdatedAt:    "updated_at",
-	DeletedAt:    "deleted_at",
+	ID:                "id",
+	Name:              "name",
+	Description:       "description",
+	ThumbnailURL:      "thumbnail_url",
+	PlatformID:        "platform_id",
+	CategoryID:        "category_id",
+	SiteURL:           "site_url",
+	RSSURL:            "rss_url",
+	APIQueryParam:     "api_query_param",
+	TrendPlatformType: "trend_platform_type",
+	CreatedAt:         "created_at",
+	UpdatedAt:         "updated_at",
+	DeletedAt:         "deleted_at",
 }
 
 var FeedTableColumns = struct {
-	ID           string
-	Name         string
-	Description  string
-	ThumbnailURL string
-	PlatformID   string
-	CategoryID   string
-	SiteURL      string
-	RSSURL       string
-	IsTrending   string
-	CreatedAt    string
-	UpdatedAt    string
-	DeletedAt    string
+	ID                string
+	Name              string
+	Description       string
+	ThumbnailURL      string
+	PlatformID        string
+	CategoryID        string
+	SiteURL           string
+	RSSURL            string
+	APIQueryParam     string
+	TrendPlatformType string
+	CreatedAt         string
+	UpdatedAt         string
+	DeletedAt         string
 }{
-	ID:           "feeds.id",
-	Name:         "feeds.name",
-	Description:  "feeds.description",
-	ThumbnailURL: "feeds.thumbnail_url",
-	PlatformID:   "feeds.platform_id",
-	CategoryID:   "feeds.category_id",
-	SiteURL:      "feeds.site_url",
-	RSSURL:       "feeds.rss_url",
-	IsTrending:   "feeds.is_trending",
-	CreatedAt:    "feeds.created_at",
-	UpdatedAt:    "feeds.updated_at",
-	DeletedAt:    "feeds.deleted_at",
+	ID:                "feeds.id",
+	Name:              "feeds.name",
+	Description:       "feeds.description",
+	ThumbnailURL:      "feeds.thumbnail_url",
+	PlatformID:        "feeds.platform_id",
+	CategoryID:        "feeds.category_id",
+	SiteURL:           "feeds.site_url",
+	RSSURL:            "feeds.rss_url",
+	APIQueryParam:     "feeds.api_query_param",
+	TrendPlatformType: "feeds.trend_platform_type",
+	CreatedAt:         "feeds.created_at",
+	UpdatedAt:         "feeds.updated_at",
+	DeletedAt:         "feeds.deleted_at",
 }
 
 // Generated where
 
 var FeedWhere = struct {
-	ID           whereHelperstring
-	Name         whereHelperstring
-	Description  whereHelperstring
-	ThumbnailURL whereHelperstring
-	PlatformID   whereHelperstring
-	CategoryID   whereHelperstring
-	SiteURL      whereHelperstring
-	RSSURL       whereHelperstring
-	IsTrending   whereHelperbool
-	CreatedAt    whereHelpertime_Time
-	UpdatedAt    whereHelpertime_Time
-	DeletedAt    whereHelpernull_Time
+	ID                whereHelperstring
+	Name              whereHelperstring
+	Description       whereHelperstring
+	ThumbnailURL      whereHelperstring
+	PlatformID        whereHelperstring
+	CategoryID        whereHelperstring
+	SiteURL           whereHelperstring
+	RSSURL            whereHelperstring
+	APIQueryParam     whereHelpernull_String
+	TrendPlatformType whereHelperint
+	CreatedAt         whereHelpertime_Time
+	UpdatedAt         whereHelpertime_Time
+	DeletedAt         whereHelpernull_Time
 }{
-	ID:           whereHelperstring{field: "\"feeds\".\"id\""},
-	Name:         whereHelperstring{field: "\"feeds\".\"name\""},
-	Description:  whereHelperstring{field: "\"feeds\".\"description\""},
-	ThumbnailURL: whereHelperstring{field: "\"feeds\".\"thumbnail_url\""},
-	PlatformID:   whereHelperstring{field: "\"feeds\".\"platform_id\""},
-	CategoryID:   whereHelperstring{field: "\"feeds\".\"category_id\""},
-	SiteURL:      whereHelperstring{field: "\"feeds\".\"site_url\""},
-	RSSURL:       whereHelperstring{field: "\"feeds\".\"rss_url\""},
-	IsTrending:   whereHelperbool{field: "\"feeds\".\"is_trending\""},
-	CreatedAt:    whereHelpertime_Time{field: "\"feeds\".\"created_at\""},
-	UpdatedAt:    whereHelpertime_Time{field: "\"feeds\".\"updated_at\""},
-	DeletedAt:    whereHelpernull_Time{field: "\"feeds\".\"deleted_at\""},
+	ID:                whereHelperstring{field: "\"feeds\".\"id\""},
+	Name:              whereHelperstring{field: "\"feeds\".\"name\""},
+	Description:       whereHelperstring{field: "\"feeds\".\"description\""},
+	ThumbnailURL:      whereHelperstring{field: "\"feeds\".\"thumbnail_url\""},
+	PlatformID:        whereHelperstring{field: "\"feeds\".\"platform_id\""},
+	CategoryID:        whereHelperstring{field: "\"feeds\".\"category_id\""},
+	SiteURL:           whereHelperstring{field: "\"feeds\".\"site_url\""},
+	RSSURL:            whereHelperstring{field: "\"feeds\".\"rss_url\""},
+	APIQueryParam:     whereHelpernull_String{field: "\"feeds\".\"api_query_param\""},
+	TrendPlatformType: whereHelperint{field: "\"feeds\".\"trend_platform_type\""},
+	CreatedAt:         whereHelpertime_Time{field: "\"feeds\".\"created_at\""},
+	UpdatedAt:         whereHelpertime_Time{field: "\"feeds\".\"updated_at\""},
+	DeletedAt:         whereHelpernull_Time{field: "\"feeds\".\"deleted_at\""},
 }
 
 // FeedRels is where relationship names are stored.
@@ -185,9 +192,9 @@ func (r *feedR) GetMyFeeds() MyFeedSlice {
 type feedL struct{}
 
 var (
-	feedAllColumns            = []string{"id", "name", "description", "thumbnail_url", "platform_id", "category_id", "site_url", "rss_url", "is_trending", "created_at", "updated_at", "deleted_at"}
+	feedAllColumns            = []string{"id", "name", "description", "thumbnail_url", "platform_id", "category_id", "site_url", "rss_url", "api_query_param", "trend_platform_type", "created_at", "updated_at", "deleted_at"}
 	feedColumnsWithoutDefault = []string{"name", "description", "thumbnail_url", "platform_id", "category_id", "site_url", "rss_url"}
-	feedColumnsWithDefault    = []string{"id", "is_trending", "created_at", "updated_at", "deleted_at"}
+	feedColumnsWithDefault    = []string{"id", "api_query_param", "trend_platform_type", "created_at", "updated_at", "deleted_at"}
 	feedPrimaryKeyColumns     = []string{"id"}
 	feedGeneratedColumns      = []string{}
 )

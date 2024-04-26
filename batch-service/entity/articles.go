@@ -14,6 +14,7 @@ import (
 	"time"
 
 	"github.com/friendsofgo/errors"
+	"github.com/volatiletech/null/v8"
 	"github.com/volatiletech/sqlboiler/v4/boil"
 	"github.com/volatiletech/sqlboiler/v4/queries"
 	"github.com/volatiletech/sqlboiler/v4/queries/qm"
@@ -23,16 +24,18 @@ import (
 
 // Article is an object representing the database table.
 type Article struct {
-	ID           string    `boil:"id" json:"id" toml:"id" yaml:"id"`
-	PlatformID   string    `boil:"platform_id" json:"platform_id" toml:"platform_id" yaml:"platform_id"`
-	Title        string    `boil:"title" json:"title" toml:"title" yaml:"title"`
-	Description  string    `boil:"description" json:"description" toml:"description" yaml:"description"`
-	ArticleURL   string    `boil:"article_url" json:"article_url" toml:"article_url" yaml:"article_url"`
-	PublishedAt  time.Time `boil:"published_at" json:"published_at" toml:"published_at" yaml:"published_at"`
-	ThumbnailURL string    `boil:"thumbnail_url" json:"thumbnail_url" toml:"thumbnail_url" yaml:"thumbnail_url"`
-	IsPrivate    bool      `boil:"is_private" json:"is_private" toml:"is_private" yaml:"is_private"`
-	CreatedAt    time.Time `boil:"created_at" json:"created_at" toml:"created_at" yaml:"created_at"`
-	UpdatedAt    time.Time `boil:"updated_at" json:"updated_at" toml:"updated_at" yaml:"updated_at"`
+	ID           string      `boil:"id" json:"id" toml:"id" yaml:"id"`
+	PlatformID   string      `boil:"platform_id" json:"platform_id" toml:"platform_id" yaml:"platform_id"`
+	Title        string      `boil:"title" json:"title" toml:"title" yaml:"title"`
+	Description  string      `boil:"description" json:"description" toml:"description" yaml:"description"`
+	ArticleURL   string      `boil:"article_url" json:"article_url" toml:"article_url" yaml:"article_url"`
+	PublishedAt  time.Time   `boil:"published_at" json:"published_at" toml:"published_at" yaml:"published_at"`
+	AuthorName   null.String `boil:"author_name" json:"author_name,omitempty" toml:"author_name" yaml:"author_name,omitempty"`
+	Tags         null.String `boil:"tags" json:"tags,omitempty" toml:"tags" yaml:"tags,omitempty"`
+	ThumbnailURL string      `boil:"thumbnail_url" json:"thumbnail_url" toml:"thumbnail_url" yaml:"thumbnail_url"`
+	IsPrivate    bool        `boil:"is_private" json:"is_private" toml:"is_private" yaml:"is_private"`
+	CreatedAt    time.Time   `boil:"created_at" json:"created_at" toml:"created_at" yaml:"created_at"`
+	UpdatedAt    time.Time   `boil:"updated_at" json:"updated_at" toml:"updated_at" yaml:"updated_at"`
 
 	R *articleR `boil:"-" json:"-" toml:"-" yaml:"-"`
 	L articleL  `boil:"-" json:"-" toml:"-" yaml:"-"`
@@ -45,6 +48,8 @@ var ArticleColumns = struct {
 	Description  string
 	ArticleURL   string
 	PublishedAt  string
+	AuthorName   string
+	Tags         string
 	ThumbnailURL string
 	IsPrivate    string
 	CreatedAt    string
@@ -56,6 +61,8 @@ var ArticleColumns = struct {
 	Description:  "description",
 	ArticleURL:   "article_url",
 	PublishedAt:  "published_at",
+	AuthorName:   "author_name",
+	Tags:         "tags",
 	ThumbnailURL: "thumbnail_url",
 	IsPrivate:    "is_private",
 	CreatedAt:    "created_at",
@@ -69,6 +76,8 @@ var ArticleTableColumns = struct {
 	Description  string
 	ArticleURL   string
 	PublishedAt  string
+	AuthorName   string
+	Tags         string
 	ThumbnailURL string
 	IsPrivate    string
 	CreatedAt    string
@@ -80,6 +89,8 @@ var ArticleTableColumns = struct {
 	Description:  "articles.description",
 	ArticleURL:   "articles.article_url",
 	PublishedAt:  "articles.published_at",
+	AuthorName:   "articles.author_name",
+	Tags:         "articles.tags",
 	ThumbnailURL: "articles.thumbnail_url",
 	IsPrivate:    "articles.is_private",
 	CreatedAt:    "articles.created_at",
@@ -136,6 +147,56 @@ func (w whereHelpertime_Time) GTE(x time.Time) qm.QueryMod {
 	return qmhelper.Where(w.field, qmhelper.GTE, x)
 }
 
+type whereHelpernull_String struct{ field string }
+
+func (w whereHelpernull_String) EQ(x null.String) qm.QueryMod {
+	return qmhelper.WhereNullEQ(w.field, false, x)
+}
+func (w whereHelpernull_String) NEQ(x null.String) qm.QueryMod {
+	return qmhelper.WhereNullEQ(w.field, true, x)
+}
+func (w whereHelpernull_String) LT(x null.String) qm.QueryMod {
+	return qmhelper.Where(w.field, qmhelper.LT, x)
+}
+func (w whereHelpernull_String) LTE(x null.String) qm.QueryMod {
+	return qmhelper.Where(w.field, qmhelper.LTE, x)
+}
+func (w whereHelpernull_String) GT(x null.String) qm.QueryMod {
+	return qmhelper.Where(w.field, qmhelper.GT, x)
+}
+func (w whereHelpernull_String) GTE(x null.String) qm.QueryMod {
+	return qmhelper.Where(w.field, qmhelper.GTE, x)
+}
+func (w whereHelpernull_String) LIKE(x null.String) qm.QueryMod {
+	return qm.Where(w.field+" LIKE ?", x)
+}
+func (w whereHelpernull_String) NLIKE(x null.String) qm.QueryMod {
+	return qm.Where(w.field+" NOT LIKE ?", x)
+}
+func (w whereHelpernull_String) ILIKE(x null.String) qm.QueryMod {
+	return qm.Where(w.field+" ILIKE ?", x)
+}
+func (w whereHelpernull_String) NILIKE(x null.String) qm.QueryMod {
+	return qm.Where(w.field+" NOT ILIKE ?", x)
+}
+func (w whereHelpernull_String) IN(slice []string) qm.QueryMod {
+	values := make([]interface{}, 0, len(slice))
+	for _, value := range slice {
+		values = append(values, value)
+	}
+	return qm.WhereIn(fmt.Sprintf("%s IN ?", w.field), values...)
+}
+func (w whereHelpernull_String) NIN(slice []string) qm.QueryMod {
+	values := make([]interface{}, 0, len(slice))
+	for _, value := range slice {
+		values = append(values, value)
+	}
+	return qm.WhereNotIn(fmt.Sprintf("%s NOT IN ?", w.field), values...)
+}
+
+func (w whereHelpernull_String) IsNull() qm.QueryMod    { return qmhelper.WhereIsNull(w.field) }
+func (w whereHelpernull_String) IsNotNull() qm.QueryMod { return qmhelper.WhereIsNotNull(w.field) }
+
 type whereHelperbool struct{ field string }
 
 func (w whereHelperbool) EQ(x bool) qm.QueryMod  { return qmhelper.Where(w.field, qmhelper.EQ, x) }
@@ -152,6 +213,8 @@ var ArticleWhere = struct {
 	Description  whereHelperstring
 	ArticleURL   whereHelperstring
 	PublishedAt  whereHelpertime_Time
+	AuthorName   whereHelpernull_String
+	Tags         whereHelpernull_String
 	ThumbnailURL whereHelperstring
 	IsPrivate    whereHelperbool
 	CreatedAt    whereHelpertime_Time
@@ -163,6 +226,8 @@ var ArticleWhere = struct {
 	Description:  whereHelperstring{field: "\"articles\".\"description\""},
 	ArticleURL:   whereHelperstring{field: "\"articles\".\"article_url\""},
 	PublishedAt:  whereHelpertime_Time{field: "\"articles\".\"published_at\""},
+	AuthorName:   whereHelpernull_String{field: "\"articles\".\"author_name\""},
+	Tags:         whereHelpernull_String{field: "\"articles\".\"tags\""},
 	ThumbnailURL: whereHelperstring{field: "\"articles\".\"thumbnail_url\""},
 	IsPrivate:    whereHelperbool{field: "\"articles\".\"is_private\""},
 	CreatedAt:    whereHelpertime_Time{field: "\"articles\".\"created_at\""},
@@ -174,10 +239,12 @@ var ArticleRels = struct {
 	Platform             string
 	Bookmarks            string
 	FeedArticleRelations string
+	TrendArticles        string
 }{
 	Platform:             "Platform",
 	Bookmarks:            "Bookmarks",
 	FeedArticleRelations: "FeedArticleRelations",
+	TrendArticles:        "TrendArticles",
 }
 
 // articleR is where relationships are stored.
@@ -185,6 +252,7 @@ type articleR struct {
 	Platform             *Platform                `boil:"Platform" json:"Platform" toml:"Platform" yaml:"Platform"`
 	Bookmarks            BookmarkSlice            `boil:"Bookmarks" json:"Bookmarks" toml:"Bookmarks" yaml:"Bookmarks"`
 	FeedArticleRelations FeedArticleRelationSlice `boil:"FeedArticleRelations" json:"FeedArticleRelations" toml:"FeedArticleRelations" yaml:"FeedArticleRelations"`
+	TrendArticles        TrendArticleSlice        `boil:"TrendArticles" json:"TrendArticles" toml:"TrendArticles" yaml:"TrendArticles"`
 }
 
 // NewStruct creates a new relationship struct
@@ -213,13 +281,20 @@ func (r *articleR) GetFeedArticleRelations() FeedArticleRelationSlice {
 	return r.FeedArticleRelations
 }
 
+func (r *articleR) GetTrendArticles() TrendArticleSlice {
+	if r == nil {
+		return nil
+	}
+	return r.TrendArticles
+}
+
 // articleL is where Load methods for each relationship are stored.
 type articleL struct{}
 
 var (
-	articleAllColumns            = []string{"id", "platform_id", "title", "description", "article_url", "published_at", "thumbnail_url", "is_private", "created_at", "updated_at"}
+	articleAllColumns            = []string{"id", "platform_id", "title", "description", "article_url", "published_at", "author_name", "tags", "thumbnail_url", "is_private", "created_at", "updated_at"}
 	articleColumnsWithoutDefault = []string{"platform_id", "title", "description", "article_url", "published_at", "thumbnail_url"}
-	articleColumnsWithDefault    = []string{"id", "is_private", "created_at", "updated_at"}
+	articleColumnsWithDefault    = []string{"id", "author_name", "tags", "is_private", "created_at", "updated_at"}
 	articlePrimaryKeyColumns     = []string{"id"}
 	articleGeneratedColumns      = []string{}
 )
@@ -568,6 +643,20 @@ func (o *Article) FeedArticleRelations(mods ...qm.QueryMod) feedArticleRelationQ
 	return FeedArticleRelations(queryMods...)
 }
 
+// TrendArticles retrieves all the trend_article's TrendArticles with an executor.
+func (o *Article) TrendArticles(mods ...qm.QueryMod) trendArticleQuery {
+	var queryMods []qm.QueryMod
+	if len(mods) != 0 {
+		queryMods = append(queryMods, mods...)
+	}
+
+	queryMods = append(queryMods,
+		qm.Where("\"trend_articles\".\"article_id\"=?", o.ID),
+	)
+
+	return TrendArticles(queryMods...)
+}
+
 // LoadPlatform allows an eager lookup of values, cached into the
 // loaded structs of the objects. This is for an N-1 relationship.
 func (articleL) LoadPlatform(ctx context.Context, e boil.ContextExecutor, singular bool, maybeArticle interface{}, mods queries.Applicator) error {
@@ -914,6 +1003,119 @@ func (articleL) LoadFeedArticleRelations(ctx context.Context, e boil.ContextExec
 	return nil
 }
 
+// LoadTrendArticles allows an eager lookup of values, cached into the
+// loaded structs of the objects. This is for a 1-M or N-M relationship.
+func (articleL) LoadTrendArticles(ctx context.Context, e boil.ContextExecutor, singular bool, maybeArticle interface{}, mods queries.Applicator) error {
+	var slice []*Article
+	var object *Article
+
+	if singular {
+		var ok bool
+		object, ok = maybeArticle.(*Article)
+		if !ok {
+			object = new(Article)
+			ok = queries.SetFromEmbeddedStruct(&object, &maybeArticle)
+			if !ok {
+				return errors.New(fmt.Sprintf("failed to set %T from embedded struct %T", object, maybeArticle))
+			}
+		}
+	} else {
+		s, ok := maybeArticle.(*[]*Article)
+		if ok {
+			slice = *s
+		} else {
+			ok = queries.SetFromEmbeddedStruct(&slice, maybeArticle)
+			if !ok {
+				return errors.New(fmt.Sprintf("failed to set %T from embedded struct %T", slice, maybeArticle))
+			}
+		}
+	}
+
+	args := make(map[interface{}]struct{})
+	if singular {
+		if object.R == nil {
+			object.R = &articleR{}
+		}
+		args[object.ID] = struct{}{}
+	} else {
+		for _, obj := range slice {
+			if obj.R == nil {
+				obj.R = &articleR{}
+			}
+			args[obj.ID] = struct{}{}
+		}
+	}
+
+	if len(args) == 0 {
+		return nil
+	}
+
+	argsSlice := make([]interface{}, len(args))
+	i := 0
+	for arg := range args {
+		argsSlice[i] = arg
+		i++
+	}
+
+	query := NewQuery(
+		qm.From(`trend_articles`),
+		qm.WhereIn(`trend_articles.article_id in ?`, argsSlice...),
+	)
+	if mods != nil {
+		mods.Apply(query)
+	}
+
+	results, err := query.QueryContext(ctx, e)
+	if err != nil {
+		return errors.Wrap(err, "failed to eager load trend_articles")
+	}
+
+	var resultSlice []*TrendArticle
+	if err = queries.Bind(results, &resultSlice); err != nil {
+		return errors.Wrap(err, "failed to bind eager loaded slice trend_articles")
+	}
+
+	if err = results.Close(); err != nil {
+		return errors.Wrap(err, "failed to close results in eager load on trend_articles")
+	}
+	if err = results.Err(); err != nil {
+		return errors.Wrap(err, "error occurred during iteration of eager loaded relations for trend_articles")
+	}
+
+	if len(trendArticleAfterSelectHooks) != 0 {
+		for _, obj := range resultSlice {
+			if err := obj.doAfterSelectHooks(ctx, e); err != nil {
+				return err
+			}
+		}
+	}
+	if singular {
+		object.R.TrendArticles = resultSlice
+		for _, foreign := range resultSlice {
+			if foreign.R == nil {
+				foreign.R = &trendArticleR{}
+			}
+			foreign.R.Article = object
+		}
+		return nil
+	}
+
+	for _, foreign := range resultSlice {
+		for _, local := range slice {
+			if local.ID == foreign.ArticleID {
+				local.R.TrendArticles = append(local.R.TrendArticles, foreign)
+				if foreign.R == nil {
+					foreign.R = &trendArticleR{}
+				}
+				foreign.R.Article = local
+				break
+			}
+		}
+	}
+
+	return nil
+}
+
 // SetPlatform of the article to the related item.
 // Sets o.R.Platform to related.
 // Adds o to related.R.Articles.
@@ -1132,6 +1334,59 @@ func (o *Article) AddFeedArticleRelations(ctx context.Context, exec boil.Context
 	for _, rel := range related {
 		if rel.R == nil {
 			rel.R = &feedArticleRelationR{
+				Article: o,
+			}
+		} else {
+			rel.R.Article = o
+		}
+	}
+	return nil
+}
+
+// AddTrendArticles adds the given related objects to the existing relationships
+// of the article, optionally inserting them as new records.
+// Appends related to o.R.TrendArticles.
+// Sets related.R.Article appropriately.
+func (o *Article) AddTrendArticles(ctx context.Context, exec boil.ContextExecutor, insert bool, related ...*TrendArticle) error {
+	var err error
+	for _, rel := range related {
+		if insert {
+			rel.ArticleID = o.ID
+			if err = rel.Insert(ctx, exec, boil.Infer()); err != nil {
+				return errors.Wrap(err, "failed to insert into foreign table")
+			}
+		} else {
+			updateQuery := fmt.Sprintf(
+				"UPDATE \"trend_articles\" SET %s WHERE %s",
+				strmangle.SetParamNames("\"", "\"", 1, []string{"article_id"}),
+				strmangle.WhereClause("\"", "\"", 2, trendArticlePrimaryKeyColumns),
+			)
+			values := []interface{}{o.ID, rel.ID}
+
+			if boil.IsDebug(ctx) {
+				writer := boil.DebugWriterFrom(ctx)
+				fmt.Fprintln(writer, updateQuery)
+				fmt.Fprintln(writer, values)
+			}
+			if _, err = exec.ExecContext(ctx, updateQuery, values...); err != nil {
+				return errors.Wrap(err, "failed to update foreign table")
+			}
+
+			rel.ArticleID = o.ID
+		}
+	}
+
+	if o.R == nil {
+		o.R = &articleR{
+			TrendArticles: related,
+		}
+	} else {
+		o.R.TrendArticles = append(o.R.TrendArticles, related...)
+	}
+
+	for _, rel := range related {
+		if rel.R == nil {
+			rel.R = &trendArticleR{
 				Article: o,
 			}
 		} else {

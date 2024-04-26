@@ -1,4 +1,4 @@
-package seeders
+package usecase
 
 import "github.com/YukiOnishi1129/techpicks/batch-service/domain"
 

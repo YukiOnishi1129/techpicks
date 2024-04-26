@@ -3,11 +3,12 @@ package main
 import (
 	"context"
 	"database/sql"
-	"log"
-
-	"github.com/YukiOnishi1129/techpicks/batch-service/cmd/usecase"
+	"github.com/YukiOnishi1129/techpicks/batch-service/cmd/article-company-crawler/usecase"
 	"github.com/YukiOnishi1129/techpicks/batch-service/database"
+	"github.com/YukiOnishi1129/techpicks/batch-service/infrastructure/rss/client"
+	"github.com/YukiOnishi1129/techpicks/batch-service/infrastructure/rss/repository"
 	"github.com/joho/godotenv"
+	"log"
 )
 
 func main() {
@@ -31,9 +32,18 @@ func main() {
 		}
 	}(db)
 
-	au := usecase.NewArticleUsecase(db)
+	rssClient := client.NewRSSClient()
 
-	err = au.BatchCreateArticles(ctx)
+	rr := repository.NewRepository(&repository.Params{
+		RSSClient: rssClient,
+	})
+
+	u := usecase.NewUsecase(&usecase.Param{
+		DB: db,
+		Rr: rr,
+	})
+
+	err = u.BatchCrawlCompanyArticleContents(ctx)
 	if err != nil {
 		log.Fatalf("Failed to create articles: %v", err)
 		return

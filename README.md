@@ -22,3 +22,20 @@ make supabase-start
 ```
 make supabase-stop
 ```
+
+### sqlboiler
+
+#### 1. install sqlboiler & sqlboiler-psql into mac
+
+````
+go install github.com/volatiletech/sqlboiler/v4@latest
+go install github.com/volatiletech/sqlboiler/v4/drivers/sqlboiler-psql@latest
+````
+
+### golangci-lint
+
+#### 1. install golangci-lint
+
+```
+brew install golangci-lint
+```

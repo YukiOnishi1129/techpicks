@@ -23,12 +23,5 @@ func connectDB() (*sql.DB, error) {
 		println("Failed to connect to db")
 		return nil, fmt.Errorf("failed to connect to db: %v", err)
 	}
-
-	//defer func(db *sql.DB) {
-	//	err := db.Close()
-	//	if err != nil {
-	//		println("Failed to close db connection")
-	//	}
-	//}(db)
 	return db, nil
 }

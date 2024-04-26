@@ -13,6 +13,7 @@ var TableNames = struct {
 	MyFeeds              string
 	Platforms            string
 	Profiles             string
+	TrendArticles        string
 }{
 	Articles:             "articles",
 	Bookmarks:            "bookmarks",
@@ -23,4 +24,5 @@ var TableNames = struct {
 	MyFeeds:              "my_feeds",
 	Platforms:            "platforms",
 	Profiles:             "profiles",
+	TrendArticles:        "trend_articles",
 }
