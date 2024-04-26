@@ -29,5 +29,7 @@ export const useCheckImageExist = (src?: string) => {
       setResult(false);
     });
 
+  if (src === "") return NO_IMAGE_URL;
+
   return result ? src : NO_IMAGE_URL;
 };

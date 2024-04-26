@@ -1,7 +1,7 @@
 "use client";
 
 import { User } from "@supabase/supabase-js";
-import { FC } from "react";
+import { FC, useMemo } from "react";
 
 import {
   FeedCategoryNameBadge,
@@ -12,24 +12,31 @@ import { useCheckImageExist } from "@/hooks/useImage";
 
 import { showDiffDateToCurrentDate } from "@/lib/date";
 
-import { ArticleType } from "@/types/article";
+import { ArticleTabType, ArticleType } from "@/types/article";
 
 type ArticleCardProps = {
   article: ArticleType;
   user: User | undefined;
+  tab: ArticleTabType;
 };
 
 export const ArticleCard: FC<ArticleCardProps> = ({
   article,
   user,
+  tab,
 }: ArticleCardProps) => {
   const imageUrl = useCheckImageExist(article.thumbnailURL);
+
+  const isShowLikeCount = useMemo(
+    () => tab === "trend" && article.likeCount !== undefined,
+    [article.likeCount, tab]
+  );
 
   return (
     <div className="relative w-full cursor-pointer rounded">
       <div className="justify-around md:flex">
         <div className="flex justify-center md:w-[30%]">
-          <div className="w-full  md:h-36 md:w-48">
+          <div className="flex  w-full justify-center md:h-36 md:w-48">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               className="h-full rounded-lg border-2 object-cover object-center shadow-md"
@@ -71,12 +78,11 @@ export const ArticleCard: FC<ArticleCardProps> = ({
                 </div>
               ))}
           </div>
-          {article.feeds[0].trendPlatformType !== 0 &&
-            article.likeCount !== undefined && (
-              <div className="flex size-6 items-center justify-center rounded-full text-2xl font-bold ">
-                {article.likeCount}
-              </div>
-            )}
+          {isShowLikeCount && (
+            <div className="flex size-6 items-center justify-center rounded-full text-2xl font-bold ">
+              {article.likeCount}
+            </div>
+          )}
         </div>
       </div>
     </div>
