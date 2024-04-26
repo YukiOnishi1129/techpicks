@@ -8,7 +8,6 @@ import (
 func TestDevCommunityRepository_GetDevCommunityArticles(t *testing.T) {
 	t.Parallel()
 	tagReact := "react"
-	tagDummy := "dummy"
 	tests := []struct {
 		name string
 		tag  *string

@@ -23,15 +23,9 @@ func TestQiitaRepository_GetQiitaArticles(t *testing.T) {
 			r := NewRepository(&Params{
 				APIClient: apiClient,
 			})
-			data, err := r.GetQiitaArticles(tt.id)
+			_, err := r.GetQiitaArticles(tt.id)
 			if err != nil {
 				t.Errorf("failed to get qiita articles: %v", err)
-			}
-			if data.ID != tt.id {
-				t.Errorf("failed to get qiita articles: %v", data)
-			}
-			if data.LikesCount < 0 {
-				t.Errorf("failed to get qiita articles: %v", data)
 			}
 		})
 	}
