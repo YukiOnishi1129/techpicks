@@ -112,7 +112,7 @@ export function ArticleList({
           <img className="mt-8 h-1/2" src="/sorry.png" alt="" />
         </div>
       ) : (
-        <div className="m-auto h-[700px] overflow-y-scroll md:h-[600px]">
+        <div className="m-auto h-[590px] overflow-y-scroll md:h-[540px]">
           {flatArticles.map((article) => (
             <div key={article.id} className="mb-4">
               <ArticleCardWrapper article={article} user={user} tab={tab} />

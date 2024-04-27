@@ -5,7 +5,6 @@ import { ArticleTabType } from "@/types/article";
 import { LanguageStatus } from "@/types/language";
 
 import { ArticleList } from "./ArticleList";
-import { ArticleLanguageSwitch } from "./Switch";
 import { fetchArticlesAPI } from "../actions/article";
 
 type ArticleTemplateContentProps = {
@@ -17,7 +16,7 @@ type ArticleTemplateContentProps = {
 };
 
 export const ArticleTemplateContent: FC<ArticleTemplateContentProps> = async ({
-  languageStatus,
+  languageStatus = 1,
   keyword,
   platformIdList,
   user,
@@ -31,24 +30,14 @@ export const ArticleTemplateContent: FC<ArticleTemplateContentProps> = async ({
   });
 
   return (
-    <>
-      <div className="w-full border-b-2 bg-white py-4">
-        <ArticleLanguageSwitch
-          languageStatus={languageStatus}
-          keyword={keyword}
-          tab={tab}
-        />
-      </div>
-
-      <ArticleList
-        user={user}
-        initialArticles={res.data.articles}
-        languageStatus={languageStatus}
-        keyword={keyword}
-        platformIdList={platformIdList}
-        tab={tab}
-        fetchArticles={fetchArticlesAPI}
-      />
-    </>
+    <ArticleList
+      user={user}
+      initialArticles={res.data.articles}
+      languageStatus={languageStatus}
+      keyword={keyword}
+      platformIdList={platformIdList}
+      tab={tab}
+      fetchArticles={fetchArticlesAPI}
+    />
   );
 };

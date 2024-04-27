@@ -47,19 +47,29 @@ export const getArticles = async ({
                 contains: keyword,
               },
             },
+            {
+              tags: {
+                contains: keyword,
+              },
+            },
           ],
-        },
-        {
-          platform: {
-            isEng: languageStatus === 2,
-          },
         },
       ],
     };
-  } else {
+  }
+
+  if (languageStatus === 2) {
     where = {
+      ...where,
       platform: {
-        isEng: languageStatus === 2,
+        isEng: true,
+      },
+    };
+  } else if (languageStatus === 1) {
+    where = {
+      ...where,
+      platform: {
+        isEng: false,
       },
     };
   }
@@ -91,27 +101,51 @@ export const getArticles = async ({
         ...where,
         platform: {
           platformType: 1,
-          isEng: languageStatus === 2,
         },
       };
+      if (languageStatus !== 0) {
+        where = {
+          ...where,
+          platform: {
+            platformType: 1,
+            isEng: languageStatus === 2,
+          },
+        };
+      }
       break;
     case "company":
       where = {
         ...where,
         platform: {
           platformType: 2,
-          isEng: languageStatus === 2,
         },
       };
+      if (languageStatus !== 0) {
+        where = {
+          ...where,
+          platform: {
+            platformType: 2,
+            isEng: languageStatus === 2,
+          },
+        };
+      }
       break;
     case "summary":
       where = {
         ...where,
         platform: {
           platformType: 3,
-          isEng: languageStatus === 2,
         },
       };
+      if (languageStatus !== 0) {
+        where = {
+          ...where,
+          platform: {
+            platformType: 3,
+            isEng: languageStatus === 2,
+          },
+        };
+      }
       break;
   }
 

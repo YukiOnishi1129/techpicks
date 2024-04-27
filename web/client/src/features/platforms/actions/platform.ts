@@ -3,7 +3,7 @@
 import { Platform } from "@prisma/client";
 
 export const fetchPlatformAPI = async ({
-  languageStatus = "1",
+  languageStatus = "0",
   platformType,
 }: {
   languageStatus?: string;

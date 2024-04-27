@@ -1,3 +1,7 @@
+"use server";
+
+import prisma from "@/lib/prisma";
+
 import { LanguageStatus } from "@/types/language";
 import { Platform, PlatformType } from "@/types/platform";
 
@@ -12,13 +16,17 @@ export const getPlatforms = async ({
   platformType,
   platformIdList,
 }: GetPlatformParams) => {
-  "use server";
-
   let where = {};
   where = {
     ...where,
-    isEng: languageStatus === 2,
+    deletedAt: null,
   };
+  if (languageStatus === 1 || languageStatus === 2) {
+    where = {
+      ...where,
+      isEng: languageStatus === 2,
+    };
+  }
 
   if (platformType) {
     where = {

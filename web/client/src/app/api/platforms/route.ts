@@ -15,7 +15,6 @@ export async function GET(req: NextRequest) {
     typeof languageStatus === "string"
       ? (parseInt(languageStatus) as LanguageStatus)
       : 1;
-
   const type = platformType
     ? (parseInt(platformType) as PlatformType)
     : undefined;
