@@ -123,8 +123,7 @@ const ArticleSearchDialogContent: FC<ArticleSearchDialogContentProps> = ({
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     let keywordPath = "";
-
-    if (values.keyword !== "") {
+    if (!!values.keyword && values.keyword.trim() !== "") {
       keywordPath = `&keyword=${values.keyword}`;
     }
     let platformTypePath = "";
@@ -137,7 +136,6 @@ const ArticleSearchDialogContent: FC<ArticleSearchDialogContentProps> = ({
         .map((platformId) => `&platformId=${platformId}`)
         .join("");
     }
-    console.log(values, keywordPath, platformTypePath, platformIdPath);
     await serverRevalidateArticleSearchResult();
     router.replace(
       `/article/search/result?languageStatus=${values.language}${keywordPath}${platformTypePath}${platformIdPath}`

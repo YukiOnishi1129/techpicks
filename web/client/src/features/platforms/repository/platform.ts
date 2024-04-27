@@ -17,6 +17,10 @@ export const getPlatforms = async ({
   platformIdList,
 }: GetPlatformParams) => {
   let where = {};
+  where = {
+    ...where,
+    deletedAt: null,
+  };
   if (languageStatus === 1 || languageStatus === 2) {
     where = {
       ...where,
@@ -39,6 +43,9 @@ export const getPlatforms = async ({
       },
     };
   }
+
+  console.log("💻");
+  console.log(where);
 
   const res = await prisma.platform.findMany({
     where,

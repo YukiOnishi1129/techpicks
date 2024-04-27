@@ -166,6 +166,10 @@ export const getArticles = async ({
     ];
   }
 
+  console.log("🔥");
+  console.log(where);
+  console.log(tab);
+
   try {
     const res = await prisma.article.findMany({
       take: 20,

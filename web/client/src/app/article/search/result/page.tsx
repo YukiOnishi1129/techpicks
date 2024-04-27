@@ -40,7 +40,7 @@ export default async function ArticleSearchResultPage({
   const tab =
     typeof searchParams["tab"] === "string"
       ? (searchParams["tab"] as ArticleTabType)
-      : "trend";
+      : "unknown";
 
   return (
     <ArticleSearchResultTemplate

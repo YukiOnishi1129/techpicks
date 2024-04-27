@@ -1,4 +1,5 @@
 import { FC } from "react";
+import { undefined } from "zod";
 
 import { fetchArticlesAPI } from "@/features/articles/actions/article";
 import { ArticleList } from "@/features/articles/components/ArticleList";
@@ -30,15 +31,35 @@ export const ArticleSearchResultTemplate: FC<
   platformIdList,
   tab,
 }: ArticleSearchResultTemplateProps) => {
+  const str = String(platformType);
+  const type = platformType ? String(platformType) : undefined;
   const res = await fetchArticlesAPI({
     languageStatus: languageStatus.toString(),
     keyword,
-    platformType: platformType ? platformType.toString() : undefined,
+    platformType: String(platformType),
     platformIdList,
     tab,
   });
-  const platforms = await fetchPlatformAPI({});
+  const platforms = await fetchPlatformAPI({
+    languageStatus: languageStatus.toString(),
+    platformType: String(platformType),
+  });
   const user = await getUser();
+
+  let keywordPath = "";
+  if (!!keyword && keyword.trim() !== "") {
+    keywordPath = `&keyword=${keyword}`;
+  }
+  let platformTypePath = "";
+  if (String(platformType)) {
+    platformTypePath = `&platformType=${String(platformType)}`;
+  }
+  let platformIdPath = "";
+  if (platformIdList.length) {
+    platformIdPath = platformIdList
+      .map((platformId) => `&platformId=${platformId}`)
+      .join("");
+  }
 
   const breadcrumbs: BreadCrumbType[] = [
     {
@@ -47,7 +68,7 @@ export const ArticleSearchResultTemplate: FC<
     },
     {
       title: "Article Search Result",
-      href: "/article/search/result",
+      href: `/article/search/result/?languageStatus=${languageStatus.toString()}${keywordPath}${platformTypePath}${platformIdPath}`,
     },
   ];
   return (
