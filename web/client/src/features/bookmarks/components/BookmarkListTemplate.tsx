@@ -1,5 +1,7 @@
 import { FC } from "react";
 
+import { fetchPlatformAPI } from "@/features/platforms/actions/platform";
+import { ArticleSearchDialog } from "@/features/search/components/articles/Dialog";
 import { getUser } from "@/features/users/actions/user";
 
 import { LanguageStatus } from "@/types/language";
@@ -25,17 +27,30 @@ export const BookmarkListTemplate: FC<ArticleListProps> = async ({
     keyword,
     platformIdList,
   });
+  const platforms = await fetchPlatformAPI({
+    languageStatus: "0",
+  });
   const user = await getUser();
   return (
     <div className="w-auto">
-      <h1 className="mb-4 mt-8 text-2xl font-bold text-gray-800">Bookmarks</h1>
-      <CreateBookmarkDialog user={user} languageStatus={languageStatus} />
-      <div className="w-full border-b-2 bg-white py-4">
-        <BookmarkLanguageSwitch
-          languageStatus={languageStatus}
-          keyword={keyword}
-        />
+      <div className="mb-4 flex w-full items-end justify-between px-4">
+        <h1 className="mb-4 mt-8 text-2xl font-bold text-gray-800">Bookmark</h1>
+        <div className="mb-4 flex w-48 items-center justify-end">
+          <div className="mr-12 cursor-pointer">
+            <ArticleSearchDialog platforms={platforms} />
+          </div>
+          <div className="mr-8 min-w-24">
+            <BookmarkLanguageSwitch
+              languageStatus={languageStatus}
+              keyword={keyword}
+            />
+          </div>
+          <div className="">
+            <CreateBookmarkDialog user={user} languageStatus={languageStatus} />
+          </div>
+        </div>
       </div>
+
       <BookmarkList
         user={user}
         initialBookmarks={res.data.bookmarks}
