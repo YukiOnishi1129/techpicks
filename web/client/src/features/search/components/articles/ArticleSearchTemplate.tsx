@@ -3,6 +3,8 @@ import { getUser } from "@/features/users/actions/user";
 
 import { BreadCrumbType, PageBreadcrumb } from "@/components/ui/breadcrumb";
 
+import { ArticleSearchForm } from "./ArticleSearchForm";
+
 export const ArticleSearchTemplate = async () => {
   const user = await getUser();
   const platforms = await fetchPlatformAPI({});
@@ -26,6 +28,7 @@ export const ArticleSearchTemplate = async () => {
           Article Search
         </h1>
       </div>
+      <ArticleSearchForm platforms={platforms} />
     </div>
   );
 };
