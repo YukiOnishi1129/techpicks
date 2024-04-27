@@ -1,7 +1,5 @@
 import { User } from "@supabase/supabase-js";
 
-import { ArticleLanguageSwitch } from "@/features/articles/components/Switch";
-
 import { LanguageStatus } from "@/types/language";
 
 import { TrendArticleList } from "./TrendArticleList";
@@ -29,24 +27,14 @@ export const TrendArticleTemplateContent = async ({
   });
 
   return (
-    <>
-      <div className="w-full border-b-2 bg-white py-4">
-        <ArticleLanguageSwitch
-          languageStatus={languageStatus}
-          keyword={keyword}
-          tab={tab}
-        />
-      </div>
-
-      <TrendArticleList
-        user={user}
-        initialTrendArticles={res.data.trendArticles}
-        languageStatus={languageStatus}
-        keyword={keyword}
-        platformIdList={platformIdList}
-        tab={tab}
-        fetchTrendArticles={fetchTrendArticlesAPI}
-      />
-    </>
+    <TrendArticleList
+      user={user}
+      initialTrendArticles={res.data.trendArticles}
+      languageStatus={languageStatus}
+      keyword={keyword}
+      platformIdList={platformIdList}
+      tab={tab}
+      fetchTrendArticles={fetchTrendArticlesAPI}
+    />
   );
 };

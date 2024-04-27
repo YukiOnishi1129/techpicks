@@ -5,13 +5,12 @@ import { FC, useCallback, useState } from "react";
 
 import { LanguageSwitch } from "@/components/ui/switch";
 
-import { ArticleTabType } from "@/types/article";
 import { LanguageStatus } from "@/types/language";
 
 type ArticleLanguageSwitchProps = {
   languageStatus: LanguageStatus;
   keyword?: string;
-  tab: ArticleTabType;
+  tab: string;
 };
 
 export const ArticleLanguageSwitch: FC<ArticleLanguageSwitchProps> = ({
