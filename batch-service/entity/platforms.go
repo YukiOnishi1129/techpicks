@@ -108,20 +108,23 @@ var PlatformWhere = struct {
 
 // PlatformRels is where relationship names are stored.
 var PlatformRels = struct {
-	Articles  string
-	Bookmarks string
-	Feeds     string
+	Articles      string
+	Bookmarks     string
+	Feeds         string
+	TrendArticles string
 }{
-	Articles:  "Articles",
-	Bookmarks: "Bookmarks",
-	Feeds:     "Feeds",
+	Articles:      "Articles",
+	Bookmarks:     "Bookmarks",
+	Feeds:         "Feeds",
+	TrendArticles: "TrendArticles",
 }
 
 // platformR is where relationships are stored.
 type platformR struct {
-	Articles  ArticleSlice  `boil:"Articles" json:"Articles" toml:"Articles" yaml:"Articles"`
-	Bookmarks BookmarkSlice `boil:"Bookmarks" json:"Bookmarks" toml:"Bookmarks" yaml:"Bookmarks"`
-	Feeds     FeedSlice     `boil:"Feeds" json:"Feeds" toml:"Feeds" yaml:"Feeds"`
+	Articles      ArticleSlice      `boil:"Articles" json:"Articles" toml:"Articles" yaml:"Articles"`
+	Bookmarks     BookmarkSlice     `boil:"Bookmarks" json:"Bookmarks" toml:"Bookmarks" yaml:"Bookmarks"`
+	Feeds         FeedSlice         `boil:"Feeds" json:"Feeds" toml:"Feeds" yaml:"Feeds"`
+	TrendArticles TrendArticleSlice `boil:"TrendArticles" json:"TrendArticles" toml:"TrendArticles" yaml:"TrendArticles"`
 }
 
 // NewStruct creates a new relationship struct
@@ -148,6 +151,13 @@ func (r *platformR) GetFeeds() FeedSlice {
 		return nil
 	}
 	return r.Feeds
+}
+
+func (r *platformR) GetTrendArticles() TrendArticleSlice {
+	if r == nil {
+		return nil
+	}
+	return r.TrendArticles
 }
 
 // platformL is where Load methods for each relationship are stored.
@@ -508,6 +518,20 @@ func (o *Platform) Feeds(mods ...qm.QueryMod) feedQuery {
 	return Feeds(queryMods...)
 }
 
+// TrendArticles retrieves all the trend_article's TrendArticles with an executor.
+func (o *Platform) TrendArticles(mods ...qm.QueryMod) trendArticleQuery {
+	var queryMods []qm.QueryMod
+	if len(mods) != 0 {
+		queryMods = append(queryMods, mods...)
+	}
+
+	queryMods = append(queryMods,
+		qm.Where("\"trend_articles\".\"platform_id\"=?", o.ID),
+	)
+
+	return TrendArticles(queryMods...)
+}
+
 // LoadArticles allows an eager lookup of values, cached into the
 // loaded structs of the objects. This is for a 1-M or N-M relationship.
 func (platformL) LoadArticles(ctx context.Context, e boil.ContextExecutor, singular bool, maybePlatform interface{}, mods queries.Applicator) error {
@@ -847,6 +871,119 @@ func (platformL) LoadFeeds(ctx context.Context, e boil.ContextExecutor, singular
 	return nil
 }
 
+// LoadTrendArticles allows an eager lookup of values, cached into the
+// loaded structs of the objects. This is for a 1-M or N-M relationship.
+func (platformL) LoadTrendArticles(ctx context.Context, e boil.ContextExecutor, singular bool, maybePlatform interface{}, mods queries.Applicator) error {
+	var slice []*Platform
+	var object *Platform
+
+	if singular {
+		var ok bool
+		object, ok = maybePlatform.(*Platform)
+		if !ok {
+			object = new(Platform)
+			ok = queries.SetFromEmbeddedStruct(&object, &maybePlatform)
+			if !ok {
+				return errors.New(fmt.Sprintf("failed to set %T from embedded struct %T", object, maybePlatform))
+			}
+		}
+	} else {
+		s, ok := maybePlatform.(*[]*Platform)
+		if ok {
+			slice = *s
+		} else {
+			ok = queries.SetFromEmbeddedStruct(&slice, maybePlatform)
+			if !ok {
+				return errors.New(fmt.Sprintf("failed to set %T from embedded struct %T", slice, maybePlatform))
+			}
+		}
+	}
+
+	args := make(map[interface{}]struct{})
+	if singular {
+		if object.R == nil {
+			object.R = &platformR{}
+		}
+		args[object.ID] = struct{}{}
+	} else {
+		for _, obj := range slice {
+			if obj.R == nil {
+				obj.R = &platformR{}
+			}
+			args[obj.ID] = struct{}{}
+		}
+	}
+
+	if len(args) == 0 {
+		return nil
+	}
+
+	argsSlice := make([]interface{}, len(args))
+	i := 0
+	for arg := range args {
+		argsSlice[i] = arg
+		i++
+	}
+
+	query := NewQuery(
+		qm.From(`trend_articles`),
+		qm.WhereIn(`trend_articles.platform_id in ?`, argsSlice...),
+	)
+	if mods != nil {
+		mods.Apply(query)
+	}
+
+	results, err := query.QueryContext(ctx, e)
+	if err != nil {
+		return errors.Wrap(err, "failed to eager load trend_articles")
+	}
+
+	var resultSlice []*TrendArticle
+	if err = queries.Bind(results, &resultSlice); err != nil {
+		return errors.Wrap(err, "failed to bind eager loaded slice trend_articles")
+	}
+
+	if err = results.Close(); err != nil {
+		return errors.Wrap(err, "failed to close results in eager load on trend_articles")
+	}
+	if err = results.Err(); err != nil {
+		return errors.Wrap(err, "error occurred during iteration of eager loaded relations for trend_articles")
+	}
+
+	if len(trendArticleAfterSelectHooks) != 0 {
+		for _, obj := range resultSlice {
+			if err := obj.doAfterSelectHooks(ctx, e); err != nil {
+				return err
+			}
+		}
+	}
+	if singular {
+		object.R.TrendArticles = resultSlice
+		for _, foreign := range resultSlice {
+			if foreign.R == nil {
+				foreign.R = &trendArticleR{}
+			}
+			foreign.R.Platform = object
+		}
+		return nil
+	}
+
+	for _, foreign := range resultSlice {
+		for _, local := range slice {
+			if local.ID == foreign.PlatformID {
+				local.R.TrendArticles = append(local.R.TrendArticles, foreign)
+				if foreign.R == nil {
+					foreign.R = &trendArticleR{}
+				}
+				foreign.R.Platform = local
+				break
+			}
+		}
+	}
+
+	return nil
+}
+
 // AddArticles adds the given related objects to the existing relationships
 // of the platform, optionally inserting them as new records.
 // Appends related to o.R.Articles.
@@ -1071,6 +1208,59 @@ func (o *Platform) AddFeeds(ctx context.Context, exec boil.ContextExecutor, inse
 	for _, rel := range related {
 		if rel.R == nil {
 			rel.R = &feedR{
+				Platform: o,
+			}
+		} else {
+			rel.R.Platform = o
+		}
+	}
+	return nil
+}
+
+// AddTrendArticles adds the given related objects to the existing relationships
+// of the platform, optionally inserting them as new records.
+// Appends related to o.R.TrendArticles.
+// Sets related.R.Platform appropriately.
+func (o *Platform) AddTrendArticles(ctx context.Context, exec boil.ContextExecutor, insert bool, related ...*TrendArticle) error {
+	var err error
+	for _, rel := range related {
+		if insert {
+			rel.PlatformID = o.ID
+			if err = rel.Insert(ctx, exec, boil.Infer()); err != nil {
+				return errors.Wrap(err, "failed to insert into foreign table")
+			}
+		} else {
+			updateQuery := fmt.Sprintf(
+				"UPDATE \"trend_articles\" SET %s WHERE %s",
+				strmangle.SetParamNames("\"", "\"", 1, []string{"platform_id"}),
+				strmangle.WhereClause("\"", "\"", 2, trendArticlePrimaryKeyColumns),
+			)
+			values := []interface{}{o.ID, rel.ID, rel.ArticleID, rel.PlatformID}
+
+			if boil.IsDebug(ctx) {
+				writer := boil.DebugWriterFrom(ctx)
+				fmt.Fprintln(writer, updateQuery)
+				fmt.Fprintln(writer, values)
+			}
+			if _, err = exec.ExecContext(ctx, updateQuery, values...); err != nil {
+				return errors.Wrap(err, "failed to update foreign table")
+			}
+
+			rel.PlatformID = o.ID
+		}
+	}
+
+	if o.R == nil {
+		o.R = &platformR{
+			TrendArticles: related,
+		}
+	} else {
+		o.R.TrendArticles = append(o.R.TrendArticles, related...)
+	}
+
+	for _, rel := range related {
+		if rel.R == nil {
+			rel.R = &trendArticleR{
 				Platform: o,
 			}
 		} else {
