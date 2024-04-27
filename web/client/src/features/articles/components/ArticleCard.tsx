@@ -1,7 +1,7 @@
 "use client";
 
 import { User } from "@supabase/supabase-js";
-import { FC, useMemo } from "react";
+import { FC } from "react";
 
 import {
   FeedCategoryNameBadge,
@@ -26,11 +26,6 @@ export const ArticleCard: FC<ArticleCardProps> = ({
   tab,
 }: ArticleCardProps) => {
   const imageUrl = useCheckImageExist(article.thumbnailURL);
-
-  const isShowLikeCount = useMemo(
-    () => tab === "trend" && article?.likeCount !== undefined,
-    [article?.likeCount, tab]
-  );
 
   return (
     <div className="relative w-full cursor-pointer rounded">
@@ -78,11 +73,6 @@ export const ArticleCard: FC<ArticleCardProps> = ({
                 </div>
               ))}
           </div>
-          {isShowLikeCount && (
-            <div className="flex size-6 items-center justify-center rounded-full text-2xl font-bold ">
-              {article.likeCount}
-            </div>
-          )}
         </div>
       </div>
     </div>

@@ -1,6 +1,6 @@
 "use client";
 import { User } from "@supabase/supabase-js";
-import { FC } from "react";
+import { FC, useMemo } from "react";
 
 import { ArticleTabType, ArticleType } from "@/types/article";
 
@@ -23,27 +23,49 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
   const { bookmarkId, handleAddBookmark, handleRemoveBookmark } =
     useArticleBookmark({ article });
 
+  const isShowLikeCount = useMemo(
+    () => tab === "trend" && article?.likeCount !== undefined,
+    [article?.likeCount, tab]
+  );
+
   return (
-    <div key={article.id} className="mb-4 rounded-2xl border-2 md:py-2">
-      <ArticleDetailSheet article={article} user={user}>
-        <ArticleCard article={article} user={user} tab={tab} />
-      </ArticleDetailSheet>
-      <div className="flex size-8 items-center justify-center rounded-full bg-white px-8 py-4">
-        {user && (
+    <div
+      key={article.id}
+      className="mb-4 rounded-2xl border-2 px-4 pb-4 md:px-2 md:pb-2"
+    >
+      <div className="border-t-4 border-t-rose-600">
+        <div className="mb-4 flex h-16 justify-between border-b-2 py-4 md:ml-6">
           <>
-            {bookmarkId ? (
-              <DeleteBookmarkTooltip
-                bookmarkId={bookmarkId}
-                handleRemoveBookmark={handleRemoveBookmark}
-              />
+            {isShowLikeCount ? (
+              <div className=" text-rose-600">
+                <span className="text-3xl font-bold">{`${article.likeCount}`}</span>
+                <span className="ml-2">{"likes"}</span>
+              </div>
             ) : (
-              <AddBookmarkTooltip
-                articleId={article.id}
-                handleAddBookmark={handleAddBookmark}
-              />
+              <div></div>
             )}
+            <div className="flex items-center justify-center  bg-white p-4">
+              {user && (
+                <>
+                  {bookmarkId ? (
+                    <DeleteBookmarkTooltip
+                      bookmarkId={bookmarkId}
+                      handleRemoveBookmark={handleRemoveBookmark}
+                    />
+                  ) : (
+                    <AddBookmarkTooltip
+                      articleId={article.id}
+                      handleAddBookmark={handleAddBookmark}
+                    />
+                  )}
+                </>
+              )}
+            </div>
           </>
-        )}
+        </div>
+        <ArticleDetailSheet article={article} user={user}>
+          <ArticleCard article={article} user={user} tab={tab} />
+        </ArticleDetailSheet>
       </div>
     </div>
   );

@@ -25,21 +25,21 @@ func (u *Usecase) BatchCrawlTrendArticleContents(ctx context.Context) error {
 		log.Printf("【no feeds】")
 		return nil
 	}
-	fiveHoursAgo := time.Now().Add(-5 * time.Hour).Format("2006-01-02 15:04:05")
-	// idempotency check
-	trendCount, err := entity.TrendArticles(
-		qm.Where("platform_id = ?", feeds[0].PlatformID),
-		qm.And("created_at >= ?", fiveHoursAgo),
-	).Count(ctx, u.db)
-	if err != nil {
-		log.Printf("【error get trend article count】: %s", err)
-		return err
-	}
-	if trendCount != 0 {
-		log.Printf("【stop article crawler, because there was data 5 hours ago】")
-		log.Printf("【end BatchCrawlTrendArticleContents】")
-		return nil
-	}
+	//fiveHoursAgo := time.Now().Add(-5 * time.Hour).Format("2006-01-02 15:04:05")
+	//// idempotency check
+	//trendCount, err := entity.TrendArticles(
+	//	qm.Where("platform_id = ?", feeds[0].PlatformID),
+	//	qm.And("created_at >= ?", fiveHoursAgo),
+	//).Count(ctx, u.db)
+	//if err != nil {
+	//	log.Printf("【error get trend article count】: %s", err)
+	//	return err
+	//}
+	//if trendCount != 0 {
+	//	log.Printf("【stop article crawler, because there was data 5 hours ago】")
+	//	log.Printf("【end BatchCrawlTrendArticleContents】")
+	//	return nil
+	//}
 
 	for _, f := range feeds {
 		log.Printf("【start BatchCrawlTrendArticle】: %s", f.Name)
