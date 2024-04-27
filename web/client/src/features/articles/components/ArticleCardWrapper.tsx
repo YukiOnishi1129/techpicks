@@ -55,7 +55,7 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
                     {article.platform.name}
                   </span>
                 ) : (
-                  <span className=" font-bold">{article.platform.name}</span>
+                  <span className="font-bold">{article.platform.name}</span>
                 )}
               </div>
             </div>
@@ -79,6 +79,7 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
             </div>
           </>
         </div>
+
         <ArticleDetailSheet article={article} user={user}>
           <ArticleCard article={article} user={user} tab={tab} />
         </ArticleDetailSheet>

@@ -1,8 +1,6 @@
 "use client";
 import { FC } from "react";
 
-import { PlatformNameBadge } from "@/components/ui/badge";
-
 import { useCheckImageExist } from "@/hooks/useImage";
 
 import { showDiffDateToCurrentDate } from "@/lib/date";
@@ -22,7 +20,10 @@ export const BookmarkCard: FC<BookmarkCardProps> = ({
   return (
     <div className="relative w-full cursor-pointer rounded">
       <div className="justify-around md:flex">
-        <div className="flex justify-center md:w-[30%]">
+        <div className="md:flex md:w-[30%] md:justify-center">
+          <h3 className="mb-4 line-clamp-3 block text-left text-lg font-bold tracking-wide md:hidden md:w-full md:text-xl">
+            {bookmark.title}
+          </h3>
           <div className="w-full  md:h-36 md:w-48">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
@@ -34,23 +35,23 @@ export const BookmarkCard: FC<BookmarkCardProps> = ({
         </div>
 
         <div className="mt-4 md:mt-0 md:w-[65%]">
-          <h3 className="line-clamp-3  pt-2 text-left text-lg font-bold tracking-wide md:text-xl">
+          <h3 className="line-clamp-3 hidden pt-2 text-left text-lg font-bold tracking-wide md:block md:w-full md:text-xl">
             {bookmark.title}
           </h3>
 
           <p className="flex pt-2 text-sm">
-            {`登録: ${showDiffDateToCurrentDate(bookmark.createdAt)}`}
+            {`register: ${showDiffDateToCurrentDate(bookmark.createdAt)}`}
           </p>
 
-          <div className="flex w-full items-center pt-2">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
+          {/* <div className="flex w-full items-center pt-2">
+           
             <img
               className="mr-2 inline-block size-[24px]"
               src={faviconUrl}
               alt=""
             />
             <PlatformNameBadge name={bookmark.platformName || ""} />
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
