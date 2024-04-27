@@ -3,10 +3,7 @@
 import { User } from "@supabase/supabase-js";
 import { FC } from "react";
 
-import {
-  FeedCategoryNameBadge,
-  PlatformNameBadge,
-} from "@/components/ui/badge";
+import { FeedNameBadge } from "@/components/ui/badge/FeedNameBadge";
 
 import { useCheckImageExist } from "@/hooks/useImage";
 
@@ -30,7 +27,10 @@ export const ArticleCard: FC<ArticleCardProps> = ({
   return (
     <div className="relative w-full cursor-pointer rounded">
       <div className="justify-around md:flex">
-        <div className="flex justify-center md:w-[30%]">
+        <div className="md:w-[30%]">
+          <h3 className="mb-4 line-clamp-3 block text-left text-lg font-bold tracking-wide md:hidden md:w-full md:text-xl">
+            {article.title}
+          </h3>
           <div className="flex  w-full justify-center md:h-36 md:w-48">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
@@ -42,7 +42,7 @@ export const ArticleCard: FC<ArticleCardProps> = ({
         </div>
 
         <div className="mt-4 md:mt-0 md:w-[65%]">
-          <h3 className="line-clamp-3 text-left text-lg font-bold tracking-wide md:w-full md:text-xl">
+          <h3 className="line-clamp-3 hidden text-left text-lg font-bold tracking-wide md:block md:w-full md:text-xl">
             {article.title}
           </h3>
 
@@ -51,25 +51,10 @@ export const ArticleCard: FC<ArticleCardProps> = ({
           </p>
 
           <div className="flex w-full items-center pt-2 md:w-4/5">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              className="mr-2 inline-block size-[24px]"
-              src={article.platform.faviconUrl}
-              alt=""
-            />
-            <div>
-              <PlatformNameBadge name={article.platform.name} />
-            </div>
-          </div>
-
-          <div className="ml-[32px] flex w-full flex-wrap pt-2">
             {article.feeds.length > 0 &&
               article.feeds.map((feed) => (
-                <div
-                  key={`${feed.id}-${feed.category.id}`}
-                  className="mb-2 mr-2 "
-                >
-                  <FeedCategoryNameBadge name={feed.category.name} />
+                <div key={`${article.id}-${feed.id}`} className="my-2 mr-2">
+                  <FeedNameBadge name={feed.name} />
                 </div>
               ))}
           </div>

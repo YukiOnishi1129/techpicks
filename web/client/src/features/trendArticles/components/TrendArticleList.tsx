@@ -117,7 +117,7 @@ export function TrendArticleList({
           <img className="mt-8 h-1/2" src="/sorry.png" alt="" />
         </div>
       ) : (
-        <div className="m-auto h-[700px] overflow-y-scroll md:h-[600px]">
+        <div className="m-auto h-[590px] overflow-y-scroll md:h-[540px]">
           {flatTrendArticles.map((trendArticle) => (
             <div key={trendArticle.id} className="mb-4">
               <ArticleCardWrapper

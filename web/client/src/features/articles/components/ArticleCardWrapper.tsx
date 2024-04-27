@@ -36,14 +36,30 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
       <div className="border-t-4 border-t-rose-600">
         <div className="mb-4 flex h-16 justify-between border-b-2 py-4 md:ml-6">
           <>
-            {isShowLikeCount ? (
-              <div className=" text-rose-600">
-                <span className="text-3xl font-bold">{`${article.likeCount}`}</span>
-                <span className="ml-2">{"likes"}</span>
+            <div className="flex">
+              {isShowLikeCount && (
+                <div className=" mr-4 text-rose-600">
+                  <span className="text-3xl font-bold">{`${article.likeCount}`}</span>
+                  <span className="ml-2">{"likes"}</span>
+                </div>
+              )}
+              <div>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  className="mr-2 inline-block size-[36px]"
+                  src={article.platform.faviconUrl}
+                  alt=""
+                />
+                {isShowLikeCount ? (
+                  <span className="hidden font-bold md:inline-block">
+                    {article.platform.name}
+                  </span>
+                ) : (
+                  <span className=" font-bold">{article.platform.name}</span>
+                )}
               </div>
-            ) : (
-              <div></div>
-            )}
+            </div>
+
             <div className="flex items-center justify-center  bg-white p-4">
               {user && (
                 <>
