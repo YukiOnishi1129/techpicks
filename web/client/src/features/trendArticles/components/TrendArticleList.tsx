@@ -6,7 +6,7 @@ import { ArticleCardWrapper } from "@/features/articles/components/ArticleCardWr
 
 import { Loader } from "@/components/ui/loader";
 
-import { ArticleTabType } from "@/types/article";
+import { ArticleTabType, ArticleType } from "@/types/article";
 import { LanguageStatus } from "@/types/language";
 import { TrendArticleType } from "@/types/trendArticle";
 
@@ -118,17 +118,15 @@ export function TrendArticleList({
         </div>
       ) : (
         <div className="m-auto h-[700px] overflow-y-scroll md:h-[600px]">
-          {flatTrendArticles.map((trendArticle) => {
-            return (
-              <div key={trendArticle.id} className="mb-4">
-                <ArticleCardWrapper
-                  article={trendArticle}
-                  user={user}
-                  tab={tab}
-                />
-              </div>
-            );
-          })}
+          {flatTrendArticles.map((trendArticle) => (
+            <div key={trendArticle.id} className="mb-4">
+              <ArticleCardWrapper
+                article={convertTrendArticleToArticle(trendArticle)}
+                user={user}
+                tab={tab}
+              />
+            </div>
+          ))}
           <div ref={observerTarget}>
             {hashMore && (
               <div className="flex justify-center py-4">
@@ -141,3 +139,48 @@ export function TrendArticleList({
     </>
   );
 }
+
+const convertTrendArticleToArticle = (
+  trendArticle: TrendArticleType
+): ArticleType => {
+  return {
+    id: trendArticle.id,
+    title: trendArticle.title,
+    description: trendArticle.description,
+    thumbnailURL: trendArticle.thumbnailURL,
+    articleUrl: trendArticle.articleUrl,
+    publishedAt: trendArticle.publishedAt,
+    authorName: trendArticle.authorName,
+    tags: trendArticle.tags,
+    isPrivate: trendArticle.isPrivate,
+    likeCount: trendArticle.likeCount,
+    createdAt: trendArticle.createdAt,
+    updatedAt: trendArticle.updatedAt,
+    platform: {
+      id: trendArticle.platform.id,
+      name: trendArticle.platform.name,
+      platformType: trendArticle.platform.platformType,
+      siteUrl: trendArticle.platform.siteUrl,
+      faviconUrl: trendArticle.platform.faviconUrl,
+      isEng: trendArticle.platform.isEng,
+    },
+    isBookmarked: trendArticle.isBookmarked,
+    bookmarkId: trendArticle.bookmarkId,
+    feeds: trendArticle.feeds.map((feed) => {
+      return {
+        id: feed.id,
+        name: feed.name,
+        description: feed.description,
+        thumbnailUrl: feed.thumbnailUrl,
+        siteUrl: feed.siteUrl,
+        apiQueryParam: feed.apiQueryParam,
+        trendPlatformType: feed.trendPlatformType,
+        category: {
+          id: feed.category.id,
+          name: feed.category.name,
+          type: feed.category.type,
+        },
+      };
+    }),
+  };
+};

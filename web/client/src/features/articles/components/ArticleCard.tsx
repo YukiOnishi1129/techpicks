@@ -28,8 +28,8 @@ export const ArticleCard: FC<ArticleCardProps> = ({
   const imageUrl = useCheckImageExist(article.thumbnailURL);
 
   const isShowLikeCount = useMemo(
-    () => tab === "trend" && article.likeCount !== undefined,
-    [article.likeCount, tab]
+    () => tab === "trend" && article?.likeCount !== undefined,
+    [article?.likeCount, tab]
   );
 
   return (
