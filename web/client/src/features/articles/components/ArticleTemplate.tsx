@@ -3,6 +3,7 @@ import Link from "next/link";
 import { FC } from "react";
 import { CiSearch } from "react-icons/ci";
 
+import { TrendArticleTemplateContent } from "@/features/trendArticles/components/TrendArticleTemplateContent";
 import { getUser } from "@/features/users/actions/user";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -14,17 +15,17 @@ import { ArticleList } from "./ArticleList";
 import { ArticleLanguageSwitch } from "./Switch";
 import { fetchArticlesAPI } from "../actions/article";
 
-type ArticleListTemplateProps = {
+type ArticleTemplateProps = {
   languageStatus: LanguageStatus;
   keyword?: string;
   platformIdList: Array<string>;
 };
 
-export const ArticleListTemplate: FC<ArticleListTemplateProps> = async ({
+export const ArticleTemplate: FC<ArticleTemplateProps> = async ({
   languageStatus,
   keyword,
   platformIdList,
-}: ArticleListTemplateProps) => {
+}: ArticleTemplateProps) => {
   const user = await getUser();
   return (
     <div className="w-auto">
@@ -52,16 +53,15 @@ export const ArticleListTemplate: FC<ArticleListTemplateProps> = async ({
           </TabsTrigger>
         </TabsList>
         <TabsContent value="trend">
-          <ArticleListContent
+          <TrendArticleTemplateContent
             languageStatus={languageStatus}
             keyword={keyword}
             platformIdList={platformIdList}
             user={user}
-            tab={"trend"}
           />
         </TabsContent>
         <TabsContent value="site">
-          <ArticleListContent
+          <ArticleTemplateContent
             languageStatus={languageStatus}
             keyword={keyword}
             platformIdList={platformIdList}
@@ -70,7 +70,7 @@ export const ArticleListTemplate: FC<ArticleListTemplateProps> = async ({
           />
         </TabsContent>
         <TabsContent value="company">
-          <ArticleListContent
+          <ArticleTemplateContent
             languageStatus={languageStatus}
             keyword={keyword}
             platformIdList={platformIdList}
@@ -79,7 +79,7 @@ export const ArticleListTemplate: FC<ArticleListTemplateProps> = async ({
           />
         </TabsContent>
         <TabsContent value="summary">
-          <ArticleListContent
+          <ArticleTemplateContent
             languageStatus={languageStatus}
             keyword={keyword}
             platformIdList={platformIdList}
@@ -92,7 +92,7 @@ export const ArticleListTemplate: FC<ArticleListTemplateProps> = async ({
   );
 };
 
-type ArticleListContentProps = {
+type ArticleTemplateContentProps = {
   languageStatus: LanguageStatus;
   keyword?: string;
   platformIdList: Array<string>;
@@ -100,19 +100,20 @@ type ArticleListContentProps = {
   tab: ArticleTabType;
 };
 
-const ArticleListContent = async ({
+const ArticleTemplateContent: FC<ArticleTemplateContentProps> = async ({
   languageStatus,
   keyword,
   platformIdList,
   user,
   tab,
-}: ArticleListContentProps) => {
+}: ArticleTemplateContentProps) => {
   const res = await fetchArticlesAPI({
     languageStatus: languageStatus.toString(),
     keyword,
     platformIdList,
     tab,
   });
+
   return (
     <>
       <div className="w-full border-b-2 bg-white py-4">

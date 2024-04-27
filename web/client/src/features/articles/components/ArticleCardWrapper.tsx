@@ -3,6 +3,7 @@ import { User } from "@supabase/supabase-js";
 import { FC } from "react";
 
 import { ArticleTabType, ArticleType } from "@/types/article";
+import { TrendArticleType } from "@/types/trendArticle";
 
 import { ArticleCard } from "./ArticleCard";
 import { ArticleDetailSheet } from "./ArticleDetailSheet";
@@ -10,7 +11,7 @@ import { AddBookmarkTooltip, DeleteBookmarkTooltip } from "./Tooltip";
 import { useArticleBookmark } from "../hooks/useArticleBookmark";
 
 type ArticleCardWrapperProps = {
-  article: ArticleType;
+  article: ArticleType | TrendArticleType;
   user: User | undefined;
   tab: ArticleTabType;
 };

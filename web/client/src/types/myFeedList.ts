@@ -7,9 +7,17 @@ import {
 
 export type MyFeedListType = Omit<PrismaMyFeedList, "userId"> & {
   feeds: Array<
-    Omit<PrismaFeed, "platformId" | "categoryId" | "rssUrl" | "deletedAt"> & {
-      category: Omit<PrismaCategory, "deletedAt">;
-      platform: Omit<PrismaPlatform, "deletedAt">;
+    Omit<
+      PrismaFeed,
+      | "platformId"
+      | "categoryId"
+      | "rssUrl"
+      | "createdAt"
+      | "updatedAt"
+      | "deletedAt"
+    > & {
+      category: Omit<PrismaCategory, "createdAt" | "updatedAt" | "deletedAt">;
+      platform: Omit<PrismaPlatform, "createdAt" | "updatedAt" | "deletedAt">;
       myFeedId: string;
     }
   >;

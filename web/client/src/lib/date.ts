@@ -11,9 +11,9 @@ dayjs.tz.setDefault("Asia/Tokyo");
 export const getDayjsTz = (date?: Dayjs | Date | string | null) => {
   if (!!date) {
     const convertedDate = new Date(date as Date);
-    return dayjs.tz(convertedDate);
+    return dayjs(convertedDate).tz();
   }
-  return dayjs.tz();
+  return dayjs().tz();
 };
 
 export const getCurrentDate = () => {
@@ -30,6 +30,9 @@ export const getDateEndTime = (date: Dayjs) => {
 
 export const convertUnixTime = (targetDate: dayjs.Dayjs) => {
   return targetDate.unix();
+};
+export const formatDateUTC = (date: Dayjs) => {
+  return date.utc().format("YYYY-MM-DD HH:mm:ss");
 };
 
 export const formatDate = (date?: Dayjs | Date | string | null) => {

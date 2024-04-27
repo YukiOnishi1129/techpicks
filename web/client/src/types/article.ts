@@ -6,18 +6,22 @@ import {
 } from "@prisma/client";
 
 export type ArticleType = Omit<PrismaArticle, "platformId"> & {
-  platform: PrismaPlatform;
+  platform: Omit<PrismaPlatform, "createdAt" | "updatedAt" | "deletedAt">;
   feeds: Array<
     Omit<
       PrismaFeed & {
-        category: PrismaCategory;
+        category: Omit<PrismaCategory, "createdAt" | "updatedAt" | "deletedAt">;
       },
-      "platformId" | "categoryId"
+      | "platformId"
+      | "categoryId"
+      | "createdAt"
+      | "updatedAt"
+      | "deletedAt"
+      | "rssUrl"
     >
   >;
   isBookmarked: boolean;
   bookmarkId?: string;
-  likeCount?: number;
 };
 
 export type ArticleTabType =

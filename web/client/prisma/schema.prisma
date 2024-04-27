@@ -14,16 +14,17 @@ datasource db {
 }
 
 model TrendArticle {
-  id           String   @id @default(uuid())
-  articleId    String? @map("article_id")
-  platformId   String? @map("platform_id")
+  id           String  @default(uuid())
+  articleId    String  @map("article_id")
+  platformId   String  @map("platform_id")
   likeCount    Int @default(0) @map("like_count")
   createdAt    DateTime @default(now()) @map("created_at")
   updatedAt    DateTime @updatedAt @map("updated_at")
 
-  article      Article?  @relation(fields: [articleId], references: [id], onDelete: Cascade)
-  platform     Platform?  @relation(fields: [platformId], references: [id], onDelete: Cascade)
+  article      Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  platform     Platform @relation(fields: [platformId], references: [id], onDelete: Cascade)
 
+  @@id ([id, articleId, platformId])
   @@map("trend_articles")
 }
 
@@ -179,7 +180,7 @@ model Category {
 
 
 model Platform {
-  id           String   @id @default(uuid())
+  id           String  @id @default(uuid())
   name         String
   siteUrl      String @map("site_url")
   platformType Int @map("platform_type")

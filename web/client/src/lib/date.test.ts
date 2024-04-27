@@ -10,12 +10,14 @@ import {
 } from "./date";
 
 describe("date", () => {
-  test("Success: start time ", async () => {
-    const want = "2021-10-01 00:00:00";
-    const date = getDayjsTz("2021-10-01T12:00:00Z");
+  describe("getDateStartTime", () => {
+    test("Success: start time ", async () => {
+      const want = "2021-10-01 00:00:00";
+      const date = getDayjsTz("2021-10-01T12:00:00Z");
 
-    const startOfDay = getDateStartTime(date);
-    expect(startOfDay.format("YYYY-MM-DD HH:mm:ss")).toBe(want);
+      const startOfDay = getDateStartTime(date);
+      expect(startOfDay.format("YYYY-MM-DD HH:mm:ss")).toBe(want);
+    });
   });
   test("Success: end time", async () => {
     const date = getDayjsTz("2021-10-01T12:00:00Z");

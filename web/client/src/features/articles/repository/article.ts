@@ -124,6 +124,14 @@ export const getArticles = async ({
     default:
   }
 
+  if (tab === "trend") {
+    orderBy = [
+      {
+        createdAt: "desc",
+      },
+    ];
+  }
+
   try {
     const res = await prisma.article.findMany({
       take: 20,
@@ -151,9 +159,6 @@ export const getArticles = async ({
                     id: true,
                     name: true,
                     type: true,
-                    createdAt: true,
-                    updatedAt: true,
-                    deletedAt: true,
                   },
                 },
               },
@@ -168,9 +173,6 @@ export const getArticles = async ({
             faviconUrl: true,
             platformType: true,
             isEng: true,
-            createdAt: true,
-            updatedAt: true,
-            deletedAt: true,
           },
         },
         bookmarks: {
@@ -181,27 +183,11 @@ export const getArticles = async ({
             userId: userId,
           },
         },
-        trendArticles: {
-          select: {
-            id: true,
-            likeCount: true,
-            createdAt: true,
-            updatedAt: true,
-          },
-          orderBy: {
-            createdAt: "desc",
-          },
-          take: 1,
-        },
       },
     });
 
     const articleList: Array<ArticleType> = res.map((article) => {
       const isBookmarked = article.bookmarks.length > 0;
-      const likeCount =
-        article.trendArticles.length > 0
-          ? article.trendArticles[0].likeCount
-          : undefined;
       return {
         id: article.id,
         title: article.title,
@@ -221,12 +207,8 @@ export const getArticles = async ({
           siteUrl: article.platform.siteUrl,
           faviconUrl: article.platform.faviconUrl,
           isEng: article.platform.isEng,
-          createdAt: article.platform.createdAt,
-          updatedAt: article.platform.updatedAt,
-          deletedAt: article.platform.deletedAt,
         },
         isBookmarked: isBookmarked,
-        likeCount: likeCount,
         bookmarkId: isBookmarked ? article.bookmarks[0].id : undefined,
         feeds: article.feedArticleRelatoins.map((feed) => {
           return {
@@ -235,19 +217,12 @@ export const getArticles = async ({
             description: feed.feed.description,
             thumbnailUrl: feed.feed.thumbnailUrl,
             siteUrl: feed.feed.siteUrl,
-            rssUrl: feed.feed.rssUrl,
             apiQueryParam: feed.feed.apiQueryParam,
             trendPlatformType: feed.feed.trendPlatformType,
-            createdAt: feed.feed.createdAt,
-            updatedAt: feed.feed.updatedAt,
-            deletedAt: feed.feed.deletedAt,
             category: {
               id: feed.feed.category.id,
               name: feed.feed.category.name,
               type: feed.feed.category.type,
-              createdAt: feed.feed.category.createdAt,
-              updatedAt: feed.feed.category.updatedAt,
-              deletedAt: feed.feed.category.deletedAt,
             },
           };
         }),
@@ -293,20 +268,13 @@ export const getArticleByArticleAndPlatformUrl = async ({
                 description: true,
                 thumbnailUrl: true,
                 siteUrl: true,
-                rssUrl: true,
                 apiQueryParam: true,
                 trendPlatformType: true,
-                createdAt: true,
-                updatedAt: true,
-                deletedAt: true,
                 category: {
                   select: {
                     id: true,
                     name: true,
                     type: true,
-                    createdAt: true,
-                    updatedAt: true,
-                    deletedAt: true,
                   },
                 },
               },
@@ -321,9 +289,6 @@ export const getArticleByArticleAndPlatformUrl = async ({
             faviconUrl: true,
             platformType: true,
             isEng: true,
-            createdAt: true,
-            updatedAt: true,
-            deletedAt: true,
           },
         },
         bookmarks: {
@@ -334,29 +299,12 @@ export const getArticleByArticleAndPlatformUrl = async ({
             userId: userId,
           },
         },
-        trendArticles: {
-          select: {
-            id: true,
-            likeCount: true,
-            createdAt: true,
-            updatedAt: true,
-          },
-          orderBy: {
-            createdAt: "desc",
-          },
-          take: 1,
-        },
       },
     });
 
     if (!article) return;
     const isBookmarked =
       !!article?.bookmarks?.length && article.bookmarks.length > 0;
-    const likeCount =
-      article.trendArticles.length > 0
-        ? article.trendArticles[0].likeCount
-        : undefined;
-
     const resArticle: ArticleType = {
       id: article.id,
       title: article.title,
@@ -376,12 +324,8 @@ export const getArticleByArticleAndPlatformUrl = async ({
         siteUrl: article.platform.siteUrl,
         faviconUrl: article.platform.faviconUrl,
         isEng: article.platform.isEng,
-        createdAt: article.platform.createdAt,
-        updatedAt: article.platform.updatedAt,
-        deletedAt: article.platform.deletedAt,
       },
       isBookmarked: isBookmarked,
-      likeCount: likeCount,
       bookmarkId: isBookmarked ? article.bookmarks[0].id : undefined,
       feeds: article.feedArticleRelatoins.map((feed) => {
         return {
@@ -390,19 +334,12 @@ export const getArticleByArticleAndPlatformUrl = async ({
           description: feed.feed.description,
           thumbnailUrl: feed.feed.thumbnailUrl,
           siteUrl: feed.feed.siteUrl,
-          rssUrl: feed.feed.rssUrl,
           apiQueryParam: feed.feed.apiQueryParam,
           trendPlatformType: feed.feed.trendPlatformType,
-          createdAt: feed.feed.createdAt,
-          updatedAt: feed.feed.updatedAt,
-          deletedAt: feed.feed.deletedAt,
           category: {
             id: feed.feed.category.id,
             name: feed.feed.category.name,
             type: feed.feed.category.type,
-            createdAt: feed.feed.category.createdAt,
-            updatedAt: feed.feed.category.updatedAt,
-            deletedAt: feed.feed.category.deletedAt,
           },
         };
       }),
