@@ -14,7 +14,8 @@ func (u *Usecase) zennArticleCrawler(ctx context.Context, feed *entity.Feed) err
 	log.Printf("【start zenn article crawler】: %s", feed.Name)
 	aCount := 0
 	farCount := 0
-	taCount := 0
+	taCreatedCount := 0
+	taUpdatedCount := 0
 	// get zenn articles by api
 	res, err := u.air.GetZennArticles()
 	if err != nil {
@@ -71,7 +72,10 @@ func (u *Usecase) zennArticleCrawler(ctx context.Context, feed *entity.Feed) err
 				farCount++
 			}
 			if res.IsCreatedTrendArticle {
-				taCount++
+				taCreatedCount++
+			}
+			if res.IsUpdatedTrendArticle {
+				taUpdatedCount++
 			}
 			//commit
 			err := tx.Commit()
@@ -84,7 +88,8 @@ func (u *Usecase) zennArticleCrawler(ctx context.Context, feed *entity.Feed) err
 	log.Printf("【end zenn article crawler】: %s", feed.Name)
 	log.Printf("【add article count】: %d", aCount)
 	log.Printf("【add feed_article_relationcount】: %d", farCount)
-	log.Printf("【add trend_article count】: %d", taCount)
+	log.Printf("【add trend_article count】: %d", taCreatedCount)
+	log.Printf("【update trend_article count】: %d", taUpdatedCount)
 
 	return nil
 }

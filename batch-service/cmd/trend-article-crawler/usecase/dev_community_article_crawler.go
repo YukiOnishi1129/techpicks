@@ -13,7 +13,8 @@ func (u *Usecase) DevCommunityArticleCrawler(ctx context.Context, feed *entity.F
 
 	aCount := 0
 	farCount := 0
-	taCount := 0
+	taCreatedCount := 0
+	taUpdatedCount := 0
 	// get dev community articles by api
 	res, err := u.air.GetDevCommunityArticles(&feed.APIQueryParam.String)
 	if err != nil {
@@ -63,7 +64,10 @@ func (u *Usecase) DevCommunityArticleCrawler(ctx context.Context, feed *entity.F
 				farCount++
 			}
 			if res.IsCreatedTrendArticle {
-				taCount++
+				taCreatedCount++
+			}
+			if res.IsUpdatedTrendArticle {
+				taUpdatedCount++
 			}
 			//commit
 			err := tx.Commit()
@@ -76,7 +80,8 @@ func (u *Usecase) DevCommunityArticleCrawler(ctx context.Context, feed *entity.F
 	log.Printf("【end dev community article crawler】: %s", feed.Name)
 	log.Printf("【add article count】: %d", aCount)
 	log.Printf("【add feed_article_relationcount】: %d", farCount)
-	log.Printf("【add trend_article count】: %d", taCount)
+	log.Printf("【add trend_article count】: %d", taCreatedCount)
+	log.Printf("【update trend_article count】: %d", taUpdatedCount)
 
 	return nil
 }

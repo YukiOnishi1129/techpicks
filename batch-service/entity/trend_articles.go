@@ -115,7 +115,7 @@ var (
 	trendArticleAllColumns            = []string{"id", "article_id", "platform_id", "like_count", "created_at", "updated_at"}
 	trendArticleColumnsWithoutDefault = []string{"article_id", "platform_id"}
 	trendArticleColumnsWithDefault    = []string{"id", "like_count", "created_at", "updated_at"}
-	trendArticlePrimaryKeyColumns     = []string{"id"}
+	trendArticlePrimaryKeyColumns     = []string{"id", "article_id", "platform_id"}
 	trendArticleGeneratedColumns      = []string{}
 )
 
@@ -571,7 +571,7 @@ func (o *TrendArticle) SetArticle(ctx context.Context, exec boil.ContextExecutor
 		strmangle.SetParamNames("\"", "\"", 1, []string{"article_id"}),
 		strmangle.WhereClause("\"", "\"", 2, trendArticlePrimaryKeyColumns),
 	)
-	values := []interface{}{related.ID, o.ID}
+	values := []interface{}{related.ID, o.ID, o.ArticleID, o.PlatformID}
 
 	if boil.IsDebug(ctx) {
 		writer := boil.DebugWriterFrom(ctx)
@@ -615,7 +615,7 @@ func TrendArticles(mods ...qm.QueryMod) trendArticleQuery {
 
 // FindTrendArticle retrieves a single record by ID with an executor.
 // If selectCols is empty Find will return all columns.
-func FindTrendArticle(ctx context.Context, exec boil.ContextExecutor, iD string, selectCols ...string) (*TrendArticle, error) {
+func FindTrendArticle(ctx context.Context, exec boil.ContextExecutor, iD string, articleID string, platformID string, selectCols ...string) (*TrendArticle, error) {
 	trendArticleObj := &TrendArticle{}
 
 	sel := "*"
@@ -623,10 +623,10 @@ func FindTrendArticle(ctx context.Context, exec boil.ContextExecutor, iD string,
 		sel = strings.Join(strmangle.IdentQuoteSlice(dialect.LQ, dialect.RQ, selectCols), ",")
 	}
 	query := fmt.Sprintf(
-		"select %s from \"trend_articles\" where \"id\"=$1", sel,
+		"select %s from \"trend_articles\" where \"id\"=$1 AND \"article_id\"=$2 AND \"platform_id\"=$3", sel,
 	)
 
-	q := queries.Raw(query, iD)
+	q := queries.Raw(query, iD, articleID, platformID)
 
 	err := q.Bind(ctx, exec, trendArticleObj)
 	if err != nil {
@@ -1008,7 +1008,7 @@ func (o *TrendArticle) Delete(ctx context.Context, exec boil.ContextExecutor) (i
 	}
 
 	args := queries.ValuesFromMapping(reflect.Indirect(reflect.ValueOf(o)), trendArticlePrimaryKeyMapping)
-	sql := "DELETE FROM \"trend_articles\" WHERE \"id\"=$1"
+	sql := "DELETE FROM \"trend_articles\" WHERE \"id\"=$1 AND \"article_id\"=$2 AND \"platform_id\"=$3"
 
 	if boil.IsDebug(ctx) {
 		writer := boil.DebugWriterFrom(ctx)
@@ -1105,7 +1105,7 @@ func (o TrendArticleSlice) DeleteAll(ctx context.Context, exec boil.ContextExecu
 // Reload refetches the object from the database
 // using the primary keys with an executor.
 func (o *TrendArticle) Reload(ctx context.Context, exec boil.ContextExecutor) error {
-	ret, err := FindTrendArticle(ctx, exec, o.ID)
+	ret, err := FindTrendArticle(ctx, exec, o.ID, o.ArticleID, o.PlatformID)
 	if err != nil {
 		return err
 	}
@@ -1144,16 +1144,16 @@ func (o *TrendArticleSlice) ReloadAll(ctx context.Context, exec boil.ContextExec
 }
 
 // TrendArticleExists checks if the TrendArticle row exists.
-func TrendArticleExists(ctx context.Context, exec boil.ContextExecutor, iD string) (bool, error) {
+func TrendArticleExists(ctx context.Context, exec boil.ContextExecutor, iD string, articleID string, platformID string) (bool, error) {
 	var exists bool
-	sql := "select exists(select 1 from \"trend_articles\" where \"id\"=$1 limit 1)"
+	sql := "select exists(select 1 from \"trend_articles\" where \"id\"=$1 AND \"article_id\"=$2 AND \"platform_id\"=$3 limit 1)"
 
 	if boil.IsDebug(ctx) {
 		writer := boil.DebugWriterFrom(ctx)
 		fmt.Fprintln(writer, sql)
-		fmt.Fprintln(writer, iD)
+		fmt.Fprintln(writer, iD, articleID, platformID)
 	}
-	row := exec.QueryRowContext(ctx, sql, iD)
+	row := exec.QueryRowContext(ctx, sql, iD, articleID, platformID)
 
 	err := row.Scan(&exists)
 	if err != nil {
@@ -1165,5 +1165,5 @@ func TrendArticleExists(ctx context.Context, exec boil.ContextExecutor, iD strin
 
 // Exists checks if the TrendArticle row exists.
 func (o *TrendArticle) Exists(ctx context.Context, exec boil.ContextExecutor) (bool, error) {
-	return TrendArticleExists(ctx, exec, o.ID)
+	return TrendArticleExists(ctx, exec, o.ID, o.ArticleID, o.PlatformID)
 }
