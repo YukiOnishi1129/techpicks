@@ -35,9 +35,7 @@ export const BookmarkListTemplate: FC<ArticleListProps> = async ({
   return (
     <div className="w-auto">
       <div className="mb-4 flex w-full items-end justify-between px-4">
-        <h1 className="mt-8 text-2xl font-bold text-gray-800 md:mb-4">
-          Bookmark
-        </h1>
+        <h1 className="mt-8 text-2xl font-bold  md:mb-4">Bookmark</h1>
         <div className=" flex w-48 items-center justify-end">
           <div className="mr-12 hidden cursor-pointer md:block">
             <BookmarkSearchDialog platforms={platforms} />

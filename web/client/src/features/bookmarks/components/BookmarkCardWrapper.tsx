@@ -33,7 +33,7 @@ export const BookmarkCardWrapper: FC<BookmarkCardWrapperProps> = ({
             </div>
           </div>
 
-          <div className="flex items-center justify-center bg-white p-4">
+          <div className="flex items-center justify-center p-4">
             <DeleteBookmarkAlertDialog
               bookmarkId={bookmark.id}
               bookmarkTitle={bookmark.title}

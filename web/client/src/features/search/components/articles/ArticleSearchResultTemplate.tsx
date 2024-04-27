@@ -74,9 +74,7 @@ export const ArticleSearchResultTemplate: FC<
         <PageBreadcrumb breadcrumbs={breadcrumbs} />
       </div>
       <div className="my-8 flex w-full items-center justify-between ">
-        <h1 className="text-2xl font-bold text-gray-800">
-          Article Search Result
-        </h1>
+        <h1 className="text-2xl font-bold ">Article Search Result</h1>
         <div className="mr-8 flex w-48 items-center justify-end">
           <ArticleSearchDialog
             platforms={platforms}

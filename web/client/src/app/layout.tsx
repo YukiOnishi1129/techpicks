@@ -1,6 +1,7 @@
 import { Inter } from "next/font/google";
 
 import { BaseLayout } from "@/components/layout/BaseLayout";
+import { ThemeProvider } from "@/components/Provider/ThemeProvider";
 import { Toaster } from "@/components/ui/sonner";
 
 import type { Metadata } from "next";
@@ -22,8 +23,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <BaseLayout> {children}</BaseLayout>
-        <Toaster />
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <BaseLayout> {children}</BaseLayout>
+          <Toaster />
+        </ThemeProvider>
       </body>
     </html>
   );

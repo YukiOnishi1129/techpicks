@@ -6,15 +6,13 @@ export const MyFeedListTemplate = async () => {
   const myFeedLists = res.data.myFeedLists;
   return (
     <div className="w-auto">
-      <h1 className="mb-4 mt-8 text-2xl font-bold text-gray-800">
-        Personal Feed List
-      </h1>
+      <h1 className="0 mb-4 mt-8 text-2xl font-bold">Personal Feed List</h1>
       <div>
         <CreateMyFeedListDialog />
       </div>
 
       {/* Create New Feed Folder */}
-      <div className="w-full border-b-2 bg-white py-4">
+      <div className="w-full border-b-2  py-4">
         {myFeedLists.length ? (
           <div>
             {myFeedLists.map((myFeedList) => {
