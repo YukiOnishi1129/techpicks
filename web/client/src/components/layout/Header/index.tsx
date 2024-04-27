@@ -13,7 +13,7 @@ export async function Header() {
       <Link href="/" className="cursor-pointer">
         <h1 className="text-2xl font-bold">Tech Picks</h1>
       </Link>
-      <div className="flex items-center">
+      <div className="flex items-center justify-end">
         {user ? <LoggedMenu user={user} /> : <NotLoggedMenu />}
       </div>
     </div>

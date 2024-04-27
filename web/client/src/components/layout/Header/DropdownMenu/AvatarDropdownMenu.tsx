@@ -27,7 +27,7 @@ export const AvatarDropdownMenu: FC<AvatarDropdownMenuProps> = ({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <div className="grid grid-cols-2">
+        <div className="md:flex md:justify-end">
           <Avatar>
             <AvatarImage src={image} alt="avatar" />
             <AvatarFallback>
