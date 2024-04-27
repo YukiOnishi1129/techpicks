@@ -20,8 +20,11 @@ export const AddBookmarkTooltip: FC<AddBookmarkTooltipProps> = ({
   return (
     <TooltipProvider>
       <Tooltip>
-        <TooltipTrigger onClick={() => handleAddBookmark(articleId)}>
-          <MdOutlineBookmarkAdd className="inline-block" size={36} />
+        <TooltipTrigger
+          className="cursor-pointer rounded  hover:bg-rose-200"
+          onClick={() => handleAddBookmark(articleId)}
+        >
+          <MdOutlineBookmarkAdd className="inline-block " size={36} />
         </TooltipTrigger>
         <TooltipContent>
           <p>Add bookmark</p>

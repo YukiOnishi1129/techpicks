@@ -2,11 +2,10 @@ package usecase
 
 import (
 	"context"
+	"github.com/Songmu/go-httpdate"
 	"github.com/YukiOnishi1129/techpicks/batch-service/entity"
-	"github.com/YukiOnishi1129/techpicks/batch-service/internal"
 	"github.com/YukiOnishi1129/techpicks/batch-service/internal/crawler"
 	"log"
-	"time"
 )
 
 func (u *Usecase) DevCommunityArticleCrawler(ctx context.Context, feed *entity.Feed) error {
@@ -14,7 +13,8 @@ func (u *Usecase) DevCommunityArticleCrawler(ctx context.Context, feed *entity.F
 
 	aCount := 0
 	farCount := 0
-	taCount := 0
+	taCreatedCount := 0
+	taUpdatedCount := 0
 	// get dev community articles by api
 	res, err := u.air.GetDevCommunityArticles(&feed.APIQueryParam.String)
 	if err != nil {
@@ -28,9 +28,9 @@ func (u *Usecase) DevCommunityArticleCrawler(ctx context.Context, feed *entity.F
 			log.Printf("【error begin transaction】: %s", err)
 			return err
 		}
-		publishedAt := int(time.Time.Unix(internal.StringToTime(d.PublishedTimestamp)))
+		publishedAt, err := httpdate.Str2Time(d.PublishedTimestamp, nil)
 		if err != nil {
-			log.Printf("【error get ogp image】: %s", err)
+			log.Printf("【error convert published at】: %s", err)
 			return err
 		}
 		res, err := crawler.TrendArticleContentsCrawler(ctx, tx, crawler.TrendArticleContentsCrawlerArg{
@@ -38,7 +38,7 @@ func (u *Usecase) DevCommunityArticleCrawler(ctx context.Context, feed *entity.F
 			ArticleTitle:       d.Title,
 			ArticleURL:         d.URL,
 			ArticleLikeCount:   d.PublicReactionsCount,
-			ArticlePublishedAt: publishedAt,
+			ArticlePublishedAt: int(publishedAt.Unix()),
 			ArticleAuthorName:  &d.User.UserName,
 			ArticleTags:        &d.Tags,
 			ArticleOGPImageURL: d.CoverImage,
@@ -64,7 +64,10 @@ func (u *Usecase) DevCommunityArticleCrawler(ctx context.Context, feed *entity.F
 				farCount++
 			}
 			if res.IsCreatedTrendArticle {
-				taCount++
+				taCreatedCount++
+			}
+			if res.IsUpdatedTrendArticle {
+				taUpdatedCount++
 			}
 			//commit
 			err := tx.Commit()
@@ -77,7 +80,8 @@ func (u *Usecase) DevCommunityArticleCrawler(ctx context.Context, feed *entity.F
 	log.Printf("【end dev community article crawler】: %s", feed.Name)
 	log.Printf("【add article count】: %d", aCount)
 	log.Printf("【add feed_article_relationcount】: %d", farCount)
-	log.Printf("【add trend_article count】: %d", taCount)
+	log.Printf("【add trend_article count】: %d", taCreatedCount)
+	log.Printf("【update trend_article count】: %d", taUpdatedCount)
 
 	return nil
 }

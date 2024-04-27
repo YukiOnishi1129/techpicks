@@ -24,6 +24,7 @@ type TrendArticleContentsCrawlerArg struct {
 
 type TrendArticleContentsCrawlerResponse struct {
 	IsCreatedTrendArticle        bool
+	IsUpdatedTrendArticle        bool
 	IsCreatedArticle             bool
 	IsCreatedFeedArticleRelation bool
 	IsRollback                   bool
@@ -33,7 +34,8 @@ type TrendArticleContentsCrawlerResponse struct {
 func TrendArticleContentsCrawler(ctx context.Context, tx *sql.Tx, arg TrendArticleContentsCrawlerArg) (TrendArticleContentsCrawlerResponse, error) {
 	isCreatedFeedArticleRelation := false
 	IsCreatedTrendArticle := false
-	oneHoursAgo := time.Now().Add(-1 * time.Hour).Format("2006-01-02 15:04:05")
+	IsUpdatedTrendArticle := false
+	oneHoursAgo := time.Now().Add(-1 * time.Hour)
 	// 1. check article table at article_url
 	article, _ := entity.Articles(
 		qm.Where("article_url = ?", arg.ArticleURL),
@@ -41,12 +43,11 @@ func TrendArticleContentsCrawler(ctx context.Context, tx *sql.Tx, arg TrendArtic
 	).One(ctx, tx)
 	if article != nil {
 		// 2. check trend_article table at article_id
-		count, _ := entity.TrendArticles(
+		trandArticle, _ := entity.TrendArticles(
 			qm.Where("article_id = ?", article.ID),
 			qm.Where("platform_id = ?", arg.Feed.PlatformID),
-			qm.And("created_at >= ?", oneHoursAgo),
-		).Count(ctx, tx)
-		if count == 0 {
+		).One(ctx, tx)
+		if trandArticle == nil {
 			// insert trend_article
 			err := CreateTrendArticle(ctx, tx, CreateTrendArticleArg{
 				ArticleID:  article.ID,
@@ -57,6 +58,7 @@ func TrendArticleContentsCrawler(ctx context.Context, tx *sql.Tx, arg TrendArtic
 				log.Printf("【error insert trend article】: %s", arg.ArticleTitle)
 				return TrendArticleContentsCrawlerResponse{
 					IsCreatedTrendArticle:        false,
+					IsUpdatedTrendArticle:        false,
 					IsCreatedArticle:             false,
 					IsCreatedFeedArticleRelation: false,
 					IsRollback:                   true,
@@ -64,6 +66,24 @@ func TrendArticleContentsCrawler(ctx context.Context, tx *sql.Tx, arg TrendArtic
 				}, err
 			}
 			IsCreatedTrendArticle = true
+		}
+
+		if trandArticle != nil && trandArticle.UpdatedAt.Before(oneHoursAgo) {
+			// update trend_article
+			trandArticle.LikeCount = arg.ArticleLikeCount
+			_, err := trandArticle.Update(ctx, tx, boil.Infer())
+			if err != nil {
+				log.Printf("【error update trend article】: %s", arg.ArticleTitle)
+				return TrendArticleContentsCrawlerResponse{
+					IsCreatedTrendArticle:        false,
+					IsUpdatedTrendArticle:        false,
+					IsCreatedArticle:             false,
+					IsCreatedFeedArticleRelation: false,
+					IsRollback:                   true,
+					IsCommit:                     false,
+				}, err
+			}
+			IsUpdatedTrendArticle = true
 		}
 
 		// check feed_article_relation table at article_url
@@ -80,6 +100,7 @@ func TrendArticleContentsCrawler(ctx context.Context, tx *sql.Tx, arg TrendArtic
 				log.Printf("【error insert feed article relation】: %s", article.Title)
 				return TrendArticleContentsCrawlerResponse{
 					IsCreatedTrendArticle:        false,
+					IsUpdatedTrendArticle:        false,
 					IsCreatedArticle:             false,
 					IsCreatedFeedArticleRelation: false,
 					IsRollback:                   true,
@@ -90,6 +111,7 @@ func TrendArticleContentsCrawler(ctx context.Context, tx *sql.Tx, arg TrendArtic
 		}
 		return TrendArticleContentsCrawlerResponse{
 			IsCreatedTrendArticle:        IsCreatedTrendArticle,
+			IsUpdatedTrendArticle:        IsUpdatedTrendArticle,
 			IsCreatedArticle:             false,
 			IsCreatedFeedArticleRelation: isCreatedFeedArticleRelation,
 			IsRollback:                   false,
@@ -116,6 +138,7 @@ func TrendArticleContentsCrawler(ctx context.Context, tx *sql.Tx, arg TrendArtic
 		log.Printf("【error insert article】: %s, err: %v", arg.ArticleTitle, err)
 		return TrendArticleContentsCrawlerResponse{
 			IsCreatedTrendArticle:        false,
+			IsUpdatedTrendArticle:        false,
 			IsCreatedArticle:             false,
 			IsCreatedFeedArticleRelation: false,
 			IsRollback:                   true,
@@ -132,6 +155,7 @@ func TrendArticleContentsCrawler(ctx context.Context, tx *sql.Tx, arg TrendArtic
 		log.Printf("【error insert feed article relation】: %s", arg.ArticleTitle)
 		return TrendArticleContentsCrawlerResponse{
 			IsCreatedTrendArticle:        false,
+			IsUpdatedTrendArticle:        false,
 			IsCreatedArticle:             false,
 			IsCreatedFeedArticleRelation: false,
 			IsRollback:                   true,
@@ -149,6 +173,7 @@ func TrendArticleContentsCrawler(ctx context.Context, tx *sql.Tx, arg TrendArtic
 		log.Printf("【error insert trend article】: %s", arg.ArticleTitle)
 		return TrendArticleContentsCrawlerResponse{
 			IsCreatedTrendArticle:        false,
+			IsUpdatedTrendArticle:        false,
 			IsCreatedArticle:             false,
 			IsCreatedFeedArticleRelation: false,
 			IsRollback:                   true,
@@ -160,6 +185,7 @@ func TrendArticleContentsCrawler(ctx context.Context, tx *sql.Tx, arg TrendArtic
 
 	return TrendArticleContentsCrawlerResponse{
 		IsCreatedTrendArticle:        true,
+		IsUpdatedTrendArticle:        false,
 		IsCreatedArticle:             true,
 		IsCreatedFeedArticleRelation: true,
 		IsRollback:                   false,

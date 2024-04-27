@@ -86,14 +86,17 @@ var TrendArticleWhere = struct {
 
 // TrendArticleRels is where relationship names are stored.
 var TrendArticleRels = struct {
-	Article string
+	Article  string
+	Platform string
 }{
-	Article: "Article",
+	Article:  "Article",
+	Platform: "Platform",
 }
 
 // trendArticleR is where relationships are stored.
 type trendArticleR struct {
-	Article *Article `boil:"Article" json:"Article" toml:"Article" yaml:"Article"`
+	Article  *Article  `boil:"Article" json:"Article" toml:"Article" yaml:"Article"`
+	Platform *Platform `boil:"Platform" json:"Platform" toml:"Platform" yaml:"Platform"`
 }
 
 // NewStruct creates a new relationship struct
@@ -108,6 +111,13 @@ func (r *trendArticleR) GetArticle() *Article {
 	return r.Article
 }
 
+func (r *trendArticleR) GetPlatform() *Platform {
+	if r == nil {
+		return nil
+	}
+	return r.Platform
+}
+
 // trendArticleL is where Load methods for each relationship are stored.
 type trendArticleL struct{}
 
@@ -115,7 +125,7 @@ var (
 	trendArticleAllColumns            = []string{"id", "article_id", "platform_id", "like_count", "created_at", "updated_at"}
 	trendArticleColumnsWithoutDefault = []string{"article_id", "platform_id"}
 	trendArticleColumnsWithDefault    = []string{"id", "like_count", "created_at", "updated_at"}
-	trendArticlePrimaryKeyColumns     = []string{"id"}
+	trendArticlePrimaryKeyColumns     = []string{"id", "article_id", "platform_id"}
 	trendArticleGeneratedColumns      = []string{}
 )
 
@@ -435,6 +445,17 @@ func (o *TrendArticle) Article(mods ...qm.QueryMod) articleQuery {
 	return Articles(queryMods...)
 }
 
+// Platform pointed to by the foreign key.
+func (o *TrendArticle) Platform(mods ...qm.QueryMod) platformQuery {
+	queryMods := []qm.QueryMod{
+		qm.Where("\"id\" = ?", o.PlatformID),
+	}
+
+	queryMods = append(queryMods, mods...)
+
+	return Platforms(queryMods...)
+}
+
 // LoadArticle allows an eager lookup of values, cached into the
 // loaded structs of the objects. This is for an N-1 relationship.
 func (trendArticleL) LoadArticle(ctx context.Context, e boil.ContextExecutor, singular bool, maybeTrendArticle interface{}, mods queries.Applicator) error {
@@ -555,6 +576,126 @@ func (trendArticleL) LoadArticle(ctx context.Context, e boil.ContextExecutor, si
 	return nil
 }
 
+// LoadPlatform allows an eager lookup of values, cached into the
+// loaded structs of the objects. This is for an N-1 relationship.
+func (trendArticleL) LoadPlatform(ctx context.Context, e boil.ContextExecutor, singular bool, maybeTrendArticle interface{}, mods queries.Applicator) error {
+	var slice []*TrendArticle
+	var object *TrendArticle
+
+	if singular {
+		var ok bool
+		object, ok = maybeTrendArticle.(*TrendArticle)
+		if !ok {
+			object = new(TrendArticle)
+			ok = queries.SetFromEmbeddedStruct(&object, &maybeTrendArticle)
+			if !ok {
+				return errors.New(fmt.Sprintf("failed to set %T from embedded struct %T", object, maybeTrendArticle))
+			}
+		}
+	} else {
+		s, ok := maybeTrendArticle.(*[]*TrendArticle)
+		if ok {
+			slice = *s
+		} else {
+			ok = queries.SetFromEmbeddedStruct(&slice, maybeTrendArticle)
+			if !ok {
+				return errors.New(fmt.Sprintf("failed to set %T from embedded struct %T", slice, maybeTrendArticle))
+			}
+		}
+	}
+
+	args := make(map[interface{}]struct{})
+	if singular {
+		if object.R == nil {
+			object.R = &trendArticleR{}
+		}
+		args[object.PlatformID] = struct{}{}
+
+	} else {
+		for _, obj := range slice {
+			if obj.R == nil {
+				obj.R = &trendArticleR{}
+			}
+
+			args[obj.PlatformID] = struct{}{}
+
+		}
+	}
+
+	if len(args) == 0 {
+		return nil
+	}
+
+	argsSlice := make([]interface{}, len(args))
+	i := 0
+	for arg := range args {
+		argsSlice[i] = arg
+		i++
+	}
+
+	query := NewQuery(
+		qm.From(`platforms`),
+		qm.WhereIn(`platforms.id in ?`, argsSlice...),
+	)
+	if mods != nil {
+		mods.Apply(query)
+	}
+
+	results, err := query.QueryContext(ctx, e)
+	if err != nil {
+		return errors.Wrap(err, "failed to eager load Platform")
+	}
+
+	var resultSlice []*Platform
+	if err = queries.Bind(results, &resultSlice); err != nil {
+		return errors.Wrap(err, "failed to bind eager loaded slice Platform")
+	}
+
+	if err = results.Close(); err != nil {
+		return errors.Wrap(err, "failed to close results of eager load for platforms")
+	}
+	if err = results.Err(); err != nil {
+		return errors.Wrap(err, "error occurred during iteration of eager loaded relations for platforms")
+	}
+
+	if len(platformAfterSelectHooks) != 0 {
+		for _, obj := range resultSlice {
+			if err := obj.doAfterSelectHooks(ctx, e); err != nil {
+				return err
+			}
+		}
+	}
+
+	if len(resultSlice) == 0 {
+		return nil
+	}
+
+	if singular {
+		foreign := resultSlice[0]
+		object.R.Platform = foreign
+		if foreign.R == nil {
+			foreign.R = &platformR{}
+		}
+		foreign.R.TrendArticles = append(foreign.R.TrendArticles, object)
+		return nil
+	}
+
+	for _, local := range slice {
+		for _, foreign := range resultSlice {
+			if local.PlatformID == foreign.ID {
+				local.R.Platform = foreign
+				if foreign.R == nil {
+					foreign.R = &platformR{}
+				}
+				foreign.R.TrendArticles = append(foreign.R.TrendArticles, local)
+				break
+			}
+		}
+	}
+
+	return nil
+}
+
 // SetArticle of the trendArticle to the related item.
 // Sets o.R.Article to related.
 // Adds o to related.R.TrendArticles.
@@ -571,7 +712,7 @@ func (o *TrendArticle) SetArticle(ctx context.Context, exec boil.ContextExecutor
 		strmangle.SetParamNames("\"", "\"", 1, []string{"article_id"}),
 		strmangle.WhereClause("\"", "\"", 2, trendArticlePrimaryKeyColumns),
 	)
-	values := []interface{}{related.ID, o.ID}
+	values := []interface{}{related.ID, o.ID, o.ArticleID, o.PlatformID}
 
 	if boil.IsDebug(ctx) {
 		writer := boil.DebugWriterFrom(ctx)
@@ -602,6 +743,53 @@ func (o *TrendArticle) SetArticle(ctx context.Context, exec boil.ContextExecutor
 	return nil
 }
 
+// SetPlatform of the trendArticle to the related item.
+// Sets o.R.Platform to related.
+// Adds o to related.R.TrendArticles.
+func (o *TrendArticle) SetPlatform(ctx context.Context, exec boil.ContextExecutor, insert bool, related *Platform) error {
+	var err error
+	if insert {
+		if err = related.Insert(ctx, exec, boil.Infer()); err != nil {
+			return errors.Wrap(err, "failed to insert into foreign table")
+		}
+	}
+
+	updateQuery := fmt.Sprintf(
+		"UPDATE \"trend_articles\" SET %s WHERE %s",
+		strmangle.SetParamNames("\"", "\"", 1, []string{"platform_id"}),
+		strmangle.WhereClause("\"", "\"", 2, trendArticlePrimaryKeyColumns),
+	)
+	values := []interface{}{related.ID, o.ID, o.ArticleID, o.PlatformID}
+
+	if boil.IsDebug(ctx) {
+		writer := boil.DebugWriterFrom(ctx)
+		fmt.Fprintln(writer, updateQuery)
+		fmt.Fprintln(writer, values)
+	}
+	if _, err = exec.ExecContext(ctx, updateQuery, values...); err != nil {
+		return errors.Wrap(err, "failed to update local table")
+	}
+
+	o.PlatformID = related.ID
+	if o.R == nil {
+		o.R = &trendArticleR{
+			Platform: related,
+		}
+	} else {
+		o.R.Platform = related
+	}
+
+	if related.R == nil {
+		related.R = &platformR{
+			TrendArticles: TrendArticleSlice{o},
+		}
+	} else {
+		related.R.TrendArticles = append(related.R.TrendArticles, o)
+	}
+
+	return nil
+}
+
 // TrendArticles retrieves all the records using an executor.
 func TrendArticles(mods ...qm.QueryMod) trendArticleQuery {
 	mods = append(mods, qm.From("\"trend_articles\""))
@@ -615,7 +803,7 @@ func TrendArticles(mods ...qm.QueryMod) trendArticleQuery {
 
 // FindTrendArticle retrieves a single record by ID with an executor.
 // If selectCols is empty Find will return all columns.
-func FindTrendArticle(ctx context.Context, exec boil.ContextExecutor, iD string, selectCols ...string) (*TrendArticle, error) {
+func FindTrendArticle(ctx context.Context, exec boil.ContextExecutor, iD string, articleID string, platformID string, selectCols ...string) (*TrendArticle, error) {
 	trendArticleObj := &TrendArticle{}
 
 	sel := "*"
@@ -623,10 +811,10 @@ func FindTrendArticle(ctx context.Context, exec boil.ContextExecutor, iD string,
 		sel = strings.Join(strmangle.IdentQuoteSlice(dialect.LQ, dialect.RQ, selectCols), ",")
 	}
 	query := fmt.Sprintf(
-		"select %s from \"trend_articles\" where \"id\"=$1", sel,
+		"select %s from \"trend_articles\" where \"id\"=$1 AND \"article_id\"=$2 AND \"platform_id\"=$3", sel,
 	)
 
-	q := queries.Raw(query, iD)
+	q := queries.Raw(query, iD, articleID, platformID)
 
 	err := q.Bind(ctx, exec, trendArticleObj)
 	if err != nil {
@@ -1008,7 +1196,7 @@ func (o *TrendArticle) Delete(ctx context.Context, exec boil.ContextExecutor) (i
 	}
 
 	args := queries.ValuesFromMapping(reflect.Indirect(reflect.ValueOf(o)), trendArticlePrimaryKeyMapping)
-	sql := "DELETE FROM \"trend_articles\" WHERE \"id\"=$1"
+	sql := "DELETE FROM \"trend_articles\" WHERE \"id\"=$1 AND \"article_id\"=$2 AND \"platform_id\"=$3"
 
 	if boil.IsDebug(ctx) {
 		writer := boil.DebugWriterFrom(ctx)
@@ -1105,7 +1293,7 @@ func (o TrendArticleSlice) DeleteAll(ctx context.Context, exec boil.ContextExecu
 // Reload refetches the object from the database
 // using the primary keys with an executor.
 func (o *TrendArticle) Reload(ctx context.Context, exec boil.ContextExecutor) error {
-	ret, err := FindTrendArticle(ctx, exec, o.ID)
+	ret, err := FindTrendArticle(ctx, exec, o.ID, o.ArticleID, o.PlatformID)
 	if err != nil {
 		return err
 	}
@@ -1144,16 +1332,16 @@ func (o *TrendArticleSlice) ReloadAll(ctx context.Context, exec boil.ContextExec
 }
 
 // TrendArticleExists checks if the TrendArticle row exists.
-func TrendArticleExists(ctx context.Context, exec boil.ContextExecutor, iD string) (bool, error) {
+func TrendArticleExists(ctx context.Context, exec boil.ContextExecutor, iD string, articleID string, platformID string) (bool, error) {
 	var exists bool
-	sql := "select exists(select 1 from \"trend_articles\" where \"id\"=$1 limit 1)"
+	sql := "select exists(select 1 from \"trend_articles\" where \"id\"=$1 AND \"article_id\"=$2 AND \"platform_id\"=$3 limit 1)"
 
 	if boil.IsDebug(ctx) {
 		writer := boil.DebugWriterFrom(ctx)
 		fmt.Fprintln(writer, sql)
-		fmt.Fprintln(writer, iD)
+		fmt.Fprintln(writer, iD, articleID, platformID)
 	}
-	row := exec.QueryRowContext(ctx, sql, iD)
+	row := exec.QueryRowContext(ctx, sql, iD, articleID, platformID)
 
 	err := row.Scan(&exists)
 	if err != nil {
@@ -1165,5 +1353,5 @@ func TrendArticleExists(ctx context.Context, exec boil.ContextExecutor, iD strin
 
 // Exists checks if the TrendArticle row exists.
 func (o *TrendArticle) Exists(ctx context.Context, exec boil.ContextExecutor) (bool, error) {
-	return TrendArticleExists(ctx, exec, o.ID)
+	return TrendArticleExists(ctx, exec, o.ID, o.ArticleID, o.PlatformID)
 }

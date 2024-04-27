@@ -1,16 +1,18 @@
 import {
+  TrendArticle as PrismaTrendArticle,
   Article as PrismaArticle,
   Platform as PrismaPlatform,
   Feed as PrismaFeed,
   Category as PrismaCategory,
 } from "@prisma/client";
 
-export type ArticleType = Omit<PrismaArticle, "platformId"> & {
+export type TrendArticleType = Omit<PrismaTrendArticle, "platformId"> & {
+  article: Omit<PrismaArticle, "platformId">;
   platform: Omit<PrismaPlatform, "createdAt" | "updatedAt" | "deletedAt">;
   feeds: Array<
     Omit<
       PrismaFeed & {
-        category: Omit<PrismaCategory, "createdAt" | "updatedAt" | "deletedAt">;
+        category: PrismaCategory;
       },
       | "platformId"
       | "categoryId"
@@ -22,16 +24,4 @@ export type ArticleType = Omit<PrismaArticle, "platformId"> & {
   >;
   isBookmarked: boolean;
   bookmarkId?: string;
-  likeCount?: number;
 };
-
-export type ArticleTabType =
-  | ArticleTrendTab
-  | ArticleSiteTab
-  | ArticleCompanyTab
-  | ArticleSummaryTab;
-
-type ArticleTrendTab = "trend";
-type ArticleSiteTab = "site";
-type ArticleCompanyTab = "company";
-type ArticleSummaryTab = "summary";

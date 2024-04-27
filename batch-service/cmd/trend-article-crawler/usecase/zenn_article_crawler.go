@@ -3,19 +3,19 @@ package usecase
 import (
 	"context"
 	"fmt"
+	"github.com/Songmu/go-httpdate"
 	"github.com/YukiOnishi1129/techpicks/batch-service/entity"
-	"github.com/YukiOnishi1129/techpicks/batch-service/internal"
 	"github.com/YukiOnishi1129/techpicks/batch-service/internal/crawler"
 	"github.com/YukiOnishi1129/techpicks/batch-service/internal/ogp"
 	"log"
-	"time"
 )
 
 func (u *Usecase) zennArticleCrawler(ctx context.Context, feed *entity.Feed) error {
 	log.Printf("【start zenn article crawler】: %s", feed.Name)
 	aCount := 0
 	farCount := 0
-	taCount := 0
+	taCreatedCount := 0
+	taUpdatedCount := 0
 	// get zenn articles by api
 	res, err := u.air.GetZennArticles()
 	if err != nil {
@@ -30,8 +30,12 @@ func (u *Usecase) zennArticleCrawler(ctx context.Context, feed *entity.Feed) err
 			log.Printf("【error begin transaction】: %s", err)
 			return err
 		}
-		articleURL := fmt.Sprintf("https://zenn.dev/articles%s", z.Path)
-		publishedAt := int(time.Time.Unix(internal.StringToTime(z.PublishedAt)))
+		articleURL := fmt.Sprintf("https://zenn.dev%s", z.Path)
+		publishedAt, err := httpdate.Str2Time(z.PublishedAt, nil)
+		if err != nil {
+			log.Printf("【error convert published at】: %s", err)
+			return err
+		}
 		ogpImageURL, err := ogp.GetOgpImage(articleURL)
 		if err != nil {
 			log.Printf("【error get ogp image】: %s", err)
@@ -42,7 +46,7 @@ func (u *Usecase) zennArticleCrawler(ctx context.Context, feed *entity.Feed) err
 			ArticleTitle:       z.Title,
 			ArticleURL:         articleURL,
 			ArticleLikeCount:   z.LikedCount,
-			ArticlePublishedAt: publishedAt,
+			ArticlePublishedAt: int(publishedAt.Unix()),
 			ArticleAuthorName:  nil,
 			ArticleTags:        nil,
 			ArticleOGPImageURL: ogpImageURL,
@@ -68,7 +72,10 @@ func (u *Usecase) zennArticleCrawler(ctx context.Context, feed *entity.Feed) err
 				farCount++
 			}
 			if res.IsCreatedTrendArticle {
-				taCount++
+				taCreatedCount++
+			}
+			if res.IsUpdatedTrendArticle {
+				taUpdatedCount++
 			}
 			//commit
 			err := tx.Commit()
@@ -81,7 +88,8 @@ func (u *Usecase) zennArticleCrawler(ctx context.Context, feed *entity.Feed) err
 	log.Printf("【end zenn article crawler】: %s", feed.Name)
 	log.Printf("【add article count】: %d", aCount)
 	log.Printf("【add feed_article_relationcount】: %d", farCount)
-	log.Printf("【add trend_article count】: %d", taCount)
+	log.Printf("【add trend_article count】: %d", taCreatedCount)
+	log.Printf("【update trend_article count】: %d", taUpdatedCount)
 
 	return nil
 }

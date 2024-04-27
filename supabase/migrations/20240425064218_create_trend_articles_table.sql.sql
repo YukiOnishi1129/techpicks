@@ -9,9 +9,10 @@ CREATE TABLE trend_articles
     like_count INT NOT NULL DEFAULT 0,
     created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (id),
+    PRIMARY KEY (id, article_id, platform_id),
 
-    CONSTRAINT fk_trend_articles_article_id FOREIGN KEY (article_id) REFERENCES articles(id) ON UPDATE RESTRICT ON DELETE CASCADE
+    CONSTRAINT fk_trend_articles_article_id FOREIGN KEY (article_id) REFERENCES articles(id) ON UPDATE RESTRICT ON DELETE CASCADE,
+    CONSTRAINT fk_trend_articles_platform_id FOREIGN KEY (platform_id) REFERENCES platforms(id) ON UPDATE RESTRICT ON DELETE CASCADE
 );
 
 CREATE TRIGGER trend_articles_update_tri BEFORE UPDATE ON trend_articles FOR EACH ROW EXECUTE PROCEDURE set_trend_articles_update_time();

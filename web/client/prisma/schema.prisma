@@ -13,6 +13,21 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model TrendArticle {
+  id           String  @default(uuid())
+  articleId    String  @map("article_id")
+  platformId   String  @map("platform_id")
+  likeCount    Int @default(0) @map("like_count")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  article      Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  platform     Platform @relation(fields: [platformId], references: [id], onDelete: Cascade)
+
+  @@id ([id, articleId, platformId])
+  @@map("trend_articles")
+}
+
 model MyFeed {
   id           String   @id @default(uuid())
   userId       String @map("user_id")
@@ -26,8 +41,6 @@ model MyFeed {
   feed         Feed  @relation(fields: [feedId], references: [id], onDelete: Cascade)
 
   @@map("my_feeds")
-
-
 }
 
 model MyFeedList {
@@ -113,12 +126,15 @@ model Article {
   description  String
   articleUrl   String @map("article_url")
   publishedAt  DateTime @map("published_at")
+  authorName   String? @map("author_name")
+  tags         String?
   thumbnailURL String @map("thumbnail_url")
   isPrivate    Boolean @map("is_private")
   createdAt    DateTime @default(now()) @map("created_at")
   updatedAt    DateTime @updatedAt @map("updated_at")
   feedArticleRelatoins FeedArticleRelation[]
   bookmarks      Bookmark[]
+  trendArticles TrendArticle[]
 
   platform     Platform  @relation(fields: [platformId], references: [id], onDelete: Cascade)
   @@map("articles")
@@ -134,7 +150,8 @@ model Feed {
   categoryId   String @map("category_id")
   siteUrl      String @map("site_url")
   rssUrl       String @map("rss_url")
-  isTrending   Boolean @default(false) @map("is_trending")
+  apiQueryParam String? @map("api_query_param")
+  trendPlatformType Int @map("trend_platform_type")
   createdAt    DateTime @default(now()) @map("created_at")
   updatedAt    DateTime @updatedAt @map("updated_at")
   deletedAt    DateTime? @map("deleted_at")
@@ -163,7 +180,7 @@ model Category {
 
 
 model Platform {
-  id           String   @id @default(uuid())
+  id           String  @id @default(uuid())
   name         String
   siteUrl      String @map("site_url")
   platformType Int @map("platform_type")
@@ -175,6 +192,7 @@ model Platform {
   feeds        Feed[]
   articles     Article[]
   bookmarks    Bookmark[]
+  trendArticles TrendArticle[]
 
   @@map("platforms")
 }

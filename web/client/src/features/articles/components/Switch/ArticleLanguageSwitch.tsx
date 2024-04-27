@@ -29,7 +29,7 @@ export const ArticleLanguageSwitch: FC<ArticleLanguageSwitchProps> = ({
       setIsLoading(true);
       const language = checked ? 2 : 1;
       setIsEng(checked);
-      let path = `/?languageStatus=${language}?tab=${tab}`;
+      let path = `/?languageStatus=${language}&tab=${tab}`;
       if (keyword) {
         path += `&keyword=${keyword}`;
       }

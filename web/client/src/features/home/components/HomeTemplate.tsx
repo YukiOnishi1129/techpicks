@@ -1,30 +1,35 @@
-import { User } from "@supabase/supabase-js";
 import Link from "next/link";
 import { FC } from "react";
 import { CiSearch } from "react-icons/ci";
 
+import { ArticleTemplateContent } from "@/features/articles/components/ArticleTemplateContent";
+import { TrendArticleTemplateContent } from "@/features/trendArticles/components/TrendArticleTemplateContent";
 import { getUser } from "@/features/users/actions/user";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import { ArticleTabType } from "@/types/article";
 import { LanguageStatus } from "@/types/language";
 
-import { ArticleList } from "./ArticleList";
-import { ArticleLanguageSwitch } from "./Switch";
-import { fetchArticlesAPI } from "../actions/article";
-
-type ArticleListTemplateProps = {
+type HomeTemplateProps = {
   languageStatus: LanguageStatus;
   keyword?: string;
   platformIdList: Array<string>;
+  tab: string;
 };
 
-export const ArticleListTemplate: FC<ArticleListTemplateProps> = async ({
+const TAB_LIST = {
+  TREND: "trend",
+  SITE: "site",
+  COMPANY: "company",
+  SUMMARY: "summary",
+};
+
+export const HomeTemplate: FC<HomeTemplateProps> = async ({
   languageStatus,
   keyword,
   platformIdList,
-}: ArticleListTemplateProps) => {
+  tab,
+}: HomeTemplateProps) => {
   const user = await getUser();
   return (
     <div className="w-auto">
@@ -36,32 +41,31 @@ export const ArticleListTemplate: FC<ArticleListTemplateProps> = async ({
           </Link>
         </div>
       </div>
-      <Tabs defaultValue="trend">
+      <Tabs defaultValue={convertTab(tab)}>
         <TabsList className="w-full">
-          <TabsTrigger className="w-1/4" value="trend">
+          <TabsTrigger className="w-1/4" value={TAB_LIST.TREND}>
             Trend
           </TabsTrigger>
-          <TabsTrigger className="w-1/4" value="site">
+          <TabsTrigger className="w-1/4" value={TAB_LIST.SITE}>
             Site
           </TabsTrigger>
-          <TabsTrigger className="w-1/4" value="company">
+          <TabsTrigger className="w-1/4" value={TAB_LIST.COMPANY}>
             Company
           </TabsTrigger>
-          <TabsTrigger className="w-1/4" value="summary">
+          <TabsTrigger className="w-1/4" value={TAB_LIST.SUMMARY}>
             Summary
           </TabsTrigger>
         </TabsList>
-        <TabsContent value="trend">
-          <ArticleListContent
+        <TabsContent value={TAB_LIST.TREND}>
+          <TrendArticleTemplateContent
             languageStatus={languageStatus}
             keyword={keyword}
             platformIdList={platformIdList}
             user={user}
-            tab={"trend"}
           />
         </TabsContent>
-        <TabsContent value="site">
-          <ArticleListContent
+        <TabsContent value={TAB_LIST.SITE}>
+          <ArticleTemplateContent
             languageStatus={languageStatus}
             keyword={keyword}
             platformIdList={platformIdList}
@@ -69,8 +73,8 @@ export const ArticleListTemplate: FC<ArticleListTemplateProps> = async ({
             tab={"site"}
           />
         </TabsContent>
-        <TabsContent value="company">
-          <ArticleListContent
+        <TabsContent value={TAB_LIST.COMPANY}>
+          <ArticleTemplateContent
             languageStatus={languageStatus}
             keyword={keyword}
             platformIdList={platformIdList}
@@ -78,8 +82,8 @@ export const ArticleListTemplate: FC<ArticleListTemplateProps> = async ({
             tab={"company"}
           />
         </TabsContent>
-        <TabsContent value="summary">
-          <ArticleListContent
+        <TabsContent value={TAB_LIST.SUMMARY}>
+          <ArticleTemplateContent
             languageStatus={languageStatus}
             keyword={keyword}
             platformIdList={platformIdList}
@@ -92,46 +96,14 @@ export const ArticleListTemplate: FC<ArticleListTemplateProps> = async ({
   );
 };
 
-type ArticleListContentProps = {
-  languageStatus: LanguageStatus;
-  keyword?: string;
-  platformIdList: Array<string>;
-  user: User | undefined;
-  tab: ArticleTabType;
-};
-
-const ArticleListContent = async ({
-  languageStatus,
-  keyword,
-  platformIdList,
-  user,
-  tab,
-}: ArticleListContentProps) => {
-  const res = await fetchArticlesAPI({
-    languageStatus: languageStatus.toString(),
-    keyword,
-    platformIdList,
-    tab,
-  });
-  return (
-    <>
-      <div className="w-full border-b-2 bg-white py-4">
-        <ArticleLanguageSwitch
-          languageStatus={languageStatus}
-          keyword={keyword}
-          tab={tab}
-        />
-      </div>
-
-      <ArticleList
-        user={user}
-        initialArticles={res.data.articles}
-        languageStatus={languageStatus}
-        keyword={keyword}
-        platformIdList={platformIdList}
-        tab={tab}
-        fetchArticles={fetchArticlesAPI}
-      />
-    </>
-  );
+const convertTab = (tab: string) => {
+  if (
+    tab !== TAB_LIST.TREND &&
+    tab !== TAB_LIST.SITE &&
+    tab !== TAB_LIST.COMPANY &&
+    tab !== TAB_LIST.SUMMARY
+  ) {
+    return "trend";
+  }
+  return tab;
 };

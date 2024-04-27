@@ -1361,7 +1361,7 @@ func (o *Article) AddTrendArticles(ctx context.Context, exec boil.ContextExecuto
 				strmangle.SetParamNames("\"", "\"", 1, []string{"article_id"}),
 				strmangle.WhereClause("\"", "\"", 2, trendArticlePrimaryKeyColumns),
 			)
-			values := []interface{}{o.ID, rel.ID}
+			values := []interface{}{o.ID, rel.ID, rel.ArticleID, rel.PlatformID}
 
 			if boil.IsDebug(ctx) {
 				writer := boil.DebugWriterFrom(ctx)

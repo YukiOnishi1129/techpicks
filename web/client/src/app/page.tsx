@@ -1,7 +1,7 @@
 import { Loader } from "lucide-react";
 import { Suspense } from "react";
 
-import { ArticleListTemplate } from "@/features/articles/components/ArticleListTemplate";
+import { HomeTemplate } from "@/features/home/components/HomeTemplate";
 
 import { LanguageStatus } from "@/types/language";
 
@@ -32,6 +32,9 @@ export default async function Home({ searchParams }: PageProps) {
   if (typeof searchParams["platformId"] === "string")
     platformIdList.push(searchParams["platformId"]);
 
+  const tab =
+    typeof searchParams["tab"] === "string" ? searchParams["tab"] : "trend";
+
   return (
     <>
       <Suspense
@@ -41,10 +44,11 @@ export default async function Home({ searchParams }: PageProps) {
           </div>
         }
       >
-        <ArticleListTemplate
+        <HomeTemplate
           languageStatus={languageStatus}
           keyword={keyword}
           platformIdList={platformIdList}
+          tab={tab}
         />
       </Suspense>
     </>
