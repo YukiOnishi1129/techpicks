@@ -14,12 +14,21 @@ type HomeTemplateProps = {
   languageStatus: LanguageStatus;
   keyword?: string;
   platformIdList: Array<string>;
+  tab: string;
+};
+
+const TAB_LIST = {
+  TREND: "trend",
+  SITE: "site",
+  COMPANY: "company",
+  SUMMARY: "summary",
 };
 
 export const HomeTemplate: FC<HomeTemplateProps> = async ({
   languageStatus,
   keyword,
   platformIdList,
+  tab,
 }: HomeTemplateProps) => {
   const user = await getUser();
   return (
@@ -32,22 +41,22 @@ export const HomeTemplate: FC<HomeTemplateProps> = async ({
           </Link>
         </div>
       </div>
-      <Tabs defaultValue="trend">
+      <Tabs defaultValue={convertTab(tab)}>
         <TabsList className="w-full">
-          <TabsTrigger className="w-1/4" value="trend">
+          <TabsTrigger className="w-1/4" value={TAB_LIST.TREND}>
             Trend
           </TabsTrigger>
-          <TabsTrigger className="w-1/4" value="site">
+          <TabsTrigger className="w-1/4" value={TAB_LIST.SITE}>
             Site
           </TabsTrigger>
-          <TabsTrigger className="w-1/4" value="company">
+          <TabsTrigger className="w-1/4" value={TAB_LIST.COMPANY}>
             Company
           </TabsTrigger>
-          <TabsTrigger className="w-1/4" value="summary">
+          <TabsTrigger className="w-1/4" value={TAB_LIST.SUMMARY}>
             Summary
           </TabsTrigger>
         </TabsList>
-        <TabsContent value="trend">
+        <TabsContent value={TAB_LIST.TREND}>
           <TrendArticleTemplateContent
             languageStatus={languageStatus}
             keyword={keyword}
@@ -55,7 +64,7 @@ export const HomeTemplate: FC<HomeTemplateProps> = async ({
             user={user}
           />
         </TabsContent>
-        <TabsContent value="site">
+        <TabsContent value={TAB_LIST.SITE}>
           <ArticleTemplateContent
             languageStatus={languageStatus}
             keyword={keyword}
@@ -64,7 +73,7 @@ export const HomeTemplate: FC<HomeTemplateProps> = async ({
             tab={"site"}
           />
         </TabsContent>
-        <TabsContent value="company">
+        <TabsContent value={TAB_LIST.COMPANY}>
           <ArticleTemplateContent
             languageStatus={languageStatus}
             keyword={keyword}
@@ -73,7 +82,7 @@ export const HomeTemplate: FC<HomeTemplateProps> = async ({
             tab={"company"}
           />
         </TabsContent>
-        <TabsContent value="summary">
+        <TabsContent value={TAB_LIST.SUMMARY}>
           <ArticleTemplateContent
             languageStatus={languageStatus}
             keyword={keyword}
@@ -85,4 +94,16 @@ export const HomeTemplate: FC<HomeTemplateProps> = async ({
       </Tabs>
     </div>
   );
+};
+
+const convertTab = (tab: string) => {
+  if (
+    tab !== TAB_LIST.TREND &&
+    tab !== TAB_LIST.SITE &&
+    tab !== TAB_LIST.COMPANY &&
+    tab !== TAB_LIST.SUMMARY
+  ) {
+    return "trend";
+  }
+  return tab;
 };

@@ -32,6 +32,9 @@ export default async function Home({ searchParams }: PageProps) {
   if (typeof searchParams["platformId"] === "string")
     platformIdList.push(searchParams["platformId"]);
 
+  const tab =
+    typeof searchParams["tab"] === "string" ? searchParams["tab"] : "trend";
+
   return (
     <>
       <Suspense
@@ -45,6 +48,7 @@ export default async function Home({ searchParams }: PageProps) {
           languageStatus={languageStatus}
           keyword={keyword}
           platformIdList={platformIdList}
+          tab={tab}
         />
       </Suspense>
     </>
