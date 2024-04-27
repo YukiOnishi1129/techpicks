@@ -44,9 +44,6 @@ export const getPlatforms = async ({
     };
   }
 
-  console.log("💻");
-  console.log(where);
-
   const res = await prisma.platform.findMany({
     where,
     select: {

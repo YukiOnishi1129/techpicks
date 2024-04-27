@@ -20,6 +20,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  DialogClose,
 } from "@/components/ui/dialog";
 import {
   Form,
@@ -27,7 +28,6 @@ import {
   FormItem,
   FormLabel,
   FormControl,
-  FormDescription,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -167,20 +167,19 @@ const ArticleSearchDialogContent: FC<ArticleSearchDialogContentProps> = ({
       <div>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-            <h3>search condition</h3>
-            <div className="h-[300px] overflow-y-scroll p-4">
+            <div className="h-[300px] overflow-y-scroll border-2 p-4">
               <FormField
                 control={form.control}
                 name="keyword"
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className="mb-4">
                     <FormLabel>Keyword</FormLabel>
                     <FormControl>
-                      <Input placeholder="shadcn" {...field} />
+                      <Input placeholder="search keyword" {...field} />
                     </FormControl>
-                    <FormDescription>
+                    {/* <FormDescription>
                       Let&apos;s enter the keyword you want to search.
-                    </FormDescription>
+                    </FormDescription> */}
                     <FormMessage />
                   </FormItem>
                 )}
@@ -190,13 +189,13 @@ const ArticleSearchDialogContent: FC<ArticleSearchDialogContentProps> = ({
                 control={form.control}
                 name="language"
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className="mb-4">
                     <FormLabel>Language</FormLabel>
                     <FormControl>
                       <RadioGroup
                         onValueChange={field.onChange}
                         defaultValue={field.value}
-                        className="flex flex-col space-y-1"
+                        className="grid-cols-2 md:grid-cols-4"
                       >
                         <div className="flex items-center space-x-2">
                           <RadioGroupItem value={"0"} id={"language-0"} />
@@ -212,9 +211,9 @@ const ArticleSearchDialogContent: FC<ArticleSearchDialogContentProps> = ({
                         </div>
                       </RadioGroup>
                     </FormControl>
-                    <FormDescription>
+                    {/* <FormDescription>
                       Let&apos;s select the language you want to search.
-                    </FormDescription>
+                    </FormDescription> */}
                     <FormMessage />
                   </FormItem>
                 )}
@@ -224,13 +223,13 @@ const ArticleSearchDialogContent: FC<ArticleSearchDialogContentProps> = ({
                 control={form.control}
                 name="platformType"
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className="mb-4">
                     <FormLabel>PlatformType</FormLabel>
                     <FormControl>
                       <RadioGroup
                         onValueChange={field.onChange}
                         defaultValue={field.value}
-                        className="flex flex-col space-y-1"
+                        className="grid-cols-2 md:grid-cols-4"
                       >
                         <div className="flex items-center space-x-2">
                           <RadioGroupItem value={"0"} id={"platform-type-0"} />
@@ -250,9 +249,9 @@ const ArticleSearchDialogContent: FC<ArticleSearchDialogContentProps> = ({
                         </div>
                       </RadioGroup>
                     </FormControl>
-                    <FormDescription>
+                    {/* <FormDescription>
                       Let&apos;s select the platform type you want to search.
-                    </FormDescription>
+                    </FormDescription> */}
                     <FormMessage />
                   </FormItem>
                 )}
@@ -265,47 +264,55 @@ const ArticleSearchDialogContent: FC<ArticleSearchDialogContentProps> = ({
                   <FormItem>
                     <div className="mb-4">
                       <FormLabel className="text-base">Platform</FormLabel>
-                      <FormDescription>
+                      {/* <FormDescription>
                         Please select the platform you want to search.
-                      </FormDescription>
+                      </FormDescription> */}
                     </div>
-                    {loading ? (
-                      <Loader />
-                    ) : (
-                      showPlatforms &&
-                      showPlatforms.map((platform) => (
-                        <FormField
-                          key={platform.id}
-                          control={form.control}
-                          name="platformIdList"
-                          render={({ field }) => (
-                            <FormItem
-                              key={platform.id}
-                              className="flex flex-row items-start space-x-3 space-y-0"
-                            >
-                              <FormControl>
-                                <Checkbox
-                                  checked={field.value?.includes(platform.id)}
-                                  onCheckedChange={(checked) => {
-                                    const array = field.value ?? [];
-                                    return checked
-                                      ? field.onChange([...array, platform.id])
-                                      : field.onChange(
-                                          field.value?.filter(
-                                            (value) => value !== platform.id
-                                          )
-                                        );
-                                  }}
-                                />
-                              </FormControl>
-                              <FormLabel className="text-sm font-normal">
-                                {platform.name}
-                              </FormLabel>
-                            </FormItem>
-                          )}
-                        />
-                      ))
-                    )}
+                    <div className="grid grid-cols-2 gap-2">
+                      {loading ? (
+                        <Loader />
+                      ) : (
+                        showPlatforms &&
+                        showPlatforms.map((platform) => (
+                          <FormField
+                            key={platform.id}
+                            control={form.control}
+                            name="platformIdList"
+                            render={({ field }) => (
+                              <FormItem key={platform.id} className="mb-2">
+                                <FormControl>
+                                  <Checkbox
+                                    checked={field.value?.includes(platform.id)}
+                                    onCheckedChange={(checked) => {
+                                      const array = field.value ?? [];
+                                      return checked
+                                        ? field.onChange([
+                                            ...array,
+                                            platform.id,
+                                          ])
+                                        : field.onChange(
+                                            field.value?.filter(
+                                              (value) => value !== platform.id
+                                            )
+                                          );
+                                    }}
+                                  />
+                                </FormControl>
+                                <FormLabel className="ml-2 w-full text-sm font-normal">
+                                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                                  <img
+                                    className="mr-2 inline-block size-6"
+                                    src={platform.faviconUrl}
+                                    alt=""
+                                  />
+                                  {platform.name}
+                                </FormLabel>
+                              </FormItem>
+                            )}
+                          />
+                        ))
+                      )}
+                    </div>
                   </FormItem>
                 )}
               />
@@ -315,7 +322,12 @@ const ArticleSearchDialogContent: FC<ArticleSearchDialogContentProps> = ({
               {/* <h3>sort condition</h3> */}
             </div>
 
-            <Button type="submit">Submit</Button>
+            <div className="mt-4 flex w-full justify-center space-x-4">
+              <Button type="submit">{"SEARCH"}</Button>
+              <DialogClose>
+                <Button onClick={resetDialog}>{"CLOSE"}</Button>
+              </DialogClose>
+            </div>
           </form>
         </Form>
       </div>
