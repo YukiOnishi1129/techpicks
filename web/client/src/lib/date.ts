@@ -1,9 +1,9 @@
 import dayjs, { Dayjs, locale, extend } from "dayjs";
-import ja from "dayjs/locale/ja";
+import en from "dayjs/locale/en";
 import timezone from "dayjs/plugin/timezone";
 import utc from "dayjs/plugin/utc";
 
-locale(ja);
+locale(en);
 extend(utc);
 extend(timezone);
 dayjs.tz.setDefault("Asia/Tokyo");
@@ -60,8 +60,8 @@ export const showDiffDateToCurrentDate = (targetDate: Date) => {
   const diffHour = diffHours(currentUnixTime, targetDateUnixTime);
 
   if (diffHour < 24) {
-    return `${diffHour}時間前  (${convertedTargetDate.format("YYYY年M月DD日 H時m分")})`;
+    return `${diffHour} hour ago  (${convertedTargetDate.format("MMM DD 'YYYY")})`;
   }
   const date = diffDates(currentUnixTime, targetDateUnixTime);
-  return `${date % 24}日前  (${convertedTargetDate.format("YYYY年M月DD日 H時m分")})`;
+  return `${date % 24} days ago  (${convertedTargetDate.format("MMM DD 'YYYY")})`;
 };

@@ -7,14 +7,7 @@ import {
 } from "@prisma/client";
 
 export type TrendArticleType = Omit<PrismaTrendArticle, "platformId"> & {
-  title: PrismaArticle["title"];
-  description: PrismaArticle["description"];
-  articleUrl: PrismaArticle["articleUrl"];
-  publishedAt: PrismaArticle["publishedAt"];
-  authorName: PrismaArticle["authorName"];
-  tags: PrismaArticle["tags"];
-  thumbnailURL: PrismaArticle["thumbnailURL"];
-  isPrivate: PrismaArticle["isPrivate"];
+  article: Omit<PrismaArticle, "platformId">;
   platform: Omit<PrismaPlatform, "createdAt" | "updatedAt" | "deletedAt">;
   feeds: Array<
     Omit<
