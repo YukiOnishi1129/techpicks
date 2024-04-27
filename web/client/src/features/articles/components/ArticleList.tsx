@@ -2,6 +2,7 @@
 import { User } from "@supabase/supabase-js";
 import { useCallback, useRef, useState, useEffect } from "react";
 
+import { NotFoundList } from "@/components/layout/NotFoundList";
 import { Loader } from "@/components/ui/loader";
 
 import { ArticleTabType, ArticleType } from "@/types/article";
@@ -104,12 +105,8 @@ export function ArticleList({
   return (
     <>
       {flatArticles.length === 0 ? (
-        <div className="flex h-[700px] flex-col items-center justify-center md:h-[600px]">
-          <p className="text-center text-lg font-bold text-gray-500 md:text-xl">
-            Sorry, no article.
-          </p>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img className="mt-8 h-1/2" src="/sorry.png" alt="" />
+        <div className="h-[590px] md:h-[540px]">
+          <NotFoundList message="No articles found" />
         </div>
       ) : (
         <div className="m-auto h-[590px] overflow-y-scroll md:h-[540px]">

@@ -13,14 +13,17 @@ export function Sidebar() {
               <Link href="/">Today</Link>
             </div>
             <div>
-              <Link href="/bookmark">Read Later</Link>
+              <Link href="/bookmark">Bookmarks</Link>
+            </div>
+            <div>
+              <Link href="/feed">Feeds</Link>
             </div>
           </div>
         </div>
 
         <div className="px-4 py-2">
           <h2 className="mb-2 px-2 text-lg font-semibold tracking-tight">
-            Feed
+            My Feeds
           </h2>
           <div className="space-y-1 pl-8">
             <div>
@@ -31,7 +34,7 @@ export function Sidebar() {
 
         <div className="px-4 py-2">
           <h2 className="mb-2 px-2 text-lg font-semibold tracking-tight">
-            Favorite
+            My Articles
           </h2>
           <div className="space-y-1 pl-8">
             <div>
