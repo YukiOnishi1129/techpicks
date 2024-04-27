@@ -49,14 +49,23 @@ export const getBookmarkList = async ({
             },
           ],
         },
-        {
-          isEng: languageStatus === 2,
-        },
       ],
     };
-  } else {
+  }
+
+  if (languageStatus === 2) {
     where = {
-      isEng: languageStatus === 2,
+      ...where,
+      platform: {
+        isEng: true,
+      },
+    };
+  } else if (languageStatus === 1) {
+    where = {
+      ...where,
+      platform: {
+        isEng: false,
+      },
     };
   }
 

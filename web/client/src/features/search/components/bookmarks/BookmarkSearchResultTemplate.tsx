@@ -1,41 +1,37 @@
 import { FC } from "react";
 
-import { fetchArticlesAPI } from "@/features/articles/actions/article";
-import { ArticleList } from "@/features/articles/components/ArticleList";
+import { fetchBookmarkListAPI } from "@/features/bookmarks/actions/bookmark";
+import { BookmarkList } from "@/features/bookmarks/components/BookmarkList";
 import { fetchPlatformAPI } from "@/features/platforms/actions/platform";
 import { getUser } from "@/features/users/actions/user";
 
 import { BreadCrumbType, PageBreadcrumb } from "@/components/ui/breadcrumb";
 
-import { ArticleTabType } from "@/types/article";
 import { LanguageStatus } from "@/types/language";
 import { PlatformType } from "@/types/platform";
 
-import { ArticleSearchDialog } from "./Dialog";
+import { BookmarkSearchDialog } from "./Dialog";
 
-export type ArticleSearchResultTemplateProps = {
+export type BookmarkSearchResultTemplateProps = {
   languageStatus: LanguageStatus;
   keyword?: string;
   platformType?: PlatformType;
   platformIdList: Array<string>;
-  tab: ArticleTabType;
 };
 
-export const ArticleSearchResultTemplate: FC<
-  ArticleSearchResultTemplateProps
+export const BookmarkSearchResultTemplate: FC<
+  BookmarkSearchResultTemplateProps
 > = async ({
   languageStatus,
   keyword,
   platformType,
   platformIdList,
-  tab,
-}: ArticleSearchResultTemplateProps) => {
-  const res = await fetchArticlesAPI({
+}: BookmarkSearchResultTemplateProps) => {
+  const res = await fetchBookmarkListAPI({
     languageStatus: languageStatus.toString(),
     keyword,
     platformType: String(platformType),
     platformIdList,
-    tab,
   });
   const platforms = await fetchPlatformAPI({
     languageStatus: languageStatus.toString(),
@@ -60,12 +56,12 @@ export const ArticleSearchResultTemplate: FC<
 
   const breadcrumbs: BreadCrumbType[] = [
     {
-      title: "Home",
-      href: "/",
+      title: "Bookmark",
+      href: "/bookmark/",
     },
     {
-      title: "Article Search Result",
-      href: `/article/search/result/?languageStatus=${languageStatus.toString()}${keywordPath}${platformTypePath}${platformIdPath}`,
+      title: "Bookmark Search Result",
+      href: `/bookmark/search/result/?languageStatus=${languageStatus.toString()}${keywordPath}${platformTypePath}${platformIdPath}`,
     },
   ];
   return (
@@ -75,10 +71,10 @@ export const ArticleSearchResultTemplate: FC<
       </div>
       <div className="my-8 flex w-full items-center justify-between ">
         <h1 className="text-2xl font-bold text-gray-800">
-          Article Search Result
+          Bookmark Search Result
         </h1>
         <div className="mr-8 flex w-48 items-center justify-end">
-          <ArticleSearchDialog
+          <BookmarkSearchDialog
             platforms={platforms}
             languageStatus={languageStatus}
             keyword={keyword}
@@ -88,14 +84,13 @@ export const ArticleSearchResultTemplate: FC<
         </div>
       </div>
 
-      <ArticleList
+      <BookmarkList
         user={user}
-        initialArticles={res.data.articles}
+        initialBookmarks={res.data.bookmarks}
         languageStatus={languageStatus}
         keyword={keyword}
         platformIdList={platformIdList}
-        tab={tab}
-        fetchArticles={fetchArticlesAPI}
+        fetchBookmarks={fetchBookmarkListAPI}
       />
     </div>
   );

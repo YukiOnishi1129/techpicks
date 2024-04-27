@@ -3,6 +3,7 @@
 import { User } from "@supabase/supabase-js";
 import { FC, useCallback, useEffect, useRef, useState } from "react";
 
+import { NotFoundList } from "@/components/layout/NotFoundList";
 import { Loader } from "@/components/ui/loader";
 
 import { BookmarkType } from "@/types/bookmark";
@@ -100,19 +101,25 @@ export const BookmarkList: FC<Props> = ({
   }, [loadMore, offset, hashMore]);
 
   return (
-    <div className="m-auto h-[700px] overflow-y-scroll md:h-[600px]">
-      {flatBookmarks.map((bookmark) => (
-        <div key={bookmark.id} className="mb-8">
-          <BookmarkCardWrapper bookmark={bookmark} />
-        </div>
-      ))}
-      <div ref={observerTarget}>
-        {hashMore && (
-          <div className="flex justify-center py-4">
-            <Loader />
+    <div className="m-auto h-[590px]  overflow-y-scroll md:h-[540px]">
+      {flatBookmarks.length === 0 ? (
+        <NotFoundList message="No bookmarks found" />
+      ) : (
+        <>
+          {flatBookmarks.map((bookmark) => (
+            <div key={bookmark.id} className="mb-8">
+              <BookmarkCardWrapper bookmark={bookmark} />
+            </div>
+          ))}
+          <div ref={observerTarget}>
+            {hashMore && (
+              <div className="flex justify-center py-4">
+                <Loader />
+              </div>
+            )}
           </div>
-        )}
-      </div>
+        </>
+      )}
     </div>
   );
 };
