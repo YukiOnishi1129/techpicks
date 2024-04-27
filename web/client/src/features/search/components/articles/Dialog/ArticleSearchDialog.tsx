@@ -10,6 +10,7 @@ import { CiSearch } from "react-icons/ci";
 import { z } from "zod";
 
 import { fetchPlatformAPI } from "@/features/platforms/actions/platform";
+import { serverRevalidateArticleSearchResult } from "@/features/search/actions/serverAction";
 
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -32,7 +33,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
-import { Platform } from "@/types/platform";
+import { LanguageStatus } from "@/types/language";
+import { Platform, PlatformType } from "@/types/platform";
 
 const formSchema = z.object({
   keyword: z.string().optional(),
@@ -43,29 +45,60 @@ const formSchema = z.object({
 
 type ArticleSearchDialogProps = {
   platforms: Array<Platform>;
+  languageStatus?: LanguageStatus;
+  keyword?: string;
+  platformIdList?: Array<string>;
+  platformType?: PlatformType;
 };
 
 export const ArticleSearchDialog: FC<ArticleSearchDialogProps> = ({
   platforms,
+  languageStatus,
+  keyword,
+  platformIdList = [],
+  platformType,
 }: ArticleSearchDialogProps) => {
   const [open, setOpen] = useState(false);
+
+  const handleClose = useCallback(() => {
+    setOpen(false);
+  }, []);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger>
         <CiSearch size="36" />
       </DialogTrigger>
-      {open && <ArticleSearchDialogContent platforms={platforms} />}
+      {open && (
+        <ArticleSearchDialogContent
+          platforms={platforms}
+          languageStatus={languageStatus}
+          keyword={keyword}
+          platformIdList={platformIdList}
+          platformType={platformType}
+          handleClose={handleClose}
+        />
+      )}
     </Dialog>
   );
 };
 
 type ArticleSearchDialogContentProps = {
   platforms: Array<Platform>;
+  languageStatus?: LanguageStatus;
+  keyword?: string;
+  platformIdList?: Array<string>;
+  platformType?: PlatformType;
+  handleClose: () => void;
 };
 
 const ArticleSearchDialogContent: FC<ArticleSearchDialogContentProps> = ({
   platforms,
+  languageStatus,
+  keyword,
+  platformIdList = [],
+  platformType,
+  handleClose,
 }: ArticleSearchDialogContentProps) => {
   const [loading, setLoading] = useState(false);
   const [showPlatforms, setShowPlatforms] =
@@ -74,21 +107,29 @@ const ArticleSearchDialogContent: FC<ArticleSearchDialogContentProps> = ({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      keyword: "",
-      language: "0",
-      platformType: "0",
-      platformIdList: [],
+      keyword: keyword ?? "",
+      language: languageStatus?.toString() ?? "0",
+      platformType: platformType?.toString() ?? "0",
+      platformIdList: platformIdList,
     },
   });
 
   const watchLanguage = form.watch("language");
   const watchPlatformType = form.watch("platformType");
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
+  const resetDialog = useCallback(() => {
+    form.reset();
+  }, [form]);
+
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
     let keywordPath = "";
 
     if (values.keyword !== "") {
       keywordPath = `&keyword=${values.keyword}`;
+    }
+    let platformTypePath = "";
+    if (values.platformType) {
+      platformTypePath = `&platformType=${values.platformType}`;
     }
     let platformIdPath = "";
     if (values.platformIdList) {
@@ -96,9 +137,13 @@ const ArticleSearchDialogContent: FC<ArticleSearchDialogContentProps> = ({
         .map((platformId) => `&platformId=${platformId}`)
         .join("");
     }
+    console.log(values, keywordPath, platformTypePath, platformIdPath);
+    await serverRevalidateArticleSearchResult();
     router.replace(
-      `/article/search/result?languageStatus=${values.language}${keywordPath}${platformIdPath}`
+      `/article/search/result?languageStatus=${values.language}${keywordPath}${platformTypePath}${platformIdPath}`
     );
+    resetDialog();
+    handleClose();
   };
 
   const fetchPlatform = useCallback(async () => {
@@ -115,10 +160,6 @@ const ArticleSearchDialogContent: FC<ArticleSearchDialogContentProps> = ({
   useEffect(() => {
     fetchPlatform();
   }, [fetchPlatform]);
-
-  const resetDialog = useCallback(() => {
-    form.reset();
-  }, [form]);
 
   return (
     <DialogContent onCloseAutoFocus={resetDialog}>

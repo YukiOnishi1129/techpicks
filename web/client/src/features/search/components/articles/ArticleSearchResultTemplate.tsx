@@ -9,12 +9,14 @@ import { BreadCrumbType, PageBreadcrumb } from "@/components/ui/breadcrumb";
 
 import { ArticleTabType } from "@/types/article";
 import { LanguageStatus } from "@/types/language";
+import { PlatformType } from "@/types/platform";
 
 import { ArticleSearchDialog } from "./Dialog";
 
 export type ArticleSearchResultTemplateProps = {
   languageStatus: LanguageStatus;
   keyword?: string;
+  platformType?: PlatformType;
   platformIdList: Array<string>;
   tab: ArticleTabType;
 };
@@ -24,12 +26,14 @@ export const ArticleSearchResultTemplate: FC<
 > = async ({
   languageStatus,
   keyword,
+  platformType,
   platformIdList,
   tab,
 }: ArticleSearchResultTemplateProps) => {
   const res = await fetchArticlesAPI({
     languageStatus: languageStatus.toString(),
     keyword,
+    platformType: platformType ? platformType.toString() : undefined,
     platformIdList,
     tab,
   });
@@ -56,7 +60,13 @@ export const ArticleSearchResultTemplate: FC<
           Article Search Result
         </h1>
         <div className="mr-8 flex w-48 items-center justify-end">
-          <ArticleSearchDialog platforms={platforms} />
+          <ArticleSearchDialog
+            platforms={platforms}
+            languageStatus={languageStatus}
+            keyword={keyword}
+            platformType={platformType}
+            platformIdList={platformIdList}
+          />
         </div>
       </div>
 

@@ -83,9 +83,6 @@ export const getArticles = async ({
     };
   }
 
-  console.log("🌪️");
-  console.log("where", where);
-
   switch (tab) {
     case "trend":
       where = {

@@ -16,12 +16,14 @@ export const fetchArticlesAPI = async ({
   languageStatus,
   keyword,
   offset = "1",
+  platformType,
   platformIdList,
   tab,
 }: {
   languageStatus: string;
   keyword?: string;
   offset?: string;
+  platformType?: string;
   platformIdList: Array<string>;
   tab: ArticleTabType;
 }): Promise<FetchArticlesAPIResponse> => {
@@ -31,6 +33,9 @@ export const fetchArticlesAPI = async ({
   }
   if (keyword) {
     url += `&keyword=${keyword}`;
+  }
+  if (platformType) {
+    url += `&platformType=${platformType}`;
   }
   if (platformIdList.length) {
     const platformIdPath = platformIdList

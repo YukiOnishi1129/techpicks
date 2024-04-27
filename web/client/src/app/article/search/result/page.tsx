@@ -2,6 +2,7 @@ import { ArticleSearchResultTemplate } from "@/features/search/components/articl
 
 import { ArticleTabType } from "@/types/article";
 import { LanguageStatus } from "@/types/language";
+import { PlatformType } from "@/types/platform";
 
 type PageProps = {
   params: { slug: string };
@@ -21,8 +22,12 @@ export default async function ArticleSearchResultPage({
       ? searchParams["keyword"]
       : undefined;
 
-  let platformIdList: Array<string> = [];
+  const platformType =
+    typeof searchParams["platformType"] === "string"
+      ? (parseInt(searchParams["platformType"]) as PlatformType)
+      : undefined;
 
+  let platformIdList: Array<string> = [];
   if (
     typeof searchParams["platformId"] !== "string" &&
     searchParams["platformId"]
@@ -41,6 +46,7 @@ export default async function ArticleSearchResultPage({
     <ArticleSearchResultTemplate
       languageStatus={languageStatus}
       keyword={keyword}
+      platformType={platformType}
       platformIdList={platformIdList}
       tab={tab}
     />
