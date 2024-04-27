@@ -8,7 +8,7 @@ extend(utc);
 extend(timezone);
 dayjs.tz.setDefault("Asia/Tokyo");
 
-const getDayjsTz = (date?: Dayjs | Date | string | null) => {
+export const getDayjsTz = (date?: Dayjs | Date | string | null) => {
   if (!!date) {
     const convertedDate = new Date(date as Date);
     return dayjs.tz(convertedDate);
@@ -18,6 +18,14 @@ const getDayjsTz = (date?: Dayjs | Date | string | null) => {
 
 export const getCurrentDate = () => {
   return getDayjsTz();
+};
+
+export const getDateStartTime = (date: Dayjs) => {
+  return date.startOf("day");
+};
+
+export const getDateEndTime = (date: Dayjs) => {
+  return date.endOf("day");
 };
 
 export const convertUnixTime = (targetDate: dayjs.Dayjs) => {
