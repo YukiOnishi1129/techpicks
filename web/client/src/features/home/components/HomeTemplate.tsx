@@ -32,7 +32,9 @@ export const HomeTemplate: FC<HomeTemplateProps> = async ({
   tab,
 }: HomeTemplateProps) => {
   const user = await getUser();
-  const platforms = await fetchPlatformAPI({});
+  const platforms = await fetchPlatformAPI({
+    languageStatus: "0",
+  });
   return (
     <div className="w-auto">
       <div className="flex w-full items-end justify-between px-4">

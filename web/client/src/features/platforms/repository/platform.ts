@@ -17,10 +17,12 @@ export const getPlatforms = async ({
   platformIdList,
 }: GetPlatformParams) => {
   let where = {};
-  where = {
-    ...where,
-    isEng: languageStatus === 2,
-  };
+  if (languageStatus === 1 || languageStatus === 2) {
+    where = {
+      ...where,
+      isEng: languageStatus === 2,
+    };
+  }
 
   if (platformType) {
     where = {

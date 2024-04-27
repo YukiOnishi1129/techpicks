@@ -3,7 +3,7 @@
 import { Platform } from "@prisma/client";
 
 export const fetchPlatformAPI = async ({
-  languageStatus = "1",
+  languageStatus = "0",
   platformType,
 }: {
   languageStatus?: string;
@@ -11,7 +11,7 @@ export const fetchPlatformAPI = async ({
 }) => {
   let url = `http://localhost:80/api/platforms/?languageStatus=${languageStatus}`;
   if (platformType) {
-    url += `&platformType=${platformType}`;
+    url += `?platformType=${platformType}`;
   }
 
   const response = await fetch(url, {

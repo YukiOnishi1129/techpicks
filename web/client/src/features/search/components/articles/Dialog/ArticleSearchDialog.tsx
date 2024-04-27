@@ -1,9 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Checkbox } from "@radix-ui/react-checkbox";
 import { Label } from "@radix-ui/react-label";
-import { RadioGroup, RadioGroupItem } from "@radix-ui/react-radio-group";
 import { Loader } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { FC, useCallback, useEffect, useState } from "react";
@@ -14,6 +12,7 @@ import { z } from "zod";
 import { fetchPlatformAPI } from "@/features/platforms/actions/platform";
 
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Dialog,
   DialogContent,
@@ -31,6 +30,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 import { Platform } from "@/types/platform";
 
@@ -52,7 +52,7 @@ export const ArticleSearchDialog: FC<ArticleSearchDialogProps> = ({
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
+      <DialogTrigger>
         <CiSearch size="36" />
       </DialogTrigger>
       {open && <ArticleSearchDialogContent platforms={platforms} />}
@@ -75,7 +75,7 @@ const ArticleSearchDialogContent: FC<ArticleSearchDialogContentProps> = ({
     resolver: zodResolver(formSchema),
     defaultValues: {
       keyword: "",
-      language: "1",
+      language: "0",
       platformType: "0",
       platformIdList: [],
     },
@@ -97,7 +97,7 @@ const ArticleSearchDialogContent: FC<ArticleSearchDialogContentProps> = ({
         .join("");
     }
     router.replace(
-      `/?languageStatus=${values.language}${keywordPath}${platformIdPath}`
+      `/article/search/result?languageStatus=${values.language}${keywordPath}${platformIdPath}`
     );
   };
 
@@ -108,8 +108,9 @@ const ArticleSearchDialogContent: FC<ArticleSearchDialogContentProps> = ({
       platformType: watchPlatformType !== "0" ? watchPlatformType : undefined,
     });
     setShowPlatforms(response);
+    form.setValue("platformIdList", []);
     setLoading(false);
-  }, [watchLanguage, watchPlatformType]);
+  }, [watchLanguage, watchPlatformType, form]);
 
   useEffect(() => {
     fetchPlatform();
@@ -128,7 +129,7 @@ const ArticleSearchDialogContent: FC<ArticleSearchDialogContentProps> = ({
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             <h3>search condition</h3>
-            <div className="h-[300px] overflow-y-scroll p-2">
+            <div className="h-[300px] overflow-y-scroll p-4">
               <FormField
                 control={form.control}
                 name="keyword"
@@ -158,6 +159,10 @@ const ArticleSearchDialogContent: FC<ArticleSearchDialogContentProps> = ({
                         defaultValue={field.value}
                         className="flex flex-col space-y-1"
                       >
+                        <div className="flex items-center space-x-2">
+                          <RadioGroupItem value={"0"} id={"language-0"} />
+                          <Label htmlFor="language-0">All</Label>
+                        </div>
                         <div className="flex items-center space-x-2">
                           <RadioGroupItem value={"1"} id={"language-1"} />
                           <Label htmlFor="language-1">Japanese</Label>
