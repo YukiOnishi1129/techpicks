@@ -1,31 +1,26 @@
-import { User } from "@supabase/supabase-js";
 import Link from "next/link";
 import { FC } from "react";
 import { CiSearch } from "react-icons/ci";
 
+import { ArticleTemplateContent } from "@/features/articles/components/ArticleTemplateContent";
 import { TrendArticleTemplateContent } from "@/features/trendArticles/components/TrendArticleTemplateContent";
 import { getUser } from "@/features/users/actions/user";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import { ArticleTabType } from "@/types/article";
 import { LanguageStatus } from "@/types/language";
 
-import { ArticleList } from "./ArticleList";
-import { ArticleLanguageSwitch } from "./Switch";
-import { fetchArticlesAPI } from "../actions/article";
-
-type ArticleTemplateProps = {
+type HomeTemplateProps = {
   languageStatus: LanguageStatus;
   keyword?: string;
   platformIdList: Array<string>;
 };
 
-export const ArticleTemplate: FC<ArticleTemplateProps> = async ({
+export const HomeTemplate: FC<HomeTemplateProps> = async ({
   languageStatus,
   keyword,
   platformIdList,
-}: ArticleTemplateProps) => {
+}: HomeTemplateProps) => {
   const user = await getUser();
   return (
     <div className="w-auto">
@@ -89,50 +84,5 @@ export const ArticleTemplate: FC<ArticleTemplateProps> = async ({
         </TabsContent>
       </Tabs>
     </div>
-  );
-};
-
-type ArticleTemplateContentProps = {
-  languageStatus: LanguageStatus;
-  keyword?: string;
-  platformIdList: Array<string>;
-  user: User | undefined;
-  tab: ArticleTabType;
-};
-
-const ArticleTemplateContent: FC<ArticleTemplateContentProps> = async ({
-  languageStatus,
-  keyword,
-  platformIdList,
-  user,
-  tab,
-}: ArticleTemplateContentProps) => {
-  const res = await fetchArticlesAPI({
-    languageStatus: languageStatus.toString(),
-    keyword,
-    platformIdList,
-    tab,
-  });
-
-  return (
-    <>
-      <div className="w-full border-b-2 bg-white py-4">
-        <ArticleLanguageSwitch
-          languageStatus={languageStatus}
-          keyword={keyword}
-          tab={tab}
-        />
-      </div>
-
-      <ArticleList
-        user={user}
-        initialArticles={res.data.articles}
-        languageStatus={languageStatus}
-        keyword={keyword}
-        platformIdList={platformIdList}
-        tab={tab}
-        fetchArticles={fetchArticlesAPI}
-      />
-    </>
   );
 };

@@ -1,7 +1,7 @@
 import { Loader } from "lucide-react";
 import { Suspense } from "react";
 
-import { ArticleTemplate } from "@/features/articles/components/ArticleTemplate";
+import { HomeTemplate } from "@/features/home/components/HomeTemplate";
 
 import { LanguageStatus } from "@/types/language";
 
@@ -41,7 +41,7 @@ export default async function Home({ searchParams }: PageProps) {
           </div>
         }
       >
-        <ArticleTemplate
+        <HomeTemplate
           languageStatus={languageStatus}
           keyword={keyword}
           platformIdList={platformIdList}
