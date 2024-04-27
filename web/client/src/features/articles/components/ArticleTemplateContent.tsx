@@ -16,7 +16,7 @@ type ArticleTemplateContentProps = {
 };
 
 export const ArticleTemplateContent: FC<ArticleTemplateContentProps> = async ({
-  languageStatus,
+  languageStatus = 1,
   keyword,
   platformIdList,
   user,

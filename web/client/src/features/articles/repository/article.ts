@@ -47,19 +47,29 @@ export const getArticles = async ({
                 contains: keyword,
               },
             },
+            {
+              tags: {
+                contains: keyword,
+              },
+            },
           ],
-        },
-        {
-          platform: {
-            isEng: languageStatus === 2,
-          },
         },
       ],
     };
-  } else {
+  }
+
+  if (languageStatus === 2) {
     where = {
+      ...where,
       platform: {
-        isEng: languageStatus === 2,
+        isEng: true,
+      },
+    };
+  } else if (languageStatus === 1) {
+    where = {
+      ...where,
+      platform: {
+        isEng: false,
       },
     };
   }
@@ -72,6 +82,9 @@ export const getArticles = async ({
       },
     };
   }
+
+  console.log("🌪️");
+  console.log("where", where);
 
   switch (tab) {
     case "trend":
@@ -91,27 +104,51 @@ export const getArticles = async ({
         ...where,
         platform: {
           platformType: 1,
-          isEng: languageStatus === 2,
         },
       };
+      if (languageStatus !== 0) {
+        where = {
+          ...where,
+          platform: {
+            platformType: 1,
+            isEng: languageStatus === 2,
+          },
+        };
+      }
       break;
     case "company":
       where = {
         ...where,
         platform: {
           platformType: 2,
-          isEng: languageStatus === 2,
         },
       };
+      if (languageStatus !== 0) {
+        where = {
+          ...where,
+          platform: {
+            platformType: 2,
+            isEng: languageStatus === 2,
+          },
+        };
+      }
       break;
     case "summary":
       where = {
         ...where,
         platform: {
           platformType: 3,
-          isEng: languageStatus === 2,
         },
       };
+      if (languageStatus !== 0) {
+        where = {
+          ...where,
+          platform: {
+            platformType: 3,
+            isEng: languageStatus === 2,
+          },
+        };
+      }
       break;
   }
 
@@ -239,114 +276,4 @@ type GetArticleByArticleUrlParam = {
   articleUrl: string;
   platformUrl: string;
   userId?: string;
-};
-
-export const getArticleByArticleAndPlatformUrl = async ({
-  articleUrl,
-  platformUrl,
-  userId,
-}: GetArticleByArticleUrlParam) => {
-  try {
-    const article = await prisma.article.findFirst({
-      where: {
-        articleUrl: {
-          contains: articleUrl,
-        },
-        platform: {
-          siteUrl: {
-            contains: platformUrl,
-          },
-        },
-      },
-      include: {
-        feedArticleRelatoins: {
-          select: {
-            feed: {
-              select: {
-                id: true,
-                name: true,
-                description: true,
-                thumbnailUrl: true,
-                siteUrl: true,
-                apiQueryParam: true,
-                trendPlatformType: true,
-                category: {
-                  select: {
-                    id: true,
-                    name: true,
-                    type: true,
-                  },
-                },
-              },
-            },
-          },
-        },
-        platform: {
-          select: {
-            id: true,
-            name: true,
-            siteUrl: true,
-            faviconUrl: true,
-            platformType: true,
-            isEng: true,
-          },
-        },
-        bookmarks: {
-          select: {
-            id: true,
-          },
-          where: {
-            userId: userId,
-          },
-        },
-      },
-    });
-
-    if (!article) return;
-    const isBookmarked =
-      !!article?.bookmarks?.length && article.bookmarks.length > 0;
-    const resArticle: ArticleType = {
-      id: article.id,
-      title: article.title,
-      description: article.description,
-      thumbnailURL: article.thumbnailURL,
-      articleUrl: article.articleUrl,
-      publishedAt: article.publishedAt,
-      authorName: article.authorName,
-      tags: article.tags,
-      isPrivate: article.isPrivate,
-      createdAt: article.createdAt,
-      updatedAt: article.updatedAt,
-      platform: {
-        id: article.platform.id,
-        name: article.platform.name,
-        platformType: article.platform.platformType,
-        siteUrl: article.platform.siteUrl,
-        faviconUrl: article.platform.faviconUrl,
-        isEng: article.platform.isEng,
-      },
-      isBookmarked: isBookmarked,
-      bookmarkId: isBookmarked ? article.bookmarks[0].id : undefined,
-      feeds: article.feedArticleRelatoins.map((feed) => {
-        return {
-          id: feed.feed.id,
-          name: feed.feed.name,
-          description: feed.feed.description,
-          thumbnailUrl: feed.feed.thumbnailUrl,
-          siteUrl: feed.feed.siteUrl,
-          apiQueryParam: feed.feed.apiQueryParam,
-          trendPlatformType: feed.feed.trendPlatformType,
-          category: {
-            id: feed.feed.category.id,
-            name: feed.feed.category.name,
-            type: feed.feed.category.type,
-          },
-        };
-      }),
-    };
-
-    return resArticle;
-  } catch (err) {
-    throw new Error(`Failed to fetch article: ${err}`);
-  }
 };
