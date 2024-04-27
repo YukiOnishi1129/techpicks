@@ -30,7 +30,7 @@ func (u *Usecase) zennArticleCrawler(ctx context.Context, feed *entity.Feed) err
 			log.Printf("【error begin transaction】: %s", err)
 			return err
 		}
-		articleURL := fmt.Sprintf("https://zenn.dev/articles%s", z.Path)
+		articleURL := fmt.Sprintf("https://zenn.dev%s", z.Path)
 		publishedAt, err := httpdate.Str2Time(z.PublishedAt, nil)
 		if err != nil {
 			log.Printf("【error convert published at】: %s", err)
