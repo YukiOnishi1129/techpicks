@@ -24,9 +24,7 @@ export const ArticleSearchTemplate = async () => {
     <div className="w-auto">
       <PageBreadcrumb breadcrumbs={breadcrumbs} />
       <div className="flex w-full items-end justify-between px-4">
-        <h1 className="mb-4 mt-8 text-2xl font-bold text-gray-800">
-          Article Search
-        </h1>
+        <h1 className="mb-4 mt-8 text-2xl font-bold ">Article Search</h1>
       </div>
       <ArticleSearchForm platforms={platforms} />
     </div>

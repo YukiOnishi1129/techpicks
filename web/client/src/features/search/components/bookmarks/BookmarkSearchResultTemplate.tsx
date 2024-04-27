@@ -70,9 +70,7 @@ export const BookmarkSearchResultTemplate: FC<
         <PageBreadcrumb breadcrumbs={breadcrumbs} />
       </div>
       <div className="my-8 flex w-full items-center justify-between ">
-        <h1 className="text-2xl font-bold text-gray-800">
-          Bookmark Search Result
-        </h1>
+        <h1 className="text-2xl font-bold ">Bookmark Search Result</h1>
         <div className="mr-8 flex w-48 items-center justify-end">
           <BookmarkSearchDialog
             platforms={platforms}

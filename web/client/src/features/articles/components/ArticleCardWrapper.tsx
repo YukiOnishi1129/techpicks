@@ -60,7 +60,7 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
               </div>
             </div>
 
-            <div className="flex items-center justify-center  bg-white p-4">
+            <div className="flex items-center justify-center   p-4">
               {user && (
                 <>
                   {bookmarkId ? (
