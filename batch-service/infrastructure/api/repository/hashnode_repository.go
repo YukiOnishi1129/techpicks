@@ -84,7 +84,7 @@ func (r *Repository) GetHashnodeArticles(arg GetHashnodeArticlesArg) (HashnodeFe
 	varFeedFilter := FeedFilterRequest{
 		Type: "FEATURED",
 	}
-	if arg.Tag != nil {
+	if arg.Tag != nil && *arg.Tag != "" {
 		varFeedFilter.Tags = []string{*arg.Tag}
 	}
 	request.Var("filter", varFeedFilter)
@@ -94,6 +94,5 @@ func (r *Repository) GetHashnodeArticles(arg GetHashnodeArticlesArg) (HashnodeFe
 	if err != nil {
 		return HashnodeFeedQueryResponse{}, err
 	}
-
 	return response, nil
 }

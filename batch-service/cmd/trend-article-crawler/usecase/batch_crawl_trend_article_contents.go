@@ -25,6 +25,7 @@ func (u *Usecase) BatchCrawlTrendArticleContents(ctx context.Context) error {
 		log.Printf("【no feeds】")
 		return nil
 	}
+	// MEMO: If there is data 5 hours ago, do not run the crawler
 	//fiveHoursAgo := time.Now().Add(-5 * time.Hour).Format("2006-01-02 15:04:05")
 	//// idempotency check
 	//trendCount, err := entity.TrendArticles(
@@ -57,17 +58,21 @@ func (u *Usecase) BatchCrawlTrendArticleContents(ctx context.Context) error {
 				continue
 			}
 		case int(domain.TrendPlatformTypeHatena):
-			// hatena
 			err = u.hatenaArticleCrawler(ctx, f)
 			if err != nil {
 				log.Printf("【error hatena article crawler】: %s", err)
 				continue
 			}
 		case int(domain.TrendPlatformTypeDevCommunity):
-
-			err = u.DevCommunityArticleCrawler(ctx, f)
+			err = u.devCommunityArticleCrawler(ctx, f)
 			if err != nil {
 				log.Printf("【error dev community article crawler】: %s", err)
+				continue
+			}
+		case int(domain.TrendPlatformTypeHashnode):
+			err = u.hashnodeArticleCrawler(ctx, f)
+			if err != nil {
+				log.Printf("【error hashnode article crawler】: %s", err)
 				continue
 			}
 		default:

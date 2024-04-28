@@ -8,4 +8,5 @@ const (
 	TrendPlatformTypeQiita
 	TrendPlatformTypeHatena
 	TrendPlatformTypeDevCommunity
+	TrendPlatformTypeHashnode
 )

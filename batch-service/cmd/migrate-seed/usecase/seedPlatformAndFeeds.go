@@ -29,11 +29,14 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 	zennTrendType := domain.TrendPlatformTypeZenn
 	hatenaTrendType := domain.TrendPlatformTypeHatena
 	devCommunityTrendType := domain.TrendPlatformTypeDevCommunity
+	hashnodeTrendType := domain.TrendPlatformTypeHashnode
 
 	devComReact := "react"
 	devComReactNative := "reactnative"
 	devComNextjs := "nextjs"
 	devComGo := "go"
+
+	hashnodeReact := "56744723958ef13879b95434"
 	return []seedPlatformFeed{
 		{
 			PlatformName:      "Qiita",
@@ -1288,262 +1291,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 
 			IsEng: false,
 		},
-		{
-			PlatformName:    "Hashnode",
-			FeedName:        "Hashnode React",
-			FeedDescription: "React - React is a JavaScript library for building user interfaces.",
-			FeedThumbnail:   "https://cdn.hashnode.com/res/hashnode/image/upload/v1513321478077/ByCWNxZMf.png",
-			seedCategoryID:  18,
-			RssURL:          "https://hashnode.com/n/reactjs/rss",
 
-			PlatformSiteURL: "https://hashnode.com/",
-			FeedSiteURL:     "https://hashnode.com/n/reactjs/",
-			PlatformType:    domain.PlatformTypeSite,
-			FaviconURL:      "https://cdn.hashnode.com/res/hashnode/image/upload/v1611242155728/W3_BYVVVh.png",
-
-			IsEng: true,
-		},
-		{
-			PlatformName:    "Hashnode",
-			FeedName:        "Hashnode Next.js",
-			FeedDescription: "Next.js - The React Framework",
-			FeedThumbnail:   "https://cdn.hashnode.com/res/hashnode/image/upload/v1651122498709/FQjch0sgd.png",
-			seedCategoryID:  20,
-			RssURL:          "https://hashnode.com/n/nextjs/rss",
-
-			PlatformSiteURL: "https://hashnode.com/",
-			FeedSiteURL:     "https://hashnode.com/n/nextjs/",
-			PlatformType:    domain.PlatformTypeSite,
-			FaviconURL:      "https://cdn.hashnode.com/res/hashnode/image/upload/v1611242155728/W3_BYVVVh.png",
-
-			IsEng: true,
-		},
-		{
-			PlatformName:    "Hashnode",
-			FeedName:        "Hashnode React Native",
-			FeedDescription: "React Native - Learn once, write anywhere: Build mobile apps with React",
-			FeedThumbnail:   "https://cdn.hashnode.com/res/hashnode/image/upload/v1513321478077/ByCWNxZMf.png",
-			seedCategoryID:  26,
-			RssURL:          "https://hashnode.com/n/react-native/rss",
-
-			PlatformSiteURL: "https://hashnode.com/",
-			FeedSiteURL:     "https://hashnode.com/n/react-native/",
-			PlatformType:    domain.PlatformTypeSite,
-			FaviconURL:      "https://cdn.hashnode.com/res/hashnode/image/upload/v1611242155728/W3_BYVVVh.png",
-
-			IsEng: true,
-		},
-		{
-			PlatformName:    "Hashnode",
-			FeedName:        "Hashnode Expo",
-			FeedDescription: "Expo - Expo is a free and open source toolchain built around React Native to help you build native iOS and Android projects using JavaScript and React.",
-			FeedThumbnail:   "https://cdn.hashnode.com/res/hashnode/image/upload/v1515394575880/SkuMI5gEM.jpeg",
-			seedCategoryID:  45,
-			RssURL:          "https://hashnode.com/n/expo/rss",
-
-			PlatformSiteURL: "https://hashnode.com/",
-			FeedSiteURL:     "https://hashnode.com/n/expo/",
-			PlatformType:    domain.PlatformTypeSite,
-			FaviconURL:      "https://cdn.hashnode.com/res/hashnode/image/upload/v1611242155728/W3_BYVVVh.png",
-
-			IsEng: true,
-		},
-		{
-			PlatformName:    "Hashnode",
-			FeedName:        "Hashnode Node.js",
-			FeedDescription: "Node.js - Node.js is a JavaScript runtime built on Chrome's V8 JavaScript engine.",
-			FeedThumbnail:   "https://cdn.hashnode.com/res/hashnode/image/upload/v1607322143407/LsbeyUL86.png",
-			seedCategoryID:  22,
-			RssURL:          "https://hashnode.com/n/nodejs/rss",
-
-			PlatformSiteURL: "https://hashnode.com/",
-			FeedSiteURL:     "https://hashnode.com/n/nodejs/",
-			PlatformType:    domain.PlatformTypeSite,
-			FaviconURL:      "https://cdn.hashnode.com/res/hashnode/image/upload/v1611242155728/W3_BYVVVh.png",
-
-			IsEng: true,
-		},
-		{
-			PlatformName:    "Hashnode",
-			FeedName:        "Hashnode TypeScript",
-			FeedDescription: "TypeScript  - TypeScript is an open-source language which builds on JavaScript, one of the world's most used tools, by adding static type definitions.",
-			FeedThumbnail:   "https://cdn.hashnode.com/res/hashnode/image/upload/v1607081795383/tEjUv8e8s.png",
-			seedCategoryID:  6,
-			RssURL:          "https://hashnode.com/n/typescript/rss",
-
-			PlatformSiteURL: "https://hashnode.com/",
-			FeedSiteURL:     "https://hashnode.com/n/typescript/",
-			PlatformType:    domain.PlatformTypeSite,
-			FaviconURL:      "https://cdn.hashnode.com/res/hashnode/image/upload/v1611242155728/W3_BYVVVh.png",
-
-			IsEng: true,
-		},
-		{
-			PlatformName:    "Hashnode",
-			FeedName:        "Hashnode Golang",
-			FeedDescription: "Go Language   - Go is an open source programming language that makes it easy to build simple, reliable, and efficient software.",
-			FeedThumbnail:   "https://cdn.hashnode.com/res/hashnode/image/upload/v1534512687168/S1D40rVLm.png",
-			seedCategoryID:  9,
-			RssURL:          "https://hashnode.com/n/go/rss",
-
-			PlatformSiteURL: "https://hashnode.com/",
-			FeedSiteURL:     "https://hashnode.com/n/go/",
-			PlatformType:    domain.PlatformTypeSite,
-			FaviconURL:      "https://cdn.hashnode.com/res/hashnode/image/upload/v1611242155728/W3_BYVVVh.png",
-
-			IsEng: true,
-		},
-
-		{
-			PlatformName:    "Hashnode",
-			FeedName:        "Hashnode AWS",
-			FeedDescription: "AWS   - Amazon Web Services offers reliable, scalable, and inexpensive cloud computing services.",
-			FeedThumbnail:   "https://cdn.hashnode.com/res/hashnode/image/upload/v1607508501076/CYQAUOwqq.png",
-			seedCategoryID:  28,
-			RssURL:          "https://hashnode.com/n/aws/rss",
-
-			PlatformSiteURL: "https://hashnode.com/",
-			FeedSiteURL:     "https://hashnode.com/n/aws/",
-			PlatformType:    domain.PlatformTypeSite,
-			FaviconURL:      "https://cdn.hashnode.com/res/hashnode/image/upload/v1611242155728/W3_BYVVVh.png",
-
-			IsEng: true,
-		},
-		{
-			PlatformName:    "Hashnode",
-			FeedName:        "Hashnode GCP",
-			FeedDescription: "GCP   - Google Cloud Platform lets you build, deploy, and scale applications, websites, and services on the same infrastructure as Google.",
-			FeedThumbnail:   "https://www.gstatic.com/devrel-devsite/prod/v18deffdce717053d2574d396ca1a06d6589d5eab7eb54fc25710e3ed98d4a3ba/cloud/images/social-icon-google-cloud-1200-630.png",
-			seedCategoryID:  29,
-			RssURL:          "https://hashnode.com/n/gcp/rss",
-
-			PlatformSiteURL: "https://hashnode.com/",
-			FeedSiteURL:     "https://hashnode.com/n/gcp/",
-			PlatformType:    domain.PlatformTypeSite,
-			FaviconURL:      "https://cdn.hashnode.com/res/hashnode/image/upload/v1611242155728/W3_BYVVVh.png",
-
-			IsEng: true,
-		},
-		{
-			PlatformName:    "Hashnode",
-			FeedName:        "Hashnode Docker",
-			FeedDescription: "Docker - Docker is a computer program that performs operating-system-level virtualization also known as containerization. It is developed by Docker, Inc.",
-			FeedThumbnail:   "https://cdn.hashnode.com/res/hashnode/image/upload/ryxk99vk41tdn8bo28m4/1453789075.png?w=200&h=200&fit=crop&crop=entropy&auto=compress,format&format=webp&auto=compress,format&format=webp",
-			seedCategoryID:  31,
-			RssURL:          "https://hashnode.com/n/docker/rss",
-
-			PlatformSiteURL: "https://hashnode.com/",
-			FeedSiteURL:     "https://hashnode.com/n/docker/",
-			PlatformType:    domain.PlatformTypeSite,
-			FaviconURL:      "https://cdn.hashnode.com/res/hashnode/image/upload/v1611242155728/W3_BYVVVh.png",
-
-			IsEng: true,
-		},
-		{
-			PlatformName:    "Hashnode",
-			FeedName:        "Hashnode Testing",
-			FeedDescription: "Testing - Software testing is an investigation conducted to provide stakeholders with information about the quality of the software product or service under test.",
-			FeedThumbnail:   "https://cdn.hashnode.com/res/hashnode/image/upload/xszq3zb8t6rmgg6regon/1450619295.png?w=200&h=200&fit=crop&crop=entropy&auto=compress,format&format=webp&auto=compress,format&format=webp",
-			seedCategoryID:  44,
-			RssURL:          "https://hashnode.com/n/testing/rss",
-
-			PlatformSiteURL: "https://hashnode.com/",
-			FeedSiteURL:     "https://hashnode.com/n/testing/",
-			PlatformType:    domain.PlatformTypeSite,
-			FaviconURL:      "https://cdn.hashnode.com/res/hashnode/image/upload/v1611242155728/W3_BYVVVh.png",
-
-			IsEng: true,
-		},
-		{
-			PlatformName:    "Hashnode",
-			FeedName:        "Hashnode GraphQL",
-			FeedDescription: "GraphQL - GraphQL is a data query language developed internally by Facebook in 2012 before being publicly released in 2015. It provides an alternative to REST and ad-hoc webservice architectures.",
-			FeedThumbnail:   "https://cdn.hashnode.com/res/hashnode/image/upload/qbofja8kwx8cw8nuyaqg/1475235506.jpg?w=200&h=200&fit=crop&crop=entropy&auto=compress,format&format=webp&auto=compress,format&format=webp",
-			seedCategoryID:  36,
-			RssURL:          "https://hashnode.com/n/graphql/rss",
-
-			PlatformSiteURL: "https://hashnode.com/",
-			FeedSiteURL:     "https://hashnode.com/n/graphql/",
-			PlatformType:    domain.PlatformTypeSite,
-			FaviconURL:      "https://cdn.hashnode.com/res/hashnode/image/upload/v1611242155728/W3_BYVVVh.png",
-
-			IsEng: true,
-		},
-		{
-			PlatformName:    "Hashnode",
-			FeedName:        "Hashnode Frontend Development",
-			FeedDescription: "Frontend Development - Front-end web development, also known as client-side development is the practice of producing HTML, CSS and JavaScript for a website or Web Application so that a user can see and interact with them directly.",
-			FeedThumbnail:   "https://cdn.hashnode.com/res/hashnode/image/upload/v1611242155728/W3_BYVVVh.png",
-			seedCategoryID:  43,
-			RssURL:          "https://hashnode.com/n/frontend-development/rss",
-
-			PlatformSiteURL: "https://hashnode.com/",
-			FeedSiteURL:     "https://hashnode.com/n/frontend-development/",
-			PlatformType:    domain.PlatformTypeSite,
-			FaviconURL:      "https://cdn.hashnode.com/res/hashnode/image/upload/v1611242155728/W3_BYVVVh.png",
-
-			IsEng: true,
-		},
-		{
-			PlatformName:    "Hashnode",
-			FeedName:        "Hashnode Web Development",
-			FeedDescription: "Web Development - Web development is the work involved in developing a Web site for the Internet or an intranet.",
-			FeedThumbnail:   "https://cdn.hashnode.com/res/hashnode/image/upload/vdxecajl3uwbprclsctm/1450469658.jpg",
-			seedCategoryID:  4,
-			RssURL:          "https://hashnode.com/n/web-development/rss",
-
-			PlatformSiteURL: "https://hashnode.com/",
-			FeedSiteURL:     "https://hashnode.com/n/web-development/",
-			PlatformType:    domain.PlatformTypeSite,
-			FaviconURL:      "https://cdn.hashnode.com/res/hashnode/image/upload/v1611242155728/W3_BYVVVh.png",
-
-			IsEng: true,
-		},
-		{
-			PlatformName:    "Hashnode",
-			FeedName:        "Hashnode ChatGPT",
-			FeedDescription: "ChatGPT - ChatGPT is a large language model that can generate human-like responses to given prompts.",
-			FeedThumbnail:   "https://cdn.hashnode.com/res/hashnode/image/upload/v1611242155728/W3_BYVVVh.png",
-			seedCategoryID:  41,
-			RssURL:          "https://hashnode.com/n/chatgpt/rss",
-
-			PlatformSiteURL: "https://hashnode.com/",
-			FeedSiteURL:     "https://hashnode.com/n/chatgpt/",
-			PlatformType:    domain.PlatformTypeSite,
-			FaviconURL:      "https://cdn.hashnode.com/res/hashnode/image/upload/v1611242155728/W3_BYVVVh.png",
-
-			IsEng: true,
-		},
-		{
-			PlatformName:    "Hashnode",
-			FeedName:        "Hashnode Developer",
-			FeedDescription: "Developer - A developer is a person who writes computer software.",
-			FeedThumbnail:   "https://cdn.hashnode.com/res/hashnode/image/upload/v1554321431158/MqVqSHr8Q.jpeg",
-			seedCategoryID:  4,
-			RssURL:          "https://hashnode.com/n/developer/rss",
-
-			PlatformSiteURL: "https://hashnode.com/",
-			FeedSiteURL:     "https://hashnode.com/n/developer/",
-			PlatformType:    domain.PlatformTypeSite,
-			FaviconURL:      "https://cdn.hashnode.com/res/hashnode/image/upload/v1611242155728/W3_BYVVVh.png",
-
-			IsEng: true,
-		},
-		{
-			PlatformName:    "Hashnode",
-			FeedName:        "Hashnode Devops",
-			FeedDescription: "Devops - Processes and tools that help DEV and OPS teams work faster",
-			FeedThumbnail:   "https://cdn.hashnode.com/res/hashnode/image/upload/cnvm0znfqcrwelhgtblb/1496913014.png",
-			seedCategoryID:  46,
-			RssURL:          "https://hashnode.com/n/devops/rss",
-
-			PlatformSiteURL: "https://hashnode.com/",
-			FeedSiteURL:     "https://hashnode.com/n/devops/",
-			PlatformType:    domain.PlatformTypeSite,
-			FaviconURL:      "https://cdn.hashnode.com/res/hashnode/image/upload/v1611242155728/W3_BYVVVh.png",
-
-			IsEng: true,
-		},
 		{
 			PlatformName:    "LogRocket",
 			FeedName:        "LogRocket",
@@ -1937,5 +1685,290 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			TrendPlatformType: &devCommunityTrendType,
 			APIQueryParam:     &devComGo,
 		},
+		{
+			PlatformName:      "Hashnode",
+			FeedName:          "Hashnode",
+			FeedDescription:   "Hashnode is a free developer blogging platform that allows you to publish articles on your own domain and helps you stay connected with a global developer community.",
+			FeedThumbnail:     "https://cdn.hashnode.com/res/hashnode/image/upload/v1697709257859/6413332e-a3c0-4d37-bc72-f65293cb6664.png",
+			seedCategoryID:    1,
+			RssURL:            "https://hashnode.com/n/rss",
+			PlatformSiteURL:   "https://hashnode.com/",
+			FeedSiteURL:       "https://hashnode.com/",
+			PlatformType:      domain.PlatformTypeSite,
+			FaviconURL:        "https://cdn.hashnode.com/res/hashnode/image/upload/v1611242155728/W3_BYVVVh.png",
+			IsEng:             true,
+			TrendPlatformType: &hashnodeTrendType,
+		},
+		{
+			PlatformName:      "Hashnode",
+			FeedName:          "React | Hashnode",
+			FeedDescription:   "React is a JavaScript library for building user interfaces.",
+			FeedThumbnail:     "https://cdn.hashnode.com/res/hashnode/image/upload/v1697709257859/6413332e-a3c0-4d37-bc72-f65293cb6664.png",
+			seedCategoryID:    1,
+			RssURL:            "https://hashnode.com/n/rss",
+			PlatformSiteURL:   "https://hashnode.com/",
+			FeedSiteURL:       "https://hashnode.com/n/reactjs",
+			PlatformType:      domain.PlatformTypeSite,
+			FaviconURL:        "https://cdn.hashnode.com/res/hashnode/image/upload/v1611242155728/W3_BYVVVh.png",
+			IsEng:             true,
+			TrendPlatformType: &hashnodeTrendType,
+			APIQueryParam:     &hashnodeReact,
+		},
+		//{
+		//	PlatformName:    "Hashnode",
+		//	FeedName:        "Hashnode React",
+		//	FeedDescription: "React - React is a JavaScript library for building user interfaces.",
+		//	FeedThumbnail:   "https://cdn.hashnode.com/res/hashnode/image/upload/v1513321478077/ByCWNxZMf.png",
+		//	seedCategoryID:  18,
+		//	RssURL:          "https://hashnode.com/n/reactjs/rss",
+		//
+		//	PlatformSiteURL: "https://hashnode.com/",
+		//	FeedSiteURL:     "https://hashnode.com/n/reactjs/",
+		//	PlatformType:    domain.PlatformTypeSite,
+		//	FaviconURL:      "https://cdn.hashnode.com/res/hashnode/image/upload/v1611242155728/W3_BYVVVh.png",
+		//
+		//	IsEng: true,
+		//},
+		//{
+		//	PlatformName:    "Hashnode",
+		//	FeedName:        "Hashnode Next.js",
+		//	FeedDescription: "Next.js - The React Framework",
+		//	FeedThumbnail:   "https://cdn.hashnode.com/res/hashnode/image/upload/v1651122498709/FQjch0sgd.png",
+		//	seedCategoryID:  20,
+		//	RssURL:          "https://hashnode.com/n/nextjs/rss",
+		//
+		//	PlatformSiteURL: "https://hashnode.com/",
+		//	FeedSiteURL:     "https://hashnode.com/n/nextjs/",
+		//	PlatformType:    domain.PlatformTypeSite,
+		//	FaviconURL:      "https://cdn.hashnode.com/res/hashnode/image/upload/v1611242155728/W3_BYVVVh.png",
+		//
+		//	IsEng: true,
+		//},
+		//{
+		//	PlatformName:    "Hashnode",
+		//	FeedName:        "Hashnode React Native",
+		//	FeedDescription: "React Native - Learn once, write anywhere: Build mobile apps with React",
+		//	FeedThumbnail:   "https://cdn.hashnode.com/res/hashnode/image/upload/v1513321478077/ByCWNxZMf.png",
+		//	seedCategoryID:  26,
+		//	RssURL:          "https://hashnode.com/n/react-native/rss",
+		//
+		//	PlatformSiteURL: "https://hashnode.com/",
+		//	FeedSiteURL:     "https://hashnode.com/n/react-native/",
+		//	PlatformType:    domain.PlatformTypeSite,
+		//	FaviconURL:      "https://cdn.hashnode.com/res/hashnode/image/upload/v1611242155728/W3_BYVVVh.png",
+		//
+		//	IsEng: true,
+		//},
+		//{
+		//	PlatformName:    "Hashnode",
+		//	FeedName:        "Hashnode Expo",
+		//	FeedDescription: "Expo - Expo is a free and open source toolchain built around React Native to help you build native iOS and Android projects using JavaScript and React.",
+		//	FeedThumbnail:   "https://cdn.hashnode.com/res/hashnode/image/upload/v1515394575880/SkuMI5gEM.jpeg",
+		//	seedCategoryID:  45,
+		//	RssURL:          "https://hashnode.com/n/expo/rss",
+		//
+		//	PlatformSiteURL: "https://hashnode.com/",
+		//	FeedSiteURL:     "https://hashnode.com/n/expo/",
+		//	PlatformType:    domain.PlatformTypeSite,
+		//	FaviconURL:      "https://cdn.hashnode.com/res/hashnode/image/upload/v1611242155728/W3_BYVVVh.png",
+		//
+		//	IsEng: true,
+		//},
+		//{
+		//	PlatformName:    "Hashnode",
+		//	FeedName:        "Hashnode Node.js",
+		//	FeedDescription: "Node.js - Node.js is a JavaScript runtime built on Chrome's V8 JavaScript engine.",
+		//	FeedThumbnail:   "https://cdn.hashnode.com/res/hashnode/image/upload/v1607322143407/LsbeyUL86.png",
+		//	seedCategoryID:  22,
+		//	RssURL:          "https://hashnode.com/n/nodejs/rss",
+		//
+		//	PlatformSiteURL: "https://hashnode.com/",
+		//	FeedSiteURL:     "https://hashnode.com/n/nodejs/",
+		//	PlatformType:    domain.PlatformTypeSite,
+		//	FaviconURL:      "https://cdn.hashnode.com/res/hashnode/image/upload/v1611242155728/W3_BYVVVh.png",
+		//
+		//	IsEng: true,
+		//},
+		//{
+		//	PlatformName:    "Hashnode",
+		//	FeedName:        "Hashnode TypeScript",
+		//	FeedDescription: "TypeScript  - TypeScript is an open-source language which builds on JavaScript, one of the world's most used tools, by adding static type definitions.",
+		//	FeedThumbnail:   "https://cdn.hashnode.com/res/hashnode/image/upload/v1607081795383/tEjUv8e8s.png",
+		//	seedCategoryID:  6,
+		//	RssURL:          "https://hashnode.com/n/typescript/rss",
+		//
+		//	PlatformSiteURL: "https://hashnode.com/",
+		//	FeedSiteURL:     "https://hashnode.com/n/typescript/",
+		//	PlatformType:    domain.PlatformTypeSite,
+		//	FaviconURL:      "https://cdn.hashnode.com/res/hashnode/image/upload/v1611242155728/W3_BYVVVh.png",
+		//
+		//	IsEng: true,
+		//},
+		//{
+		//	PlatformName:    "Hashnode",
+		//	FeedName:        "Hashnode Golang",
+		//	FeedDescription: "Go Language   - Go is an open source programming language that makes it easy to build simple, reliable, and efficient software.",
+		//	FeedThumbnail:   "https://cdn.hashnode.com/res/hashnode/image/upload/v1534512687168/S1D40rVLm.png",
+		//	seedCategoryID:  9,
+		//	RssURL:          "https://hashnode.com/n/go/rss",
+		//
+		//	PlatformSiteURL: "https://hashnode.com/",
+		//	FeedSiteURL:     "https://hashnode.com/n/go/",
+		//	PlatformType:    domain.PlatformTypeSite,
+		//	FaviconURL:      "https://cdn.hashnode.com/res/hashnode/image/upload/v1611242155728/W3_BYVVVh.png",
+		//
+		//	IsEng: true,
+		//},
+		//
+		//{
+		//	PlatformName:    "Hashnode",
+		//	FeedName:        "Hashnode AWS",
+		//	FeedDescription: "AWS   - Amazon Web Services offers reliable, scalable, and inexpensive cloud computing services.",
+		//	FeedThumbnail:   "https://cdn.hashnode.com/res/hashnode/image/upload/v1607508501076/CYQAUOwqq.png",
+		//	seedCategoryID:  28,
+		//	RssURL:          "https://hashnode.com/n/aws/rss",
+		//
+		//	PlatformSiteURL: "https://hashnode.com/",
+		//	FeedSiteURL:     "https://hashnode.com/n/aws/",
+		//	PlatformType:    domain.PlatformTypeSite,
+		//	FaviconURL:      "https://cdn.hashnode.com/res/hashnode/image/upload/v1611242155728/W3_BYVVVh.png",
+		//
+		//	IsEng: true,
+		//},
+		//{
+		//	PlatformName:    "Hashnode",
+		//	FeedName:        "Hashnode GCP",
+		//	FeedDescription: "GCP   - Google Cloud Platform lets you build, deploy, and scale applications, websites, and services on the same infrastructure as Google.",
+		//	FeedThumbnail:   "https://www.gstatic.com/devrel-devsite/prod/v18deffdce717053d2574d396ca1a06d6589d5eab7eb54fc25710e3ed98d4a3ba/cloud/images/social-icon-google-cloud-1200-630.png",
+		//	seedCategoryID:  29,
+		//	RssURL:          "https://hashnode.com/n/gcp/rss",
+		//
+		//	PlatformSiteURL: "https://hashnode.com/",
+		//	FeedSiteURL:     "https://hashnode.com/n/gcp/",
+		//	PlatformType:    domain.PlatformTypeSite,
+		//	FaviconURL:      "https://cdn.hashnode.com/res/hashnode/image/upload/v1611242155728/W3_BYVVVh.png",
+		//
+		//	IsEng: true,
+		//},
+		//{
+		//	PlatformName:    "Hashnode",
+		//	FeedName:        "Hashnode Docker",
+		//	FeedDescription: "Docker - Docker is a computer program that performs operating-system-level virtualization also known as containerization. It is developed by Docker, Inc.",
+		//	FeedThumbnail:   "https://cdn.hashnode.com/res/hashnode/image/upload/ryxk99vk41tdn8bo28m4/1453789075.png?w=200&h=200&fit=crop&crop=entropy&auto=compress,format&format=webp&auto=compress,format&format=webp",
+		//	seedCategoryID:  31,
+		//	RssURL:          "https://hashnode.com/n/docker/rss",
+		//
+		//	PlatformSiteURL: "https://hashnode.com/",
+		//	FeedSiteURL:     "https://hashnode.com/n/docker/",
+		//	PlatformType:    domain.PlatformTypeSite,
+		//	FaviconURL:      "https://cdn.hashnode.com/res/hashnode/image/upload/v1611242155728/W3_BYVVVh.png",
+		//
+		//	IsEng: true,
+		//},
+		//{
+		//	PlatformName:    "Hashnode",
+		//	FeedName:        "Hashnode Testing",
+		//	FeedDescription: "Testing - Software testing is an investigation conducted to provide stakeholders with information about the quality of the software product or service under test.",
+		//	FeedThumbnail:   "https://cdn.hashnode.com/res/hashnode/image/upload/xszq3zb8t6rmgg6regon/1450619295.png?w=200&h=200&fit=crop&crop=entropy&auto=compress,format&format=webp&auto=compress,format&format=webp",
+		//	seedCategoryID:  44,
+		//	RssURL:          "https://hashnode.com/n/testing/rss",
+		//
+		//	PlatformSiteURL: "https://hashnode.com/",
+		//	FeedSiteURL:     "https://hashnode.com/n/testing/",
+		//	PlatformType:    domain.PlatformTypeSite,
+		//	FaviconURL:      "https://cdn.hashnode.com/res/hashnode/image/upload/v1611242155728/W3_BYVVVh.png",
+		//
+		//	IsEng: true,
+		//},
+		//{
+		//	PlatformName:    "Hashnode",
+		//	FeedName:        "Hashnode GraphQL",
+		//	FeedDescription: "GraphQL - GraphQL is a data query language developed internally by Facebook in 2012 before being publicly released in 2015. It provides an alternative to REST and ad-hoc webservice architectures.",
+		//	FeedThumbnail:   "https://cdn.hashnode.com/res/hashnode/image/upload/qbofja8kwx8cw8nuyaqg/1475235506.jpg?w=200&h=200&fit=crop&crop=entropy&auto=compress,format&format=webp&auto=compress,format&format=webp",
+		//	seedCategoryID:  36,
+		//	RssURL:          "https://hashnode.com/n/graphql/rss",
+		//
+		//	PlatformSiteURL: "https://hashnode.com/",
+		//	FeedSiteURL:     "https://hashnode.com/n/graphql/",
+		//	PlatformType:    domain.PlatformTypeSite,
+		//	FaviconURL:      "https://cdn.hashnode.com/res/hashnode/image/upload/v1611242155728/W3_BYVVVh.png",
+		//
+		//	IsEng: true,
+		//},
+		//{
+		//	PlatformName:    "Hashnode",
+		//	FeedName:        "Hashnode Frontend Development",
+		//	FeedDescription: "Frontend Development - Front-end web development, also known as client-side development is the practice of producing HTML, CSS and JavaScript for a website or Web Application so that a user can see and interact with them directly.",
+		//	FeedThumbnail:   "https://cdn.hashnode.com/res/hashnode/image/upload/v1611242155728/W3_BYVVVh.png",
+		//	seedCategoryID:  43,
+		//	RssURL:          "https://hashnode.com/n/frontend-development/rss",
+		//
+		//	PlatformSiteURL: "https://hashnode.com/",
+		//	FeedSiteURL:     "https://hashnode.com/n/frontend-development/",
+		//	PlatformType:    domain.PlatformTypeSite,
+		//	FaviconURL:      "https://cdn.hashnode.com/res/hashnode/image/upload/v1611242155728/W3_BYVVVh.png",
+		//
+		//	IsEng: true,
+		//},
+		//{
+		//	PlatformName:    "Hashnode",
+		//	FeedName:        "Hashnode Web Development",
+		//	FeedDescription: "Web Development - Web development is the work involved in developing a Web site for the Internet or an intranet.",
+		//	FeedThumbnail:   "https://cdn.hashnode.com/res/hashnode/image/upload/vdxecajl3uwbprclsctm/1450469658.jpg",
+		//	seedCategoryID:  4,
+		//	RssURL:          "https://hashnode.com/n/web-development/rss",
+		//
+		//	PlatformSiteURL: "https://hashnode.com/",
+		//	FeedSiteURL:     "https://hashnode.com/n/web-development/",
+		//	PlatformType:    domain.PlatformTypeSite,
+		//	FaviconURL:      "https://cdn.hashnode.com/res/hashnode/image/upload/v1611242155728/W3_BYVVVh.png",
+		//
+		//	IsEng: true,
+		//},
+		//{
+		//	PlatformName:    "Hashnode",
+		//	FeedName:        "Hashnode ChatGPT",
+		//	FeedDescription: "ChatGPT - ChatGPT is a large language model that can generate human-like responses to given prompts.",
+		//	FeedThumbnail:   "https://cdn.hashnode.com/res/hashnode/image/upload/v1611242155728/W3_BYVVVh.png",
+		//	seedCategoryID:  41,
+		//	RssURL:          "https://hashnode.com/n/chatgpt/rss",
+		//
+		//	PlatformSiteURL: "https://hashnode.com/",
+		//	FeedSiteURL:     "https://hashnode.com/n/chatgpt/",
+		//	PlatformType:    domain.PlatformTypeSite,
+		//	FaviconURL:      "https://cdn.hashnode.com/res/hashnode/image/upload/v1611242155728/W3_BYVVVh.png",
+		//
+		//	IsEng: true,
+		//},
+		//{
+		//	PlatformName:    "Hashnode",
+		//	FeedName:        "Hashnode Developer",
+		//	FeedDescription: "Developer - A developer is a person who writes computer software.",
+		//	FeedThumbnail:   "https://cdn.hashnode.com/res/hashnode/image/upload/v1554321431158/MqVqSHr8Q.jpeg",
+		//	seedCategoryID:  4,
+		//	RssURL:          "https://hashnode.com/n/developer/rss",
+		//
+		//	PlatformSiteURL: "https://hashnode.com/",
+		//	FeedSiteURL:     "https://hashnode.com/n/developer/",
+		//	PlatformType:    domain.PlatformTypeSite,
+		//	FaviconURL:      "https://cdn.hashnode.com/res/hashnode/image/upload/v1611242155728/W3_BYVVVh.png",
+		//
+		//	IsEng: true,
+		//},
+		//{
+		//	PlatformName:    "Hashnode",
+		//	FeedName:        "Hashnode Devops",
+		//	FeedDescription: "Devops - Processes and tools that help DEV and OPS teams work faster",
+		//	FeedThumbnail:   "https://cdn.hashnode.com/res/hashnode/image/upload/cnvm0znfqcrwelhgtblb/1496913014.png",
+		//	seedCategoryID:  46,
+		//	RssURL:          "https://hashnode.com/n/devops/rss",
+		//
+		//	PlatformSiteURL: "https://hashnode.com/",
+		//	FeedSiteURL:     "https://hashnode.com/n/devops/",
+		//	PlatformType:    domain.PlatformTypeSite,
+		//	FaviconURL:      "https://cdn.hashnode.com/res/hashnode/image/upload/v1611242155728/W3_BYVVVh.png",
+		//
+		//	IsEng: true,
+		//},
 	}
 }
