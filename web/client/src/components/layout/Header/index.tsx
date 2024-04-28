@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { getUser } from "@/features/users/actions/user";
 
+import { ModeToggle } from "./DropdownMenu";
 import { LoggedMenu } from "./LoggedMenu";
 import { NotLoggedMenu } from "./NotLoggedMenu";
 
@@ -14,6 +15,9 @@ export async function Header() {
         <h1 className="text-2xl font-bold">Tech Picks</h1>
       </Link>
       <div className="flex items-center justify-end">
+        <div className="mr-4">
+          <ModeToggle />
+        </div>
         {user ? <LoggedMenu user={user} /> : <NotLoggedMenu />}
       </div>
     </div>
