@@ -50,11 +50,13 @@ export const ArticleCard: FC<ArticleCardProps> = ({
             {showDiffDateToCurrentDate(article.publishedAt)}
           </p>
 
-          <div className="flex w-full items-center pt-2 md:w-4/5">
+          <div className="flex w-full flex-wrap items-center justify-start pt-2 md:w-4/5">
             {article.feeds.length > 0 &&
               article.feeds.map((feed) => (
                 <div key={`${article.id}-${feed.id}`} className="my-2 mr-2">
-                  <FeedNameBadge name={feed.name} />
+                  <div className="">
+                    <FeedNameBadge name={feed.name} />
+                  </div>
                 </div>
               ))}
           </div>
