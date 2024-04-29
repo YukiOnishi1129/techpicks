@@ -1,6 +1,6 @@
-import { Loader } from "@/components/ui/loader";
+import { ScreenLoader } from "@/components/layout/ScreenLoader/ScreenLoader";
 
 export default function Loading() {
   // You can add any UI inside Loading, including a Skeleton.
-  return <Loader />;
+  return <ScreenLoader />;
 }

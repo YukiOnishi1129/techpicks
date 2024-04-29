@@ -1,7 +1,8 @@
-import { Loader } from "lucide-react";
 import { Suspense } from "react";
 
 import { HomeTemplate } from "@/features/home/components/HomeTemplate";
+
+import { ScreenLoader } from "@/components/layout/ScreenLoader/ScreenLoader";
 
 import { LanguageStatus } from "@/types/language";
 
@@ -37,13 +38,7 @@ export default async function Home({ searchParams }: PageProps) {
 
   return (
     <>
-      <Suspense
-        fallback={
-          <div>
-            <Loader />
-          </div>
-        }
-      >
+      <Suspense fallback={<ScreenLoader />}>
         <HomeTemplate
           languageStatus={languageStatus}
           keyword={keyword}
