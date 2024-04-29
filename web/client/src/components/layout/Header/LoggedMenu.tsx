@@ -5,7 +5,7 @@ import { FC } from "react";
 import { AvatarDropdownMenu } from "./DropdownMenu";
 
 type LoggedMenuProps = {
-  user: User | null;
+  user?: User;
 };
 export const LoggedMenu: FC<LoggedMenuProps> = ({ user }: LoggedMenuProps) => {
   return <AvatarDropdownMenu user={user} />;

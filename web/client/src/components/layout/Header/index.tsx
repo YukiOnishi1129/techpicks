@@ -1,14 +1,15 @@
+import { User } from "@supabase/supabase-js";
 import Link from "next/link";
-
-import { getUser } from "@/features/users/actions/user";
 
 import { ModeToggle } from "./DropdownMenu";
 import { LoggedMenu } from "./LoggedMenu";
 import { NotLoggedMenu } from "./NotLoggedMenu";
 
-export async function Header() {
-  const user = await getUser();
+type HeaderProps = {
+  user?: User;
+};
 
+export async function Header({ user }: HeaderProps) {
   return (
     <div className="fixed z-50 flex h-16 w-screen items-center justify-between border-b border-gray-300  px-8 shadow-md">
       <Link href="/" className="cursor-pointer">
