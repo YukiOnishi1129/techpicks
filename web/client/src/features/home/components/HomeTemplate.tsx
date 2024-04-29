@@ -37,14 +37,14 @@ export const HomeTemplate: FC<HomeTemplateProps> = async ({
   });
   return (
     <div className="w-auto">
-      <div className="flex w-full items-end justify-between px-4">
-        <h1 className="mb-4 mt-8 text-2xl font-bold ">Today</h1>
-        <div className="mb-4 flex w-48 items-center justify-end">
+      <div className="flex w-full items-end justify-end px-4 md:justify-between">
+        <h1 className="mb-4 mt-8 hidden text-2xl font-bold md:block">Today</h1>
+        <div className="my-4 flex w-48 items-center justify-end md:mt-0">
           <div className="mr-4 hidden cursor-pointer md:block">
             <ArticleSearchDialog platforms={platforms} />
           </div>
 
-          <div className="min-w-24">
+          <div className="min-w-24 ">
             <ArticleLanguageSwitch
               languageStatus={languageStatus}
               keyword={keyword}
