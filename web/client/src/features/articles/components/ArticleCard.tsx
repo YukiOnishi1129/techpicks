@@ -31,10 +31,10 @@ export const ArticleCard: FC<ArticleCardProps> = ({
           <h3 className="mb-4 line-clamp-3 block text-left text-lg font-bold tracking-wide md:hidden md:w-full md:text-xl">
             {article.title}
           </h3>
-          <div className="flex  w-full justify-center md:h-36 md:w-48">
+          <div className="flex   w-full justify-center md:h-36 md:w-48">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              className="h-full rounded-lg border-2 object-cover object-center shadow-md"
+              className="max-h-[170px] rounded-lg border-2 object-cover object-center shadow-md md:h-full"
               src={imageUrl}
               alt=""
             />

@@ -19,20 +19,25 @@ export const BaseLayout = async ({ children }: { children: ReactNode }) => {
 
       <div className="h-16" />
       <main className="md:flex">
-        <div className="invisible fixed h-lvh w-[200px] md:visible">
-          <Sidebar />
-        </div>
-        <div className="invisible mr-[10px] w-[200px] md:visible" />
-        <div className="mx-auto w-[90%] md:w-[70%]">{children}</div>
+        {user && (
+          <>
+            <div className="invisible fixed h-lvh w-[200px] md:visible">
+              <Sidebar />
+            </div>
+            <div className="invisible mr-[10px] w-[200px] md:visible" />
+          </>
+        )}
 
-        <div className="fixed inset-x-0 bottom-0 z-50 block border-t border-gray-200  md:hidden">
-          {user ? (
-            <LoggedBottomNavigationMenu user={user} />
-          ) : (
-            <NotLoggedBottomNavigationMenu />
-          )}
-        </div>
+        <div className="mx-auto w-[90%] md:w-[70%]">{children}</div>
       </main>
+
+      <footer className="fixed inset-x-0 bottom-0 z-50 block border-t border-gray-200  md:hidden">
+        {user ? (
+          <LoggedBottomNavigationMenu user={user} />
+        ) : (
+          <NotLoggedBottomNavigationMenu />
+        )}
+      </footer>
     </div>
   );
 };
