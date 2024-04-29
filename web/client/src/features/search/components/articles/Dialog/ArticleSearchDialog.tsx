@@ -301,7 +301,7 @@ const ArticleSearchDialogContent: FC<ArticleSearchDialogContentProps> = ({
                                 <FormLabel className="ml-2 w-full text-sm font-normal">
                                   {/* eslint-disable-next-line @next/next/no-img-element */}
                                   <img
-                                    className="mr-2 inline-block size-6"
+                                    className="mr-2 inline-block size-6 bg-white"
                                     src={platform.faviconUrl}
                                     alt=""
                                   />

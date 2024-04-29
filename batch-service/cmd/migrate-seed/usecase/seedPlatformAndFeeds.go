@@ -232,7 +232,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			PlatformSiteURL: "https://www.wantedly.com/stories/s/rakuma",
 			FeedSiteURL:     "https://www.wantedly.com/stories/s/rakuma",
 			PlatformType:    domain.PlatformTypeCompany,
-			FaviconURL:      "https://www.wantedly.com//favicon.ico",
+			FaviconURL:      "https://asset.fril.jp/assets/favicon-c2fcf6793ca88837b294f072aa8d922226f64c977fbbd44980a1addacb59db6e.ico",
 
 			IsEng: false,
 		},
@@ -386,7 +386,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			PlatformSiteURL: "https://blog.recruit.co.jp/",
 			FeedSiteURL:     "https://blog.recruit.co.jp/rtc/",
 			PlatformType:    domain.PlatformTypeCompany,
-			FaviconURL:      "https://blog.recruit.co.jp/rtc/wp-content/themes/pc-rtc-blog.git/library/images/favicon.ico",
+			FaviconURL:      "https://www.recruit.co.jp/favicon.ico",
 
 			IsEng: false,
 		},
@@ -775,7 +775,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			PlatformSiteURL: "https://medium.com/eureka-engineering/",
 			FeedSiteURL:     "https://medium.com/eureka-engineering/",
 			PlatformType:    domain.PlatformTypeCompany,
-			FaviconURL:      "https://miro.medium.com/1*m-R_BkNf1Qjr1YbyOIJY2w.png",
+			FaviconURL:      "https://eure.jp/wp-content/themes/eureseventeen/assets/images/common/favicon.ico",
 
 			IsEng: false,
 		},
@@ -790,7 +790,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			PlatformSiteURL: "https://medium.com/airbnb-engineering/",
 			FeedSiteURL:     "https://medium.com/airbnb-engineering/",
 			PlatformType:    domain.PlatformTypeCompany,
-			FaviconURL:      "https://miro.medium.com/1*m-R_BkNf1Qjr1YbyOIJY2w.png",
+			FaviconURL:      "https://a0.muscache.com/airbnb/static/logotype_favicon-21cc8e6c6a2cca43f061d2dcabdf6e58.ico",
 
 			IsEng: true,
 		},
@@ -865,7 +865,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			PlatformSiteURL: "https://developers.googleblog.com/",
 			FeedSiteURL:     "https://developers.googleblog.com/",
 			PlatformType:    domain.PlatformTypeCompany,
-			FaviconURL:      "https://developers.googleblog.com/favicon.ico",
+			FaviconURL:      "https://storage.googleapis.com/gweb-developer-goog-blog-cms-assets/dd19bfb1-e060-4647-96ec-4be23ce2bba0/images/favicon.ico",
 
 			IsEng: true,
 		},
@@ -880,7 +880,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			PlatformSiteURL: "https://instagram-engineering.com/",
 			FeedSiteURL:     "https://instagram-engineering.com/",
 			PlatformType:    domain.PlatformTypeCompany,
-			FaviconURL:      "https://miro.medium.com/1*m-R_BkNf1Qjr1YbyOIJY2w.png",
+			FaviconURL:      "https://static.cdninstagram.com/rsrc.php/v3/yI/r/VsNE-OHk_8a.png",
 
 			IsEng: true,
 		},
@@ -895,7 +895,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			PlatformSiteURL: "https://netflixtechblog.com/",
 			FeedSiteURL:     "https://netflixtechblog.com/",
 			PlatformType:    domain.PlatformTypeCompany,
-			FaviconURL:      "https://miro.medium.com/1*m-R_BkNf1Qjr1YbyOIJY2w.png",
+			FaviconURL:      "https://about.netflix.com/images/meta/netflix-symbol-black.png",
 
 			IsEng: true,
 		},
@@ -910,7 +910,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			PlatformSiteURL: "https://medium.com/paypal-tech/",
 			FeedSiteURL:     "https://medium.com/paypal-tech/",
 			PlatformType:    domain.PlatformTypeCompany,
-			FaviconURL:      "https://miro.medium.com/1*m-R_BkNf1Qjr1YbyOIJY2w.png",
+			FaviconURL:      "https://www.paypalobjects.com/webstatic/icon/favicon.ico",
 
 			IsEng: true,
 		},
@@ -940,7 +940,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			PlatformSiteURL: "https://medium.com/zoom-developer-blog/",
 			FeedSiteURL:     "https://medium.com/zoom-developer-blog/",
 			PlatformType:    domain.PlatformTypeCompany,
-			FaviconURL:      "https://miro.medium.com/1*m-R_BkNf1Qjr1YbyOIJY2w.png",
+			FaviconURL:      "https://explore.zoom.us/assets/favicons/zoom.ico",
 
 			IsEng: true,
 		},
@@ -970,7 +970,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			PlatformSiteURL: "https://engineering.mercari.com/en/blog/",
 			FeedSiteURL:     "https://engineering.mercari.com/en/blog/",
 			PlatformType:    domain.PlatformTypeCompany,
-			FaviconURL:      "https://engineering.mercari.com/favicon.ico/",
+			FaviconURL:      "https://engineering.mercari.com/favicon.ico",
 
 			IsEng: true,
 		},
@@ -1068,7 +1068,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			PlatformName:    "Zenn",
 			FeedName:        "Zenn React",
 			FeedDescription: "Reactの記事一覧 | Zenn",
-			FeedThumbnail:   "https://storage.googleapis.com/zenn-user-upload/topics/489b9436a3.png",
+			FeedThumbnail:   "https://static.zenn.studio/images/logo-only-dark.png",
 			seedCategoryID:  18,
 			RssURL:          "https://zenn.dev/topics/react/feed",
 
@@ -1083,7 +1083,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			PlatformName:    "Zenn",
 			FeedName:        "Zenn Next.js",
 			FeedDescription: "Next.jsの記事一覧 | Zenn",
-			FeedThumbnail:   "https://storage.googleapis.com/zenn-user-upload/topics/d87ff27d89.png",
+			FeedThumbnail:   "https://static.zenn.studio/images/logo-only-dark.png",
 			seedCategoryID:  18,
 			RssURL:          "https://zenn.dev/topics/nextjs/feed",
 
@@ -1098,7 +1098,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			PlatformName:    "Zenn",
 			FeedName:        "Zenn React Native",
 			FeedDescription: "React Nativeの記事一覧 | Zenn",
-			FeedThumbnail:   "https://storage.googleapis.com/zenn-user-upload/topics/658126d68f.png",
+			FeedThumbnail:   "https://static.zenn.studio/images/logo-only-dark.png",
 			seedCategoryID:  26,
 			RssURL:          "https://zenn.dev/topics/reactnative/feed",
 
@@ -1113,7 +1113,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			PlatformName:    "Zenn",
 			FeedName:        "Zenn JavaScript",
 			FeedDescription: "JavaScriptの記事一覧 | Zenn",
-			FeedThumbnail:   "https://storage.googleapis.com/zenn-user-upload/topics/64acd76870.png",
+			FeedThumbnail:   "https://static.zenn.studio/images/logo-only-dark.png",
 			seedCategoryID:  5,
 			RssURL:          "https://zenn.dev/topics/javascript/feed",
 
@@ -1128,7 +1128,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			PlatformName:    "Zenn",
 			FeedName:        "Zenn TypeScript",
 			FeedDescription: "TypeScriptの記事一覧 | Zenn",
-			FeedThumbnail:   "https://storage.googleapis.com/zenn-user-upload/topics/f13e758fdb.png",
+			FeedThumbnail:   "https://static.zenn.studio/images/logo-only-dark.png",
 			seedCategoryID:  6,
 			RssURL:          "https://zenn.dev/topics/typescript/feed",
 
@@ -1143,181 +1143,157 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			PlatformName:    "Zenn",
 			FeedName:        "Zenn Node.js",
 			FeedDescription: "Node.jsの記事一覧 | Zenn",
-			FeedThumbnail:   "https://storage.googleapis.com/zenn-user-upload/topics/54d1e3ddea.png",
+			FeedThumbnail:   "https://static.zenn.studio/images/logo-only-dark.png",
 			seedCategoryID:  22,
 			RssURL:          "https://zenn.dev/topics/nodejs/feed",
-
 			PlatformSiteURL: "https://zenn.dev/",
 			FeedSiteURL:     "https://zenn.dev/topics/nodejs/",
 			PlatformType:    domain.PlatformTypeSite,
 			FaviconURL:      "https://static.zenn.studio/images/logo-transparent.png",
-
-			IsEng: false,
+			IsEng:           false,
 		},
 		{
 			PlatformName:    "Zenn",
 			FeedName:        "Zenn Golang",
 			FeedDescription: "Golangの記事一覧 | Zenn",
-			FeedThumbnail:   "https://storage.googleapis.com/zenn-user-upload/topics/8b677725c8.png",
+			FeedThumbnail:   "https://static.zenn.studio/images/logo-only-dark.png",
 			seedCategoryID:  9,
 			RssURL:          "https://zenn.dev/topics/go/feed",
-
 			PlatformSiteURL: "https://zenn.dev/",
 			FeedSiteURL:     "https://zenn.dev/topics/go/",
 			PlatformType:    domain.PlatformTypeSite,
 			FaviconURL:      "https://static.zenn.studio/images/logo-transparent.png",
-
-			IsEng: false,
+			IsEng:           false,
 		},
 		{
 			PlatformName:    "Zenn",
 			FeedName:        "Zenn AWS",
 			FeedDescription: "AWSの記事一覧 | Zenn",
-			FeedThumbnail:   "https://storage.googleapis.com/zenn-user-upload/topics/dc1922748b.png",
+			FeedThumbnail:   "https://static.zenn.studio/images/logo-only-dark.png",
 			seedCategoryID:  28,
 			RssURL:          "https://zenn.dev/topics/aws/feed",
-
 			PlatformSiteURL: "https://zenn.dev/",
 			FeedSiteURL:     "https://zenn.dev/topics/aws/",
 			PlatformType:    domain.PlatformTypeSite,
 			FaviconURL:      "https://static.zenn.studio/images/logo-transparent.png",
-
-			IsEng: false,
+			IsEng:           false,
 		},
 		{
 			PlatformName:    "Zenn",
 			FeedName:        "Zenn GCP",
 			FeedDescription: "GCPの記事一覧 | Zenn",
-			FeedThumbnail:   "https://storage.googleapis.com/zenn-user-upload/topics/90aad273f0.png",
+			FeedThumbnail:   "https://static.zenn.studio/images/logo-only-dark.png",
 			seedCategoryID:  29,
 			RssURL:          "https://zenn.dev/topics/gcp/feed",
-
 			PlatformSiteURL: "https://zenn.dev/",
 			FeedSiteURL:     "https://zenn.dev/topics/gcp/",
 			PlatformType:    domain.PlatformTypeSite,
 			FaviconURL:      "https://static.zenn.studio/images/logo-transparent.png",
-
-			IsEng: false,
+			IsEng:           false,
 		},
 		{
 			PlatformName:    "Zenn",
 			FeedName:        "Zenn Docker",
 			FeedDescription: "Dockerの記事一覧 | Zenn",
-			FeedThumbnail:   "https://storage.googleapis.com/zenn-user-upload/topics/01c7f20365.png",
+			FeedThumbnail:   "https://static.zenn.studio/images/logo-only-dark.png",
 			seedCategoryID:  31,
 			RssURL:          "https://zenn.dev/topics/docker/feed",
-
 			PlatformSiteURL: "https://zenn.dev/",
 			FeedSiteURL:     "https://zenn.dev/topics/docker/",
 			PlatformType:    domain.PlatformTypeSite,
 			FaviconURL:      "https://static.zenn.studio/images/logo-transparent.png",
-
-			IsEng: false,
+			IsEng:           false,
 		},
 		{
 			PlatformName:    "Zenn",
 			FeedName:        "Zenn GraphQL",
 			FeedDescription: "GraphQLの記事一覧 | Zenn",
-			FeedThumbnail:   "https://storage.googleapis.com/zenn-user-upload/topics/d3a7f336d2.png",
+			FeedThumbnail:   "https://static.zenn.studio/images/logo-only-dark.png",
 			seedCategoryID:  36,
 			RssURL:          "https://zenn.dev/topics/graphql/feed",
-
 			PlatformSiteURL: "https://zenn.dev/",
 			FeedSiteURL:     "https://zenn.dev/topics/graphql/",
 			PlatformType:    domain.PlatformTypeSite,
 			FaviconURL:      "https://static.zenn.studio/images/logo-transparent.png",
-
-			IsEng: false,
+			IsEng:           false,
 		},
 		{
 			PlatformName:    "Zenn",
 			FeedName:        "Zenn GitHub",
 			FeedDescription: "GitHubの記事一覧 | Zenn",
-			FeedThumbnail:   "https://storage.googleapis.com/zenn-user-upload/topics/3a8fd1cede.png",
+			FeedThumbnail:   "https://static.zenn.studio/images/logo-only-dark.png",
 			seedCategoryID:  37,
 			RssURL:          "https://zenn.dev/topics/github/feed",
-
 			PlatformSiteURL: "https://zenn.dev/",
 			FeedSiteURL:     "https://zenn.dev/topics/github/",
 			PlatformType:    domain.PlatformTypeSite,
 			FaviconURL:      "https://static.zenn.studio/images/logo-transparent.png",
-
-			IsEng: false,
+			IsEng:           false,
 		},
 		{
 			PlatformName:    "Zenn",
 			FeedName:        "Zenn GitHub Actions",
 			FeedDescription: "GitHub Actionsの記事一覧 | Zenn",
-			FeedThumbnail:   "https://storage.googleapis.com/zenn-user-upload/topics/da1b8cf8f6.jpeg",
+			FeedThumbnail:   "https://static.zenn.studio/images/logo-only-dark.png",
 			seedCategoryID:  40,
 			RssURL:          "https://zenn.dev/topics/githubactions/feed",
-
 			PlatformSiteURL: "https://zenn.dev/",
 			FeedSiteURL:     "https://zenn.dev/topics/githubactions/",
 			PlatformType:    domain.PlatformTypeSite,
 			FaviconURL:      "https://static.zenn.studio/images/logo-transparent.png",
-
-			IsEng: false,
+			IsEng:           false,
 		},
 		{
 			PlatformName:    "Zenn",
 			FeedName:        "Zenn ChatGPT",
 			FeedDescription: "ChatGPTの記事一覧 | Zenn",
-			FeedThumbnail:   "https://storage.googleapis.com/zenn-user-upload/topics/2bb6923651.png",
+			FeedThumbnail:   "https://static.zenn.studio/images/logo-only-dark.png",
 			seedCategoryID:  41,
 			RssURL:          "https://zenn.dev/topics/chatgpt/feed",
-
 			PlatformSiteURL: "https://zenn.dev/",
 			FeedSiteURL:     "https://zenn.dev/topics/chatgpt/",
 			PlatformType:    domain.PlatformTypeSite,
 			FaviconURL:      "https://static.zenn.studio/images/logo-transparent.png",
-
-			IsEng: false,
+			IsEng:           false,
 		},
 		{
 			PlatformName:    "Zenn",
 			FeedName:        "Zenn 個人開発",
 			FeedDescription: "個人開発の記事一覧 | Zenn",
-			FeedThumbnail:   "https://storage.googleapis.com/zenn-user-upload/topics/604d5b83b5.jpeg",
+			FeedThumbnail:   "https://static.zenn.studio/images/logo-only-dark.png",
 			seedCategoryID:  42,
 			RssURL:          "https://zenn.dev/topics/個人開発/feed",
-
 			PlatformSiteURL: "https://zenn.dev/",
 			FeedSiteURL:     "https://zenn.dev/topics/個人開発/",
 			PlatformType:    domain.PlatformTypeSite,
 			FaviconURL:      "https://static.zenn.studio/images/logo-transparent.png",
-
-			IsEng: false,
+			IsEng:           false,
 		},
 		{
 			PlatformName:    "Zenn",
 			FeedName:        "Zenn Frontend",
 			FeedDescription: "フロントエンドの記事一覧 | Zenn",
-			FeedThumbnail:   "https://storage.googleapis.com/zenn-user-upload/topics/d766db09a2.jpeg",
+			FeedThumbnail:   "https://static.zenn.studio/images/logo-only-dark.png",
 			seedCategoryID:  43,
 			RssURL:          "https://zenn.dev/topics/frontend/feed",
-
 			PlatformSiteURL: "https://zenn.dev/",
 			FeedSiteURL:     "https://zenn.dev/topics/frontend/",
 			PlatformType:    domain.PlatformTypeSite,
 			FaviconURL:      "https://static.zenn.studio/images/logo-transparent.png",
-
-			IsEng: false,
+			IsEng:           false,
 		},
 		{
 			PlatformName:    "Zenn",
 			FeedName:        "Zenn Test",
 			FeedDescription: "テストの記事一覧 | Zenn",
-			FeedThumbnail:   "https://storage.googleapis.com/zenn-user-upload/topics/902109da93.jpeg",
+			FeedThumbnail:   "https://static.zenn.studio/images/logo-only-dark.png",
 			seedCategoryID:  44,
 			RssURL:          "https://zenn.dev/topics/test/feed",
-
 			PlatformSiteURL: "https://zenn.dev/",
 			FeedSiteURL:     "https://zenn.dev/topics/test/",
 			PlatformType:    domain.PlatformTypeSite,
 			FaviconURL:      "https://static.zenn.studio/images/logo-transparent.png",
-
-			IsEng: false,
+			IsEng:           false,
 		},
 
 		{
@@ -1327,13 +1303,11 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedThumbnail:   "https://blog.logrocket.com/wp-content/uploads/2019/05/logrocket-blog.jpg",
 			seedCategoryID:  1,
 			RssURL:          "https://blog.logrocket.com/feed/",
-
 			PlatformSiteURL: "https://blog.logrocket.com/",
 			FeedSiteURL:     "https://blog.logrocket.com/",
 			PlatformType:    domain.PlatformTypeCompany,
 			FaviconURL:      "https://blog.logrocket.com/wp-content/uploads/2019/06/cropped-cropped-favicon-196x196.png?w=192",
-
-			IsEng: true,
+			IsEng:           true,
 		},
 		{
 			PlatformName:    "フューチャー技術ブログ",

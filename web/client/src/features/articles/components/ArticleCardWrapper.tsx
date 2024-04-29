@@ -46,7 +46,7 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
               <div>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  className="mr-2 inline-block size-[36px]"
+                  className="mr-2 inline-block size-[36px] bg-white"
                   src={article.platform.faviconUrl}
                   alt=""
                 />
