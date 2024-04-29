@@ -7,6 +7,7 @@ import {
   NotLoggedBottomNavigationMenu,
 } from "../BottomNavigationMenu";
 import { Header } from "../Header";
+import { MobileHeader } from "../Header/MobileHeader";
 import { Sidebar } from "../Sidebar";
 
 export const BaseLayout = async ({ children }: { children: ReactNode }) => {
@@ -14,7 +15,12 @@ export const BaseLayout = async ({ children }: { children: ReactNode }) => {
   return (
     <div className="overflow-hidden">
       <header className="overflow-hidden">
-        <Header user={user} />
+        <div className="hidden md:block">
+          <Header user={user} />
+        </div>
+        <div className="block md:hidden">
+          <MobileHeader user={user} />
+        </div>
       </header>
 
       <div className="h-16" />

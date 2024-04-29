@@ -40,7 +40,7 @@ export const HomeTemplate: FC<HomeTemplateProps> = async ({
       <div className="flex w-full items-end justify-between px-4">
         <h1 className="mb-4 mt-8 text-2xl font-bold ">Today</h1>
         <div className="mb-4 flex w-48 items-center justify-end">
-          <div className="mr-4 cursor-pointer">
+          <div className="mr-4 hidden cursor-pointer md:block">
             <ArticleSearchDialog platforms={platforms} />
           </div>
 
