@@ -1,4 +1,3 @@
-import { fetchPlatformAPI } from "@/features/platforms/actions/platform";
 import { ArticleSearchTemplate } from "@/features/search/components/articles/ArticleSearchTemplate";
 
 type PageProps = {
@@ -7,7 +6,5 @@ type PageProps = {
 };
 
 export default async function SearchArticlePage({ searchParams }: PageProps) {
-  const platforms = await fetchPlatformAPI({});
-
   return <ArticleSearchTemplate />;
 }
