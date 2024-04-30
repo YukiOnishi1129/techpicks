@@ -40,7 +40,7 @@ export const FollowDorpDownMenuContent: FC<FollowDorpDownMenuContentProps> = ({
   handleRemoveMyFeed,
   handleCreatedMyFeedLists,
 }: FollowDorpDownMenuContentProps) => {
-  const { getValues, control, watch } = useForm<z.infer<typeof formSchema>>({
+  const { control, watch } = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       keyword: "",

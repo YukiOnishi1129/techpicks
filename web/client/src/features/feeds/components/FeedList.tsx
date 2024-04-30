@@ -1,6 +1,7 @@
 "use client";
 import { useCallback, useEffect, useRef, useState } from "react";
 
+import { NotFoundList } from "@/components/layout/NotFoundList";
 import { Loader } from "@/components/ui/loader";
 
 import { FeedType } from "@/types/feed";
@@ -80,17 +81,11 @@ export function FeedList({
   }, [loadMore, offset, hashMore]);
 
   return (
-    <>
+    <div className="m-auto h-[590px] overflow-y-scroll md:h-[550px]">
       {flatFeeds.length === 0 ? (
-        <div className="flex h-[700px] flex-col items-center justify-center md:h-[600px]">
-          <p className="text-center text-lg font-bold text-gray-500 md:text-xl">
-            Sorry, no article.
-          </p>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img className="mt-8 h-1/2" src="/sorry.png" alt="" />
-        </div>
+        <NotFoundList message="No feeds found." />
       ) : (
-        <div className="m-auto h-[700px] overflow-y-scroll md:h-[600px]">
+        <div className="grid grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-5">
           {flatFeeds.map((feed) => (
             <div key={feed.id} className="mb-4">
               <FeedCardWrapper feed={feed} myFeedLists={myFeedLists} />
@@ -105,6 +100,6 @@ export function FeedList({
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 }

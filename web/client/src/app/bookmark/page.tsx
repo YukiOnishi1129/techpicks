@@ -1,7 +1,8 @@
-import { Loader } from "lucide-react";
 import { Suspense } from "react";
 
 import { BookmarkListTemplate } from "@/features/bookmarks/components/BookmarkListTemplate";
+
+import { ScreenLoader } from "@/components/layout/ScreenLoader/ScreenLoader";
 
 import { LanguageStatus } from "@/types/language";
 
@@ -33,13 +34,7 @@ export default function Bookmark({ searchParams }: PageProps) {
     platformIdList.push(searchParams["platformId"]);
 
   return (
-    <Suspense
-      fallback={
-        <div>
-          <Loader />
-        </div>
-      }
-    >
+    <Suspense fallback={<ScreenLoader />}>
       <BookmarkListTemplate
         languageStatus={languageStatus}
         keyword={keyword}

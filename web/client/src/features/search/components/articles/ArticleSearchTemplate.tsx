@@ -22,11 +22,16 @@ export const ArticleSearchTemplate = async () => {
 
   return (
     <div className="w-auto">
-      <PageBreadcrumb breadcrumbs={breadcrumbs} />
-      <div className="flex w-full items-end justify-between px-4">
-        <h1 className="mb-4 mt-8 text-2xl font-bold ">Article Search</h1>
+      <div className="my-4">
+        <PageBreadcrumb breadcrumbs={breadcrumbs} />
       </div>
-      <ArticleSearchForm platforms={platforms} />
+
+      <div className="hidden w-full items-end justify-between  px-4 md:flex">
+        <h1 className="mb-4 mt-8 text-2xl font-bold">Article Search</h1>
+      </div>
+      <div className="mt-8">
+        <ArticleSearchForm platforms={platforms} />
+      </div>
     </div>
   );
 };

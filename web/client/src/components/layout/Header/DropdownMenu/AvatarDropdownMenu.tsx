@@ -7,7 +7,7 @@ import { GrUser } from "react-icons/gr";
 
 import { logout } from "@/features/auth/actions/auth";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { UserAvatar } from "@/components/ui/avatar/UserAvatar";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 type AvatarDropdownMenuProps = {
-  user: User | null;
+  user?: User;
 };
 
 export const AvatarDropdownMenu: FC<AvatarDropdownMenuProps> = ({
@@ -28,12 +28,7 @@ export const AvatarDropdownMenu: FC<AvatarDropdownMenuProps> = ({
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <div className="md:flex md:justify-end">
-          <Avatar>
-            <AvatarImage src={image} alt="avatar" />
-            <AvatarFallback>
-              {user?.user_metadata["full_name"] || ""}
-            </AvatarFallback>
-          </Avatar>
+          <UserAvatar user={user} />
         </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-[100px]">

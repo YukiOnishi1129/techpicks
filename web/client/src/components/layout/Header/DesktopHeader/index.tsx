@@ -1,15 +1,19 @@
+"use client";
 import { User } from "@supabase/supabase-js";
 import Link from "next/link";
+import { FC } from "react";
 
-import { ModeToggle } from "./DropdownMenu";
 import { LoggedMenu } from "./LoggedMenu";
 import { NotLoggedMenu } from "./NotLoggedMenu";
+import { ModeToggle } from "../DropdownMenu";
 
-type HeaderProps = {
+type DesktopHeaderProps = {
   user?: User;
 };
 
-export async function Header({ user }: HeaderProps) {
+export const DesktopHeader: FC<DesktopHeaderProps> = async ({
+  user,
+}: DesktopHeaderProps) => {
   return (
     <div className="fixed z-50 flex h-16 w-screen items-center justify-between border-b border-gray-300  px-8 shadow-md">
       <Link href="/" className="cursor-pointer">
@@ -23,4 +27,4 @@ export async function Header({ user }: HeaderProps) {
       </div>
     </div>
   );
-}
+};

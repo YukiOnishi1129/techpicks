@@ -12,7 +12,7 @@ export const FeedNameBadge: FC<FeedNameBadgeProps> = ({
   return (
     <Badge
       variant="default"
-      className="bg-amber-600  text-xs text-white md:text-base"
+      className="truncate bg-amber-600 px-2 text-xs text-white md:text-base"
     >
       {name}
     </Badge>

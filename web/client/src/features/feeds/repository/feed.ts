@@ -54,6 +54,30 @@ export const getFeed = async ({ userId, offset = 1 }: GetFeedParams) => {
             userId: userId,
           },
         },
+        feedArticleRelatoins: {
+          select: {
+            article: {
+              select: {
+                id: true,
+                title: true,
+                description: true,
+                articleUrl: true,
+                publishedAt: true,
+                thumbnailURL: true,
+                authorName: true,
+                tags: true,
+                isPrivate: true,
+                createdAt: true,
+                updatedAt: true,
+              },
+            },
+          },
+          orderBy: {
+            article: {
+              publishedAt: "desc",
+            },
+          },
+        },
       },
     });
 
@@ -72,7 +96,23 @@ export const getFeed = async ({ userId, offset = 1 }: GetFeedParams) => {
         platform: feed.platform,
         myFeeds: feed.myFeeds,
         isFollowing: feed.myFeeds.length > 0,
+        articles: feed.feedArticleRelatoins.map((relation) => {
+          return {
+            id: relation.article.id,
+            title: relation.article.title,
+            description: relation.article.description,
+            articleUrl: relation.article.articleUrl,
+            publishedAt: relation.article.publishedAt,
+            thumbnailURL: relation.article.thumbnailURL,
+            authorName: relation.article.authorName,
+            tags: relation.article.tags,
+            isPrivate: relation.article.isPrivate,
+            createdAt: relation.article.createdAt,
+            updatedAt: relation.article.updatedAt,
+          };
+        }),
       };
+
       return resFeed;
     });
 

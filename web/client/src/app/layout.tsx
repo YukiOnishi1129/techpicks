@@ -1,3 +1,4 @@
+import { clsx } from "clsx";
 import { Inter } from "next/font/google";
 
 import { BaseLayout } from "@/components/layout/BaseLayout";
@@ -22,7 +23,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={clsx(inter.className, "fixed w-full")}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

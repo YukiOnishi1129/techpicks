@@ -1,10 +1,12 @@
 "use client";
 import { User } from "@supabase/supabase-js";
+import { clsx } from "clsx";
 import { FC, useMemo } from "react";
 
 import { ArticleTabType, ArticleType } from "@/types/article";
 
 import { ArticleCard } from "./ArticleCard";
+import style from "./ArticleCardWrapper.module.css";
 import { ArticleDetailSheet } from "./ArticleDetailSheet";
 import { AddBookmarkTooltip, DeleteBookmarkTooltip } from "./Tooltip";
 import { useArticleBookmark } from "../hooks/useArticleBookmark";
@@ -38,15 +40,17 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
           <>
             <div className="flex">
               {isShowLikeCount && (
-                <div className=" mr-4 text-rose-600">
-                  <span className="text-3xl font-bold">{`${article.likeCount}`}</span>
-                  <span className="ml-2">{"likes"}</span>
+                <div
+                  className={clsx(style["like-count"], "mr-4 text-rose-600")}
+                >
+                  <span className="text-4xl font-bold">{`${article.likeCount}`}</span>
+                  <span className="ml-2 font-bold">{"likes"}</span>
                 </div>
               )}
               <div>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  className="mr-2 inline-block size-[36px]"
+                  className="mr-2 inline-block size-[36px] bg-white"
                   src={article.platform.faviconUrl}
                   alt=""
                 />

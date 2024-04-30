@@ -1,1 +1,2 @@
-export * from "./BottomNavigationMenu";
+export * from "./LoggedBottomNavigationMenu";
+export * from "./NotLoggedBottomNavigationMenu";

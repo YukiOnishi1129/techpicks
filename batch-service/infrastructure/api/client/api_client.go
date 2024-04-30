@@ -1,9 +1,13 @@
 package client
 
-import "net/http"
+import (
+	"github.com/machinebox/graphql"
+	"net/http"
+)
 
 type APIClient struct {
 	client          *http.Client
+	hashnodeClient  *graphql.Client
 	zennBaseURL     string
 	qiitaBaseURL    string
 	hatenaBaseURL   string
@@ -11,8 +15,10 @@ type APIClient struct {
 }
 
 func NewAPIClient() *APIClient {
+	hashnodeClient := graphql.NewClient("https://gql.hashnode.com")
 	return &APIClient{
 		client:          http.DefaultClient,
+		hashnodeClient:  hashnodeClient,
 		zennBaseURL:     "https://zenn.dev/api/",
 		qiitaBaseURL:    "https://qiita.com/api/v2/",
 		hatenaBaseURL:   "https://bookmark.hatenaapis.com/",
@@ -22,6 +28,10 @@ func NewAPIClient() *APIClient {
 
 func (a *APIClient) GetClient() *http.Client {
 	return a.client
+}
+
+func (a *APIClient) GetHashnodeClient() *graphql.Client {
+	return a.hashnodeClient
 }
 
 func (a *APIClient) GetZennBaseURL() string {

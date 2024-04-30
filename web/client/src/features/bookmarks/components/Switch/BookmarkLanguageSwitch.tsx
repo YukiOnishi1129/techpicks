@@ -26,7 +26,7 @@ export const BookmarkLanguageSwitch: FC<BookmarkLanguageSwitchProps> = ({
       setIsLoading(true);
       const language = checked ? 2 : 1;
       setIsEng(checked);
-      let path = `/bookmark/?languageStatus=${language}?`;
+      let path = `/bookmark/?languageStatus=${language}`;
       if (keyword) {
         path += `&keyword=${keyword}`;
       }

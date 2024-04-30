@@ -2,9 +2,9 @@
 
 import { FC } from "react";
 
-import { LanguageBadge, PlatformTypeBadge } from "@/components/ui/badge";
-
 import { useCheckImageExist } from "@/hooks/useImage";
+
+import { showDiffDateToCurrentDate } from "@/lib/date";
 
 import { FeedType } from "@/types/feed";
 
@@ -15,44 +15,62 @@ type FeedCardProps = {
 export const FeedCard: FC<FeedCardProps> = ({ feed }: FeedCardProps) => {
   const imageUrl = useCheckImageExist(feed.thumbnailUrl);
   const faviconUrl = useCheckImageExist(feed.platform.faviconUrl);
+  const latestPublishedAt = feed.articles?.[0]?.publishedAt;
   return (
-    <div className="relative w-full cursor-pointer rounded">
-      <div className="justify-around md:flex">
-        <div className="flex justify-center md:w-[30%]">
-          <div className="w-full md:h-36 md:w-48">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              className="mx-auto h-full rounded-lg border-2 object-cover object-center shadow-md"
-              src={imageUrl}
-              alt=""
-            />
-          </div>
-        </div>
+    <div className="relative h-[340px] w-full cursor-pointer rounded px-4 py-2 md:h-[210px]">
+      <div className="mt-2 flex h-10 md:mt-0">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          className="inline-block size-4 rounded-full shadow-md md:size-8"
+          src={faviconUrl}
+          alt=""
+        />
+      </div>
 
-        <div className="mt-4 md:mt-0 md:w-[65%]">
-          <h3 className="line-clamp-3 text-left text-lg font-bold tracking-wide md:w-3/5 md:text-xl">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              className="mr-2 inline-block size-[24px]"
-              src={faviconUrl}
-              alt=""
-            />
+      <div className="">
+        <div className="mt-0 md:mt-4">
+          <h3 className="line-clamp-2 h-[48px] text-left text-base font-bold tracking-wide md:h-full md:text-xl">
             {feed.name}
           </h3>
 
-          <div className="flex w-full items-center pt-2 md:w-4/5">
+          <div className="mt-2 flex justify-center md:hidden md:w-[30%]">
+            <div className="max-h-[70px] w-full md:h-36 md:w-48">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                className="mx-auto h-full rounded-lg border-2 object-cover object-center shadow-md"
+                src={imageUrl}
+                alt=""
+              />
+            </div>
+          </div>
+
+          {/* <div className="flex w-full items-center pt-2 md:w-4/5">
             <div>
               <PlatformTypeBadge platformType={feed.platform.platformType} />
             </div>
             <div className="ml-2">
               <LanguageBadge isEng={feed.platform.isEng} />
             </div>
-          </div>
+          </div> */}
 
           {/* TODO: description */}
           <div className="mt-2">
-            <p className="text-sm">{feed.description}</p>
+            <p
+              className="line-clamp-3 h-[62px]
+            text-sm
+            "
+            >
+              {feed.description}
+            </p>
           </div>
+        </div>
+
+        <div className="absolute bottom-4 mt-2 h-[30px] pr-2 md:bottom-0">
+          {latestPublishedAt && (
+            <p className="text-xs">
+              latest: {showDiffDateToCurrentDate(latestPublishedAt)}
+            </p>
+          )}
         </div>
       </div>
     </div>

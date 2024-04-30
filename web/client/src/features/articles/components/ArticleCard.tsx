@@ -31,10 +31,10 @@ export const ArticleCard: FC<ArticleCardProps> = ({
           <h3 className="mb-4 line-clamp-3 block text-left text-lg font-bold tracking-wide md:hidden md:w-full md:text-xl">
             {article.title}
           </h3>
-          <div className="flex  w-full justify-center md:h-36 md:w-48">
+          <div className="flex   w-full justify-center md:h-36 md:w-48">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              className="h-full rounded-lg border-2 object-cover object-center shadow-md"
+              className="max-h-[170px] rounded-lg border-2 object-cover object-center shadow-md md:h-full"
               src={imageUrl}
               alt=""
             />
@@ -50,11 +50,13 @@ export const ArticleCard: FC<ArticleCardProps> = ({
             {showDiffDateToCurrentDate(article.publishedAt)}
           </p>
 
-          <div className="flex w-full items-center pt-2 md:w-4/5">
+          <div className="flex w-full flex-wrap items-center justify-start pt-2 md:w-4/5">
             {article.feeds.length > 0 &&
               article.feeds.map((feed) => (
                 <div key={`${article.id}-${feed.id}`} className="my-2 mr-2">
-                  <FeedNameBadge name={feed.name} />
+                  <div className="">
+                    <FeedNameBadge name={feed.name} />
+                  </div>
                 </div>
               ))}
           </div>

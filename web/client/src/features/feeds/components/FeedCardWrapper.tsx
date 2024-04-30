@@ -227,9 +227,8 @@ export const FeedCardWrapper: FC<FeedCardWrapperProps> = ({
 
   return (
     <div key={showFeed.id} className="mb-4 rounded-2xl border-2 md:py-2">
-      <div className="w-full rounded md:relative">
-        <FeedCard feed={showFeed} />
-        <div className="right-4 top-0 md:absolute">
+      <div className="relative w-full rounded">
+        <div className="absolute right-4  top-2 z-10">
           <FollowDropdownMenu
             feedId={showFeed.id}
             isFollowing={isFollowing}
@@ -239,6 +238,7 @@ export const FeedCardWrapper: FC<FeedCardWrapperProps> = ({
             handleCreatedMyFeedLists={handleCreatedMyFeedLists}
           />
         </div>
+        <FeedCard feed={showFeed} />
       </div>
     </div>
   );
