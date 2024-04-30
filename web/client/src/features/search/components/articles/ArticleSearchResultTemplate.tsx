@@ -73,7 +73,7 @@ export const ArticleSearchResultTemplate: FC<
       <div className="mb-2 mt-4">
         <PageBreadcrumb breadcrumbs={breadcrumbs} />
       </div>
-      <div className="my-8 flex w-full items-center justify-between ">
+      <div className="my-8 hidden w-full items-center justify-between md:flex ">
         <h1 className="text-2xl font-bold ">Article Search Result</h1>
         <div className="mr-8 flex w-48 items-center justify-end">
           <ArticleSearchDialog
@@ -86,15 +86,17 @@ export const ArticleSearchResultTemplate: FC<
         </div>
       </div>
 
-      <ArticleList
-        user={user}
-        initialArticles={res.data.articles}
-        languageStatus={languageStatus}
-        keyword={keyword}
-        platformIdList={platformIdList}
-        tab={tab}
-        fetchArticles={fetchArticlesAPI}
-      />
+      <div className="mt-8 md:mt-0">
+        <ArticleList
+          user={user}
+          initialArticles={res.data.articles}
+          languageStatus={languageStatus}
+          keyword={keyword}
+          platformIdList={platformIdList}
+          tab={tab}
+          fetchArticles={fetchArticlesAPI}
+        />
+      </div>
     </div>
   );
 };
