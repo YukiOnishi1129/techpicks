@@ -22,7 +22,7 @@ type FollowDropdownMenuProps = {
   handleCreatedMyFeedLists: (myFeedId: string) => Promise<void>;
 };
 
-export async function FollowDropdownMenu({
+export function FollowDropdownMenu({
   feedId,
   isFollowing,
   myFeedLists,
