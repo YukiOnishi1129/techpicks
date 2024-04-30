@@ -42,9 +42,11 @@ export function FollowDropdownMenu({
           <Button
             variant="outline"
             size="sm"
-            className="group relative font-bold "
+            className="group relative font-bold"
           >
-            <span className="w-full group-hover:invisible">{"FOLLOWING"}</span>
+            <span className=" w-full group-hover:invisible ">
+              {"FOLLOWING"}
+            </span>
             <span className="invisible absolute w-full group-hover:visible">
               {"EDIT"}
             </span>
@@ -53,7 +55,7 @@ export function FollowDropdownMenu({
           <Button
             variant="outline"
             size="sm"
-            className="border-emerald-500 font-bold text-emerald-500 hover:text-emerald-600"
+            className="border-emerald-500 font-bold text-emerald-500 hover:text-emerald-600 "
           >
             {"FOLLOW"}
           </Button>
