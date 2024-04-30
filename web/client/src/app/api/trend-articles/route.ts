@@ -2,12 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { getTrendArticles } from "@/features/trendArticles/repository/trendArticles";
 
-import {
-  getCurrentDate,
-  getDateEndTime,
-  getDateStartTime,
-  getDayjsTz,
-} from "@/lib/date";
+import { get24HoursAgoDate, getCurrentDate, getDayjsTz } from "@/lib/date";
 
 import { ArticleTabType } from "@/types/article";
 import { LanguageStatus } from "@/types/language";
@@ -27,9 +22,9 @@ export async function GET(req: NextRequest) {
   const currentDate = getCurrentDate();
 
   const startTime =
-    searchParams.get("startTime") || getDateStartTime(currentDate).format();
-  const endTime =
-    searchParams.get("endTime") || getDateEndTime(currentDate).format();
+    searchParams.get("startTime") || get24HoursAgoDate().format();
+
+  const endTime = searchParams.get("endTime") || currentDate.format();
   const trendArticles = await getTrendArticles({
     languageStatus: status,
     keyword: keyword,
