@@ -11,7 +11,7 @@ type MobileHeaderProps = {
   user?: User;
 };
 
-export async function MobileHeader({ user }: MobileHeaderProps) {
+export function MobileHeader({ user }: MobileHeaderProps) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
 
