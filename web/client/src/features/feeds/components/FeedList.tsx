@@ -82,7 +82,7 @@ export function FeedList({
   return (
     <>
       {flatFeeds.length === 0 ? (
-        <div className="flex h-[700px] flex-col items-center justify-center md:h-[600px]">
+        <div className="flex h-[590px] flex-col items-center justify-center md:h-[550px]">
           <p className="text-center text-lg font-bold text-gray-500 md:text-xl">
             Sorry, no article.
           </p>
@@ -90,7 +90,7 @@ export function FeedList({
           <img className="mt-8 h-1/2" src="/sorry.png" alt="" />
         </div>
       ) : (
-        <div className="m-auto h-[700px] overflow-y-scroll md:h-[600px]">
+        <div className="m-auto h-[590px] overflow-y-scroll md:h-[550px]">
           {flatFeeds.map((feed) => (
             <div key={feed.id} className="mb-4">
               <FeedCardWrapper feed={feed} myFeedLists={myFeedLists} />
