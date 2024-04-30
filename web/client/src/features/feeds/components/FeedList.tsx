@@ -85,7 +85,7 @@ export function FeedList({
       {flatFeeds.length === 0 ? (
         <NotFoundList message="No feeds found." />
       ) : (
-        <>
+        <div className="grid grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-5">
           {flatFeeds.map((feed) => (
             <div key={feed.id} className="mb-4">
               <FeedCardWrapper feed={feed} myFeedLists={myFeedLists} />
@@ -98,7 +98,7 @@ export function FeedList({
               </div>
             )}
           </div>
-        </>
+        </div>
       )}
     </div>
   );
