@@ -1,11 +1,13 @@
 import { FC } from "react";
 
+import { FeedType } from "@/types/feed";
 import { MyFeedFolderType } from "@/types/myFeedFolder";
 
 import { UpdateMyFeedFolderDialog } from "./Dialog/UpdateMyFeedFolderDialog";
 
 type MyFeedFolderCardProps = {
   myFeedFolder: MyFeedFolderType;
+  feeds: FeedType[];
   handleUpdateMyFeedFolder: ({
     id,
     title,
@@ -22,9 +24,12 @@ type MyFeedFolderCardProps = {
 
 export const MyFeedFolderCard: FC<MyFeedFolderCardProps> = ({
   myFeedFolder,
+  feeds,
   handleUpdateMyFeedFolder,
   handleDeleteMyFeedFolder,
 }) => {
+  const myFeedIdList = myFeedFolder.feeds.map((feed) => feed.id);
+
   return (
     <div className="mb-4">
       <div className="h-[340px] w-full cursor-pointer rounded border-2 px-4 py-2">
@@ -33,10 +38,11 @@ export const MyFeedFolderCard: FC<MyFeedFolderCardProps> = ({
             {myFeedFolder.title}
           </h3>
           <UpdateMyFeedFolderDialog
+            feeds={feeds}
             myFeedFolderId={myFeedFolder.id}
             title={myFeedFolder.title}
             description={myFeedFolder?.description || ""}
-            feedIdList={[...myFeedFolder.feeds.map((feed) => feed.id)]}
+            feedIdList={myFeedIdList}
             handleUpdateMyFeedFolder={handleUpdateMyFeedFolder}
             handleDeleteMyFeedFolder={handleDeleteMyFeedFolder}
           />

@@ -1,8 +1,6 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Label } from "@radix-ui/react-label";
-import { Loader } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { FC, useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -31,6 +29,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Loader } from "@/components/ui/loader";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 import { LanguageStatus } from "@/types/language";
