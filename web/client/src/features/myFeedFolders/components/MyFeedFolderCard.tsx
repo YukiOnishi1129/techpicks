@@ -3,14 +3,17 @@ import { FC } from "react";
 import { MyFeedFolderType } from "@/types/myFeedFolder";
 
 import { UpdateMyFeedFolderDialog } from "./Dialog/UpdateMyFeedFolderDialog";
+import { UpdateMyFeedFolderDTO } from "../repository/myFeedFolder";
 
 type MyFeedFolderCardProps = {
   myFeedFolder: MyFeedFolderType;
+  handleUpdateMyFeedFolder: (dto: UpdateMyFeedFolderDTO) => Promise<void>;
   handleDeleteMyFeedFolder: (id: string) => Promise<void>;
 };
 
 export const MyFeedFolderCard: FC<MyFeedFolderCardProps> = ({
   myFeedFolder,
+  handleUpdateMyFeedFolder,
   handleDeleteMyFeedFolder,
 }) => {
   return (
@@ -25,6 +28,7 @@ export const MyFeedFolderCard: FC<MyFeedFolderCardProps> = ({
             title={myFeedFolder.title}
             description={myFeedFolder?.description || ""}
             feedIdList={[...myFeedFolder.feeds.map((feed) => feed.id)]}
+            handleUpdateMyFeedFolder={handleUpdateMyFeedFolder}
             handleDeleteMyFeedFolder={handleDeleteMyFeedFolder}
           />
         </div>

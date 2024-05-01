@@ -16,6 +16,8 @@ import {
 
 import { useStatusToast } from "@/hooks/useStatusToast";
 
+import { UpdateMyFeedFolderDTO } from "../../repository/myFeedFolder";
+
 const formSchema = z.object({
   title: z
     .string({
@@ -32,6 +34,7 @@ type UpdateMyFeedFolderDialogProps = {
   title: string;
   description: string;
   feedIdList: Array<string>;
+  handleUpdateMyFeedFolder: (dto: UpdateMyFeedFolderDTO) => Promise<void>;
   handleDeleteMyFeedFolder: (id: string) => Promise<void>;
 };
 
@@ -40,6 +43,7 @@ export const UpdateMyFeedFolderDialog: FC<UpdateMyFeedFolderDialogProps> = ({
   title,
   description,
   feedIdList,
+  handleUpdateMyFeedFolder,
   handleDeleteMyFeedFolder,
 }) => {
   const [open, setOpen] = useState(false);
@@ -60,6 +64,7 @@ export const UpdateMyFeedFolderDialog: FC<UpdateMyFeedFolderDialogProps> = ({
           title={title}
           description={description}
           feedIdList={feedIdList}
+          handleUpdateMyFeedFolder={handleUpdateMyFeedFolder}
           handleDeleteMyFeedFolder={handleDeleteMyFeedFolder}
         />
       )}
@@ -72,6 +77,7 @@ type UpdateMyFeedFolderDialogContentProps = {
   title: string;
   description: string;
   feedIdList: Array<string>;
+  handleUpdateMyFeedFolder: (dto: UpdateMyFeedFolderDTO) => Promise<void>;
   handleDeleteMyFeedFolder: (id: string) => Promise<void>;
 };
 
@@ -82,6 +88,7 @@ export const UpdateMyFeedFolderDialogContent: FC<
   title,
   description,
   feedIdList,
+  handleUpdateMyFeedFolder,
   handleDeleteMyFeedFolder,
 }) => {
   const form = useForm<z.infer<typeof formSchema>>({
@@ -97,10 +104,11 @@ export const UpdateMyFeedFolderDialogContent: FC<
   const resetDialog = useCallback(() => {
     form.reset();
   }, [form]);
+
   return (
     <DialogContent onCloseAutoFocus={resetDialog}>
       <DialogHeader>
-        <DialogTitle>{"Edit Folder"}</DialogTitle>
+        <DialogTitle>{"Edit My Feed Folder"}</DialogTitle>
       </DialogHeader>
       <div>
         <Button onClick={() => handleDeleteMyFeedFolder(myFeedFolderId)}>

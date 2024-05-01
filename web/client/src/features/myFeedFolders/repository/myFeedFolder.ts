@@ -261,13 +261,13 @@ export const getMyFeedFolderById = async ({
   }
 };
 
-type createMyFeedFolderDTO = {
+export type CreateMyFeedFolderDTO = {
   title: string;
   description: string;
   userId: string;
 };
 
-export const createMyFeedFolder = async (dto: createMyFeedFolderDTO) => {
+export const createMyFeedFolder = async (dto: CreateMyFeedFolderDTO) => {
   try {
     const uuid = uuidv4();
     const data = await prisma.myFeedFolder.create({
@@ -284,14 +284,14 @@ export const createMyFeedFolder = async (dto: createMyFeedFolderDTO) => {
   }
 };
 
-type updateMyFeedFolderDTO = {
+export type UpdateMyFeedFolderDTO = {
   id: string;
   title: string;
   description: string;
   userId: string;
 };
 
-export const updateMyFeedFolder = async (dto: updateMyFeedFolderDTO) => {
+export const updateMyFeedFolder = async (dto: UpdateMyFeedFolderDTO) => {
   try {
     const data = await prisma.myFeedFolder.update({
       where: {

@@ -11,7 +11,11 @@ import { MyFeedFolderType } from "@/types/myFeedFolder";
 import { MyFeedFolderCard } from "./MyFeedFolderCard";
 import { fetchMyFeedFolderByIdAPI } from "../actions/myFeedFolder";
 import { serverRevalidateMyFeedFolders } from "../actions/serverAction";
-import { deleteMyFeedFolder } from "../repository/myFeedFolder";
+import {
+  UpdateMyFeedFolderDTO,
+  deleteMyFeedFolder,
+  updateMyFeedFolder,
+} from "../repository/myFeedFolder";
 
 type MyFeedFolderListProps = {
   initialMyFeedFolders: MyFeedFolderType[];
@@ -23,10 +27,11 @@ export const MyFeedFolderList: FC<MyFeedFolderListProps> = ({
   user,
 }) => {
   const { successToast, failToast } = useStatusToast();
+
   const handleUpdateMyFeedFolder = useCallback(
-    async (id: string) => {
+    async (dto: UpdateMyFeedFolderDTO) => {
       // 1. folder check
-      const fetchRes = await fetchMyFeedFolderByIdAPI(id);
+      const fetchRes = await fetchMyFeedFolderByIdAPI(dto.id);
       if (fetchRes.status === 401) {
         failToast({
           description: "Fail: Unauthorized",
@@ -40,6 +45,7 @@ export const MyFeedFolderList: FC<MyFeedFolderListProps> = ({
         return;
       }
       // 2. update folder
+      const updatedId = await updateMyFeedFolder(dto);
       console.log("update my feed folder");
     },
     [failToast]
@@ -90,6 +96,7 @@ export const MyFeedFolderList: FC<MyFeedFolderListProps> = ({
               <MyFeedFolderCard
                 key={myFeedFolder.id}
                 myFeedFolder={myFeedFolder}
+                handleUpdateMyFeedFolder={handleUpdateMyFeedFolder}
                 handleDeleteMyFeedFolder={handleDeleteMyFeedFolder}
               />
             ))}
