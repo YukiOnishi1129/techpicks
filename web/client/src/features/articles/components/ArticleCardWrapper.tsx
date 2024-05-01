@@ -2,6 +2,7 @@
 import { User } from "@supabase/supabase-js";
 import { clsx } from "clsx";
 import { FC, useMemo } from "react";
+import { TwitterShareButton, XIcon } from "react-share";
 
 import { ReadPostTooltip } from "@/components/ui/tooltip/ReadPostTooltip";
 
@@ -32,6 +33,8 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
     [article?.likeCount, tab]
   );
 
+  const shareUrl = `${process.env.NEXT_PUBLIC_SITE_DOMAIN}/article/${article.id}`;
+
   return (
     <div
       key={article.id}
@@ -49,26 +52,39 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
                   <span className="ml-2 font-bold">{"likes"}</span>
                 </div>
               )}
-              <div>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  className="mr-2 inline-block size-[36px] bg-white"
-                  src={article.platform.faviconUrl}
-                  alt=""
-                />
-                {isShowLikeCount ? (
+
+              {article?.likeCount === undefined ? (
+                <div>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    className="mr-2 inline-block size-[36px] bg-white"
+                    src={article.platform.faviconUrl}
+                    alt=""
+                  />
                   <span className="hidden font-bold md:inline-block">
                     {article.platform.name}
                   </span>
-                ) : (
-                  <span className="font-bold">{article.platform.name}</span>
-                )}
-              </div>
+                </div>
+              ) : (
+                <div>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    className="mr-2 hidden size-[36px] bg-white md:inline-block"
+                    src={article.platform.faviconUrl}
+                    alt=""
+                  />
+                </div>
+              )}
             </div>
 
-            <div className="flex items-center justify-center   p-4">
+            <div className="flex items-center justify-center p-4">
               <div className="mr-4">
-                <ReadPostTooltip postUrl={article.articleUrl} size={30} />
+                <ReadPostTooltip postUrl={article.articleUrl} size={24} />
+              </div>
+              <div className="mr-4">
+                <TwitterShareButton title={article.title} url={shareUrl}>
+                  <XIcon className="inline-block" size={36} />
+                </TwitterShareButton>
               </div>
 
               {user && (
