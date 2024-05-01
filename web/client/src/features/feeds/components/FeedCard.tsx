@@ -27,7 +27,7 @@ export const FeedCard: FC<FeedCardProps> = ({ feed }: FeedCardProps) => {
         />
       </div>
 
-      <div className="">
+      <div>
         <div className="mt-0 md:mt-4">
           <h3 className="line-clamp-2 h-[48px] text-left text-base font-bold tracking-wide md:h-full md:text-xl">
             {feed.name}
@@ -55,13 +55,7 @@ export const FeedCard: FC<FeedCardProps> = ({ feed }: FeedCardProps) => {
 
           {/* TODO: description */}
           <div className="mt-2">
-            <p
-              className="line-clamp-3 h-[62px]
-            text-sm
-            "
-            >
-              {feed.description}
-            </p>
+            <p className="line-clamp-3 h-[62px] text-sm">{feed.description}</p>
           </div>
         </div>
 
