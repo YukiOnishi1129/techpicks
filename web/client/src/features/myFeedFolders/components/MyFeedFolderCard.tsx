@@ -3,11 +3,20 @@ import { FC } from "react";
 import { MyFeedFolderType } from "@/types/myFeedFolder";
 
 import { UpdateMyFeedFolderDialog } from "./Dialog/UpdateMyFeedFolderDialog";
-import { UpdateMyFeedFolderDTO } from "../repository/myFeedFolder";
 
 type MyFeedFolderCardProps = {
   myFeedFolder: MyFeedFolderType;
-  handleUpdateMyFeedFolder: (dto: UpdateMyFeedFolderDTO) => Promise<void>;
+  handleUpdateMyFeedFolder: ({
+    id,
+    title,
+    description,
+    feedIdList,
+  }: {
+    id: string;
+    title: string;
+    description: string;
+    feedIdList: Array<string>;
+  }) => Promise<void>;
   handleDeleteMyFeedFolder: (id: string) => Promise<void>;
 };
 

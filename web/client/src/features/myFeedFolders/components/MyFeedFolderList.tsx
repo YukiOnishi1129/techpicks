@@ -2,6 +2,8 @@
 import { User } from "@supabase/supabase-js";
 import { FC, useCallback } from "react";
 
+import { getUser } from "@/features/users/actions/user";
+
 import { NotFoundList } from "@/components/layout/NotFoundList";
 
 import { useStatusToast } from "@/hooks/useStatusToast";
@@ -12,7 +14,6 @@ import { MyFeedFolderCard } from "./MyFeedFolderCard";
 import { fetchMyFeedFolderByIdAPI } from "../actions/myFeedFolder";
 import { serverRevalidateMyFeedFolders } from "../actions/serverAction";
 import {
-  UpdateMyFeedFolderDTO,
   deleteMyFeedFolder,
   updateMyFeedFolder,
 } from "../repository/myFeedFolder";
@@ -29,9 +30,26 @@ export const MyFeedFolderList: FC<MyFeedFolderListProps> = ({
   const { successToast, failToast } = useStatusToast();
 
   const handleUpdateMyFeedFolder = useCallback(
-    async (dto: UpdateMyFeedFolderDTO) => {
+    async ({
+      id,
+      title,
+      description,
+      feedIdList,
+    }: {
+      id: string;
+      title: string;
+      description: string;
+      feedIdList: Array<string>;
+    }) => {
+      const user = await getUser();
+      if (!user) {
+        failToast({
+          description: "Please login to create a new feed folder",
+        });
+        return;
+      }
       // 1. folder check
-      const fetchRes = await fetchMyFeedFolderByIdAPI(dto.id);
+      const fetchRes = await fetchMyFeedFolderByIdAPI(id);
       if (fetchRes.status === 401) {
         failToast({
           description: "Fail: Unauthorized",
@@ -45,10 +63,24 @@ export const MyFeedFolderList: FC<MyFeedFolderListProps> = ({
         return;
       }
       // 2. update folder
-      const updatedId = await updateMyFeedFolder(dto);
-      console.log("update my feed folder");
+      const updatedId = await updateMyFeedFolder({
+        id,
+        title,
+        description,
+        userId: user.id,
+      });
+      if (!updatedId) {
+        failToast({
+          description: "Fail: Something went wrong",
+        });
+        return;
+      }
+      successToast({
+        description: "Update my feed folder",
+      });
+      await serverRevalidateMyFeedFolders();
     },
-    [failToast]
+    [successToast, failToast]
   );
 
   const handleDeleteMyFeedFolder = useCallback(

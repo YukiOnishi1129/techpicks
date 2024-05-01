@@ -16,8 +16,6 @@ import {
 
 import { useStatusToast } from "@/hooks/useStatusToast";
 
-import { UpdateMyFeedFolderDTO } from "../../repository/myFeedFolder";
-
 const formSchema = z.object({
   title: z
     .string({
@@ -34,7 +32,17 @@ type UpdateMyFeedFolderDialogProps = {
   title: string;
   description: string;
   feedIdList: Array<string>;
-  handleUpdateMyFeedFolder: (dto: UpdateMyFeedFolderDTO) => Promise<void>;
+  handleUpdateMyFeedFolder: ({
+    id,
+    title,
+    description,
+    feedIdList,
+  }: {
+    id: string;
+    title: string;
+    description: string;
+    feedIdList: Array<string>;
+  }) => Promise<void>;
   handleDeleteMyFeedFolder: (id: string) => Promise<void>;
 };
 
@@ -77,7 +85,17 @@ type UpdateMyFeedFolderDialogContentProps = {
   title: string;
   description: string;
   feedIdList: Array<string>;
-  handleUpdateMyFeedFolder: (dto: UpdateMyFeedFolderDTO) => Promise<void>;
+  handleUpdateMyFeedFolder: ({
+    id,
+    title,
+    description,
+    feedIdList,
+  }: {
+    id: string;
+    title: string;
+    description: string;
+    feedIdList: Array<string>;
+  }) => Promise<void>;
   handleDeleteMyFeedFolder: (id: string) => Promise<void>;
 };
 
