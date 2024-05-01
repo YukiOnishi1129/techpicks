@@ -9,19 +9,11 @@ import { MyFeedFolderType } from "@/types/myFeedFolder";
 
 type GetMyFeedFolders = {
   userId: string;
-  offset?: number;
 };
 
-const LIMIT = 20;
-
-export const getMyFeedFolders = async ({
-  userId,
-  offset = 1,
-}: GetMyFeedFolders) => {
+export const getMyFeedFolders = async ({ userId }: GetMyFeedFolders) => {
   try {
     const res = await prisma.myFeedFolder.findMany({
-      take: LIMIT,
-      skip: (offset - 1) * LIMIT,
       where: {
         userId: userId,
       },

@@ -4,27 +4,18 @@ import { FC } from "react";
 
 import { NotFoundList } from "@/components/layout/NotFoundList";
 
-import {
-  FetchMyFeedFolderAPIResponse,
-  MyFeedFolderType,
-} from "@/types/myFeedFolder";
+import { MyFeedFolderType } from "@/types/myFeedFolder";
 
 import { MyFeedFolderCard } from "./MyFeedFolderCard";
 
 type MyFeedFolderListProps = {
   initialMyFeedFolders: MyFeedFolderType[];
   user?: User;
-  fetchMyFeedFoldersAPI({
-    offset,
-  }: {
-    offset?: string;
-  }): Promise<FetchMyFeedFolderAPIResponse>;
 };
 
 export const MyFeedFolderList: FC<MyFeedFolderListProps> = ({
   initialMyFeedFolders,
   user,
-  fetchMyFeedFoldersAPI,
 }) => {
   return (
     <>
