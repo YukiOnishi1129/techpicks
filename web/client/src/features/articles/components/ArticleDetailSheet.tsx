@@ -4,6 +4,7 @@ import Link from "next/link";
 import { FC, useState } from "react";
 import { FcBookmark } from "react-icons/fc";
 import { MdOutlineBookmarkAdd } from "react-icons/md";
+import { TwitterShareButton, XIcon } from "react-share";
 
 import { FeedNameBadge } from "@/components/ui/badge/FeedNameBadge";
 import { Button } from "@/components/ui/button";
@@ -104,7 +105,10 @@ const ArticleContent = ({
             />
           </Link>
           {user && (
-            <div className="flex justify-end">
+            <div className="flex justify-between">
+              <TwitterShareButton title="テスト" url={"/"}>
+                <XIcon className="inline-block" size={36} />
+              </TwitterShareButton>
               {bookmarkId ? (
                 <Button
                   variant="outline"
