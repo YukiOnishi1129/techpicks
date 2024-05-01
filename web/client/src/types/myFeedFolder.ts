@@ -1,11 +1,11 @@
 import {
-  MyFeedList as PrismaMyFeedList,
+  myFeedFolder as PrismaMMyFeedFolder,
   Platform as PrismaPlatform,
   Feed as PrismaFeed,
   Category as PrismaCategory,
 } from "@prisma/client";
 
-export type MyFeedFolderType = Omit<PrismaMyFeedList, "userId"> & {
+export type MyFeedFolderType = Omit<PrismaMMyFeedFolder, "userId"> & {
   feeds: Array<
     Omit<
       PrismaFeed,

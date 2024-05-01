@@ -35,7 +35,7 @@ export const getMyFeedById = async ({ id, userId }: GetMyFeedById) => {
             updatedAt: true,
           },
         },
-        myFeedList: {
+        myFeedFolder: {
           select: {
             id: true,
             title: true,
@@ -51,7 +51,7 @@ export const getMyFeedById = async ({ id, userId }: GetMyFeedById) => {
 
     const myFeedData: MyFeedType = {
       id: data.id,
-      myFeedListId: data.myFeedListId,
+      myFeedFolderId: data.myFeedFolderId,
       feedId: data.feedId,
       createdAt: data.createdAt,
       updatedAt: data.updatedAt,
@@ -69,11 +69,11 @@ export const getMyFeedById = async ({ id, userId }: GetMyFeedById) => {
         updatedAt: data.feed.updatedAt,
       },
       myFeedList: {
-        id: data.myFeedList.id,
-        title: data.myFeedList.title,
-        description: data.myFeedList.description,
-        createdAt: data.myFeedList.createdAt,
-        updatedAt: data.myFeedList.updatedAt,
+        id: data.myFeedFolder.id,
+        title: data.myFeedFolder.title,
+        description: data.myFeedFolder.description,
+        createdAt: data.myFeedFolder.createdAt,
+        updatedAt: data.myFeedFolder.updatedAt,
       },
     };
 
@@ -85,18 +85,18 @@ export const getMyFeedById = async ({ id, userId }: GetMyFeedById) => {
 
 export const getMyFeedCountByMyFeedListIdAndFeedId = async ({
   feedId,
-  myFeedListId,
+  myFeedFolderId,
   userId,
 }: {
   feedId: string;
-  myFeedListId: string;
+  myFeedFolderId: string;
   userId: string;
 }) => {
   try {
     const data = await prisma.myFeed.count({
       where: {
         feedId: feedId,
-        myFeedListId: myFeedListId,
+        myFeedFolderId: myFeedFolderId,
         userId: userId,
       },
     });
@@ -119,7 +119,7 @@ export const createMyFeed = async (dto: createMyFeedDTO) => {
       data: {
         id: uuid,
         userId: dto.userId,
-        myFeedListId: dto.myFeedFolderId,
+        myFeedFolderId: dto.myFeedFolderId,
         feedId: dto.feedId,
       },
     });

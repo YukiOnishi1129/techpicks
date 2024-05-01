@@ -22,8 +22,8 @@ import (
 	"github.com/volatiletech/strmangle"
 )
 
-// MyFeedList is an object representing the database table.
-type MyFeedList struct {
+// MyFeedFolder is an object representing the database table.
+type MyFeedFolder struct {
 	ID          string      `boil:"id" json:"id" toml:"id" yaml:"id"`
 	UserID      string      `boil:"user_id" json:"user_id" toml:"user_id" yaml:"user_id"`
 	Title       string      `boil:"title" json:"title" toml:"title" yaml:"title"`
@@ -31,11 +31,11 @@ type MyFeedList struct {
 	CreatedAt   time.Time   `boil:"created_at" json:"created_at" toml:"created_at" yaml:"created_at"`
 	UpdatedAt   time.Time   `boil:"updated_at" json:"updated_at" toml:"updated_at" yaml:"updated_at"`
 
-	R *myFeedListR `boil:"-" json:"-" toml:"-" yaml:"-"`
-	L myFeedListL  `boil:"-" json:"-" toml:"-" yaml:"-"`
+	R *myFeedFolderR `boil:"-" json:"-" toml:"-" yaml:"-"`
+	L myFeedFolderL  `boil:"-" json:"-" toml:"-" yaml:"-"`
 }
 
-var MyFeedListColumns = struct {
+var MyFeedFolderColumns = struct {
 	ID          string
 	UserID      string
 	Title       string
@@ -51,7 +51,7 @@ var MyFeedListColumns = struct {
 	UpdatedAt:   "updated_at",
 }
 
-var MyFeedListTableColumns = struct {
+var MyFeedFolderTableColumns = struct {
 	ID          string
 	UserID      string
 	Title       string
@@ -59,17 +59,17 @@ var MyFeedListTableColumns = struct {
 	CreatedAt   string
 	UpdatedAt   string
 }{
-	ID:          "my_feed_lists.id",
-	UserID:      "my_feed_lists.user_id",
-	Title:       "my_feed_lists.title",
-	Description: "my_feed_lists.description",
-	CreatedAt:   "my_feed_lists.created_at",
-	UpdatedAt:   "my_feed_lists.updated_at",
+	ID:          "my_feed_folders.id",
+	UserID:      "my_feed_folders.user_id",
+	Title:       "my_feed_folders.title",
+	Description: "my_feed_folders.description",
+	CreatedAt:   "my_feed_folders.created_at",
+	UpdatedAt:   "my_feed_folders.updated_at",
 }
 
 // Generated where
 
-var MyFeedListWhere = struct {
+var MyFeedFolderWhere = struct {
 	ID          whereHelperstring
 	UserID      whereHelperstring
 	Title       whereHelperstring
@@ -77,16 +77,16 @@ var MyFeedListWhere = struct {
 	CreatedAt   whereHelpertime_Time
 	UpdatedAt   whereHelpertime_Time
 }{
-	ID:          whereHelperstring{field: "\"my_feed_lists\".\"id\""},
-	UserID:      whereHelperstring{field: "\"my_feed_lists\".\"user_id\""},
-	Title:       whereHelperstring{field: "\"my_feed_lists\".\"title\""},
-	Description: whereHelpernull_String{field: "\"my_feed_lists\".\"description\""},
-	CreatedAt:   whereHelpertime_Time{field: "\"my_feed_lists\".\"created_at\""},
-	UpdatedAt:   whereHelpertime_Time{field: "\"my_feed_lists\".\"updated_at\""},
+	ID:          whereHelperstring{field: "\"my_feed_folders\".\"id\""},
+	UserID:      whereHelperstring{field: "\"my_feed_folders\".\"user_id\""},
+	Title:       whereHelperstring{field: "\"my_feed_folders\".\"title\""},
+	Description: whereHelpernull_String{field: "\"my_feed_folders\".\"description\""},
+	CreatedAt:   whereHelpertime_Time{field: "\"my_feed_folders\".\"created_at\""},
+	UpdatedAt:   whereHelpertime_Time{field: "\"my_feed_folders\".\"updated_at\""},
 }
 
-// MyFeedListRels is where relationship names are stored.
-var MyFeedListRels = struct {
+// MyFeedFolderRels is where relationship names are stored.
+var MyFeedFolderRels = struct {
 	User    string
 	MyFeeds string
 }{
@@ -94,65 +94,65 @@ var MyFeedListRels = struct {
 	MyFeeds: "MyFeeds",
 }
 
-// myFeedListR is where relationships are stored.
-type myFeedListR struct {
+// myFeedFolderR is where relationships are stored.
+type myFeedFolderR struct {
 	User    *Profile    `boil:"User" json:"User" toml:"User" yaml:"User"`
 	MyFeeds MyFeedSlice `boil:"MyFeeds" json:"MyFeeds" toml:"MyFeeds" yaml:"MyFeeds"`
 }
 
 // NewStruct creates a new relationship struct
-func (*myFeedListR) NewStruct() *myFeedListR {
-	return &myFeedListR{}
+func (*myFeedFolderR) NewStruct() *myFeedFolderR {
+	return &myFeedFolderR{}
 }
 
-func (r *myFeedListR) GetUser() *Profile {
+func (r *myFeedFolderR) GetUser() *Profile {
 	if r == nil {
 		return nil
 	}
 	return r.User
 }
 
-func (r *myFeedListR) GetMyFeeds() MyFeedSlice {
+func (r *myFeedFolderR) GetMyFeeds() MyFeedSlice {
 	if r == nil {
 		return nil
 	}
 	return r.MyFeeds
 }
 
-// myFeedListL is where Load methods for each relationship are stored.
-type myFeedListL struct{}
+// myFeedFolderL is where Load methods for each relationship are stored.
+type myFeedFolderL struct{}
 
 var (
-	myFeedListAllColumns            = []string{"id", "user_id", "title", "description", "created_at", "updated_at"}
-	myFeedListColumnsWithoutDefault = []string{"user_id", "title"}
-	myFeedListColumnsWithDefault    = []string{"id", "description", "created_at", "updated_at"}
-	myFeedListPrimaryKeyColumns     = []string{"id"}
-	myFeedListGeneratedColumns      = []string{}
+	myFeedFolderAllColumns            = []string{"id", "user_id", "title", "description", "created_at", "updated_at"}
+	myFeedFolderColumnsWithoutDefault = []string{"user_id", "title"}
+	myFeedFolderColumnsWithDefault    = []string{"id", "description", "created_at", "updated_at"}
+	myFeedFolderPrimaryKeyColumns     = []string{"id"}
+	myFeedFolderGeneratedColumns      = []string{}
 )
 
 type (
-	// MyFeedListSlice is an alias for a slice of pointers to MyFeedList.
-	// This should almost always be used instead of []MyFeedList.
-	MyFeedListSlice []*MyFeedList
-	// MyFeedListHook is the signature for custom MyFeedList hook methods
-	MyFeedListHook func(context.Context, boil.ContextExecutor, *MyFeedList) error
+	// MyFeedFolderSlice is an alias for a slice of pointers to MyFeedFolder.
+	// This should almost always be used instead of []MyFeedFolder.
+	MyFeedFolderSlice []*MyFeedFolder
+	// MyFeedFolderHook is the signature for custom MyFeedFolder hook methods
+	MyFeedFolderHook func(context.Context, boil.ContextExecutor, *MyFeedFolder) error
 
-	myFeedListQuery struct {
+	myFeedFolderQuery struct {
 		*queries.Query
 	}
 )
 
 // Cache for insert, update and upsert
 var (
-	myFeedListType                 = reflect.TypeOf(&MyFeedList{})
-	myFeedListMapping              = queries.MakeStructMapping(myFeedListType)
-	myFeedListPrimaryKeyMapping, _ = queries.BindMapping(myFeedListType, myFeedListMapping, myFeedListPrimaryKeyColumns)
-	myFeedListInsertCacheMut       sync.RWMutex
-	myFeedListInsertCache          = make(map[string]insertCache)
-	myFeedListUpdateCacheMut       sync.RWMutex
-	myFeedListUpdateCache          = make(map[string]updateCache)
-	myFeedListUpsertCacheMut       sync.RWMutex
-	myFeedListUpsertCache          = make(map[string]insertCache)
+	myFeedFolderType                 = reflect.TypeOf(&MyFeedFolder{})
+	myFeedFolderMapping              = queries.MakeStructMapping(myFeedFolderType)
+	myFeedFolderPrimaryKeyMapping, _ = queries.BindMapping(myFeedFolderType, myFeedFolderMapping, myFeedFolderPrimaryKeyColumns)
+	myFeedFolderInsertCacheMut       sync.RWMutex
+	myFeedFolderInsertCache          = make(map[string]insertCache)
+	myFeedFolderUpdateCacheMut       sync.RWMutex
+	myFeedFolderUpdateCache          = make(map[string]updateCache)
+	myFeedFolderUpsertCacheMut       sync.RWMutex
+	myFeedFolderUpsertCache          = make(map[string]insertCache)
 )
 
 var (
@@ -163,36 +163,36 @@ var (
 	_ = qmhelper.Where
 )
 
-var myFeedListAfterSelectMu sync.Mutex
-var myFeedListAfterSelectHooks []MyFeedListHook
+var myFeedFolderAfterSelectMu sync.Mutex
+var myFeedFolderAfterSelectHooks []MyFeedFolderHook
 
-var myFeedListBeforeInsertMu sync.Mutex
-var myFeedListBeforeInsertHooks []MyFeedListHook
-var myFeedListAfterInsertMu sync.Mutex
-var myFeedListAfterInsertHooks []MyFeedListHook
+var myFeedFolderBeforeInsertMu sync.Mutex
+var myFeedFolderBeforeInsertHooks []MyFeedFolderHook
+var myFeedFolderAfterInsertMu sync.Mutex
+var myFeedFolderAfterInsertHooks []MyFeedFolderHook
 
-var myFeedListBeforeUpdateMu sync.Mutex
-var myFeedListBeforeUpdateHooks []MyFeedListHook
-var myFeedListAfterUpdateMu sync.Mutex
-var myFeedListAfterUpdateHooks []MyFeedListHook
+var myFeedFolderBeforeUpdateMu sync.Mutex
+var myFeedFolderBeforeUpdateHooks []MyFeedFolderHook
+var myFeedFolderAfterUpdateMu sync.Mutex
+var myFeedFolderAfterUpdateHooks []MyFeedFolderHook
 
-var myFeedListBeforeDeleteMu sync.Mutex
-var myFeedListBeforeDeleteHooks []MyFeedListHook
-var myFeedListAfterDeleteMu sync.Mutex
-var myFeedListAfterDeleteHooks []MyFeedListHook
+var myFeedFolderBeforeDeleteMu sync.Mutex
+var myFeedFolderBeforeDeleteHooks []MyFeedFolderHook
+var myFeedFolderAfterDeleteMu sync.Mutex
+var myFeedFolderAfterDeleteHooks []MyFeedFolderHook
 
-var myFeedListBeforeUpsertMu sync.Mutex
-var myFeedListBeforeUpsertHooks []MyFeedListHook
-var myFeedListAfterUpsertMu sync.Mutex
-var myFeedListAfterUpsertHooks []MyFeedListHook
+var myFeedFolderBeforeUpsertMu sync.Mutex
+var myFeedFolderBeforeUpsertHooks []MyFeedFolderHook
+var myFeedFolderAfterUpsertMu sync.Mutex
+var myFeedFolderAfterUpsertHooks []MyFeedFolderHook
 
 // doAfterSelectHooks executes all "after Select" hooks.
-func (o *MyFeedList) doAfterSelectHooks(ctx context.Context, exec boil.ContextExecutor) (err error) {
+func (o *MyFeedFolder) doAfterSelectHooks(ctx context.Context, exec boil.ContextExecutor) (err error) {
 	if boil.HooksAreSkipped(ctx) {
 		return nil
 	}
 
-	for _, hook := range myFeedListAfterSelectHooks {
+	for _, hook := range myFeedFolderAfterSelectHooks {
 		if err := hook(ctx, exec, o); err != nil {
 			return err
 		}
@@ -202,12 +202,12 @@ func (o *MyFeedList) doAfterSelectHooks(ctx context.Context, exec boil.ContextEx
 }
 
 // doBeforeInsertHooks executes all "before insert" hooks.
-func (o *MyFeedList) doBeforeInsertHooks(ctx context.Context, exec boil.ContextExecutor) (err error) {
+func (o *MyFeedFolder) doBeforeInsertHooks(ctx context.Context, exec boil.ContextExecutor) (err error) {
 	if boil.HooksAreSkipped(ctx) {
 		return nil
 	}
 
-	for _, hook := range myFeedListBeforeInsertHooks {
+	for _, hook := range myFeedFolderBeforeInsertHooks {
 		if err := hook(ctx, exec, o); err != nil {
 			return err
 		}
@@ -217,12 +217,12 @@ func (o *MyFeedList) doBeforeInsertHooks(ctx context.Context, exec boil.ContextE
 }
 
 // doAfterInsertHooks executes all "after Insert" hooks.
-func (o *MyFeedList) doAfterInsertHooks(ctx context.Context, exec boil.ContextExecutor) (err error) {
+func (o *MyFeedFolder) doAfterInsertHooks(ctx context.Context, exec boil.ContextExecutor) (err error) {
 	if boil.HooksAreSkipped(ctx) {
 		return nil
 	}
 
-	for _, hook := range myFeedListAfterInsertHooks {
+	for _, hook := range myFeedFolderAfterInsertHooks {
 		if err := hook(ctx, exec, o); err != nil {
 			return err
 		}
@@ -232,12 +232,12 @@ func (o *MyFeedList) doAfterInsertHooks(ctx context.Context, exec boil.ContextEx
 }
 
 // doBeforeUpdateHooks executes all "before Update" hooks.
-func (o *MyFeedList) doBeforeUpdateHooks(ctx context.Context, exec boil.ContextExecutor) (err error) {
+func (o *MyFeedFolder) doBeforeUpdateHooks(ctx context.Context, exec boil.ContextExecutor) (err error) {
 	if boil.HooksAreSkipped(ctx) {
 		return nil
 	}
 
-	for _, hook := range myFeedListBeforeUpdateHooks {
+	for _, hook := range myFeedFolderBeforeUpdateHooks {
 		if err := hook(ctx, exec, o); err != nil {
 			return err
 		}
@@ -247,12 +247,12 @@ func (o *MyFeedList) doBeforeUpdateHooks(ctx context.Context, exec boil.ContextE
 }
 
 // doAfterUpdateHooks executes all "after Update" hooks.
-func (o *MyFeedList) doAfterUpdateHooks(ctx context.Context, exec boil.ContextExecutor) (err error) {
+func (o *MyFeedFolder) doAfterUpdateHooks(ctx context.Context, exec boil.ContextExecutor) (err error) {
 	if boil.HooksAreSkipped(ctx) {
 		return nil
 	}
 
-	for _, hook := range myFeedListAfterUpdateHooks {
+	for _, hook := range myFeedFolderAfterUpdateHooks {
 		if err := hook(ctx, exec, o); err != nil {
 			return err
 		}
@@ -262,12 +262,12 @@ func (o *MyFeedList) doAfterUpdateHooks(ctx context.Context, exec boil.ContextEx
 }
 
 // doBeforeDeleteHooks executes all "before Delete" hooks.
-func (o *MyFeedList) doBeforeDeleteHooks(ctx context.Context, exec boil.ContextExecutor) (err error) {
+func (o *MyFeedFolder) doBeforeDeleteHooks(ctx context.Context, exec boil.ContextExecutor) (err error) {
 	if boil.HooksAreSkipped(ctx) {
 		return nil
 	}
 
-	for _, hook := range myFeedListBeforeDeleteHooks {
+	for _, hook := range myFeedFolderBeforeDeleteHooks {
 		if err := hook(ctx, exec, o); err != nil {
 			return err
 		}
@@ -277,12 +277,12 @@ func (o *MyFeedList) doBeforeDeleteHooks(ctx context.Context, exec boil.ContextE
 }
 
 // doAfterDeleteHooks executes all "after Delete" hooks.
-func (o *MyFeedList) doAfterDeleteHooks(ctx context.Context, exec boil.ContextExecutor) (err error) {
+func (o *MyFeedFolder) doAfterDeleteHooks(ctx context.Context, exec boil.ContextExecutor) (err error) {
 	if boil.HooksAreSkipped(ctx) {
 		return nil
 	}
 
-	for _, hook := range myFeedListAfterDeleteHooks {
+	for _, hook := range myFeedFolderAfterDeleteHooks {
 		if err := hook(ctx, exec, o); err != nil {
 			return err
 		}
@@ -292,12 +292,12 @@ func (o *MyFeedList) doAfterDeleteHooks(ctx context.Context, exec boil.ContextEx
 }
 
 // doBeforeUpsertHooks executes all "before Upsert" hooks.
-func (o *MyFeedList) doBeforeUpsertHooks(ctx context.Context, exec boil.ContextExecutor) (err error) {
+func (o *MyFeedFolder) doBeforeUpsertHooks(ctx context.Context, exec boil.ContextExecutor) (err error) {
 	if boil.HooksAreSkipped(ctx) {
 		return nil
 	}
 
-	for _, hook := range myFeedListBeforeUpsertHooks {
+	for _, hook := range myFeedFolderBeforeUpsertHooks {
 		if err := hook(ctx, exec, o); err != nil {
 			return err
 		}
@@ -307,12 +307,12 @@ func (o *MyFeedList) doBeforeUpsertHooks(ctx context.Context, exec boil.ContextE
 }
 
 // doAfterUpsertHooks executes all "after Upsert" hooks.
-func (o *MyFeedList) doAfterUpsertHooks(ctx context.Context, exec boil.ContextExecutor) (err error) {
+func (o *MyFeedFolder) doAfterUpsertHooks(ctx context.Context, exec boil.ContextExecutor) (err error) {
 	if boil.HooksAreSkipped(ctx) {
 		return nil
 	}
 
-	for _, hook := range myFeedListAfterUpsertHooks {
+	for _, hook := range myFeedFolderAfterUpsertHooks {
 		if err := hook(ctx, exec, o); err != nil {
 			return err
 		}
@@ -321,51 +321,51 @@ func (o *MyFeedList) doAfterUpsertHooks(ctx context.Context, exec boil.ContextEx
 	return nil
 }
 
-// AddMyFeedListHook registers your hook function for all future operations.
-func AddMyFeedListHook(hookPoint boil.HookPoint, myFeedListHook MyFeedListHook) {
+// AddMyFeedFolderHook registers your hook function for all future operations.
+func AddMyFeedFolderHook(hookPoint boil.HookPoint, myFeedFolderHook MyFeedFolderHook) {
 	switch hookPoint {
 	case boil.AfterSelectHook:
-		myFeedListAfterSelectMu.Lock()
-		myFeedListAfterSelectHooks = append(myFeedListAfterSelectHooks, myFeedListHook)
-		myFeedListAfterSelectMu.Unlock()
+		myFeedFolderAfterSelectMu.Lock()
+		myFeedFolderAfterSelectHooks = append(myFeedFolderAfterSelectHooks, myFeedFolderHook)
+		myFeedFolderAfterSelectMu.Unlock()
 	case boil.BeforeInsertHook:
-		myFeedListBeforeInsertMu.Lock()
-		myFeedListBeforeInsertHooks = append(myFeedListBeforeInsertHooks, myFeedListHook)
-		myFeedListBeforeInsertMu.Unlock()
+		myFeedFolderBeforeInsertMu.Lock()
+		myFeedFolderBeforeInsertHooks = append(myFeedFolderBeforeInsertHooks, myFeedFolderHook)
+		myFeedFolderBeforeInsertMu.Unlock()
 	case boil.AfterInsertHook:
-		myFeedListAfterInsertMu.Lock()
-		myFeedListAfterInsertHooks = append(myFeedListAfterInsertHooks, myFeedListHook)
-		myFeedListAfterInsertMu.Unlock()
+		myFeedFolderAfterInsertMu.Lock()
+		myFeedFolderAfterInsertHooks = append(myFeedFolderAfterInsertHooks, myFeedFolderHook)
+		myFeedFolderAfterInsertMu.Unlock()
 	case boil.BeforeUpdateHook:
-		myFeedListBeforeUpdateMu.Lock()
-		myFeedListBeforeUpdateHooks = append(myFeedListBeforeUpdateHooks, myFeedListHook)
-		myFeedListBeforeUpdateMu.Unlock()
+		myFeedFolderBeforeUpdateMu.Lock()
+		myFeedFolderBeforeUpdateHooks = append(myFeedFolderBeforeUpdateHooks, myFeedFolderHook)
+		myFeedFolderBeforeUpdateMu.Unlock()
 	case boil.AfterUpdateHook:
-		myFeedListAfterUpdateMu.Lock()
-		myFeedListAfterUpdateHooks = append(myFeedListAfterUpdateHooks, myFeedListHook)
-		myFeedListAfterUpdateMu.Unlock()
+		myFeedFolderAfterUpdateMu.Lock()
+		myFeedFolderAfterUpdateHooks = append(myFeedFolderAfterUpdateHooks, myFeedFolderHook)
+		myFeedFolderAfterUpdateMu.Unlock()
 	case boil.BeforeDeleteHook:
-		myFeedListBeforeDeleteMu.Lock()
-		myFeedListBeforeDeleteHooks = append(myFeedListBeforeDeleteHooks, myFeedListHook)
-		myFeedListBeforeDeleteMu.Unlock()
+		myFeedFolderBeforeDeleteMu.Lock()
+		myFeedFolderBeforeDeleteHooks = append(myFeedFolderBeforeDeleteHooks, myFeedFolderHook)
+		myFeedFolderBeforeDeleteMu.Unlock()
 	case boil.AfterDeleteHook:
-		myFeedListAfterDeleteMu.Lock()
-		myFeedListAfterDeleteHooks = append(myFeedListAfterDeleteHooks, myFeedListHook)
-		myFeedListAfterDeleteMu.Unlock()
+		myFeedFolderAfterDeleteMu.Lock()
+		myFeedFolderAfterDeleteHooks = append(myFeedFolderAfterDeleteHooks, myFeedFolderHook)
+		myFeedFolderAfterDeleteMu.Unlock()
 	case boil.BeforeUpsertHook:
-		myFeedListBeforeUpsertMu.Lock()
-		myFeedListBeforeUpsertHooks = append(myFeedListBeforeUpsertHooks, myFeedListHook)
-		myFeedListBeforeUpsertMu.Unlock()
+		myFeedFolderBeforeUpsertMu.Lock()
+		myFeedFolderBeforeUpsertHooks = append(myFeedFolderBeforeUpsertHooks, myFeedFolderHook)
+		myFeedFolderBeforeUpsertMu.Unlock()
 	case boil.AfterUpsertHook:
-		myFeedListAfterUpsertMu.Lock()
-		myFeedListAfterUpsertHooks = append(myFeedListAfterUpsertHooks, myFeedListHook)
-		myFeedListAfterUpsertMu.Unlock()
+		myFeedFolderAfterUpsertMu.Lock()
+		myFeedFolderAfterUpsertHooks = append(myFeedFolderAfterUpsertHooks, myFeedFolderHook)
+		myFeedFolderAfterUpsertMu.Unlock()
 	}
 }
 
-// One returns a single myFeedList record from the query.
-func (q myFeedListQuery) One(ctx context.Context, exec boil.ContextExecutor) (*MyFeedList, error) {
-	o := &MyFeedList{}
+// One returns a single myFeedFolder record from the query.
+func (q myFeedFolderQuery) One(ctx context.Context, exec boil.ContextExecutor) (*MyFeedFolder, error) {
+	o := &MyFeedFolder{}
 
 	queries.SetLimit(q.Query, 1)
 
@@ -374,7 +374,7 @@ func (q myFeedListQuery) One(ctx context.Context, exec boil.ContextExecutor) (*M
 		if errors.Is(err, sql.ErrNoRows) {
 			return nil, sql.ErrNoRows
 		}
-		return nil, errors.Wrap(err, "entity: failed to execute a one query for my_feed_lists")
+		return nil, errors.Wrap(err, "entity: failed to execute a one query for my_feed_folders")
 	}
 
 	if err := o.doAfterSelectHooks(ctx, exec); err != nil {
@@ -384,16 +384,16 @@ func (q myFeedListQuery) One(ctx context.Context, exec boil.ContextExecutor) (*M
 	return o, nil
 }
 
-// All returns all MyFeedList records from the query.
-func (q myFeedListQuery) All(ctx context.Context, exec boil.ContextExecutor) (MyFeedListSlice, error) {
-	var o []*MyFeedList
+// All returns all MyFeedFolder records from the query.
+func (q myFeedFolderQuery) All(ctx context.Context, exec boil.ContextExecutor) (MyFeedFolderSlice, error) {
+	var o []*MyFeedFolder
 
 	err := q.Bind(ctx, exec, &o)
 	if err != nil {
-		return nil, errors.Wrap(err, "entity: failed to assign all query results to MyFeedList slice")
+		return nil, errors.Wrap(err, "entity: failed to assign all query results to MyFeedFolder slice")
 	}
 
-	if len(myFeedListAfterSelectHooks) != 0 {
+	if len(myFeedFolderAfterSelectHooks) != 0 {
 		for _, obj := range o {
 			if err := obj.doAfterSelectHooks(ctx, exec); err != nil {
 				return o, err
@@ -404,8 +404,8 @@ func (q myFeedListQuery) All(ctx context.Context, exec boil.ContextExecutor) (My
 	return o, nil
 }
 
-// Count returns the count of all MyFeedList records in the query.
-func (q myFeedListQuery) Count(ctx context.Context, exec boil.ContextExecutor) (int64, error) {
+// Count returns the count of all MyFeedFolder records in the query.
+func (q myFeedFolderQuery) Count(ctx context.Context, exec boil.ContextExecutor) (int64, error) {
 	var count int64
 
 	queries.SetSelect(q.Query, nil)
@@ -413,14 +413,14 @@ func (q myFeedListQuery) Count(ctx context.Context, exec boil.ContextExecutor) (
 
 	err := q.Query.QueryRowContext(ctx, exec).Scan(&count)
 	if err != nil {
-		return 0, errors.Wrap(err, "entity: failed to count my_feed_lists rows")
+		return 0, errors.Wrap(err, "entity: failed to count my_feed_folders rows")
 	}
 
 	return count, nil
 }
 
 // Exists checks if the row exists in the table.
-func (q myFeedListQuery) Exists(ctx context.Context, exec boil.ContextExecutor) (bool, error) {
+func (q myFeedFolderQuery) Exists(ctx context.Context, exec boil.ContextExecutor) (bool, error) {
 	var count int64
 
 	queries.SetSelect(q.Query, nil)
@@ -429,14 +429,14 @@ func (q myFeedListQuery) Exists(ctx context.Context, exec boil.ContextExecutor) 
 
 	err := q.Query.QueryRowContext(ctx, exec).Scan(&count)
 	if err != nil {
-		return false, errors.Wrap(err, "entity: failed to check if my_feed_lists exists")
+		return false, errors.Wrap(err, "entity: failed to check if my_feed_folders exists")
 	}
 
 	return count > 0, nil
 }
 
 // User pointed to by the foreign key.
-func (o *MyFeedList) User(mods ...qm.QueryMod) profileQuery {
+func (o *MyFeedFolder) User(mods ...qm.QueryMod) profileQuery {
 	queryMods := []qm.QueryMod{
 		qm.Where("\"id\" = ?", o.UserID),
 	}
@@ -447,14 +447,14 @@ func (o *MyFeedList) User(mods ...qm.QueryMod) profileQuery {
 }
 
 // MyFeeds retrieves all the my_feed's MyFeeds with an executor.
-func (o *MyFeedList) MyFeeds(mods ...qm.QueryMod) myFeedQuery {
+func (o *MyFeedFolder) MyFeeds(mods ...qm.QueryMod) myFeedQuery {
 	var queryMods []qm.QueryMod
 	if len(mods) != 0 {
 		queryMods = append(queryMods, mods...)
 	}
 
 	queryMods = append(queryMods,
-		qm.Where("\"my_feeds\".\"my_feed_list_id\"=?", o.ID),
+		qm.Where("\"my_feeds\".\"my_feed_folder_id\"=?", o.ID),
 	)
 
 	return MyFeeds(queryMods...)
@@ -462,28 +462,28 @@ func (o *MyFeedList) MyFeeds(mods ...qm.QueryMod) myFeedQuery {
 
 // LoadUser allows an eager lookup of values, cached into the
 // loaded structs of the objects. This is for an N-1 relationship.
-func (myFeedListL) LoadUser(ctx context.Context, e boil.ContextExecutor, singular bool, maybeMyFeedList interface{}, mods queries.Applicator) error {
-	var slice []*MyFeedList
-	var object *MyFeedList
+func (myFeedFolderL) LoadUser(ctx context.Context, e boil.ContextExecutor, singular bool, maybeMyFeedFolder interface{}, mods queries.Applicator) error {
+	var slice []*MyFeedFolder
+	var object *MyFeedFolder
 
 	if singular {
 		var ok bool
-		object, ok = maybeMyFeedList.(*MyFeedList)
+		object, ok = maybeMyFeedFolder.(*MyFeedFolder)
 		if !ok {
-			object = new(MyFeedList)
-			ok = queries.SetFromEmbeddedStruct(&object, &maybeMyFeedList)
+			object = new(MyFeedFolder)
+			ok = queries.SetFromEmbeddedStruct(&object, &maybeMyFeedFolder)
 			if !ok {
-				return errors.New(fmt.Sprintf("failed to set %T from embedded struct %T", object, maybeMyFeedList))
+				return errors.New(fmt.Sprintf("failed to set %T from embedded struct %T", object, maybeMyFeedFolder))
 			}
 		}
 	} else {
-		s, ok := maybeMyFeedList.(*[]*MyFeedList)
+		s, ok := maybeMyFeedFolder.(*[]*MyFeedFolder)
 		if ok {
 			slice = *s
 		} else {
-			ok = queries.SetFromEmbeddedStruct(&slice, maybeMyFeedList)
+			ok = queries.SetFromEmbeddedStruct(&slice, maybeMyFeedFolder)
 			if !ok {
-				return errors.New(fmt.Sprintf("failed to set %T from embedded struct %T", slice, maybeMyFeedList))
+				return errors.New(fmt.Sprintf("failed to set %T from embedded struct %T", slice, maybeMyFeedFolder))
 			}
 		}
 	}
@@ -491,14 +491,14 @@ func (myFeedListL) LoadUser(ctx context.Context, e boil.ContextExecutor, singula
 	args := make(map[interface{}]struct{})
 	if singular {
 		if object.R == nil {
-			object.R = &myFeedListR{}
+			object.R = &myFeedFolderR{}
 		}
 		args[object.UserID] = struct{}{}
 
 	} else {
 		for _, obj := range slice {
 			if obj.R == nil {
-				obj.R = &myFeedListR{}
+				obj.R = &myFeedFolderR{}
 			}
 
 			args[obj.UserID] = struct{}{}
@@ -560,7 +560,7 @@ func (myFeedListL) LoadUser(ctx context.Context, e boil.ContextExecutor, singula
 		if foreign.R == nil {
 			foreign.R = &profileR{}
 		}
-		foreign.R.UserMyFeedLists = append(foreign.R.UserMyFeedLists, object)
+		foreign.R.UserMyFeedFolders = append(foreign.R.UserMyFeedFolders, object)
 		return nil
 	}
 
@@ -571,7 +571,7 @@ func (myFeedListL) LoadUser(ctx context.Context, e boil.ContextExecutor, singula
 				if foreign.R == nil {
 					foreign.R = &profileR{}
 				}
-				foreign.R.UserMyFeedLists = append(foreign.R.UserMyFeedLists, local)
+				foreign.R.UserMyFeedFolders = append(foreign.R.UserMyFeedFolders, local)
 				break
 			}
 		}
@@ -582,28 +582,28 @@ func (myFeedListL) LoadUser(ctx context.Context, e boil.ContextExecutor, singula
 
 // LoadMyFeeds allows an eager lookup of values, cached into the
 // loaded structs of the objects. This is for a 1-M or N-M relationship.
-func (myFeedListL) LoadMyFeeds(ctx context.Context, e boil.ContextExecutor, singular bool, maybeMyFeedList interface{}, mods queries.Applicator) error {
-	var slice []*MyFeedList
-	var object *MyFeedList
+func (myFeedFolderL) LoadMyFeeds(ctx context.Context, e boil.ContextExecutor, singular bool, maybeMyFeedFolder interface{}, mods queries.Applicator) error {
+	var slice []*MyFeedFolder
+	var object *MyFeedFolder
 
 	if singular {
 		var ok bool
-		object, ok = maybeMyFeedList.(*MyFeedList)
+		object, ok = maybeMyFeedFolder.(*MyFeedFolder)
 		if !ok {
-			object = new(MyFeedList)
-			ok = queries.SetFromEmbeddedStruct(&object, &maybeMyFeedList)
+			object = new(MyFeedFolder)
+			ok = queries.SetFromEmbeddedStruct(&object, &maybeMyFeedFolder)
 			if !ok {
-				return errors.New(fmt.Sprintf("failed to set %T from embedded struct %T", object, maybeMyFeedList))
+				return errors.New(fmt.Sprintf("failed to set %T from embedded struct %T", object, maybeMyFeedFolder))
 			}
 		}
 	} else {
-		s, ok := maybeMyFeedList.(*[]*MyFeedList)
+		s, ok := maybeMyFeedFolder.(*[]*MyFeedFolder)
 		if ok {
 			slice = *s
 		} else {
-			ok = queries.SetFromEmbeddedStruct(&slice, maybeMyFeedList)
+			ok = queries.SetFromEmbeddedStruct(&slice, maybeMyFeedFolder)
 			if !ok {
-				return errors.New(fmt.Sprintf("failed to set %T from embedded struct %T", slice, maybeMyFeedList))
+				return errors.New(fmt.Sprintf("failed to set %T from embedded struct %T", slice, maybeMyFeedFolder))
 			}
 		}
 	}
@@ -611,13 +611,13 @@ func (myFeedListL) LoadMyFeeds(ctx context.Context, e boil.ContextExecutor, sing
 	args := make(map[interface{}]struct{})
 	if singular {
 		if object.R == nil {
-			object.R = &myFeedListR{}
+			object.R = &myFeedFolderR{}
 		}
 		args[object.ID] = struct{}{}
 	} else {
 		for _, obj := range slice {
 			if obj.R == nil {
-				obj.R = &myFeedListR{}
+				obj.R = &myFeedFolderR{}
 			}
 			args[obj.ID] = struct{}{}
 		}
@@ -636,7 +636,7 @@ func (myFeedListL) LoadMyFeeds(ctx context.Context, e boil.ContextExecutor, sing
 
 	query := NewQuery(
 		qm.From(`my_feeds`),
-		qm.WhereIn(`my_feeds.my_feed_list_id in ?`, argsSlice...),
+		qm.WhereIn(`my_feeds.my_feed_folder_id in ?`, argsSlice...),
 	)
 	if mods != nil {
 		mods.Apply(query)
@@ -672,19 +672,19 @@ func (myFeedListL) LoadMyFeeds(ctx context.Context, e boil.ContextExecutor, sing
 			if foreign.R == nil {
 				foreign.R = &myFeedR{}
 			}
-			foreign.R.MyFeedList = object
+			foreign.R.MyFeedFolder = object
 		}
 		return nil
 	}
 
 	for _, foreign := range resultSlice {
 		for _, local := range slice {
-			if local.ID == foreign.MyFeedListID {
+			if local.ID == foreign.MyFeedFolderID {
 				local.R.MyFeeds = append(local.R.MyFeeds, foreign)
 				if foreign.R == nil {
 					foreign.R = &myFeedR{}
 				}
-				foreign.R.MyFeedList = local
+				foreign.R.MyFeedFolder = local
 				break
 			}
 		}
@@ -693,10 +693,10 @@ func (myFeedListL) LoadMyFeeds(ctx context.Context, e boil.ContextExecutor, sing
 	return nil
 }
 
-// SetUser of the myFeedList to the related item.
+// SetUser of the myFeedFolder to the related item.
 // Sets o.R.User to related.
-// Adds o to related.R.UserMyFeedLists.
-func (o *MyFeedList) SetUser(ctx context.Context, exec boil.ContextExecutor, insert bool, related *Profile) error {
+// Adds o to related.R.UserMyFeedFolders.
+func (o *MyFeedFolder) SetUser(ctx context.Context, exec boil.ContextExecutor, insert bool, related *Profile) error {
 	var err error
 	if insert {
 		if err = related.Insert(ctx, exec, boil.Infer()); err != nil {
@@ -705,9 +705,9 @@ func (o *MyFeedList) SetUser(ctx context.Context, exec boil.ContextExecutor, ins
 	}
 
 	updateQuery := fmt.Sprintf(
-		"UPDATE \"my_feed_lists\" SET %s WHERE %s",
+		"UPDATE \"my_feed_folders\" SET %s WHERE %s",
 		strmangle.SetParamNames("\"", "\"", 1, []string{"user_id"}),
-		strmangle.WhereClause("\"", "\"", 2, myFeedListPrimaryKeyColumns),
+		strmangle.WhereClause("\"", "\"", 2, myFeedFolderPrimaryKeyColumns),
 	)
 	values := []interface{}{related.ID, o.ID}
 
@@ -722,7 +722,7 @@ func (o *MyFeedList) SetUser(ctx context.Context, exec boil.ContextExecutor, ins
 
 	o.UserID = related.ID
 	if o.R == nil {
-		o.R = &myFeedListR{
+		o.R = &myFeedFolderR{
 			User: related,
 		}
 	} else {
@@ -731,31 +731,31 @@ func (o *MyFeedList) SetUser(ctx context.Context, exec boil.ContextExecutor, ins
 
 	if related.R == nil {
 		related.R = &profileR{
-			UserMyFeedLists: MyFeedListSlice{o},
+			UserMyFeedFolders: MyFeedFolderSlice{o},
 		}
 	} else {
-		related.R.UserMyFeedLists = append(related.R.UserMyFeedLists, o)
+		related.R.UserMyFeedFolders = append(related.R.UserMyFeedFolders, o)
 	}
 
 	return nil
 }
 
 // AddMyFeeds adds the given related objects to the existing relationships
-// of the my_feed_list, optionally inserting them as new records.
+// of the my_feed_folder, optionally inserting them as new records.
 // Appends related to o.R.MyFeeds.
-// Sets related.R.MyFeedList appropriately.
-func (o *MyFeedList) AddMyFeeds(ctx context.Context, exec boil.ContextExecutor, insert bool, related ...*MyFeed) error {
+// Sets related.R.MyFeedFolder appropriately.
+func (o *MyFeedFolder) AddMyFeeds(ctx context.Context, exec boil.ContextExecutor, insert bool, related ...*MyFeed) error {
 	var err error
 	for _, rel := range related {
 		if insert {
-			rel.MyFeedListID = o.ID
+			rel.MyFeedFolderID = o.ID
 			if err = rel.Insert(ctx, exec, boil.Infer()); err != nil {
 				return errors.Wrap(err, "failed to insert into foreign table")
 			}
 		} else {
 			updateQuery := fmt.Sprintf(
 				"UPDATE \"my_feeds\" SET %s WHERE %s",
-				strmangle.SetParamNames("\"", "\"", 1, []string{"my_feed_list_id"}),
+				strmangle.SetParamNames("\"", "\"", 1, []string{"my_feed_folder_id"}),
 				strmangle.WhereClause("\"", "\"", 2, myFeedPrimaryKeyColumns),
 			)
 			values := []interface{}{o.ID, rel.ID}
@@ -769,12 +769,12 @@ func (o *MyFeedList) AddMyFeeds(ctx context.Context, exec boil.ContextExecutor, 
 				return errors.Wrap(err, "failed to update foreign table")
 			}
 
-			rel.MyFeedListID = o.ID
+			rel.MyFeedFolderID = o.ID
 		}
 	}
 
 	if o.R == nil {
-		o.R = &myFeedListR{
+		o.R = &myFeedFolderR{
 			MyFeeds: related,
 		}
 	} else {
@@ -784,61 +784,61 @@ func (o *MyFeedList) AddMyFeeds(ctx context.Context, exec boil.ContextExecutor, 
 	for _, rel := range related {
 		if rel.R == nil {
 			rel.R = &myFeedR{
-				MyFeedList: o,
+				MyFeedFolder: o,
 			}
 		} else {
-			rel.R.MyFeedList = o
+			rel.R.MyFeedFolder = o
 		}
 	}
 	return nil
 }
 
-// MyFeedLists retrieves all the records using an executor.
-func MyFeedLists(mods ...qm.QueryMod) myFeedListQuery {
-	mods = append(mods, qm.From("\"my_feed_lists\""))
+// MyFeedFolders retrieves all the records using an executor.
+func MyFeedFolders(mods ...qm.QueryMod) myFeedFolderQuery {
+	mods = append(mods, qm.From("\"my_feed_folders\""))
 	q := NewQuery(mods...)
 	if len(queries.GetSelect(q)) == 0 {
-		queries.SetSelect(q, []string{"\"my_feed_lists\".*"})
+		queries.SetSelect(q, []string{"\"my_feed_folders\".*"})
 	}
 
-	return myFeedListQuery{q}
+	return myFeedFolderQuery{q}
 }
 
-// FindMyFeedList retrieves a single record by ID with an executor.
+// FindMyFeedFolder retrieves a single record by ID with an executor.
 // If selectCols is empty Find will return all columns.
-func FindMyFeedList(ctx context.Context, exec boil.ContextExecutor, iD string, selectCols ...string) (*MyFeedList, error) {
-	myFeedListObj := &MyFeedList{}
+func FindMyFeedFolder(ctx context.Context, exec boil.ContextExecutor, iD string, selectCols ...string) (*MyFeedFolder, error) {
+	myFeedFolderObj := &MyFeedFolder{}
 
 	sel := "*"
 	if len(selectCols) > 0 {
 		sel = strings.Join(strmangle.IdentQuoteSlice(dialect.LQ, dialect.RQ, selectCols), ",")
 	}
 	query := fmt.Sprintf(
-		"select %s from \"my_feed_lists\" where \"id\"=$1", sel,
+		"select %s from \"my_feed_folders\" where \"id\"=$1", sel,
 	)
 
 	q := queries.Raw(query, iD)
 
-	err := q.Bind(ctx, exec, myFeedListObj)
+	err := q.Bind(ctx, exec, myFeedFolderObj)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return nil, sql.ErrNoRows
 		}
-		return nil, errors.Wrap(err, "entity: unable to select from my_feed_lists")
+		return nil, errors.Wrap(err, "entity: unable to select from my_feed_folders")
 	}
 
-	if err = myFeedListObj.doAfterSelectHooks(ctx, exec); err != nil {
-		return myFeedListObj, err
+	if err = myFeedFolderObj.doAfterSelectHooks(ctx, exec); err != nil {
+		return myFeedFolderObj, err
 	}
 
-	return myFeedListObj, nil
+	return myFeedFolderObj, nil
 }
 
 // Insert a single record using an executor.
 // See boil.Columns.InsertColumnSet documentation to understand column list inference for inserts.
-func (o *MyFeedList) Insert(ctx context.Context, exec boil.ContextExecutor, columns boil.Columns) error {
+func (o *MyFeedFolder) Insert(ctx context.Context, exec boil.ContextExecutor, columns boil.Columns) error {
 	if o == nil {
-		return errors.New("entity: no my_feed_lists provided for insertion")
+		return errors.New("entity: no my_feed_folders provided for insertion")
 	}
 
 	var err error
@@ -857,33 +857,33 @@ func (o *MyFeedList) Insert(ctx context.Context, exec boil.ContextExecutor, colu
 		return err
 	}
 
-	nzDefaults := queries.NonZeroDefaultSet(myFeedListColumnsWithDefault, o)
+	nzDefaults := queries.NonZeroDefaultSet(myFeedFolderColumnsWithDefault, o)
 
 	key := makeCacheKey(columns, nzDefaults)
-	myFeedListInsertCacheMut.RLock()
-	cache, cached := myFeedListInsertCache[key]
-	myFeedListInsertCacheMut.RUnlock()
+	myFeedFolderInsertCacheMut.RLock()
+	cache, cached := myFeedFolderInsertCache[key]
+	myFeedFolderInsertCacheMut.RUnlock()
 
 	if !cached {
 		wl, returnColumns := columns.InsertColumnSet(
-			myFeedListAllColumns,
-			myFeedListColumnsWithDefault,
-			myFeedListColumnsWithoutDefault,
+			myFeedFolderAllColumns,
+			myFeedFolderColumnsWithDefault,
+			myFeedFolderColumnsWithoutDefault,
 			nzDefaults,
 		)
 
-		cache.valueMapping, err = queries.BindMapping(myFeedListType, myFeedListMapping, wl)
+		cache.valueMapping, err = queries.BindMapping(myFeedFolderType, myFeedFolderMapping, wl)
 		if err != nil {
 			return err
 		}
-		cache.retMapping, err = queries.BindMapping(myFeedListType, myFeedListMapping, returnColumns)
+		cache.retMapping, err = queries.BindMapping(myFeedFolderType, myFeedFolderMapping, returnColumns)
 		if err != nil {
 			return err
 		}
 		if len(wl) != 0 {
-			cache.query = fmt.Sprintf("INSERT INTO \"my_feed_lists\" (\"%s\") %%sVALUES (%s)%%s", strings.Join(wl, "\",\""), strmangle.Placeholders(dialect.UseIndexPlaceholders, len(wl), 1, 1))
+			cache.query = fmt.Sprintf("INSERT INTO \"my_feed_folders\" (\"%s\") %%sVALUES (%s)%%s", strings.Join(wl, "\",\""), strmangle.Placeholders(dialect.UseIndexPlaceholders, len(wl), 1, 1))
 		} else {
-			cache.query = "INSERT INTO \"my_feed_lists\" %sDEFAULT VALUES%s"
+			cache.query = "INSERT INTO \"my_feed_folders\" %sDEFAULT VALUES%s"
 		}
 
 		var queryOutput, queryReturning string
@@ -911,22 +911,22 @@ func (o *MyFeedList) Insert(ctx context.Context, exec boil.ContextExecutor, colu
 	}
 
 	if err != nil {
-		return errors.Wrap(err, "entity: unable to insert into my_feed_lists")
+		return errors.Wrap(err, "entity: unable to insert into my_feed_folders")
 	}
 
 	if !cached {
-		myFeedListInsertCacheMut.Lock()
-		myFeedListInsertCache[key] = cache
-		myFeedListInsertCacheMut.Unlock()
+		myFeedFolderInsertCacheMut.Lock()
+		myFeedFolderInsertCache[key] = cache
+		myFeedFolderInsertCacheMut.Unlock()
 	}
 
 	return o.doAfterInsertHooks(ctx, exec)
 }
 
-// Update uses an executor to update the MyFeedList.
+// Update uses an executor to update the MyFeedFolder.
 // See boil.Columns.UpdateColumnSet documentation to understand column list inference for updates.
 // Update does not automatically update the record in case of default values. Use .Reload() to refresh the records.
-func (o *MyFeedList) Update(ctx context.Context, exec boil.ContextExecutor, columns boil.Columns) (int64, error) {
+func (o *MyFeedFolder) Update(ctx context.Context, exec boil.ContextExecutor, columns boil.Columns) (int64, error) {
 	if !boil.TimestampsAreSkipped(ctx) {
 		currTime := time.Now().In(boil.GetLocation())
 
@@ -938,28 +938,28 @@ func (o *MyFeedList) Update(ctx context.Context, exec boil.ContextExecutor, colu
 		return 0, err
 	}
 	key := makeCacheKey(columns, nil)
-	myFeedListUpdateCacheMut.RLock()
-	cache, cached := myFeedListUpdateCache[key]
-	myFeedListUpdateCacheMut.RUnlock()
+	myFeedFolderUpdateCacheMut.RLock()
+	cache, cached := myFeedFolderUpdateCache[key]
+	myFeedFolderUpdateCacheMut.RUnlock()
 
 	if !cached {
 		wl := columns.UpdateColumnSet(
-			myFeedListAllColumns,
-			myFeedListPrimaryKeyColumns,
+			myFeedFolderAllColumns,
+			myFeedFolderPrimaryKeyColumns,
 		)
 
 		if !columns.IsWhitelist() {
 			wl = strmangle.SetComplement(wl, []string{"created_at"})
 		}
 		if len(wl) == 0 {
-			return 0, errors.New("entity: unable to update my_feed_lists, could not build whitelist")
+			return 0, errors.New("entity: unable to update my_feed_folders, could not build whitelist")
 		}
 
-		cache.query = fmt.Sprintf("UPDATE \"my_feed_lists\" SET %s WHERE %s",
+		cache.query = fmt.Sprintf("UPDATE \"my_feed_folders\" SET %s WHERE %s",
 			strmangle.SetParamNames("\"", "\"", 1, wl),
-			strmangle.WhereClause("\"", "\"", len(wl)+1, myFeedListPrimaryKeyColumns),
+			strmangle.WhereClause("\"", "\"", len(wl)+1, myFeedFolderPrimaryKeyColumns),
 		)
-		cache.valueMapping, err = queries.BindMapping(myFeedListType, myFeedListMapping, append(wl, myFeedListPrimaryKeyColumns...))
+		cache.valueMapping, err = queries.BindMapping(myFeedFolderType, myFeedFolderMapping, append(wl, myFeedFolderPrimaryKeyColumns...))
 		if err != nil {
 			return 0, err
 		}
@@ -975,42 +975,42 @@ func (o *MyFeedList) Update(ctx context.Context, exec boil.ContextExecutor, colu
 	var result sql.Result
 	result, err = exec.ExecContext(ctx, cache.query, values...)
 	if err != nil {
-		return 0, errors.Wrap(err, "entity: unable to update my_feed_lists row")
+		return 0, errors.Wrap(err, "entity: unable to update my_feed_folders row")
 	}
 
 	rowsAff, err := result.RowsAffected()
 	if err != nil {
-		return 0, errors.Wrap(err, "entity: failed to get rows affected by update for my_feed_lists")
+		return 0, errors.Wrap(err, "entity: failed to get rows affected by update for my_feed_folders")
 	}
 
 	if !cached {
-		myFeedListUpdateCacheMut.Lock()
-		myFeedListUpdateCache[key] = cache
-		myFeedListUpdateCacheMut.Unlock()
+		myFeedFolderUpdateCacheMut.Lock()
+		myFeedFolderUpdateCache[key] = cache
+		myFeedFolderUpdateCacheMut.Unlock()
 	}
 
 	return rowsAff, o.doAfterUpdateHooks(ctx, exec)
 }
 
 // UpdateAll updates all rows with the specified column values.
-func (q myFeedListQuery) UpdateAll(ctx context.Context, exec boil.ContextExecutor, cols M) (int64, error) {
+func (q myFeedFolderQuery) UpdateAll(ctx context.Context, exec boil.ContextExecutor, cols M) (int64, error) {
 	queries.SetUpdate(q.Query, cols)
 
 	result, err := q.Query.ExecContext(ctx, exec)
 	if err != nil {
-		return 0, errors.Wrap(err, "entity: unable to update all for my_feed_lists")
+		return 0, errors.Wrap(err, "entity: unable to update all for my_feed_folders")
 	}
 
 	rowsAff, err := result.RowsAffected()
 	if err != nil {
-		return 0, errors.Wrap(err, "entity: unable to retrieve rows affected for my_feed_lists")
+		return 0, errors.Wrap(err, "entity: unable to retrieve rows affected for my_feed_folders")
 	}
 
 	return rowsAff, nil
 }
 
 // UpdateAll updates all rows with the specified column values, using an executor.
-func (o MyFeedListSlice) UpdateAll(ctx context.Context, exec boil.ContextExecutor, cols M) (int64, error) {
+func (o MyFeedFolderSlice) UpdateAll(ctx context.Context, exec boil.ContextExecutor, cols M) (int64, error) {
 	ln := int64(len(o))
 	if ln == 0 {
 		return 0, nil
@@ -1032,13 +1032,13 @@ func (o MyFeedListSlice) UpdateAll(ctx context.Context, exec boil.ContextExecuto
 
 	// Append all of the primary key values for each column
 	for _, obj := range o {
-		pkeyArgs := queries.ValuesFromMapping(reflect.Indirect(reflect.ValueOf(obj)), myFeedListPrimaryKeyMapping)
+		pkeyArgs := queries.ValuesFromMapping(reflect.Indirect(reflect.ValueOf(obj)), myFeedFolderPrimaryKeyMapping)
 		args = append(args, pkeyArgs...)
 	}
 
-	sql := fmt.Sprintf("UPDATE \"my_feed_lists\" SET %s WHERE %s",
+	sql := fmt.Sprintf("UPDATE \"my_feed_folders\" SET %s WHERE %s",
 		strmangle.SetParamNames("\"", "\"", 1, colNames),
-		strmangle.WhereClauseRepeated(string(dialect.LQ), string(dialect.RQ), len(colNames)+1, myFeedListPrimaryKeyColumns, len(o)))
+		strmangle.WhereClauseRepeated(string(dialect.LQ), string(dialect.RQ), len(colNames)+1, myFeedFolderPrimaryKeyColumns, len(o)))
 
 	if boil.IsDebug(ctx) {
 		writer := boil.DebugWriterFrom(ctx)
@@ -1047,21 +1047,21 @@ func (o MyFeedListSlice) UpdateAll(ctx context.Context, exec boil.ContextExecuto
 	}
 	result, err := exec.ExecContext(ctx, sql, args...)
 	if err != nil {
-		return 0, errors.Wrap(err, "entity: unable to update all in myFeedList slice")
+		return 0, errors.Wrap(err, "entity: unable to update all in myFeedFolder slice")
 	}
 
 	rowsAff, err := result.RowsAffected()
 	if err != nil {
-		return 0, errors.Wrap(err, "entity: unable to retrieve rows affected all in update all myFeedList")
+		return 0, errors.Wrap(err, "entity: unable to retrieve rows affected all in update all myFeedFolder")
 	}
 	return rowsAff, nil
 }
 
 // Upsert attempts an insert using an executor, and does an update or ignore on conflict.
 // See boil.Columns documentation for how to properly use updateColumns and insertColumns.
-func (o *MyFeedList) Upsert(ctx context.Context, exec boil.ContextExecutor, updateOnConflict bool, conflictColumns []string, updateColumns, insertColumns boil.Columns, opts ...UpsertOptionFunc) error {
+func (o *MyFeedFolder) Upsert(ctx context.Context, exec boil.ContextExecutor, updateOnConflict bool, conflictColumns []string, updateColumns, insertColumns boil.Columns, opts ...UpsertOptionFunc) error {
 	if o == nil {
-		return errors.New("entity: no my_feed_lists provided for upsert")
+		return errors.New("entity: no my_feed_folders provided for upsert")
 	}
 	if !boil.TimestampsAreSkipped(ctx) {
 		currTime := time.Now().In(boil.GetLocation())
@@ -1076,7 +1076,7 @@ func (o *MyFeedList) Upsert(ctx context.Context, exec boil.ContextExecutor, upda
 		return err
 	}
 
-	nzDefaults := queries.NonZeroDefaultSet(myFeedListColumnsWithDefault, o)
+	nzDefaults := queries.NonZeroDefaultSet(myFeedFolderColumnsWithDefault, o)
 
 	// Build cache key in-line uglily - mysql vs psql problems
 	buf := strmangle.GetBuffer()
@@ -1106,48 +1106,48 @@ func (o *MyFeedList) Upsert(ctx context.Context, exec boil.ContextExecutor, upda
 	key := buf.String()
 	strmangle.PutBuffer(buf)
 
-	myFeedListUpsertCacheMut.RLock()
-	cache, cached := myFeedListUpsertCache[key]
-	myFeedListUpsertCacheMut.RUnlock()
+	myFeedFolderUpsertCacheMut.RLock()
+	cache, cached := myFeedFolderUpsertCache[key]
+	myFeedFolderUpsertCacheMut.RUnlock()
 
 	var err error
 
 	if !cached {
 		insert, _ := insertColumns.InsertColumnSet(
-			myFeedListAllColumns,
-			myFeedListColumnsWithDefault,
-			myFeedListColumnsWithoutDefault,
+			myFeedFolderAllColumns,
+			myFeedFolderColumnsWithDefault,
+			myFeedFolderColumnsWithoutDefault,
 			nzDefaults,
 		)
 
 		update := updateColumns.UpdateColumnSet(
-			myFeedListAllColumns,
-			myFeedListPrimaryKeyColumns,
+			myFeedFolderAllColumns,
+			myFeedFolderPrimaryKeyColumns,
 		)
 
 		if updateOnConflict && len(update) == 0 {
-			return errors.New("entity: unable to upsert my_feed_lists, could not build update column list")
+			return errors.New("entity: unable to upsert my_feed_folders, could not build update column list")
 		}
 
-		ret := strmangle.SetComplement(myFeedListAllColumns, strmangle.SetIntersect(insert, update))
+		ret := strmangle.SetComplement(myFeedFolderAllColumns, strmangle.SetIntersect(insert, update))
 
 		conflict := conflictColumns
 		if len(conflict) == 0 && updateOnConflict && len(update) != 0 {
-			if len(myFeedListPrimaryKeyColumns) == 0 {
-				return errors.New("entity: unable to upsert my_feed_lists, could not build conflict column list")
+			if len(myFeedFolderPrimaryKeyColumns) == 0 {
+				return errors.New("entity: unable to upsert my_feed_folders, could not build conflict column list")
 			}
 
-			conflict = make([]string, len(myFeedListPrimaryKeyColumns))
-			copy(conflict, myFeedListPrimaryKeyColumns)
+			conflict = make([]string, len(myFeedFolderPrimaryKeyColumns))
+			copy(conflict, myFeedFolderPrimaryKeyColumns)
 		}
-		cache.query = buildUpsertQueryPostgres(dialect, "\"my_feed_lists\"", updateOnConflict, ret, update, conflict, insert, opts...)
+		cache.query = buildUpsertQueryPostgres(dialect, "\"my_feed_folders\"", updateOnConflict, ret, update, conflict, insert, opts...)
 
-		cache.valueMapping, err = queries.BindMapping(myFeedListType, myFeedListMapping, insert)
+		cache.valueMapping, err = queries.BindMapping(myFeedFolderType, myFeedFolderMapping, insert)
 		if err != nil {
 			return err
 		}
 		if len(ret) != 0 {
-			cache.retMapping, err = queries.BindMapping(myFeedListType, myFeedListMapping, ret)
+			cache.retMapping, err = queries.BindMapping(myFeedFolderType, myFeedFolderMapping, ret)
 			if err != nil {
 				return err
 			}
@@ -1175,31 +1175,31 @@ func (o *MyFeedList) Upsert(ctx context.Context, exec boil.ContextExecutor, upda
 		_, err = exec.ExecContext(ctx, cache.query, vals...)
 	}
 	if err != nil {
-		return errors.Wrap(err, "entity: unable to upsert my_feed_lists")
+		return errors.Wrap(err, "entity: unable to upsert my_feed_folders")
 	}
 
 	if !cached {
-		myFeedListUpsertCacheMut.Lock()
-		myFeedListUpsertCache[key] = cache
-		myFeedListUpsertCacheMut.Unlock()
+		myFeedFolderUpsertCacheMut.Lock()
+		myFeedFolderUpsertCache[key] = cache
+		myFeedFolderUpsertCacheMut.Unlock()
 	}
 
 	return o.doAfterUpsertHooks(ctx, exec)
 }
 
-// Delete deletes a single MyFeedList record with an executor.
+// Delete deletes a single MyFeedFolder record with an executor.
 // Delete will match against the primary key column to find the record to delete.
-func (o *MyFeedList) Delete(ctx context.Context, exec boil.ContextExecutor) (int64, error) {
+func (o *MyFeedFolder) Delete(ctx context.Context, exec boil.ContextExecutor) (int64, error) {
 	if o == nil {
-		return 0, errors.New("entity: no MyFeedList provided for delete")
+		return 0, errors.New("entity: no MyFeedFolder provided for delete")
 	}
 
 	if err := o.doBeforeDeleteHooks(ctx, exec); err != nil {
 		return 0, err
 	}
 
-	args := queries.ValuesFromMapping(reflect.Indirect(reflect.ValueOf(o)), myFeedListPrimaryKeyMapping)
-	sql := "DELETE FROM \"my_feed_lists\" WHERE \"id\"=$1"
+	args := queries.ValuesFromMapping(reflect.Indirect(reflect.ValueOf(o)), myFeedFolderPrimaryKeyMapping)
+	sql := "DELETE FROM \"my_feed_folders\" WHERE \"id\"=$1"
 
 	if boil.IsDebug(ctx) {
 		writer := boil.DebugWriterFrom(ctx)
@@ -1208,12 +1208,12 @@ func (o *MyFeedList) Delete(ctx context.Context, exec boil.ContextExecutor) (int
 	}
 	result, err := exec.ExecContext(ctx, sql, args...)
 	if err != nil {
-		return 0, errors.Wrap(err, "entity: unable to delete from my_feed_lists")
+		return 0, errors.Wrap(err, "entity: unable to delete from my_feed_folders")
 	}
 
 	rowsAff, err := result.RowsAffected()
 	if err != nil {
-		return 0, errors.Wrap(err, "entity: failed to get rows affected by delete for my_feed_lists")
+		return 0, errors.Wrap(err, "entity: failed to get rows affected by delete for my_feed_folders")
 	}
 
 	if err := o.doAfterDeleteHooks(ctx, exec); err != nil {
@@ -1224,33 +1224,33 @@ func (o *MyFeedList) Delete(ctx context.Context, exec boil.ContextExecutor) (int
 }
 
 // DeleteAll deletes all matching rows.
-func (q myFeedListQuery) DeleteAll(ctx context.Context, exec boil.ContextExecutor) (int64, error) {
+func (q myFeedFolderQuery) DeleteAll(ctx context.Context, exec boil.ContextExecutor) (int64, error) {
 	if q.Query == nil {
-		return 0, errors.New("entity: no myFeedListQuery provided for delete all")
+		return 0, errors.New("entity: no myFeedFolderQuery provided for delete all")
 	}
 
 	queries.SetDelete(q.Query)
 
 	result, err := q.Query.ExecContext(ctx, exec)
 	if err != nil {
-		return 0, errors.Wrap(err, "entity: unable to delete all from my_feed_lists")
+		return 0, errors.Wrap(err, "entity: unable to delete all from my_feed_folders")
 	}
 
 	rowsAff, err := result.RowsAffected()
 	if err != nil {
-		return 0, errors.Wrap(err, "entity: failed to get rows affected by deleteall for my_feed_lists")
+		return 0, errors.Wrap(err, "entity: failed to get rows affected by deleteall for my_feed_folders")
 	}
 
 	return rowsAff, nil
 }
 
 // DeleteAll deletes all rows in the slice, using an executor.
-func (o MyFeedListSlice) DeleteAll(ctx context.Context, exec boil.ContextExecutor) (int64, error) {
+func (o MyFeedFolderSlice) DeleteAll(ctx context.Context, exec boil.ContextExecutor) (int64, error) {
 	if len(o) == 0 {
 		return 0, nil
 	}
 
-	if len(myFeedListBeforeDeleteHooks) != 0 {
+	if len(myFeedFolderBeforeDeleteHooks) != 0 {
 		for _, obj := range o {
 			if err := obj.doBeforeDeleteHooks(ctx, exec); err != nil {
 				return 0, err
@@ -1260,12 +1260,12 @@ func (o MyFeedListSlice) DeleteAll(ctx context.Context, exec boil.ContextExecuto
 
 	var args []interface{}
 	for _, obj := range o {
-		pkeyArgs := queries.ValuesFromMapping(reflect.Indirect(reflect.ValueOf(obj)), myFeedListPrimaryKeyMapping)
+		pkeyArgs := queries.ValuesFromMapping(reflect.Indirect(reflect.ValueOf(obj)), myFeedFolderPrimaryKeyMapping)
 		args = append(args, pkeyArgs...)
 	}
 
-	sql := "DELETE FROM \"my_feed_lists\" WHERE " +
-		strmangle.WhereClauseRepeated(string(dialect.LQ), string(dialect.RQ), 1, myFeedListPrimaryKeyColumns, len(o))
+	sql := "DELETE FROM \"my_feed_folders\" WHERE " +
+		strmangle.WhereClauseRepeated(string(dialect.LQ), string(dialect.RQ), 1, myFeedFolderPrimaryKeyColumns, len(o))
 
 	if boil.IsDebug(ctx) {
 		writer := boil.DebugWriterFrom(ctx)
@@ -1274,15 +1274,15 @@ func (o MyFeedListSlice) DeleteAll(ctx context.Context, exec boil.ContextExecuto
 	}
 	result, err := exec.ExecContext(ctx, sql, args...)
 	if err != nil {
-		return 0, errors.Wrap(err, "entity: unable to delete all from myFeedList slice")
+		return 0, errors.Wrap(err, "entity: unable to delete all from myFeedFolder slice")
 	}
 
 	rowsAff, err := result.RowsAffected()
 	if err != nil {
-		return 0, errors.Wrap(err, "entity: failed to get rows affected by deleteall for my_feed_lists")
+		return 0, errors.Wrap(err, "entity: failed to get rows affected by deleteall for my_feed_folders")
 	}
 
-	if len(myFeedListAfterDeleteHooks) != 0 {
+	if len(myFeedFolderAfterDeleteHooks) != 0 {
 		for _, obj := range o {
 			if err := obj.doAfterDeleteHooks(ctx, exec); err != nil {
 				return 0, err
@@ -1295,8 +1295,8 @@ func (o MyFeedListSlice) DeleteAll(ctx context.Context, exec boil.ContextExecuto
 
 // Reload refetches the object from the database
 // using the primary keys with an executor.
-func (o *MyFeedList) Reload(ctx context.Context, exec boil.ContextExecutor) error {
-	ret, err := FindMyFeedList(ctx, exec, o.ID)
+func (o *MyFeedFolder) Reload(ctx context.Context, exec boil.ContextExecutor) error {
+	ret, err := FindMyFeedFolder(ctx, exec, o.ID)
 	if err != nil {
 		return err
 	}
@@ -1307,26 +1307,26 @@ func (o *MyFeedList) Reload(ctx context.Context, exec boil.ContextExecutor) erro
 
 // ReloadAll refetches every row with matching primary key column values
 // and overwrites the original object slice with the newly updated slice.
-func (o *MyFeedListSlice) ReloadAll(ctx context.Context, exec boil.ContextExecutor) error {
+func (o *MyFeedFolderSlice) ReloadAll(ctx context.Context, exec boil.ContextExecutor) error {
 	if o == nil || len(*o) == 0 {
 		return nil
 	}
 
-	slice := MyFeedListSlice{}
+	slice := MyFeedFolderSlice{}
 	var args []interface{}
 	for _, obj := range *o {
-		pkeyArgs := queries.ValuesFromMapping(reflect.Indirect(reflect.ValueOf(obj)), myFeedListPrimaryKeyMapping)
+		pkeyArgs := queries.ValuesFromMapping(reflect.Indirect(reflect.ValueOf(obj)), myFeedFolderPrimaryKeyMapping)
 		args = append(args, pkeyArgs...)
 	}
 
-	sql := "SELECT \"my_feed_lists\".* FROM \"my_feed_lists\" WHERE " +
-		strmangle.WhereClauseRepeated(string(dialect.LQ), string(dialect.RQ), 1, myFeedListPrimaryKeyColumns, len(*o))
+	sql := "SELECT \"my_feed_folders\".* FROM \"my_feed_folders\" WHERE " +
+		strmangle.WhereClauseRepeated(string(dialect.LQ), string(dialect.RQ), 1, myFeedFolderPrimaryKeyColumns, len(*o))
 
 	q := queries.Raw(sql, args...)
 
 	err := q.Bind(ctx, exec, &slice)
 	if err != nil {
-		return errors.Wrap(err, "entity: unable to reload all in MyFeedListSlice")
+		return errors.Wrap(err, "entity: unable to reload all in MyFeedFolderSlice")
 	}
 
 	*o = slice
@@ -1334,10 +1334,10 @@ func (o *MyFeedListSlice) ReloadAll(ctx context.Context, exec boil.ContextExecut
 	return nil
 }
 
-// MyFeedListExists checks if the MyFeedList row exists.
-func MyFeedListExists(ctx context.Context, exec boil.ContextExecutor, iD string) (bool, error) {
+// MyFeedFolderExists checks if the MyFeedFolder row exists.
+func MyFeedFolderExists(ctx context.Context, exec boil.ContextExecutor, iD string) (bool, error) {
 	var exists bool
-	sql := "select exists(select 1 from \"my_feed_lists\" where \"id\"=$1 limit 1)"
+	sql := "select exists(select 1 from \"my_feed_folders\" where \"id\"=$1 limit 1)"
 
 	if boil.IsDebug(ctx) {
 		writer := boil.DebugWriterFrom(ctx)
@@ -1348,13 +1348,13 @@ func MyFeedListExists(ctx context.Context, exec boil.ContextExecutor, iD string)
 
 	err := row.Scan(&exists)
 	if err != nil {
-		return false, errors.Wrap(err, "entity: unable to check if my_feed_lists exists")
+		return false, errors.Wrap(err, "entity: unable to check if my_feed_folders exists")
 	}
 
 	return exists, nil
 }
 
-// Exists checks if the MyFeedList row exists.
-func (o *MyFeedList) Exists(ctx context.Context, exec boil.ContextExecutor) (bool, error) {
-	return MyFeedListExists(ctx, exec, o.ID)
+// Exists checks if the MyFeedFolder row exists.
+func (o *MyFeedFolder) Exists(ctx context.Context, exec boil.ContextExecutor) (bool, error) {
+	return MyFeedFolderExists(ctx, exec, o.ID)
 }

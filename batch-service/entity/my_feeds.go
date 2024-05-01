@@ -23,83 +23,83 @@ import (
 
 // MyFeed is an object representing the database table.
 type MyFeed struct {
-	ID           string    `boil:"id" json:"id" toml:"id" yaml:"id"`
-	UserID       string    `boil:"user_id" json:"user_id" toml:"user_id" yaml:"user_id"`
-	MyFeedListID string    `boil:"my_feed_list_id" json:"my_feed_list_id" toml:"my_feed_list_id" yaml:"my_feed_list_id"`
-	FeedID       string    `boil:"feed_id" json:"feed_id" toml:"feed_id" yaml:"feed_id"`
-	CreatedAt    time.Time `boil:"created_at" json:"created_at" toml:"created_at" yaml:"created_at"`
-	UpdatedAt    time.Time `boil:"updated_at" json:"updated_at" toml:"updated_at" yaml:"updated_at"`
+	ID             string    `boil:"id" json:"id" toml:"id" yaml:"id"`
+	UserID         string    `boil:"user_id" json:"user_id" toml:"user_id" yaml:"user_id"`
+	MyFeedFolderID string    `boil:"my_feed_folder_id" json:"my_feed_folder_id" toml:"my_feed_folder_id" yaml:"my_feed_folder_id"`
+	FeedID         string    `boil:"feed_id" json:"feed_id" toml:"feed_id" yaml:"feed_id"`
+	CreatedAt      time.Time `boil:"created_at" json:"created_at" toml:"created_at" yaml:"created_at"`
+	UpdatedAt      time.Time `boil:"updated_at" json:"updated_at" toml:"updated_at" yaml:"updated_at"`
 
 	R *myFeedR `boil:"-" json:"-" toml:"-" yaml:"-"`
 	L myFeedL  `boil:"-" json:"-" toml:"-" yaml:"-"`
 }
 
 var MyFeedColumns = struct {
-	ID           string
-	UserID       string
-	MyFeedListID string
-	FeedID       string
-	CreatedAt    string
-	UpdatedAt    string
+	ID             string
+	UserID         string
+	MyFeedFolderID string
+	FeedID         string
+	CreatedAt      string
+	UpdatedAt      string
 }{
-	ID:           "id",
-	UserID:       "user_id",
-	MyFeedListID: "my_feed_list_id",
-	FeedID:       "feed_id",
-	CreatedAt:    "created_at",
-	UpdatedAt:    "updated_at",
+	ID:             "id",
+	UserID:         "user_id",
+	MyFeedFolderID: "my_feed_folder_id",
+	FeedID:         "feed_id",
+	CreatedAt:      "created_at",
+	UpdatedAt:      "updated_at",
 }
 
 var MyFeedTableColumns = struct {
-	ID           string
-	UserID       string
-	MyFeedListID string
-	FeedID       string
-	CreatedAt    string
-	UpdatedAt    string
+	ID             string
+	UserID         string
+	MyFeedFolderID string
+	FeedID         string
+	CreatedAt      string
+	UpdatedAt      string
 }{
-	ID:           "my_feeds.id",
-	UserID:       "my_feeds.user_id",
-	MyFeedListID: "my_feeds.my_feed_list_id",
-	FeedID:       "my_feeds.feed_id",
-	CreatedAt:    "my_feeds.created_at",
-	UpdatedAt:    "my_feeds.updated_at",
+	ID:             "my_feeds.id",
+	UserID:         "my_feeds.user_id",
+	MyFeedFolderID: "my_feeds.my_feed_folder_id",
+	FeedID:         "my_feeds.feed_id",
+	CreatedAt:      "my_feeds.created_at",
+	UpdatedAt:      "my_feeds.updated_at",
 }
 
 // Generated where
 
 var MyFeedWhere = struct {
-	ID           whereHelperstring
-	UserID       whereHelperstring
-	MyFeedListID whereHelperstring
-	FeedID       whereHelperstring
-	CreatedAt    whereHelpertime_Time
-	UpdatedAt    whereHelpertime_Time
+	ID             whereHelperstring
+	UserID         whereHelperstring
+	MyFeedFolderID whereHelperstring
+	FeedID         whereHelperstring
+	CreatedAt      whereHelpertime_Time
+	UpdatedAt      whereHelpertime_Time
 }{
-	ID:           whereHelperstring{field: "\"my_feeds\".\"id\""},
-	UserID:       whereHelperstring{field: "\"my_feeds\".\"user_id\""},
-	MyFeedListID: whereHelperstring{field: "\"my_feeds\".\"my_feed_list_id\""},
-	FeedID:       whereHelperstring{field: "\"my_feeds\".\"feed_id\""},
-	CreatedAt:    whereHelpertime_Time{field: "\"my_feeds\".\"created_at\""},
-	UpdatedAt:    whereHelpertime_Time{field: "\"my_feeds\".\"updated_at\""},
+	ID:             whereHelperstring{field: "\"my_feeds\".\"id\""},
+	UserID:         whereHelperstring{field: "\"my_feeds\".\"user_id\""},
+	MyFeedFolderID: whereHelperstring{field: "\"my_feeds\".\"my_feed_folder_id\""},
+	FeedID:         whereHelperstring{field: "\"my_feeds\".\"feed_id\""},
+	CreatedAt:      whereHelpertime_Time{field: "\"my_feeds\".\"created_at\""},
+	UpdatedAt:      whereHelpertime_Time{field: "\"my_feeds\".\"updated_at\""},
 }
 
 // MyFeedRels is where relationship names are stored.
 var MyFeedRels = struct {
-	Feed       string
-	MyFeedList string
-	User       string
+	Feed         string
+	MyFeedFolder string
+	User         string
 }{
-	Feed:       "Feed",
-	MyFeedList: "MyFeedList",
-	User:       "User",
+	Feed:         "Feed",
+	MyFeedFolder: "MyFeedFolder",
+	User:         "User",
 }
 
 // myFeedR is where relationships are stored.
 type myFeedR struct {
-	Feed       *Feed       `boil:"Feed" json:"Feed" toml:"Feed" yaml:"Feed"`
-	MyFeedList *MyFeedList `boil:"MyFeedList" json:"MyFeedList" toml:"MyFeedList" yaml:"MyFeedList"`
-	User       *Profile    `boil:"User" json:"User" toml:"User" yaml:"User"`
+	Feed         *Feed         `boil:"Feed" json:"Feed" toml:"Feed" yaml:"Feed"`
+	MyFeedFolder *MyFeedFolder `boil:"MyFeedFolder" json:"MyFeedFolder" toml:"MyFeedFolder" yaml:"MyFeedFolder"`
+	User         *Profile      `boil:"User" json:"User" toml:"User" yaml:"User"`
 }
 
 // NewStruct creates a new relationship struct
@@ -114,11 +114,11 @@ func (r *myFeedR) GetFeed() *Feed {
 	return r.Feed
 }
 
-func (r *myFeedR) GetMyFeedList() *MyFeedList {
+func (r *myFeedR) GetMyFeedFolder() *MyFeedFolder {
 	if r == nil {
 		return nil
 	}
-	return r.MyFeedList
+	return r.MyFeedFolder
 }
 
 func (r *myFeedR) GetUser() *Profile {
@@ -132,8 +132,8 @@ func (r *myFeedR) GetUser() *Profile {
 type myFeedL struct{}
 
 var (
-	myFeedAllColumns            = []string{"id", "user_id", "my_feed_list_id", "feed_id", "created_at", "updated_at"}
-	myFeedColumnsWithoutDefault = []string{"user_id", "my_feed_list_id", "feed_id"}
+	myFeedAllColumns            = []string{"id", "user_id", "my_feed_folder_id", "feed_id", "created_at", "updated_at"}
+	myFeedColumnsWithoutDefault = []string{"user_id", "my_feed_folder_id", "feed_id"}
 	myFeedColumnsWithDefault    = []string{"id", "created_at", "updated_at"}
 	myFeedPrimaryKeyColumns     = []string{"id"}
 	myFeedGeneratedColumns      = []string{}
@@ -455,15 +455,15 @@ func (o *MyFeed) Feed(mods ...qm.QueryMod) feedQuery {
 	return Feeds(queryMods...)
 }
 
-// MyFeedList pointed to by the foreign key.
-func (o *MyFeed) MyFeedList(mods ...qm.QueryMod) myFeedListQuery {
+// MyFeedFolder pointed to by the foreign key.
+func (o *MyFeed) MyFeedFolder(mods ...qm.QueryMod) myFeedFolderQuery {
 	queryMods := []qm.QueryMod{
-		qm.Where("\"id\" = ?", o.MyFeedListID),
+		qm.Where("\"id\" = ?", o.MyFeedFolderID),
 	}
 
 	queryMods = append(queryMods, mods...)
 
-	return MyFeedLists(queryMods...)
+	return MyFeedFolders(queryMods...)
 }
 
 // User pointed to by the foreign key.
@@ -597,9 +597,9 @@ func (myFeedL) LoadFeed(ctx context.Context, e boil.ContextExecutor, singular bo
 	return nil
 }
 
-// LoadMyFeedList allows an eager lookup of values, cached into the
+// LoadMyFeedFolder allows an eager lookup of values, cached into the
 // loaded structs of the objects. This is for an N-1 relationship.
-func (myFeedL) LoadMyFeedList(ctx context.Context, e boil.ContextExecutor, singular bool, maybeMyFeed interface{}, mods queries.Applicator) error {
+func (myFeedL) LoadMyFeedFolder(ctx context.Context, e boil.ContextExecutor, singular bool, maybeMyFeed interface{}, mods queries.Applicator) error {
 	var slice []*MyFeed
 	var object *MyFeed
 
@@ -630,7 +630,7 @@ func (myFeedL) LoadMyFeedList(ctx context.Context, e boil.ContextExecutor, singu
 		if object.R == nil {
 			object.R = &myFeedR{}
 		}
-		args[object.MyFeedListID] = struct{}{}
+		args[object.MyFeedFolderID] = struct{}{}
 
 	} else {
 		for _, obj := range slice {
@@ -638,7 +638,7 @@ func (myFeedL) LoadMyFeedList(ctx context.Context, e boil.ContextExecutor, singu
 				obj.R = &myFeedR{}
 			}
 
-			args[obj.MyFeedListID] = struct{}{}
+			args[obj.MyFeedFolderID] = struct{}{}
 
 		}
 	}
@@ -655,8 +655,8 @@ func (myFeedL) LoadMyFeedList(ctx context.Context, e boil.ContextExecutor, singu
 	}
 
 	query := NewQuery(
-		qm.From(`my_feed_lists`),
-		qm.WhereIn(`my_feed_lists.id in ?`, argsSlice...),
+		qm.From(`my_feed_folders`),
+		qm.WhereIn(`my_feed_folders.id in ?`, argsSlice...),
 	)
 	if mods != nil {
 		mods.Apply(query)
@@ -664,22 +664,22 @@ func (myFeedL) LoadMyFeedList(ctx context.Context, e boil.ContextExecutor, singu
 
 	results, err := query.QueryContext(ctx, e)
 	if err != nil {
-		return errors.Wrap(err, "failed to eager load MyFeedList")
+		return errors.Wrap(err, "failed to eager load MyFeedFolder")
 	}
 
-	var resultSlice []*MyFeedList
+	var resultSlice []*MyFeedFolder
 	if err = queries.Bind(results, &resultSlice); err != nil {
-		return errors.Wrap(err, "failed to bind eager loaded slice MyFeedList")
+		return errors.Wrap(err, "failed to bind eager loaded slice MyFeedFolder")
 	}
 
 	if err = results.Close(); err != nil {
-		return errors.Wrap(err, "failed to close results of eager load for my_feed_lists")
+		return errors.Wrap(err, "failed to close results of eager load for my_feed_folders")
 	}
 	if err = results.Err(); err != nil {
-		return errors.Wrap(err, "error occurred during iteration of eager loaded relations for my_feed_lists")
+		return errors.Wrap(err, "error occurred during iteration of eager loaded relations for my_feed_folders")
 	}
 
-	if len(myFeedListAfterSelectHooks) != 0 {
+	if len(myFeedFolderAfterSelectHooks) != 0 {
 		for _, obj := range resultSlice {
 			if err := obj.doAfterSelectHooks(ctx, e); err != nil {
 				return err
@@ -693,9 +693,9 @@ func (myFeedL) LoadMyFeedList(ctx context.Context, e boil.ContextExecutor, singu
 
 	if singular {
 		foreign := resultSlice[0]
-		object.R.MyFeedList = foreign
+		object.R.MyFeedFolder = foreign
 		if foreign.R == nil {
-			foreign.R = &myFeedListR{}
+			foreign.R = &myFeedFolderR{}
 		}
 		foreign.R.MyFeeds = append(foreign.R.MyFeeds, object)
 		return nil
@@ -703,10 +703,10 @@ func (myFeedL) LoadMyFeedList(ctx context.Context, e boil.ContextExecutor, singu
 
 	for _, local := range slice {
 		for _, foreign := range resultSlice {
-			if local.MyFeedListID == foreign.ID {
-				local.R.MyFeedList = foreign
+			if local.MyFeedFolderID == foreign.ID {
+				local.R.MyFeedFolder = foreign
 				if foreign.R == nil {
-					foreign.R = &myFeedListR{}
+					foreign.R = &myFeedFolderR{}
 				}
 				foreign.R.MyFeeds = append(foreign.R.MyFeeds, local)
 				break
@@ -884,10 +884,10 @@ func (o *MyFeed) SetFeed(ctx context.Context, exec boil.ContextExecutor, insert 
 	return nil
 }
 
-// SetMyFeedList of the myFeed to the related item.
-// Sets o.R.MyFeedList to related.
+// SetMyFeedFolder of the myFeed to the related item.
+// Sets o.R.MyFeedFolder to related.
 // Adds o to related.R.MyFeeds.
-func (o *MyFeed) SetMyFeedList(ctx context.Context, exec boil.ContextExecutor, insert bool, related *MyFeedList) error {
+func (o *MyFeed) SetMyFeedFolder(ctx context.Context, exec boil.ContextExecutor, insert bool, related *MyFeedFolder) error {
 	var err error
 	if insert {
 		if err = related.Insert(ctx, exec, boil.Infer()); err != nil {
@@ -897,7 +897,7 @@ func (o *MyFeed) SetMyFeedList(ctx context.Context, exec boil.ContextExecutor, i
 
 	updateQuery := fmt.Sprintf(
 		"UPDATE \"my_feeds\" SET %s WHERE %s",
-		strmangle.SetParamNames("\"", "\"", 1, []string{"my_feed_list_id"}),
+		strmangle.SetParamNames("\"", "\"", 1, []string{"my_feed_folder_id"}),
 		strmangle.WhereClause("\"", "\"", 2, myFeedPrimaryKeyColumns),
 	)
 	values := []interface{}{related.ID, o.ID}
@@ -911,17 +911,17 @@ func (o *MyFeed) SetMyFeedList(ctx context.Context, exec boil.ContextExecutor, i
 		return errors.Wrap(err, "failed to update local table")
 	}
 
-	o.MyFeedListID = related.ID
+	o.MyFeedFolderID = related.ID
 	if o.R == nil {
 		o.R = &myFeedR{
-			MyFeedList: related,
+			MyFeedFolder: related,
 		}
 	} else {
-		o.R.MyFeedList = related
+		o.R.MyFeedFolder = related
 	}
 
 	if related.R == nil {
-		related.R = &myFeedListR{
+		related.R = &myFeedFolderR{
 			MyFeeds: MyFeedSlice{o},
 		}
 	} else {

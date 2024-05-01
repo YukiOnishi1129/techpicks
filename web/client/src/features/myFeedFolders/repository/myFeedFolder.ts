@@ -19,7 +19,7 @@ export const getMyFeedFolders = async ({
   offset = 1,
 }: GetMyFeedFolders) => {
   try {
-    const res = await prisma.myFeedList.findMany({
+    const res = await prisma.myFeedFolder.findMany({
       take: LIMIT,
       skip: (offset - 1) * LIMIT,
       where: {
@@ -147,7 +147,7 @@ export const getMyFeedFolderById = async ({
   userId,
 }: GetMyFeedFolderById) => {
   try {
-    const myFeedFolder = await prisma.myFeedList.findUnique({
+    const myFeedFolder = await prisma.myFeedFolder.findUnique({
       where: {
         id: id,
         userId: userId,
@@ -278,7 +278,7 @@ type createMyFeedFolderDTO = {
 export const createMyFeedFolder = async (dto: createMyFeedFolderDTO) => {
   try {
     const uuid = uuidv4();
-    const data = await prisma.myFeedList.create({
+    const data = await prisma.myFeedFolder.create({
       data: {
         id: uuid,
         title: dto.title,
@@ -301,7 +301,7 @@ type updateMyFeedFolderDTO = {
 
 export const updateMyFeedFolder = async (dto: updateMyFeedFolderDTO) => {
   try {
-    const data = await prisma.myFeedList.update({
+    const data = await prisma.myFeedFolder.update({
       where: {
         id: dto.id,
         userId: dto.userId,
@@ -319,7 +319,7 @@ export const updateMyFeedFolder = async (dto: updateMyFeedFolderDTO) => {
 
 export const deleteMyFeedFolder = async (id: string) => {
   try {
-    await prisma.myFeedList.delete({
+    await prisma.myFeedFolder.delete({
       where: {
         id: id,
       },

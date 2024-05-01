@@ -115,20 +115,20 @@ var ProfileWhere = struct {
 
 // ProfileRels is where relationship names are stored.
 var ProfileRels = struct {
-	UserBookmarks   string
-	UserMyFeedLists string
-	UserMyFeeds     string
+	UserBookmarks     string
+	UserMyFeedFolders string
+	UserMyFeeds       string
 }{
-	UserBookmarks:   "UserBookmarks",
-	UserMyFeedLists: "UserMyFeedLists",
-	UserMyFeeds:     "UserMyFeeds",
+	UserBookmarks:     "UserBookmarks",
+	UserMyFeedFolders: "UserMyFeedFolders",
+	UserMyFeeds:       "UserMyFeeds",
 }
 
 // profileR is where relationships are stored.
 type profileR struct {
-	UserBookmarks   BookmarkSlice   `boil:"UserBookmarks" json:"UserBookmarks" toml:"UserBookmarks" yaml:"UserBookmarks"`
-	UserMyFeedLists MyFeedListSlice `boil:"UserMyFeedLists" json:"UserMyFeedLists" toml:"UserMyFeedLists" yaml:"UserMyFeedLists"`
-	UserMyFeeds     MyFeedSlice     `boil:"UserMyFeeds" json:"UserMyFeeds" toml:"UserMyFeeds" yaml:"UserMyFeeds"`
+	UserBookmarks     BookmarkSlice     `boil:"UserBookmarks" json:"UserBookmarks" toml:"UserBookmarks" yaml:"UserBookmarks"`
+	UserMyFeedFolders MyFeedFolderSlice `boil:"UserMyFeedFolders" json:"UserMyFeedFolders" toml:"UserMyFeedFolders" yaml:"UserMyFeedFolders"`
+	UserMyFeeds       MyFeedSlice       `boil:"UserMyFeeds" json:"UserMyFeeds" toml:"UserMyFeeds" yaml:"UserMyFeeds"`
 }
 
 // NewStruct creates a new relationship struct
@@ -143,11 +143,11 @@ func (r *profileR) GetUserBookmarks() BookmarkSlice {
 	return r.UserBookmarks
 }
 
-func (r *profileR) GetUserMyFeedLists() MyFeedListSlice {
+func (r *profileR) GetUserMyFeedFolders() MyFeedFolderSlice {
 	if r == nil {
 		return nil
 	}
-	return r.UserMyFeedLists
+	return r.UserMyFeedFolders
 }
 
 func (r *profileR) GetUserMyFeeds() MyFeedSlice {
@@ -487,18 +487,18 @@ func (o *Profile) UserBookmarks(mods ...qm.QueryMod) bookmarkQuery {
 	return Bookmarks(queryMods...)
 }
 
-// UserMyFeedLists retrieves all the my_feed_list's MyFeedLists with an executor via user_id column.
-func (o *Profile) UserMyFeedLists(mods ...qm.QueryMod) myFeedListQuery {
+// UserMyFeedFolders retrieves all the my_feed_folder's MyFeedFolders with an executor via user_id column.
+func (o *Profile) UserMyFeedFolders(mods ...qm.QueryMod) myFeedFolderQuery {
 	var queryMods []qm.QueryMod
 	if len(mods) != 0 {
 		queryMods = append(queryMods, mods...)
 	}
 
 	queryMods = append(queryMods,
-		qm.Where("\"my_feed_lists\".\"user_id\"=?", o.ID),
+		qm.Where("\"my_feed_folders\".\"user_id\"=?", o.ID),
 	)
 
-	return MyFeedLists(queryMods...)
+	return MyFeedFolders(queryMods...)
 }
 
 // UserMyFeeds retrieves all the my_feed's MyFeeds with an executor via user_id column.
@@ -628,9 +628,9 @@ func (profileL) LoadUserBookmarks(ctx context.Context, e boil.ContextExecutor, s
 	return nil
 }
 
-// LoadUserMyFeedLists allows an eager lookup of values, cached into the
+// LoadUserMyFeedFolders allows an eager lookup of values, cached into the
 // loaded structs of the objects. This is for a 1-M or N-M relationship.
-func (profileL) LoadUserMyFeedLists(ctx context.Context, e boil.ContextExecutor, singular bool, maybeProfile interface{}, mods queries.Applicator) error {
+func (profileL) LoadUserMyFeedFolders(ctx context.Context, e boil.ContextExecutor, singular bool, maybeProfile interface{}, mods queries.Applicator) error {
 	var slice []*Profile
 	var object *Profile
 
@@ -683,8 +683,8 @@ func (profileL) LoadUserMyFeedLists(ctx context.Context, e boil.ContextExecutor,
 	}
 
 	query := NewQuery(
-		qm.From(`my_feed_lists`),
-		qm.WhereIn(`my_feed_lists.user_id in ?`, argsSlice...),
+		qm.From(`my_feed_folders`),
+		qm.WhereIn(`my_feed_folders.user_id in ?`, argsSlice...),
 	)
 	if mods != nil {
 		mods.Apply(query)
@@ -692,22 +692,22 @@ func (profileL) LoadUserMyFeedLists(ctx context.Context, e boil.ContextExecutor,
 
 	results, err := query.QueryContext(ctx, e)
 	if err != nil {
-		return errors.Wrap(err, "failed to eager load my_feed_lists")
+		return errors.Wrap(err, "failed to eager load my_feed_folders")
 	}
 
-	var resultSlice []*MyFeedList
+	var resultSlice []*MyFeedFolder
 	if err = queries.Bind(results, &resultSlice); err != nil {
-		return errors.Wrap(err, "failed to bind eager loaded slice my_feed_lists")
+		return errors.Wrap(err, "failed to bind eager loaded slice my_feed_folders")
 	}
 
 	if err = results.Close(); err != nil {
-		return errors.Wrap(err, "failed to close results in eager load on my_feed_lists")
+		return errors.Wrap(err, "failed to close results in eager load on my_feed_folders")
 	}
 	if err = results.Err(); err != nil {
-		return errors.Wrap(err, "error occurred during iteration of eager loaded relations for my_feed_lists")
+		return errors.Wrap(err, "error occurred during iteration of eager loaded relations for my_feed_folders")
 	}
 
-	if len(myFeedListAfterSelectHooks) != 0 {
+	if len(myFeedFolderAfterSelectHooks) != 0 {
 		for _, obj := range resultSlice {
 			if err := obj.doAfterSelectHooks(ctx, e); err != nil {
 				return err
@@ -715,10 +715,10 @@ func (profileL) LoadUserMyFeedLists(ctx context.Context, e boil.ContextExecutor,
 		}
 	}
 	if singular {
-		object.R.UserMyFeedLists = resultSlice
+		object.R.UserMyFeedFolders = resultSlice
 		for _, foreign := range resultSlice {
 			if foreign.R == nil {
-				foreign.R = &myFeedListR{}
+				foreign.R = &myFeedFolderR{}
 			}
 			foreign.R.User = object
 		}
@@ -728,9 +728,9 @@ func (profileL) LoadUserMyFeedLists(ctx context.Context, e boil.ContextExecutor,
 	for _, foreign := range resultSlice {
 		for _, local := range slice {
 			if local.ID == foreign.UserID {
-				local.R.UserMyFeedLists = append(local.R.UserMyFeedLists, foreign)
+				local.R.UserMyFeedFolders = append(local.R.UserMyFeedFolders, foreign)
 				if foreign.R == nil {
-					foreign.R = &myFeedListR{}
+					foreign.R = &myFeedFolderR{}
 				}
 				foreign.R.User = local
 				break
@@ -907,11 +907,11 @@ func (o *Profile) AddUserBookmarks(ctx context.Context, exec boil.ContextExecuto
 	return nil
 }
 
-// AddUserMyFeedLists adds the given related objects to the existing relationships
+// AddUserMyFeedFolders adds the given related objects to the existing relationships
 // of the profile, optionally inserting them as new records.
-// Appends related to o.R.UserMyFeedLists.
+// Appends related to o.R.UserMyFeedFolders.
 // Sets related.R.User appropriately.
-func (o *Profile) AddUserMyFeedLists(ctx context.Context, exec boil.ContextExecutor, insert bool, related ...*MyFeedList) error {
+func (o *Profile) AddUserMyFeedFolders(ctx context.Context, exec boil.ContextExecutor, insert bool, related ...*MyFeedFolder) error {
 	var err error
 	for _, rel := range related {
 		if insert {
@@ -921,9 +921,9 @@ func (o *Profile) AddUserMyFeedLists(ctx context.Context, exec boil.ContextExecu
 			}
 		} else {
 			updateQuery := fmt.Sprintf(
-				"UPDATE \"my_feed_lists\" SET %s WHERE %s",
+				"UPDATE \"my_feed_folders\" SET %s WHERE %s",
 				strmangle.SetParamNames("\"", "\"", 1, []string{"user_id"}),
-				strmangle.WhereClause("\"", "\"", 2, myFeedListPrimaryKeyColumns),
+				strmangle.WhereClause("\"", "\"", 2, myFeedFolderPrimaryKeyColumns),
 			)
 			values := []interface{}{o.ID, rel.ID}
 
@@ -942,15 +942,15 @@ func (o *Profile) AddUserMyFeedLists(ctx context.Context, exec boil.ContextExecu
 
 	if o.R == nil {
 		o.R = &profileR{
-			UserMyFeedLists: related,
+			UserMyFeedFolders: related,
 		}
 	} else {
-		o.R.UserMyFeedLists = append(o.R.UserMyFeedLists, related...)
+		o.R.UserMyFeedFolders = append(o.R.UserMyFeedFolders, related...)
 	}
 
 	for _, rel := range related {
 		if rel.R == nil {
-			rel.R = &myFeedListR{
+			rel.R = &myFeedFolderR{
 				User: o,
 			}
 		} else {

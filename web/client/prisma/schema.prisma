@@ -31,19 +31,19 @@ model TrendArticle {
 model MyFeed {
   id           String   @id @default(uuid())
   userId       String @map("user_id")
-  myFeedListId String @map("my_feed_list_id")
+  myFeedFolderId String @map("my_feed_folder_id")
   feedId       String @map("feed_id")
   createdAt    DateTime @default(now()) @map("created_at")
   updatedAt    DateTime @updatedAt @map("updated_at")
 
   profile      Profile  @relation(fields: [userId], references: [id], onDelete: Cascade)
-  myFeedList   MyFeedList  @relation(fields: [myFeedListId], references: [id], onDelete: Cascade)
+  myFeedFolder   myFeedFolder  @relation(fields: [myFeedFolderId], references: [id], onDelete: Cascade)
   feed         Feed  @relation(fields: [feedId], references: [id], onDelete: Cascade)
 
   @@map("my_feeds")
 }
 
-model MyFeedList {
+model myFeedFolder {
   id           String   @id @default(uuid())
   userId       String @map("user_id")
   title        String
@@ -54,7 +54,7 @@ model MyFeedList {
 
   profile      Profile  @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@map("my_feed_lists")
+  @@map("my_feed_folders")
 
 }
 
@@ -97,7 +97,7 @@ model Profile {
   updatedAt     DateTime @updatedAt @map("updated_at")
   deletedAt     DateTime? @map("deleted_at")
   bookmarks     Bookmark[]
-  myFeedLists   MyFeedList[]
+  myFeedFolders   myFeedFolder[]
   myFeeds       MyFeed[]
 
   @@map("profiles")
