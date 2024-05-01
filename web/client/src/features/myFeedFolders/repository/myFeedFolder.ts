@@ -311,11 +311,13 @@ export const updateMyFeedFolder = async (dto: updateMyFeedFolderDTO) => {
 
 export const deleteMyFeedFolder = async (id: string) => {
   try {
-    await prisma.myFeedFolder.delete({
+    const data = await prisma.myFeedFolder.delete({
       where: {
         id: id,
       },
     });
+
+    return data.id;
   } catch (err) {
     throw new Error(`Failed to delete my feed folder: ${err}`);
   }

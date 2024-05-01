@@ -5,7 +5,7 @@ import { fetchFeedsAPI } from "../actions/feed";
 
 export const FeedTemplate = async () => {
   const res = await fetchFeedsAPI({});
-  const resMyFeedList = await fetchMyFeedFoldersAPI({});
+  const resMyFeedList = await fetchMyFeedFoldersAPI();
   return (
     <div className="w-auto">
       <h1 className="mb-4 mt-8 text-2xl font-bold ">Feed List</h1>
