@@ -74,6 +74,9 @@ const ArticleContent = ({
   const { bookmarkId, handleAddBookmark, handleRemoveBookmark } =
     useArticleBookmark({ article });
 
+  const shareUrl = `${process.env.NEXT_PUBLIC_SITE_DOMAIN}/article/${article.id}`;
+  const shareTitle = article.title;
+
   return (
     <>
       <SheetHeader className="mb-4">
@@ -106,7 +109,7 @@ const ArticleContent = ({
           </Link>
           {user && (
             <div className="flex justify-between">
-              <TwitterShareButton title="テスト" url={"/"}>
+              <TwitterShareButton title={shareTitle} url={shareUrl}>
                 <XIcon className="inline-block" size={36} />
               </TwitterShareButton>
               {bookmarkId ? (

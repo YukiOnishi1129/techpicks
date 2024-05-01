@@ -269,6 +269,110 @@ export const getArticles = async ({
   }
 };
 
+type GetArticleByIdParam = {
+  id: string;
+  userId?: string;
+};
+
+export const getArticleById = async ({ id, userId }: GetArticleByIdParam) => {
+  try {
+    const article = await prisma.article.findFirst({
+      where: {
+        id: id,
+      },
+      include: {
+        feedArticleRelatoins: {
+          select: {
+            feed: {
+              select: {
+                id: true,
+                name: true,
+                description: true,
+                thumbnailUrl: true,
+                siteUrl: true,
+                apiQueryParam: true,
+                trendPlatformType: true,
+                category: {
+                  select: {
+                    id: true,
+                    name: true,
+                    type: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+        platform: {
+          select: {
+            id: true,
+            name: true,
+            siteUrl: true,
+            faviconUrl: true,
+            platformType: true,
+            isEng: true,
+          },
+        },
+        bookmarks: {
+          select: {
+            id: true,
+          },
+          where: {
+            userId: userId,
+          },
+        },
+      },
+    });
+
+    if (!article) return;
+    const isBookmarked =
+      !!article?.bookmarks?.length && article.bookmarks.length > 0;
+    const resArticle: ArticleType = {
+      id: article.id,
+      title: article.title,
+      description: article.description,
+      thumbnailURL: article.thumbnailURL,
+      articleUrl: article.articleUrl,
+      publishedAt: article.publishedAt,
+      authorName: article.authorName,
+      tags: article.tags,
+      isPrivate: article.isPrivate,
+      createdAt: article.createdAt,
+      updatedAt: article.updatedAt,
+      platform: {
+        id: article.platform.id,
+        name: article.platform.name,
+        platformType: article.platform.platformType,
+        siteUrl: article.platform.siteUrl,
+        faviconUrl: article.platform.faviconUrl,
+        isEng: article.platform.isEng,
+      },
+      isBookmarked: isBookmarked,
+      bookmarkId: isBookmarked ? article.bookmarks[0].id : undefined,
+      feeds: article.feedArticleRelatoins.map((feed) => {
+        return {
+          id: feed.feed.id,
+          name: feed.feed.name,
+          description: feed.feed.description,
+          thumbnailUrl: feed.feed.thumbnailUrl,
+          siteUrl: feed.feed.siteUrl,
+          apiQueryParam: feed.feed.apiQueryParam,
+          trendPlatformType: feed.feed.trendPlatformType,
+          category: {
+            id: feed.feed.category.id,
+            name: feed.feed.category.name,
+            type: feed.feed.category.type,
+          },
+        };
+      }),
+    };
+
+    return resArticle;
+  } catch (err) {
+    throw new Error(`Failed to fetch article: ${err}`);
+  }
+};
+
 type GetArticleByArticleUrlParam = {
   articleUrl: string;
   platformUrl: string;
