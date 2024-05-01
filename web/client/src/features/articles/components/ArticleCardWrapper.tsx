@@ -3,6 +3,8 @@ import { User } from "@supabase/supabase-js";
 import { clsx } from "clsx";
 import { FC, useMemo } from "react";
 
+import { ReadPostTooltip } from "@/components/ui/tooltip/ReadPostTooltip";
+
 import { ArticleTabType, ArticleType } from "@/types/article";
 
 import { ArticleCard } from "./ArticleCard";
@@ -65,6 +67,10 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
             </div>
 
             <div className="flex items-center justify-center   p-4">
+              <div className="mr-4">
+                <ReadPostTooltip postUrl={article.articleUrl} size={30} />
+              </div>
+
               {user && (
                 <>
                   {bookmarkId ? (
