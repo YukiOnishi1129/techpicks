@@ -6,31 +6,31 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { MyFeedListType } from "@/types/myFeedList";
+import { MyFeedFolderType } from "@/types/myFeedFolder";
 
 import { FollowDorpDownMenuContent } from "./FollowDorpDownMenuContent";
 
 type FollowDropdownMenuProps = {
   feedId: string;
   isFollowing: boolean | undefined;
-  myFeedLists: Array<MyFeedListType>;
+  myFeedFolders: Array<MyFeedFolderType>;
   handleCreateMyFeed: (myFeedListId: string) => Promise<string | undefined>;
   handleRemoveMyFeed: (
     myFeedId: string,
     myFeedListId: string
   ) => Promise<string | undefined>;
-  handleCreatedMyFeedLists: (myFeedId: string) => Promise<void>;
+  handleCreatedMyFeedFolder: (myFeedId: string) => Promise<void>;
 };
 
 export function FollowDropdownMenu({
   feedId,
   isFollowing,
-  myFeedLists,
+  myFeedFolders,
   handleCreateMyFeed,
   handleRemoveMyFeed,
-  handleCreatedMyFeedLists,
+  handleCreatedMyFeedFolder,
 }: FollowDropdownMenuProps) {
-  const sortedMyFeedLists = myFeedLists.sort((prev, next) => {
+  const sortedMyFeedFolders = myFeedFolders.sort((prev, next) => {
     if (prev.createdAt < next.createdAt) return -1;
     if (prev.createdAt > next.createdAt) return 1;
     return 0;
@@ -63,10 +63,10 @@ export function FollowDropdownMenu({
       </DropdownMenuTrigger>
       <FollowDorpDownMenuContent
         feedId={feedId}
-        myFeedLists={sortedMyFeedLists}
+        myFeedLists={sortedMyFeedFolders}
         handleCreateMyFeed={handleCreateMyFeed}
         handleRemoveMyFeed={handleRemoveMyFeed}
-        handleCreatedMyFeedLists={handleCreatedMyFeedLists}
+        handleCreatedMyFeedFolder={handleCreatedMyFeedFolder}
       />
     </DropdownMenu>
   );

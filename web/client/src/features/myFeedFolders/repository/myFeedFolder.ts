@@ -5,15 +5,23 @@ import { v4 as uuidv4 } from "uuid";
 
 import prisma from "@/lib/prisma";
 
-import { MyFeedListType } from "@/types/myFeedList";
+import { MyFeedFolderType } from "@/types/myFeedFolder";
 
-type GetMyFeedList = {
+type GetMyFeedFolders = {
   userId: string;
+  offset?: number;
 };
 
-export const getMyFeedList = async ({ userId }: GetMyFeedList) => {
+const LIMIT = 20;
+
+export const getMyFeedFolders = async ({
+  userId,
+  offset = 1,
+}: GetMyFeedFolders) => {
   try {
     const res = await prisma.myFeedList.findMany({
+      take: LIMIT,
+      skip: (offset - 1) * LIMIT,
       where: {
         userId: userId,
       },
@@ -78,22 +86,23 @@ export const getMyFeedList = async ({ userId }: GetMyFeedList) => {
         },
       },
     });
-    const myFeedLists: Array<MyFeedListType> = res.map((myFeedList) => {
-      const resMyFeedList: MyFeedListType = {
-        id: myFeedList.id,
-        title: myFeedList.title,
-        description: myFeedList.description,
-        createdAt: myFeedList.createdAt,
-        updatedAt: myFeedList.updatedAt,
+
+    const myFeedFolders: Array<MyFeedFolderType> = res.map((myFeedFolder) => {
+      const resMyFeedFolder: MyFeedFolderType = {
+        id: myFeedFolder.id,
+        title: myFeedFolder.title,
+        description: myFeedFolder.description,
+        createdAt: myFeedFolder.createdAt,
+        updatedAt: myFeedFolder.updatedAt,
         profile: {
-          id: myFeedList.profile.id,
-          name: myFeedList.profile.name,
-          email: myFeedList.profile.email,
-          image: myFeedList.profile.image,
-          createdAt: myFeedList.profile.createdAt,
-          updatedAt: myFeedList.profile.updatedAt,
+          id: myFeedFolder.profile.id,
+          name: myFeedFolder.profile.name,
+          email: myFeedFolder.profile.email,
+          image: myFeedFolder.profile.image,
+          createdAt: myFeedFolder.profile.createdAt,
+          updatedAt: myFeedFolder.profile.updatedAt,
         },
-        feeds: myFeedList.myFeeds.map((myFeed) => {
+        feeds: myFeedFolder.myFeeds.map((myFeed) => {
           return {
             id: myFeed.feed.id,
             name: myFeed.feed.name,
@@ -120,22 +129,25 @@ export const getMyFeedList = async ({ userId }: GetMyFeedList) => {
           };
         }),
       };
-      return resMyFeedList;
+      return resMyFeedFolder;
     });
-    return myFeedLists;
+    return myFeedFolders;
   } catch (err) {
-    throw new Error(`Failed to get my feed list: ${err}`);
+    throw new Error(`Failed to get my feed folders: ${err}`);
   }
 };
 
-type GetMyFeedListById = {
+type GetMyFeedFolderById = {
   id: string;
   userId: string;
 };
 
-export const getMyFeedListById = async ({ id, userId }: GetMyFeedListById) => {
+export const getMyFeedFolderById = async ({
+  id,
+  userId,
+}: GetMyFeedFolderById) => {
   try {
-    const myFeedList = await prisma.myFeedList.findUnique({
+    const myFeedFolder = await prisma.myFeedList.findUnique({
       where: {
         id: id,
         userId: userId,
@@ -199,25 +211,25 @@ export const getMyFeedListById = async ({ id, userId }: GetMyFeedListById) => {
       },
     });
 
-    if (!myFeedList) {
+    if (!myFeedFolder) {
       throw new Error(`My feed list not found`);
     }
 
-    const resMyFeedList: MyFeedListType = {
-      id: myFeedList.id,
-      title: myFeedList.title,
-      description: myFeedList.description,
-      createdAt: myFeedList.createdAt,
-      updatedAt: myFeedList.updatedAt,
+    const resMyFeedFolder: MyFeedFolderType = {
+      id: myFeedFolder.id,
+      title: myFeedFolder.title,
+      description: myFeedFolder.description,
+      createdAt: myFeedFolder.createdAt,
+      updatedAt: myFeedFolder.updatedAt,
       profile: {
-        id: myFeedList.profile.id,
-        name: myFeedList.profile.name,
-        email: myFeedList.profile.email,
-        image: myFeedList.profile.image,
-        createdAt: myFeedList.profile.createdAt,
-        updatedAt: myFeedList.profile.updatedAt,
+        id: myFeedFolder.profile.id,
+        name: myFeedFolder.profile.name,
+        email: myFeedFolder.profile.email,
+        image: myFeedFolder.profile.image,
+        createdAt: myFeedFolder.profile.createdAt,
+        updatedAt: myFeedFolder.profile.updatedAt,
       },
-      feeds: myFeedList.myFeeds.map((myFeed) => {
+      feeds: myFeedFolder.myFeeds.map((myFeed) => {
         return {
           id: myFeed.feed.id,
           name: myFeed.feed.name,
@@ -251,19 +263,19 @@ export const getMyFeedListById = async ({ id, userId }: GetMyFeedListById) => {
       }),
     };
 
-    return resMyFeedList;
+    return resMyFeedFolder;
   } catch (err) {
-    throw new Error(`Failed to get my feed list by id: ${err}`);
+    throw new Error(`Failed to get my feed folder by id: ${err}`);
   }
 };
 
-type createMyFeedListDTO = {
+type createMyFeedFolderDTO = {
   title: string;
   description: string;
   userId: string;
 };
 
-export const createMyFeedList = async (dto: createMyFeedListDTO) => {
+export const createMyFeedFolder = async (dto: createMyFeedFolderDTO) => {
   try {
     const uuid = uuidv4();
     const data = await prisma.myFeedList.create({
@@ -276,6 +288,43 @@ export const createMyFeedList = async (dto: createMyFeedListDTO) => {
     });
     return data.id;
   } catch (err) {
-    throw new Error(`Failed to create my feed list: ${err}`);
+    throw new Error(`Failed to create my feed folder: ${err}`);
+  }
+};
+
+type updateMyFeedFolderDTO = {
+  id: string;
+  title: string;
+  description: string;
+  userId: string;
+};
+
+export const updateMyFeedFolder = async (dto: updateMyFeedFolderDTO) => {
+  try {
+    const data = await prisma.myFeedList.update({
+      where: {
+        id: dto.id,
+        userId: dto.userId,
+      },
+      data: {
+        title: dto.title,
+        description: dto.description,
+      },
+    });
+    return data.id;
+  } catch (err) {
+    throw new Error(`Failed to update my feed folder: ${err}`);
+  }
+};
+
+export const deleteMyFeedFolder = async (id: string) => {
+  try {
+    await prisma.myFeedList.delete({
+      where: {
+        id: id,
+      },
+    });
+  } catch (err) {
+    throw new Error(`Failed to delete my feed folder: ${err}`);
   }
 };

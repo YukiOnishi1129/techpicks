@@ -1,18 +1,13 @@
 "use server";
-
 import { NextRequest, NextResponse } from "next/server";
 
-import { getMyFeedListById } from "@/features/myFeedLists/repository/myFeedList";
+import { getMyFeedFolders } from "@/features/myFeedFolders/repository/myFeedFolder";
 import { getUser } from "@/features/users/actions/user";
 
-export const GET = async (
-  res: NextRequest,
-  { params }: { params: { id: string } }
-) => {
-  const { id } = params;
-
+export async function GET(req: NextRequest) {
+  const searchParams = req.nextUrl.searchParams;
+  const offset = searchParams.get("offset");
   const user = await getUser();
-
   if (!user) {
     return NextResponse.json(
       {
@@ -24,14 +19,15 @@ export const GET = async (
     );
   }
 
-  const data = await getMyFeedListById({
-    id: id,
+  const myFeedFolders = await getMyFeedFolders({
     userId: user.id,
+    offset: parseInt(offset || "1"),
   });
 
-  if (!data) {
+  if (!myFeedFolders) {
     return NextResponse.json(
       {
+        data: [],
         message: "not found",
       },
       {
@@ -42,11 +38,11 @@ export const GET = async (
 
   return NextResponse.json(
     {
-      myFeedList: data,
+      myFeedFolders: myFeedFolders,
       message: "success",
     },
     {
       status: 200,
     }
   );
-};
+}

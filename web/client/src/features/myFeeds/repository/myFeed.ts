@@ -108,7 +108,7 @@ export const getMyFeedCountByMyFeedListIdAndFeedId = async ({
 
 type createMyFeedDTO = {
   userId: string;
-  myFeedListId: string;
+  myFeedFolderId: string;
   feedId: string;
 };
 
@@ -119,7 +119,7 @@ export const createMyFeed = async (dto: createMyFeedDTO) => {
       data: {
         id: uuid,
         userId: dto.userId,
-        myFeedListId: dto.myFeedListId,
+        myFeedListId: dto.myFeedFolderId,
         feedId: dto.feedId,
       },
     });

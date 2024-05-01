@@ -5,14 +5,14 @@ import { NotFoundList } from "@/components/layout/NotFoundList";
 import { Loader } from "@/components/ui/loader";
 
 import { FeedType } from "@/types/feed";
-import { MyFeedListType } from "@/types/myFeedList";
+import { MyFeedFolderType } from "@/types/myFeedFolder";
 
 import { FeedCardWrapper } from "./FeedCardWrapper";
 import { FetchFeedsAPIResponse } from "../actions/feed";
 
 type FeedListProps = {
   initialFeeds: Array<FeedType>;
-  myFeedLists: Array<MyFeedListType>;
+  myFeedFolders: Array<MyFeedFolderType>;
   fetchFeedsAPI: ({
     offset,
   }: {
@@ -22,7 +22,7 @@ type FeedListProps = {
 
 export function FeedList({
   initialFeeds,
-  myFeedLists,
+  myFeedFolders,
   fetchFeedsAPI,
 }: FeedListProps) {
   const observerTarget = useRef(null);
@@ -88,7 +88,7 @@ export function FeedList({
         <div className="grid grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-5">
           {flatFeeds.map((feed) => (
             <div key={feed.id} className="mb-4">
-              <FeedCardWrapper feed={feed} myFeedLists={myFeedLists} />
+              <FeedCardWrapper feed={feed} myFeedFolders={myFeedFolders} />
             </div>
           ))}
           <div ref={observerTarget}>
