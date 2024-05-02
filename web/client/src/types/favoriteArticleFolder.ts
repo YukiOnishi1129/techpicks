@@ -1,3 +1,11 @@
-import { FavoriteArticle } from "@prisma/client";
+import {
+  FavoriteArticle as PrismaFavoriteArticle,
+  favoriteArticleFolder as PrismaFavoriteArticleFolder,
+} from "@prisma/client";
 
-export type FavoriteArticleType = Omit<FavoriteArticle, "userId">;
+export type FavoriteArticleFolderType = Omit<
+  PrismaFavoriteArticleFolder,
+  "userId"
+> & {
+  favoriteArticles: Array<Omit<PrismaFavoriteArticle, "userId">>;
+};

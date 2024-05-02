@@ -13,6 +13,10 @@
       "path": "./batch-service/"
     },
     {
+      "name": "⚡️ Supabase",
+      "path": "./supabase"
+    },
+    {
       "name": "🌏 Root",
       "path": "./"
     }
