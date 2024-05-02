@@ -1,5 +1,6 @@
 import { User } from "@supabase/supabase-js";
 import Link from "next/link";
+import { MdFeed } from "react-icons/md";
 
 import { MyFeedFolderLinks } from "./MyFeedFolderLinks";
 
@@ -31,9 +32,12 @@ export function Sidebar({ user }: SidebarProps) {
           <h2 className="mb-2 px-2 text-lg font-semibold tracking-tight">
             My Feeds
           </h2>
-          <div className="space-y-1 pl-8">
-            <div>
-              <Link href="/my-feed-folder">All</Link>
+          <div>
+            <div className="flex cursor-pointer items-center space-x-2 rounded-md px-2 hover:bg-secondary">
+              <MdFeed />
+              <Link href="/my-feed-folder" className="pl-2">
+                All
+              </Link>
             </div>
             {user && <MyFeedFolderLinks user={user} />}
           </div>

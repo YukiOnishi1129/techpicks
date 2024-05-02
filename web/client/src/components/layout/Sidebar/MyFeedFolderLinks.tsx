@@ -4,6 +4,8 @@ import { FC } from "react";
 
 import { fetchMyFeedFoldersAPI } from "@/features/myFeedFolders/actions/myFeedFolder";
 
+import { FeedAccordion } from "./Accordion";
+
 type MyFeedFolderLinksProps = {
   user: User;
 };
@@ -12,32 +14,23 @@ export const MyFeedFolderLinks: FC<MyFeedFolderLinksProps> = async ({
 }: MyFeedFolderLinksProps) => {
   const res = await fetchMyFeedFoldersAPI();
   return (
-    <div className="space-y-1">
+    <div>
       {res.data.myFeedFolders.map((myFeedFolder) => (
         <div key={myFeedFolder.id} className="max-w-[198px]">
-          <Link href={`/my-feed-folder/${myFeedFolder.id}`}>
-            <span className="inline-block w-full truncate">
-              {myFeedFolder.title}
-            </span>
-          </Link>
-          {myFeedFolder.feeds.map((feed) => (
-            <div
-              key={`${myFeedFolder.id}-${feed.id}`}
-              className="truncate pl-2"
+          <div className="relative flex items-center space-x-2 truncate">
+            <Link
+              className="absolute left-10 top-1 h-full w-4/6  "
+              href={`/my-feed-folder/${myFeedFolder.id}`}
             >
-              <Link
-                href={`/feed/${feed.id}`}
-                className="flex items-center space-x-2 truncate"
-              >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img className="size-4" src={feed.platform.faviconUrl} alt="" />
+              <span className="inline-block w-full truncate hover:bg-secondary">
+                {myFeedFolder.title}
+              </span>
+            </Link>
 
-                <span className="inline-block w-full truncate">
-                  {feed.name}
-                </span>
-              </Link>
+            <div>
+              <FeedAccordion myFeedFolder={myFeedFolder} />
             </div>
-          ))}
+          </div>
         </div>
       ))}
     </div>

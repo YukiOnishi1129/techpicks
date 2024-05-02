@@ -52,7 +52,10 @@ const PageBreadcrumbItem: FC<PageBreadcrumbItemProps> = ({
   return (
     <>
       <BreadcrumbItem>
-        <BreadcrumbLink href={breadcrumb.href}>
+        <BreadcrumbLink
+          href={breadcrumb.href}
+          className="max-w-[200px] truncate"
+        >
           {breadcrumb.title}
         </BreadcrumbLink>
       </BreadcrumbItem>
