@@ -19,7 +19,7 @@ export const MyFeedFolderLinks: FC<MyFeedFolderLinksProps> = async ({
         <div key={myFeedFolder.id} className="max-w-[198px]">
           <div className="relative flex items-center space-x-2 truncate">
             <Link
-              className="absolute left-10 top-1 h-full w-4/6  "
+              className="absolute left-10 top-1 h-6 w-4/6  "
               href={`/my-feed-folder/${myFeedFolder.id}`}
             >
               <span className="inline-block w-full truncate hover:bg-secondary">

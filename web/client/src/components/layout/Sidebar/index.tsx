@@ -1,6 +1,7 @@
 import { User } from "@supabase/supabase-js";
 import Link from "next/link";
-import { MdFeed } from "react-icons/md";
+import { FaRegBookmark } from "react-icons/fa";
+import { MdFeed, MdCalendarToday, MdRssFeed } from "react-icons/md";
 
 import { MyFeedFolderLinks } from "./MyFeedFolderLinks";
 
@@ -15,14 +16,17 @@ export function Sidebar({ user }: SidebarProps) {
           <h2 className="mb-2 px-2 text-lg font-semibold tracking-tight">
             Main
           </h2>
-          <div className="space-y-1 pl-8">
-            <div>
+          <div className="space-y-2">
+            <div className="flex cursor-pointer items-center space-x-2 rounded-md px-2 hover:bg-secondary">
+              <MdCalendarToday />
               <Link href="/">Today</Link>
             </div>
-            <div>
+            <div className="flex cursor-pointer items-center space-x-2 rounded-md px-2 hover:bg-secondary">
+              <FaRegBookmark />
               <Link href="/bookmark">Bookmarks</Link>
             </div>
-            <div>
+            <div className="flex cursor-pointer items-center space-x-2 rounded-md px-2 hover:bg-secondary">
+              <MdRssFeed />
               <Link href="/feed">Feeds</Link>
             </div>
           </div>
