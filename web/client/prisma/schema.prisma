@@ -13,6 +13,52 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model FavoriteArticle {
+  id           String   @id @default(uuid())
+  userId       String @map("user_id")
+  favoriteArticleFolderId String @map("favorite_article_folder_id")
+  platformId   String? @map("platform_id")
+  articleId    String? @map("article_id")
+  title        String
+  description  String
+  articleUrl   String @map("article_url")
+  publishedAt  DateTime? @map("published_at")
+  author_name  String? @map("author_name")
+  tags         String?
+  thumbnailURL String? @map("thumbnail_url")
+  platformName String? @map("platform_name")
+  platformUrl  String? @map("platform_url")
+  platformFaviconUrl String? @map("platform_favicon_url")
+  isEng        Boolean @default(false) @map("is_eng")
+  isRead    Boolean @default(false) @map("is_read")
+  is_private  Boolean @default(false) @map("is_private")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  profile         Profile  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  favoriteArticleFolder   favoriteArticleFolder  @relation(fields: [favoriteArticleFolderId], references: [id], onDelete: Cascade)
+  platform        Platform?  @relation(fields: [platformId], references: [id], onDelete: Cascade)
+  article      Article?  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+
+  @@map("favorite_articles")
+
+}
+
+model favoriteArticleFolder {
+  id           String   @id @default(uuid())
+  userId       String @map("user_id")
+  title        String
+  description  String?
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+  favoriteArticles      FavoriteArticle[]
+
+  profile      Profile  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("favorite_article_folders")
+
+}
+
 model TrendArticle {
   id           String  @default(uuid())
   articleId    String  @map("article_id")
@@ -99,6 +145,8 @@ model Profile {
   bookmarks     Bookmark[]
   myFeedFolders   myFeedFolder[]
   myFeeds       MyFeed[]
+  favoriteArticleFolders favoriteArticleFolder[]
+  favoriteArticles  FavoriteArticle[]
 
   @@map("profiles")
 }
@@ -135,6 +183,7 @@ model Article {
   feedArticleRelatoins FeedArticleRelation[]
   bookmarks      Bookmark[]
   trendArticles TrendArticle[]
+  favoriteArticles  FavoriteArticle[]
 
   platform     Platform  @relation(fields: [platformId], references: [id], onDelete: Cascade)
   @@map("articles")
@@ -193,6 +242,7 @@ model Platform {
   articles     Article[]
   bookmarks    Bookmark[]
   trendArticles TrendArticle[]
+  favoriteArticles  FavoriteArticle[]
 
   @@map("platforms")
 }
