@@ -8,6 +8,8 @@ import {
   bulkDeleteMyFeed,
 } from "@/features/myFeeds/repository/myFeed";
 
+import { Button } from "@/components/ui/button";
+
 import { useStatusToast } from "@/hooks/useStatusToast";
 
 import { diffStringArray } from "@/lib/convert";
@@ -51,6 +53,9 @@ export const MyFeedFolderCard: FC<MyFeedFolderCardProps> = ({
         feedId: feed.id,
       };
     });
+
+  const showFeedList = myFeedFolder.feeds.slice(0, 3);
+  const moreFeedsCount = myFeedFolder.feeds.length - showFeedList.length;
 
   const handleBulkDeleteMyFeed = useCallback(
     async (removedFeedIds: string[]) => {
@@ -152,7 +157,7 @@ export const MyFeedFolderCard: FC<MyFeedFolderCardProps> = ({
 
   return (
     <div className="mb-4">
-      <div className="h-[340px] w-full cursor-pointer rounded border-2 px-4 py-2">
+      <div className="max-h-[400px] w-full cursor-pointer rounded border-2 px-4 py-2 md:h-[340px]">
         <div className="mb-2 flex h-[48px] w-full items-center justify-between border-b-2 pb-2">
           <h3 className="truncate px-2 text-left text-base font-bold tracking-wide md:text-xl">
             {myFeedFolder.title}
@@ -173,8 +178,8 @@ export const MyFeedFolderCard: FC<MyFeedFolderCardProps> = ({
         <p className="line-clamp-3 h-[62px] w-full text-sm">
           {myFeedFolder.description}
         </p>
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {myFeedFolder.feeds.map((feed, i) => {
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 ">
+          {showFeedList.map((feed) => {
             return (
               <div key={`${myFeedFolder}-${feed.id}`}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -187,6 +192,11 @@ export const MyFeedFolderCard: FC<MyFeedFolderCardProps> = ({
               </div>
             );
           })}
+          {moreFeedsCount > 0 && (
+            <Button variant="secondary">
+              <span className="text-xs">More +{moreFeedsCount}</span>
+            </Button>
+          )}
         </div>
       </div>
     </div>
