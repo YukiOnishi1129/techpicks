@@ -28,7 +28,7 @@ export const BaseLayout = async ({ children }: { children: ReactNode }) => {
         {user && (
           <>
             <div className="invisible fixed h-lvh w-[200px] md:visible">
-              <Sidebar />
+              <Sidebar user={user} />
             </div>
             <div className="invisible mr-[10px] w-[200px] md:visible" />
           </>

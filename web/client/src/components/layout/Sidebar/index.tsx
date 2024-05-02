@@ -1,6 +1,12 @@
+import { User } from "@supabase/supabase-js";
 import Link from "next/link";
 
-export function Sidebar() {
+import { MyFeedFolderLinks } from "./MyFeedFolderLinks";
+
+type SidebarProps = {
+  user: User | undefined;
+};
+export function Sidebar({ user }: SidebarProps) {
   return (
     <div className="h-lvh w-full border-r-2 pb-12">
       <div className="space-y-4 py-4">
@@ -29,6 +35,7 @@ export function Sidebar() {
             <div>
               <Link href="/my-feed-folder">All</Link>
             </div>
+            {user && <MyFeedFolderLinks user={user} />}
           </div>
         </div>
 
