@@ -139,7 +139,7 @@ export const getFavoriteArticleFolders = async ({
 
 export type CreateFavoriteArticleFolderDTO = {
   title: string;
-  description: string;
+  description?: string;
   userId: string;
 };
 

@@ -3,11 +3,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import { useRouter } from "next/navigation";
-import { FC, useCallback, useState, useTransition } from "react";
+import { useState, useCallback, FC, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { createMyFeedFolder } from "@/features/myFeedFolders/repository/myFeedFolder";
 import { getUser } from "@/features/users/actions/user";
 
 import { Button } from "@/components/ui/button";
@@ -31,7 +30,8 @@ import { Input } from "@/components/ui/input";
 
 import { useStatusToast } from "@/hooks/useStatusToast";
 
-import { serverRevalidateMyFeedFolders } from "../../actions/serverAction";
+import { serverRevalidateFavoriteArticleFolderPageTag } from "../../actions/serverActions";
+import { createFavoriteArticleFolder } from "../../repository/favoriteArticleFolder";
 
 const FormSchema = z.object({
   title: z
@@ -43,28 +43,24 @@ const FormSchema = z.object({
   description: z.string().optional(),
 });
 
-type CreateMyFeedFolderDialogProps = {
-  handleCreatedMyFeedFolder?: (myFeedId: string) => Promise<void>;
-};
+type CreateMyFeedFolderDialogProps = {};
 
-export const CreateMyFeedFolderDialog: FC<CreateMyFeedFolderDialogProps> = ({
-  handleCreatedMyFeedFolder,
-}) => {
+export const CreateFavoriteArticleFolderDialog: FC<
+  CreateMyFeedFolderDialogProps
+> = ({}) => {
   const [open, setOpen] = useState(false);
 
   const handleCloseDialog = useCallback(() => {
     setOpen(false);
   }, []);
-
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>{"Create my feed folder"}</Button>
+        <Button>{"Create folder"}</Button>
       </DialogTrigger>
       {open && (
-        <CreateMyFeedFolderDialogContent
+        <CreateFavoriteArticleFolderDialogContent
           handleCloseDialog={handleCloseDialog}
-          handleCreatedMyFeedFolder={handleCreatedMyFeedFolder}
         />
       )}
     </Dialog>
@@ -73,15 +69,11 @@ export const CreateMyFeedFolderDialog: FC<CreateMyFeedFolderDialogProps> = ({
 
 type CreateMyFeedFolderDialogContentProps = {
   handleCloseDialog: () => void;
-  handleCreatedMyFeedFolder?: (myFeedId: string) => Promise<void>;
 };
 
-const CreateMyFeedFolderDialogContent: FC<
+const CreateFavoriteArticleFolderDialogContent: FC<
   CreateMyFeedFolderDialogContentProps
-> = ({
-  handleCloseDialog,
-  handleCreatedMyFeedFolder,
-}: CreateMyFeedFolderDialogContentProps) => {
+> = ({ handleCloseDialog }) => {
   const { successToast, failToast } = useStatusToast();
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
@@ -105,51 +97,39 @@ const CreateMyFeedFolderDialogContent: FC<
 
         if (!user) {
           failToast({
-            description: "Please login to create a new feed folder",
+            description: "Please login to create a favorite article folder",
           });
           return;
         }
-        const createdId = await createMyFeedFolder({
+
+        const createdId = await createFavoriteArticleFolder({
           title: data.title,
-          description: data?.description ?? "",
-          userId: user?.id,
+          description: data.description,
+          userId: user.id,
         });
+
         if (!createdId) {
           failToast({
-            description: "Failed to create new feed folder",
+            description: "Failed to create favorite article folder",
           });
           return;
         }
         successToast({
-          description: "Successfully created new feed folder",
+          description: "Successfully created favorite article folder",
         });
-        if (handleCreatedMyFeedFolder !== undefined) {
-          await handleCreatedMyFeedFolder(createdId);
-          resetDialog();
-          handleCloseDialog();
-          return;
-        }
-        await serverRevalidateMyFeedFolders();
-        router.replace("/my-feed-folder");
+        await serverRevalidateFavoriteArticleFolderPageTag();
+        router.replace("/favorite-article-folder");
         resetDialog();
         handleCloseDialog();
       });
     },
-    [
-      failToast,
-      handleCreatedMyFeedFolder,
-      resetDialog,
-      router,
-      startTransition,
-      successToast,
-      handleCloseDialog,
-    ]
+    [failToast, handleCloseDialog, resetDialog, router, successToast]
   );
 
   return (
     <DialogContent onCloseAutoFocus={resetDialog}>
       <DialogHeader>
-        <DialogTitle>{"Create My Feed Folder"}</DialogTitle>
+        <DialogTitle>{"Create Favorite Article Folder"}</DialogTitle>
       </DialogHeader>
 
       <div>
@@ -204,7 +184,7 @@ const CreateMyFeedFolderDialogContent: FC<
                 disabled={!form.formState.isValid || isPending}
                 type="submit"
               >
-                {"CREATE MY FEED FOLDER"}
+                {"CREATE FOLDER"}
               </Button>
             )}
           </form>
