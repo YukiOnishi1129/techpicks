@@ -1,6 +1,7 @@
 import { getUser } from "@/features/users/actions/user";
 
 import { CreateFavoriteArticleFolderDialog } from "./Dialog";
+import { FavoriteArticleFolderList } from "./FavoriteArticleFolderList";
 import { fetchFavoriteArticleFoldersAPI } from "../actions/favoriteArticleFolders";
 
 export const FavoriteArticleFolderListTemplate = async () => {
@@ -13,13 +14,11 @@ export const FavoriteArticleFolderListTemplate = async () => {
         <CreateFavoriteArticleFolderDialog />
       </div>
 
-      {/* Create New Feed Folder */}
       <div className="w-full border-b-2  py-4">
-        {/* <MyFeedFolderList
-          initialMyFeedFolders={myFeedFolders}
-          feeds={feeds}
+        <FavoriteArticleFolderList
+          initialFavoriteArticleFolders={res.data.favoriteArticleFolders}
           user={user}
-        /> */}
+        />
       </div>
     </div>
   );
