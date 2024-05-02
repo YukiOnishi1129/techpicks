@@ -1,5 +1,4 @@
 "use client";
-
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FC, useCallback, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
@@ -24,7 +23,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Loader } from "@/components/ui/loader";
 
 import { useStatusToast } from "@/hooks/useStatusToast";
 
@@ -48,15 +46,15 @@ type UpdateMyFeedFolderDialogProps = {
   description: string;
   feedIdList: Array<string>;
   handleUpdateMyFeedFolder: ({
-    id,
-    title,
-    description,
-    feedIdList,
+    myFeedFolderId,
+    myFeedFolderTitle,
+    myFeedDescription,
+    selectedFeedIds,
   }: {
-    id: string;
-    title: string;
-    description: string;
-    feedIdList: Array<string>;
+    myFeedFolderId: string;
+    myFeedFolderTitle: string;
+    myFeedDescription: string;
+    selectedFeedIds: string[];
   }) => Promise<void>;
   handleDeleteMyFeedFolder: (id: string) => Promise<void>;
 };
@@ -71,6 +69,9 @@ export const UpdateMyFeedFolderDialog: FC<UpdateMyFeedFolderDialogProps> = ({
   handleDeleteMyFeedFolder,
 }) => {
   const [open, setOpen] = useState(false);
+  const handleClose = useCallback(() => {
+    setOpen(false);
+  }, []);
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
@@ -91,6 +92,7 @@ export const UpdateMyFeedFolderDialog: FC<UpdateMyFeedFolderDialogProps> = ({
           feedIdList={feedIdList}
           handleUpdateMyFeedFolder={handleUpdateMyFeedFolder}
           handleDeleteMyFeedFolder={handleDeleteMyFeedFolder}
+          handleClose={handleClose}
         />
       )}
     </Dialog>
@@ -104,17 +106,18 @@ type UpdateMyFeedFolderDialogContentProps = {
   description: string;
   feedIdList: Array<string>;
   handleUpdateMyFeedFolder: ({
-    id,
-    title,
-    description,
-    feedIdList,
+    myFeedFolderId,
+    myFeedFolderTitle,
+    myFeedDescription,
+    selectedFeedIds,
   }: {
-    id: string;
-    title: string;
-    description: string;
-    feedIdList: Array<string>;
+    myFeedFolderId: string;
+    myFeedFolderTitle: string;
+    myFeedDescription: string;
+    selectedFeedIds: string[];
   }) => Promise<void>;
   handleDeleteMyFeedFolder: (id: string) => Promise<void>;
+  handleClose: () => void;
 };
 
 export const UpdateMyFeedFolderDialogContent: FC<
@@ -127,8 +130,8 @@ export const UpdateMyFeedFolderDialogContent: FC<
   feedIdList,
   handleUpdateMyFeedFolder,
   handleDeleteMyFeedFolder,
+  handleClose,
 }) => {
-  const [loading, setLoading] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -137,15 +140,25 @@ export const UpdateMyFeedFolderDialogContent: FC<
       feedIdList: feedIdList,
     },
   });
-  console.log("🔥");
-  console.log(feedIdList);
   const { successToast, failToast } = useStatusToast();
   const [isPending, startTransition] = useTransition();
   const resetDialog = useCallback(() => {
     form.reset();
   }, [form]);
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {};
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    startTransition(async () => {
+      const inputDescription = values.description ?? "";
+      const inputFeedIdList = values.feedIdList ?? [];
+      await handleUpdateMyFeedFolder({
+        myFeedFolderId,
+        myFeedFolderTitle: values.title,
+        myFeedDescription: inputDescription,
+        selectedFeedIds: inputFeedIdList,
+      });
+      handleClose();
+    });
+  };
 
   return (
     <DialogContent onCloseAutoFocus={resetDialog}>
@@ -166,9 +179,6 @@ export const UpdateMyFeedFolderDialogContent: FC<
                       <FormControl>
                         <Input placeholder="folder title" {...field} />
                       </FormControl>
-                      {/* <FormDescription>
-                      Let&apos;s enter the keyword you want to search.
-                    </FormDescription> */}
                       <FormMessage />
                     </FormItem>
                   )}
@@ -182,14 +192,11 @@ export const UpdateMyFeedFolderDialogContent: FC<
                       <FormControl>
                         <Input placeholder="folder description" {...field} />
                       </FormControl>
-                      {/* <FormDescription>
-                      Let&apos;s enter the keyword you want to search.
-                    </FormDescription> */}
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-                {/* platform */}
+                {/* feeds */}
                 <FormField
                   control={form.control}
                   name="feedIdList"
@@ -199,10 +206,7 @@ export const UpdateMyFeedFolderDialogContent: FC<
                         <FormLabel className="text-base">Feeds</FormLabel>
                       </div>
                       <div className="grid grid-cols-2 gap-2">
-                        {loading ? (
-                          <Loader />
-                        ) : (
-                          feeds &&
+                        {feeds?.length &&
                           feeds.map((feed) => (
                             <FormField
                               key={feed.id}
@@ -237,8 +241,7 @@ export const UpdateMyFeedFolderDialogContent: FC<
                                 </FormItem>
                               )}
                             />
-                          ))
-                        )}
+                          ))}
                       </div>
                     </FormItem>
                   )}

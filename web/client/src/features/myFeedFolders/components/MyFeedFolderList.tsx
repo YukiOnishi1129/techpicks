@@ -37,12 +37,10 @@ export const MyFeedFolderList: FC<MyFeedFolderListProps> = ({
       id,
       title,
       description,
-      feedIdList,
     }: {
       id: string;
       title: string;
       description: string;
-      feedIdList: Array<string>;
     }) => {
       const user = await getUser();
       if (!user) {
@@ -81,7 +79,6 @@ export const MyFeedFolderList: FC<MyFeedFolderListProps> = ({
       successToast({
         description: "Update my feed folder",
       });
-      await serverRevalidateMyFeedFolders();
     },
     [successToast, failToast]
   );
@@ -130,6 +127,7 @@ export const MyFeedFolderList: FC<MyFeedFolderListProps> = ({
             {initialMyFeedFolders.map((myFeedFolder) => (
               <MyFeedFolderCard
                 key={myFeedFolder.id}
+                user={user}
                 myFeedFolder={myFeedFolder}
                 feeds={feeds}
                 handleUpdateMyFeedFolder={handleUpdateMyFeedFolder}
