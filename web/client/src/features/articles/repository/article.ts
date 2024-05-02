@@ -289,18 +289,17 @@ export const getArticlesByFeedIds = async ({
         {
           OR: [
             {
-              title: {
-                contains: keyword,
+              article: {
+                title: {
+                  contains: keyword,
+                },
               },
             },
             {
-              description: {
-                contains: keyword,
-              },
-            },
-            {
-              tags: {
-                contains: keyword,
+              article: {
+                description: {
+                  contains: keyword,
+                },
               },
             },
           ],

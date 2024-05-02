@@ -2,6 +2,7 @@ import { FC } from "react";
 
 import { fetchArticlesByFeedIdsAPI } from "@/features/articles/actions/article";
 import { fetchMyFeedsByMyFeedFolderIdAPI } from "@/features/myFeeds/actions/myFeed";
+import { MyFeedFolderArticleKeywordSearchInput } from "@/features/search/components/myFeedFolders/MyFeedFolderArticleKeywordSearchInput";
 import { getUser } from "@/features/users/actions/user";
 
 import { BreadCrumbType, PageBreadcrumb } from "@/components/ui/breadcrumb";
@@ -10,11 +11,12 @@ import { MyFeedFolderArticleList } from "./MyFeedFolderArtcleList";
 
 type MyFeedFolderDetailTemplateProps = {
   id: string;
+  keyword?: string;
 };
 
 export const MyFeedFolderDetailTemplate: FC<
   MyFeedFolderDetailTemplateProps
-> = async ({ id }) => {
+> = async ({ id, keyword }) => {
   const user = await getUser();
   const resMyFeeds = await fetchMyFeedsByMyFeedFolderIdAPI({
     myFeedFolderId: id,
@@ -23,6 +25,7 @@ export const MyFeedFolderDetailTemplate: FC<
   const feedIdList = resMyFeeds.data.myFeeds.map((myFeed) => myFeed.feedId);
   const res = await fetchArticlesByFeedIdsAPI({
     feedIds: feedIdList,
+    keyword: keyword,
   });
 
   const title = resMyFeeds.data.myFeeds[0].myFeedFolder.title;
@@ -45,10 +48,15 @@ export const MyFeedFolderDetailTemplate: FC<
     <>
       <div className="mb-2 mt-4">
         <PageBreadcrumb breadcrumbs={breadcrumbs} />
+        <div className="mt-2">
+          <MyFeedFolderArticleKeywordSearchInput myFeedFolderId={id} />
+        </div>
+
         <div className="mt-4">
           <MyFeedFolderArticleList
             user={user}
             initialArticles={res.data.articles}
+            keyword={keyword}
             feedIdList={feedIdList}
             fetchArticles={fetchArticlesByFeedIdsAPI}
           />
