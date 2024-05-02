@@ -8,6 +8,8 @@ import { useStatusToast } from "@/hooks/useStatusToast";
 
 import { FavoriteArticleFolderType } from "@/types/favoriteArticleFolder";
 
+import { FavoriteArticleFolderCard } from "./FavoriteArticleFolderCard";
+
 type FavoriteArticleFolderListProps = {
   initialFavoriteArticleFolders: FavoriteArticleFolderType[];
   user?: User;
@@ -28,16 +30,12 @@ export const FavoriteArticleFolderList: FC<FavoriteArticleFolderListProps> = ({
       ) : (
         <div className="m-auto h-[590px] overflow-y-scroll md:h-[540px]">
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {/* {initialFavoriteArticleFolders.map((myFeedFolder) => (
-              <MyFeedFolderCard
-                key={myFeedFolder.id}
-                user={user}
-                myFeedFolder={myFeedFolder}
-                feeds={feeds}
-                handleUpdateMyFeedFolder={handleUpdateMyFeedFolder}
-                handleDeleteMyFeedFolder={handleDeleteMyFeedFolder}
+            {initialFavoriteArticleFolders.map((favoriteArticleFolder) => (
+              <FavoriteArticleFolderCard
+                key={`${favoriteArticleFolder.id}`}
+                favoriteArticleFolder={favoriteArticleFolder}
               />
-            ))} */}
+            ))}
           </div>
         </div>
       )}
