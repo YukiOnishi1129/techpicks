@@ -23,7 +23,7 @@ export const FeedAccordion: FC<FeedAccordionProps> = ({ myFeedFolder }) => {
           {myFeedFolder.feeds.map((feed) => (
             <div
               key={`${myFeedFolder.id}-${feed.id}`}
-              className="mb-2 w-full cursor-pointer truncate pt-2"
+              className="mb-2 w-full cursor-pointer truncate pl-8 pt-2"
             >
               <Link
                 href={`/feed/${feed.id}`}
