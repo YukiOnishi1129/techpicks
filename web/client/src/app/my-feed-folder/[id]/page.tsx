@@ -1,3 +1,5 @@
+import { MyFeedFolderDetailTemplate } from "@/features/myFeedFolders/components/MyFeedFolderDetailTemplate";
+
 type MyFeedFolderDetailPageProps = {
   params: {
     id: string;
@@ -8,9 +10,5 @@ export default function MyFeedFolderDetailPage({
   params,
 }: MyFeedFolderDetailPageProps) {
   const { id } = params;
-  return (
-    <div className="mx-auto mt-20 w-2/5 rounded-md border-2 border-gray-300 p-4 shadow-md">
-      <h2 className="text-center text-2xl font-bold ">MyFeedList Page</h2>
-    </div>
-  );
+  return <MyFeedFolderDetailTemplate id={id} />;
 }

@@ -68,5 +68,10 @@ export const showDiffDateToCurrentDate = (targetDate: Date) => {
     return `${diffHour} hour ago  (${convertedTargetDate.format("MMM DD 'YYYY")})`;
   }
   const date = diffDates(currentUnixTime, targetDateUnixTime);
-  return `${date % 24} days ago  (${convertedTargetDate.format("MMM DD 'YYYY")})`;
+
+  if (date / 24 < 1) {
+    return `${date} days ago  (${convertedTargetDate.format("MMM DD 'YYYY")})`;
+  }
+
+  return `${date} days ago  (${convertedTargetDate.format("MMM DD 'YYYY")})`;
 };

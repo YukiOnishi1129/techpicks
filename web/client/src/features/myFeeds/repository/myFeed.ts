@@ -68,18 +68,135 @@ export const getMyFeedById = async ({ id, userId }: GetMyFeedById) => {
         createdAt: data.feed.createdAt,
         updatedAt: data.feed.updatedAt,
       },
-      myFeedList: {
+      myFeedFolder: {
         id: data.myFeedFolder.id,
         title: data.myFeedFolder.title,
         description: data.myFeedFolder.description,
         createdAt: data.myFeedFolder.createdAt,
         updatedAt: data.myFeedFolder.updatedAt,
       },
+      articles: [],
     };
 
     return myFeedData;
   } catch (err) {
     throw new Error(`Failed to get my feed: ${err}`);
+  }
+};
+
+type GetMyFeedsByMyFeedFolderId = {
+  myFeedFolderId: string;
+  userId: string;
+};
+
+export const getMyFeedsByMyFeedFolderId = async ({
+  myFeedFolderId,
+  userId,
+}: GetMyFeedsByMyFeedFolderId) => {
+  try {
+    const data = await prisma.myFeed.findMany({
+      where: {
+        myFeedFolderId: myFeedFolderId,
+        userId: userId,
+      },
+      distinct: ["feedId"],
+      include: {
+        feed: {
+          select: {
+            id: true,
+            name: true,
+            description: true,
+            thumbnailUrl: true,
+            platformId: true,
+            categoryId: true,
+            siteUrl: true,
+            apiQueryParam: true,
+            trendPlatformType: true,
+            createdAt: true,
+            updatedAt: true,
+            feedArticleRelatoins: {
+              select: {
+                article: {
+                  select: {
+                    id: true,
+                    platformId: true,
+                    title: true,
+                    description: true,
+                    articleUrl: true,
+                    publishedAt: true,
+                    thumbnailURL: true,
+                    authorName: true,
+                    tags: true,
+                    isPrivate: true,
+                    createdAt: true,
+                    updatedAt: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+        myFeedFolder: {
+          select: {
+            id: true,
+            title: true,
+            description: true,
+            createdAt: true,
+            updatedAt: true,
+          },
+        },
+      },
+    });
+
+    const resMyFeeds: Array<MyFeedType> = data.map((myFeed) => {
+      return {
+        id: myFeed.id,
+        myFeedFolderId: myFeed.myFeedFolderId,
+        feedId: myFeed.feedId,
+        createdAt: myFeed.createdAt,
+        updatedAt: myFeed.updatedAt,
+        feed: {
+          id: myFeed.feed.id,
+          name: myFeed.feed.name,
+          description: myFeed.feed.description,
+          thumbnailUrl: myFeed.feed.thumbnailUrl,
+          platformId: myFeed.feed.platformId,
+          categoryId: myFeed.feed.categoryId,
+          siteUrl: myFeed.feed.siteUrl,
+          apiQueryParam: myFeed.feed.apiQueryParam,
+          trendPlatformType: myFeed.feed.trendPlatformType,
+          createdAt: myFeed.feed.createdAt,
+          updatedAt: myFeed.feed.updatedAt,
+        },
+        myFeedFolder: {
+          id: myFeed.myFeedFolder.id,
+          title: myFeed.myFeedFolder.title,
+          description: myFeed.myFeedFolder.description,
+          createdAt: myFeed.myFeedFolder.createdAt,
+          updatedAt: myFeed.myFeedFolder.updatedAt,
+        },
+        articles: myFeed.feed.feedArticleRelatoins.map((feedArticle) => {
+          return {
+            id: feedArticle.article.id,
+            platformId: feedArticle.article.platformId,
+            title: feedArticle.article.title,
+            description: feedArticle.article.description,
+            articleUrl: feedArticle.article.articleUrl,
+            publishedAt: feedArticle.article.publishedAt,
+            thumbnailURL: feedArticle.article.thumbnailURL,
+            authorName: feedArticle.article.authorName,
+            tags: feedArticle.article.tags,
+            isPrivate: feedArticle.article.isPrivate,
+            createdAt: feedArticle.article.createdAt,
+            updatedAt: feedArticle.article.updatedAt,
+          };
+        }),
+      };
+    });
+
+    return resMyFeeds;
+  } catch (err) {
+    throw new Error(`Failed to get my feeds: ${err}`);
   }
 };
 

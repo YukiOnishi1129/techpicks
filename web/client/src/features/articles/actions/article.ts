@@ -60,6 +60,83 @@ export const fetchArticlesAPI = async ({
   };
 };
 
+export const fetchArticlesByFeedIdsAPI = async ({
+  feedIds,
+  keyword,
+  offset = "1",
+}: {
+  feedIds: Array<string>;
+  keyword?: string;
+  offset?: string;
+}): Promise<FetchArticlesAPIResponse> => {
+  let url = `http://localhost:80/api/articles/feed-ids/?offset=${offset}}`;
+  if (keyword) {
+    url += `&keyword=${keyword}`;
+  }
+  if (feedIds.length) {
+    const feedIdPath = feedIds.map((feedId) => `&feedId=${feedId}`).join("");
+    url += feedIdPath;
+  }
+
+  const response = await getFetch({
+    url,
+    tagName: "articles/feedIds",
+    cacheType: "no-store",
+  });
+  const data = await response.json();
+  const status = response.status;
+
+  return {
+    data: {
+      articles: data.articles as ArticleType[],
+      message: "success",
+    },
+    status,
+  };
+};
+
+export const fetchArticlesByIdsAPI = async ({
+  articleIds,
+  languageStatus,
+  keyword,
+  offset = "1",
+}: {
+  languageStatus?: string;
+  articleIds: Array<string>;
+  keyword?: string;
+  offset?: string;
+}): Promise<FetchArticlesAPIResponse> => {
+  let url = `http://localhost:80/api/articles/article-ids/?offset=${offset}}`;
+  if (languageStatus) {
+    url += `&languageStatus=${languageStatus}`;
+  }
+  if (keyword) {
+    url += `&keyword=${keyword}`;
+  }
+  if (articleIds.length) {
+    const articleIdPath = articleIds
+      .map((articleId) => `&articleId=${articleId}`)
+      .join("");
+    url += articleIdPath;
+  }
+
+  const response = await getFetch({
+    url,
+    tagName: "articles",
+    cacheType: "no-store",
+  });
+  const data = await response.json();
+  const status = response.status;
+
+  return {
+    data: {
+      articles: data.articles as ArticleType[],
+      message: "success",
+    },
+    status,
+  };
+};
+
 export type FetchArticleAPIResponse = {
   data: {
     article: ArticleType | undefined;
