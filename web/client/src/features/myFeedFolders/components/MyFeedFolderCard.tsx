@@ -3,13 +3,12 @@ import { User } from "@supabase/supabase-js";
 import Link from "next/link";
 import { FC, useCallback } from "react";
 
+import { ShowMyFeedListDialog } from "@/features/myFeeds/components/Dialog/ShowMyFeedListDialog";
 import {
   CreateMyFeedDTO,
   bulkCreateMyFeed,
   bulkDeleteMyFeed,
 } from "@/features/myFeeds/repository/myFeed";
-
-import { Button } from "@/components/ui/button";
 
 import { useStatusToast } from "@/hooks/useStatusToast";
 
@@ -201,9 +200,10 @@ export const MyFeedFolderCard: FC<MyFeedFolderCardProps> = ({
             );
           })}
           {moreFeedsCount > 0 && (
-            <Button variant="secondary">
-              <span className="text-xs">More +{moreFeedsCount}</span>
-            </Button>
+            <ShowMyFeedListDialog
+              buttonLabel={`More +${moreFeedsCount}`}
+              feeds={myFeedFolder.feeds}
+            />
           )}
         </div>
       </div>
