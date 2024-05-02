@@ -29,8 +29,8 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
     useArticleBookmark({ article });
 
   const isShowLikeCount = useMemo(
-    () => tab === "trend" && article?.likeCount !== undefined,
-    [article?.likeCount, tab]
+    () => article?.likeCount !== undefined,
+    [article?.likeCount]
   );
 
   const shareUrl = `${process.env.NEXT_PUBLIC_SITE_DOMAIN}/article/${article.id}`;
