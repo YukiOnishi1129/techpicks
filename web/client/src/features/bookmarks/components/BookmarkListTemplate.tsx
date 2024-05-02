@@ -1,7 +1,6 @@
 import { FC } from "react";
 
 import { fetchPlatformAPI } from "@/features/platforms/actions/platform";
-import { ArticleSearchDialog } from "@/features/search/components/articles/Dialog";
 import { BookmarkSearchDialog } from "@/features/search/components/bookmarks/Dialog";
 import { getUser } from "@/features/users/actions/user";
 
@@ -54,7 +53,7 @@ export const BookmarkListTemplate: FC<ArticleListProps> = async ({
 
       <div className="mb-4 flex items-center justify-end md:hidden">
         <div className="mr-12 cursor-pointer">
-          <ArticleSearchDialog platforms={platforms} />
+          <BookmarkSearchDialog platforms={platforms} />
         </div>
         <div className="mr-8 min-w-24">
           <BookmarkLanguageSwitch

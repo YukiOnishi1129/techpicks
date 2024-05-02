@@ -1,7 +1,20 @@
-export default function MyFeedListDetailPage() {
-  return (
-    <div className="mx-auto mt-20 w-2/5 rounded-md border-2 border-gray-300 p-4 shadow-md">
-      <h2 className="text-center text-2xl font-bold ">MyFeedList Page</h2>
-    </div>
-  );
+import { MyFeedFolderDetailTemplate } from "@/features/myFeedFolders/components/MyFeedFolderDetailTemplate";
+
+type MyFeedFolderDetailPageProps = {
+  params: {
+    id: string;
+  };
+  searchParams: { [key: string]: string | string[] | undefined };
+};
+
+export default function MyFeedFolderDetailPage({
+  params,
+  searchParams,
+}: MyFeedFolderDetailPageProps) {
+  const { id } = params;
+  const keyword =
+    typeof searchParams["keyword"] === "string"
+      ? searchParams["keyword"]
+      : undefined;
+  return <MyFeedFolderDetailTemplate id={id} keyword={keyword} />;
 }

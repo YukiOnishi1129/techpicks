@@ -3,10 +3,11 @@ import Link from "next/link";
 import { FC } from "react";
 import { BiSolidSearch } from "react-icons/bi";
 import { FaBookmark } from "react-icons/fa";
-import { HiOutlineMenuAlt2 } from "react-icons/hi";
 import { IoHomeSharp } from "react-icons/io5";
 
 import { UserAvatar } from "@/components/ui/avatar/UserAvatar";
+
+import { MobileSidebarNavigation } from "./MobileSidebarNavigation";
 
 type LoggedBottomNavigationMenuProps = {
   user: User;
@@ -17,10 +18,8 @@ export const LoggedBottomNavigationMenu: FC<
 > = ({ user }: LoggedBottomNavigationMenuProps) => {
   return (
     <div className="fixed bottom-0 left-0 z-50 flex h-16 w-full grid-cols-5 bg-gray-800  text-white">
-      <div className="w-1/5 border-r  px-4 py-2">
-        <Link href="/" className="flex flex-col items-center justify-center">
-          <HiOutlineMenuAlt2 className="mt-2" size={36} />
-        </Link>
+      <div className="flex w-1/5  flex-col items-center justify-center border-r px-4 py-2">
+        <MobileSidebarNavigation user={user} />
       </div>
 
       <div className="w-1/5 border-r  px-4 py-2">

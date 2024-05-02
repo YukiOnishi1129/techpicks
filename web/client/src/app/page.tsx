@@ -2,8 +2,6 @@ import { Suspense } from "react";
 
 import { HomeTemplate } from "@/features/home/components/HomeTemplate";
 
-// import { ScreenLoader } from "@/components/layout/ScreenLoader/ScreenLoader";
-
 import { ScreenLoader } from "@/components/layout/ScreenLoader";
 
 import { LanguageStatus } from "@/types/language";

@@ -1,5 +1,3 @@
-// import { getArticleById } from "@/features/articles/repository/article";
-
 import { ArticleDetailTemplate } from "@/features/articles/components/ArticleDetailTemplate";
 
 type ArticleDetailPageProps = {

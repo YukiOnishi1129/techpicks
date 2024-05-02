@@ -60,6 +60,41 @@ export const fetchArticlesAPI = async ({
   };
 };
 
+export const fetchArticlesByFeedIdsAPI = async ({
+  feedIds,
+  keyword,
+  offset = "1",
+}: {
+  feedIds: Array<string>;
+  keyword?: string;
+  offset?: string;
+}): Promise<FetchArticlesAPIResponse> => {
+  let url = `http://localhost:80/api/articles/feed-ids/?offset=${offset}}`;
+  if (keyword) {
+    url += `&keyword=${keyword}`;
+  }
+  if (feedIds.length) {
+    const feedIdPath = feedIds.map((feedId) => `&feedId=${feedId}`).join("");
+    url += feedIdPath;
+  }
+
+  const response = await getFetch({
+    url,
+    tagName: "articles/feedIds",
+    cacheType: "no-store",
+  });
+  const data = await response.json();
+  const status = response.status;
+
+  return {
+    data: {
+      articles: data.articles as ArticleType[],
+      message: "success",
+    },
+    status,
+  };
+};
+
 export type FetchArticleAPIResponse = {
   data: {
     article: ArticleType | undefined;
