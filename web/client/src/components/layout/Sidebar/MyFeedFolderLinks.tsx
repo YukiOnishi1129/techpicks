@@ -20,6 +20,24 @@ export const MyFeedFolderLinks: FC<MyFeedFolderLinksProps> = async ({
               {myFeedFolder.title}
             </span>
           </Link>
+          {myFeedFolder.feeds.map((feed) => (
+            <div
+              key={`${myFeedFolder.id}-${feed.id}`}
+              className="truncate pl-2"
+            >
+              <Link
+                href={`/feed/${feed.id}`}
+                className="flex items-center space-x-2 truncate"
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img className="size-4" src={feed.platform.faviconUrl} alt="" />
+
+                <span className="inline-block w-full truncate">
+                  {feed.name}
+                </span>
+              </Link>
+            </div>
+          ))}
         </div>
       ))}
     </div>

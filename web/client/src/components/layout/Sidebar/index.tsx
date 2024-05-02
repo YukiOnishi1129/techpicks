@@ -8,8 +8,8 @@ type SidebarProps = {
 };
 export function Sidebar({ user }: SidebarProps) {
   return (
-    <div className="h-lvh w-full border-r-2 pb-12">
-      <div className="space-y-4 py-4">
+    <div className="h-lvh w-full overflow-y-auto border-r-2 pb-12">
+      <div className="mb-8 space-y-4 py-4">
         <div className="px-4 py-2">
           <h2 className="mb-2 px-2 text-lg font-semibold tracking-tight">
             Main
