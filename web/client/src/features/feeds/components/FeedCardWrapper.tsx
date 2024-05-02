@@ -126,8 +126,6 @@ export const FeedCardWrapper: FC<FeedCardWrapperProps> = ({
 
       // state update
       if (!isFollowing) setIsFollowing(true);
-      console.log("🔥🔥🔥🔥🔥");
-      console.log(createdMyFeedFolder);
       // add feed to myFeedFolder
       if (createdMyFeedFolder) {
         setShowMyFeedFolders((prev) => [
@@ -162,8 +160,6 @@ export const FeedCardWrapper: FC<FeedCardWrapperProps> = ({
     async (myFeedFolderId: string) => {
       const res = await fetchMyFeedFolderByIdAPI(myFeedFolderId);
       const newMyFeedFolders = res.data.myFeedFolders;
-
-      console.log;
       const id = await handleCreateMyFeed(myFeedFolderId, newMyFeedFolders);
 
       if (id) {

@@ -83,7 +83,7 @@ export const getMyFeedById = async ({ id, userId }: GetMyFeedById) => {
   }
 };
 
-export const getMyFeedCountByMyFeedListIdAndFeedId = async ({
+export const getMyFeedCountByMyFeedFolderIdAndFeedId = async ({
   feedId,
   myFeedFolderId,
   userId,

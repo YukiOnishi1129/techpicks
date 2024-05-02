@@ -49,7 +49,7 @@ export const fetchMyFeedCountByMyFeedFolderIdAndFeedIdAPI = async ({
   feedId: string;
   myFeedFolderId: string;
 }): Promise<FetchMyFeedCountAPIResponse> => {
-  const url = `http://localhost:80/api/myfeeds/count/by-myfeed-list-and-feed-id?myFeedListId=${myFeedFolderId}&feedId=${feedId}`;
+  const url = `http://localhost:80/api/myfeeds/count/by-myfeed-list-and-feed-id?myFeedFolderId=${myFeedFolderId}&feedId=${feedId}`;
 
   const response = await getFetch({
     url,

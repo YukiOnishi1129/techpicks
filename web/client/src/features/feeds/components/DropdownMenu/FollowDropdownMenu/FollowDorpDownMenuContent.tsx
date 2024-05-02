@@ -21,10 +21,10 @@ import { TargetFollowMyFeedList } from "./FollowTargetMyFeedList";
 type FollowDorpDownMenuContentProps = {
   feedId: string;
   myFeedLists: Array<MyFeedFolderType>;
-  handleCreateMyFeed: (myFeedListId: string) => Promise<string | undefined>;
+  handleCreateMyFeed: (myFeedFolderId: string) => Promise<string | undefined>;
   handleRemoveMyFeed: (
     myFeedId: string,
-    myFeedListId: string
+    myFeedFolderId: string
   ) => Promise<string | undefined>;
   handleCreatedMyFeedFolder: (myFeedId: string) => Promise<void>;
 };

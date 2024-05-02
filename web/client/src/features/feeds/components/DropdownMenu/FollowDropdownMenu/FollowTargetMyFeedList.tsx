@@ -10,10 +10,10 @@ import { MyFeedFolderType } from "@/types/myFeedFolder";
 type TargetFollowMyFeedListProps = {
   feedId: string;
   myFeedFolder: MyFeedFolderType;
-  handleCreateMyFeed: (myFeedListId: string) => Promise<string | undefined>;
+  handleCreateMyFeed: (myFeedFolderId: string) => Promise<string | undefined>;
   handleRemoveMyFeed: (
     myFeedId: string,
-    myFeedListId: string
+    myFeedFolderId: string
   ) => Promise<string | undefined>;
 };
 

@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { getMyFeedCountByMyFeedListIdAndFeedId } from "@/features/myFeeds/repository/myFeed";
+import { getMyFeedCountByMyFeedFolderIdAndFeedId } from "@/features/myFeeds/repository/myFeed";
 import { getUser } from "@/features/users/actions/user";
 
 export async function GET(req: NextRequest) {
   const searchParams = req.nextUrl.searchParams;
-  const myFeedListId = searchParams.get("myFeedListId");
+  const myFeedFolderId = searchParams.get("myFeedFolderId");
   const feedId = searchParams.get("feedId");
 
   const user = await getUser();
@@ -21,9 +21,9 @@ export async function GET(req: NextRequest) {
     );
   }
 
-  const count = await getMyFeedCountByMyFeedListIdAndFeedId({
+  const count = await getMyFeedCountByMyFeedFolderIdAndFeedId({
     feedId: feedId || "",
-    myFeedListId: myFeedListId || "",
+    myFeedFolderId: myFeedFolderId || "",
     userId: user.id,
   });
 
