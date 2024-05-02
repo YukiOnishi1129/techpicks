@@ -1,5 +1,4 @@
 "use client";
-
 import Link from "next/link";
 import { BiSolidSearch } from "react-icons/bi";
 import { IoHomeSharp } from "react-icons/io5";
