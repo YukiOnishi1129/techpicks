@@ -1,11 +1,11 @@
-import { fetchMyFeedListAPI } from "@/features/myFeedLists/actions/myFeedList";
+import { fetchMyFeedFoldersAPI } from "@/features/myFeedFolders/actions/myFeedFolder";
 
 import { FeedList } from "./FeedList";
 import { fetchFeedsAPI } from "../actions/feed";
 
 export const FeedTemplate = async () => {
   const res = await fetchFeedsAPI({});
-  const resMyFeedList = await fetchMyFeedListAPI();
+  const resMyFeedList = await fetchMyFeedFoldersAPI();
   return (
     <div className="w-auto">
       <h1 className="mb-4 mt-8 text-2xl font-bold ">Feed List</h1>
@@ -13,7 +13,7 @@ export const FeedTemplate = async () => {
 
       <FeedList
         initialFeeds={res.data.feeds}
-        myFeedLists={resMyFeedList.data.myFeedLists}
+        myFeedFolders={resMyFeedList.data.myFeedFolders}
         fetchFeedsAPI={fetchFeedsAPI}
       />
     </div>

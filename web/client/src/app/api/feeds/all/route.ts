@@ -1,30 +1,27 @@
 "use server";
+
 import { NextRequest, NextResponse } from "next/server";
 
-import { getMyFeedList } from "@/features/myFeedLists/repository/myFeedList";
-import { getUser } from "@/features/users/actions/user";
+import { getAllFeed } from "@/features/feeds/repository/feed";
 
 export async function GET(req: NextRequest) {
   const searchParams = req.nextUrl.searchParams;
-  const user = await getUser();
-  if (!user) {
+  const feeds = await getAllFeed({});
+
+  if (!feeds) {
     return NextResponse.json(
       {
-        message: "unauthorized",
+        message: "Failed to get feed",
       },
       {
-        status: 401,
+        status: 500,
       }
     );
   }
 
-  const myFeedLists = await getMyFeedList({
-    userId: user.id,
-  });
-
   return NextResponse.json(
     {
-      myFeedLists: myFeedLists,
+      feeds: feeds,
       message: "success",
     },
     {

@@ -5,7 +5,7 @@ import { FC, useMemo } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { z } from "zod";
 
-import { CreateMyFeedListDialog } from "@/features/myFeedLists/components/Dialog";
+import { CreateMyFeedFolderDialog } from "@/features/myFeedFolders/components/Dialog";
 
 import {
   DropdownMenuContent,
@@ -14,19 +14,19 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 
-import { MyFeedListType } from "@/types/myFeedList";
+import { MyFeedFolderType } from "@/types/myFeedFolder";
 
 import { TargetFollowMyFeedList } from "./FollowTargetMyFeedList";
 
 type FollowDorpDownMenuContentProps = {
   feedId: string;
-  myFeedLists: Array<MyFeedListType>;
-  handleCreateMyFeed: (myFeedListId: string) => Promise<string | undefined>;
+  myFeedLists: Array<MyFeedFolderType>;
+  handleCreateMyFeed: (myFeedFolderId: string) => Promise<string | undefined>;
   handleRemoveMyFeed: (
     myFeedId: string,
-    myFeedListId: string
+    myFeedFolderId: string
   ) => Promise<string | undefined>;
-  handleCreatedMyFeedLists: (myFeedId: string) => Promise<void>;
+  handleCreatedMyFeedFolder: (myFeedId: string) => Promise<void>;
 };
 
 const formSchema = z.object({
@@ -38,7 +38,7 @@ export const FollowDorpDownMenuContent: FC<FollowDorpDownMenuContentProps> = ({
   myFeedLists,
   handleCreateMyFeed,
   handleRemoveMyFeed,
-  handleCreatedMyFeedLists,
+  handleCreatedMyFeedFolder,
 }: FollowDorpDownMenuContentProps) => {
   const { control, watch } = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -73,15 +73,15 @@ export const FollowDorpDownMenuContent: FC<FollowDorpDownMenuContentProps> = ({
           <TargetFollowMyFeedList
             key={`${feedId}-${myFeedList.id}`}
             feedId={feedId}
-            myFeedList={myFeedList}
+            myFeedFolder={myFeedList}
             handleCreateMyFeed={handleCreateMyFeed}
             handleRemoveMyFeed={handleRemoveMyFeed}
           />
         ))}
       </div>
       <DropdownMenuLabel>
-        <CreateMyFeedListDialog
-          handleCreatedMyFeedLists={handleCreatedMyFeedLists}
+        <CreateMyFeedFolderDialog
+          handleCreatedMyFeedFolder={handleCreatedMyFeedFolder}
         />
       </DropdownMenuLabel>
     </DropdownMenuContent>

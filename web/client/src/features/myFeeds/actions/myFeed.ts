@@ -42,14 +42,14 @@ type FetchMyFeedCountAPIResponse = {
   status: number;
 };
 
-export const fetchMyFeedCountByMyFeedListIdAndFeedIdAPI = async ({
+export const fetchMyFeedCountByMyFeedFolderIdAndFeedIdAPI = async ({
   feedId,
-  myFeedListId,
+  myFeedFolderId,
 }: {
   feedId: string;
-  myFeedListId: string;
+  myFeedFolderId: string;
 }): Promise<FetchMyFeedCountAPIResponse> => {
-  const url = `http://localhost:80/api/myfeeds/count/by-myfeed-list-and-feed-id?myFeedListId=${myFeedListId}&feedId=${feedId}`;
+  const url = `http://localhost:80/api/myfeeds/count/by-myfeed-list-and-feed-id?myFeedFolderId=${myFeedFolderId}&feedId=${feedId}`;
 
   const response = await getFetch({
     url,

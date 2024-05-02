@@ -35,7 +35,7 @@ export const getMyFeedById = async ({ id, userId }: GetMyFeedById) => {
             updatedAt: true,
           },
         },
-        myFeedList: {
+        myFeedFolder: {
           select: {
             id: true,
             title: true,
@@ -51,7 +51,7 @@ export const getMyFeedById = async ({ id, userId }: GetMyFeedById) => {
 
     const myFeedData: MyFeedType = {
       id: data.id,
-      myFeedListId: data.myFeedListId,
+      myFeedFolderId: data.myFeedFolderId,
       feedId: data.feedId,
       createdAt: data.createdAt,
       updatedAt: data.updatedAt,
@@ -69,11 +69,11 @@ export const getMyFeedById = async ({ id, userId }: GetMyFeedById) => {
         updatedAt: data.feed.updatedAt,
       },
       myFeedList: {
-        id: data.myFeedList.id,
-        title: data.myFeedList.title,
-        description: data.myFeedList.description,
-        createdAt: data.myFeedList.createdAt,
-        updatedAt: data.myFeedList.updatedAt,
+        id: data.myFeedFolder.id,
+        title: data.myFeedFolder.title,
+        description: data.myFeedFolder.description,
+        createdAt: data.myFeedFolder.createdAt,
+        updatedAt: data.myFeedFolder.updatedAt,
       },
     };
 
@@ -83,20 +83,20 @@ export const getMyFeedById = async ({ id, userId }: GetMyFeedById) => {
   }
 };
 
-export const getMyFeedCountByMyFeedListIdAndFeedId = async ({
+export const getMyFeedCountByMyFeedFolderIdAndFeedId = async ({
   feedId,
-  myFeedListId,
+  myFeedFolderId,
   userId,
 }: {
   feedId: string;
-  myFeedListId: string;
+  myFeedFolderId: string;
   userId: string;
 }) => {
   try {
     const data = await prisma.myFeed.count({
       where: {
         feedId: feedId,
-        myFeedListId: myFeedListId,
+        myFeedFolderId: myFeedFolderId,
         userId: userId,
       },
     });
@@ -106,26 +106,44 @@ export const getMyFeedCountByMyFeedListIdAndFeedId = async ({
   }
 };
 
-type createMyFeedDTO = {
+export type CreateMyFeedDTO = {
   userId: string;
-  myFeedListId: string;
+  myFeedFolderId: string;
   feedId: string;
 };
 
-export const createMyFeed = async (dto: createMyFeedDTO) => {
+export const createMyFeed = async (dto: CreateMyFeedDTO) => {
   try {
     const uuid = uuidv4();
     const data = await prisma.myFeed.create({
       data: {
         id: uuid,
         userId: dto.userId,
-        myFeedListId: dto.myFeedListId,
+        myFeedFolderId: dto.myFeedFolderId,
         feedId: dto.feedId,
       },
     });
     return data;
   } catch (err) {
     throw new Error(`Failed to create my feed list: ${err}`);
+  }
+};
+
+export const bulkCreateMyFeed = async (myFeedList: CreateMyFeedDTO[]) => {
+  try {
+    const data = await prisma.myFeed.createMany({
+      data: myFeedList.map((myFeed) => {
+        return {
+          id: uuidv4(),
+          userId: myFeed.userId,
+          myFeedFolderId: myFeed.myFeedFolderId,
+          feedId: myFeed.feedId,
+        };
+      }),
+    });
+    return data;
+  } catch (err) {
+    throw new Error(`Failed to bulk create my feed list: ${err}`);
   }
 };
 
@@ -145,5 +163,20 @@ export const deleteMyFeed = async ({ id, userId }: deleteMyFeedDTO) => {
     return data.id;
   } catch (err) {
     throw new Error(`Failed to delete my feed: ${err}`);
+  }
+};
+
+export const bulkDeleteMyFeed = async (myFeedIds: string[]) => {
+  try {
+    const data = await prisma.myFeed.deleteMany({
+      where: {
+        id: {
+          in: myFeedIds,
+        },
+      },
+    });
+    return data.count;
+  } catch (err) {
+    throw new Error(`Failed to bulk delete my feed: ${err}`);
   }
 };

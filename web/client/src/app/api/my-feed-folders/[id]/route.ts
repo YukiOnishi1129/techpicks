@@ -2,7 +2,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 
-import { getMyFeedListById } from "@/features/myFeedLists/repository/myFeedList";
+import { getMyFeedFolderById } from "@/features/myFeedFolders/repository/myFeedFolder";
 import { getUser } from "@/features/users/actions/user";
 
 export const GET = async (
@@ -24,7 +24,7 @@ export const GET = async (
     );
   }
 
-  const data = await getMyFeedListById({
+  const data = await getMyFeedFolderById({
     id: id,
     userId: user.id,
   });
@@ -42,7 +42,7 @@ export const GET = async (
 
   return NextResponse.json(
     {
-      myFeedList: data,
+      myFeedFolders: data,
       message: "success",
     },
     {

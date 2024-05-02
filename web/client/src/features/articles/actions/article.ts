@@ -60,12 +60,32 @@ export const fetchArticlesAPI = async ({
   };
 };
 
-export type FetchArticleByArticleAndPlatformUrlAPIResponse = {
+export type FetchArticleAPIResponse = {
   data: {
     article: ArticleType | undefined;
     message: string;
   };
   status: number;
+};
+
+export const fetchArticleByIdAPI = async (
+  id: string
+): Promise<FetchArticleAPIResponse> => {
+  const url = `${process.env.NEXT_PUBLIC_SITE_DOMAIN}/api/articles/${id}`;
+  const response = await getFetch({
+    url,
+    tagName: "article",
+    cacheType: "no-store",
+  });
+  const data = await response.json();
+  const status = response.status;
+  return {
+    data: {
+      article: data.article as ArticleType | undefined,
+      message: "success",
+    },
+    status,
+  };
 };
 
 export const fetchArticleByArticleAndPlatformUrlAPI = async ({
@@ -74,7 +94,7 @@ export const fetchArticleByArticleAndPlatformUrlAPI = async ({
 }: {
   articleUrl: string;
   platformUrl: string;
-}): Promise<FetchArticleByArticleAndPlatformUrlAPIResponse> => {
+}): Promise<FetchArticleAPIResponse> => {
   let url = `http://localhost:80/api/articles/article-platform-url?articleUrl=${articleUrl}&platformUrl=${platformUrl}`;
   const response = await getFetch({
     url,

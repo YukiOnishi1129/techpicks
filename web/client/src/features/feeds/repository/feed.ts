@@ -122,6 +122,119 @@ export const getFeed = async ({ userId, offset = 1 }: GetFeedParams) => {
   }
 };
 
+export type GetAllFeedType = {
+  userId?: string;
+};
+
+export const getAllFeed = async ({ userId }: GetAllFeedType) => {
+  try {
+    const res = await prisma.feed.findMany({
+      where: {
+        deletedAt: null,
+      },
+      orderBy: [
+        {
+          platform: {
+            platformType: "asc",
+          },
+        },
+        {
+          platform: {
+            isEng: "asc",
+          },
+        },
+        {
+          platform: {
+            name: "asc",
+          },
+        },
+        {
+          category: {
+            type: "asc",
+          },
+        },
+        {
+          category: {
+            name: "asc",
+          },
+        },
+      ],
+      include: {
+        category: true,
+        platform: true,
+        myFeeds: {
+          where: {
+            userId: userId,
+          },
+        },
+        feedArticleRelatoins: {
+          select: {
+            article: {
+              select: {
+                id: true,
+                title: true,
+                description: true,
+                articleUrl: true,
+                publishedAt: true,
+                thumbnailURL: true,
+                authorName: true,
+                tags: true,
+                isPrivate: true,
+                createdAt: true,
+                updatedAt: true,
+              },
+            },
+          },
+          orderBy: {
+            article: {
+              publishedAt: "desc",
+            },
+          },
+        },
+      },
+    });
+
+    const feeds: Array<FeedType> = res.map((feed) => {
+      const resFeed: FeedType = {
+        id: feed.id,
+        name: feed.name,
+        description: feed.description,
+        thumbnailUrl: feed.thumbnailUrl,
+        siteUrl: feed.siteUrl,
+        apiQueryParam: feed.apiQueryParam,
+        trendPlatformType: feed.trendPlatformType,
+        createdAt: feed.createdAt,
+        updatedAt: feed.updatedAt,
+        category: feed.category,
+        platform: feed.platform,
+        myFeeds: feed.myFeeds,
+        isFollowing: feed.myFeeds.length > 0,
+        articles: feed.feedArticleRelatoins.map((relation) => {
+          return {
+            id: relation.article.id,
+            title: relation.article.title,
+            description: relation.article.description,
+            articleUrl: relation.article.articleUrl,
+            publishedAt: relation.article.publishedAt,
+            thumbnailURL: relation.article.thumbnailURL,
+            authorName: relation.article.authorName,
+            tags: relation.article.tags,
+            isPrivate: relation.article.isPrivate,
+            createdAt: relation.article.createdAt,
+            updatedAt: relation.article.updatedAt,
+          };
+        }),
+      };
+
+      return resFeed;
+    });
+
+    return feeds;
+  } catch (err) {
+    throw new Error("Failed to get feed");
+  }
+};
+
 export const getFeedById = async (id: string) => {
   try {
     const res = await prisma.feed.findUnique({

@@ -7,7 +7,7 @@ import { FC, useCallback, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { serverRevalidateFeed } from "@/features/feeds/actions/serverAction";
+import { createMyFeedFolder } from "@/features/myFeedFolders/repository/myFeedFolder";
 import { getUser } from "@/features/users/actions/user";
 
 import { Button } from "@/components/ui/button";
@@ -31,7 +31,7 @@ import { Input } from "@/components/ui/input";
 
 import { useStatusToast } from "@/hooks/useStatusToast";
 
-import { createMyFeedList } from "../../repository/myFeedList";
+import { serverRevalidateMyFeedFolders } from "../../actions/serverAction";
 
 const FormSchema = z.object({
   title: z
@@ -43,13 +43,13 @@ const FormSchema = z.object({
   description: z.string().optional(),
 });
 
-type CreateMyFeedListDialogProps = {
-  handleCreatedMyFeedLists?: (myFeedId: string) => Promise<void>;
+type CreateMyFeedFolderDialogProps = {
+  handleCreatedMyFeedFolder?: (myFeedId: string) => Promise<void>;
 };
 
-export const CreateMyFeedListDialog: FC<CreateMyFeedListDialogProps> = ({
-  handleCreatedMyFeedLists,
-}: CreateMyFeedListDialogProps) => {
+export const CreateMyFeedFolderDialog: FC<CreateMyFeedFolderDialogProps> = ({
+  handleCreatedMyFeedFolder,
+}: CreateMyFeedFolderDialogProps) => {
   const [open, setOpen] = useState(false);
 
   const handleCloseDialog = useCallback(() => {
@@ -62,24 +62,26 @@ export const CreateMyFeedListDialog: FC<CreateMyFeedListDialogProps> = ({
         <Button>{"Create my feed folder"}</Button>
       </DialogTrigger>
       {open && (
-        <CreateMyFeedListDialogContent
+        <CreateMyFeedFolderDialogContent
           handleCloseDialog={handleCloseDialog}
-          handleCreatedMyFeedLists={handleCreatedMyFeedLists}
+          handleCreatedMyFeedFolder={handleCreatedMyFeedFolder}
         />
       )}
     </Dialog>
   );
 };
 
-type CreateMyFeedListDialogContentProps = {
+type CreateMyFeedFolderDialogContentProps = {
   handleCloseDialog: () => void;
-  handleCreatedMyFeedLists?: (myFeedId: string) => Promise<void>;
+  handleCreatedMyFeedFolder?: (myFeedId: string) => Promise<void>;
 };
 
-const CreateMyFeedListDialogContent: FC<CreateMyFeedListDialogContentProps> = ({
+const CreateMyFeedFolderDialogContent: FC<
+  CreateMyFeedFolderDialogContentProps
+> = ({
   handleCloseDialog,
-  handleCreatedMyFeedLists,
-}: CreateMyFeedListDialogContentProps) => {
+  handleCreatedMyFeedFolder,
+}: CreateMyFeedFolderDialogContentProps) => {
   const { successToast, failToast } = useStatusToast();
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
@@ -107,7 +109,7 @@ const CreateMyFeedListDialogContent: FC<CreateMyFeedListDialogContentProps> = ({
           });
           return;
         }
-        const createdId = await createMyFeedList({
+        const createdId = await createMyFeedFolder({
           title: data.title,
           description: data?.description ?? "",
           userId: user?.id,
@@ -121,21 +123,21 @@ const CreateMyFeedListDialogContent: FC<CreateMyFeedListDialogContentProps> = ({
         successToast({
           description: "Successfully created new feed folder",
         });
-        if (handleCreatedMyFeedLists !== undefined) {
-          await handleCreatedMyFeedLists(createdId);
+        if (handleCreatedMyFeedFolder !== undefined) {
+          await handleCreatedMyFeedFolder(createdId);
           resetDialog();
           handleCloseDialog();
           return;
         }
-        await serverRevalidateFeed();
-        router.replace("/feed");
+        await serverRevalidateMyFeedFolders();
+        router.replace("/my-feed-folder");
         resetDialog();
         handleCloseDialog();
       });
     },
     [
       failToast,
-      handleCreatedMyFeedLists,
+      handleCreatedMyFeedFolder,
       resetDialog,
       router,
       startTransition,

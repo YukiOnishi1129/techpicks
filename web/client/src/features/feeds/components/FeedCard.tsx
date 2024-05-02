@@ -17,24 +17,24 @@ export const FeedCard: FC<FeedCardProps> = ({ feed }: FeedCardProps) => {
   const faviconUrl = useCheckImageExist(feed.platform.faviconUrl);
   const latestPublishedAt = feed.articles?.[0]?.publishedAt;
   return (
-    <div className="relative h-[340px] w-full cursor-pointer rounded px-4 py-2 md:h-[210px]">
+    <div className="relative h-[450px] w-full cursor-pointer rounded px-4 py-2 md:h-[210px]">
       <div className="mt-2 flex h-10 md:mt-0">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          className="inline-block size-4 rounded-full shadow-md md:size-8"
+          className="inline-block size-8 rounded-full shadow-md"
           src={faviconUrl}
           alt=""
         />
       </div>
 
-      <div className="">
+      <div>
         <div className="mt-0 md:mt-4">
-          <h3 className="line-clamp-2 h-[48px] text-left text-base font-bold tracking-wide md:h-full md:text-xl">
+          <h3 className="line-clamp-2 h-[48px] text-left text-lg font-bold tracking-wide md:h-full md:text-xl">
             {feed.name}
           </h3>
 
           <div className="mt-2 flex justify-center md:hidden md:w-[30%]">
-            <div className="max-h-[70px] w-full md:h-36 md:w-48">
+            <div className="max-h-[200px] w-full md:h-36 md:max-h-[70px] md:w-48">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 className="mx-auto h-full rounded-lg border-2 object-cover object-center shadow-md"
@@ -55,13 +55,7 @@ export const FeedCard: FC<FeedCardProps> = ({ feed }: FeedCardProps) => {
 
           {/* TODO: description */}
           <div className="mt-2">
-            <p
-              className="line-clamp-3 h-[62px]
-            text-sm
-            "
-            >
-              {feed.description}
-            </p>
+            <p className="line-clamp-3 h-[62px] text-sm">{feed.description}</p>
           </div>
         </div>
 

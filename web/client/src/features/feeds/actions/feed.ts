@@ -35,6 +35,25 @@ export const fetchFeedsAPI = async ({
   };
 };
 
+export const fetchAllFeedAPI = async (): Promise<FetchFeedsAPIResponse> => {
+  const url = `http://localhost:80/api/feeds/all`;
+  const response = await getFetch({
+    url,
+    tagName: "feeds/all",
+    cacheType: "no-store",
+  });
+  const data = await response.json();
+  const status = response.status;
+
+  return {
+    data: {
+      feeds: data.feeds as FeedType[],
+      message: data.message as string,
+    },
+    status: status,
+  };
+};
+
 type FetchFeedByIdAPIResponse = {
   data: {
     feed: FeedType | undefined;

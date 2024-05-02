@@ -1,11 +1,11 @@
 import {
-  MyFeedList as PrismaMyFeedList,
+  myFeedFolder as PrismaMMyFeedFolder,
   Platform as PrismaPlatform,
   Feed as PrismaFeed,
   Category as PrismaCategory,
 } from "@prisma/client";
 
-export type MyFeedListType = Omit<PrismaMyFeedList, "userId"> & {
+export type MyFeedFolderType = Omit<PrismaMMyFeedFolder, "userId"> & {
   feeds: Array<
     Omit<
       PrismaFeed,
@@ -31,17 +31,17 @@ export type MyFeedListType = Omit<PrismaMyFeedList, "userId"> & {
   };
 };
 
-export type FetchMyFeedListAPIResponse = {
+export type FetchMyFeedFolderAPIResponse = {
   data: {
-    myFeedLists: MyFeedListType[];
+    myFeedFolders: MyFeedFolderType[];
     message: string;
   };
   status: number;
 };
 
-export type FetchMyFeedListByIdAPIResponse = {
+export type FetchMyFeedFolderByIdAPIResponse = {
   data: {
-    myFeedList?: MyFeedListType;
+    myFeedFolders?: MyFeedFolderType;
     message: string;
   };
   status: number;

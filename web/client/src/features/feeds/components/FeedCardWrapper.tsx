@@ -2,8 +2,8 @@
 
 import { FC, useCallback, useState } from "react";
 
-import { fetchMyFeedListById } from "@/features/myFeedLists/actions/myFeedList";
-import { fetchMyFeedCountByMyFeedListIdAndFeedIdAPI } from "@/features/myFeeds/actions/myFeed";
+import { fetchMyFeedFolderByIdAPI } from "@/features/myFeedFolders/actions/myFeedFolder";
+import { fetchMyFeedCountByMyFeedFolderIdAndFeedIdAPI } from "@/features/myFeeds/actions/myFeed";
 import {
   createMyFeed,
   deleteMyFeed,
@@ -13,19 +13,19 @@ import { getUser } from "@/features/users/actions/user";
 import { useStatusToast } from "@/hooks/useStatusToast";
 
 import { FeedType } from "@/types/feed";
-import { MyFeedListType } from "@/types/myFeedList";
+import { MyFeedFolderType } from "@/types/myFeedFolder";
 
 import { FollowDropdownMenu } from "./DropdownMenu";
 import { FeedCard } from "./FeedCard";
 
 type FeedCardWrapperProps = {
   feed: FeedType;
-  myFeedLists: Array<MyFeedListType>;
+  myFeedFolders: Array<MyFeedFolderType>;
 };
 
 export const FeedCardWrapper: FC<FeedCardWrapperProps> = ({
   feed,
-  myFeedLists,
+  myFeedFolders,
 }: FeedCardWrapperProps) => {
   const { successToast, failToast } = useStatusToast();
   const [isFollowing, setIsFollowing] = useState<boolean>(
@@ -34,21 +34,28 @@ export const FeedCardWrapper: FC<FeedCardWrapperProps> = ({
 
   const [showFeed, setShowFeed] = useState<FeedType>(feed);
 
-  const [showMyFeedLists, setShowMyFeedLists] = useState<Array<MyFeedListType>>(
-    myFeedLists.map((myFeedList) => {
-      return {
-        ...myFeedList,
-        feeds: myFeedList.feeds.filter((myFeed) => myFeed.id === feed.id),
-      };
-    })
+  const [showMyFeedFolders, setShowMyFeedFolders] = useState<
+    Array<MyFeedFolderType>
+  >(
+    myFeedFolders.length
+      ? myFeedFolders.map((myFeedFolder) => {
+          return {
+            ...myFeedFolder,
+            feeds: myFeedFolder.feeds.filter((myFeed) => myFeed.id === feed.id),
+          };
+        })
+      : []
   );
 
-  const addStateFeedInMyFeedList = useCallback(
-    (targetMyFeedList: MyFeedListType, myFeedId: string): MyFeedListType => {
-      const newMyFeedList: MyFeedListType = {
-        ...targetMyFeedList,
+  const addStateFeedInMyFeedFolder = useCallback(
+    (
+      targetMyFeedFolder: MyFeedFolderType,
+      myFeedId: string
+    ): MyFeedFolderType => {
+      const newMyFeedFolder: MyFeedFolderType = {
+        ...targetMyFeedFolder,
         feeds: [
-          ...targetMyFeedList.feeds,
+          ...targetMyFeedFolder.feeds,
           {
             id: showFeed.id,
             name: showFeed.name,
@@ -74,17 +81,17 @@ export const FeedCardWrapper: FC<FeedCardWrapperProps> = ({
           },
         ],
       };
-      return newMyFeedList;
+      return newMyFeedFolder;
     },
     [showFeed]
   );
 
   const handleCreateMyFeed = useCallback(
-    async (myFeedListId: string, createdMyFeedList?: MyFeedListType) => {
-      // check count myFeed by myFeedListId and feedId
-      const res = await fetchMyFeedCountByMyFeedListIdAndFeedIdAPI({
+    async (myFeedFolderId: string, createdMyFeedFolder?: MyFeedFolderType) => {
+      // check count myFeed by myFeedFolderId and feedId
+      const res = await fetchMyFeedCountByMyFeedFolderIdAndFeedIdAPI({
         feedId: showFeed.id,
-        myFeedListId,
+        myFeedFolderId,
       });
       if (res.data?.count && res.data.count > 0) {
         failToast({
@@ -104,7 +111,7 @@ export const FeedCardWrapper: FC<FeedCardWrapperProps> = ({
       // create myFeed
       const data = await createMyFeed({
         userId: user.id,
-        myFeedListId,
+        myFeedFolderId,
         feedId: showFeed.id,
       });
       if (!data) {
@@ -119,23 +126,22 @@ export const FeedCardWrapper: FC<FeedCardWrapperProps> = ({
 
       // state update
       if (!isFollowing) setIsFollowing(true);
-
-      // add feed to myFeedList
-      if (createdMyFeedList) {
-        setShowMyFeedLists((prev) => [
+      // add feed to myFeedFolder
+      if (createdMyFeedFolder) {
+        setShowMyFeedFolders((prev) => [
           ...prev,
-          addStateFeedInMyFeedList(createdMyFeedList, data.id),
+          addStateFeedInMyFeedFolder(createdMyFeedFolder, data.id),
         ]);
         return data.id;
       }
 
-      const targetMyFeedList = showMyFeedLists.find(
-        (myFeedList) => myFeedList.id === myFeedListId
+      const targetMyFeedFolder = showMyFeedFolders.find(
+        (myFeedFolder) => myFeedFolder.id === myFeedFolderId
       );
-      if (targetMyFeedList) {
-        setShowMyFeedLists((prev) => [
-          ...prev.filter((myFeedList) => myFeedList.id !== myFeedListId),
-          addStateFeedInMyFeedList(targetMyFeedList, data.id),
+      if (targetMyFeedFolder) {
+        setShowMyFeedFolders((prev) => [
+          ...prev.filter((myFeedFolder) => myFeedFolder.id !== myFeedFolderId),
+          addStateFeedInMyFeedFolder(targetMyFeedFolder, data.id),
         ]);
       }
       return data.id;
@@ -145,17 +151,16 @@ export const FeedCardWrapper: FC<FeedCardWrapperProps> = ({
       showFeed,
       isFollowing,
       successToast,
-      showMyFeedLists,
-      addStateFeedInMyFeedList,
+      showMyFeedFolders,
+      addStateFeedInMyFeedFolder,
     ]
   );
 
-  const handleCreatedMyFeedLists = useCallback(
-    async (myFeedListId: string) => {
-      const res = await fetchMyFeedListById(myFeedListId);
-      const newMyFeedList = res.data.myFeedList;
-
-      const id = await handleCreateMyFeed(myFeedListId, newMyFeedList);
+  const handleCreatedMyFeedFolder = useCallback(
+    async (myFeedFolderId: string) => {
+      const res = await fetchMyFeedFolderByIdAPI(myFeedFolderId);
+      const newMyFeedFolders = res.data.myFeedFolders;
+      const id = await handleCreateMyFeed(myFeedFolderId, newMyFeedFolders);
 
       if (id) {
         successToast({
@@ -167,7 +172,7 @@ export const FeedCardWrapper: FC<FeedCardWrapperProps> = ({
   );
 
   const handleRemoveMyFeed = useCallback(
-    async (myFeedId: string, myFeedListId: string) => {
+    async (myFeedId: string, myFeedFolderId: string) => {
       // TODO: check count myFeed by myFeedId
       const user = await getUser();
       if (!user) {
@@ -192,20 +197,20 @@ export const FeedCardWrapper: FC<FeedCardWrapperProps> = ({
       });
 
       // state update
-      // remove feed from myFeedList
-      const targetMyFeedList = showMyFeedLists.find(
-        (myFeedList) => myFeedList.id === myFeedListId
+      // remove feed from myFeedFolder
+      const targetMyFeedFolder = showMyFeedFolders.find(
+        (myFeedFolder) => myFeedFolder.id === myFeedFolderId
       );
-      if (targetMyFeedList) {
-        const newMyFeedList: MyFeedListType = {
-          ...targetMyFeedList,
-          feeds: targetMyFeedList.feeds.filter(
+      if (targetMyFeedFolder) {
+        const newMyFeedFolder: MyFeedFolderType = {
+          ...targetMyFeedFolder,
+          feeds: targetMyFeedFolder.feeds.filter(
             (myFeed) => myFeed.id !== showFeed.id
           ),
         };
-        setShowMyFeedLists((prev) => [
-          ...prev.filter((myFeedList) => myFeedList.id !== myFeedListId),
-          newMyFeedList,
+        setShowMyFeedFolders((prev) => [
+          ...prev.filter((myFeedFolder) => myFeedFolder.id !== myFeedFolderId),
+          newMyFeedFolder,
         ]);
       }
 
@@ -222,7 +227,7 @@ export const FeedCardWrapper: FC<FeedCardWrapperProps> = ({
 
       return id;
     },
-    [successToast, failToast, showMyFeedLists, showFeed]
+    [successToast, failToast, showMyFeedFolders, showFeed]
   );
 
   return (
@@ -232,10 +237,10 @@ export const FeedCardWrapper: FC<FeedCardWrapperProps> = ({
           <FollowDropdownMenu
             feedId={showFeed.id}
             isFollowing={isFollowing}
-            myFeedLists={showMyFeedLists}
+            myFeedFolders={showMyFeedFolders}
             handleCreateMyFeed={handleCreateMyFeed}
             handleRemoveMyFeed={handleRemoveMyFeed}
-            handleCreatedMyFeedLists={handleCreatedMyFeedLists}
+            handleCreatedMyFeedFolder={handleCreatedMyFeedFolder}
           />
         </div>
         <FeedCard feed={showFeed} />

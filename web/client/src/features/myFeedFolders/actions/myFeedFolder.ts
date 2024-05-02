@@ -3,26 +3,25 @@
 import { getFetch } from "@/lib/fetch";
 
 import {
-  FetchMyFeedListAPIResponse,
-  FetchMyFeedListByIdAPIResponse,
-  MyFeedListType,
-} from "@/types/myFeedList";
+  FetchMyFeedFolderAPIResponse,
+  FetchMyFeedFolderByIdAPIResponse,
+  MyFeedFolderType,
+} from "@/types/myFeedFolder";
 
-export const fetchMyFeedListAPI =
-  async (): Promise<FetchMyFeedListAPIResponse> => {
-    const url = `http://localhost:80/api/myfeed-lists`;
+export const fetchMyFeedFoldersAPI =
+  async (): Promise<FetchMyFeedFolderAPIResponse> => {
+    const url = `http://localhost:80/api/my-feed-folders`;
     const response = await getFetch({
       url,
-      tagName: "myfeed-list",
+      tagName: "my-feed-folders",
       cacheType: "no-store",
     });
     const data = await response.json();
     const status = response.status;
-
     if (status === 401) {
       return {
         data: {
-          myFeedLists: [],
+          myFeedFolders: [],
           message: data.message as string,
         },
         status: status,
@@ -31,20 +30,20 @@ export const fetchMyFeedListAPI =
 
     return {
       data: {
-        myFeedLists: data.myFeedLists as MyFeedListType[],
+        myFeedFolders: data.myFeedFolders as MyFeedFolderType[],
         message: data.message as string,
       },
       status: status,
     };
   };
 
-export const fetchMyFeedListById = async (
+export const fetchMyFeedFolderByIdAPI = async (
   id: string
-): Promise<FetchMyFeedListByIdAPIResponse> => {
-  const url = `http://localhost:80/api/myfeed-lists/${id}`;
+): Promise<FetchMyFeedFolderByIdAPIResponse> => {
+  const url = `http://localhost:80/api/my-feed-folders/${id}`;
   const response = await getFetch({
     url,
-    tagName: "myfeed-list",
+    tagName: "my-feed-folder",
     cacheType: "no-store",
   });
   const data = await response.json();
@@ -53,7 +52,7 @@ export const fetchMyFeedListById = async (
   if (status === 401) {
     return {
       data: {
-        myFeedList: undefined,
+        myFeedFolders: undefined,
         message: data.message as string,
       },
       status: status,
@@ -63,7 +62,7 @@ export const fetchMyFeedListById = async (
   if (status === 404) {
     return {
       data: {
-        myFeedList: undefined,
+        myFeedFolders: undefined,
         message: data.message as string,
       },
       status: status,
@@ -72,7 +71,7 @@ export const fetchMyFeedListById = async (
 
   return {
     data: {
-      myFeedList: data?.myFeedList as MyFeedListType,
+      myFeedFolders: data?.myFeedFolders as MyFeedFolderType,
       message: data.message as string,
     },
     status: status,

@@ -9,7 +9,7 @@ var TableNames = struct {
 	Categories           string
 	FeedArticleRelations string
 	Feeds                string
-	MyFeedLists          string
+	MyFeedFolders        string
 	MyFeeds              string
 	Platforms            string
 	Profiles             string
@@ -20,7 +20,7 @@ var TableNames = struct {
 	Categories:           "categories",
 	FeedArticleRelations: "feed_article_relations",
 	Feeds:                "feeds",
-	MyFeedLists:          "my_feed_lists",
+	MyFeedFolders:        "my_feed_folders",
 	MyFeeds:              "my_feeds",
 	Platforms:            "platforms",
 	Profiles:             "profiles",
