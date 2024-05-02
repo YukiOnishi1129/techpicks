@@ -24,9 +24,9 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
-import { useStatusToast } from "@/hooks/useStatusToast";
-
 import { FeedType } from "@/types/feed";
+
+import { DeleteMyFeedFolderAlertDialog } from "./DeleteMyFeedFolderAlertDialog";
 
 const formSchema = z.object({
   title: z
@@ -140,7 +140,6 @@ export const UpdateMyFeedFolderDialogContent: FC<
       feedIdList: feedIdList,
     },
   });
-  const { successToast, failToast } = useStatusToast();
   const [isPending, startTransition] = useTransition();
   const resetDialog = useCallback(() => {
     form.reset();
@@ -159,6 +158,11 @@ export const UpdateMyFeedFolderDialogContent: FC<
       handleClose();
     });
   };
+
+  const onDelete = useCallback(async () => {
+    await handleDeleteMyFeedFolder(myFeedFolderId);
+    handleClose();
+  }, [myFeedFolderId, handleDeleteMyFeedFolder, handleClose]);
 
   return (
     <DialogContent onCloseAutoFocus={resetDialog}>
@@ -254,18 +258,19 @@ export const UpdateMyFeedFolderDialogContent: FC<
 
               <div className="mt-4 flex w-full justify-center space-x-4">
                 <Button type="submit">{"EDIT"}</Button>
+                <DialogClose>
+                  <Button onClick={resetDialog}>{"CLOSE"}</Button>
+                </DialogClose>
               </div>
             </form>
           </Form>
         </div>
       </div>
       <div>
-        <Button onClick={() => handleDeleteMyFeedFolder(myFeedFolderId)}>
-          {"DELETE"}
-        </Button>
-        <DialogClose>
-          <Button onClick={resetDialog}>{"CLOSE"}</Button>
-        </DialogClose>
+        <DeleteMyFeedFolderAlertDialog
+          myFeedFolderTitle={title}
+          onDelete={onDelete}
+        />
       </div>
     </DialogContent>
   );
