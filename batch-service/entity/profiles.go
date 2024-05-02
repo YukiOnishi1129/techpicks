@@ -115,20 +115,26 @@ var ProfileWhere = struct {
 
 // ProfileRels is where relationship names are stored.
 var ProfileRels = struct {
-	UserBookmarks     string
-	UserMyFeedFolders string
-	UserMyFeeds       string
+	UserBookmarks              string
+	UserFavoriteArticleFolders string
+	UserFavoriteArticles       string
+	UserMyFeedFolders          string
+	UserMyFeeds                string
 }{
-	UserBookmarks:     "UserBookmarks",
-	UserMyFeedFolders: "UserMyFeedFolders",
-	UserMyFeeds:       "UserMyFeeds",
+	UserBookmarks:              "UserBookmarks",
+	UserFavoriteArticleFolders: "UserFavoriteArticleFolders",
+	UserFavoriteArticles:       "UserFavoriteArticles",
+	UserMyFeedFolders:          "UserMyFeedFolders",
+	UserMyFeeds:                "UserMyFeeds",
 }
 
 // profileR is where relationships are stored.
 type profileR struct {
-	UserBookmarks     BookmarkSlice     `boil:"UserBookmarks" json:"UserBookmarks" toml:"UserBookmarks" yaml:"UserBookmarks"`
-	UserMyFeedFolders MyFeedFolderSlice `boil:"UserMyFeedFolders" json:"UserMyFeedFolders" toml:"UserMyFeedFolders" yaml:"UserMyFeedFolders"`
-	UserMyFeeds       MyFeedSlice       `boil:"UserMyFeeds" json:"UserMyFeeds" toml:"UserMyFeeds" yaml:"UserMyFeeds"`
+	UserBookmarks              BookmarkSlice              `boil:"UserBookmarks" json:"UserBookmarks" toml:"UserBookmarks" yaml:"UserBookmarks"`
+	UserFavoriteArticleFolders FavoriteArticleFolderSlice `boil:"UserFavoriteArticleFolders" json:"UserFavoriteArticleFolders" toml:"UserFavoriteArticleFolders" yaml:"UserFavoriteArticleFolders"`
+	UserFavoriteArticles       FavoriteArticleSlice       `boil:"UserFavoriteArticles" json:"UserFavoriteArticles" toml:"UserFavoriteArticles" yaml:"UserFavoriteArticles"`
+	UserMyFeedFolders          MyFeedFolderSlice          `boil:"UserMyFeedFolders" json:"UserMyFeedFolders" toml:"UserMyFeedFolders" yaml:"UserMyFeedFolders"`
+	UserMyFeeds                MyFeedSlice                `boil:"UserMyFeeds" json:"UserMyFeeds" toml:"UserMyFeeds" yaml:"UserMyFeeds"`
 }
 
 // NewStruct creates a new relationship struct
@@ -141,6 +147,20 @@ func (r *profileR) GetUserBookmarks() BookmarkSlice {
 		return nil
 	}
 	return r.UserBookmarks
+}
+
+func (r *profileR) GetUserFavoriteArticleFolders() FavoriteArticleFolderSlice {
+	if r == nil {
+		return nil
+	}
+	return r.UserFavoriteArticleFolders
+}
+
+func (r *profileR) GetUserFavoriteArticles() FavoriteArticleSlice {
+	if r == nil {
+		return nil
+	}
+	return r.UserFavoriteArticles
 }
 
 func (r *profileR) GetUserMyFeedFolders() MyFeedFolderSlice {
@@ -487,6 +507,34 @@ func (o *Profile) UserBookmarks(mods ...qm.QueryMod) bookmarkQuery {
 	return Bookmarks(queryMods...)
 }
 
+// UserFavoriteArticleFolders retrieves all the favorite_article_folder's FavoriteArticleFolders with an executor via user_id column.
+func (o *Profile) UserFavoriteArticleFolders(mods ...qm.QueryMod) favoriteArticleFolderQuery {
+	var queryMods []qm.QueryMod
+	if len(mods) != 0 {
+		queryMods = append(queryMods, mods...)
+	}
+
+	queryMods = append(queryMods,
+		qm.Where("\"favorite_article_folders\".\"user_id\"=?", o.ID),
+	)
+
+	return FavoriteArticleFolders(queryMods...)
+}
+
+// UserFavoriteArticles retrieves all the favorite_article's FavoriteArticles with an executor via user_id column.
+func (o *Profile) UserFavoriteArticles(mods ...qm.QueryMod) favoriteArticleQuery {
+	var queryMods []qm.QueryMod
+	if len(mods) != 0 {
+		queryMods = append(queryMods, mods...)
+	}
+
+	queryMods = append(queryMods,
+		qm.Where("\"favorite_articles\".\"user_id\"=?", o.ID),
+	)
+
+	return FavoriteArticles(queryMods...)
+}
+
 // UserMyFeedFolders retrieves all the my_feed_folder's MyFeedFolders with an executor via user_id column.
 func (o *Profile) UserMyFeedFolders(mods ...qm.QueryMod) myFeedFolderQuery {
 	var queryMods []qm.QueryMod
@@ -618,6 +666,232 @@ func (profileL) LoadUserBookmarks(ctx context.Context, e boil.ContextExecutor, s
 				local.R.UserBookmarks = append(local.R.UserBookmarks, foreign)
 				if foreign.R == nil {
 					foreign.R = &bookmarkR{}
+				}
+				foreign.R.User = local
+				break
+			}
+		}
+	}
+
+	return nil
+}
+
+// LoadUserFavoriteArticleFolders allows an eager lookup of values, cached into the
+// loaded structs of the objects. This is for a 1-M or N-M relationship.
+func (profileL) LoadUserFavoriteArticleFolders(ctx context.Context, e boil.ContextExecutor, singular bool, maybeProfile interface{}, mods queries.Applicator) error {
+	var slice []*Profile
+	var object *Profile
+
+	if singular {
+		var ok bool
+		object, ok = maybeProfile.(*Profile)
+		if !ok {
+			object = new(Profile)
+			ok = queries.SetFromEmbeddedStruct(&object, &maybeProfile)
+			if !ok {
+				return errors.New(fmt.Sprintf("failed to set %T from embedded struct %T", object, maybeProfile))
+			}
+		}
+	} else {
+		s, ok := maybeProfile.(*[]*Profile)
+		if ok {
+			slice = *s
+		} else {
+			ok = queries.SetFromEmbeddedStruct(&slice, maybeProfile)
+			if !ok {
+				return errors.New(fmt.Sprintf("failed to set %T from embedded struct %T", slice, maybeProfile))
+			}
+		}
+	}
+
+	args := make(map[interface{}]struct{})
+	if singular {
+		if object.R == nil {
+			object.R = &profileR{}
+		}
+		args[object.ID] = struct{}{}
+	} else {
+		for _, obj := range slice {
+			if obj.R == nil {
+				obj.R = &profileR{}
+			}
+			args[obj.ID] = struct{}{}
+		}
+	}
+
+	if len(args) == 0 {
+		return nil
+	}
+
+	argsSlice := make([]interface{}, len(args))
+	i := 0
+	for arg := range args {
+		argsSlice[i] = arg
+		i++
+	}
+
+	query := NewQuery(
+		qm.From(`favorite_article_folders`),
+		qm.WhereIn(`favorite_article_folders.user_id in ?`, argsSlice...),
+	)
+	if mods != nil {
+		mods.Apply(query)
+	}
+
+	results, err := query.QueryContext(ctx, e)
+	if err != nil {
+		return errors.Wrap(err, "failed to eager load favorite_article_folders")
+	}
+
+	var resultSlice []*FavoriteArticleFolder
+	if err = queries.Bind(results, &resultSlice); err != nil {
+		return errors.Wrap(err, "failed to bind eager loaded slice favorite_article_folders")
+	}
+
+	if err = results.Close(); err != nil {
+		return errors.Wrap(err, "failed to close results in eager load on favorite_article_folders")
+	}
+	if err = results.Err(); err != nil {
+		return errors.Wrap(err, "error occurred during iteration of eager loaded relations for favorite_article_folders")
+	}
+
+	if len(favoriteArticleFolderAfterSelectHooks) != 0 {
+		for _, obj := range resultSlice {
+			if err := obj.doAfterSelectHooks(ctx, e); err != nil {
+				return err
+			}
+		}
+	}
+	if singular {
+		object.R.UserFavoriteArticleFolders = resultSlice
+		for _, foreign := range resultSlice {
+			if foreign.R == nil {
+				foreign.R = &favoriteArticleFolderR{}
+			}
+			foreign.R.User = object
+		}
+		return nil
+	}
+
+	for _, foreign := range resultSlice {
+		for _, local := range slice {
+			if local.ID == foreign.UserID {
+				local.R.UserFavoriteArticleFolders = append(local.R.UserFavoriteArticleFolders, foreign)
+				if foreign.R == nil {
+					foreign.R = &favoriteArticleFolderR{}
+				}
+				foreign.R.User = local
+				break
+			}
+		}
+	}
+
+	return nil
+}
+
+// LoadUserFavoriteArticles allows an eager lookup of values, cached into the
+// loaded structs of the objects. This is for a 1-M or N-M relationship.
+func (profileL) LoadUserFavoriteArticles(ctx context.Context, e boil.ContextExecutor, singular bool, maybeProfile interface{}, mods queries.Applicator) error {
+	var slice []*Profile
+	var object *Profile
+
+	if singular {
+		var ok bool
+		object, ok = maybeProfile.(*Profile)
+		if !ok {
+			object = new(Profile)
+			ok = queries.SetFromEmbeddedStruct(&object, &maybeProfile)
+			if !ok {
+				return errors.New(fmt.Sprintf("failed to set %T from embedded struct %T", object, maybeProfile))
+			}
+		}
+	} else {
+		s, ok := maybeProfile.(*[]*Profile)
+		if ok {
+			slice = *s
+		} else {
+			ok = queries.SetFromEmbeddedStruct(&slice, maybeProfile)
+			if !ok {
+				return errors.New(fmt.Sprintf("failed to set %T from embedded struct %T", slice, maybeProfile))
+			}
+		}
+	}
+
+	args := make(map[interface{}]struct{})
+	if singular {
+		if object.R == nil {
+			object.R = &profileR{}
+		}
+		args[object.ID] = struct{}{}
+	} else {
+		for _, obj := range slice {
+			if obj.R == nil {
+				obj.R = &profileR{}
+			}
+			args[obj.ID] = struct{}{}
+		}
+	}
+
+	if len(args) == 0 {
+		return nil
+	}
+
+	argsSlice := make([]interface{}, len(args))
+	i := 0
+	for arg := range args {
+		argsSlice[i] = arg
+		i++
+	}
+
+	query := NewQuery(
+		qm.From(`favorite_articles`),
+		qm.WhereIn(`favorite_articles.user_id in ?`, argsSlice...),
+	)
+	if mods != nil {
+		mods.Apply(query)
+	}
+
+	results, err := query.QueryContext(ctx, e)
+	if err != nil {
+		return errors.Wrap(err, "failed to eager load favorite_articles")
+	}
+
+	var resultSlice []*FavoriteArticle
+	if err = queries.Bind(results, &resultSlice); err != nil {
+		return errors.Wrap(err, "failed to bind eager loaded slice favorite_articles")
+	}
+
+	if err = results.Close(); err != nil {
+		return errors.Wrap(err, "failed to close results in eager load on favorite_articles")
+	}
+	if err = results.Err(); err != nil {
+		return errors.Wrap(err, "error occurred during iteration of eager loaded relations for favorite_articles")
+	}
+
+	if len(favoriteArticleAfterSelectHooks) != 0 {
+		for _, obj := range resultSlice {
+			if err := obj.doAfterSelectHooks(ctx, e); err != nil {
+				return err
+			}
+		}
+	}
+	if singular {
+		object.R.UserFavoriteArticles = resultSlice
+		for _, foreign := range resultSlice {
+			if foreign.R == nil {
+				foreign.R = &favoriteArticleR{}
+			}
+			foreign.R.User = object
+		}
+		return nil
+	}
+
+	for _, foreign := range resultSlice {
+		for _, local := range slice {
+			if local.ID == foreign.UserID {
+				local.R.UserFavoriteArticles = append(local.R.UserFavoriteArticles, foreign)
+				if foreign.R == nil {
+					foreign.R = &favoriteArticleR{}
 				}
 				foreign.R.User = local
 				break
@@ -898,6 +1172,112 @@ func (o *Profile) AddUserBookmarks(ctx context.Context, exec boil.ContextExecuto
 	for _, rel := range related {
 		if rel.R == nil {
 			rel.R = &bookmarkR{
+				User: o,
+			}
+		} else {
+			rel.R.User = o
+		}
+	}
+	return nil
+}
+
+// AddUserFavoriteArticleFolders adds the given related objects to the existing relationships
+// of the profile, optionally inserting them as new records.
+// Appends related to o.R.UserFavoriteArticleFolders.
+// Sets related.R.User appropriately.
+func (o *Profile) AddUserFavoriteArticleFolders(ctx context.Context, exec boil.ContextExecutor, insert bool, related ...*FavoriteArticleFolder) error {
+	var err error
+	for _, rel := range related {
+		if insert {
+			rel.UserID = o.ID
+			if err = rel.Insert(ctx, exec, boil.Infer()); err != nil {
+				return errors.Wrap(err, "failed to insert into foreign table")
+			}
+		} else {
+			updateQuery := fmt.Sprintf(
+				"UPDATE \"favorite_article_folders\" SET %s WHERE %s",
+				strmangle.SetParamNames("\"", "\"", 1, []string{"user_id"}),
+				strmangle.WhereClause("\"", "\"", 2, favoriteArticleFolderPrimaryKeyColumns),
+			)
+			values := []interface{}{o.ID, rel.ID}
+
+			if boil.IsDebug(ctx) {
+				writer := boil.DebugWriterFrom(ctx)
+				fmt.Fprintln(writer, updateQuery)
+				fmt.Fprintln(writer, values)
+			}
+			if _, err = exec.ExecContext(ctx, updateQuery, values...); err != nil {
+				return errors.Wrap(err, "failed to update foreign table")
+			}
+
+			rel.UserID = o.ID
+		}
+	}
+
+	if o.R == nil {
+		o.R = &profileR{
+			UserFavoriteArticleFolders: related,
+		}
+	} else {
+		o.R.UserFavoriteArticleFolders = append(o.R.UserFavoriteArticleFolders, related...)
+	}
+
+	for _, rel := range related {
+		if rel.R == nil {
+			rel.R = &favoriteArticleFolderR{
+				User: o,
+			}
+		} else {
+			rel.R.User = o
+		}
+	}
+	return nil
+}
+
+// AddUserFavoriteArticles adds the given related objects to the existing relationships
+// of the profile, optionally inserting them as new records.
+// Appends related to o.R.UserFavoriteArticles.
+// Sets related.R.User appropriately.
+func (o *Profile) AddUserFavoriteArticles(ctx context.Context, exec boil.ContextExecutor, insert bool, related ...*FavoriteArticle) error {
+	var err error
+	for _, rel := range related {
+		if insert {
+			rel.UserID = o.ID
+			if err = rel.Insert(ctx, exec, boil.Infer()); err != nil {
+				return errors.Wrap(err, "failed to insert into foreign table")
+			}
+		} else {
+			updateQuery := fmt.Sprintf(
+				"UPDATE \"favorite_articles\" SET %s WHERE %s",
+				strmangle.SetParamNames("\"", "\"", 1, []string{"user_id"}),
+				strmangle.WhereClause("\"", "\"", 2, favoriteArticlePrimaryKeyColumns),
+			)
+			values := []interface{}{o.ID, rel.ID}
+
+			if boil.IsDebug(ctx) {
+				writer := boil.DebugWriterFrom(ctx)
+				fmt.Fprintln(writer, updateQuery)
+				fmt.Fprintln(writer, values)
+			}
+			if _, err = exec.ExecContext(ctx, updateQuery, values...); err != nil {
+				return errors.Wrap(err, "failed to update foreign table")
+			}
+
+			rel.UserID = o.ID
+		}
+	}
+
+	if o.R == nil {
+		o.R = &profileR{
+			UserFavoriteArticles: related,
+		}
+	} else {
+		o.R.UserFavoriteArticles = append(o.R.UserFavoriteArticles, related...)
+	}
+
+	for _, rel := range related {
+		if rel.R == nil {
+			rel.R = &favoriteArticleR{
 				User: o,
 			}
 		} else {
