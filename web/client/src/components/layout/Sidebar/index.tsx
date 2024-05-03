@@ -4,6 +4,7 @@ import { FaRegBookmark } from "react-icons/fa";
 import { MdFeed, MdCalendarToday, MdRssFeed } from "react-icons/md";
 
 import { CreateFavoriteArticleFolderDialog } from "@/features/favoriteArticleFolders/components/Dialog";
+import { CreateMyFeedFolderDialog } from "@/features/myFeedFolders/components/Dialog";
 
 import { FavoriteArticleFolderLinks } from "./FavoriteArticleFolderLinks";
 import { MyFeedFolderLinks } from "./MyFeedFolderLinks";
@@ -43,7 +44,7 @@ export function Sidebar({ user }: SidebarProps) {
               <h2 className="mb-2 px-2 text-lg font-semibold tracking-tight">
                 My Feeds
               </h2>
-              <div>
+              <div className="mt-2">
                 <div className="flex cursor-pointer items-center space-x-2 rounded-md px-2 hover:bg-secondary">
                   <MdFeed />
                   <Link href="/my-feed-folder" className="pl-2">
@@ -51,6 +52,9 @@ export function Sidebar({ user }: SidebarProps) {
                   </Link>
                 </div>
                 <MyFeedFolderLinks user={user} />
+                <div className="ml-4">
+                  <CreateMyFeedFolderDialog buttonVariant="ghost" />
+                </div>
               </div>
             </div>
 

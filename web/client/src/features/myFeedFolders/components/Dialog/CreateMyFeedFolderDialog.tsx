@@ -33,8 +33,6 @@ import { useStatusToast } from "@/hooks/useStatusToast";
 
 import { serverRevalidatePage } from "@/actions/serverAction";
 
-import { serverRevalidateMyFeedFolders } from "../../actions/serverAction";
-
 const FormSchema = z.object({
   title: z
     .string({
@@ -46,10 +44,18 @@ const FormSchema = z.object({
 });
 
 type CreateMyFeedFolderDialogProps = {
+  buttonVariant?:
+    | "default"
+    | "destructive"
+    | "outline"
+    | "secondary"
+    | "ghost"
+    | "link";
   handleCreatedMyFeedFolder?: (myFeedId: string) => Promise<void>;
 };
 
 export const CreateMyFeedFolderDialog: FC<CreateMyFeedFolderDialogProps> = ({
+  buttonVariant,
   handleCreatedMyFeedFolder,
 }) => {
   const [open, setOpen] = useState(false);
@@ -61,7 +67,7 @@ export const CreateMyFeedFolderDialog: FC<CreateMyFeedFolderDialogProps> = ({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>{"Create my feed folder"}</Button>
+        <Button variant={buttonVariant}>{"Create folder"}</Button>
       </DialogTrigger>
       {open && (
         <CreateMyFeedFolderDialogContent
@@ -133,8 +139,7 @@ const CreateMyFeedFolderDialogContent: FC<
           handleCloseDialog();
           return;
         }
-        await serverRevalidateMyFeedFolders();
-        router.replace("/my-feed-folder");
+        await serverRevalidatePage(pathname);
         resetDialog();
         handleCloseDialog();
       });
