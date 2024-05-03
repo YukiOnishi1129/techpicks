@@ -194,14 +194,6 @@ const ArticleContent = ({
           </SheetClose>
         </div>
       </div>
-
-      {/* <SheetFooter className="mt-8">
-        <SheetClose asChild>
-          <Button variant="outline" className=" inline-block w-1/2 text-xl ">
-            CLOSE
-          </Button>
-        </SheetClose>
-      </SheetFooter> */}
     </>
   );
 };
