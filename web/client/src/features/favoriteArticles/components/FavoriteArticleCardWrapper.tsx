@@ -8,8 +8,10 @@ import { useCheckImageExist } from "@/hooks/useImage";
 import { useStatusToast } from "@/hooks/useStatusToast";
 
 import { FavoriteArticleType } from "@/types/favoriteArticle";
+import { FavoriteArticleFolderType } from "@/types/favoriteArticleFolder";
 
 import { RemoveFavoriteArticleAlertDialog } from "./Dialog/RemoveFavoriteArticleAlertDialog";
+import { CopyFavoriteArticleDropdownMenu } from "./DropdownMenu";
 import { FavoriteArticleCard } from "./FavoriteArticleCard";
 import { FavoriteArticleDetailSheet } from "./FavoriteArticleDetailSheet";
 import { AddFavoriteArticleTooltip } from "./Tooltip/AddFavoriteArticleTooltip";
@@ -26,11 +28,17 @@ type FavoriteArticleCardWrapperProps = {
   user?: User;
   favoriteArticleFolderId: string;
   favoriteArticle: FavoriteArticleType;
+  otherFavoriteArticleFolders: Array<FavoriteArticleFolderType>;
 };
 
 export const FavoriteArticleCardWrapper: FC<
   FavoriteArticleCardWrapperProps
-> = ({ user, favoriteArticleFolderId, favoriteArticle }) => {
+> = ({
+  user,
+  favoriteArticleFolderId,
+  favoriteArticle,
+  otherFavoriteArticleFolders,
+}) => {
   const faviconImageUrl = useCheckImageExist(
     favoriteArticle?.platformFaviconUrl || "undefined"
   );
@@ -155,6 +163,12 @@ export const FavoriteArticleCardWrapper: FC<
               <ShareLinks
                 shareTitle={favoriteArticle.title}
                 shareUrl={favoriteArticle.articleUrl}
+              />
+            </div>
+            <div className="mr-4">
+              <CopyFavoriteArticleDropdownMenu
+                articleId={favoriteArticle.articleId || ""}
+                favoriteArticleFolders={otherFavoriteArticleFolders}
               />
             </div>
             <div>

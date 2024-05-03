@@ -10,6 +10,7 @@ import { FavoriteArticleType } from "@/types/favoriteArticle";
 import {
   FetchFavoriteArticlesByFavoriteArticleFolderIdAPIArg,
   FetchFavoriteArticlesAPIResponse,
+  FavoriteArticleFolderType,
 } from "@/types/favoriteArticleFolder";
 
 import { FavoriteArticleCardWrapper } from "./FavoriteArticleCardWrapper";
@@ -18,6 +19,7 @@ type FavoriteArticleListProps = {
   user?: User;
   favoriteArticleFolderId: string;
   initialFavoriteArticles: Array<FavoriteArticleType>;
+  otherFavoriteArticleFolders: Array<FavoriteArticleFolderType>;
   keyword?: string;
   fetchFavoriteArticles: ({
     favoriteArticleFolderId,
@@ -28,6 +30,7 @@ export const FavoriteArticleList: FC<FavoriteArticleListProps> = ({
   user,
   favoriteArticleFolderId,
   initialFavoriteArticles,
+  otherFavoriteArticleFolders,
   keyword,
   fetchFavoriteArticles,
 }) => {
@@ -106,6 +109,7 @@ export const FavoriteArticleList: FC<FavoriteArticleListProps> = ({
                 user={user}
                 favoriteArticleFolderId={favoriteArticleFolderId}
                 favoriteArticle={favoriteArticle}
+                otherFavoriteArticleFolders={otherFavoriteArticleFolders}
               />
             </div>
           ))}

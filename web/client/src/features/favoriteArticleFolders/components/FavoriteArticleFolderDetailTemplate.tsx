@@ -7,7 +7,10 @@ import { getUser } from "@/features/users/actions/user";
 
 import { BreadCrumbType, PageBreadcrumb } from "@/components/ui/breadcrumb";
 
-import { fetchFavoriteArticleFolderByIdAPI } from "../actions/favoriteArticleFolders";
+import {
+  fetchFavoriteArticleFolderByIdAPI,
+  fetchFavoriteArticleFoldersAPI,
+} from "../actions/favoriteArticleFolders";
 
 type FavoriteArticleFolderDetailTemplateProps = {
   id: string;
@@ -25,8 +28,14 @@ export const FavoriteArticleFolderDetailTemplate: FC<
       keyword: keyword,
     });
 
+  const resAllFavoriteArticleFolders = await fetchFavoriteArticleFoldersAPI();
+
   const title = res.data.favoriteArticleFolder?.title || "";
-  const favoriteArticleFolderId = res.data.favoriteArticleFolder?.id || "";
+
+  const otherFavoriteArticleFolders =
+    resAllFavoriteArticleFolders.data.favoriteArticleFolders.filter(
+      (favoriteArticleFolder) => favoriteArticleFolder.id !== id
+    );
 
   const breadcrumbs: BreadCrumbType[] = [
     {
@@ -54,8 +63,9 @@ export const FavoriteArticleFolderDetailTemplate: FC<
       <div className="mt-4">
         <FavoriteArticleList
           user={user}
-          favoriteArticleFolderId={favoriteArticleFolderId}
+          favoriteArticleFolderId={id}
           initialFavoriteArticles={resFavoriteArticles.data.favoriteArticles}
+          otherFavoriteArticleFolders={otherFavoriteArticleFolders}
           keyword={keyword}
           fetchFavoriteArticles={
             fetchFavoriteArticlesByFavoriteArticleFolderIdAPI
