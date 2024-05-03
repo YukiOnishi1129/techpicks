@@ -4,13 +4,46 @@ import { getFetch } from "@/lib/fetch";
 
 import { FetchCountAPIResponse } from "@/types/api";
 import { FavoriteArticleType } from "@/types/favoriteArticle";
+import {
+  FetchFavoriteArticlesByFavoriteArticleFolderIdAPIArg,
+  FetchFavoriteArticlesAPIResponse,
+  FetchFavoriteArticleAPIResponse,
+} from "@/types/favoriteArticleFolder";
 
-type FetchFavoriteArticleAPIResponse = {
-  data: {
-    favoriteArticle?: FavoriteArticleType;
-    message: string;
+export const fetchFavoriteArticlesByFavoriteArticleFolderIdAPI = async ({
+  favoriteArticleFolderId,
+  offset = "1",
+  keyword,
+}: FetchFavoriteArticlesByFavoriteArticleFolderIdAPIArg): Promise<FetchFavoriteArticlesAPIResponse> => {
+  let url = `http://localhost:80/api/favorite-articles/favorite-article-folder-id/${favoriteArticleFolderId}?offset=${offset}`;
+  if (keyword) {
+    url += `&keyword=${keyword}`;
+  }
+  const response = await getFetch({
+    url,
+    tagName: "favorite-articles/favorite-article-folder-id",
+    cacheType: "no-store",
+  });
+  const data = await response.json();
+  const status = response.status;
+
+  if (status === 401) {
+    return {
+      data: {
+        favoriteArticles: [],
+        message: data.message as string,
+      },
+      status,
+    };
+  }
+
+  return {
+    data: {
+      favoriteArticles: data.favoriteArticles as Array<FavoriteArticleType>,
+      message: data.message as string,
+    },
+    status,
   };
-  status: number;
 };
 
 export const fetchFavoriteArticleAPI = async (

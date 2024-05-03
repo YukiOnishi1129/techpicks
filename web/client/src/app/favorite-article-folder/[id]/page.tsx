@@ -1,4 +1,4 @@
-import { FavoriteArticleFolderListTemplate } from "@/features/favoriteArticleFolders/components/FavoriteArticleFolderListTemplate";
+import { FavoriteArticleFolderDetailTemplate } from "@/features/favoriteArticleFolders/components/FavoriteArticleFolderDetailTemplate";
 
 type FavoriteArticleFolderDetailPageProps = {
   params: {
@@ -10,5 +10,5 @@ export default function FavoriteArticleFolderDetailPage({
   params,
 }: FavoriteArticleFolderDetailPageProps) {
   const { id } = params;
-  return <FavoriteArticleFolderListTemplate />;
+  return <FavoriteArticleFolderDetailTemplate id={id} />;
 }

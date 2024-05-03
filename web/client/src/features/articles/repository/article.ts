@@ -168,7 +168,7 @@ export const getArticles = async ({
 
   try {
     const res = await prisma.article.findMany({
-      take: 20,
+      take: LIMIT,
       skip: (offset - 1) * LIMIT,
       where,
       orderBy,
