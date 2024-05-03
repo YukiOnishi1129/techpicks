@@ -1,10 +1,15 @@
 "use client";
 import { User } from "@supabase/supabase-js";
 import { clsx } from "clsx";
-import { FC, useMemo, useState } from "react";
+import { FC, useCallback, useMemo, useState } from "react";
 import { TwitterShareButton, XIcon } from "react-share";
 
+import { fetchFavoriteArticleCountByFavoriteArticleFolderIdAndArticleIdAPI } from "@/features/favoriteArticles/actions/favoriteArticle";
+import { createFavoriteArticle } from "@/features/favoriteArticles/repository/favoriteArticle";
+
 import { ReadPostTooltip } from "@/components/ui/tooltip/ReadPostTooltip";
+
+import { useStatusToast } from "@/hooks/useStatusToast";
 
 import { ArticleTabType, ArticleType } from "@/types/article";
 import { FavoriteArticleFolderType } from "@/types/favoriteArticleFolder";
@@ -29,10 +34,14 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
   user,
   tab,
 }: ArticleCardWrapperProps) => {
+  const { successToast, failToast } = useStatusToast();
   const [isFollowing, setIsFollowing] = useState<boolean>(
     article.isFollowing || false
   );
   const [showArticle, setShowArticle] = useState<ArticleType>(article);
+  const [showFavoriteArticleFolders, setShowFavoriteArticleFolders] = useState<
+    Array<FavoriteArticleFolderType>
+  >(favoriteArticleFolders);
 
   const { bookmarkId, handleAddBookmark, handleRemoveBookmark } =
     useArticleBookmark({ article });
@@ -43,6 +52,140 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
   );
 
   const shareUrl = `${process.env.NEXT_PUBLIC_SITE_DOMAIN}/article/${article.id}`;
+
+  const addStateFavoriteArticleInFavoriteArticleFolder = useCallback(
+    (
+      targetFavoriteArticleFolder: FavoriteArticleFolderType,
+      favoriteArticleId: string
+    ): FavoriteArticleFolderType => {
+      const newFavoriteArticleFolder: FavoriteArticleFolderType = {
+        ...targetFavoriteArticleFolder,
+        favoriteArticles: [
+          ...targetFavoriteArticleFolder.favoriteArticles,
+          {
+            id: favoriteArticleId,
+            favoriteArticleFolderId: targetFavoriteArticleFolder.id,
+            articleId: showArticle.id,
+            platformId: showArticle.platform.id,
+            title: showArticle.title,
+            description: showArticle.description,
+            articleUrl: showArticle.articleUrl,
+            publishedAt: showArticle.publishedAt,
+            authorName: showArticle?.authorName,
+            tags: showArticle?.tags,
+            thumbnailURL: showArticle?.thumbnailURL,
+            platformName: showArticle.platform.name,
+            platformUrl: showArticle.platform.siteUrl,
+            platformFaviconUrl: showArticle.platform.faviconUrl,
+            isEng: showArticle.platform.isEng,
+            isRead: false,
+            isPrivate: showArticle.isPrivate,
+          },
+        ],
+      };
+      return newFavoriteArticleFolder;
+    },
+    [showArticle]
+  );
+
+  const handleCreateFavoriteArticle = useCallback(
+    async (
+      favoriteArticleFolderId: string,
+      createdFavoriteArticleFolder?: FavoriteArticleFolderType
+    ) => {
+      // 1. check user
+      if (!user) {
+        failToast({
+          description: "Please login to follow the article",
+        });
+        return;
+      }
+      // 2. check out favoriteArticle by favoriteArticleFolderId and articleId
+      const resCount =
+        await fetchFavoriteArticleCountByFavoriteArticleFolderIdAndArticleIdAPI(
+          {
+            articleId: showArticle.id,
+            favoriteArticleFolderId,
+          }
+        );
+      if (resCount.data?.count && resCount.data.count > 0) {
+        failToast({
+          description: "You are already following the article",
+        });
+        return;
+      }
+
+      // 3. create favoriteArticle
+      const createdId = await createFavoriteArticle({
+        userId: user?.id || "",
+        favoriteArticleFolderId: favoriteArticleFolderId,
+        articleId: showArticle.id,
+        platformId: showArticle.platform.id,
+        title: showArticle.title,
+        description: showArticle.description,
+        articleUrl: showArticle.articleUrl,
+        publishedAt: showArticle.publishedAt,
+        authorName: showArticle?.authorName || undefined,
+        tags: showArticle?.tags || undefined,
+        thumbnailURL: showArticle?.thumbnailURL,
+        platformName: showArticle.platform.name,
+        platformUrl: showArticle.platform.siteUrl,
+        platformFaviconUrl: showArticle.platform.faviconUrl,
+        isEng: showArticle.platform.isEng,
+        isRead: false,
+        isPrivate: showArticle.isPrivate,
+      });
+
+      if (!createdId) {
+        failToast({
+          description: "Failed to follow the article",
+        });
+        return;
+      }
+      successToast({
+        description: "Followed the article",
+      });
+
+      // state update
+      if (!isFollowing) setIsFollowing(true);
+      if (createdFavoriteArticleFolder) {
+        setShowFavoriteArticleFolders((prev) => [
+          ...prev,
+          addStateFavoriteArticleInFavoriteArticleFolder(
+            createdFavoriteArticleFolder,
+            createdId
+          ),
+        ]);
+      }
+
+      const targetFavoriteArticleFolder = showFavoriteArticleFolders.find(
+        (favoriteArticleFolder) =>
+          favoriteArticleFolder.id === favoriteArticleFolderId
+      );
+      if (targetFavoriteArticleFolder) {
+        setShowFavoriteArticleFolders((prev) => [
+          ...prev.filter(
+            (favoriteArticleFolder) =>
+              favoriteArticleFolder.id !== favoriteArticleFolderId
+          ),
+          addStateFavoriteArticleInFavoriteArticleFolder(
+            targetFavoriteArticleFolder,
+            createdId
+          ),
+        ]);
+      }
+      return createdId;
+    },
+    [
+      failToast,
+      successToast,
+      addStateFavoriteArticleInFavoriteArticleFolder,
+      showArticle,
+      user,
+      isFollowing,
+      showFavoriteArticleFolders,
+    ]
+  );
 
   return (
     <div
@@ -113,7 +256,8 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
                     <FollowFavoriteArticleDropdownMenu
                       isFollowing={isFollowing}
                       articleId={showArticle.id}
-                      favoriteArticleFolders={favoriteArticleFolders}
+                      favoriteArticleFolders={showFavoriteArticleFolders}
+                      handleCreateFavoriteArticle={handleCreateFavoriteArticle}
                     />
                   </div>
                 </>

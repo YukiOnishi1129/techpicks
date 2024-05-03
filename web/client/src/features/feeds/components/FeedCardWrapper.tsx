@@ -88,6 +88,15 @@ export const FeedCardWrapper: FC<FeedCardWrapperProps> = ({
 
   const handleCreateMyFeed = useCallback(
     async (myFeedFolderId: string, createdMyFeedFolder?: MyFeedFolderType) => {
+      // login check
+      const user = await getUser();
+      if (!user) {
+        failToast({
+          description: "Please sign in to follow the feed",
+        });
+        return;
+      }
+
       // check count myFeed by myFeedFolderId and feedId
       const res = await fetchMyFeedCountByMyFeedFolderIdAndFeedIdAPI({
         feedId: showFeed.id,
@@ -96,14 +105,6 @@ export const FeedCardWrapper: FC<FeedCardWrapperProps> = ({
       if (res.data?.count && res.data.count > 0) {
         failToast({
           description: "You are already following the feed",
-        });
-        return;
-      }
-
-      const user = await getUser();
-      if (!user) {
-        failToast({
-          description: "Please sign in to follow the feed",
         });
         return;
       }

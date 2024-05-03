@@ -45,8 +45,6 @@ export function ArticleList({
   tab,
   fetchArticles,
 }: Props) {
-  console.log("🧝‍♀️");
-  console.log(favoriteArticleFolders);
   const observerTarget = useRef(null);
 
   const [articles, setArticles] = useState<ArticleType[]>(initialArticles);

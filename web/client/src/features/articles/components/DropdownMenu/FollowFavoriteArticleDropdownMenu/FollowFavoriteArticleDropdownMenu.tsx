@@ -22,11 +22,28 @@ type FollowFavoriteArticleDropdownMenuProps = {
   isFollowing: boolean;
   articleId: string;
   favoriteArticleFolders: Array<FavoriteArticleFolderType>;
+  handleCreateFavoriteArticle: (
+    favoriteArticleFolderId: string,
+    createdFavoriteArticleFolder?: FavoriteArticleFolderType
+  ) => Promise<string | undefined>;
 };
 
 export const FollowFavoriteArticleDropdownMenu: FC<
   FollowFavoriteArticleDropdownMenuProps
-> = ({ isFollowing, articleId, favoriteArticleFolders }) => {
+> = ({
+  isFollowing,
+  articleId,
+  favoriteArticleFolders,
+  handleCreateFavoriteArticle,
+}) => {
+  const sortedFavoriteArticleFolders = favoriteArticleFolders.sort(
+    (prev, next) => {
+      if (prev.createdAt < next.createdAt) return -1;
+      if (prev.createdAt > next.createdAt) return 1;
+      return 0;
+    }
+  );
+
   return (
     <DropdownMenu>
       <TooltipProvider>
@@ -49,7 +66,8 @@ export const FollowFavoriteArticleDropdownMenu: FC<
 
       <FollowFavoriteArticleDropdownMenuContent
         articleId={articleId}
-        favoriteArticleFolders={favoriteArticleFolders}
+        favoriteArticleFolders={sortedFavoriteArticleFolders}
+        handleCreateFavoriteArticle={handleCreateFavoriteArticle}
       />
     </DropdownMenu>
   );

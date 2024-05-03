@@ -201,7 +201,7 @@ export const getTrendArticles = async ({
           isBookmarked: isBookmarked,
           bookmarkId: bookmarkId,
           favoriteArticles: trendArticle.article.favoriteArticles,
-          isFollowing: false,
+          isFollowing: trendArticle.article.favoriteArticles.length > 0,
         };
       }
     );

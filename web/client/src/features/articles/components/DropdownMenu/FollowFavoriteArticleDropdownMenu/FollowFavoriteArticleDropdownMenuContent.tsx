@@ -25,11 +25,15 @@ const formSchema = z.object({
 type FollowFavoriteArticleDropdownMenuContentProps = {
   articleId: string;
   favoriteArticleFolders: Array<FavoriteArticleFolderType>;
+  handleCreateFavoriteArticle: (
+    favoriteArticleFolderId: string,
+    createdFavoriteArticleFolder?: FavoriteArticleFolderType
+  ) => Promise<string | undefined>;
 };
 
 export const FollowFavoriteArticleDropdownMenuContent: FC<
   FollowFavoriteArticleDropdownMenuContentProps
-> = ({ articleId, favoriteArticleFolders }) => {
+> = ({ articleId, favoriteArticleFolders, handleCreateFavoriteArticle }) => {
   const { control, watch } = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -58,11 +62,12 @@ export const FollowFavoriteArticleDropdownMenuContent: FC<
       <DropdownMenuSeparator />
       <div className="max-h-[200px] overflow-y-auto">
         {showFavoriteArticleFolders.length &&
-          showFavoriteArticleFolders.map((favoriteArticleFolders) => (
+          showFavoriteArticleFolders.map((favoriteArticleFolder) => (
             <FollowTargetFavoriteArticleFolderList
-              key={favoriteArticleFolders.id}
+              key={favoriteArticleFolder.id}
               articleId={articleId}
-              favoriteArticleFolder={favoriteArticleFolders}
+              favoriteArticleFolder={favoriteArticleFolder}
+              handleCreateFavoriteArticle={handleCreateFavoriteArticle}
             />
           ))}
       </div>

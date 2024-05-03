@@ -10,11 +10,15 @@ import { FavoriteArticleFolderType } from "@/types/favoriteArticleFolder";
 type FollowTargetFavoriteArticleFolderListProps = {
   articleId: string;
   favoriteArticleFolder: FavoriteArticleFolderType;
+  handleCreateFavoriteArticle: (
+    favoriteArticleFolderId: string,
+    createdFavoriteArticleFolder?: FavoriteArticleFolderType
+  ) => Promise<string | undefined>;
 };
 
 export const FollowTargetFavoriteArticleFolderList: FC<
   FollowTargetFavoriteArticleFolderListProps
-> = ({ articleId, favoriteArticleFolder }) => {
+> = ({ articleId, favoriteArticleFolder, handleCreateFavoriteArticle }) => {
   const isFollowed = useMemo(
     () =>
       favoriteArticleFolder.favoriteArticles.some(
@@ -45,7 +49,9 @@ export const FollowTargetFavoriteArticleFolderList: FC<
             variant="outline"
             size="sm"
             className="border-emerald-500 font-bold text-emerald-500 hover:text-emerald-600"
-            // onClick={() => onCreateMyFeed(myFeedFolder.id)}
+            onClick={() =>
+              handleCreateFavoriteArticle(favoriteArticleFolder.id)
+            }
           >
             {"SAVE"}
           </Button>

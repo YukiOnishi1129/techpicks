@@ -4,6 +4,29 @@ import { v4 as uuidv4 } from "uuid";
 
 import prisma from "@/lib/prisma";
 
+type GetFavoriteArticleCountByFavoriteArticleFolderIdAndArticleIdDTO = {
+  userId: string;
+  articleId: string;
+  favoriteArticleFolderId: string;
+};
+
+export const getFavoriteArticleCountByFavoriteArticleFolderIdAndArticleId =
+  async ({
+    userId,
+    articleId,
+    favoriteArticleFolderId,
+  }: GetFavoriteArticleCountByFavoriteArticleFolderIdAndArticleIdDTO): Promise<number> => {
+    const count = await prisma.favoriteArticle.count({
+      where: {
+        userId: userId,
+        favoriteArticleFolderId: favoriteArticleFolderId,
+        articleId: articleId,
+      },
+    });
+
+    return count;
+  };
+
 export type CreateFavoriteArticleDTO = {
   userId: string;
   favoriteArticleFolderId: string;
@@ -13,7 +36,7 @@ export type CreateFavoriteArticleDTO = {
   description: string;
   articleUrl: string;
   publishedAt: Date;
-  author_name?: string;
+  authorName?: string;
   tags?: string;
   thumbnailURL?: string;
   platformName?: string;
@@ -38,7 +61,7 @@ export const createFavoriteArticle = async (dto: CreateFavoriteArticleDTO) => {
         description: dto.description,
         articleUrl: dto.articleUrl,
         publishedAt: dto.publishedAt,
-        author_name: dto.author_name,
+        authorName: dto.authorName,
         tags: dto.tags,
         thumbnailURL: dto.thumbnailURL,
         platformName: dto.platformName,

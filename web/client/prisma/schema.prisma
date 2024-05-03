@@ -23,7 +23,7 @@ model FavoriteArticle {
   description  String
   articleUrl   String @map("article_url")
   publishedAt  DateTime? @map("published_at")
-  author_name  String? @map("author_name")
+  authorName  String? @map("author_name")
   tags         String?
   thumbnailURL String? @map("thumbnail_url")
   platformName String? @map("platform_name")

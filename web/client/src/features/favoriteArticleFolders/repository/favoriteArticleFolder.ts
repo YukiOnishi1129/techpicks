@@ -34,7 +34,7 @@ export const getFavoriteArticleFolders = async ({
             description: true,
             platformId: true,
             articleId: true,
-            author_name: true,
+            authorName: true,
             tags: true,
             thumbnailURL: true,
             platformName: true,
@@ -45,88 +45,45 @@ export const getFavoriteArticleFolders = async ({
             isPrivate: true,
             createdAt: true,
             updatedAt: true,
-            // article: {
-            //   select: {
-            //     feedArticleRelatoins: {
-            //       select: {
-            //         feed: {
-            //           select: {
-            //             id: true,
-            //             name: true,
-            //             description: true,
-            //             thumbnailUrl: true,
-            //             siteUrl: true,
-            //             rssUrl: true,
-            //             apiQueryParam: true,
-            //             trendPlatformType: true,
-            //             createdAt: true,
-            //             updatedAt: true,
-            //             deletedAt: true,
-            //             category: {
-            //               select: {
-            //                 id: true,
-            //                 name: true,
-            //                 type: true,
-            //                 createdAt: true,
-            //                 updatedAt: true,
-            //                 deletedAt: true,
-            //               },
-            //             },
-            //             platform: {
-            //               select: {
-            //                 id: true,
-            //                 name: true,
-            //                 siteUrl: true,
-            //                 faviconUrl: true,
-            //                 platformType: true,
-            //                 isEng: true,
-            //               },
-            //             },
-            //           },
-            //         },
-            //       },
-            //     },
-            //   },
-            // },
           },
         },
       },
     });
 
     const favoriteArticleFolders: Array<FavoriteArticleFolderType> = res.map(
-      (data) => {
+      (favoriteArticleFolder) => {
         const favoriteArticles: Array<FavoriteArticleType> =
-          data.favoriteArticles.map((article) => {
+          favoriteArticleFolder.favoriteArticles.map((favoriteArticle) => {
             return {
-              id: article.id,
-              title: article.title,
-              description: article.description,
-              articleUrl: article.articleUrl,
-              publishedAt: article.publishedAt,
-              favoriteArticleFolderId: article.favoriteArticleFolderId,
-              platformId: article.platformId,
-              articleId: article.articleId,
-              author_name: article.author_name,
-              tags: article.tags,
-              thumbnailURL: article.thumbnailURL,
-              platformName: article.platformName,
-              platformUrl: article.platformUrl,
-              platformFaviconUrl: article.platformFaviconUrl,
-              isEng: article.isEng,
-              isRead: article.isRead,
-              isPrivate: article.isPrivate,
-              createdAt: article.createdAt,
-              updatedAt: article.updatedAt,
+              id: favoriteArticle.id,
+              title: favoriteArticle.title,
+              description: favoriteArticle.description,
+              articleUrl: favoriteArticle.articleUrl,
+              publishedAt: favoriteArticle.publishedAt,
+              favoriteArticleFolderId: favoriteArticle.favoriteArticleFolderId,
+              platformId: favoriteArticle.platformId,
+              articleId: favoriteArticle.articleId,
+              authorName: favoriteArticle.authorName,
+              tags: favoriteArticle.tags,
+              thumbnailURL: favoriteArticle.thumbnailURL,
+              platformName: favoriteArticle.platformName,
+              platformUrl: favoriteArticle.platformUrl,
+              platformFaviconUrl: favoriteArticle.platformFaviconUrl,
+              isEng: favoriteArticle.isEng,
+              isRead: favoriteArticle.isRead,
+              isPrivate: favoriteArticle.isPrivate,
+              createdAt: favoriteArticle.createdAt,
+              updatedAt: favoriteArticle.updatedAt,
             };
           });
 
         return {
-          id: data.id,
-          title: data.title,
-          description: data.description,
+          id: favoriteArticleFolder.id,
+          title: favoriteArticleFolder.title,
+          description: favoriteArticleFolder.description,
           favoriteArticles: favoriteArticles,
-          createdAt: data.createdAt,
-          updatedAt: data.updatedAt,
+          createdAt: favoriteArticleFolder.createdAt,
+          updatedAt: favoriteArticleFolder.updatedAt,
         };
       }
     );

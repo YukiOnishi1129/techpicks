@@ -7,5 +7,7 @@ export type FavoriteArticleFolderType = Omit<
   PrismaFavoriteArticleFolder,
   "userId"
 > & {
-  favoriteArticles: Array<Omit<PrismaFavoriteArticle, "userId">>;
+  favoriteArticles: Array<
+    Omit<PrismaFavoriteArticle, "userId" | "createdAt" | "updatedAt">
+  >;
 };

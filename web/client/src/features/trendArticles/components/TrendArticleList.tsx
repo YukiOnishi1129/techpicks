@@ -186,5 +186,7 @@ const convertTrendArticleToArticle = (
         },
       };
     }),
+    favoriteArticles: trendArticle.favoriteArticles,
+    isFollowing: trendArticle.isFollowing,
   };
 };
