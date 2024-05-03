@@ -12,16 +12,22 @@ import {
 } from "@/components/ui/tooltip";
 
 type AddFavoriteArticleTooltipProps = {
-  handleCreateFavoriteArticle: () => Promise<string | undefined>;
+  favoriteArticleFolderId: string;
+  handleCreateFavoriteArticle: (
+    favoriteArticleFolderId: string
+  ) => Promise<string | undefined>;
 };
 
 export const AddFavoriteArticleTooltip: FC<AddFavoriteArticleTooltipProps> = ({
+  favoriteArticleFolderId,
   handleCreateFavoriteArticle,
 }) => {
   return (
     <TooltipProvider>
       <Tooltip>
-        <TooltipTrigger onClick={handleCreateFavoriteArticle}>
+        <TooltipTrigger
+          onClick={() => handleCreateFavoriteArticle(favoriteArticleFolderId)}
+        >
           <IconContext.Provider value={{ className: "hover:text-rose-600" }}>
             <FaRegHeart size={30} className="cursor-pointer" />
           </IconContext.Provider>

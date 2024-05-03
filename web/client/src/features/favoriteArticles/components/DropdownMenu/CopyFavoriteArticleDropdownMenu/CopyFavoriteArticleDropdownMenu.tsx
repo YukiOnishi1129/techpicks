@@ -25,11 +25,26 @@ const formSchema = z.object({
 type CopyFavoriteArticleDropdownMenuContentProps = {
   articleId: string;
   favoriteArticleFolders: Array<FavoriteArticleFolderType>;
+  handleCreateFavoriteArticle: (
+    targetFavoriteArticleFolderId: string
+  ) => Promise<string | undefined>;
+  handleRemoveFavoriteArticle: (
+    favoriteArticleId: string
+  ) => Promise<string | undefined>;
+  handleCreateFavoriteArticleFolder: (
+    favoriteArticleFolderId: string
+  ) => Promise<void>;
 };
 
 export const CopyFavoriteArticleDropdownMenuContent: FC<
   CopyFavoriteArticleDropdownMenuContentProps
-> = ({ articleId, favoriteArticleFolders }) => {
+> = ({
+  articleId,
+  favoriteArticleFolders,
+  handleCreateFavoriteArticle,
+  handleRemoveFavoriteArticle,
+  handleCreateFavoriteArticleFolder,
+}) => {
   const { control, watch } = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -62,12 +77,14 @@ export const CopyFavoriteArticleDropdownMenuContent: FC<
             key={favoriteArticleFolder.id}
             articleId={articleId}
             favoriteArticleFolder={favoriteArticleFolder}
+            handleCreateFavoriteArticle={handleCreateFavoriteArticle}
+            handleRemoveFavoriteArticle={handleRemoveFavoriteArticle}
           />
         ))}
       </div>
       <DropdownMenuLabel>
         <CreateFavoriteArticleFolderDialog
-        //   handleCreateFavoriteArticleFolder={}
+          handleCreateFavoriteArticleFolder={handleCreateFavoriteArticleFolder}
         />
       </DropdownMenuLabel>
     </DropdownMenuContent>

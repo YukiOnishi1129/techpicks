@@ -10,11 +10,22 @@ import { FavoriteArticleFolderType } from "@/types/favoriteArticleFolder";
 type CopyTargetFavoriteArticleFolderListProps = {
   articleId: string;
   favoriteArticleFolder: FavoriteArticleFolderType;
+  handleCreateFavoriteArticle: (
+    targetFavoriteArticleFolderId: string
+  ) => Promise<string | undefined>;
+  handleRemoveFavoriteArticle: (
+    favoriteArticleId: string
+  ) => Promise<string | undefined>;
 };
 
 export const CopyTargetFavoriteArticleFolderList: FC<
   CopyTargetFavoriteArticleFolderListProps
-> = ({ articleId, favoriteArticleFolder }) => {
+> = ({
+  articleId,
+  favoriteArticleFolder,
+  handleCreateFavoriteArticle,
+  handleRemoveFavoriteArticle,
+}) => {
   const isFollowed = useMemo(
     () =>
       favoriteArticleFolder.favoriteArticles.some(
@@ -39,12 +50,9 @@ export const CopyTargetFavoriteArticleFolderList: FC<
             variant="outline"
             size="sm"
             className="group relative border-emerald-500 bg-emerald-500 font-bold text-white hover:border-red-600 hover:text-red-600"
-            // onClick={() =>
-            //   handleRemoveFavoriteArticle(
-            //     targetFavoriteArticleId || "",
-            //     favoriteArticleFolder.id
-            //   )
-            // }
+            onClick={() =>
+              handleRemoveFavoriteArticle(targetFavoriteArticleId || "")
+            }
           >
             <span className="w-full group-hover:invisible">{"COPIED"}</span>
             <span className="invisible absolute w-full group-hover:visible">
@@ -56,9 +64,9 @@ export const CopyTargetFavoriteArticleFolderList: FC<
             variant="outline"
             size="sm"
             className="border-emerald-500 font-bold text-emerald-500 hover:text-emerald-600"
-            // onClick={() =>
-            //   handleCreateFavoriteArticle(favoriteArticleFolder.id)
-            // }
+            onClick={() =>
+              handleCreateFavoriteArticle(favoriteArticleFolder.id)
+            }
           >
             {"COPY"}
           </Button>

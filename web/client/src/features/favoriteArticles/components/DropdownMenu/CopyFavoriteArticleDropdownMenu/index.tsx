@@ -22,11 +22,26 @@ import { CopyFavoriteArticleDropdownMenuContent } from "./CopyFavoriteArticleDro
 type CopyFavoriteArticleDropdownMenuProps = {
   articleId: string;
   favoriteArticleFolders: Array<FavoriteArticleFolderType>;
+  handleCreateFavoriteArticle: (
+    targetFavoriteArticleFolderId: string
+  ) => Promise<string | undefined>;
+  handleRemoveFavoriteArticle: (
+    favoriteArticleId: string
+  ) => Promise<string | undefined>;
+  handleCreateFavoriteArticleFolder: (
+    favoriteArticleFolderId: string
+  ) => Promise<void>;
 };
 
 export const CopyFavoriteArticleDropdownMenu: FC<
   CopyFavoriteArticleDropdownMenuProps
-> = ({ articleId, favoriteArticleFolders }) => {
+> = ({
+  articleId,
+  favoriteArticleFolders,
+  handleCreateFavoriteArticle,
+  handleRemoveFavoriteArticle,
+  handleCreateFavoriteArticleFolder,
+}) => {
   const sortedFavoriteArticleFolders = favoriteArticleFolders.sort(
     (prev, next) => {
       if (prev.createdAt < next.createdAt) return -1;
@@ -58,6 +73,9 @@ export const CopyFavoriteArticleDropdownMenu: FC<
       <CopyFavoriteArticleDropdownMenuContent
         articleId={articleId}
         favoriteArticleFolders={sortedFavoriteArticleFolders}
+        handleCreateFavoriteArticle={handleCreateFavoriteArticle}
+        handleRemoveFavoriteArticle={handleRemoveFavoriteArticle}
+        handleCreateFavoriteArticleFolder={handleCreateFavoriteArticleFolder}
       />
     </DropdownMenu>
   );

@@ -45,62 +45,79 @@ export const FavoriteArticleCardWrapper: FC<
   const [isFollowing, setIsFollowing] = useState(true);
   const { successToast, failToast } = useStatusToast();
 
-  const handleCreateFavoriteArticle = useCallback(async () => {
-    // 1. check user
-    if (!user) {
-      failToast({
-        description: "Please login to follow the article",
-      });
-      return;
-    }
-    // 2. check out favoriteArticle by favoriteArticleFolderId and articleId
-    const resCount =
-      await fetchFavoriteArticleCountByFavoriteArticleFolderIdAndArticleIdAPI({
+  const handleCreateFavoriteArticle = useCallback(
+    async (targetFavoriteArticleFolderId: string) => {
+      // 1. check user
+      if (!user) {
+        failToast({
+          description: "Please login to follow the article",
+        });
+        return;
+      }
+      // 2. check out favoriteArticle by favoriteArticleFolderId and articleId
+      const resCount =
+        await fetchFavoriteArticleCountByFavoriteArticleFolderIdAndArticleIdAPI(
+          {
+            articleId: favoriteArticle.articleId || "",
+            favoriteArticleFolderId: targetFavoriteArticleFolderId,
+          }
+        );
+      if (resCount.data?.count && resCount.data.count > 0) {
+        failToast({
+          description: "You are already following the article",
+        });
+        return;
+      }
+
+      // 3. create favoriteArticle
+      const createdData = await createFavoriteArticle({
+        userId: user?.id || "",
+        favoriteArticleFolderId: targetFavoriteArticleFolderId,
         articleId: favoriteArticle.articleId || "",
-        favoriteArticleFolderId,
+        platformId: favoriteArticle.platformId || undefined,
+        title: favoriteArticle.title,
+        description: favoriteArticle.description,
+        articleUrl: favoriteArticle.articleUrl,
+        publishedAt: favoriteArticle.publishedAt || undefined,
+        authorName: favoriteArticle.authorName || undefined,
+        tags: favoriteArticle.tags || undefined,
+        thumbnailURL: favoriteArticle.thumbnailURL || undefined,
+        platformName: favoriteArticle.platformName || undefined,
+        platformUrl: favoriteArticle.platformUrl || undefined,
+        platformFaviconUrl: favoriteArticle.platformFaviconUrl || undefined,
+        isEng: favoriteArticle.isEng,
+        isRead: favoriteArticle.isRead,
+        isPrivate: favoriteArticle.isPrivate,
       });
-    if (resCount.data?.count && resCount.data.count > 0) {
-      failToast({
-        description: "You are already following the article",
+
+      if (!createdData) {
+        failToast({
+          description: "Failed to follow the article",
+        });
+        return;
+      }
+      successToast({
+        description: "Followed the article",
       });
-      return;
-    }
 
-    // 3. create favoriteArticle
-    const createdData = await createFavoriteArticle({
-      userId: user?.id || "",
-      favoriteArticleFolderId: favoriteArticleFolderId,
-      articleId: favoriteArticle.articleId || "",
-      platformId: favoriteArticle.platformId || undefined,
-      title: favoriteArticle.title,
-      description: favoriteArticle.description,
-      articleUrl: favoriteArticle.articleUrl,
-      publishedAt: favoriteArticle.publishedAt || undefined,
-      authorName: favoriteArticle.authorName || undefined,
-      tags: favoriteArticle.tags || undefined,
-      thumbnailURL: favoriteArticle.thumbnailURL || undefined,
-      platformName: favoriteArticle.platformName || undefined,
-      platformUrl: favoriteArticle.platformUrl || undefined,
-      platformFaviconUrl: favoriteArticle.platformFaviconUrl || undefined,
-      isEng: favoriteArticle.isEng,
-      isRead: favoriteArticle.isRead,
-      isPrivate: favoriteArticle.isPrivate,
-    });
+      setIsFollowing(true);
 
-    if (!createdData) {
-      failToast({
-        description: "Failed to follow the article",
-      });
-      return;
-    }
-    successToast({
-      description: "Followed the article",
-    });
+      return createdData.id;
+    },
+    [failToast, successToast, user, favoriteArticle]
+  );
 
-    setIsFollowing(true);
-
-    return createdData.id;
-  }, [failToast, successToast, user, favoriteArticle, favoriteArticleFolderId]);
+  const handleCreateFavoriteArticleFolder = useCallback(
+    async (favoriteArticleFolderId: string) => {
+      const id = await handleCreateFavoriteArticle(favoriteArticleFolderId);
+      if (!id) {
+        successToast({
+          description: "Successfully followed the article",
+        });
+      }
+    },
+    [handleCreateFavoriteArticle, successToast]
+  );
 
   const handleRemoveFavoriteArticle = useCallback(
     async (favoriteArticleId: string) => {
@@ -169,6 +186,11 @@ export const FavoriteArticleCardWrapper: FC<
               <CopyFavoriteArticleDropdownMenu
                 articleId={favoriteArticle.articleId || ""}
                 favoriteArticleFolders={otherFavoriteArticleFolders}
+                handleCreateFavoriteArticle={handleCreateFavoriteArticle}
+                handleRemoveFavoriteArticle={handleRemoveFavoriteArticle}
+                handleCreateFavoriteArticleFolder={
+                  handleCreateFavoriteArticleFolder
+                }
               />
             </div>
             <div>
@@ -180,6 +202,7 @@ export const FavoriteArticleCardWrapper: FC<
                 />
               ) : (
                 <AddFavoriteArticleTooltip
+                  favoriteArticleFolderId={favoriteArticleFolderId}
                   handleCreateFavoriteArticle={handleCreateFavoriteArticle}
                 />
               )}
