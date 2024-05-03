@@ -94,6 +94,95 @@ export const getFavoriteArticleFolders = async ({
   }
 };
 
+type GetFavoriteArticleFolderById = {
+  id: string;
+  userId: string;
+};
+
+export const getFavoriteArticleFolderById = async ({
+  id,
+  userId,
+}: GetFavoriteArticleFolderById) => {
+  try {
+    const favoriteArticleFolder = await prisma.favoriteArticleFolder.findUnique(
+      {
+        where: {
+          id: id,
+          userId: userId,
+        },
+        include: {
+          favoriteArticles: {
+            select: {
+              id: true,
+              favoriteArticleFolderId: true,
+              publishedAt: true,
+              articleUrl: true,
+              title: true,
+              description: true,
+              platformId: true,
+              articleId: true,
+              authorName: true,
+              tags: true,
+              thumbnailURL: true,
+              platformName: true,
+              platformUrl: true,
+              platformFaviconUrl: true,
+              isEng: true,
+              isRead: true,
+              isPrivate: true,
+              createdAt: true,
+              updatedAt: true,
+            },
+            orderBy: {
+              createdAt: "desc",
+            },
+          },
+        },
+      }
+    );
+
+    if (!favoriteArticleFolder) return;
+
+    const favoriteArticles: Array<FavoriteArticleType> =
+      favoriteArticleFolder.favoriteArticles.map((favoriteArticle) => {
+        return {
+          id: favoriteArticle.id,
+          title: favoriteArticle.title,
+          description: favoriteArticle.description,
+          articleUrl: favoriteArticle.articleUrl,
+          publishedAt: favoriteArticle.publishedAt,
+          favoriteArticleFolderId: favoriteArticle.favoriteArticleFolderId,
+          platformId: favoriteArticle.platformId,
+          articleId: favoriteArticle.articleId,
+          authorName: favoriteArticle.authorName,
+          tags: favoriteArticle.tags,
+          thumbnailURL: favoriteArticle.thumbnailURL,
+          platformName: favoriteArticle.platformName,
+          platformUrl: favoriteArticle.platformUrl,
+          platformFaviconUrl: favoriteArticle.platformFaviconUrl,
+          isEng: favoriteArticle.isEng,
+          isRead: favoriteArticle.isRead,
+          isPrivate: favoriteArticle.isPrivate,
+          createdAt: favoriteArticle.createdAt,
+          updatedAt: favoriteArticle.updatedAt,
+        };
+      });
+
+    const resFavoriteArticleFolder: FavoriteArticleFolderType = {
+      id: favoriteArticleFolder.id,
+      title: favoriteArticleFolder.title,
+      description: favoriteArticleFolder.description,
+      favoriteArticles: favoriteArticles,
+      createdAt: favoriteArticleFolder.createdAt,
+      updatedAt: favoriteArticleFolder.updatedAt,
+    };
+
+    return resFavoriteArticleFolder;
+  } catch (err) {
+    throw new Error(`Failed to get favorite article folder: ${err}`);
+  }
+};
+
 export type CreateFavoriteArticleFolderDTO = {
   title: string;
   description?: string;

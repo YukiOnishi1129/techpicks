@@ -33,6 +33,9 @@ type FollowFavoriteArticleDropdownMenuContentProps = {
     favoriteArticleId: string,
     favoriteArticleFolderId: string
   ) => Promise<string | undefined>;
+  handleCreateFavoriteArticleFolder: (
+    favoriteArticleFolderId: string
+  ) => Promise<void>;
 };
 
 export const FollowFavoriteArticleDropdownMenuContent: FC<
@@ -42,6 +45,7 @@ export const FollowFavoriteArticleDropdownMenuContent: FC<
   favoriteArticleFolders,
   handleCreateFavoriteArticle,
   handleRemoveFavoriteArticle,
+  handleCreateFavoriteArticleFolder,
 }) => {
   const { control, watch } = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -82,7 +86,9 @@ export const FollowFavoriteArticleDropdownMenuContent: FC<
           ))}
       </div>
       <DropdownMenuLabel>
-        <CreateFavoriteArticleFolderDialog />
+        <CreateFavoriteArticleFolderDialog
+          handleCreateFavoriteArticleFolder={handleCreateFavoriteArticleFolder}
+        />
       </DropdownMenuLabel>
     </DropdownMenuContent>
   );

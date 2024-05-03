@@ -4,6 +4,7 @@ import { clsx } from "clsx";
 import { FC, useCallback, useMemo, useState } from "react";
 import { TwitterShareButton, XIcon } from "react-share";
 
+import { fetchFavoriteArticleFolderByIdAPI } from "@/features/favoriteArticleFolders/actions/favoriteArticleFolders";
 import {
   fetchFavoriteArticleAPI,
   fetchFavoriteArticleCountByFavoriteArticleFolderIdAndArticleIdAPI,
@@ -221,6 +222,25 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
     ]
   );
 
+  const handleCreateFavoriteArticleFolder = useCallback(
+    async (favoriteArticleFolderId: string) => {
+      const res = await fetchFavoriteArticleFolderByIdAPI(
+        favoriteArticleFolderId
+      );
+      const newFavoriteArticleFolder = res.data.favoriteArticleFolder;
+      const id = await handleCreateFavoriteArticle(
+        favoriteArticleFolderId,
+        newFavoriteArticleFolder
+      );
+      if (!id) {
+        successToast({
+          description: "Successfully followed the article",
+        });
+      }
+    },
+    [handleCreateFavoriteArticle, successToast]
+  );
+
   const handleRemoveFavoriteArticle = useCallback(
     async (favoriteArticleId: string, favoriteArticleFolderId: string) => {
       // TODO: check count favoriteArticle by favoriteArticleId
@@ -365,6 +385,9 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
                       favoriteArticleFolders={showFavoriteArticleFolders}
                       handleCreateFavoriteArticle={handleCreateFavoriteArticle}
                       handleRemoveFavoriteArticle={handleRemoveFavoriteArticle}
+                      handleCreateFavoriteArticleFolder={
+                        handleCreateFavoriteArticleFolder
+                      }
                     />
                   </div>
                 </>

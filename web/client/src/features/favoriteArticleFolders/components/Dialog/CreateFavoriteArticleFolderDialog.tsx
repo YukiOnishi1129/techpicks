@@ -43,11 +43,15 @@ const FormSchema = z.object({
   description: z.string().optional(),
 });
 
-type CreateMyFeedFolderDialogProps = {};
+type CreateMyFeedFolderDialogProps = {
+  handleCreateFavoriteArticleFolder: (
+    favoriteArticleFolderId: string
+  ) => Promise<void>;
+};
 
 export const CreateFavoriteArticleFolderDialog: FC<
   CreateMyFeedFolderDialogProps
-> = ({}) => {
+> = ({ handleCreateFavoriteArticleFolder }) => {
   const [open, setOpen] = useState(false);
 
   const handleCloseDialog = useCallback(() => {
@@ -61,6 +65,7 @@ export const CreateFavoriteArticleFolderDialog: FC<
       {open && (
         <CreateFavoriteArticleFolderDialogContent
           handleCloseDialog={handleCloseDialog}
+          handleCreateFavoriteArticleFolder={handleCreateFavoriteArticleFolder}
         />
       )}
     </Dialog>
@@ -69,11 +74,14 @@ export const CreateFavoriteArticleFolderDialog: FC<
 
 type CreateMyFeedFolderDialogContentProps = {
   handleCloseDialog: () => void;
+  handleCreateFavoriteArticleFolder: (
+    favoriteArticleFolderId: string
+  ) => Promise<void>;
 };
 
 const CreateFavoriteArticleFolderDialogContent: FC<
   CreateMyFeedFolderDialogContentProps
-> = ({ handleCloseDialog }) => {
+> = ({ handleCloseDialog, handleCreateFavoriteArticleFolder }) => {
   const { successToast, failToast } = useStatusToast();
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
@@ -117,13 +125,26 @@ const CreateFavoriteArticleFolderDialogContent: FC<
         successToast({
           description: "Successfully created favorite article folder",
         });
+        if (handleCreateFavoriteArticleFolder !== undefined) {
+          await handleCreateFavoriteArticleFolder(createdId);
+          resetDialog();
+          handleCloseDialog();
+          return;
+        }
         await serverRevalidateFavoriteArticleFolderPageTag();
         router.replace("/favorite-article-folder");
         resetDialog();
         handleCloseDialog();
       });
     },
-    [failToast, handleCloseDialog, resetDialog, router, successToast]
+    [
+      failToast,
+      handleCloseDialog,
+      resetDialog,
+      router,
+      successToast,
+      handleCreateFavoriteArticleFolder,
+    ]
   );
 
   return (
