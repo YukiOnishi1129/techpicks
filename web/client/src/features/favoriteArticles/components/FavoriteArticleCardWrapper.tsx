@@ -5,6 +5,9 @@ import { useCheckImageExist } from "@/hooks/useImage";
 
 import { FavoriteArticleType } from "@/types/favoriteArticle";
 
+import { FavoriteArticleCard } from "./FavoriteArticleCard";
+import { FavoriteArticleDetailSheet } from "./FavoriteArticleDetailSheet";
+
 type FavoriteArticleCardWrapperProps = {
   favoriteArticleFolderId: string;
   favoriteArticle: FavoriteArticleType;
@@ -12,7 +15,7 @@ type FavoriteArticleCardWrapperProps = {
 
 export const FavoriteArticleCardWrapper: FC<
   FavoriteArticleCardWrapperProps
-> = ({ favoriteArticle }) => {
+> = ({ favoriteArticleFolderId, favoriteArticle }) => {
   const faviconImageUrl = useCheckImageExist(
     favoriteArticle?.platformFaviconUrl || "undefined"
   );
@@ -43,9 +46,12 @@ export const FavoriteArticleCardWrapper: FC<
           </div>
         </div>
 
-        {/* <BookmarkDetailSheet bookmark={bookmark}>
-          <BookmarkCard bookmark={bookmark} />
-        </BookmarkDetailSheet> */}
+        <FavoriteArticleDetailSheet
+          favoriteArticleFolderId={favoriteArticleFolderId}
+          favoriteArticle={favoriteArticle}
+        >
+          <FavoriteArticleCard favoriteArticle={favoriteArticle} />
+        </FavoriteArticleDetailSheet>
       </div>
     </div>
   );
