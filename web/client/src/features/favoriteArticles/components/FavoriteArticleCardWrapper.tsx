@@ -2,6 +2,8 @@
 import { User } from "@supabase/supabase-js";
 import { FC, useCallback, useState } from "react";
 
+import { fetchFavoriteArticleFolderByIdAPI } from "@/features/favoriteArticleFolders/actions/favoriteArticleFolders";
+
 import { ShareLinks } from "@/components/ui/share";
 
 import { useCheckImageExist } from "@/hooks/useImage";
@@ -45,8 +47,49 @@ export const FavoriteArticleCardWrapper: FC<
   const [isFollowing, setIsFollowing] = useState(true);
   const { successToast, failToast } = useStatusToast();
 
+  const [showOtherFavoriteArticleFolders, setShowOtherFavoriteArticleFolders] =
+    useState(otherFavoriteArticleFolders);
+
+  const addStateFavoriteArticleInFavoriteArticleFolder = useCallback(
+    (
+      targetFavoriteArticleFolder: FavoriteArticleFolderType,
+      favoriteArticleId: string
+    ): FavoriteArticleFolderType => {
+      const newFavoriteArticleFolder: FavoriteArticleFolderType = {
+        ...targetFavoriteArticleFolder,
+        favoriteArticles: [
+          ...targetFavoriteArticleFolder.favoriteArticles,
+          {
+            id: favoriteArticleId,
+            favoriteArticleFolderId: targetFavoriteArticleFolder.id,
+            articleId: favoriteArticle.articleId,
+            platformId: favoriteArticle.platformId,
+            title: favoriteArticle.title,
+            description: favoriteArticle.description,
+            articleUrl: favoriteArticle.articleUrl,
+            publishedAt: favoriteArticle.publishedAt,
+            authorName: favoriteArticle?.authorName,
+            tags: favoriteArticle?.tags,
+            thumbnailURL: favoriteArticle?.thumbnailURL,
+            platformName: favoriteArticle.platformName,
+            platformUrl: favoriteArticle.platformUrl,
+            platformFaviconUrl: favoriteArticle.platformFaviconUrl,
+            isEng: favoriteArticle.isEng,
+            isRead: favoriteArticle.isRead,
+            isPrivate: favoriteArticle.isPrivate,
+          },
+        ],
+      };
+      return newFavoriteArticleFolder;
+    },
+    [favoriteArticle]
+  );
+
   const handleCreateFavoriteArticle = useCallback(
-    async (targetFavoriteArticleFolderId: string) => {
+    async (
+      targetFavoriteArticleFolderId: string,
+      createdFavoriteArticleFolder?: FavoriteArticleFolderType
+    ) => {
       // 1. check user
       if (!user) {
         failToast({
@@ -100,16 +143,61 @@ export const FavoriteArticleCardWrapper: FC<
         description: "Followed the article",
       });
 
-      setIsFollowing(true);
+      if (createdFavoriteArticleFolder) {
+        setShowOtherFavoriteArticleFolders((prev) => [
+          ...prev,
+          addStateFavoriteArticleInFavoriteArticleFolder(
+            createdFavoriteArticleFolder,
+            createdData.id
+          ),
+        ]);
+        return createdData.id;
+      }
 
+      if (targetFavoriteArticleFolderId === favoriteArticleFolderId) {
+        setIsFollowing(true);
+        return createdData.id;
+      }
+
+      const targetFavoriteArticleFolder = showOtherFavoriteArticleFolders.find(
+        (favoriteArticleFolder) =>
+          favoriteArticleFolder.id === targetFavoriteArticleFolderId
+      );
+      if (targetFavoriteArticleFolder) {
+        setShowOtherFavoriteArticleFolders((prev) => [
+          ...prev.filter(
+            (favoriteArticleFolder) =>
+              favoriteArticleFolder.id !== targetFavoriteArticleFolderId
+          ),
+          addStateFavoriteArticleInFavoriteArticleFolder(
+            targetFavoriteArticleFolder,
+            createdData.id
+          ),
+        ]);
+      }
       return createdData.id;
     },
-    [failToast, successToast, user, favoriteArticle]
+    [
+      failToast,
+      successToast,
+      user,
+      favoriteArticle,
+      showOtherFavoriteArticleFolders,
+      favoriteArticleFolderId,
+      addStateFavoriteArticleInFavoriteArticleFolder,
+    ]
   );
 
   const handleCreateFavoriteArticleFolder = useCallback(
     async (favoriteArticleFolderId: string) => {
-      const id = await handleCreateFavoriteArticle(favoriteArticleFolderId);
+      const res = await fetchFavoriteArticleFolderByIdAPI(
+        favoriteArticleFolderId
+      );
+      const newFavoriteArticleFolder = res.data.favoriteArticleFolder;
+      const id = await handleCreateFavoriteArticle(
+        favoriteArticleFolderId,
+        newFavoriteArticleFolder
+      );
       if (!id) {
         successToast({
           description: "Successfully followed the article",
@@ -120,7 +208,7 @@ export const FavoriteArticleCardWrapper: FC<
   );
 
   const handleRemoveFavoriteArticle = useCallback(
-    async (favoriteArticleId: string) => {
+    async (favoriteArticleId: string, favoriteArticleFolderId?: string) => {
       // check count favoriteArticle by favoriteArticleId
       const res = await fetchFavoriteArticleAPI(favoriteArticleId);
       if (!res.data) {
@@ -150,7 +238,25 @@ export const FavoriteArticleCardWrapper: FC<
         description: "Successfully unfollowed the article",
       });
 
-      setIsFollowing(false);
+      if (!favoriteArticleFolderId) {
+        setIsFollowing(false);
+      } else {
+        setShowOtherFavoriteArticleFolders((prev) =>
+          prev.map((favoriteArticleFolder) => {
+            if (favoriteArticleFolder.id === favoriteArticleFolderId) {
+              const newFavoriteArticles =
+                favoriteArticleFolder.favoriteArticles.filter(
+                  (favoriteArticle) => favoriteArticle.id !== favoriteArticleId
+                );
+              return {
+                ...favoriteArticleFolder,
+                favoriteArticles: newFavoriteArticles,
+              };
+            }
+            return favoriteArticleFolder;
+          })
+        );
+      }
 
       return id;
     },
@@ -185,7 +291,7 @@ export const FavoriteArticleCardWrapper: FC<
             <div className="mr-4">
               <CopyFavoriteArticleDropdownMenu
                 articleId={favoriteArticle.articleId || ""}
-                favoriteArticleFolders={otherFavoriteArticleFolders}
+                favoriteArticleFolders={showOtherFavoriteArticleFolders}
                 handleCreateFavoriteArticle={handleCreateFavoriteArticle}
                 handleRemoveFavoriteArticle={handleRemoveFavoriteArticle}
                 handleCreateFavoriteArticleFolder={
