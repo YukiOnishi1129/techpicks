@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ReloadIcon } from "@radix-ui/react-icons";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { useState, useCallback, FC, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -29,6 +29,8 @@ import {
 import { Input } from "@/components/ui/input";
 
 import { useStatusToast } from "@/hooks/useStatusToast";
+
+import { serverRevalidatePage } from "@/actions/serverAction";
 
 import { serverRevalidateFavoriteArticleFolderPageTag } from "../../actions/serverActions";
 import { createFavoriteArticleFolder } from "../../repository/favoriteArticleFolder";
@@ -85,6 +87,7 @@ const CreateFavoriteArticleFolderDialogContent: FC<
   const { successToast, failToast } = useStatusToast();
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
+  const pathname = usePathname();
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -127,6 +130,7 @@ const CreateFavoriteArticleFolderDialogContent: FC<
         });
         if (handleCreateFavoriteArticleFolder !== undefined) {
           await handleCreateFavoriteArticleFolder(createdId);
+          await serverRevalidatePage(pathname);
           resetDialog();
           handleCloseDialog();
           return;
@@ -142,6 +146,7 @@ const CreateFavoriteArticleFolderDialogContent: FC<
       handleCloseDialog,
       resetDialog,
       router,
+      pathname,
       successToast,
       handleCreateFavoriteArticleFolder,
     ]

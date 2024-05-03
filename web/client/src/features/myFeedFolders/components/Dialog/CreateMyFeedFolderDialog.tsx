@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ReloadIcon } from "@radix-ui/react-icons";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { FC, useCallback, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -30,6 +30,8 @@ import {
 import { Input } from "@/components/ui/input";
 
 import { useStatusToast } from "@/hooks/useStatusToast";
+
+import { serverRevalidatePage } from "@/actions/serverAction";
 
 import { serverRevalidateMyFeedFolders } from "../../actions/serverAction";
 
@@ -85,6 +87,7 @@ const CreateMyFeedFolderDialogContent: FC<
   const { successToast, failToast } = useStatusToast();
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
+  const pathname = usePathname();
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -125,6 +128,7 @@ const CreateMyFeedFolderDialogContent: FC<
         });
         if (handleCreatedMyFeedFolder !== undefined) {
           await handleCreatedMyFeedFolder(createdId);
+          await serverRevalidatePage(pathname);
           resetDialog();
           handleCloseDialog();
           return;
