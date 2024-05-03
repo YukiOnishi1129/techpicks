@@ -147,7 +147,7 @@ const CreateFavoriteArticleFolderDialogContent: FC<
                   <FormControl>
                     <Input
                       className="block w-full"
-                      placeholder="Feed Folder Title"
+                      placeholder="Favorite Article  Folder Title"
                       type="text"
                       {...field}
                     />
@@ -165,7 +165,7 @@ const CreateFavoriteArticleFolderDialogContent: FC<
                   <FormControl>
                     <Input
                       className="block w-full"
-                      placeholder="Feed Folder Description"
+                      placeholder="Favorite Article Folder Description"
                       type="text"
                       {...field}
                     />
@@ -184,7 +184,7 @@ const CreateFavoriteArticleFolderDialogContent: FC<
                 disabled={!form.formState.isValid || isPending}
                 type="submit"
               >
-                {"CREATE FOLDER"}
+                {"CREATE FAVORITE ARTICLE FOLDER"}
               </Button>
             )}
           </form>

@@ -35,7 +35,7 @@ export const FollowTargetFavoriteArticleFolderList: FC<
             //   onRemoveMyFeed(targetMyFeedId || "", myFeedFolder.id)
             // }
           >
-            <span className="w-full group-hover:invisible">{"ADDED"}</span>
+            <span className="w-full group-hover:invisible">{"SAVED"}</span>
             <span className="invisible absolute w-full group-hover:visible">
               {"REMOVE"}
             </span>
@@ -47,7 +47,7 @@ export const FollowTargetFavoriteArticleFolderList: FC<
             className="border-emerald-500 font-bold text-emerald-500 hover:text-emerald-600"
             // onClick={() => onCreateMyFeed(myFeedFolder.id)}
           >
-            ADD
+            {"SAVE"}
           </Button>
         )}
       </div>
