@@ -217,6 +217,11 @@ export const getArticles = async ({
             userId: userId,
           },
         },
+        favoriteArticles: {
+          where: {
+            userId: userId,
+          },
+        },
       },
     });
 
@@ -260,6 +265,8 @@ export const getArticles = async ({
             },
           };
         }),
+        isFollowing: article.favoriteArticles.length > 0,
+        favoriteArticles: article.favoriteArticles,
       };
     });
 
@@ -401,6 +408,11 @@ export const getArticlesByFeedIds = async ({
                 likeCount: "desc",
               },
             },
+            favoriteArticles: {
+              where: {
+                userId: userId,
+              },
+            },
           },
         },
       },
@@ -453,6 +465,8 @@ export const getArticlesByFeedIds = async ({
             },
           };
         }),
+        isFollowing: article.favoriteArticles.length > 0,
+        favoriteArticles: article.favoriteArticles,
       };
     });
 
@@ -514,6 +528,11 @@ export const getArticleById = async ({ id, userId }: GetArticleByIdParam) => {
             userId: userId,
           },
         },
+        favoriteArticles: {
+          where: {
+            userId: userId,
+          },
+        },
       },
     });
 
@@ -558,6 +577,8 @@ export const getArticleById = async ({ id, userId }: GetArticleByIdParam) => {
           },
         };
       }),
+      isFollowing: article.favoriteArticles.length > 0,
+      favoriteArticles: article.favoriteArticles,
     };
 
     return resArticle;
@@ -630,6 +651,11 @@ export const getArticleByArticleAndPlatformUrl = async ({
             userId: userId,
           },
         },
+        favoriteArticles: {
+          where: {
+            userId: userId,
+          },
+        },
       },
     });
 
@@ -674,6 +700,8 @@ export const getArticleByArticleAndPlatformUrl = async ({
           },
         };
       }),
+      isFollowing: article.favoriteArticles.length > 0,
+      favoriteArticles: article.favoriteArticles,
     };
 
     return resArticle;

@@ -1,6 +1,7 @@
 import { FC } from "react";
 
 import { fetchArticlesByFeedIdsAPI } from "@/features/articles/actions/article";
+import { fetchFavoriteArticleFoldersAPI } from "@/features/favoriteArticleFolders/actions/favoriteArticleFolders";
 import { MyFeedFolderArticleList } from "@/features/myFeedFolders/components/MyFeedFolderArtcleList";
 import { getUser } from "@/features/users/actions/user";
 
@@ -25,6 +26,7 @@ export const FeedDetailTemplate: FC<FeedDetailPageProps> = async ({
     keyword: keyword,
   });
   const resFeed = await fetchFeedByIdAPI(id);
+  const resFavoriteArticleFolders = await fetchFavoriteArticleFoldersAPI();
 
   const title = resFeed.data.feed?.name;
 
@@ -59,6 +61,9 @@ export const FeedDetailTemplate: FC<FeedDetailPageProps> = async ({
           initialArticles={res.data.articles}
           keyword={keyword}
           feedIdList={feedIdList}
+          favoriteArticleFolders={
+            resFavoriteArticleFolders.data.favoriteArticleFolders
+          }
           fetchArticles={fetchArticlesByFeedIdsAPI}
         />
       </div>

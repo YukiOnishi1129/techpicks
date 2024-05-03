@@ -382,7 +382,7 @@ func getSeedPlatformAndFeeds() []seedPlatformFeed {
 			FeedDescription: "リクルートテクノロジーズ　メンバーズブログ",
 			FeedThumbnail:   "https://blog.recruit.co.jp/rtc/wp-content/themes/pc-rtc-blog.git/library/images/favicon.ico",
 			seedCategoryID:  1,
-			RssURL:          "https://blog.recruit.co.jp/rtc/feed/",
+			RssURL:          "https://techblog.recruit.co.jp/rss.xml",
 			PlatformSiteURL: "https://blog.recruit.co.jp/",
 			FeedSiteURL:     "https://blog.recruit.co.jp/rtc/",
 			PlatformType:    domain.PlatformTypeCompany,

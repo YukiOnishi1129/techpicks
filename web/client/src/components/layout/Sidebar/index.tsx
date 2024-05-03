@@ -3,6 +3,7 @@ import Link from "next/link";
 import { FaRegBookmark } from "react-icons/fa";
 import { MdFeed, MdCalendarToday, MdRssFeed } from "react-icons/md";
 
+import { FavoriteArticleFolderLinks } from "./FavoriteArticleFolderLinks";
 import { MyFeedFolderLinks } from "./MyFeedFolderLinks";
 
 type SidebarProps = {
@@ -11,7 +12,7 @@ type SidebarProps = {
 export function Sidebar({ user }: SidebarProps) {
   return (
     <div className="h-lvh w-full overflow-y-auto border-r-2 pb-12">
-      <div className="mb-8 space-y-4 py-4">
+      <div className="mb-16 space-y-4 py-4">
         <div className="px-4 py-2">
           <h2 className="mb-2 px-2 text-lg font-semibold tracking-tight">
             Main
@@ -50,14 +51,19 @@ export function Sidebar({ user }: SidebarProps) {
                 <MyFeedFolderLinks user={user} />
               </div>
             </div>
+
             <div className="px-4 py-2">
               <h2 className="mb-2 px-2 text-lg font-semibold tracking-tight">
-                My Articles
+                Favorite Articles
               </h2>
-              <div className="space-y-1 pl-8">
-                <div>
-                  <Link href="/favorite">All</Link>
+              <div>
+                <div className="flex cursor-pointer items-center space-x-2 rounded-md px-2 hover:bg-secondary">
+                  <MdFeed />
+                  <Link href="/favorite-article-folder" className="pl-2">
+                    All
+                  </Link>
                 </div>
+                <FavoriteArticleFolderLinks />
               </div>
             </div>
           </>

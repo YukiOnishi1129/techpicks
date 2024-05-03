@@ -4,6 +4,7 @@ import {
   Platform as PrismaPlatform,
   Feed as PrismaFeed,
   Category as PrismaCategory,
+  FavoriteArticle as PrismaFavoriteArticle,
 } from "@prisma/client";
 
 export type TrendArticleType = Omit<PrismaTrendArticle, "platformId"> & {
@@ -24,4 +25,6 @@ export type TrendArticleType = Omit<PrismaTrendArticle, "platformId"> & {
   >;
   isBookmarked: boolean;
   bookmarkId?: string;
+  favoriteArticles?: Array<PrismaFavoriteArticle>;
+  isFollowing?: boolean;
 };

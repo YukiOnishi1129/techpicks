@@ -2,6 +2,7 @@ import { FC } from "react";
 
 import { fetchArticlesAPI } from "@/features/articles/actions/article";
 import { ArticleList } from "@/features/articles/components/ArticleList";
+import { fetchFavoriteArticleFoldersAPI } from "@/features/favoriteArticleFolders/actions/favoriteArticleFolders";
 import { fetchPlatformAPI } from "@/features/platforms/actions/platform";
 import { getUser } from "@/features/users/actions/user";
 
@@ -42,6 +43,7 @@ export const ArticleSearchResultTemplate: FC<
     platformType: String(platformType),
   });
   const user = await getUser();
+  const resFavoriteArticleFolders = await fetchFavoriteArticleFoldersAPI();
 
   let keywordPath = "";
   if (!!keyword && keyword.trim() !== "") {
@@ -93,6 +95,9 @@ export const ArticleSearchResultTemplate: FC<
           languageStatus={languageStatus}
           keyword={keyword}
           platformIdList={platformIdList}
+          favoriteArticleFolders={
+            resFavoriteArticleFolders.data.favoriteArticleFolders
+          }
           tab={tab}
           fetchArticles={fetchArticlesAPI}
         />

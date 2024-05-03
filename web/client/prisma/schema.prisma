@@ -23,7 +23,7 @@ model FavoriteArticle {
   description  String
   articleUrl   String @map("article_url")
   publishedAt  DateTime? @map("published_at")
-  author_name  String? @map("author_name")
+  authorName  String? @map("author_name")
   tags         String?
   thumbnailURL String? @map("thumbnail_url")
   platformName String? @map("platform_name")
@@ -31,7 +31,7 @@ model FavoriteArticle {
   platformFaviconUrl String? @map("platform_favicon_url")
   isEng        Boolean @default(false) @map("is_eng")
   isRead    Boolean @default(false) @map("is_read")
-  is_private  Boolean @default(false) @map("is_private")
+  isPrivate  Boolean @default(false) @map("is_private")
   createdAt    DateTime @default(now()) @map("created_at")
   updatedAt    DateTime @updatedAt @map("updated_at")
 
