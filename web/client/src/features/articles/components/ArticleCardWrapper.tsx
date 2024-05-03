@@ -378,7 +378,7 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
                       handleAddBookmark={handleAddBookmark}
                     />
                   )}
-                  <div className="mx-2  md:ml-4">
+                  <div className="mx-2  mt-2 md:ml-4">
                     <FollowFavoriteArticleDropdownMenu
                       isFollowing={isFollowing}
                       articleId={showArticle.id}

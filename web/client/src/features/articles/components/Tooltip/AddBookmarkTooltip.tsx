@@ -1,4 +1,5 @@
 import { FC } from "react";
+import { IconContext } from "react-icons";
 import { MdOutlineBookmarkAdd } from "react-icons/md";
 
 import {
@@ -21,10 +22,12 @@ export const AddBookmarkTooltip: FC<AddBookmarkTooltipProps> = ({
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger
-          className="cursor-pointer rounded  hover:bg-rose-200"
+          className="cursor-pointer rounded "
           onClick={() => handleAddBookmark(articleId)}
         >
-          <MdOutlineBookmarkAdd className="inline-block " size={36} />
+          <IconContext.Provider value={{ className: "hover:text-rose-600" }}>
+            <MdOutlineBookmarkAdd className="inline-block " size={36} />
+          </IconContext.Provider>
         </TooltipTrigger>
         <TooltipContent>
           <p>Add bookmark</p>

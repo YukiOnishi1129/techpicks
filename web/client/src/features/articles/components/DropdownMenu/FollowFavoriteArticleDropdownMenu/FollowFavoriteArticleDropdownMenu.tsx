@@ -1,6 +1,7 @@
 "use client";
 
 import { FC } from "react";
+import { IconContext } from "react-icons";
 import { FaRegHeart, FaHeart } from "react-icons/fa";
 
 import {
@@ -60,14 +61,22 @@ export const FollowFavoriteArticleDropdownMenu: FC<
           <DropdownMenuTrigger asChild>
             <TooltipTrigger>
               {isFollowing ? (
-                <FaHeart size={32} className="cursor-pointer" color="red" />
+                <IconContext.Provider
+                  value={{ className: "hover:text-rose-900" }}
+                >
+                  <FaHeart size={30} className="cursor-pointer" color="red" />
+                </IconContext.Provider>
               ) : (
-                <FaRegHeart size={32} className="cursor-pointer" />
+                <IconContext.Provider
+                  value={{ className: "hover:text-rose-600" }}
+                >
+                  <FaRegHeart size={30} className="cursor-pointer" />
+                </IconContext.Provider>
               )}
             </TooltipTrigger>
           </DropdownMenuTrigger>
 
-          <TooltipContent className="px-4 py-3 font-semibold">
+          <TooltipContent className="px-4 py-3 ">
             <p>Save Article</p>
           </TooltipContent>
         </Tooltip>

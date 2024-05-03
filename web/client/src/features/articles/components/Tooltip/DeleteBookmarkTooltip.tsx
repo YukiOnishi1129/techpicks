@@ -1,4 +1,5 @@
 import { FC } from "react";
+import { IconContext } from "react-icons";
 import { FcBookmark } from "react-icons/fc";
 
 import {
@@ -21,7 +22,9 @@ export const DeleteBookmarkTooltip: FC<DeleteBookmarkTooltipProps> = ({
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger onClick={() => handleRemoveBookmark(bookmarkId)}>
-          <FcBookmark className="inline-block" size={36} />
+          <IconContext.Provider value={{ className: "hover:text-rose-900" }}>
+            <FcBookmark className="inline-block" size={36} />
+          </IconContext.Provider>
         </TooltipTrigger>
         <TooltipContent>
           <p>Delete bookmark</p>
