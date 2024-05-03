@@ -4,6 +4,51 @@ import { v4 as uuidv4 } from "uuid";
 
 import prisma from "@/lib/prisma";
 
+import { FavoriteArticleType } from "@/types/favoriteArticle";
+
+type GetFavoriteArticleByIdDTO = {
+  id: string;
+  userId: string;
+};
+
+export const getFavoriteArticleById = async (
+  dto: GetFavoriteArticleByIdDTO
+) => {
+  try {
+    const favoriteArticle = await prisma.favoriteArticle.findFirst({
+      where: {
+        id: dto.id,
+        userId: dto.userId,
+      },
+    });
+    if (!favoriteArticle) return;
+    const resFavoriteArticle: FavoriteArticleType = {
+      id: favoriteArticle.id,
+      favoriteArticleFolderId: favoriteArticle.favoriteArticleFolderId,
+      platformId: favoriteArticle.platformId,
+      articleId: favoriteArticle.articleId,
+      title: favoriteArticle.title,
+      description: favoriteArticle.description,
+      articleUrl: favoriteArticle.articleUrl,
+      publishedAt: favoriteArticle.publishedAt,
+      authorName: favoriteArticle.authorName,
+      tags: favoriteArticle.tags,
+      thumbnailURL: favoriteArticle.thumbnailURL,
+      platformName: favoriteArticle.platformName,
+      platformUrl: favoriteArticle.platformUrl,
+      platformFaviconUrl: favoriteArticle.platformFaviconUrl,
+      isEng: favoriteArticle.isEng,
+      isRead: favoriteArticle.isRead,
+      isPrivate: favoriteArticle.isPrivate,
+      createdAt: favoriteArticle.createdAt,
+      updatedAt: favoriteArticle.updatedAt,
+    };
+    return resFavoriteArticle;
+  } catch (err) {
+    throw new Error(`Failed to get favorite article: ${err}`);
+  }
+};
+
 type GetFavoriteArticleCountByFavoriteArticleFolderIdAndArticleIdDTO = {
   userId: string;
   articleId: string;
@@ -72,7 +117,7 @@ export const createFavoriteArticle = async (dto: CreateFavoriteArticleDTO) => {
         isPrivate: dto.isPrivate,
       },
     });
-    return data.id;
+    return data;
   } catch (err) {
     throw new Error(`Failed to create favorite article: ${err}`);
   }

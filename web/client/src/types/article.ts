@@ -24,7 +24,7 @@ export type ArticleType = Omit<PrismaArticle, "platformId"> & {
   isBookmarked: boolean;
   bookmarkId?: string;
   likeCount?: number;
-  favoriteArticles?: Array<PrismaFavoriteArticle>;
+  favoriteArticles?: Array<Omit<PrismaFavoriteArticle, "userId">>;
   isFollowing?: boolean;
 };
 

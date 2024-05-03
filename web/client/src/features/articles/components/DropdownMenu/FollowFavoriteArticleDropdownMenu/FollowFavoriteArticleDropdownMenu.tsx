@@ -26,6 +26,10 @@ type FollowFavoriteArticleDropdownMenuProps = {
     favoriteArticleFolderId: string,
     createdFavoriteArticleFolder?: FavoriteArticleFolderType
   ) => Promise<string | undefined>;
+  handleRemoveFavoriteArticle: (
+    favoriteArticleId: string,
+    favoriteArticleFolderId: string
+  ) => Promise<string | undefined>;
 };
 
 export const FollowFavoriteArticleDropdownMenu: FC<
@@ -35,6 +39,7 @@ export const FollowFavoriteArticleDropdownMenu: FC<
   articleId,
   favoriteArticleFolders,
   handleCreateFavoriteArticle,
+  handleRemoveFavoriteArticle,
 }) => {
   const sortedFavoriteArticleFolders = favoriteArticleFolders.sort(
     (prev, next) => {
@@ -68,6 +73,7 @@ export const FollowFavoriteArticleDropdownMenu: FC<
         articleId={articleId}
         favoriteArticleFolders={sortedFavoriteArticleFolders}
         handleCreateFavoriteArticle={handleCreateFavoriteArticle}
+        handleRemoveFavoriteArticle={handleRemoveFavoriteArticle}
       />
     </DropdownMenu>
   );

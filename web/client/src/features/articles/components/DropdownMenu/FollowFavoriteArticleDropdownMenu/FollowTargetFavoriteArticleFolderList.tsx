@@ -14,11 +14,20 @@ type FollowTargetFavoriteArticleFolderListProps = {
     favoriteArticleFolderId: string,
     createdFavoriteArticleFolder?: FavoriteArticleFolderType
   ) => Promise<string | undefined>;
+  handleRemoveFavoriteArticle: (
+    favoriteArticleId: string,
+    favoriteArticleFolderId: string
+  ) => Promise<string | undefined>;
 };
 
 export const FollowTargetFavoriteArticleFolderList: FC<
   FollowTargetFavoriteArticleFolderListProps
-> = ({ articleId, favoriteArticleFolder, handleCreateFavoriteArticle }) => {
+> = ({
+  articleId,
+  favoriteArticleFolder,
+  handleCreateFavoriteArticle,
+  handleRemoveFavoriteArticle,
+}) => {
   const isFollowed = useMemo(
     () =>
       favoriteArticleFolder.favoriteArticles.some(
@@ -26,6 +35,14 @@ export const FollowTargetFavoriteArticleFolderList: FC<
       ),
     [articleId, favoriteArticleFolder.favoriteArticles]
   );
+
+  const targetFavoriteArticleId = useMemo(() => {
+    const targetFavoriteArticle = favoriteArticleFolder.favoriteArticles.find(
+      (favoriteArticle) => favoriteArticle.articleId === articleId
+    );
+    return targetFavoriteArticle?.id;
+  }, [articleId, favoriteArticleFolder.favoriteArticles]);
+
   return (
     <div>
       <div className="flex items-center justify-between">
@@ -35,9 +52,12 @@ export const FollowTargetFavoriteArticleFolderList: FC<
             variant="outline"
             size="sm"
             className="group relative border-emerald-500 bg-emerald-500 font-bold text-white hover:border-red-600 hover:text-red-600"
-            // onClick={() =>
-            //   onRemoveMyFeed(targetMyFeedId || "", myFeedFolder.id)
-            // }
+            onClick={() =>
+              handleRemoveFavoriteArticle(
+                targetFavoriteArticleId || "",
+                favoriteArticleFolder.id
+              )
+            }
           >
             <span className="w-full group-hover:invisible">{"SAVED"}</span>
             <span className="invisible absolute w-full group-hover:visible">

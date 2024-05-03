@@ -3,6 +3,45 @@
 import { getFetch } from "@/lib/fetch";
 
 import { FetchCountAPIResponse } from "@/types/api";
+import { FavoriteArticleType } from "@/types/favoriteArticle";
+
+type FetchFavoriteArticleAPIResponse = {
+  data: {
+    favoriteArticle?: FavoriteArticleType;
+    message: string;
+  };
+  status: number;
+};
+
+export const fetchFavoriteArticleAPI = async (
+  id: string
+): Promise<FetchFavoriteArticleAPIResponse> => {
+  const url = `http://localhost:80/api/favorite-articles/${id}`;
+  const response = await getFetch({
+    url,
+    tagName: "favorite-articles",
+    cacheType: "no-store",
+  });
+  const data = await response.json();
+  const status = response.status;
+
+  if (status === 401) {
+    return {
+      data: {
+        message: data.message as string,
+      },
+      status,
+    };
+  }
+
+  return {
+    data: {
+      favoriteArticle: data.favoriteArticle as FavoriteArticleType,
+      message: data.message as string,
+    },
+    status,
+  };
+};
 
 export const fetchFavoriteArticleCountByFavoriteArticleFolderIdAndArticleIdAPI =
   async ({
@@ -25,7 +64,7 @@ export const fetchFavoriteArticleCountByFavoriteArticleFolderIdAndArticleIdAPI =
     if (status === 401) {
       return {
         data: {
-          message: data.message,
+          message: data.message as string,
         },
         status,
       };
@@ -34,7 +73,7 @@ export const fetchFavoriteArticleCountByFavoriteArticleFolderIdAndArticleIdAPI =
     if (status === 404) {
       return {
         data: {
-          message: data.message,
+          message: data.message as string,
         },
         status,
       };
@@ -42,7 +81,7 @@ export const fetchFavoriteArticleCountByFavoriteArticleFolderIdAndArticleIdAPI =
 
     return {
       data: {
-        count: data.count,
+        count: data.count as number,
         message: data.message,
       },
       status,

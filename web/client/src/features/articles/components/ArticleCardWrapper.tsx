@@ -4,8 +4,14 @@ import { clsx } from "clsx";
 import { FC, useCallback, useMemo, useState } from "react";
 import { TwitterShareButton, XIcon } from "react-share";
 
-import { fetchFavoriteArticleCountByFavoriteArticleFolderIdAndArticleIdAPI } from "@/features/favoriteArticles/actions/favoriteArticle";
-import { createFavoriteArticle } from "@/features/favoriteArticles/repository/favoriteArticle";
+import {
+  fetchFavoriteArticleAPI,
+  fetchFavoriteArticleCountByFavoriteArticleFolderIdAndArticleIdAPI,
+} from "@/features/favoriteArticles/actions/favoriteArticle";
+import {
+  createFavoriteArticle,
+  deleteFavoriteArticle,
+} from "@/features/favoriteArticles/repository/favoriteArticle";
 
 import { ReadPostTooltip } from "@/components/ui/tooltip/ReadPostTooltip";
 
@@ -116,7 +122,7 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
       }
 
       // 3. create favoriteArticle
-      const createdId = await createFavoriteArticle({
+      const createdData = await createFavoriteArticle({
         userId: user?.id || "",
         favoriteArticleFolderId: favoriteArticleFolderId,
         articleId: showArticle.id,
@@ -136,7 +142,7 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
         isPrivate: showArticle.isPrivate,
       });
 
-      if (!createdId) {
+      if (!createdData) {
         failToast({
           description: "Failed to follow the article",
         });
@@ -153,7 +159,7 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
           ...prev,
           addStateFavoriteArticleInFavoriteArticleFolder(
             createdFavoriteArticleFolder,
-            createdId
+            createdData.id
           ),
         ]);
       }
@@ -170,11 +176,39 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
           ),
           addStateFavoriteArticleInFavoriteArticleFolder(
             targetFavoriteArticleFolder,
-            createdId
+            createdData.id
           ),
         ]);
       }
-      return createdId;
+      setShowArticle({
+        ...showArticle,
+        favoriteArticles: [
+          ...(showArticle.favoriteArticles || []),
+          {
+            id: createdData.id,
+            favoriteArticleFolderId: favoriteArticleFolderId,
+            articleId: createdData.id,
+            platformId: createdData.platformId,
+            title: createdData.title,
+            description: createdData.description,
+            articleUrl: createdData.articleUrl,
+            publishedAt: createdData.publishedAt,
+            authorName: createdData?.authorName,
+            tags: createdData?.tags,
+            thumbnailURL: createdData?.thumbnailURL,
+            platformName: createdData.platformName,
+            platformUrl: createdData.platformUrl,
+            platformFaviconUrl: createdData.platformFaviconUrl,
+            isEng: createdData.isEng,
+            isRead: createdData.isRead,
+            isPrivate: createdData.isPrivate,
+            createdAt: createdData.createdAt,
+            updatedAt: createdData.updatedAt,
+          },
+        ],
+      });
+
+      return createdData.id;
     },
     [
       failToast,
@@ -185,6 +219,78 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
       isFollowing,
       showFavoriteArticleFolders,
     ]
+  );
+
+  const handleRemoveFavoriteArticle = useCallback(
+    async (favoriteArticleId: string, favoriteArticleFolderId: string) => {
+      // TODO: check count favoriteArticle by favoriteArticleId
+      const res = await fetchFavoriteArticleAPI(favoriteArticleId);
+      if (!res.data) {
+        failToast({
+          description: "Failed to unfollow the article",
+        });
+        return;
+      }
+      if (!user) {
+        failToast({
+          description: "Please login to unfollow the article",
+        });
+        return;
+      }
+      const id = await deleteFavoriteArticle({
+        id: favoriteArticleId,
+        userId: user.id,
+      });
+      if (!id) {
+        failToast({
+          description: "Failed to unfollow the article",
+        });
+        return;
+      }
+      successToast({
+        description: "Successfully unfollowed the article",
+      });
+
+      // state update
+      // remove favoriteArticle from favoriteArticleFolder
+      const targetFavoriteArticleFolder = showFavoriteArticleFolders.find(
+        (favoriteArticleFolder) =>
+          favoriteArticleFolder.id === favoriteArticleFolderId
+      );
+      if (targetFavoriteArticleFolder) {
+        setShowFavoriteArticleFolders((prev) => [
+          ...prev.filter(
+            (favoriteArticleFolder) =>
+              favoriteArticleFolder.id !== favoriteArticleFolderId
+          ),
+          {
+            ...targetFavoriteArticleFolder,
+            favoriteArticles:
+              targetFavoriteArticleFolder.favoriteArticles.filter(
+                (favoriteArticle) => favoriteArticle.id !== favoriteArticleId
+              ),
+          },
+        ]);
+      }
+
+      if (showArticle?.favoriteArticles) {
+        const newArticle: ArticleType = {
+          ...showArticle,
+          favoriteArticles: showArticle.favoriteArticles.filter(
+            (favoriteArticle) => favoriteArticle.id !== favoriteArticleId
+          ),
+        };
+        setShowArticle(newArticle);
+        if (
+          !newArticle?.favoriteArticles ||
+          newArticle.favoriteArticles.length === 0
+        ) {
+          setIsFollowing(false);
+        }
+      }
+      return id;
+    },
+    [successToast, failToast, showFavoriteArticleFolders, showArticle, user]
   );
 
   return (
@@ -258,6 +364,7 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
                       articleId={showArticle.id}
                       favoriteArticleFolders={showFavoriteArticleFolders}
                       handleCreateFavoriteArticle={handleCreateFavoriteArticle}
+                      handleRemoveFavoriteArticle={handleRemoveFavoriteArticle}
                     />
                   </div>
                 </>
