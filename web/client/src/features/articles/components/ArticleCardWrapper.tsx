@@ -13,8 +13,7 @@ import {
   deleteFavoriteArticle,
 } from "@/features/favoriteArticles/repository/favoriteArticle";
 
-import { ReadPostTooltip } from "@/components/ui/tooltip/ReadPostTooltip";
-import { XShareTooltip } from "@/components/ui/tooltip/XShareTooltip";
+import { ShareLinks } from "@/components/ui/share/ShareLinks";
 
 import { useStatusToast } from "@/hooks/useStatusToast";
 
@@ -354,14 +353,10 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
             </div>
 
             <div className="flex items-center justify-center">
-              <div className="mr-2 md:mr-4">
-                <ReadPostTooltip postUrl={showArticle.articleUrl} size={24} />
-              </div>
-              <div className="mr-2 md:mr-4">
-                <XShareTooltip
+              <div className="mr-4">
+                <ShareLinks
                   shareTitle={showArticle.title}
                   shareUrl={showArticle.articleUrl}
-                  size={24}
                 />
               </div>
 
@@ -378,7 +373,7 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
                       handleAddBookmark={handleAddBookmark}
                     />
                   )}
-                  <div className="mx-2  mt-2 md:ml-4">
+                  <div className="mx-4  mt-2">
                     <FollowFavoriteArticleDropdownMenu
                       isFollowing={isFollowing}
                       articleId={showArticle.id}
