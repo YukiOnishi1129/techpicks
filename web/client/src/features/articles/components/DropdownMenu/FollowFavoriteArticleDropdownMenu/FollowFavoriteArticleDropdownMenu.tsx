@@ -6,8 +6,6 @@ import { FaRegHeart, FaHeart } from "react-icons/fa";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import {
   Tooltip,
@@ -16,13 +14,19 @@ import {
   TooltipContent,
 } from "@/components/ui/tooltip";
 
+import { FavoriteArticleFolderType } from "@/types/favoriteArticleFolder";
+
+import { FollowFavoriteArticleDropdownMenuContent } from "./FollowFavoriteArticleDropdownMenuContent";
+
 type FollowFavoriteArticleDropdownMenuProps = {
   isFollowing: boolean;
+  articleId: string;
+  favoriteArticleFolders: Array<FavoriteArticleFolderType>;
 };
 
 export const FollowFavoriteArticleDropdownMenu: FC<
   FollowFavoriteArticleDropdownMenuProps
-> = ({ isFollowing }) => {
+> = ({ isFollowing, articleId, favoriteArticleFolders }) => {
   return (
     <DropdownMenu>
       <TooltipProvider>
@@ -43,10 +47,10 @@ export const FollowFavoriteArticleDropdownMenu: FC<
         </Tooltip>
       </TooltipProvider>
 
-      <DropdownMenuContent align="end" className="w-[200px]">
-        aaaa
-        <DropdownMenuSeparator />
-      </DropdownMenuContent>
+      <FollowFavoriteArticleDropdownMenuContent
+        articleId={articleId}
+        favoriteArticleFolders={favoriteArticleFolders}
+      />
     </DropdownMenu>
   );
 };

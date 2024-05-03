@@ -1,6 +1,8 @@
 import { User } from "@supabase/supabase-js";
 import { FC } from "react";
 
+import { fetchFavoriteArticleFoldersAPI } from "@/features/favoriteArticleFolders/actions/favoriteArticleFolders";
+
 import { ArticleTabType } from "@/types/article";
 import { LanguageStatus } from "@/types/language";
 
@@ -29,10 +31,15 @@ export const ArticleTemplateContent: FC<ArticleTemplateContentProps> = async ({
     tab,
   });
 
+  const resFavoriteArticleFolders = await fetchFavoriteArticleFoldersAPI();
+
   return (
     <ArticleList
       user={user}
       initialArticles={res.data.articles}
+      favoriteArticleFolders={
+        resFavoriteArticleFolders.data.favoriteArticleFolders
+      }
       languageStatus={languageStatus}
       keyword={keyword}
       platformIdList={platformIdList}

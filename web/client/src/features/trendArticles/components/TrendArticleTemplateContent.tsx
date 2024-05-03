@@ -1,5 +1,7 @@
 import { User } from "@supabase/supabase-js";
 
+import { fetchFavoriteArticleFoldersAPI } from "@/features/favoriteArticleFolders/actions/favoriteArticleFolders";
+
 import { LanguageStatus } from "@/types/language";
 
 import { TrendArticleList } from "./TrendArticleList";
@@ -25,11 +27,15 @@ export const TrendArticleTemplateContent = async ({
     platformIdList,
     tab,
   });
+  const resFavoriteArticleFolders = await fetchFavoriteArticleFoldersAPI();
 
   return (
     <TrendArticleList
       user={user}
       initialTrendArticles={res.data.trendArticles}
+      favoriteArticleFolders={
+        resFavoriteArticleFolders.data.favoriteArticleFolders
+      }
       languageStatus={languageStatus}
       keyword={keyword}
       platformIdList={platformIdList}

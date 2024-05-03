@@ -1,4 +1,5 @@
 "use client";
+
 import { User } from "@supabase/supabase-js";
 import { useCallback, useRef, useState, useEffect } from "react";
 
@@ -6,6 +7,7 @@ import { NotFoundList } from "@/components/layout/NotFoundList";
 import { Loader } from "@/components/ui/loader";
 
 import { ArticleTabType, ArticleType } from "@/types/article";
+import { FavoriteArticleFolderType } from "@/types/favoriteArticleFolder";
 import { LanguageStatus } from "@/types/language";
 
 import { ArticleCardWrapper } from "./ArticleCardWrapper";
@@ -14,6 +16,7 @@ import { FetchArticlesAPIResponse } from "../actions/article";
 type Props = {
   user: User | undefined;
   initialArticles: Array<ArticleType>;
+  favoriteArticleFolders: Array<FavoriteArticleFolderType>;
   languageStatus: LanguageStatus;
   keyword?: string;
   platformIdList: Array<string>;
@@ -35,12 +38,15 @@ type Props = {
 export function ArticleList({
   user,
   initialArticles,
+  favoriteArticleFolders,
   languageStatus,
   keyword,
   platformIdList,
   tab,
   fetchArticles,
 }: Props) {
+  console.log("🧝‍♀️");
+  console.log(favoriteArticleFolders);
   const observerTarget = useRef(null);
 
   const [articles, setArticles] = useState<ArticleType[]>(initialArticles);
@@ -112,7 +118,12 @@ export function ArticleList({
         <div className="m-auto h-[590px] overflow-y-scroll md:h-[540px]">
           {flatArticles.map((article) => (
             <div key={article.id} className="mb-4">
-              <ArticleCardWrapper article={article} user={user} tab={tab} />
+              <ArticleCardWrapper
+                article={article}
+                favoriteArticleFolders={favoriteArticleFolders}
+                user={user}
+                tab={tab}
+              />
             </div>
           ))}
           <div ref={observerTarget}>

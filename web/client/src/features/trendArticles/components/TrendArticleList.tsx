@@ -7,6 +7,7 @@ import { ArticleCardWrapper } from "@/features/articles/components/ArticleCardWr
 import { Loader } from "@/components/ui/loader";
 
 import { ArticleTabType, ArticleType } from "@/types/article";
+import { FavoriteArticleFolderType } from "@/types/favoriteArticleFolder";
 import { LanguageStatus } from "@/types/language";
 import { TrendArticleType } from "@/types/trendArticle";
 
@@ -15,6 +16,7 @@ import { FetchTrendArticlesAPIResponse } from "../actions/trendArticles";
 type Props = {
   user: User | undefined;
   initialTrendArticles: Array<TrendArticleType>;
+  favoriteArticleFolders: Array<FavoriteArticleFolderType>;
   languageStatus: LanguageStatus;
   keyword?: string;
   platformIdList: Array<string>;
@@ -36,6 +38,7 @@ type Props = {
 export function TrendArticleList({
   user,
   initialTrendArticles,
+  favoriteArticleFolders,
   languageStatus,
   keyword,
   platformIdList,
@@ -122,6 +125,7 @@ export function TrendArticleList({
             <div key={trendArticle.id} className="mb-4">
               <ArticleCardWrapper
                 article={convertTrendArticleToArticle(trendArticle)}
+                favoriteArticleFolders={favoriteArticleFolders}
                 user={user}
                 tab={tab}
               />

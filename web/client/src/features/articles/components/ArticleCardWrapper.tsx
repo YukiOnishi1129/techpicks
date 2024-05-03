@@ -7,6 +7,7 @@ import { TwitterShareButton, XIcon } from "react-share";
 import { ReadPostTooltip } from "@/components/ui/tooltip/ReadPostTooltip";
 
 import { ArticleTabType, ArticleType } from "@/types/article";
+import { FavoriteArticleFolderType } from "@/types/favoriteArticleFolder";
 
 import { ArticleCard } from "./ArticleCard";
 import style from "./ArticleCardWrapper.module.css";
@@ -17,12 +18,14 @@ import { useArticleBookmark } from "../hooks/useArticleBookmark";
 
 type ArticleCardWrapperProps = {
   article: ArticleType;
+  favoriteArticleFolders: Array<FavoriteArticleFolderType>;
   user: User | undefined;
   tab: ArticleTabType;
 };
 
 export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
   article,
+  favoriteArticleFolders,
   user,
   tab,
 }: ArticleCardWrapperProps) => {
@@ -109,6 +112,8 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
                   <div className="mx-2  md:ml-4">
                     <FollowFavoriteArticleDropdownMenu
                       isFollowing={isFollowing}
+                      articleId={showArticle.id}
+                      favoriteArticleFolders={favoriteArticleFolders}
                     />
                   </div>
                 </>
