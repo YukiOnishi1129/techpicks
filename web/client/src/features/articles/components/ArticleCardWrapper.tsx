@@ -2,7 +2,6 @@
 import { User } from "@supabase/supabase-js";
 import { clsx } from "clsx";
 import { FC, useCallback, useMemo, useState } from "react";
-import { TwitterShareButton, XIcon } from "react-share";
 
 import { fetchFavoriteArticleFolderByIdAPI } from "@/features/favoriteArticleFolders/actions/favoriteArticleFolders";
 import {
@@ -14,7 +13,7 @@ import {
   deleteFavoriteArticle,
 } from "@/features/favoriteArticles/repository/favoriteArticle";
 
-import { ReadPostTooltip } from "@/components/ui/tooltip/ReadPostTooltip";
+import { ShareLinks } from "@/components/ui/share/ShareLinks";
 
 import { useStatusToast } from "@/hooks/useStatusToast";
 
@@ -57,8 +56,6 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
     () => article?.likeCount !== undefined,
     [article?.likeCount]
   );
-
-  const shareUrl = `${process.env.NEXT_PUBLIC_SITE_DOMAIN}/article/${article.id}`;
 
   const addStateFavoriteArticleInFavoriteArticleFolder = useCallback(
     (
@@ -243,7 +240,7 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
 
   const handleRemoveFavoriteArticle = useCallback(
     async (favoriteArticleId: string, favoriteArticleFolderId: string) => {
-      // TODO: check count favoriteArticle by favoriteArticleId
+      // check count favoriteArticle by favoriteArticleId
       const res = await fetchFavoriteArticleAPI(favoriteArticleId);
       if (!res.data) {
         failToast({
@@ -356,13 +353,11 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
             </div>
 
             <div className="flex items-center justify-center">
-              <div className="mr-2 md:mr-4">
-                <ReadPostTooltip postUrl={showArticle.articleUrl} size={24} />
-              </div>
-              <div className="mr-2 md:mr-4">
-                <TwitterShareButton title={showArticle.title} url={shareUrl}>
-                  <XIcon className="inline-block" size={36} />
-                </TwitterShareButton>
+              <div className="mr-4">
+                <ShareLinks
+                  shareTitle={showArticle.title}
+                  shareUrl={showArticle.articleUrl}
+                />
               </div>
 
               {user && (
@@ -378,7 +373,7 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
                       handleAddBookmark={handleAddBookmark}
                     />
                   )}
-                  <div className="mx-2  md:ml-4">
+                  <div className="mx-4  mt-2">
                     <FollowFavoriteArticleDropdownMenu
                       isFollowing={isFollowing}
                       articleId={showArticle.id}

@@ -6,21 +6,119 @@ import prisma from "@/lib/prisma";
 
 import { FavoriteArticleType } from "@/types/favoriteArticle";
 
+const LIMIT = 20;
+
+type GetFavoriteArticlesByFavoriteArticleFolderIdDTO = {
+  userId: string;
+  favoriteArticleFolderId: string;
+  offset: number;
+  keyword?: string;
+};
+
+export const getFavoriteArticlesByFavoriteArticleFolderId = async ({
+  userId,
+  favoriteArticleFolderId,
+  offset,
+  keyword,
+}: GetFavoriteArticlesByFavoriteArticleFolderIdDTO): Promise<
+  Array<FavoriteArticleType>
+> => {
+  let where = {};
+  where = {
+    userId: userId,
+    favoriteArticleFolderId: favoriteArticleFolderId,
+  };
+
+  if (keyword) {
+    where = {
+      ...where,
+      OR: [
+        {
+          title: {
+            contains: keyword,
+          },
+        },
+        {
+          description: {
+            contains: keyword,
+          },
+        },
+        {
+          authorName: {
+            contains: keyword,
+          },
+        },
+        {
+          tags: {
+            contains: keyword,
+          },
+        },
+        {
+          platformName: {
+            contains: keyword,
+          },
+        },
+      ],
+    };
+  }
+
+  try {
+    const favoriteArticles = await prisma.favoriteArticle.findMany({
+      take: LIMIT,
+      skip: (offset - 1) * LIMIT,
+      where,
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+
+    const resFavoriteArticles: Array<FavoriteArticleType> =
+      favoriteArticles.map((favoriteArticle) => {
+        return {
+          id: favoriteArticle.id,
+          favoriteArticleFolderId: favoriteArticle.favoriteArticleFolderId,
+          platformId: favoriteArticle.platformId,
+          articleId: favoriteArticle.articleId,
+          title: favoriteArticle.title,
+          description: favoriteArticle.description,
+          articleUrl: favoriteArticle.articleUrl,
+          publishedAt: favoriteArticle.publishedAt,
+          authorName: favoriteArticle.authorName,
+          tags: favoriteArticle.tags,
+          thumbnailURL: favoriteArticle.thumbnailURL,
+          platformName: favoriteArticle.platformName,
+          platformUrl: favoriteArticle.platformUrl,
+          platformFaviconUrl: favoriteArticle.platformFaviconUrl,
+          isEng: favoriteArticle.isEng,
+          isRead: favoriteArticle.isRead,
+          isPrivate: favoriteArticle.isPrivate,
+          createdAt: favoriteArticle.createdAt,
+          updatedAt: favoriteArticle.updatedAt,
+        };
+      });
+    return resFavoriteArticles;
+  } catch (err) {
+    throw new Error(`Failed to get favorite articles: ${err}`);
+  }
+};
+
 type GetFavoriteArticleByIdDTO = {
   id: string;
   userId: string;
 };
 
-export const getFavoriteArticleById = async (
-  dto: GetFavoriteArticleByIdDTO
-) => {
+export const getFavoriteArticleById = async ({
+  id,
+  userId,
+}: GetFavoriteArticleByIdDTO) => {
   try {
-    const favoriteArticle = await prisma.favoriteArticle.findFirst({
+    const favoriteArticle = await prisma.favoriteArticle.findUnique({
       where: {
-        id: dto.id,
-        userId: dto.userId,
+        id: id,
+        userId: userId,
       },
     });
+
     if (!favoriteArticle) return;
     const resFavoriteArticle: FavoriteArticleType = {
       id: favoriteArticle.id,
@@ -43,6 +141,7 @@ export const getFavoriteArticleById = async (
       createdAt: favoriteArticle.createdAt,
       updatedAt: favoriteArticle.updatedAt,
     };
+
     return resFavoriteArticle;
   } catch (err) {
     throw new Error(`Failed to get favorite article: ${err}`);
@@ -80,7 +179,7 @@ export type CreateFavoriteArticleDTO = {
   title: string;
   description: string;
   articleUrl: string;
-  publishedAt: Date;
+  publishedAt?: Date;
   authorName?: string;
   tags?: string;
   thumbnailURL?: string;

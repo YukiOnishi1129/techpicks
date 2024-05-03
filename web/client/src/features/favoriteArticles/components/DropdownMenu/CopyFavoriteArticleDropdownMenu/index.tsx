@@ -2,7 +2,7 @@
 
 import { FC } from "react";
 import { IconContext } from "react-icons";
-import { FaRegHeart, FaHeart } from "react-icons/fa";
+import { FaRegCopy } from "react-icons/fa";
 
 import {
   DropdownMenu,
@@ -17,29 +17,27 @@ import {
 
 import { FavoriteArticleFolderType } from "@/types/favoriteArticleFolder";
 
-import { FollowFavoriteArticleDropdownMenuContent } from "./FollowFavoriteArticleDropdownMenuContent";
+import { CopyFavoriteArticleDropdownMenuContent } from "./CopyFavoriteArticleDropdownMenu";
 
-type FollowFavoriteArticleDropdownMenuProps = {
-  isFollowing: boolean;
+type CopyFavoriteArticleDropdownMenuProps = {
   articleId: string;
   favoriteArticleFolders: Array<FavoriteArticleFolderType>;
   handleCreateFavoriteArticle: (
-    favoriteArticleFolderId: string,
-    createdFavoriteArticleFolder?: FavoriteArticleFolderType
+    targetFavoriteArticleFolderId: string,
+    targetFavoriteArticleFolder?: FavoriteArticleFolderType
   ) => Promise<string | undefined>;
   handleRemoveFavoriteArticle: (
     favoriteArticleId: string,
-    favoriteArticleFolderId: string
+    favoriteArticleFolderId?: string
   ) => Promise<string | undefined>;
   handleCreateFavoriteArticleFolder: (
     favoriteArticleFolderId: string
   ) => Promise<void>;
 };
 
-export const FollowFavoriteArticleDropdownMenu: FC<
-  FollowFavoriteArticleDropdownMenuProps
+export const CopyFavoriteArticleDropdownMenu: FC<
+  CopyFavoriteArticleDropdownMenuProps
 > = ({
-  isFollowing,
   articleId,
   favoriteArticleFolders,
   handleCreateFavoriteArticle,
@@ -60,29 +58,21 @@ export const FollowFavoriteArticleDropdownMenu: FC<
         <Tooltip>
           <DropdownMenuTrigger asChild>
             <TooltipTrigger>
-              {isFollowing ? (
-                <IconContext.Provider
-                  value={{ className: "hover:text-rose-900" }}
-                >
-                  <FaHeart size={30} className="cursor-pointer" color="red" />
-                </IconContext.Provider>
-              ) : (
-                <IconContext.Provider
-                  value={{ className: "hover:text-rose-600" }}
-                >
-                  <FaRegHeart size={30} className="cursor-pointer" />
-                </IconContext.Provider>
-              )}
+              <IconContext.Provider
+                value={{ className: "hover:text-rose-600" }}
+              >
+                <FaRegCopy size={30} className="cursor-pointer" />
+              </IconContext.Provider>
             </TooltipTrigger>
           </DropdownMenuTrigger>
 
           <TooltipContent className="px-4 py-3 ">
-            <p>Save Article</p>
+            <p>Copy article to other folder</p>
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>
 
-      <FollowFavoriteArticleDropdownMenuContent
+      <CopyFavoriteArticleDropdownMenuContent
         articleId={articleId}
         favoriteArticleFolders={sortedFavoriteArticleFolders}
         handleCreateFavoriteArticle={handleCreateFavoriteArticle}

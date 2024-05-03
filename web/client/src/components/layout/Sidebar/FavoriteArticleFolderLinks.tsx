@@ -1,11 +1,10 @@
 import Link from "next/link";
-import { FaRegHeart } from "react-icons/fa";
+import { FaHeart } from "react-icons/fa";
 
 import { fetchFavoriteArticleFoldersAPI } from "@/features/favoriteArticleFolders/actions/favoriteArticleFolders";
 
 export const FavoriteArticleFolderLinks = async () => {
   const res = await fetchFavoriteArticleFoldersAPI();
-
   return (
     <>
       {res.data.favoriteArticleFolders.map((folder, i) => (
@@ -17,7 +16,7 @@ export const FavoriteArticleFolderLinks = async () => {
             href={`/favorite-article-folder/${folder.id}`}
             className="flex items-center"
           >
-            <FaRegHeart />
+            <FaHeart color="red" />
             <p className="ml-4 inline-block w-full truncate ">{folder.title}</p>
           </Link>
         </div>

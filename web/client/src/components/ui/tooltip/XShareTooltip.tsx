@@ -1,8 +1,8 @@
 "use client";
-import Link from "next/link";
 import { FC } from "react";
 import { IconContext } from "react-icons";
-import { BsBoxArrowUpRight } from "react-icons/bs";
+import { BsTwitterX } from "react-icons/bs";
+import { TwitterShareButton } from "react-share";
 
 import {
   Tooltip,
@@ -11,29 +11,31 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-type ReadPostTooltipProps = {
-  postUrl: string;
+type XShareTooltipProps = {
+  shareTitle: string;
+  shareUrl: string;
   size?: number;
 };
 
-export const ReadPostTooltip: FC<ReadPostTooltipProps> = ({
-  postUrl,
-  size = 32,
+export const XShareTooltip: FC<XShareTooltipProps> = ({
+  shareTitle,
+  shareUrl,
+  size = 36,
 }) => {
   return (
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
-          <Link href={postUrl} target="_blank">
+          <TwitterShareButton title={shareTitle} url={shareUrl}>
             <IconContext.Provider
               value={{ className: "hover:text-emerald-600" }}
             >
-              <BsBoxArrowUpRight className="inline-block" size={size} />
+              <BsTwitterX className="inline-block" size={size} />
             </IconContext.Provider>
-          </Link>
+          </TwitterShareButton>
         </TooltipTrigger>
         <TooltipContent>
-          <p>Read Post</p>
+          <p>X Share</p>
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>
