@@ -130,7 +130,7 @@ const FavoriteArticleContent: FC<FavoriteArticleContentProps> = ({
             <Link href={favoriteArticle.articleUrl} target="_blank">
               <Button
                 size={"lg"}
-                className="w-1/2 bg-blue-700 text-xl hover:bg-blue-900"
+                className="w-1/2 bg-blue-700 text-xl text-white hover:bg-blue-900"
               >
                 {"READ MORE"}
               </Button>
@@ -145,7 +145,7 @@ const FavoriteArticleContent: FC<FavoriteArticleContentProps> = ({
             <Link href={favoriteArticle.articleUrl} target="_blank">
               <Button
                 size={"lg"}
-                className="w-1/2 bg-blue-700 text-xl hover:bg-blue-900"
+                className="w-1/2 bg-blue-700 text-xl text-white hover:bg-blue-900"
               >
                 {"READ MORE"}
               </Button>

@@ -103,6 +103,7 @@ export const FavoriteArticleList: FC<FavoriteArticleListProps> = ({
           {flatFavoriteArticles.map((favoriteArticle) => (
             <div key={favoriteArticle.id} className="mb-8">
               <FavoriteArticleCardWrapper
+                user={user}
                 favoriteArticleFolderId={favoriteArticleFolderId}
                 favoriteArticle={favoriteArticle}
               />

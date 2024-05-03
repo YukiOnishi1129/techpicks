@@ -17,7 +17,7 @@ type AddBookmarkTooltipProps = {
 export const AddBookmarkTooltip: FC<AddBookmarkTooltipProps> = ({
   articleId,
   handleAddBookmark,
-}: AddBookmarkTooltipProps) => {
+}) => {
   return (
     <TooltipProvider>
       <Tooltip>

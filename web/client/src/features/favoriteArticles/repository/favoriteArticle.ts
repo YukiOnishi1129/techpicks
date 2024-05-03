@@ -179,7 +179,7 @@ export type CreateFavoriteArticleDTO = {
   title: string;
   description: string;
   articleUrl: string;
-  publishedAt: Date;
+  publishedAt?: Date;
   authorName?: string;
   tags?: string;
   thumbnailURL?: string;
