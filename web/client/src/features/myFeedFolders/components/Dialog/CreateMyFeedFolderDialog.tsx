@@ -143,6 +143,7 @@ const CreateMyFeedFolderDialogContent: FC<
       failToast,
       handleCreatedMyFeedFolder,
       resetDialog,
+      pathname,
       router,
       startTransition,
       successToast,

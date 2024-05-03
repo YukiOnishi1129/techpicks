@@ -1,6 +1,7 @@
 import { FC } from "react";
 
 import { fetchArticlesByFeedIdsAPI } from "@/features/articles/actions/article";
+import { fetchFavoriteArticleFoldersAPI } from "@/features/favoriteArticleFolders/actions/favoriteArticleFolders";
 import { fetchMyFeedsByMyFeedFolderIdAPI } from "@/features/myFeeds/actions/myFeed";
 import { MyFeedFolderArticleKeywordSearchInput } from "@/features/search/components/myFeedFolders/MyFeedFolderArticleKeywordSearchInput";
 import { getUser } from "@/features/users/actions/user";
@@ -27,6 +28,7 @@ export const MyFeedFolderDetailTemplate: FC<
     feedIds: feedIdList,
     keyword: keyword,
   });
+  const resFavoriteArticleFolders = await fetchFavoriteArticleFoldersAPI();
 
   const title = resMyFeeds.data.myFeeds[0].myFeedFolder.title;
 
@@ -58,6 +60,9 @@ export const MyFeedFolderDetailTemplate: FC<
             initialArticles={res.data.articles}
             keyword={keyword}
             feedIdList={feedIdList}
+            favoriteArticleFolders={
+              resFavoriteArticleFolders.data.favoriteArticleFolders
+            }
             fetchArticles={fetchArticlesByFeedIdsAPI}
           />
         </div>

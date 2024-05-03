@@ -9,12 +9,14 @@ import { NotFoundList } from "@/components/layout/NotFoundList";
 import { Loader } from "@/components/ui/loader";
 
 import { ArticleType } from "@/types/article";
+import { FavoriteArticleFolderType } from "@/types/favoriteArticleFolder";
 
 type MyFeedFolderArticleListProps = {
   user: User | undefined;
   initialArticles: Array<ArticleType>;
   keyword?: string;
   feedIdList: Array<string>;
+  favoriteArticleFolders: Array<FavoriteArticleFolderType>;
   fetchArticles: ({
     feedIds,
     keyword,
@@ -31,6 +33,7 @@ export function MyFeedFolderArticleList({
   initialArticles,
   keyword,
   feedIdList,
+  favoriteArticleFolders,
   fetchArticles,
 }: MyFeedFolderArticleListProps) {
   const observerTarget = useRef(null);
@@ -102,7 +105,12 @@ export function MyFeedFolderArticleList({
         <div className="m-auto h-[590px] overflow-y-scroll md:h-[540px]">
           {flatArticles.map((article) => (
             <div key={article.id} className="mb-4">
-              <ArticleCardWrapper article={article} user={user} tab="unknown" />
+              <ArticleCardWrapper
+                article={article}
+                user={user}
+                tab="unknown"
+                favoriteArticleFolders={favoriteArticleFolders}
+              />
             </div>
           ))}
           <div ref={observerTarget}>

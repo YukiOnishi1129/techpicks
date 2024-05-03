@@ -46,7 +46,7 @@ const FormSchema = z.object({
 });
 
 type CreateMyFeedFolderDialogProps = {
-  handleCreateFavoriteArticleFolder: (
+  handleCreateFavoriteArticleFolder?: (
     favoriteArticleFolderId: string
   ) => Promise<void>;
 };
@@ -76,7 +76,7 @@ export const CreateFavoriteArticleFolderDialog: FC<
 
 type CreateMyFeedFolderDialogContentProps = {
   handleCloseDialog: () => void;
-  handleCreateFavoriteArticleFolder: (
+  handleCreateFavoriteArticleFolder?: (
     favoriteArticleFolderId: string
   ) => Promise<void>;
 };
