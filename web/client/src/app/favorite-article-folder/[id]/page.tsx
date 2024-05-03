@@ -4,11 +4,17 @@ type FavoriteArticleFolderDetailPageProps = {
   params: {
     id: string;
   };
+  searchParams: { [key: string]: string | string[] | undefined };
 };
 
 export default function FavoriteArticleFolderDetailPage({
   params,
+  searchParams,
 }: FavoriteArticleFolderDetailPageProps) {
   const { id } = params;
-  return <FavoriteArticleFolderDetailTemplate id={id} />;
+  const keyword =
+    typeof searchParams["keyword"] === "string"
+      ? searchParams["keyword"]
+      : undefined;
+  return <FavoriteArticleFolderDetailTemplate id={id} keyword={keyword} />;
 }

@@ -2,6 +2,7 @@ import { FC } from "react";
 
 import { fetchFavoriteArticlesByFavoriteArticleFolderIdAPI } from "@/features/favoriteArticles/actions/favoriteArticle";
 import { FavoriteArticleList } from "@/features/favoriteArticles/components/FavoriteArticleList";
+import { FavoriteArticleFolderArticleKeywordSearchInput } from "@/features/search/components/favoriteArticleFoldera/FavoriteArticleFolderArticleKeywordSearchInput";
 import { getUser } from "@/features/users/actions/user";
 
 import { BreadCrumbType, PageBreadcrumb } from "@/components/ui/breadcrumb";
@@ -21,6 +22,7 @@ export const FavoriteArticleFolderDetailTemplate: FC<
   const resFavoriteArticles =
     await fetchFavoriteArticlesByFavoriteArticleFolderIdAPI({
       favoriteArticleFolderId: id,
+      keyword: keyword,
     });
 
   const title = res.data.favoriteArticleFolder?.title || "";
@@ -44,7 +46,9 @@ export const FavoriteArticleFolderDetailTemplate: FC<
     <div className="mb-2 mt-4">
       <PageBreadcrumb breadcrumbs={breadcrumbs} />
       <div className="mt-2">
-        {/* <MyFeedFolderArticleKeywordSearchInput myFeedFolderId={id} /> */}
+        <FavoriteArticleFolderArticleKeywordSearchInput
+          favoriteArticleFolderId={id}
+        />
       </div>
 
       <div className="mt-4">
