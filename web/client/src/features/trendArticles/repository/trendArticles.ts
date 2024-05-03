@@ -138,6 +138,11 @@ export const getTrendArticles = async ({
                 userId: userId,
               },
             },
+            favoriteArticles: {
+              where: {
+                userId: userId,
+              },
+            },
           },
         },
       },
@@ -171,17 +176,6 @@ export const getTrendArticles = async ({
             createdAt: trendArticle.article.createdAt,
             updatedAt: trendArticle.article.updatedAt,
           },
-
-          // title: trendArticle.article.title,
-          // description: trendArticle.article.description,
-          // articleUrl: trendArticle.article.articleUrl,
-          // publishedAt: trendArticle.article.publishedAt,
-          // authorName: trendArticle.article.authorName,
-          // tags: trendArticle.article.tags,
-          // thumbnailURL: trendArticle.article.thumbnailURL,
-          // isPrivate: trendArticle.article.isPrivate,
-          // articleCreatedAt: trendArticle.article.createdAt,
-          // articleUpdatedAt: trendArticle.article.updatedAt,
           platform: {
             id: trendArticle.platform.id,
             name: trendArticle.platform.name,
@@ -206,6 +200,8 @@ export const getTrendArticles = async ({
           ),
           isBookmarked: isBookmarked,
           bookmarkId: bookmarkId,
+          favoriteArticles: trendArticle.article.favoriteArticles,
+          isFollowing: false,
         };
       }
     );

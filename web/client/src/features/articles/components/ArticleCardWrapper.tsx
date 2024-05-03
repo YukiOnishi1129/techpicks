@@ -1,7 +1,7 @@
 "use client";
 import { User } from "@supabase/supabase-js";
 import { clsx } from "clsx";
-import { FC, useMemo } from "react";
+import { FC, useMemo, useState } from "react";
 import { TwitterShareButton, XIcon } from "react-share";
 
 import { ReadPostTooltip } from "@/components/ui/tooltip/ReadPostTooltip";
@@ -11,6 +11,7 @@ import { ArticleTabType, ArticleType } from "@/types/article";
 import { ArticleCard } from "./ArticleCard";
 import style from "./ArticleCardWrapper.module.css";
 import { ArticleDetailSheet } from "./ArticleDetailSheet";
+import { FollowFavoriteArticleDropdownMenu } from "./DropdownMenu";
 import { AddBookmarkTooltip, DeleteBookmarkTooltip } from "./Tooltip";
 import { useArticleBookmark } from "../hooks/useArticleBookmark";
 
@@ -25,6 +26,11 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
   user,
   tab,
 }: ArticleCardWrapperProps) => {
+  const [isFollowing, setIsFollowing] = useState<boolean>(
+    article.isFollowing || false
+  );
+  const [showArticle, setShowArticle] = useState<ArticleType>(article);
+
   const { bookmarkId, handleAddBookmark, handleRemoveBookmark } =
     useArticleBookmark({ article });
 
@@ -37,7 +43,7 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
 
   return (
     <div
-      key={article.id}
+      key={showArticle.id}
       className="mb-4 rounded-2xl border-2 px-4 pb-4 md:px-2 md:pb-2"
     >
       <div className="border-t-4 border-t-rose-600">
@@ -48,21 +54,21 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
                 <div
                   className={clsx(style["like-count"], "mr-4 text-rose-600")}
                 >
-                  <span className="text-4xl font-bold">{`${article.likeCount}`}</span>
+                  <span className="text-4xl font-bold">{`${showArticle.likeCount}`}</span>
                   <span className="ml-2 font-bold">{"likes"}</span>
                 </div>
               )}
 
-              {article?.likeCount === undefined ? (
+              {showArticle?.likeCount === undefined ? (
                 <div>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     className="mr-2 inline-block size-[36px] bg-white"
-                    src={article.platform.faviconUrl}
+                    src={showArticle.platform.faviconUrl}
                     alt=""
                   />
                   <span className="hidden font-bold md:inline-block">
-                    {article.platform.name}
+                    {showArticle.platform.name}
                   </span>
                 </div>
               ) : (
@@ -70,19 +76,19 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     className="mr-2 hidden size-[36px] bg-white md:inline-block"
-                    src={article.platform.faviconUrl}
+                    src={showArticle.platform.faviconUrl}
                     alt=""
                   />
                 </div>
               )}
             </div>
 
-            <div className="flex items-center justify-center p-4">
-              <div className="mr-4">
-                <ReadPostTooltip postUrl={article.articleUrl} size={24} />
+            <div className="flex items-center justify-center">
+              <div className="mr-2 md:mr-4">
+                <ReadPostTooltip postUrl={showArticle.articleUrl} size={24} />
               </div>
-              <div className="mr-4">
-                <TwitterShareButton title={article.title} url={shareUrl}>
+              <div className="mr-2 md:mr-4">
+                <TwitterShareButton title={showArticle.title} url={shareUrl}>
                   <XIcon className="inline-block" size={36} />
                 </TwitterShareButton>
               </div>
@@ -96,18 +102,23 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
                     />
                   ) : (
                     <AddBookmarkTooltip
-                      articleId={article.id}
+                      articleId={showArticle.id}
                       handleAddBookmark={handleAddBookmark}
                     />
                   )}
+                  <div className="mx-2  md:ml-4">
+                    <FollowFavoriteArticleDropdownMenu
+                      isFollowing={isFollowing}
+                    />
+                  </div>
                 </>
               )}
             </div>
           </>
         </div>
 
-        <ArticleDetailSheet article={article} user={user}>
-          <ArticleCard article={article} user={user} tab={tab} />
+        <ArticleDetailSheet article={showArticle} user={user}>
+          <ArticleCard article={showArticle} user={user} tab={tab} />
         </ArticleDetailSheet>
       </div>
     </div>

@@ -3,6 +3,7 @@ import {
   Platform as PrismaPlatform,
   Feed as PrismaFeed,
   Category as PrismaCategory,
+  FavoriteArticle as PrismaFavoriteArticle,
 } from "@prisma/client";
 
 export type ArticleType = Omit<PrismaArticle, "platformId"> & {
@@ -23,6 +24,8 @@ export type ArticleType = Omit<PrismaArticle, "platformId"> & {
   isBookmarked: boolean;
   bookmarkId?: string;
   likeCount?: number;
+  favoriteArticles?: Array<PrismaFavoriteArticle>;
+  isFollowing?: boolean;
 };
 
 export type ArticleTabType =
