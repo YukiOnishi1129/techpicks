@@ -30,7 +30,10 @@ export const MyFeedFolderDetailTemplate: FC<
   });
   const resFavoriteArticleFolders = await fetchFavoriteArticleFoldersAPI();
 
-  const title = resMyFeeds.data.myFeeds[0].myFeedFolder.title;
+  const title =
+    resMyFeeds.data?.myFeeds.length > 0
+      ? resMyFeeds.data?.myFeeds[0]?.myFeedFolder.title
+      : "";
 
   const breadcrumbs: BreadCrumbType[] = [
     {
