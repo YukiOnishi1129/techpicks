@@ -110,12 +110,12 @@ export const FeedCardWrapper: FC<FeedCardWrapperProps> = ({
       }
 
       // create myFeed
-      const data = await createMyFeed({
+      const createdData = await createMyFeed({
         userId: user.id,
         myFeedFolderId,
         feedId: showFeed.id,
       });
-      if (!data) {
+      if (!createdData) {
         failToast({
           description: "Failed to follow the feed",
         });
@@ -131,9 +131,9 @@ export const FeedCardWrapper: FC<FeedCardWrapperProps> = ({
       if (createdMyFeedFolder) {
         setShowMyFeedFolders((prev) => [
           ...prev,
-          addStateFeedInMyFeedFolder(createdMyFeedFolder, data.id),
+          addStateFeedInMyFeedFolder(createdMyFeedFolder, createdData.id),
         ]);
-        return data.id;
+        return createdData.id;
       }
 
       const targetMyFeedFolder = showMyFeedFolders.find(
@@ -142,10 +142,26 @@ export const FeedCardWrapper: FC<FeedCardWrapperProps> = ({
       if (targetMyFeedFolder) {
         setShowMyFeedFolders((prev) => [
           ...prev.filter((myFeedFolder) => myFeedFolder.id !== myFeedFolderId),
-          addStateFeedInMyFeedFolder(targetMyFeedFolder, data.id),
+          addStateFeedInMyFeedFolder(targetMyFeedFolder, createdData.id),
         ]);
       }
-      return data.id;
+
+      setShowFeed({
+        ...showFeed,
+        myFeeds: [
+          ...(showFeed.myFeeds || []),
+          {
+            id: createdData.id,
+            myFeedFolderId,
+            userId: user.id,
+            feedId: showFeed.id,
+            createdAt: createdData.createdAt,
+            updatedAt: createdData.updatedAt,
+          },
+        ],
+      });
+
+      return createdData.id;
     },
     [
       failToast,
