@@ -3,6 +3,8 @@ import Link from "next/link";
 import { FaRegBookmark } from "react-icons/fa";
 import { MdFeed, MdCalendarToday, MdRssFeed } from "react-icons/md";
 
+import { CreateFavoriteArticleFolderDialog } from "@/features/favoriteArticleFolders/components/Dialog";
+
 import { FavoriteArticleFolderLinks } from "./FavoriteArticleFolderLinks";
 import { MyFeedFolderLinks } from "./MyFeedFolderLinks";
 
@@ -56,14 +58,17 @@ export function Sidebar({ user }: SidebarProps) {
               <h2 className="mb-2 px-2 text-lg font-semibold tracking-tight">
                 Favorite Articles
               </h2>
-              <div>
-                <div className="flex cursor-pointer items-center space-x-2 rounded-md px-2 hover:bg-secondary">
+              <div className="mt-2">
+                <div className="mb-2 flex cursor-pointer items-center space-x-2 rounded-md px-2 hover:bg-secondary">
                   <MdFeed />
                   <Link href="/favorite-article-folder" className="pl-2">
                     All
                   </Link>
                 </div>
                 <FavoriteArticleFolderLinks />
+                <div className="ml-4">
+                  <CreateFavoriteArticleFolderDialog buttonVariant="ghost" />
+                </div>
               </div>
             </div>
           </>

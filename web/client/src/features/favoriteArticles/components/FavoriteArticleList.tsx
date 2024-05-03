@@ -97,7 +97,7 @@ export const FavoriteArticleList: FC<FavoriteArticleListProps> = ({
   return (
     <div className="m-auto h-[590px]  overflow-y-scroll md:h-[540px]">
       {flatFavoriteArticles.length === 0 ? (
-        <NotFoundList message="No bookmarks found" />
+        <NotFoundList message="No favorite Article" />
       ) : (
         <>
           {flatFavoriteArticles.map((favoriteArticle) => (

@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ReloadIcon } from "@radix-ui/react-icons";
-import { useRouter, usePathname } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useState, useCallback, FC, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -32,7 +32,6 @@ import { useStatusToast } from "@/hooks/useStatusToast";
 
 import { serverRevalidatePage } from "@/actions/serverAction";
 
-import { serverRevalidateFavoriteArticleFolderPageTag } from "../../actions/serverActions";
 import { createFavoriteArticleFolder } from "../../repository/favoriteArticleFolder";
 
 const FormSchema = z.object({
@@ -46,6 +45,13 @@ const FormSchema = z.object({
 });
 
 type CreateMyFeedFolderDialogProps = {
+  buttonVariant?:
+    | "default"
+    | "destructive"
+    | "outline"
+    | "secondary"
+    | "ghost"
+    | "link";
   handleCreateFavoriteArticleFolder?: (
     favoriteArticleFolderId: string
   ) => Promise<void>;
@@ -53,7 +59,7 @@ type CreateMyFeedFolderDialogProps = {
 
 export const CreateFavoriteArticleFolderDialog: FC<
   CreateMyFeedFolderDialogProps
-> = ({ handleCreateFavoriteArticleFolder }) => {
+> = ({ buttonVariant, handleCreateFavoriteArticleFolder }) => {
   const [open, setOpen] = useState(false);
 
   const handleCloseDialog = useCallback(() => {
@@ -62,7 +68,7 @@ export const CreateFavoriteArticleFolderDialog: FC<
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>{"Create folder"}</Button>
+        <Button variant={buttonVariant}>{"Create folder"}</Button>
       </DialogTrigger>
       {open && (
         <CreateFavoriteArticleFolderDialogContent
@@ -86,7 +92,6 @@ const CreateFavoriteArticleFolderDialogContent: FC<
 > = ({ handleCloseDialog, handleCreateFavoriteArticleFolder }) => {
   const { successToast, failToast } = useStatusToast();
   const [isPending, startTransition] = useTransition();
-  const router = useRouter();
   const pathname = usePathname();
 
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -135,8 +140,7 @@ const CreateFavoriteArticleFolderDialogContent: FC<
           handleCloseDialog();
           return;
         }
-        await serverRevalidateFavoriteArticleFolderPageTag();
-        router.replace("/favorite-article-folder");
+        await serverRevalidatePage(pathname);
         resetDialog();
         handleCloseDialog();
       });
@@ -145,7 +149,6 @@ const CreateFavoriteArticleFolderDialogContent: FC<
       failToast,
       handleCloseDialog,
       resetDialog,
-      router,
       pathname,
       successToast,
       handleCreateFavoriteArticleFolder,
