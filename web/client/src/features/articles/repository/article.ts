@@ -164,6 +164,11 @@ export const getArticles = async ({
     ];
   }
 
+  where = {
+    ...where,
+    isPrivate: false,
+  };
+
   try {
     const res = await prisma.article.findMany({
       take: LIMIT,

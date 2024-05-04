@@ -179,7 +179,7 @@ export const CreateFavoriteArticleDialog: FC<
         articleUrl: url,
         thumbnailURL: ogpData?.image || "",
         isEng: isEng,
-        isPrivate: false,
+        isPrivate: true,
       });
 
       if (!createdArticleId) {

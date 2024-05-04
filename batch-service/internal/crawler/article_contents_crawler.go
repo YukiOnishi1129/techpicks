@@ -131,7 +131,7 @@ func CreateArticle(ctx context.Context, tx *sql.Tx, arg CreateArticleArg) error 
 		ArticleURL:   arg.ArticleURL,
 		PublishedAt:  null.TimeFrom(publishedAt),
 		IsEng:        arg.IsEng,
-		IsPrivate:    true,
+		IsPrivate:    false,
 	}
 	if arg.AuthorName != nil {
 		article.AuthorName = null.StringFromPtr(arg.AuthorName)
