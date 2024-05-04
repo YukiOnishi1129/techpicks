@@ -162,6 +162,7 @@ export const CreateBookmarkDialog: FC<CreateBookmarkDialogProps> = ({
         setOpen(false);
         return;
       }
+
       // 3. If not, get ogp data and register that data to article table and bookmark table.
       const isEng = !checkJapaneseArticle({
         title: ogpData?.title || "",

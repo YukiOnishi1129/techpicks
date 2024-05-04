@@ -11,7 +11,7 @@ CREATE TABLE favorite_articles
     title VARCHAR(255) NOT NULL,
     description TEXT NOT NULL,
     article_url TEXT NOT NULL,
-    published_at TIMESTAMPTZ NOT NULL,
+    published_at TIMESTAMPTZ NULL,
     author_name VARCHAR(255),
     tags TEXT,
     thumbnail_url TEXT NOT NULL,
