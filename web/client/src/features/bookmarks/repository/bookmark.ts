@@ -24,7 +24,7 @@ type GetBookmarkList = {
 
 export const getBookmarkList = async ({
   keyword,
-  languageStatus = 1,
+  languageStatus = 0,
   platformIdList,
   offset = 1,
   sort = "desc",

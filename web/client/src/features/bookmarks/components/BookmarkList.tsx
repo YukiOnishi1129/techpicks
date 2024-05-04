@@ -15,7 +15,7 @@ import { FetchBookmarkListAPIResponse } from "../actions/bookmark";
 type Props = {
   user: User | undefined;
   initialBookmarks: Array<BookmarkType>;
-  languageStatus: LanguageStatus;
+  languageStatus?: LanguageStatus;
   keyword?: string;
   platformIdList: Array<string>;
   fetchBookmarks: ({
@@ -24,7 +24,7 @@ type Props = {
     offset,
     platformIdList,
   }: {
-    languageStatus: string;
+    languageStatus?: string;
     keyword?: string;
     offset: string;
     platformIdList: Array<string>;
@@ -53,7 +53,7 @@ export const BookmarkList: FC<Props> = ({
       const res = await fetchBookmarks({
         offset: offset.toString(),
         keyword: keyword,
-        languageStatus: languageStatus.toString(),
+        languageStatus: languageStatus?.toString(),
         platformIdList: platformIdList,
       });
       setBookmarks((prev) => [...prev, ...res.data.bookmarks]);

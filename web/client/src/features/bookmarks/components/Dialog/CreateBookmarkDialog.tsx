@@ -38,27 +38,25 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
+import { useServerRevalidatePage } from "@/hooks/useServerRevalidatePage";
 import { useStatusToast } from "@/hooks/useStatusToast";
 
 import { checkJapaneseArticle } from "@/lib/check";
 
-import { LanguageStatus } from "@/types/language";
 import { OgpType } from "@/types/ogp";
 
 import { fetchBookmarkCountByArticleUrlAPI } from "../../actions/bookmark";
-import { serverRevalidateBookmark } from "../../actions/serverAction";
 import { createBookmark } from "../../repository/bookmark";
 
 type CreateBookmarkDialogProps = {
   user: User | undefined;
-  languageStatus: LanguageStatus;
 };
 
 export const CreateBookmarkDialog: FC<CreateBookmarkDialogProps> = ({
   user,
-  languageStatus,
 }: CreateBookmarkDialogProps) => {
   const router = useRouter();
+  const { revalidatePage } = useServerRevalidatePage();
   const [ogpData, setOgpData] = useState<OgpType | null>(null);
   const [open, setOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
@@ -156,8 +154,8 @@ export const CreateBookmarkDialog: FC<CreateBookmarkDialogProps> = ({
         successToast({
           description: "Success: add bookmark",
         });
-        await serverRevalidateBookmark();
-        router.replace(`/bookmark/?languageStatus=${languageStatus}`);
+        await revalidatePage();
+        router.replace(`/bookmark/`);
         resetDialog();
         setOpen(false);
         return;
@@ -189,15 +187,15 @@ export const CreateBookmarkDialog: FC<CreateBookmarkDialogProps> = ({
       successToast({
         description: "Success: add bookmark",
       });
-      await serverRevalidateBookmark();
-      router.replace(`/bookmark/?languageStatus=${languageStatus}`);
+      await revalidatePage();
+      router.replace(`/bookmark`);
       resetDialog();
       setOpen(false);
     });
   }, [
     form,
     router,
-    languageStatus,
+    revalidatePage,
     resetDialog,
     failToast,
     successToast,

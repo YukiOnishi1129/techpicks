@@ -13,7 +13,7 @@ export async function GET(req: NextRequest) {
   const status =
     typeof languageStatus === "string"
       ? (parseInt(languageStatus) as LanguageStatus)
-      : 1;
+      : undefined;
 
   const bookmarks = await getBookmarkList({
     languageStatus: status,

@@ -26,7 +26,7 @@ export const fetchBookmarkListAPI = async ({
   platformType,
   platformIdList,
 }: {
-  languageStatus: string;
+  languageStatus?: string;
   keyword?: string;
   offset?: string;
   platformType?: string;

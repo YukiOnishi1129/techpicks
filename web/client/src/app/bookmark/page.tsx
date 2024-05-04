@@ -15,7 +15,7 @@ export default function Bookmark({ searchParams }: PageProps) {
   const languageStatus =
     typeof searchParams["languageStatus"] === "string"
       ? (parseInt(searchParams["languageStatus"]) as LanguageStatus)
-      : 1;
+      : undefined;
 
   const keyword =
     typeof searchParams["keyword"] === "string"
