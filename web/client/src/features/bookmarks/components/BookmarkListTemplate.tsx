@@ -1,5 +1,6 @@
 import { FC } from "react";
 
+import { BookmarkArticleKeywordSearchInput } from "@/features/search/components/bookmarks/BookmarkArticleKeywordSearchInput";
 import { getUser } from "@/features/users/actions/user";
 
 import { LanguageStatus } from "@/types/language";
@@ -27,13 +28,15 @@ export const BookmarkListTemplate: FC<ArticleListProps> = async ({
   const user = await getUser();
   return (
     <div className="w-auto">
-      <div className="mb-4 flex w-full items-end justify-between px-4">
-        <h1 className="mt-8 text-2xl font-bold  md:mb-4">Bookmark</h1>
-        <div className=" flex w-48 items-center justify-end">
-          <div className="">
-            <CreateBookmarkDialog user={user} />
-          </div>
+      <div className="mb-4 mt-8 flex w-full items-center justify-between px-4">
+        <h1 className="mr-8 hidden text-2xl font-bold  md:mb-4 md:block">
+          Bookmark
+        </h1>
+        <div className="mr-2 w-3/4 md:mr-4">
+          <BookmarkArticleKeywordSearchInput />
         </div>
+
+        <CreateBookmarkDialog user={user} />
       </div>
 
       <BookmarkList

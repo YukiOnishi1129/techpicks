@@ -161,7 +161,11 @@ export const UpdateFavoriteArticleFolderDialogContent: FC<
                     <FormItem className="mb-4">
                       <FormLabel>Title</FormLabel>
                       <FormControl>
-                        <Input placeholder="folder title" {...field} />
+                        <Input
+                          className="border-primary bg-secondary text-primary"
+                          placeholder="folder title"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -174,7 +178,11 @@ export const UpdateFavoriteArticleFolderDialogContent: FC<
                     <FormItem className="mb-4">
                       <FormLabel>Description</FormLabel>
                       <FormControl>
-                        <Input placeholder="folder description" {...field} />
+                        <Input
+                          className="border-primary bg-secondary text-primary"
+                          placeholder="folder description"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

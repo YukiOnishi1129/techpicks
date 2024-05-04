@@ -175,7 +175,7 @@ const CreateFavoriteArticleFolderDialogContent: FC<
                   <FormLabel className="font-bold">TITLE</FormLabel>
                   <FormControl>
                     <Input
-                      className="block w-full"
+                      className="block w-full border-primary bg-secondary text-primary"
                       placeholder="Favorite Article  Folder Title"
                       type="text"
                       {...field}
@@ -193,7 +193,7 @@ const CreateFavoriteArticleFolderDialogContent: FC<
                   <FormLabel className="font-bold">DESCRIPTION</FormLabel>
                   <FormControl>
                     <Input
-                      className="block w-full"
+                      className="block w-full border-primary bg-secondary text-primary"
                       placeholder="Favorite Article Folder Description"
                       type="text"
                       {...field}

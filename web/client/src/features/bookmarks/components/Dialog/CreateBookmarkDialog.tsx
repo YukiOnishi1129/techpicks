@@ -206,7 +206,7 @@ export const CreateBookmarkDialog: FC<CreateBookmarkDialogProps> = ({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>{"Add new article"}</Button>
+        <Button>{"Add article"}</Button>
       </DialogTrigger>
       <DialogContent onCloseAutoFocus={resetDialog}>
         <DialogHeader>

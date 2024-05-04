@@ -234,7 +234,7 @@ export const CreateFavoriteArticleDialog: FC<
                     <FormLabel className="font-bold">URL</FormLabel>
                     <FormControl>
                       <Input
-                        className="block w-full"
+                        className="block w-full border-primary bg-secondary text-primary"
                         placeholder="https://example.com"
                         type="url"
                         pattern="https://.*|http://.*"

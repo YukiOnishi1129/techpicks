@@ -111,7 +111,11 @@ export const ArticleSearchForm: FC<ArticleSearchFormProps> = ({
                 <FormItem className="mb-8">
                   <FormLabel>Keyword</FormLabel>
                   <FormControl>
-                    <Input placeholder="shadcn" {...field} />
+                    <Input
+                      className="border-primary bg-secondary text-primary"
+                      placeholder="search keyword"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

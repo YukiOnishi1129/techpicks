@@ -54,7 +54,7 @@ export const MyFeedFolderArticleKeywordSearchInput: FC<
 
               <FormControl>
                 <Input
-                  className="bg-secondary text-primary"
+                  className="border-primary bg-secondary text-primary"
                   placeholder="search keyword"
                   {...field}
                 />

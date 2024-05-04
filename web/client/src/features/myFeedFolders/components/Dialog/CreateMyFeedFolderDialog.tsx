@@ -176,7 +176,7 @@ const CreateMyFeedFolderDialogContent: FC<
                   <FormLabel className="font-bold">TITLE</FormLabel>
                   <FormControl>
                     <Input
-                      className="block w-full"
+                      className="block w-full border-primary bg-secondary text-primary"
                       placeholder="Feed Folder Title"
                       type="text"
                       {...field}
@@ -194,7 +194,7 @@ const CreateMyFeedFolderDialogContent: FC<
                   <FormLabel className="font-bold">DESCRIPTION</FormLabel>
                   <FormControl>
                     <Input
-                      className="block w-full"
+                      className="block w-full border-primary bg-secondary text-primary"
                       placeholder="Feed Folder Description"
                       type="text"
                       {...field}
