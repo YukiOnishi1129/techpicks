@@ -84,15 +84,15 @@ const ArticleContent = ({
       description: article.description,
       articleId: article.id,
       articleUrl: article.articleUrl,
-      publishedAt: article.publishedAt,
+      publishedAt: article?.publishedAt || undefined,
       thumbnailURL: article.thumbnailURL,
-      platformId: article.platform.id,
+      platformId: article.platform?.id,
       isRead: false,
-      isEng: article.platform.isEng,
+      isEng: article.platform?.isEng || false,
       userId: user.id,
-      platformName: article.platform.name,
-      platformUrl: article.platform.siteUrl,
-      platformFaviconUrl: article.platform.faviconUrl,
+      platformName: article.platform?.name,
+      platformUrl: article.platform?.siteUrl,
+      platformFaviconUrl: article.platform?.faviconUrl,
     });
     setBookmarkId(data.id);
   }, [article, user]);
@@ -125,23 +125,23 @@ const ArticleContent = ({
         <div className="pb-0">
           <Link
             className="hover:opacity-80"
-            href={article.platform.siteUrl}
+            href={article.platform?.siteUrl || ""}
             target="_blank"
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               className="mr-2 inline-block size-[24px]"
-              src={article.platform.faviconUrl}
+              src={article.platform?.faviconUrl}
               alt=""
             />
           </Link>
           <Link
             className="hover:opacity-80"
-            href={article.platform.siteUrl}
+            href={article.platform?.siteUrl || ""}
             target="_blank"
           >
             <span className="rounded-lg bg-sky-500 px-2 py-1 text-xs font-bold text-white md:text-base">
-              {article.platform.name}
+              {article.platform?.name || ""}
             </span>
           </Link>
 

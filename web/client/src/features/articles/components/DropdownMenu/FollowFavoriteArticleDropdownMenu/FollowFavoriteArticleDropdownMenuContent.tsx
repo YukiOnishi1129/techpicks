@@ -78,7 +78,7 @@ export const FollowFavoriteArticleDropdownMenuContent: FC<
       />
       <DropdownMenuSeparator />
       <div className="max-h-[200px] overflow-y-auto">
-        {showFavoriteArticleFolders.length &&
+        {showFavoriteArticleFolders.length > 0 &&
           showFavoriteArticleFolders.map((favoriteArticleFolder) => (
             <FollowTargetFavoriteArticleFolderList
               key={favoriteArticleFolder.id}

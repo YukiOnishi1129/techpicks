@@ -67,6 +67,7 @@ func ArticleContentsCrawler(ctx context.Context, tx *sql.Tx, f *entity.Feed, r r
 		PublishedAt:  r.PublishedAt,
 		AuthorName:   &r.AuthorName,
 		Tags:         &r.Tags,
+		IsEng:        f.R.Platform.IsEng,
 	})
 	if err != nil {
 		log.Printf("【error insert article】: %s, err: %v", r.Title, err)
@@ -112,6 +113,7 @@ type CreateArticleArg struct {
 	PublishedAt  int
 	AuthorName   *string
 	Tags         *string
+	IsEng        bool
 }
 
 func CreateArticle(ctx context.Context, tx *sql.Tx, arg CreateArticleArg) error {
@@ -122,13 +124,14 @@ func CreateArticle(ctx context.Context, tx *sql.Tx, arg CreateArticleArg) error 
 	}
 	article := entity.Article{
 		ID:           arg.ID,
-		PlatformID:   arg.PlatformID,
+		PlatformID:   null.StringFrom(arg.PlatformID),
 		Title:        articleTitle,
 		Description:  arg.Description,
 		ThumbnailURL: arg.ThumbnailURL,
 		ArticleURL:   arg.ArticleURL,
-		PublishedAt:  publishedAt,
-		IsPrivate:    false,
+		PublishedAt:  null.TimeFrom(publishedAt),
+		IsEng:        arg.IsEng,
+		IsPrivate:    true,
 	}
 	if arg.AuthorName != nil {
 		article.AuthorName = null.StringFromPtr(arg.AuthorName)

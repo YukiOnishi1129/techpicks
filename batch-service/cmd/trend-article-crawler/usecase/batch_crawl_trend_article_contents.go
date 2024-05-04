@@ -16,6 +16,7 @@ func (u *Usecase) BatchCrawlTrendArticleContents(ctx context.Context) error {
 		qm.Where("feeds.deleted_at IS NULL"),
 		qm.And("feeds.trend_platform_type != ?", 0),
 		qm.OrderBy("feeds.created_at asc"),
+		qm.Load("Platform"),
 	).All(ctx, u.db)
 	if err != nil {
 		log.Printf("【error get feeds】: %s", err)

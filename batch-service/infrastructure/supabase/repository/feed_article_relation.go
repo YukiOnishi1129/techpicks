@@ -85,7 +85,7 @@ func convertDBtoFeedArticleRelationDomain(far *entity.FeedArticleRelation) domai
 			Description:  far.R.Article.Description,
 			ThumbnailURL: far.R.Article.ThumbnailURL,
 			ArticleURL:   far.R.Article.ArticleURL,
-			PublishedAt:  far.R.Article.PublishedAt,
+			PublishedAt:  far.R.Article.PublishedAt.Time,
 			IsPrivate:    far.R.Article.IsPrivate,
 			CreatedAt:    far.R.Article.CreatedAt,
 			UpdatedAt:    far.R.Article.UpdatedAt,

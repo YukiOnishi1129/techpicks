@@ -19,7 +19,7 @@ import { FavoriteArticleDetailSheet } from "./FavoriteArticleDetailSheet";
 import { AddFavoriteArticleTooltip } from "./Tooltip/AddFavoriteArticleTooltip";
 import {
   fetchFavoriteArticleAPI,
-  fetchFavoriteArticleCountByFavoriteArticleFolderIdAndArticleIdAPI,
+  fetchFavoriteArticleCountByFavoriteArticleFolderIdAndArticleIdAndArticleUrlAPI,
 } from "../actions/favoriteArticle";
 import {
   createFavoriteArticle,
@@ -99,10 +99,11 @@ export const FavoriteArticleCardWrapper: FC<
       }
       // 2. check out favoriteArticle by favoriteArticleFolderId and articleId
       const resCount =
-        await fetchFavoriteArticleCountByFavoriteArticleFolderIdAndArticleIdAPI(
+        await fetchFavoriteArticleCountByFavoriteArticleFolderIdAndArticleIdAndArticleUrlAPI(
           {
-            articleId: favoriteArticle.articleId || "",
+            articleId: favoriteArticle?.articleId || undefined,
             favoriteArticleFolderId: targetFavoriteArticleFolderId,
+            articleUrl: favoriteArticle?.articleUrl || "",
           }
         );
       if (resCount.data?.count && resCount.data.count > 0) {
@@ -121,9 +122,9 @@ export const FavoriteArticleCardWrapper: FC<
         title: favoriteArticle.title,
         description: favoriteArticle.description,
         articleUrl: favoriteArticle.articleUrl,
-        publishedAt: favoriteArticle.publishedAt || undefined,
-        authorName: favoriteArticle.authorName || undefined,
-        tags: favoriteArticle.tags || undefined,
+        publishedAt: favoriteArticle?.publishedAt || undefined,
+        authorName: favoriteArticle?.authorName || undefined,
+        tags: favoriteArticle?.tags || undefined,
         thumbnailURL: favoriteArticle.thumbnailURL || undefined,
         platformName: favoriteArticle.platformName || undefined,
         platformUrl: favoriteArticle.platformUrl || undefined,

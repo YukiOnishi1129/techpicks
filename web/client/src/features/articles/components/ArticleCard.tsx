@@ -46,9 +46,11 @@ export const ArticleCard: FC<ArticleCardProps> = ({
             {article.title}
           </h3>
 
-          <p className="flex pt-2 text-sm">
-            {showDiffDateToCurrentDate(article.publishedAt)}
-          </p>
+          {article?.publishedAt && (
+            <p className="flex pt-2 text-sm">
+              {showDiffDateToCurrentDate(article.publishedAt)}
+            </p>
+          )}
 
           <div className="flex w-full flex-wrap items-center justify-start pt-2 md:w-4/5">
             {article.feeds.length > 0 &&

@@ -6,7 +6,7 @@ import { FC, useCallback, useMemo, useState } from "react";
 import { fetchFavoriteArticleFolderByIdAPI } from "@/features/favoriteArticleFolders/actions/favoriteArticleFolders";
 import {
   fetchFavoriteArticleAPI,
-  fetchFavoriteArticleCountByFavoriteArticleFolderIdAndArticleIdAPI,
+  fetchFavoriteArticleCountByFavoriteArticleFolderIdAndArticleIdAndArticleUrlAPI,
 } from "@/features/favoriteArticles/actions/favoriteArticle";
 import {
   createFavoriteArticle,
@@ -70,7 +70,7 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
             id: favoriteArticleId,
             favoriteArticleFolderId: targetFavoriteArticleFolder.id,
             articleId: showArticle.id,
-            platformId: showArticle.platform.id,
+            platformId: showArticle.platform?.id || null,
             title: showArticle.title,
             description: showArticle.description,
             articleUrl: showArticle.articleUrl,
@@ -78,10 +78,10 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
             authorName: showArticle?.authorName,
             tags: showArticle?.tags,
             thumbnailURL: showArticle?.thumbnailURL,
-            platformName: showArticle.platform.name,
-            platformUrl: showArticle.platform.siteUrl,
-            platformFaviconUrl: showArticle.platform.faviconUrl,
-            isEng: showArticle.platform.isEng,
+            platformName: showArticle.platform?.name || null,
+            platformUrl: showArticle.platform?.siteUrl || null,
+            platformFaviconUrl: showArticle.platform?.faviconUrl || null,
+            isEng: showArticle.platform?.isEng || false,
             isRead: false,
             isPrivate: showArticle.isPrivate,
           },
@@ -106,10 +106,11 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
       }
       // 2. check out favoriteArticle by favoriteArticleFolderId and articleId
       const resCount =
-        await fetchFavoriteArticleCountByFavoriteArticleFolderIdAndArticleIdAPI(
+        await fetchFavoriteArticleCountByFavoriteArticleFolderIdAndArticleIdAndArticleUrlAPI(
           {
             articleId: showArticle.id,
             favoriteArticleFolderId,
+            articleUrl: showArticle.articleUrl,
           }
         );
       if (resCount.data?.count && resCount.data.count > 0) {
@@ -124,18 +125,18 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
         userId: user?.id || "",
         favoriteArticleFolderId: favoriteArticleFolderId,
         articleId: showArticle.id,
-        platformId: showArticle.platform.id,
+        platformId: showArticle.platform?.id,
         title: showArticle.title,
         description: showArticle.description,
         articleUrl: showArticle.articleUrl,
-        publishedAt: showArticle.publishedAt,
+        publishedAt: showArticle?.publishedAt || undefined,
         authorName: showArticle?.authorName || undefined,
         tags: showArticle?.tags || undefined,
         thumbnailURL: showArticle?.thumbnailURL,
-        platformName: showArticle.platform.name,
-        platformUrl: showArticle.platform.siteUrl,
-        platformFaviconUrl: showArticle.platform.faviconUrl,
-        isEng: showArticle.platform.isEng,
+        platformName: showArticle.platform?.name,
+        platformUrl: showArticle.platform?.siteUrl,
+        platformFaviconUrl: showArticle.platform?.faviconUrl,
+        isEng: showArticle.platform?.isEng,
         isRead: false,
         isPrivate: showArticle.isPrivate,
       });
@@ -333,11 +334,11 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     className="mr-2 inline-block size-[36px] bg-white"
-                    src={showArticle.platform.faviconUrl}
+                    src={showArticle.platform?.faviconUrl || ""}
                     alt=""
                   />
                   <span className="hidden font-bold md:inline-block">
-                    {showArticle.platform.name}
+                    {showArticle.platform?.name || ""}
                   </span>
                 </div>
               ) : (
@@ -345,7 +346,7 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     className="mr-2 hidden size-[36px] bg-white md:inline-block"
-                    src={showArticle.platform.faviconUrl}
+                    src={showArticle.platform?.faviconUrl || ""}
                     alt=""
                   />
                 </div>

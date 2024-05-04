@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"github.com/YukiOnishi1129/techpicks/batch-service/domain"
 	"github.com/YukiOnishi1129/techpicks/batch-service/entity"
+	"github.com/volatiletech/null/v8"
 	"github.com/volatiletech/sqlboiler/v4/boil"
 	"github.com/volatiletech/sqlboiler/v4/queries/qm"
 )
@@ -65,8 +66,9 @@ func (ar *ArticleRepository) CreateArticle(ctx context.Context, article domain.C
 		Description:  article.Description,
 		ThumbnailURL: article.ThumbnailURL,
 		ArticleURL:   article.ArticleURL,
-		PublishedAt:  article.PublishedAt,
+		PublishedAt:  null.TimeFrom(article.PublishedAt),
 	}
+
 	if article.IsPrivate != nil {
 		a.IsPrivate = *article.IsPrivate
 	}
@@ -92,7 +94,7 @@ func convertDBtoArticleDomain(a *entity.Article) domain.Article {
 		Description:  a.Description,
 		ThumbnailURL: a.ThumbnailURL,
 		ArticleURL:   a.ArticleURL,
-		PublishedAt:  a.PublishedAt,
+		PublishedAt:  a.PublishedAt.Time,
 		IsPrivate:    a.IsPrivate,
 		CreatedAt:    a.CreatedAt,
 		UpdatedAt:    a.UpdatedAt,

@@ -7,7 +7,7 @@ import {
 } from "@prisma/client";
 
 export type ArticleType = Omit<PrismaArticle, "platformId"> & {
-  platform: Omit<PrismaPlatform, "createdAt" | "updatedAt" | "deletedAt">;
+  platform?: Omit<PrismaPlatform, "createdAt" | "updatedAt" | "deletedAt">;
   feeds: Array<
     Omit<
       PrismaFeed & {

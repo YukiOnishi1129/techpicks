@@ -17,6 +17,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { fetchArticleByArticleAndPlatformUrlAPI } from "@/features/articles/actions/article";
+import { createArticle } from "@/features/articles/repository/article";
 import { getOgpData } from "@/features/ogp/actions/ogp";
 
 import { Button } from "@/components/ui/button";
@@ -139,11 +140,11 @@ export const CreateBookmarkDialog: FC<CreateBookmarkDialogProps> = ({
           thumbnailURL: article.thumbnailURL,
           isRead: false,
           userId: user?.id || "",
-          platformId: article.platform.id,
-          platformName: article.platform.name,
-          platformUrl: article.platform.siteUrl,
-          platformFaviconUrl: article.platform.faviconUrl,
-          isEng: article.platform.isEng,
+          platformId: article.platform?.id,
+          platformName: article.platform?.name,
+          platformUrl: article.platform?.siteUrl,
+          platformFaviconUrl: article.platform?.faviconUrl,
+          isEng: article.platform?.isEng || false,
         });
         if (!data) {
           failToast({
@@ -166,7 +167,25 @@ export const CreateBookmarkDialog: FC<CreateBookmarkDialogProps> = ({
         title: ogpData?.title || "",
         description: ogpData?.description || "",
       });
+
+      const createdArticleId = await createArticle({
+        title: ogpData?.title || "",
+        description: ogpData?.description || "",
+        articleUrl: url,
+        thumbnailURL: ogpData?.image || "",
+        isEng: isEng,
+        isPrivate: false,
+      });
+
+      if (!createdArticleId) {
+        failToast({
+          description: "Fail: add article failed",
+        });
+        return;
+      }
+
       const id = await createBookmark({
+        articleId: createdArticleId,
         title: ogpData?.title || "",
         description: ogpData?.description || "",
         articleUrl: url,
@@ -178,6 +197,7 @@ export const CreateBookmarkDialog: FC<CreateBookmarkDialogProps> = ({
         platformFaviconUrl: ogpData?.faviconImage || "",
         isEng: isEng,
       });
+
       if (!id) {
         failToast({
           description: "Fail: add bookmark failed",

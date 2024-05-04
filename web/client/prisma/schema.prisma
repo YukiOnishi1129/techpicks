@@ -169,14 +169,15 @@ model FeedArticleRelation {
 
 model Article {
   id           String   @id @default(uuid())
-  platformId   String @map("platform_id")
+  platformId   String? @map("platform_id")
   title        String
   description  String
   articleUrl   String @map("article_url")
-  publishedAt  DateTime @map("published_at")
+  publishedAt  DateTime? @map("published_at")
   authorName   String? @map("author_name")
   tags         String?
   thumbnailURL String @map("thumbnail_url")
+  isEng        Boolean @default(false) @map("is_eng")
   isPrivate    Boolean @map("is_private")
   createdAt    DateTime @default(now()) @map("created_at")
   updatedAt    DateTime @updatedAt @map("updated_at")
@@ -185,7 +186,7 @@ model Article {
   trendArticles TrendArticle[]
   favoriteArticles  FavoriteArticle[]
 
-  platform     Platform  @relation(fields: [platformId], references: [id], onDelete: Cascade)
+  platform     Platform?  @relation(fields: [platformId], references: [id], onDelete: Cascade)
   @@map("articles")
 
 }

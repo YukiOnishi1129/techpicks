@@ -5,10 +5,11 @@ import { FC, useState, useCallback } from "react";
 import { FollowFavoriteArticleDropdownMenu } from "@/features/articles/components/DropdownMenu";
 import { fetchFavoriteArticleFolderByIdAPI } from "@/features/favoriteArticleFolders/actions/favoriteArticleFolders";
 import {
-  fetchFavoriteArticleCountByFavoriteArticleFolderIdAndArticleIdAPI,
   fetchFavoriteArticleAPI,
+  fetchFavoriteArticleCountByFavoriteArticleFolderIdAndArticleIdAndArticleUrlAPI,
 } from "@/features/favoriteArticles/actions/favoriteArticle";
 import {
+  CreateFavoriteArticleDTO,
   createFavoriteArticle,
   deleteFavoriteArticle,
 } from "@/features/favoriteArticles/repository/favoriteArticle";
@@ -56,8 +57,8 @@ export const BookmarkCardWrapper: FC<BookmarkCardWrapperProps> = ({
           {
             id: favoriteArticleId,
             favoriteArticleFolderId: targetFavoriteArticleFolder.id,
-            articleId: showBookmark.articleId || "",
-            platformId: showBookmark.platformId || "",
+            articleId: showBookmark.articleId || null,
+            platformId: showBookmark.platformId || null,
             title: showBookmark.title,
             description: showBookmark.description,
             articleUrl: showBookmark.articleUrl,
@@ -91,12 +92,14 @@ export const BookmarkCardWrapper: FC<BookmarkCardWrapperProps> = ({
         });
         return;
       }
+
       // 2. check out favoriteArticle by favoriteArticleFolderId and articleId
       const resCount =
-        await fetchFavoriteArticleCountByFavoriteArticleFolderIdAndArticleIdAPI(
+        await fetchFavoriteArticleCountByFavoriteArticleFolderIdAndArticleIdAndArticleUrlAPI(
           {
-            articleId: showBookmark.articleId || "",
+            articleId: showBookmark.articleId,
             favoriteArticleFolderId,
+            articleUrl: showBookmark.articleUrl,
           }
         );
       if (resCount.data?.count && resCount.data.count > 0) {
@@ -106,18 +109,14 @@ export const BookmarkCardWrapper: FC<BookmarkCardWrapperProps> = ({
         return;
       }
 
-      // 3. create favoriteArticle
-      const createdData = await createFavoriteArticle({
-        userId: user?.id || "",
+      const arg: CreateFavoriteArticleDTO = {
+        userId: user.id,
         favoriteArticleFolderId: favoriteArticleFolderId,
-        articleId: showBookmark.articleId || "",
-        platformId: showBookmark.platformId || "",
+        articleId: showBookmark?.articleId,
+        platformId: showBookmark.platformId,
         title: showBookmark.title,
         description: showBookmark.description,
         articleUrl: showBookmark.articleUrl,
-        publishedAt: showBookmark.publishedAt,
-        authorName: undefined,
-        tags: undefined,
         thumbnailURL: showBookmark?.thumbnailURL,
         platformName: showBookmark.platformName,
         platformUrl: showBookmark.platformUrl,
@@ -125,7 +124,13 @@ export const BookmarkCardWrapper: FC<BookmarkCardWrapperProps> = ({
         isEng: showBookmark.isEng,
         isRead: false,
         isPrivate: false,
-      });
+      };
+
+      if (showBookmark.publishedAt) {
+        arg.publishedAt = showBookmark.publishedAt;
+      }
+      // 3. create favoriteArticle
+      const createdData = await createFavoriteArticle(arg);
 
       if (!createdData) {
         failToast({

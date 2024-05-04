@@ -156,6 +156,7 @@ const convertTrendArticleToArticle = (
     publishedAt: trendArticle.article.publishedAt,
     authorName: trendArticle.article.authorName,
     tags: trendArticle.article.tags,
+    isEng: trendArticle.article.isEng,
     isPrivate: trendArticle.article.isPrivate,
     likeCount: trendArticle.likeCount,
     createdAt: trendArticle.article.createdAt,
