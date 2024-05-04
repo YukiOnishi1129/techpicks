@@ -1,3 +1,5 @@
+import { FaHeart } from "react-icons/fa";
+
 import { getUser } from "@/features/users/actions/user";
 
 import { CreateFavoriteArticleFolderDialog } from "./Dialog";
@@ -9,7 +11,10 @@ export const FavoriteArticleFolderListTemplate = async () => {
   const user = await getUser();
   return (
     <div className="w-auto">
-      <h1 className="mb-4 mt-8 text-2xl font-bold">Favorite Article Folder</h1>
+      <h1 className="mb-4 mt-8 flex items-center text-2xl font-bold">
+        <FaHeart className="mr-4" color="red" />
+        <span>Favorite Article Folders</span>
+      </h1>
       <div>
         <CreateFavoriteArticleFolderDialog />
       </div>
