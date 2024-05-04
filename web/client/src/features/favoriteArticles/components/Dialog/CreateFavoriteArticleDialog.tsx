@@ -41,10 +41,6 @@ import { useStatusToast } from "@/hooks/useStatusToast";
 
 import { OgpType } from "@/types/ogp";
 
-// import { fetchBookmarkCountByArticleUrlAPI } from "../../actions/bookmark";
-// import { serverRevalidateBookmark } from "../../actions/serverAction";
-// import { createBookmark } from "../../repository/bookmark";
-
 type CreateFavoriteArticleDialogProps = {
   user: User | undefined;
   favoriteArticleFolderId: string;

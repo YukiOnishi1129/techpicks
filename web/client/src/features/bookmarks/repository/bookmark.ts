@@ -56,16 +56,12 @@ export const getBookmarkList = async ({
   if (languageStatus === 2) {
     where = {
       ...where,
-      platform: {
-        isEng: true,
-      },
+      isEng: true,
     };
   } else if (languageStatus === 1) {
     where = {
       ...where,
-      platform: {
-        isEng: false,
-      },
+      isEng: false,
     };
   }
 
@@ -82,6 +78,8 @@ export const getBookmarkList = async ({
     ...where,
     userId: user?.id,
   };
+
+  console.log(where);
 
   try {
     const res = await prisma.bookmark.findMany({
@@ -106,6 +104,8 @@ export const getBookmarkList = async ({
         },
       },
     });
+
+    console.log(res);
 
     const bookmarkList: Array<BookmarkType> = res.map((bookmark) => {
       const bookmarkData: BookmarkType = {

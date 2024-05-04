@@ -1,9 +1,5 @@
 const ogs = require("open-graph-scraper");
 
-type OgpResponseType = {
-  ogTitle: string;
-};
-
 export const useOgp = () => {
   const getOgpData = async (url: string) => {
     const options = { url: url };
@@ -11,8 +7,7 @@ export const useOgp = () => {
       const { result } = await ogs(options);
       return result;
     } catch (error) {
-      console.log(error);
-      throw new Error("Failed to fetch OGP data");
+      throw new Error(`Failed to fetch OGP data: ${error}`);
     }
   };
 
