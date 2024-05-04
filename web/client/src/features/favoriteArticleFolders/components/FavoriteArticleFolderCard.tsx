@@ -22,11 +22,13 @@ type FavoriteArticleFolderCardProps = {
     title: string;
     description: string;
   }) => Promise<void>;
+  handleDeleteFavoriteArticleFolder: (id: string) => Promise<void>;
 };
 
 export const FavoriteArticleFolderCard: FC<FavoriteArticleFolderCardProps> = ({
   favoriteArticleFolder,
   handleUpdateFavoriteArticleFolder,
+  handleDeleteFavoriteArticleFolder,
 }) => {
   const { successToast, failToast } = useStatusToast();
   const latestFavoriteArticle =
@@ -48,6 +50,9 @@ export const FavoriteArticleFolderCard: FC<FavoriteArticleFolderCardProps> = ({
             description={favoriteArticleFolder.description || ""}
             handleUpdateFavoriteArticleFolder={
               handleUpdateFavoriteArticleFolder
+            }
+            handleDeleteFavoriteArticleFolder={
+              handleDeleteFavoriteArticleFolder
             }
           />
         </div>

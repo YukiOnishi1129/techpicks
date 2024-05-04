@@ -11,7 +11,10 @@ import { FavoriteArticleFolderType } from "@/types/favoriteArticleFolder";
 import { FavoriteArticleFolderCard } from "./FavoriteArticleFolderCard";
 import { fetchFavoriteArticleFolderByIdAPI } from "../actions/favoriteArticleFolders";
 import { serverRevalidateFavoriteArticleFolderPageTag } from "../actions/serverActions";
-import { updateFavoriteArticleFolder } from "../repository/favoriteArticleFolder";
+import {
+  deleteFavoriteArticleFolder,
+  updateFavoriteArticleFolder,
+} from "../repository/favoriteArticleFolder";
 
 type FavoriteArticleFolderListProps = {
   initialFavoriteArticleFolders: FavoriteArticleFolderType[];
@@ -36,7 +39,7 @@ export const FavoriteArticleFolderList: FC<FavoriteArticleFolderListProps> = ({
     }) => {
       if (!user) {
         failToast({
-          description: "Please login to create a new favorite folder",
+          description: "Please login to edit a  favorite folder",
         });
         return;
       }
@@ -75,6 +78,45 @@ export const FavoriteArticleFolderList: FC<FavoriteArticleFolderListProps> = ({
     [user, successToast, failToast]
   );
 
+  const handleDeleteFavoriteArticleFolder = useCallback(
+    async (id: string) => {
+      // 1. login check
+      if (!user) {
+        failToast({
+          description: "Please login to delete a  favorite folder",
+        });
+        return;
+      }
+      // 2. folder check
+      const fetchRes = await fetchFavoriteArticleFolderByIdAPI(id);
+      if (fetchRes.status === 401) {
+        failToast({
+          description: "Fail: Unauthorized",
+        });
+        return;
+      }
+      if (fetchRes.status !== 200) {
+        failToast({
+          description: "Fail: Folder not found",
+        });
+        return;
+      }
+      // 3. delete folder
+      const deletedId = await deleteFavoriteArticleFolder(id);
+      if (!deletedId) {
+        failToast({
+          description: "Fail: Something went wrong",
+        });
+        return;
+      }
+      successToast({
+        description: "Success: Delete folder",
+      });
+      await serverRevalidateFavoriteArticleFolderPageTag();
+    },
+    [user, successToast, failToast]
+  );
+
   return (
     <>
       {initialFavoriteArticleFolders.length === 0 ? (
@@ -90,6 +132,9 @@ export const FavoriteArticleFolderList: FC<FavoriteArticleFolderListProps> = ({
                 favoriteArticleFolder={favoriteArticleFolder}
                 handleUpdateFavoriteArticleFolder={
                   handleUpdateFavoriteArticleFolder
+                }
+                handleDeleteFavoriteArticleFolder={
+                  handleDeleteFavoriteArticleFolder
                 }
               />
             ))}

@@ -23,6 +23,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
+import { DeleteFavoriteArticleFolderAlertDialog } from "./DeleteFavoriteArticleFolderAlertDialog";
+
 const formSchema = z.object({
   title: z
     .string({
@@ -46,6 +48,7 @@ type UpdateFavoriteArticleFolderDialogProps = {
     title: string;
     description: string;
   }) => Promise<void>;
+  handleDeleteFavoriteArticleFolder: (id: string) => Promise<void>;
 };
 
 export const UpdateFavoriteArticleFolderDialog: FC<
@@ -55,6 +58,7 @@ export const UpdateFavoriteArticleFolderDialog: FC<
   title,
   description,
   handleUpdateFavoriteArticleFolder,
+  handleDeleteFavoriteArticleFolder,
 }) => {
   const [open, setOpen] = useState(false);
   const handleClose = useCallback(() => {
@@ -77,6 +81,7 @@ export const UpdateFavoriteArticleFolderDialog: FC<
           title={title}
           description={description}
           handleUpdateFavoriteArticleFolder={handleUpdateFavoriteArticleFolder}
+          handleDeleteFavoriteArticleFolder={handleDeleteFavoriteArticleFolder}
           handleClose={handleClose}
         />
       )}
@@ -97,6 +102,7 @@ type UpdateFavoriteArticleFolderDialogContentProps = {
     title: string;
     description: string;
   }) => Promise<void>;
+  handleDeleteFavoriteArticleFolder: (id: string) => Promise<void>;
   handleClose: () => void;
 };
 
@@ -108,6 +114,7 @@ export const UpdateFavoriteArticleFolderDialogContent: FC<
   description,
   handleClose,
   handleUpdateFavoriteArticleFolder,
+  handleDeleteFavoriteArticleFolder,
 }) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -132,6 +139,10 @@ export const UpdateFavoriteArticleFolderDialogContent: FC<
       handleClose();
     });
   };
+
+  const onDelete = useCallback(async () => {
+    await handleDeleteFavoriteArticleFolder(favoriteArticleFolderId);
+  }, [favoriteArticleFolderId, handleDeleteFavoriteArticleFolder]);
 
   return (
     <DialogContent onCloseAutoFocus={resetDialog}>
@@ -182,10 +193,10 @@ export const UpdateFavoriteArticleFolderDialogContent: FC<
         </div>
       </div>
       <div>
-        {/* <DeleteMyFeedFolderAlertDialog
-          myFeedFolderTitle={title}
+        <DeleteFavoriteArticleFolderAlertDialog
+          favoriteArticleFolderTitle={title}
           onDelete={onDelete}
-        /> */}
+        />
       </div>
     </DialogContent>
   );
