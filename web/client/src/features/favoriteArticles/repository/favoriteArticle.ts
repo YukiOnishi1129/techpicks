@@ -171,6 +171,32 @@ export const getFavoriteArticleCountByFavoriteArticleFolderIdAndArticleId =
     return count;
   };
 
+type GetFavoriteArticleCountByFolderIdAndArticleUrlDTO = {
+  userId: string;
+  favoriteArticleFolderId: string;
+  articleUrl: string;
+};
+
+export const getFavoriteArticleCountByFolderIdAndArticleUrl = async ({
+  userId,
+  favoriteArticleFolderId,
+  articleUrl,
+}: GetFavoriteArticleCountByFolderIdAndArticleUrlDTO) => {
+  try {
+    const count = await prisma.favoriteArticle.count({
+      where: {
+        userId: userId,
+        favoriteArticleFolderId: favoriteArticleFolderId,
+        articleUrl: articleUrl,
+      },
+    });
+
+    return count;
+  } catch (err) {
+    throw new Error(`Failed to get favorite article count: ${err}`);
+  }
+};
+
 export type CreateFavoriteArticleDTO = {
   userId: string;
   favoriteArticleFolderId: string;
@@ -199,21 +225,21 @@ export const createFavoriteArticle = async (dto: CreateFavoriteArticleDTO) => {
         id: uuid,
         userId: dto.userId,
         favoriteArticleFolderId: dto.favoriteArticleFolderId,
-        platformId: dto.platformId,
-        articleId: dto.articleId,
+        platformId: dto?.platformId,
+        articleId: dto?.articleId,
         title: dto.title,
         description: dto.description,
         articleUrl: dto.articleUrl,
-        publishedAt: dto.publishedAt,
-        authorName: dto.authorName,
-        tags: dto.tags,
-        thumbnailURL: dto.thumbnailURL,
-        platformName: dto.platformName,
-        platformUrl: dto.platformUrl,
-        platformFaviconUrl: dto.platformFaviconUrl,
-        isEng: dto.isEng,
-        isRead: dto.isRead,
-        isPrivate: dto.isPrivate,
+        publishedAt: dto?.publishedAt,
+        authorName: dto?.authorName,
+        tags: dto?.tags,
+        thumbnailURL: dto?.thumbnailURL || "",
+        platformName: dto?.platformName || "",
+        platformUrl: dto?.platformUrl || "",
+        platformFaviconUrl: dto?.platformFaviconUrl || "",
+        isEng: dto?.isEng,
+        isRead: dto?.isRead,
+        isPrivate: dto?.isPrivate,
       },
     });
     return data;

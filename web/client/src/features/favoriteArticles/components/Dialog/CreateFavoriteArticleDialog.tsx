@@ -38,27 +38,26 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
+import { useServerRevalidatePage } from "@/hooks/useServerRevalidatePage";
 import { useStatusToast } from "@/hooks/useStatusToast";
 
 import { checkJapaneseArticle } from "@/lib/check";
 
-import { LanguageStatus } from "@/types/language";
 import { OgpType } from "@/types/ogp";
 
-import { fetchBookmarkCountByArticleUrlAPI } from "../../actions/bookmark";
-import { serverRevalidateBookmark } from "../../actions/serverAction";
-import { createBookmark } from "../../repository/bookmark";
+import { fetchFavoriteArticleCountByFolderIdAndArticleUrlAPI } from "../../actions/favoriteArticle";
+import { createFavoriteArticle } from "../../repository/favoriteArticle";
 
-type CreateBookmarkDialogProps = {
+type CreateFavoriteArticleDialogProps = {
   user: User | undefined;
-  languageStatus: LanguageStatus;
+  favoriteArticleFolderId: string;
 };
 
-export const CreateBookmarkDialog: FC<CreateBookmarkDialogProps> = ({
-  user,
-  languageStatus,
-}: CreateBookmarkDialogProps) => {
+export const CreateFavoriteArticleDialog: FC<
+  CreateFavoriteArticleDialogProps
+> = ({ user, favoriteArticleFolderId }) => {
   const router = useRouter();
+  const { revalidatePage } = useServerRevalidatePage();
   const [ogpData, setOgpData] = useState<OgpType | null>(null);
   const [open, setOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
@@ -102,18 +101,21 @@ export const CreateBookmarkDialog: FC<CreateBookmarkDialogProps> = ({
     startOgpPending(async () => {
       if (!user) {
         failToast({
-          description: "Fail: Please login to bookmark this article",
+          description: "Fail: Please login to add favorite article",
         });
         return;
       }
-      // 1. check article is already bookmarked
+
+      // 1. check favorite article is already favorite
       const url = form.getValues("url");
-      const countResponse = await fetchBookmarkCountByArticleUrlAPI({
-        articleUrl: url,
-      });
+      const countResponse =
+        await fetchFavoriteArticleCountByFolderIdAndArticleUrlAPI({
+          articleUrl: url,
+          favoriteArticleFolderId: favoriteArticleFolderId,
+        });
       if (countResponse.status !== 200) {
         failToast({
-          description: "Fail: fetch bookmark count failed",
+          description: "Fail: fetch favorite article count failed",
         });
         return;
       }
@@ -125,7 +127,7 @@ export const CreateBookmarkDialog: FC<CreateBookmarkDialogProps> = ({
         return;
       }
 
-      // 2. If same article url is in article table, register that date to bookmark table.
+      // 2. If same article url is in article table, register that date to article table.
       const articleResponse = await fetchArticleByArticleAndPlatformUrlAPI({
         articleUrl: url,
         platformUrl: ogpData?.siteUrl || "",
@@ -133,7 +135,7 @@ export const CreateBookmarkDialog: FC<CreateBookmarkDialogProps> = ({
 
       if (articleResponse.status === 200 && articleResponse.data?.article) {
         const article = articleResponse.data.article;
-        const data = await createBookmark({
+        const data = await createFavoriteArticle({
           title: article.title,
           description: article.description,
           articleId: article.id,
@@ -146,29 +148,31 @@ export const CreateBookmarkDialog: FC<CreateBookmarkDialogProps> = ({
           platformUrl: article.platform.siteUrl,
           platformFaviconUrl: article.platform.faviconUrl,
           isEng: article.platform.isEng,
+          favoriteArticleFolderId: favoriteArticleFolderId,
         });
         if (!data) {
           failToast({
-            description: "Fail: add bookmark failed",
+            description: "Fail: add favorite article failed",
           });
           return;
         }
         successToast({
-          description: "Success: add bookmark",
+          description: "Success: add favorite article",
         });
-        await serverRevalidateBookmark();
-        router.replace(`/bookmark/?languageStatus=${languageStatus}`);
+        await revalidatePage();
+        router.replace(`/favorite-article-folder/${favoriteArticleFolderId}`);
         resetDialog();
         setOpen(false);
         return;
       }
 
-      // 3. If not, get ogp data and register that data to article table and bookmark table.
+      // 3. If not, get ogp data and register that data to article table and favorite article table.
       const isEng = !checkJapaneseArticle({
         title: ogpData?.title || "",
         description: ogpData?.description || "",
       });
-      const id = await createBookmark({
+
+      const data = await createFavoriteArticle({
         title: ogpData?.title || "",
         description: ogpData?.description || "",
         articleUrl: url,
@@ -179,30 +183,32 @@ export const CreateBookmarkDialog: FC<CreateBookmarkDialogProps> = ({
         platformUrl: ogpData?.siteUrl || "",
         platformFaviconUrl: ogpData?.faviconImage || "",
         isEng: isEng,
+        favoriteArticleFolderId: favoriteArticleFolderId,
       });
-      if (!id) {
+      if (!data) {
         failToast({
-          description: "Fail: add bookmark failed",
+          description: "Fail: add favorite article failed",
         });
         return;
       }
       successToast({
-        description: "Success: add bookmark",
+        description: "Success: add favorite article",
       });
-      await serverRevalidateBookmark();
-      router.replace(`/bookmark/?languageStatus=${languageStatus}`);
+      await revalidatePage();
+      router.replace(`/favorite-article-folder/${favoriteArticleFolderId}`);
       resetDialog();
       setOpen(false);
     });
   }, [
     form,
     router,
-    languageStatus,
     resetDialog,
     failToast,
     successToast,
     user,
     ogpData,
+    favoriteArticleFolderId,
+    revalidatePage,
   ]);
 
   return (
@@ -281,7 +287,7 @@ export const CreateBookmarkDialog: FC<CreateBookmarkDialogProps> = ({
             </Button>
           ) : (
             <Button disabled={!ogpData} onClick={handleAddSubmit}>
-              {"ADD BOOKMARK"}
+              {"ADD FAVORITE"}
             </Button>
           )}
           <DialogClose>

@@ -28,10 +28,22 @@ export const getOgpData = async (url: string) => {
   const encodeUri = encodeURI(url);
 
   const res = await fetch(encodeUri, {
-    headers: { "User-Agent": "bot" },
+    headers: { "User-Agent": "Googlebot" },
   });
   const html = await res.text();
-  const root = parse(html);
+  let detect_charset = detectCharset(html);
+
+  let fetchedHtml = html;
+
+  if (detect_charset === "SHIFT_JIS") {
+    const response = await fetch(encodeUri, {
+      headers: { "User-Agent": "Googlebot" },
+    });
+    const arrayBuffer = await response.arrayBuffer();
+    fetchedHtml = decodeAsText(arrayBuffer, "shift-jis");
+  }
+
+  const root = parse(fetchedHtml);
   const objectMap: { [key: string]: string } = {};
 
   root
@@ -68,12 +80,15 @@ export const getOgpData = async (url: string) => {
 
   const imageSrc = objectMap["og:image"];
 
-  const favIconImage =
+  let favIconImage =
     objectMap["apple-touch-icon"] ||
     objectMap["icon"] ||
     objectMap["shortcut icon"];
 
   const image = await setImagePath(url, imageSrc);
+  if (favIconImage === undefined) {
+    favIconImage = `https://t0.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=${encodeUri}&size=128`;
+  }
 
   const faviconUrl = await setFaviconUrl(url, favIconImage);
 
@@ -105,4 +120,18 @@ const setFaviconUrl = async (url: string, faviconUrl: string) => {
   if (checkHTTPUrl(faviconUrl)) return faviconUrl;
   const { protocol, host } = new URL(url);
   return new URL(faviconUrl, `${protocol}//${host}`).toString();
+};
+
+const decodeAsText = (
+  arrayBuffer?: AllowSharedBufferSource,
+  encoding?: string
+) => new TextDecoder(encoding).decode(arrayBuffer);
+
+const detectCharset = (html: string) => {
+  if (html.match(/charset=[\"]{0,1}EUC-JP/gi)) return "EUC-JP";
+  if (html.match(/charset=[\"]{0,1}(Shift_JIS|sjis)/gi)) return "SHIFT_JIS";
+  if (html.match(/charset=[\"]{0,1}ISO-2002-JP/gi)) return "ISO-2002-JP";
+  if (html.match(/charset=[\"]{0,1}(UTF-8|utf8)/gi)) return "UTF-8";
+
+  return "UTF-8";
 };

@@ -32,7 +32,7 @@ type FavoriteArticle struct {
 	Title                   string      `boil:"title" json:"title" toml:"title" yaml:"title"`
 	Description             string      `boil:"description" json:"description" toml:"description" yaml:"description"`
 	ArticleURL              string      `boil:"article_url" json:"article_url" toml:"article_url" yaml:"article_url"`
-	PublishedAt             time.Time   `boil:"published_at" json:"published_at" toml:"published_at" yaml:"published_at"`
+	PublishedAt             null.Time   `boil:"published_at" json:"published_at,omitempty" toml:"published_at" yaml:"published_at,omitempty"`
 	AuthorName              null.String `boil:"author_name" json:"author_name,omitempty" toml:"author_name" yaml:"author_name,omitempty"`
 	Tags                    null.String `boil:"tags" json:"tags,omitempty" toml:"tags" yaml:"tags,omitempty"`
 	ThumbnailURL            string      `boil:"thumbnail_url" json:"thumbnail_url" toml:"thumbnail_url" yaml:"thumbnail_url"`
@@ -148,7 +148,7 @@ var FavoriteArticleWhere = struct {
 	Title                   whereHelperstring
 	Description             whereHelperstring
 	ArticleURL              whereHelperstring
-	PublishedAt             whereHelpertime_Time
+	PublishedAt             whereHelpernull_Time
 	AuthorName              whereHelpernull_String
 	Tags                    whereHelpernull_String
 	ThumbnailURL            whereHelperstring
@@ -169,7 +169,7 @@ var FavoriteArticleWhere = struct {
 	Title:                   whereHelperstring{field: "\"favorite_articles\".\"title\""},
 	Description:             whereHelperstring{field: "\"favorite_articles\".\"description\""},
 	ArticleURL:              whereHelperstring{field: "\"favorite_articles\".\"article_url\""},
-	PublishedAt:             whereHelpertime_Time{field: "\"favorite_articles\".\"published_at\""},
+	PublishedAt:             whereHelpernull_Time{field: "\"favorite_articles\".\"published_at\""},
 	AuthorName:              whereHelpernull_String{field: "\"favorite_articles\".\"author_name\""},
 	Tags:                    whereHelpernull_String{field: "\"favorite_articles\".\"tags\""},
 	ThumbnailURL:            whereHelperstring{field: "\"favorite_articles\".\"thumbnail_url\""},
@@ -242,8 +242,8 @@ type favoriteArticleL struct{}
 
 var (
 	favoriteArticleAllColumns            = []string{"id", "user_id", "favorite_article_folder_id", "platform_id", "article_id", "title", "description", "article_url", "published_at", "author_name", "tags", "thumbnail_url", "platform_name", "platform_url", "platform_favicon_url", "is_eng", "is_read", "is_private", "created_at", "updated_at"}
-	favoriteArticleColumnsWithoutDefault = []string{"user_id", "favorite_article_folder_id", "title", "description", "article_url", "published_at", "thumbnail_url", "platform_name", "platform_url", "platform_favicon_url"}
-	favoriteArticleColumnsWithDefault    = []string{"id", "platform_id", "article_id", "author_name", "tags", "is_eng", "is_read", "is_private", "created_at", "updated_at"}
+	favoriteArticleColumnsWithoutDefault = []string{"user_id", "favorite_article_folder_id", "title", "description", "article_url", "thumbnail_url", "platform_name", "platform_url", "platform_favicon_url"}
+	favoriteArticleColumnsWithDefault    = []string{"id", "platform_id", "article_id", "published_at", "author_name", "tags", "is_eng", "is_read", "is_private", "created_at", "updated_at"}
 	favoriteArticlePrimaryKeyColumns     = []string{"id"}
 	favoriteArticleGeneratedColumns      = []string{}
 )
