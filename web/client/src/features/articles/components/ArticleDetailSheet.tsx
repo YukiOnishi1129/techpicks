@@ -23,13 +23,29 @@ import { useParseHtml } from "@/hooks/useParseHtml";
 import { showDiffDateToCurrentDate } from "@/lib/date";
 
 import { ArticleType } from "@/types/article";
+import { FavoriteArticleFolderType } from "@/types/favoriteArticleFolder";
+
+import { FollowFavoriteArticleDropdownMenu } from "./DropdownMenu";
 
 type ArticleDetailSheetProps = {
   article: ArticleType;
   user: User | undefined;
   bookmarkId?: string;
+  isFollowing: boolean;
+  favoriteArticleFolders: Array<FavoriteArticleFolderType>;
   handleAddBookmark: (articleId: string) => Promise<void>;
   handleRemoveBookmark: (bookmarkId: string) => Promise<void>;
+  handleCreateFavoriteArticle: (
+    favoriteArticleFolderId: string,
+    createdFavoriteArticleFolder?: FavoriteArticleFolderType
+  ) => Promise<string | undefined>;
+  handleRemoveFavoriteArticle: (
+    favoriteArticleId: string,
+    favoriteArticleFolderId: string
+  ) => Promise<string | undefined>;
+  handleCreateFavoriteArticleFolder: (
+    favoriteArticleFolderId: string
+  ) => Promise<void>;
   children: React.ReactNode;
 };
 
@@ -37,8 +53,13 @@ export const ArticleDetailSheet: FC<ArticleDetailSheetProps> = ({
   article,
   user,
   bookmarkId,
+  isFollowing,
+  favoriteArticleFolders,
   handleAddBookmark,
   handleRemoveBookmark,
+  handleCreateFavoriteArticle,
+  handleRemoveFavoriteArticle,
+  handleCreateFavoriteArticleFolder,
   children,
 }: ArticleDetailSheetProps) => {
   const [open, setOpen] = useState(false);
@@ -65,8 +86,15 @@ export const ArticleDetailSheet: FC<ArticleDetailSheetProps> = ({
             article={article}
             user={user}
             bookmarkId={bookmarkId}
+            isFollowing={isFollowing}
+            favoriteArticleFolders={favoriteArticleFolders}
             handleAddBookmark={handleAddBookmark}
             handleRemoveBookmark={handleRemoveBookmark}
+            handleCreateFavoriteArticle={handleCreateFavoriteArticle}
+            handleRemoveFavoriteArticle={handleRemoveFavoriteArticle}
+            handleCreateFavoriteArticleFolder={
+              handleCreateFavoriteArticleFolder
+            }
           />
         )}
       </SheetContent>
@@ -78,16 +106,34 @@ type ArticleDetailSheetContentProps = {
   article: ArticleType;
   user?: User;
   bookmarkId?: string;
+  isFollowing: boolean;
+  favoriteArticleFolders: Array<FavoriteArticleFolderType>;
   handleAddBookmark: (articleId: string) => Promise<void>;
   handleRemoveBookmark: (bookmarkId: string) => Promise<void>;
+  handleCreateFavoriteArticle: (
+    favoriteArticleFolderId: string,
+    createdFavoriteArticleFolder?: FavoriteArticleFolderType
+  ) => Promise<string | undefined>;
+  handleRemoveFavoriteArticle: (
+    favoriteArticleId: string,
+    favoriteArticleFolderId: string
+  ) => Promise<string | undefined>;
+  handleCreateFavoriteArticleFolder: (
+    favoriteArticleFolderId: string
+  ) => Promise<void>;
 };
 
 const ArticleDetailSheetContent: FC<ArticleDetailSheetContentProps> = ({
   article,
   user,
   bookmarkId,
+  isFollowing,
+  favoriteArticleFolders,
   handleAddBookmark,
   handleRemoveBookmark,
+  handleCreateFavoriteArticle,
+  handleRemoveFavoriteArticle,
+  handleCreateFavoriteArticleFolder,
 }) => {
   const imageUrl = useCheckImageExist(article.thumbnailURL);
   const { convertParseHtml } = useParseHtml();
@@ -149,6 +195,18 @@ const ArticleDetailSheetContent: FC<ArticleDetailSheetContentProps> = ({
                   <MdOutlineBookmarkAdd className="inline-block" size={36} />
                 </Button>
               )}
+              <div className="mx-4  mt-2">
+                <FollowFavoriteArticleDropdownMenu
+                  isFollowing={isFollowing}
+                  articleId={article.id}
+                  favoriteArticleFolders={favoriteArticleFolders}
+                  handleCreateFavoriteArticle={handleCreateFavoriteArticle}
+                  handleRemoveFavoriteArticle={handleRemoveFavoriteArticle}
+                  handleCreateFavoriteArticleFolder={
+                    handleCreateFavoriteArticleFolder
+                  }
+                />
+              </div>
             </div>
           )}
         </div>
