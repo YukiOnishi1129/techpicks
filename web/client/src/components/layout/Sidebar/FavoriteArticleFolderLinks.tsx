@@ -4,7 +4,7 @@ import { FaHeart } from "react-icons/fa";
 import { fetchFavoriteArticleFoldersAPI } from "@/features/favoriteArticleFolders/actions/favoriteArticleFolders";
 
 export const FavoriteArticleFolderLinks = async () => {
-  const res = await fetchFavoriteArticleFoldersAPI();
+  const res = await fetchFavoriteArticleFoldersAPI({});
   return (
     <>
       {res.data.favoriteArticleFolders.map((folder, i) => (

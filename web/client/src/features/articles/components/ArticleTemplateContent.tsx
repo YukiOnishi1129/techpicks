@@ -31,7 +31,7 @@ export const ArticleTemplateContent: FC<ArticleTemplateContentProps> = async ({
     tab,
   });
 
-  const resFavoriteArticleFolders = await fetchFavoriteArticleFoldersAPI();
+  const resFavoriteArticleFolders = await fetchFavoriteArticleFoldersAPI({});
 
   return (
     <ArticleList

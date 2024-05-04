@@ -19,19 +19,19 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-type DeleteMyFeedFolderAlertDialogProps = {
-  myFeedFolderTitle: string;
+type DeleteFavoriteArticleFolderAlertDialogProps = {
+  favoriteArticleFolderTitle: string;
   onDelete: () => Promise<void>;
 };
 
-export function DeleteMyFeedFolderAlertDialog({
-  myFeedFolderTitle,
+export function DeleteFavoriteArticleFolderAlertDialog({
+  favoriteArticleFolderTitle,
   onDelete,
-}: DeleteMyFeedFolderAlertDialogProps) {
+}: DeleteFavoriteArticleFolderAlertDialogProps) {
   const showTitle =
-    myFeedFolderTitle.length > 35
-      ? myFeedFolderTitle.slice(0, 35) + "..."
-      : myFeedFolderTitle;
+    favoriteArticleFolderTitle.length > 35
+      ? favoriteArticleFolderTitle.slice(0, 35) + "..."
+      : favoriteArticleFolderTitle;
   return (
     <AlertDialog>
       <TooltipProvider>
@@ -42,7 +42,7 @@ export function DeleteMyFeedFolderAlertDialog({
             </TooltipTrigger>
           </AlertDialogTrigger>
           <TooltipContent className="px-4 py-3 font-semibold">
-            <p>Delete my feed folder</p>
+            <p>Delete favorite article folder</p>
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>

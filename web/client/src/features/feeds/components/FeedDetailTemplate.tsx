@@ -26,7 +26,7 @@ export const FeedDetailTemplate: FC<FeedDetailPageProps> = async ({
     keyword: keyword,
   });
   const resFeed = await fetchFeedByIdAPI(id);
-  const resFavoriteArticleFolders = await fetchFavoriteArticleFoldersAPI();
+  const resFavoriteArticleFolders = await fetchFavoriteArticleFoldersAPI({});
 
   const title = resFeed.data.feed?.name;
 

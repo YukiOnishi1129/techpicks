@@ -2,7 +2,7 @@ import { FC } from "react";
 
 import { fetchFavoriteArticlesByFavoriteArticleFolderIdAPI } from "@/features/favoriteArticles/actions/favoriteArticle";
 import { FavoriteArticleList } from "@/features/favoriteArticles/components/FavoriteArticleList";
-import { FavoriteArticleFolderArticleKeywordSearchInput } from "@/features/search/components/favoriteArticleFoldera/FavoriteArticleFolderArticleKeywordSearchInput";
+import { FavoriteArticleFolderArticleKeywordSearchInput } from "@/features/search/components/favoriteArticleFolder/FavoriteArticleFolderArticleKeywordSearchInput";
 import { getUser } from "@/features/users/actions/user";
 
 import { BreadCrumbType, PageBreadcrumb } from "@/components/ui/breadcrumb";
@@ -28,7 +28,7 @@ export const FavoriteArticleFolderDetailTemplate: FC<
       keyword: keyword,
     });
 
-  const resAllFavoriteArticleFolders = await fetchFavoriteArticleFoldersAPI();
+  const resAllFavoriteArticleFolders = await fetchFavoriteArticleFoldersAPI({});
 
   const title = res.data.favoriteArticleFolder?.title || "";
 

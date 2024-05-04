@@ -28,7 +28,7 @@ export const MyFeedFolderDetailTemplate: FC<
     feedIds: feedIdList,
     keyword: keyword,
   });
-  const resFavoriteArticleFolders = await fetchFavoriteArticleFoldersAPI();
+  const resFavoriteArticleFolders = await fetchFavoriteArticleFoldersAPI({});
 
   const title =
     resMyFeeds.data?.myFeeds.length > 0
