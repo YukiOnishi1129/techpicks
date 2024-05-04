@@ -392,7 +392,13 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
           </>
         </div>
 
-        <ArticleDetailSheet article={showArticle} user={user}>
+        <ArticleDetailSheet
+          article={showArticle}
+          user={user}
+          bookmarkId={bookmarkId}
+          handleAddBookmark={handleAddBookmark}
+          handleRemoveBookmark={handleRemoveBookmark}
+        >
           <ArticleCard article={showArticle} user={user} tab={tab} />
         </ArticleDetailSheet>
       </div>

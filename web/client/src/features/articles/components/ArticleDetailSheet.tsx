@@ -24,17 +24,21 @@ import { showDiffDateToCurrentDate } from "@/lib/date";
 
 import { ArticleType } from "@/types/article";
 
-import { useArticleBookmark } from "../hooks/useArticleBookmark";
-
 type ArticleDetailSheetProps = {
   article: ArticleType;
   user: User | undefined;
+  bookmarkId?: string;
+  handleAddBookmark: (articleId: string) => Promise<void>;
+  handleRemoveBookmark: (bookmarkId: string) => Promise<void>;
   children: React.ReactNode;
 };
 
 export const ArticleDetailSheet: FC<ArticleDetailSheetProps> = ({
   article,
   user,
+  bookmarkId,
+  handleAddBookmark,
+  handleRemoveBookmark,
   children,
 }: ArticleDetailSheetProps) => {
   const [open, setOpen] = useState(false);
@@ -56,23 +60,37 @@ export const ArticleDetailSheet: FC<ArticleDetailSheetProps> = ({
         </div>
       </SheetTrigger>
       <SheetContent className="w-[360px] sm:w-[700px] sm:max-w-[700px]">
-        {open && <ArticleContent article={article} user={user} />}
+        {open && (
+          <ArticleDetailSheetContent
+            article={article}
+            user={user}
+            bookmarkId={bookmarkId}
+            handleAddBookmark={handleAddBookmark}
+            handleRemoveBookmark={handleRemoveBookmark}
+          />
+        )}
       </SheetContent>
     </Sheet>
   );
 };
 
-const ArticleContent = ({
+type ArticleDetailSheetContentProps = {
+  article: ArticleType;
+  user?: User;
+  bookmarkId?: string;
+  handleAddBookmark: (articleId: string) => Promise<void>;
+  handleRemoveBookmark: (bookmarkId: string) => Promise<void>;
+};
+
+const ArticleDetailSheetContent: FC<ArticleDetailSheetContentProps> = ({
   article,
   user,
-}: {
-  article: ArticleType;
-  user: User | undefined;
+  bookmarkId,
+  handleAddBookmark,
+  handleRemoveBookmark,
 }) => {
   const imageUrl = useCheckImageExist(article.thumbnailURL);
   const { convertParseHtml } = useParseHtml();
-  const { bookmarkId, handleAddBookmark, handleRemoveBookmark } =
-    useArticleBookmark({ article });
 
   const shareUrl = `${process.env.NEXT_PUBLIC_SITE_DOMAIN}/article/${article.id}`;
   const shareTitle = article.title;
