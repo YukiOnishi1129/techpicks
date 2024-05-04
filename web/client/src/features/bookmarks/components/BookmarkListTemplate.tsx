@@ -1,5 +1,6 @@
 import { FC } from "react";
 
+import { fetchFavoriteArticleFoldersAPI } from "@/features/favoriteArticleFolders/actions/favoriteArticleFolders";
 import { BookmarkArticleKeywordSearchInput } from "@/features/search/components/bookmarks/BookmarkArticleKeywordSearchInput";
 import { getUser } from "@/features/users/actions/user";
 
@@ -25,6 +26,7 @@ export const BookmarkListTemplate: FC<ArticleListProps> = async ({
     keyword,
     platformIdList,
   });
+  const resFavoriteArticleFolders = await fetchFavoriteArticleFoldersAPI({});
   const user = await getUser();
   return (
     <div className="w-auto">
@@ -42,6 +44,9 @@ export const BookmarkListTemplate: FC<ArticleListProps> = async ({
       <BookmarkList
         user={user}
         initialBookmarks={res.data.bookmarks}
+        favoriteArticleFolders={
+          resFavoriteArticleFolders.data.favoriteArticleFolders
+        }
         languageStatus={languageStatus}
         keyword={keyword}
         platformIdList={platformIdList}
