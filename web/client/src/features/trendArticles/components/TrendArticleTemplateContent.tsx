@@ -27,7 +27,7 @@ export const TrendArticleTemplateContent = async ({
     platformIdList,
     tab,
   });
-  const resFavoriteArticleFolders = await fetchFavoriteArticleFoldersAPI();
+  const resFavoriteArticleFolders = await fetchFavoriteArticleFoldersAPI({});
 
   return (
     <TrendArticleList

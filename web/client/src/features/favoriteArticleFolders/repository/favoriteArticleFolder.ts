@@ -10,16 +10,43 @@ import { FavoriteArticleFolderType } from "@/types/favoriteArticleFolder";
 
 type GetFavoriteArticleFolders = {
   userId: string;
+  keyword?: string;
 };
 
 export const getFavoriteArticleFolders = async ({
   userId,
+  keyword,
 }: GetFavoriteArticleFolders): Promise<Array<FavoriteArticleFolderType>> => {
+  let where = {};
+  if (keyword) {
+    where = {
+      AND: [
+        {
+          OR: [
+            {
+              title: {
+                contains: keyword,
+              },
+            },
+            {
+              description: {
+                contains: keyword,
+              },
+            },
+          ],
+        },
+      ],
+    };
+  }
+
+  where = {
+    ...where,
+    userId: userId,
+  };
+
   try {
     const res = await prisma.favoriteArticleFolder.findMany({
-      where: {
-        userId: userId,
-      },
+      where,
       orderBy: {
         createdAt: "asc",
       },

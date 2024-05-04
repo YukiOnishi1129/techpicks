@@ -43,7 +43,7 @@ export const ArticleSearchResultTemplate: FC<
     platformType: String(platformType),
   });
   const user = await getUser();
-  const resFavoriteArticleFolders = await fetchFavoriteArticleFoldersAPI();
+  const resFavoriteArticleFolders = await fetchFavoriteArticleFoldersAPI({});
 
   let keywordPath = "";
   if (!!keyword && keyword.trim() !== "") {

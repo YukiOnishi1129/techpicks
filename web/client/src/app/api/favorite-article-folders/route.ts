@@ -5,6 +5,7 @@ import { getUser } from "@/features/users/actions/user";
 
 export async function GET(req: NextRequest) {
   const searchParams = req.nextUrl.searchParams;
+  const keyword = searchParams.get("keyword") || undefined;
   const user = await getUser();
 
   if (!user) {
@@ -21,6 +22,7 @@ export async function GET(req: NextRequest) {
 
   const favoriteArticleFolders = await getFavoriteArticleFolders({
     userId: user?.id || "",
+    keyword: keyword,
   });
 
   if (favoriteArticleFolders.length === 0) {
