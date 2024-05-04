@@ -80,12 +80,15 @@ export const getOgpData = async (url: string) => {
 
   const imageSrc = objectMap["og:image"];
 
-  const favIconImage =
+  let favIconImage =
     objectMap["apple-touch-icon"] ||
     objectMap["icon"] ||
     objectMap["shortcut icon"];
 
   const image = await setImagePath(url, imageSrc);
+  if (favIconImage === undefined) {
+    favIconImage = `https://t0.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=${encodeUri}&size=128`;
+  }
 
   const faviconUrl = await setFaviconUrl(url, favIconImage);
 

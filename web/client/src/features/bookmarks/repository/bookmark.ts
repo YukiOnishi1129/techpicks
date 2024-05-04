@@ -79,8 +79,6 @@ export const getBookmarkList = async ({
     userId: user?.id,
   };
 
-  console.log(where);
-
   try {
     const res = await prisma.bookmark.findMany({
       take: 20,
@@ -104,8 +102,6 @@ export const getBookmarkList = async ({
         },
       },
     });
-
-    console.log(res);
 
     const bookmarkList: Array<BookmarkType> = res.map((bookmark) => {
       const bookmarkData: BookmarkType = {
