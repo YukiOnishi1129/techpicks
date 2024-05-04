@@ -66,7 +66,7 @@ export const FavoriteArticleFolderCard: FC<FavoriteArticleFolderCardProps> = ({
             )}
           </Link>
         </p>
-        <div className="border-t-2 py-2">
+        <div className=" border-t-2 py-2">
           {latestFavoriteArticle ? (
             <div>
               <h3 className="mb-2">Latest article</h3>
@@ -90,7 +90,11 @@ export const FavoriteArticleFolderCard: FC<FavoriteArticleFolderCardProps> = ({
               </div>
             </div>
           ) : (
-            <div />
+            <div className="mt-4 flex size-full items-center justify-center ">
+              <Link href={`/`}>
+                <Button variant="secondary">{"ADD ARTICLE"}</Button>
+              </Link>
+            </div>
           )}
         </div>
 
