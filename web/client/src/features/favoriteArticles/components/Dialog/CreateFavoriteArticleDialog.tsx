@@ -17,6 +17,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { fetchArticleByArticleAndPlatformUrlAPI } from "@/features/articles/actions/article";
+import { createArticle } from "@/features/articles/repository/article";
 import { getOgpData } from "@/features/ogp/actions/ogp";
 
 import { Button } from "@/components/ui/button";
@@ -143,11 +144,11 @@ export const CreateFavoriteArticleDialog: FC<
           thumbnailURL: article.thumbnailURL,
           isRead: false,
           userId: user?.id || "",
-          platformId: article.platform.id,
-          platformName: article.platform.name,
-          platformUrl: article.platform.siteUrl,
-          platformFaviconUrl: article.platform.faviconUrl,
-          isEng: article.platform.isEng,
+          platformId: article.platform?.id,
+          platformName: article.platform?.name,
+          platformUrl: article.platform?.siteUrl,
+          platformFaviconUrl: article.platform?.faviconUrl,
+          isEng: article.platform?.isEng || false,
           favoriteArticleFolderId: favoriteArticleFolderId,
         });
         if (!data) {
@@ -172,7 +173,24 @@ export const CreateFavoriteArticleDialog: FC<
         description: ogpData?.description || "",
       });
 
+      const createdArticleId = await createArticle({
+        title: ogpData?.title || "",
+        description: ogpData?.description || "",
+        articleUrl: url,
+        thumbnailURL: ogpData?.image || "",
+        isEng: isEng,
+        isPrivate: false,
+      });
+
+      if (!createdArticleId) {
+        failToast({
+          description: "Fail: add article failed",
+        });
+        return;
+      }
+
       const data = await createFavoriteArticle({
+        articleId: createdArticleId,
         title: ogpData?.title || "",
         description: ogpData?.description || "",
         articleUrl: url,
@@ -234,7 +252,7 @@ export const CreateFavoriteArticleDialog: FC<
                     <FormLabel className="font-bold">URL</FormLabel>
                     <FormControl>
                       <Input
-                        className="block w-full"
+                        className="block w-full border-primary bg-secondary text-primary"
                         placeholder="https://example.com"
                         type="url"
                         pattern="https://.*|http://.*"

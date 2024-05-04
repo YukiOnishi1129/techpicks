@@ -655,7 +655,7 @@ func (platformL) LoadArticles(ctx context.Context, e boil.ContextExecutor, singu
 
 	for _, foreign := range resultSlice {
 		for _, local := range slice {
-			if local.ID == foreign.PlatformID {
+			if queries.Equal(local.ID, foreign.PlatformID) {
 				local.R.Articles = append(local.R.Articles, foreign)
 				if foreign.R == nil {
 					foreign.R = &articleR{}
@@ -1129,7 +1129,7 @@ func (o *Platform) AddArticles(ctx context.Context, exec boil.ContextExecutor, i
 	var err error
 	for _, rel := range related {
 		if insert {
-			rel.PlatformID = o.ID
+			queries.Assign(&rel.PlatformID, o.ID)
 			if err = rel.Insert(ctx, exec, boil.Infer()); err != nil {
 				return errors.Wrap(err, "failed to insert into foreign table")
 			}
@@ -1150,7 +1150,7 @@ func (o *Platform) AddArticles(ctx context.Context, exec boil.ContextExecutor, i
 				return errors.Wrap(err, "failed to update foreign table")
 			}
 
-			rel.PlatformID = o.ID
+			queries.Assign(&rel.PlatformID, o.ID)
 		}
 	}
 
@@ -1171,6 +1171,80 @@ func (o *Platform) AddArticles(ctx context.Context, exec boil.ContextExecutor, i
 			rel.R.Platform = o
 		}
 	}
+	return nil
+}
+
+// SetArticles removes all previously related items of the
+// platform replacing them completely with the passed
+// in related items, optionally inserting them as new records.
+// Sets o.R.Platform's Articles accordingly.
+// Replaces o.R.Articles with related.
+// Sets related.R.Platform's Articles accordingly.
+func (o *Platform) SetArticles(ctx context.Context, exec boil.ContextExecutor, insert bool, related ...*Article) error {
+	query := "update \"articles\" set \"platform_id\" = null where \"platform_id\" = $1"
+	values := []interface{}{o.ID}
+	if boil.IsDebug(ctx) {
+		writer := boil.DebugWriterFrom(ctx)
+		fmt.Fprintln(writer, query)
+		fmt.Fprintln(writer, values)
+	}
+	_, err := exec.ExecContext(ctx, query, values...)
+	if err != nil {
+		return errors.Wrap(err, "failed to remove relationships before set")
+	}
+
+	if o.R != nil {
+		for _, rel := range o.R.Articles {
+			queries.SetScanner(&rel.PlatformID, nil)
+			if rel.R == nil {
+				continue
+			}
+
+			rel.R.Platform = nil
+		}
+		o.R.Articles = nil
+	}
+
+	return o.AddArticles(ctx, exec, insert, related...)
+}
+
+// RemoveArticles relationships from objects passed in.
+// Removes related items from R.Articles (uses pointer comparison, removal does not keep order)
+// Sets related.R.Platform.
+func (o *Platform) RemoveArticles(ctx context.Context, exec boil.ContextExecutor, related ...*Article) error {
+	if len(related) == 0 {
+		return nil
+	}
+
+	var err error
+	for _, rel := range related {
+		queries.SetScanner(&rel.PlatformID, nil)
+		if rel.R != nil {
+			rel.R.Platform = nil
+		}
+		if _, err = rel.Update(ctx, exec, boil.Whitelist("platform_id")); err != nil {
+			return err
+		}
+	}
+	if o.R == nil {
+		return nil
+	}
+
+	for _, rel := range related {
+		for i, ri := range o.R.Articles {
+			if rel != ri {
+				continue
+			}
+
+			ln := len(o.R.Articles)
+			if ln > 1 && i < ln-1 {
+				o.R.Articles[i] = o.R.Articles[ln-1]
+			}
+			o.R.Articles = o.R.Articles[:ln-1]
+			break
+		}
+	}
+
 	return nil
 }
 

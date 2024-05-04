@@ -175,7 +175,11 @@ const BookmarkSearchDialogContent: FC<BookmarkSearchDialogContentProps> = ({
                   <FormItem className="mb-4">
                     <FormLabel>Keyword</FormLabel>
                     <FormControl>
-                      <Input placeholder="search keyword" {...field} />
+                      <Input
+                        className="border-primary bg-secondary text-primary"
+                        placeholder="search keyword"
+                        {...field}
+                      />
                     </FormControl>
                     {/* <FormDescription>
                       Let&apos;s enter the keyword you want to search.

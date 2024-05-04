@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import { getBookmarkList } from "@/features/bookmarks/repository/bookmark";
+import { getUser } from "@/features/users/actions/user";
 
 import { LanguageStatus } from "@/types/language";
 
@@ -13,9 +14,21 @@ export async function GET(req: NextRequest) {
   const status =
     typeof languageStatus === "string"
       ? (parseInt(languageStatus) as LanguageStatus)
-      : 1;
+      : undefined;
+  const user = await getUser();
+  if (!user) {
+    return NextResponse.json(
+      {
+        message: "unauthorized",
+      },
+      {
+        status: 401,
+      }
+    );
+  }
 
   const bookmarks = await getBookmarkList({
+    userId: user.id,
     languageStatus: status,
     keyword: keyword,
     platformIdList: platformIdList,

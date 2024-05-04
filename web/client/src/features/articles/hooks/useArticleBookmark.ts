@@ -45,15 +45,15 @@ export const useArticleBookmark = ({ article }: { article: ArticleType }) => {
         description: article.description,
         articleId: article.id,
         articleUrl: article.articleUrl,
-        publishedAt: article.publishedAt,
+        publishedAt: article?.publishedAt || undefined,
         thumbnailURL: article.thumbnailURL,
         isRead: false,
         userId: user?.id || "",
-        platformId: article.platform.id,
-        isEng: article.platform.isEng,
-        platformName: article.platform.name,
-        platformUrl: article.platform.siteUrl,
-        platformFaviconUrl: article.platform.faviconUrl,
+        platformId: article.platform?.id,
+        isEng: article.platform?.isEng || false,
+        platformName: article.platform?.name,
+        platformUrl: article.platform?.siteUrl,
+        platformFaviconUrl: article.platform?.faviconUrl,
       });
       if (!newData) {
         failToast({

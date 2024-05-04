@@ -7,6 +7,7 @@ import { NotFoundList } from "@/components/layout/NotFoundList";
 import { Loader } from "@/components/ui/loader";
 
 import { BookmarkType } from "@/types/bookmark";
+import { FavoriteArticleFolderType } from "@/types/favoriteArticleFolder";
 import { LanguageStatus } from "@/types/language";
 
 import { BookmarkCardWrapper } from "./BookmarkCardWrapper";
@@ -15,7 +16,8 @@ import { FetchBookmarkListAPIResponse } from "../actions/bookmark";
 type Props = {
   user: User | undefined;
   initialBookmarks: Array<BookmarkType>;
-  languageStatus: LanguageStatus;
+  favoriteArticleFolders: Array<FavoriteArticleFolderType>;
+  languageStatus?: LanguageStatus;
   keyword?: string;
   platformIdList: Array<string>;
   fetchBookmarks: ({
@@ -24,7 +26,7 @@ type Props = {
     offset,
     platformIdList,
   }: {
-    languageStatus: string;
+    languageStatus?: string;
     keyword?: string;
     offset: string;
     platformIdList: Array<string>;
@@ -32,7 +34,9 @@ type Props = {
 };
 
 export const BookmarkList: FC<Props> = ({
+  user,
   initialBookmarks,
+  favoriteArticleFolders,
   keyword,
   languageStatus,
   platformIdList,
@@ -53,7 +57,7 @@ export const BookmarkList: FC<Props> = ({
       const res = await fetchBookmarks({
         offset: offset.toString(),
         keyword: keyword,
-        languageStatus: languageStatus.toString(),
+        languageStatus: languageStatus?.toString(),
         platformIdList: platformIdList,
       });
       setBookmarks((prev) => [...prev, ...res.data.bookmarks]);
@@ -108,7 +112,11 @@ export const BookmarkList: FC<Props> = ({
         <>
           {flatBookmarks.map((bookmark) => (
             <div key={bookmark.id} className="mb-8">
-              <BookmarkCardWrapper bookmark={bookmark} />
+              <BookmarkCardWrapper
+                bookmark={bookmark}
+                favoriteArticleFolders={favoriteArticleFolders}
+                user={user}
+              />
             </div>
           ))}
           <div ref={observerTarget}>

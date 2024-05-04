@@ -90,9 +90,11 @@ const ArticleContent = ({
           </Link>
         </SheetTitle>
 
-        <p className="pl-2 text-sm">
-          {showDiffDateToCurrentDate(article.publishedAt)}
-        </p>
+        {article.publishedAt && (
+          <p className="pl-2 text-sm">
+            {showDiffDateToCurrentDate(article.publishedAt)}
+          </p>
+        )}
 
         <div className="flex w-full items-center justify-between pt-2">
           <Link

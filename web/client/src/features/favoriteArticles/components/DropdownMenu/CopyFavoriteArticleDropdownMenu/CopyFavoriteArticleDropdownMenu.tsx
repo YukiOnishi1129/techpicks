@@ -69,7 +69,11 @@ export const CopyFavoriteArticleDropdownMenuContent: FC<
         control={control}
         rules={{ required: true }}
         render={({ field }) => (
-          <Input placeholder="search keyword" {...field} />
+          <Input
+            className="border-primary bg-secondary text-primary"
+            placeholder="search keyword"
+            {...field}
+          />
         )}
       />
       <DropdownMenuSeparator />

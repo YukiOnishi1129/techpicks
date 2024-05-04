@@ -29,6 +29,7 @@ func (u *Usecase) BatchCrawlSiteAndSummaryArticleContents(ctx context.Context) e
 		qm.InnerJoin("platforms on feeds.platform_id = platforms.id"),
 		qm.WhereIn("platforms.platform_type IN ?", platformTypes...),
 		qm.OrderBy("feeds.created_at asc"),
+		qm.Load("Platform"),
 	).All(ctx, u.db)
 	if err != nil {
 		log.Printf("【error get feeds】: %s", err)

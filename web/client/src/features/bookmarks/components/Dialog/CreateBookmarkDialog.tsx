@@ -17,6 +17,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { fetchArticleByArticleAndPlatformUrlAPI } from "@/features/articles/actions/article";
+import { createArticle } from "@/features/articles/repository/article";
 import { getOgpData } from "@/features/ogp/actions/ogp";
 
 import { Button } from "@/components/ui/button";
@@ -38,27 +39,25 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
+import { useServerRevalidatePage } from "@/hooks/useServerRevalidatePage";
 import { useStatusToast } from "@/hooks/useStatusToast";
 
 import { checkJapaneseArticle } from "@/lib/check";
 
-import { LanguageStatus } from "@/types/language";
 import { OgpType } from "@/types/ogp";
 
 import { fetchBookmarkCountByArticleUrlAPI } from "../../actions/bookmark";
-import { serverRevalidateBookmark } from "../../actions/serverAction";
 import { createBookmark } from "../../repository/bookmark";
 
 type CreateBookmarkDialogProps = {
   user: User | undefined;
-  languageStatus: LanguageStatus;
 };
 
 export const CreateBookmarkDialog: FC<CreateBookmarkDialogProps> = ({
   user,
-  languageStatus,
 }: CreateBookmarkDialogProps) => {
   const router = useRouter();
+  const { revalidatePage } = useServerRevalidatePage();
   const [ogpData, setOgpData] = useState<OgpType | null>(null);
   const [open, setOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
@@ -141,11 +140,11 @@ export const CreateBookmarkDialog: FC<CreateBookmarkDialogProps> = ({
           thumbnailURL: article.thumbnailURL,
           isRead: false,
           userId: user?.id || "",
-          platformId: article.platform.id,
-          platformName: article.platform.name,
-          platformUrl: article.platform.siteUrl,
-          platformFaviconUrl: article.platform.faviconUrl,
-          isEng: article.platform.isEng,
+          platformId: article.platform?.id,
+          platformName: article.platform?.name,
+          platformUrl: article.platform?.siteUrl,
+          platformFaviconUrl: article.platform?.faviconUrl,
+          isEng: article.platform?.isEng || false,
         });
         if (!data) {
           failToast({
@@ -156,8 +155,8 @@ export const CreateBookmarkDialog: FC<CreateBookmarkDialogProps> = ({
         successToast({
           description: "Success: add bookmark",
         });
-        await serverRevalidateBookmark();
-        router.replace(`/bookmark/?languageStatus=${languageStatus}`);
+        await revalidatePage();
+        router.replace(`/bookmark/`);
         resetDialog();
         setOpen(false);
         return;
@@ -168,7 +167,25 @@ export const CreateBookmarkDialog: FC<CreateBookmarkDialogProps> = ({
         title: ogpData?.title || "",
         description: ogpData?.description || "",
       });
+
+      const createdArticleId = await createArticle({
+        title: ogpData?.title || "",
+        description: ogpData?.description || "",
+        articleUrl: url,
+        thumbnailURL: ogpData?.image || "",
+        isEng: isEng,
+        isPrivate: false,
+      });
+
+      if (!createdArticleId) {
+        failToast({
+          description: "Fail: add article failed",
+        });
+        return;
+      }
+
       const id = await createBookmark({
+        articleId: createdArticleId,
         title: ogpData?.title || "",
         description: ogpData?.description || "",
         articleUrl: url,
@@ -180,6 +197,7 @@ export const CreateBookmarkDialog: FC<CreateBookmarkDialogProps> = ({
         platformFaviconUrl: ogpData?.faviconImage || "",
         isEng: isEng,
       });
+
       if (!id) {
         failToast({
           description: "Fail: add bookmark failed",
@@ -189,15 +207,15 @@ export const CreateBookmarkDialog: FC<CreateBookmarkDialogProps> = ({
       successToast({
         description: "Success: add bookmark",
       });
-      await serverRevalidateBookmark();
-      router.replace(`/bookmark/?languageStatus=${languageStatus}`);
+      await revalidatePage();
+      router.replace(`/bookmark`);
       resetDialog();
       setOpen(false);
     });
   }, [
     form,
     router,
-    languageStatus,
+    revalidatePage,
     resetDialog,
     failToast,
     successToast,
@@ -208,7 +226,7 @@ export const CreateBookmarkDialog: FC<CreateBookmarkDialogProps> = ({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>{"Add new article"}</Button>
+        <Button>{"Add article"}</Button>
       </DialogTrigger>
       <DialogContent onCloseAutoFocus={resetDialog}>
         <DialogHeader>

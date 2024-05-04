@@ -148,23 +148,27 @@ export const getFavoriteArticleById = async ({
   }
 };
 
-type GetFavoriteArticleCountByFavoriteArticleFolderIdAndArticleIdDTO = {
-  userId: string;
-  articleId: string;
-  favoriteArticleFolderId: string;
-};
+type GetFavoriteArticleCountByFavoriteArticleFolderIdAndArticleIdAndArticleUrlDTO =
+  {
+    userId: string;
+    articleId: string | null;
+    favoriteArticleFolderId: string;
+    articleUrl: string;
+  };
 
-export const getFavoriteArticleCountByFavoriteArticleFolderIdAndArticleId =
+export const getFavoriteArticleCountByFavoriteArticleFolderIdAndArticleIdAndArticleUrl =
   async ({
     userId,
     articleId,
     favoriteArticleFolderId,
-  }: GetFavoriteArticleCountByFavoriteArticleFolderIdAndArticleIdDTO): Promise<number> => {
+    articleUrl,
+  }: GetFavoriteArticleCountByFavoriteArticleFolderIdAndArticleIdAndArticleUrlDTO): Promise<number> => {
     const count = await prisma.favoriteArticle.count({
       where: {
         userId: userId,
         favoriteArticleFolderId: favoriteArticleFolderId,
         articleId: articleId,
+        articleUrl: articleUrl,
       },
     });
 
@@ -178,6 +182,26 @@ type GetFavoriteArticleCountByFolderIdAndArticleUrlDTO = {
 };
 
 export const getFavoriteArticleCountByFolderIdAndArticleUrl = async ({
+  userId,
+  favoriteArticleFolderId,
+  articleUrl,
+}: GetFavoriteArticleCountByFolderIdAndArticleUrlDTO) => {
+  try {
+    const count = await prisma.favoriteArticle.count({
+      where: {
+        userId: userId,
+        favoriteArticleFolderId: favoriteArticleFolderId,
+        articleUrl: articleUrl,
+      },
+    });
+
+    return count;
+  } catch (err) {
+    throw new Error(`Failed to get favorite article count: ${err}`);
+  }
+};
+
+export const getFavoriteArticleCountByFolderIdAndArticleUrlAndArticle = async ({
   userId,
   favoriteArticleFolderId,
   articleUrl,

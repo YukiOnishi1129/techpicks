@@ -113,19 +113,24 @@ export const fetchFavoriteArticleAPI = async (
   };
 };
 
-export const fetchFavoriteArticleCountByFavoriteArticleFolderIdAndArticleIdAPI =
+export const fetchFavoriteArticleCountByFavoriteArticleFolderIdAndArticleIdAndArticleUrlAPI =
   async ({
     favoriteArticleFolderId,
     articleId,
+    articleUrl,
   }: {
     favoriteArticleFolderId: string;
-    articleId: string;
+    articleId?: string;
+    articleUrl: string;
   }): Promise<FetchCountAPIResponse> => {
-    const url = `http://localhost:80/api/favorite-articles/count/by-favorite-article-folder-and-article-id?favoriteArticleFolderId=${favoriteArticleFolderId}&articleId=${articleId}`;
+    let url = `http://localhost:80/api/favorite-articles/count/favorite-article-folders/${favoriteArticleFolderId}/article-id-and-url?articleUrl=${articleUrl}`;
+    if (articleId) {
+      url += `&articleId=${articleId}`;
+    }
     const response = await getFetch({
       url,
       tagName:
-        "favorite-articles/count/by-favorite-article-folder-and-article-id",
+        "favorite-articles/count/favorite-article-folder/favorite-article-folder-id/article-id-and-url",
       cacheType: "no-store",
     });
     const data = await response.json();

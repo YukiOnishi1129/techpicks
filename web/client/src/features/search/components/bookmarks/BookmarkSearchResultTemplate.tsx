@@ -2,6 +2,7 @@ import { FC } from "react";
 
 import { fetchBookmarkListAPI } from "@/features/bookmarks/actions/bookmark";
 import { BookmarkList } from "@/features/bookmarks/components/BookmarkList";
+import { fetchFavoriteArticleFoldersAPI } from "@/features/favoriteArticleFolders/actions/favoriteArticleFolders";
 import { fetchPlatformAPI } from "@/features/platforms/actions/platform";
 import { getUser } from "@/features/users/actions/user";
 
@@ -37,6 +38,7 @@ export const BookmarkSearchResultTemplate: FC<
     languageStatus: languageStatus.toString(),
     platformType: String(platformType),
   });
+  const resFavoriteArticleFolders = await fetchFavoriteArticleFoldersAPI({});
   const user = await getUser();
 
   let keywordPath = "";
@@ -89,6 +91,9 @@ export const BookmarkSearchResultTemplate: FC<
         keyword={keyword}
         platformIdList={platformIdList}
         fetchBookmarks={fetchBookmarkListAPI}
+        favoriteArticleFolders={
+          resFavoriteArticleFolders.data.favoriteArticleFolders
+        }
       />
     </div>
   );

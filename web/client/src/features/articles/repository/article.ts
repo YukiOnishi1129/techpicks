@@ -1,3 +1,7 @@
+"use server";
+// eslint-disable-next-line import/named
+import { v4 as uuidv4 } from "uuid";
+
 import prisma from "@/lib/prisma";
 
 import { ArticleTabType, ArticleType } from "@/types/article";
@@ -27,8 +31,6 @@ export const getArticles = async ({
   sort = "desc",
   sortColum = "publishedAt",
 }: GetArticleParams): Promise<Array<ArticleType>> => {
-  "use server";
-
   let orderBy = {};
 
   let where = {};
@@ -61,16 +63,12 @@ export const getArticles = async ({
   if (languageStatus === 2) {
     where = {
       ...where,
-      platform: {
-        isEng: true,
-      },
+      isEng: true,
     };
   } else if (languageStatus === 1) {
     where = {
       ...where,
-      platform: {
-        isEng: false,
-      },
+      isEng: false,
     };
   }
 
@@ -106,9 +104,9 @@ export const getArticles = async ({
       if (languageStatus !== 0) {
         where = {
           ...where,
+          isEng: languageStatus === 2,
           platform: {
             platformType: 1,
-            isEng: languageStatus === 2,
           },
         };
       }
@@ -123,9 +121,9 @@ export const getArticles = async ({
       if (languageStatus !== 0) {
         where = {
           ...where,
+          isEng: languageStatus === 2,
           platform: {
             platformType: 2,
-            isEng: languageStatus === 2,
           },
         };
       }
@@ -140,9 +138,9 @@ export const getArticles = async ({
       if (languageStatus !== 0) {
         where = {
           ...where,
+          isEng: languageStatus === 2,
           platform: {
             platformType: 3,
-            isEng: languageStatus === 2,
           },
         };
       }
@@ -227,7 +225,7 @@ export const getArticles = async ({
 
     const articleList: Array<ArticleType> = res.map((article) => {
       const isBookmarked = article.bookmarks.length > 0;
-      return {
+      const resArticle: ArticleType = {
         id: article.id,
         title: article.title,
         description: article.description,
@@ -236,17 +234,10 @@ export const getArticles = async ({
         publishedAt: article.publishedAt,
         authorName: article.authorName,
         tags: article.tags,
+        isEng: article.isEng,
         isPrivate: article.isPrivate,
         createdAt: article.createdAt,
         updatedAt: article.updatedAt,
-        platform: {
-          id: article.platform.id,
-          name: article.platform.name,
-          platformType: article.platform.platformType,
-          siteUrl: article.platform.siteUrl,
-          faviconUrl: article.platform.faviconUrl,
-          isEng: article.platform.isEng,
-        },
         isBookmarked: isBookmarked,
         bookmarkId: isBookmarked ? article.bookmarks[0].id : undefined,
         feeds: article.feedArticleRelatoins.map((feed) => {
@@ -268,6 +259,18 @@ export const getArticles = async ({
         isFollowing: article.favoriteArticles.length > 0,
         favoriteArticles: article.favoriteArticles,
       };
+      if (article.platform) {
+        resArticle.platform = {
+          id: article.platform.id,
+          name: article.platform.name,
+          platformType: article.platform.platformType,
+          siteUrl: article.platform.siteUrl,
+          faviconUrl: article.platform.faviconUrl,
+          isEng: article.platform.isEng,
+        };
+      }
+
+      return resArticle;
     });
 
     return articleList;
@@ -346,6 +349,7 @@ export const getArticlesByFeedIds = async ({
             publishedAt: true,
             authorName: true,
             tags: true,
+            isEng: true,
             isPrivate: true,
             createdAt: true,
             updatedAt: true,
@@ -426,7 +430,8 @@ export const getArticlesByFeedIds = async ({
         article.trendArticles.length > 0
           ? article.trendArticles[0].likeCount
           : undefined;
-      return {
+
+      const resArticle: ArticleType = {
         id: article.id,
         title: article.title,
         description: article.description,
@@ -435,17 +440,10 @@ export const getArticlesByFeedIds = async ({
         publishedAt: article.publishedAt,
         authorName: article.authorName,
         tags: article.tags,
+        isEng: article.isEng,
         isPrivate: article.isPrivate,
         createdAt: article.createdAt,
         updatedAt: article.updatedAt,
-        platform: {
-          id: article.platform.id,
-          name: article.platform.name,
-          platformType: article.platform.platformType,
-          siteUrl: article.platform.siteUrl,
-          faviconUrl: article.platform.faviconUrl,
-          isEng: article.platform.isEng,
-        },
         isBookmarked: isBookmarked,
         bookmarkId: isBookmarked ? article.bookmarks[0].id : undefined,
         likeCount: likeCount,
@@ -468,8 +466,18 @@ export const getArticlesByFeedIds = async ({
         isFollowing: article.favoriteArticles.length > 0,
         favoriteArticles: article.favoriteArticles,
       };
+      if (article.platform) {
+        resArticle.platform = {
+          id: article.platform.id,
+          name: article.platform.name,
+          siteUrl: article.platform.siteUrl,
+          faviconUrl: article.platform.faviconUrl,
+          platformType: article.platform.platformType,
+          isEng: article.platform.isEng,
+        };
+      }
+      return resArticle;
     });
-
     return articleList;
   } catch (err) {
     throw new Error(`Failed to fetch articles: ${err}`);
@@ -548,17 +556,10 @@ export const getArticleById = async ({ id, userId }: GetArticleByIdParam) => {
       publishedAt: article.publishedAt,
       authorName: article.authorName,
       tags: article.tags,
+      isEng: article.isEng,
       isPrivate: article.isPrivate,
       createdAt: article.createdAt,
       updatedAt: article.updatedAt,
-      platform: {
-        id: article.platform.id,
-        name: article.platform.name,
-        platformType: article.platform.platformType,
-        siteUrl: article.platform.siteUrl,
-        faviconUrl: article.platform.faviconUrl,
-        isEng: article.platform.isEng,
-      },
       isBookmarked: isBookmarked,
       bookmarkId: isBookmarked ? article.bookmarks[0].id : undefined,
       feeds: article.feedArticleRelatoins.map((feed) => {
@@ -580,6 +581,17 @@ export const getArticleById = async ({ id, userId }: GetArticleByIdParam) => {
       isFollowing: article.favoriteArticles.length > 0,
       favoriteArticles: article.favoriteArticles,
     };
+
+    if (article.platform) {
+      resArticle.platform = {
+        id: article.platform.id,
+        name: article.platform.name,
+        platformType: article.platform.platformType,
+        siteUrl: article.platform.siteUrl,
+        faviconUrl: article.platform.faviconUrl,
+        isEng: article.platform.isEng,
+      };
+    }
 
     return resArticle;
   } catch (err) {
@@ -671,17 +683,10 @@ export const getArticleByArticleAndPlatformUrl = async ({
       publishedAt: article.publishedAt,
       authorName: article.authorName,
       tags: article.tags,
+      isEng: article.isEng,
       isPrivate: article.isPrivate,
       createdAt: article.createdAt,
       updatedAt: article.updatedAt,
-      platform: {
-        id: article.platform.id,
-        name: article.platform.name,
-        platformType: article.platform.platformType,
-        siteUrl: article.platform.siteUrl,
-        faviconUrl: article.platform.faviconUrl,
-        isEng: article.platform.isEng,
-      },
       isBookmarked: isBookmarked,
       bookmarkId: isBookmarked ? article.bookmarks[0].id : undefined,
       feeds: article.feedArticleRelatoins.map((feed) => {
@@ -704,8 +709,56 @@ export const getArticleByArticleAndPlatformUrl = async ({
       favoriteArticles: article.favoriteArticles,
     };
 
+    if (article.platform) {
+      resArticle.platform = {
+        id: article.platform.id,
+        name: article.platform.name,
+        platformType: article.platform.platformType,
+        siteUrl: article.platform.siteUrl,
+        faviconUrl: article.platform.faviconUrl,
+        isEng: article.platform.isEng,
+      };
+    }
+
     return resArticle;
   } catch (err) {
     throw new Error(`Failed to fetch article: ${err}`);
+  }
+};
+
+type CreateArticleDTO = {
+  platformId?: string;
+  title: string;
+  description: string;
+  thumbnailURL: string;
+  articleUrl: string;
+  publishedAt?: Date;
+  authorName?: string;
+  tags?: string;
+  isEng: boolean;
+  isPrivate: boolean;
+};
+
+export const createArticle = async (dto: CreateArticleDTO) => {
+  try {
+    const uuid = uuidv4();
+    const data = await prisma.article.create({
+      data: {
+        id: uuid,
+        platformId: dto.platformId,
+        title: dto.title,
+        description: dto.description,
+        thumbnailURL: dto.thumbnailURL,
+        articleUrl: dto.articleUrl,
+        publishedAt: dto.publishedAt,
+        authorName: dto.authorName,
+        tags: dto.tags,
+        isEng: dto.isEng,
+        isPrivate: dto.isPrivate,
+      },
+    });
+    return data.id;
+  } catch (err) {
+    throw new Error(`Failed to create article: ${err}`);
   }
 };

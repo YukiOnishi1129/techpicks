@@ -133,6 +133,7 @@ func TrendArticleContentsCrawler(ctx context.Context, tx *sql.Tx, arg TrendArtic
 		PublishedAt:  arg.ArticlePublishedAt,
 		AuthorName:   arg.ArticleAuthorName,
 		Tags:         arg.ArticleTags,
+		IsEng:        arg.Feed.R.Platform.IsEng,
 	})
 	if err != nil {
 		log.Printf("【error insert article】: %s, err: %v", arg.ArticleTitle, err)

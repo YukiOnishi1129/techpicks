@@ -25,14 +25,15 @@ import (
 // Article is an object representing the database table.
 type Article struct {
 	ID           string      `boil:"id" json:"id" toml:"id" yaml:"id"`
-	PlatformID   string      `boil:"platform_id" json:"platform_id" toml:"platform_id" yaml:"platform_id"`
+	PlatformID   null.String `boil:"platform_id" json:"platform_id,omitempty" toml:"platform_id" yaml:"platform_id,omitempty"`
 	Title        string      `boil:"title" json:"title" toml:"title" yaml:"title"`
 	Description  string      `boil:"description" json:"description" toml:"description" yaml:"description"`
 	ArticleURL   string      `boil:"article_url" json:"article_url" toml:"article_url" yaml:"article_url"`
-	PublishedAt  time.Time   `boil:"published_at" json:"published_at" toml:"published_at" yaml:"published_at"`
+	PublishedAt  null.Time   `boil:"published_at" json:"published_at,omitempty" toml:"published_at" yaml:"published_at,omitempty"`
 	AuthorName   null.String `boil:"author_name" json:"author_name,omitempty" toml:"author_name" yaml:"author_name,omitempty"`
 	Tags         null.String `boil:"tags" json:"tags,omitempty" toml:"tags" yaml:"tags,omitempty"`
 	ThumbnailURL string      `boil:"thumbnail_url" json:"thumbnail_url" toml:"thumbnail_url" yaml:"thumbnail_url"`
+	IsEng        bool        `boil:"is_eng" json:"is_eng" toml:"is_eng" yaml:"is_eng"`
 	IsPrivate    bool        `boil:"is_private" json:"is_private" toml:"is_private" yaml:"is_private"`
 	CreatedAt    time.Time   `boil:"created_at" json:"created_at" toml:"created_at" yaml:"created_at"`
 	UpdatedAt    time.Time   `boil:"updated_at" json:"updated_at" toml:"updated_at" yaml:"updated_at"`
@@ -51,6 +52,7 @@ var ArticleColumns = struct {
 	AuthorName   string
 	Tags         string
 	ThumbnailURL string
+	IsEng        string
 	IsPrivate    string
 	CreatedAt    string
 	UpdatedAt    string
@@ -64,6 +66,7 @@ var ArticleColumns = struct {
 	AuthorName:   "author_name",
 	Tags:         "tags",
 	ThumbnailURL: "thumbnail_url",
+	IsEng:        "is_eng",
 	IsPrivate:    "is_private",
 	CreatedAt:    "created_at",
 	UpdatedAt:    "updated_at",
@@ -79,6 +82,7 @@ var ArticleTableColumns = struct {
 	AuthorName   string
 	Tags         string
 	ThumbnailURL string
+	IsEng        string
 	IsPrivate    string
 	CreatedAt    string
 	UpdatedAt    string
@@ -92,6 +96,7 @@ var ArticleTableColumns = struct {
 	AuthorName:   "articles.author_name",
 	Tags:         "articles.tags",
 	ThumbnailURL: "articles.thumbnail_url",
+	IsEng:        "articles.is_eng",
 	IsPrivate:    "articles.is_private",
 	CreatedAt:    "articles.created_at",
 	UpdatedAt:    "articles.updated_at",
@@ -124,27 +129,6 @@ func (w whereHelperstring) NIN(slice []string) qm.QueryMod {
 		values = append(values, value)
 	}
 	return qm.WhereNotIn(fmt.Sprintf("%s NOT IN ?", w.field), values...)
-}
-
-type whereHelpertime_Time struct{ field string }
-
-func (w whereHelpertime_Time) EQ(x time.Time) qm.QueryMod {
-	return qmhelper.Where(w.field, qmhelper.EQ, x)
-}
-func (w whereHelpertime_Time) NEQ(x time.Time) qm.QueryMod {
-	return qmhelper.Where(w.field, qmhelper.NEQ, x)
-}
-func (w whereHelpertime_Time) LT(x time.Time) qm.QueryMod {
-	return qmhelper.Where(w.field, qmhelper.LT, x)
-}
-func (w whereHelpertime_Time) LTE(x time.Time) qm.QueryMod {
-	return qmhelper.Where(w.field, qmhelper.LTE, x)
-}
-func (w whereHelpertime_Time) GT(x time.Time) qm.QueryMod {
-	return qmhelper.Where(w.field, qmhelper.GT, x)
-}
-func (w whereHelpertime_Time) GTE(x time.Time) qm.QueryMod {
-	return qmhelper.Where(w.field, qmhelper.GTE, x)
 }
 
 type whereHelpernull_String struct{ field string }
@@ -197,6 +181,30 @@ func (w whereHelpernull_String) NIN(slice []string) qm.QueryMod {
 func (w whereHelpernull_String) IsNull() qm.QueryMod    { return qmhelper.WhereIsNull(w.field) }
 func (w whereHelpernull_String) IsNotNull() qm.QueryMod { return qmhelper.WhereIsNotNull(w.field) }
 
+type whereHelpernull_Time struct{ field string }
+
+func (w whereHelpernull_Time) EQ(x null.Time) qm.QueryMod {
+	return qmhelper.WhereNullEQ(w.field, false, x)
+}
+func (w whereHelpernull_Time) NEQ(x null.Time) qm.QueryMod {
+	return qmhelper.WhereNullEQ(w.field, true, x)
+}
+func (w whereHelpernull_Time) LT(x null.Time) qm.QueryMod {
+	return qmhelper.Where(w.field, qmhelper.LT, x)
+}
+func (w whereHelpernull_Time) LTE(x null.Time) qm.QueryMod {
+	return qmhelper.Where(w.field, qmhelper.LTE, x)
+}
+func (w whereHelpernull_Time) GT(x null.Time) qm.QueryMod {
+	return qmhelper.Where(w.field, qmhelper.GT, x)
+}
+func (w whereHelpernull_Time) GTE(x null.Time) qm.QueryMod {
+	return qmhelper.Where(w.field, qmhelper.GTE, x)
+}
+
+func (w whereHelpernull_Time) IsNull() qm.QueryMod    { return qmhelper.WhereIsNull(w.field) }
+func (w whereHelpernull_Time) IsNotNull() qm.QueryMod { return qmhelper.WhereIsNotNull(w.field) }
+
 type whereHelperbool struct{ field string }
 
 func (w whereHelperbool) EQ(x bool) qm.QueryMod  { return qmhelper.Where(w.field, qmhelper.EQ, x) }
@@ -206,29 +214,52 @@ func (w whereHelperbool) LTE(x bool) qm.QueryMod { return qmhelper.Where(w.field
 func (w whereHelperbool) GT(x bool) qm.QueryMod  { return qmhelper.Where(w.field, qmhelper.GT, x) }
 func (w whereHelperbool) GTE(x bool) qm.QueryMod { return qmhelper.Where(w.field, qmhelper.GTE, x) }
 
+type whereHelpertime_Time struct{ field string }
+
+func (w whereHelpertime_Time) EQ(x time.Time) qm.QueryMod {
+	return qmhelper.Where(w.field, qmhelper.EQ, x)
+}
+func (w whereHelpertime_Time) NEQ(x time.Time) qm.QueryMod {
+	return qmhelper.Where(w.field, qmhelper.NEQ, x)
+}
+func (w whereHelpertime_Time) LT(x time.Time) qm.QueryMod {
+	return qmhelper.Where(w.field, qmhelper.LT, x)
+}
+func (w whereHelpertime_Time) LTE(x time.Time) qm.QueryMod {
+	return qmhelper.Where(w.field, qmhelper.LTE, x)
+}
+func (w whereHelpertime_Time) GT(x time.Time) qm.QueryMod {
+	return qmhelper.Where(w.field, qmhelper.GT, x)
+}
+func (w whereHelpertime_Time) GTE(x time.Time) qm.QueryMod {
+	return qmhelper.Where(w.field, qmhelper.GTE, x)
+}
+
 var ArticleWhere = struct {
 	ID           whereHelperstring
-	PlatformID   whereHelperstring
+	PlatformID   whereHelpernull_String
 	Title        whereHelperstring
 	Description  whereHelperstring
 	ArticleURL   whereHelperstring
-	PublishedAt  whereHelpertime_Time
+	PublishedAt  whereHelpernull_Time
 	AuthorName   whereHelpernull_String
 	Tags         whereHelpernull_String
 	ThumbnailURL whereHelperstring
+	IsEng        whereHelperbool
 	IsPrivate    whereHelperbool
 	CreatedAt    whereHelpertime_Time
 	UpdatedAt    whereHelpertime_Time
 }{
 	ID:           whereHelperstring{field: "\"articles\".\"id\""},
-	PlatformID:   whereHelperstring{field: "\"articles\".\"platform_id\""},
+	PlatformID:   whereHelpernull_String{field: "\"articles\".\"platform_id\""},
 	Title:        whereHelperstring{field: "\"articles\".\"title\""},
 	Description:  whereHelperstring{field: "\"articles\".\"description\""},
 	ArticleURL:   whereHelperstring{field: "\"articles\".\"article_url\""},
-	PublishedAt:  whereHelpertime_Time{field: "\"articles\".\"published_at\""},
+	PublishedAt:  whereHelpernull_Time{field: "\"articles\".\"published_at\""},
 	AuthorName:   whereHelpernull_String{field: "\"articles\".\"author_name\""},
 	Tags:         whereHelpernull_String{field: "\"articles\".\"tags\""},
 	ThumbnailURL: whereHelperstring{field: "\"articles\".\"thumbnail_url\""},
+	IsEng:        whereHelperbool{field: "\"articles\".\"is_eng\""},
 	IsPrivate:    whereHelperbool{field: "\"articles\".\"is_private\""},
 	CreatedAt:    whereHelpertime_Time{field: "\"articles\".\"created_at\""},
 	UpdatedAt:    whereHelpertime_Time{field: "\"articles\".\"updated_at\""},
@@ -302,9 +333,9 @@ func (r *articleR) GetTrendArticles() TrendArticleSlice {
 type articleL struct{}
 
 var (
-	articleAllColumns            = []string{"id", "platform_id", "title", "description", "article_url", "published_at", "author_name", "tags", "thumbnail_url", "is_private", "created_at", "updated_at"}
-	articleColumnsWithoutDefault = []string{"platform_id", "title", "description", "article_url", "published_at", "thumbnail_url"}
-	articleColumnsWithDefault    = []string{"id", "author_name", "tags", "is_private", "created_at", "updated_at"}
+	articleAllColumns            = []string{"id", "platform_id", "title", "description", "article_url", "published_at", "author_name", "tags", "thumbnail_url", "is_eng", "is_private", "created_at", "updated_at"}
+	articleColumnsWithoutDefault = []string{"title", "description", "article_url", "thumbnail_url"}
+	articleColumnsWithDefault    = []string{"id", "platform_id", "published_at", "author_name", "tags", "is_eng", "is_private", "created_at", "updated_at"}
 	articlePrimaryKeyColumns     = []string{"id"}
 	articleGeneratedColumns      = []string{}
 )
@@ -714,7 +745,9 @@ func (articleL) LoadPlatform(ctx context.Context, e boil.ContextExecutor, singul
 		if object.R == nil {
 			object.R = &articleR{}
 		}
-		args[object.PlatformID] = struct{}{}
+		if !queries.IsNil(object.PlatformID) {
+			args[object.PlatformID] = struct{}{}
+		}
 
 	} else {
 		for _, obj := range slice {
@@ -722,7 +755,9 @@ func (articleL) LoadPlatform(ctx context.Context, e boil.ContextExecutor, singul
 				obj.R = &articleR{}
 			}
 
-			args[obj.PlatformID] = struct{}{}
+			if !queries.IsNil(obj.PlatformID) {
+				args[obj.PlatformID] = struct{}{}
+			}
 
 		}
 	}
@@ -787,7 +822,7 @@ func (articleL) LoadPlatform(ctx context.Context, e boil.ContextExecutor, singul
 
 	for _, local := range slice {
 		for _, foreign := range resultSlice {
-			if local.PlatformID == foreign.ID {
+			if queries.Equal(local.PlatformID, foreign.ID) {
 				local.R.Platform = foreign
 				if foreign.R == nil {
 					foreign.R = &platformR{}
@@ -1280,7 +1315,7 @@ func (o *Article) SetPlatform(ctx context.Context, exec boil.ContextExecutor, in
 		return errors.Wrap(err, "failed to update local table")
 	}
 
-	o.PlatformID = related.ID
+	queries.Assign(&o.PlatformID, related.ID)
 	if o.R == nil {
 		o.R = &articleR{
 			Platform: related,
@@ -1297,6 +1332,39 @@ func (o *Article) SetPlatform(ctx context.Context, exec boil.ContextExecutor, in
 		related.R.Articles = append(related.R.Articles, o)
 	}
 
+	return nil
+}
+
+// RemovePlatform relationship.
+// Sets o.R.Platform to nil.
+// Removes o from all passed in related items' relationships struct.
+func (o *Article) RemovePlatform(ctx context.Context, exec boil.ContextExecutor, related *Platform) error {
+	var err error
+
+	queries.SetScanner(&o.PlatformID, nil)
+	if _, err = o.Update(ctx, exec, boil.Whitelist("platform_id")); err != nil {
+		return errors.Wrap(err, "failed to update local table")
+	}
+
+	if o.R != nil {
+		o.R.Platform = nil
+	}
+	if related == nil || related.R == nil {
+		return nil
+	}
+
+	for i, ri := range related.R.Articles {
+		if queries.Equal(o.PlatformID, ri.PlatformID) {
+			continue
+		}
+
+		ln := len(related.R.Articles)
+		if ln > 1 && i < ln-1 {
+			related.R.Articles[i] = related.R.Articles[ln-1]
+		}
+		related.R.Articles = related.R.Articles[:ln-1]
+		break
+	}
 	return nil
 }
 

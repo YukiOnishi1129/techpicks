@@ -13,6 +13,7 @@ import { LanguageStatus } from "@/types/language";
 const LIMIT = 20;
 
 type GetBookmarkList = {
+  userId?: string;
   platformId?: string;
   keyword?: string;
   languageStatus?: LanguageStatus;
@@ -23,8 +24,9 @@ type GetBookmarkList = {
 };
 
 export const getBookmarkList = async ({
+  userId,
   keyword,
-  languageStatus = 1,
+  languageStatus = 0,
   platformIdList,
   offset = 1,
   sort = "desc",
@@ -100,6 +102,15 @@ export const getBookmarkList = async ({
             updatedAt: true,
           },
         },
+        article: {
+          select: {
+            favoriteArticles: {
+              where: {
+                userId: userId,
+              },
+            },
+          },
+        },
       },
     });
 
@@ -114,6 +125,7 @@ export const getBookmarkList = async ({
         thumbnailURL: bookmark.thumbnailURL || undefined,
         isRead: bookmark.isRead,
         isEng: bookmark.isEng,
+        platformId: bookmark.platformId || undefined,
         platformName: bookmark.platformName || undefined,
         platformUrl: bookmark.platformUrl || undefined,
         platformFaviconUrl: bookmark.platformFaviconUrl || undefined,
@@ -125,6 +137,8 @@ export const getBookmarkList = async ({
           createdAt: bookmark.profile.createdAt,
           updatedAt: bookmark.profile.updatedAt,
         },
+        favoriteArticles: bookmark?.article?.favoriteArticles || [],
+        isFollowing: bookmark?.article?.favoriteArticles?.length ? true : false,
         createdAt: bookmark.createdAt,
         updatedAt: bookmark.updatedAt,
       };
@@ -190,6 +204,7 @@ export const getBookmark = async ({ bookmarkId, userId }: GetBookmarkDTO) => {
       thumbnailURL: data.thumbnailURL || undefined,
       isRead: data.isRead,
       isEng: data.isEng,
+      platformId: data.platformId || undefined,
       platformName: data.platformName || undefined,
       platformUrl: data.platformUrl || undefined,
       platformFaviconUrl: data.platformFaviconUrl || undefined,

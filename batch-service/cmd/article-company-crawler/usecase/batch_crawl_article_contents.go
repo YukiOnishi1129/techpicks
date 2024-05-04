@@ -26,6 +26,7 @@ func (u *Usecase) BatchCrawlCompanyArticleContents(ctx context.Context) error {
 		qm.InnerJoin("platforms on feeds.platform_id = platforms.id"),
 		qm.Where("platforms.platform_type = ?", strconv.Itoa(int(domain.PlatformTypeCompany))),
 		qm.OrderBy("feeds.created_at asc"),
+		qm.Load("Platform"),
 	).All(ctx, u.db)
 	if err != nil {
 		log.Printf("【error get feeds】: %s", err)

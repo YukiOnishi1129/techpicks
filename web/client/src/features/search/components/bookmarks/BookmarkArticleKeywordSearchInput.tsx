@@ -16,11 +16,11 @@ const formSchema = z.object({
   keyword: z.string().optional(),
 });
 
-type FavoriteArticleFolderKeywordSearchInputProps = {};
+type BookmarkArticleKeywordSearchInputProps = {};
 
-export const FavoriteArticleFolderKeywordSearchInput: FC<
-  FavoriteArticleFolderKeywordSearchInputProps
-> = () => {
+export const BookmarkArticleKeywordSearchInput: FC<
+  BookmarkArticleKeywordSearchInputProps
+> = ({}) => {
   const router = useRouter();
   const pathname = usePathname();
   const form = useForm<z.infer<typeof formSchema>>({
@@ -36,7 +36,7 @@ export const FavoriteArticleFolderKeywordSearchInput: FC<
       keywordPath = `?keyword=${values.keyword}`;
     }
     await serverRevalidatePage(pathname);
-    router.replace(`/favorite-article-folder/${keywordPath}`);
+    router.replace(`/bookmark/${keywordPath}`);
   };
 
   return (
@@ -53,7 +53,7 @@ export const FavoriteArticleFolderKeywordSearchInput: FC<
 
               <FormControl>
                 <Input
-                  className="border-primary bg-secondary text-primary "
+                  className="border-primary bg-secondary text-primary"
                   placeholder="search keyword"
                   {...field}
                 />
