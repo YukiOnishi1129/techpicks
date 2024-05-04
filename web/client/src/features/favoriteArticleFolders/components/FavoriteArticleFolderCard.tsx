@@ -9,6 +9,8 @@ import { useStatusToast } from "@/hooks/useStatusToast";
 
 import { FavoriteArticleFolderType } from "@/types/favoriteArticleFolder";
 
+import { UpdateFavoriteArticleFolderDialog } from "./Dialog/UpdateFavoriteArticleFolderDialog";
+
 type FavoriteArticleFolderCardProps = {
   favoriteArticleFolder: FavoriteArticleFolderType;
 };
@@ -30,6 +32,11 @@ export const FavoriteArticleFolderCard: FC<FavoriteArticleFolderCardProps> = ({
               {favoriteArticleFolder.title}
             </Link>
           </h3>
+          <UpdateFavoriteArticleFolderDialog
+            favoriteArticleFolderId={favoriteArticleFolder.id}
+            title={favoriteArticleFolder.title}
+            description={favoriteArticleFolder.description || ""}
+          />
         </div>
 
         <p className="line-clamp-3 h-[62px] w-full text-sm">
