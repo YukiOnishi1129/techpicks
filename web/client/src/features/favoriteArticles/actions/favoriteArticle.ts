@@ -15,7 +15,7 @@ export const fetchFavoriteArticlesByFavoriteArticleFolderIdAPI = async ({
   offset = "1",
   keyword,
 }: FetchFavoriteArticlesByFavoriteArticleFolderIdAPIArg): Promise<FetchFavoriteArticlesAPIResponse> => {
-  let url = `http://localhost:80/api/favorite-articles/favorite-article-folder-id/${favoriteArticleFolderId}?offset=${offset}`;
+  let url = `http://localhost:80/api/favorite-articles/favorite-article-folders/${favoriteArticleFolderId}?offset=${offset}`;
   if (keyword) {
     url += `&keyword=${keyword}`;
   }
@@ -40,6 +40,43 @@ export const fetchFavoriteArticlesByFavoriteArticleFolderIdAPI = async ({
   return {
     data: {
       favoriteArticles: data.favoriteArticles as Array<FavoriteArticleType>,
+      message: data.message as string,
+    },
+    status,
+  };
+};
+
+type FetchFavoriteArticleCountByFolderIdAndArticleUrlAPIResponse = {
+  articleUrl: string;
+  favoriteArticleFolderId: string;
+};
+
+export const fetchFavoriteArticleCountByFolderIdAndArticleUrlAPI = async ({
+  articleUrl,
+  favoriteArticleFolderId,
+}: FetchFavoriteArticleCountByFolderIdAndArticleUrlAPIResponse): Promise<FetchCountAPIResponse> => {
+  const url = `http://localhost:80/api/favorite-articles/favorite-article-folders/${favoriteArticleFolderId}/article-url?articleUrl=${articleUrl}`;
+  const response = await getFetch({
+    url,
+    tagName: "favorite-articles/favorite-article-folder-id/article-url",
+    cacheType: "no-store",
+  });
+  const data = await response.json();
+  const status = response.status;
+
+  if (status === 401) {
+    return {
+      data: {
+        count: 0,
+        message: data.message as string,
+      },
+      status,
+    };
+  }
+
+  return {
+    data: {
+      count: data.count as number,
       message: data.message as string,
     },
     status,

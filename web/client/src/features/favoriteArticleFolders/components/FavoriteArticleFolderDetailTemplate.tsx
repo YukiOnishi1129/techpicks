@@ -1,6 +1,7 @@
 import { FC } from "react";
 
 import { fetchFavoriteArticlesByFavoriteArticleFolderIdAPI } from "@/features/favoriteArticles/actions/favoriteArticle";
+import { CreateFavoriteArticleDialog } from "@/features/favoriteArticles/components/Dialog/CreateFavoriteArticleDialog";
 import { FavoriteArticleList } from "@/features/favoriteArticles/components/FavoriteArticleList";
 import { FavoriteArticleFolderArticleKeywordSearchInput } from "@/features/search/components/favoriteArticleFolder/FavoriteArticleFolderArticleKeywordSearchInput";
 import { getUser } from "@/features/users/actions/user";
@@ -54,10 +55,13 @@ export const FavoriteArticleFolderDetailTemplate: FC<
   return (
     <div className="mb-2 mt-4">
       <PageBreadcrumb breadcrumbs={breadcrumbs} />
-      <div className="mt-2">
-        <FavoriteArticleFolderArticleKeywordSearchInput
-          favoriteArticleFolderId={id}
-        />
+      <div className="flex w-full items-center justify-between">
+        <div className="w-3/5 pt-2">
+          <FavoriteArticleFolderArticleKeywordSearchInput
+            favoriteArticleFolderId={id}
+          />
+        </div>
+        <CreateFavoriteArticleDialog user={user} favoriteArticleFolderId={id} />
       </div>
 
       <div className="mt-4">
