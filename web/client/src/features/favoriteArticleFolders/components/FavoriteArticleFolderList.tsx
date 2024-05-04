@@ -25,7 +25,7 @@ export const FavoriteArticleFolderList: FC<FavoriteArticleFolderListProps> = ({
     <>
       {initialFavoriteArticleFolders.length === 0 ? (
         <div className="h-[590px] md:h-[540px]">
-          <NotFoundList message="No articles found" />
+          <NotFoundList message="No folder found" />
         </div>
       ) : (
         <div className="m-auto h-[590px] overflow-y-scroll md:h-[540px]">

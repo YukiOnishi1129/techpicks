@@ -46,6 +46,9 @@ export const getFavoriteArticleFolders = async ({
             createdAt: true,
             updatedAt: true,
           },
+          orderBy: {
+            createdAt: "desc",
+          },
         },
       },
     });
