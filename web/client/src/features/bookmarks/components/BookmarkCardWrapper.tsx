@@ -347,7 +347,16 @@ export const BookmarkCardWrapper: FC<BookmarkCardWrapperProps> = ({
           </div>
         </div>
 
-        <BookmarkDetailSheet bookmark={bookmark}>
+        <BookmarkDetailSheet
+          user={user}
+          bookmark={bookmark}
+          isFollowing={isFollowing}
+          articleId={showBookmark.articleId || ""}
+          favoriteArticleFolders={showFavoriteArticleFolders}
+          handleCreateFavoriteArticle={handleCreateFavoriteArticle}
+          handleRemoveFavoriteArticle={handleRemoveFavoriteArticle}
+          handleCreateFavoriteArticleFolder={handleCreateFavoriteArticleFolder}
+        >
           <BookmarkCard bookmark={bookmark} />
         </BookmarkDetailSheet>
       </div>

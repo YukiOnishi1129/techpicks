@@ -111,7 +111,7 @@ const ArticleContent = ({
           </Link>
           {user && (
             <div className="flex justify-between">
-              <TwitterShareButton title={shareTitle} url={shareUrl}>
+              <TwitterShareButton title={shareTitle} url={article.articleUrl}>
                 <XIcon className="inline-block" size={36} />
               </TwitterShareButton>
               {bookmarkId ? (
@@ -152,7 +152,7 @@ const ArticleContent = ({
         </div>
       </SheetHeader>
 
-      <div className="h-[400px] overflow-y-scroll md:h-[400px]">
+      <div className="h-[500px] overflow-y-scroll">
         <Link href={article.articleUrl} target="_blank">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
