@@ -1,6 +1,6 @@
 "use client";
 import { User } from "@supabase/supabase-js";
-import { FC } from "react";
+import { FC, useCallback } from "react";
 
 import { NotFoundList } from "@/components/layout/NotFoundList";
 
@@ -9,6 +9,9 @@ import { useStatusToast } from "@/hooks/useStatusToast";
 import { FavoriteArticleFolderType } from "@/types/favoriteArticleFolder";
 
 import { FavoriteArticleFolderCard } from "./FavoriteArticleFolderCard";
+import { fetchFavoriteArticleFolderByIdAPI } from "../actions/favoriteArticleFolders";
+import { serverRevalidateFavoriteArticleFolderPageTag } from "../actions/serverActions";
+import { updateFavoriteArticleFolder } from "../repository/favoriteArticleFolder";
 
 type FavoriteArticleFolderListProps = {
   initialFavoriteArticleFolders: FavoriteArticleFolderType[];
@@ -20,6 +23,57 @@ export const FavoriteArticleFolderList: FC<FavoriteArticleFolderListProps> = ({
   user,
 }) => {
   const { successToast, failToast } = useStatusToast();
+
+  const handleUpdateFavoriteArticleFolder = useCallback(
+    async ({
+      id,
+      title,
+      description,
+    }: {
+      id: string;
+      title: string;
+      description: string;
+    }) => {
+      if (!user) {
+        failToast({
+          description: "Please login to create a new favorite folder",
+        });
+        return;
+      }
+      // 1. folder check
+      const fetchRes = await fetchFavoriteArticleFolderByIdAPI(id);
+      if (fetchRes.status === 401) {
+        failToast({
+          description: "Fail: Unauthorized",
+        });
+        return;
+      }
+      if (fetchRes.status !== 200) {
+        failToast({
+          description: "Fail: Folder not found",
+        });
+        return;
+      }
+      // 2. update
+      const updatedId = await updateFavoriteArticleFolder({
+        id,
+        title,
+        description,
+        userId: user.id,
+      });
+      if (!updatedId) {
+        failToast({
+          description: "Fail: Something went wrong",
+        });
+        return;
+      }
+      successToast({
+        description: "Success: Update folder",
+      });
+      await serverRevalidateFavoriteArticleFolderPageTag();
+    },
+    [user, successToast, failToast]
+  );
 
   return (
     <>
@@ -34,6 +88,9 @@ export const FavoriteArticleFolderList: FC<FavoriteArticleFolderListProps> = ({
               <FavoriteArticleFolderCard
                 key={`${favoriteArticleFolder.id}`}
                 favoriteArticleFolder={favoriteArticleFolder}
+                handleUpdateFavoriteArticleFolder={
+                  handleUpdateFavoriteArticleFolder
+                }
               />
             ))}
           </div>

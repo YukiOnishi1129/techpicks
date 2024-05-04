@@ -37,11 +37,25 @@ type UpdateFavoriteArticleFolderDialogProps = {
   favoriteArticleFolderId: string;
   title: string;
   description: string;
+  handleUpdateFavoriteArticleFolder: ({
+    id,
+    title,
+    description,
+  }: {
+    id: string;
+    title: string;
+    description: string;
+  }) => Promise<void>;
 };
 
 export const UpdateFavoriteArticleFolderDialog: FC<
   UpdateFavoriteArticleFolderDialogProps
-> = ({ favoriteArticleFolderId, title, description }) => {
+> = ({
+  favoriteArticleFolderId,
+  title,
+  description,
+  handleUpdateFavoriteArticleFolder,
+}) => {
   const [open, setOpen] = useState(false);
   const handleClose = useCallback(() => {
     setOpen(false);
@@ -62,6 +76,7 @@ export const UpdateFavoriteArticleFolderDialog: FC<
           favoriteArticleFolderId={favoriteArticleFolderId}
           title={title}
           description={description}
+          handleUpdateFavoriteArticleFolder={handleUpdateFavoriteArticleFolder}
           handleClose={handleClose}
         />
       )}
@@ -73,12 +88,27 @@ type UpdateFavoriteArticleFolderDialogContentProps = {
   favoriteArticleFolderId: string;
   title: string;
   description: string;
+  handleUpdateFavoriteArticleFolder: ({
+    id,
+    title,
+    description,
+  }: {
+    id: string;
+    title: string;
+    description: string;
+  }) => Promise<void>;
   handleClose: () => void;
 };
 
 export const UpdateFavoriteArticleFolderDialogContent: FC<
   UpdateFavoriteArticleFolderDialogContentProps
-> = ({ favoriteArticleFolderId, title, description, handleClose }) => {
+> = ({
+  favoriteArticleFolderId,
+  title,
+  description,
+  handleClose,
+  handleUpdateFavoriteArticleFolder,
+}) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -94,7 +124,11 @@ export const UpdateFavoriteArticleFolderDialogContent: FC<
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     startTransition(async () => {
       const inputDescription = values.description ?? "";
-
+      await handleUpdateFavoriteArticleFolder({
+        id: favoriteArticleFolderId,
+        title: values.title,
+        description: inputDescription,
+      });
       handleClose();
     });
   };

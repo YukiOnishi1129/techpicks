@@ -13,10 +13,20 @@ import { UpdateFavoriteArticleFolderDialog } from "./Dialog/UpdateFavoriteArticl
 
 type FavoriteArticleFolderCardProps = {
   favoriteArticleFolder: FavoriteArticleFolderType;
+  handleUpdateFavoriteArticleFolder: ({
+    id,
+    title,
+    description,
+  }: {
+    id: string;
+    title: string;
+    description: string;
+  }) => Promise<void>;
 };
 
 export const FavoriteArticleFolderCard: FC<FavoriteArticleFolderCardProps> = ({
   favoriteArticleFolder,
+  handleUpdateFavoriteArticleFolder,
 }) => {
   const { successToast, failToast } = useStatusToast();
   const latestFavoriteArticle =
@@ -36,6 +46,9 @@ export const FavoriteArticleFolderCard: FC<FavoriteArticleFolderCardProps> = ({
             favoriteArticleFolderId={favoriteArticleFolder.id}
             title={favoriteArticleFolder.title}
             description={favoriteArticleFolder.description || ""}
+            handleUpdateFavoriteArticleFolder={
+              handleUpdateFavoriteArticleFolder
+            }
           />
         </div>
 
