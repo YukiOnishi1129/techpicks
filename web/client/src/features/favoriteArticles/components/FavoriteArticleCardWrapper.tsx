@@ -7,6 +7,7 @@ import { fetchFavoriteArticleFolderByIdAPI } from "@/features/favoriteArticleFol
 import { ShareLinks } from "@/components/ui/share";
 
 import { useCheckImageExist } from "@/hooks/useImage";
+import { useServerRevalidatePage } from "@/hooks/useServerRevalidatePage";
 import { useStatusToast } from "@/hooks/useStatusToast";
 
 import { FavoriteArticleType } from "@/types/favoriteArticle";
@@ -16,7 +17,6 @@ import { RemoveFavoriteArticleAlertDialog } from "./Dialog/RemoveFavoriteArticle
 import { CopyFavoriteArticleDropdownMenu } from "./DropdownMenu";
 import { FavoriteArticleCard } from "./FavoriteArticleCard";
 import { FavoriteArticleDetailSheet } from "./FavoriteArticleDetailSheet";
-import { AddFavoriteArticleTooltip } from "./Tooltip/AddFavoriteArticleTooltip";
 import {
   fetchFavoriteArticleAPI,
   fetchFavoriteArticleCountByFavoriteArticleFolderIdAndArticleIdAndArticleUrlAPI,
@@ -44,8 +44,8 @@ export const FavoriteArticleCardWrapper: FC<
   const faviconImageUrl = useCheckImageExist(
     favoriteArticle?.platformFaviconUrl || "undefined"
   );
-  const [isFollowing, setIsFollowing] = useState(true);
   const { successToast, failToast } = useStatusToast();
+  const { revalidatePage } = useServerRevalidatePage();
 
   const [showOtherFavoriteArticleFolders, setShowOtherFavoriteArticleFolders] =
     useState(otherFavoriteArticleFolders);
@@ -156,7 +156,6 @@ export const FavoriteArticleCardWrapper: FC<
       }
 
       if (targetFavoriteArticleFolderId === favoriteArticleFolderId) {
-        setIsFollowing(true);
         return createdData.id;
       }
 
@@ -239,9 +238,7 @@ export const FavoriteArticleCardWrapper: FC<
         description: "Successfully unfollowed the article",
       });
 
-      if (!favoriteArticleFolderId) {
-        setIsFollowing(false);
-      } else {
+      if (favoriteArticleFolderId) {
         setShowOtherFavoriteArticleFolders((prev) =>
           prev.map((favoriteArticleFolder) => {
             if (favoriteArticleFolder.id === favoriteArticleFolderId) {
@@ -263,6 +260,17 @@ export const FavoriteArticleCardWrapper: FC<
     },
     [successToast, failToast, user]
   );
+
+  const handleRemoveFavoriteArticleCard = useCallback(
+    async (favoriteArticleId: string) => {
+      const id = await handleRemoveFavoriteArticle(favoriteArticleId);
+      if (!id) return;
+      await revalidatePage();
+      return id;
+    },
+    [handleRemoveFavoriteArticle, revalidatePage]
+  );
+
   return (
     <div
       key={favoriteArticle.id}
@@ -301,29 +309,20 @@ export const FavoriteArticleCardWrapper: FC<
               />
             </div>
             <div>
-              {isFollowing ? (
-                <RemoveFavoriteArticleAlertDialog
-                  favoriteArticleId={favoriteArticle.id}
-                  favoriteArticleTitle={favoriteArticle.title}
-                  handleRemoveFavoriteArticle={handleRemoveFavoriteArticle}
-                />
-              ) : (
-                <AddFavoriteArticleTooltip
-                  favoriteArticleFolderId={favoriteArticleFolderId}
-                  handleCreateFavoriteArticle={handleCreateFavoriteArticle}
-                />
-              )}
+              <RemoveFavoriteArticleAlertDialog
+                favoriteArticleId={favoriteArticle.id}
+                favoriteArticleTitle={favoriteArticle.title}
+                handleRemoveFavoriteArticle={handleRemoveFavoriteArticleCard}
+              />
             </div>
           </div>
         </div>
 
         <FavoriteArticleDetailSheet
-          favoriteArticleFolderId={favoriteArticleFolderId}
           favoriteArticle={favoriteArticle}
-          isFollowing={isFollowing}
           otherFavoriteArticleFolders={showOtherFavoriteArticleFolders}
           handleCreateFavoriteArticle={handleCreateFavoriteArticle}
-          handleRemoveFavoriteArticle={handleRemoveFavoriteArticle}
+          handleRemoveFavoriteArticle={handleRemoveFavoriteArticleCard}
           handleCreateFavoriteArticleFolder={handleCreateFavoriteArticleFolder}
         >
           <FavoriteArticleCard favoriteArticle={favoriteArticle} />

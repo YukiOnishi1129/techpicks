@@ -23,12 +23,9 @@ import { FavoriteArticleFolderType } from "@/types/favoriteArticleFolder";
 
 import { RemoveFavoriteArticleAlertDialog } from "./Dialog/RemoveFavoriteArticleAlertDialog";
 import { CopyFavoriteArticleDropdownMenu } from "./DropdownMenu";
-import { AddFavoriteArticleTooltip } from "./Tooltip/AddFavoriteArticleTooltip";
 
 type FavoriteArticleDetailSheetProps = {
-  favoriteArticleFolderId: string;
   favoriteArticle: FavoriteArticleType;
-  isFollowing: boolean;
   otherFavoriteArticleFolders: Array<FavoriteArticleFolderType>;
   handleCreateFavoriteArticle: (
     targetFavoriteArticleFolderId: string,
@@ -47,9 +44,7 @@ type FavoriteArticleDetailSheetProps = {
 export const FavoriteArticleDetailSheet: FC<
   FavoriteArticleDetailSheetProps
 > = ({
-  favoriteArticleFolderId,
   favoriteArticle,
-  isFollowing,
   otherFavoriteArticleFolders,
   handleCreateFavoriteArticle,
   handleRemoveFavoriteArticle,
@@ -77,9 +72,7 @@ export const FavoriteArticleDetailSheet: FC<
       <SheetContent className="w-[360px] sm:w-[700px] sm:max-w-[700px]">
         {open && (
           <FavoriteArticleContent
-            favoriteArticleFolderId={favoriteArticleFolderId}
             favoriteArticle={favoriteArticle}
-            isFollowing={isFollowing}
             otherFavoriteArticleFolders={otherFavoriteArticleFolders}
             handleCreateFavoriteArticle={handleCreateFavoriteArticle}
             handleRemoveFavoriteArticle={handleRemoveFavoriteArticle}
@@ -94,9 +87,7 @@ export const FavoriteArticleDetailSheet: FC<
 };
 
 type FavoriteArticleContentProps = {
-  favoriteArticleFolderId: string;
   favoriteArticle: FavoriteArticleType;
-  isFollowing: boolean;
   otherFavoriteArticleFolders: Array<FavoriteArticleFolderType>;
   handleCreateFavoriteArticle: (
     targetFavoriteArticleFolderId: string,
@@ -112,9 +103,7 @@ type FavoriteArticleContentProps = {
 };
 
 const FavoriteArticleContent: FC<FavoriteArticleContentProps> = ({
-  favoriteArticleFolderId,
   favoriteArticle,
-  isFollowing,
   otherFavoriteArticleFolders,
   handleCreateFavoriteArticle,
   handleRemoveFavoriteArticle,
@@ -176,18 +165,11 @@ const FavoriteArticleContent: FC<FavoriteArticleContentProps> = ({
               />
             </div>
             <div>
-              {isFollowing ? (
-                <RemoveFavoriteArticleAlertDialog
-                  favoriteArticleId={favoriteArticle.id}
-                  favoriteArticleTitle={favoriteArticle.title}
-                  handleRemoveFavoriteArticle={handleRemoveFavoriteArticle}
-                />
-              ) : (
-                <AddFavoriteArticleTooltip
-                  favoriteArticleFolderId={favoriteArticleFolderId}
-                  handleCreateFavoriteArticle={handleCreateFavoriteArticle}
-                />
-              )}
+              <RemoveFavoriteArticleAlertDialog
+                favoriteArticleId={favoriteArticle.id}
+                favoriteArticleTitle={favoriteArticle.title}
+                handleRemoveFavoriteArticle={handleRemoveFavoriteArticle}
+              />
             </div>
           </div>
         </div>
