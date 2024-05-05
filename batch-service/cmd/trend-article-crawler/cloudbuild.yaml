@@ -3,7 +3,7 @@ steps:
     args:
       - build
       - '-t'
-      - '$_GCR_HOSTNAME/$PROJECT_ID/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA'
+      - 'asia-northeast1-docker.pkg.dev/${PROJECT_ID}/trend-article-crawler'
       - '-f'
       - 'Dockerfile/Dockerfile.trend-article-crawler'
       - '.'
@@ -11,7 +11,7 @@ steps:
   - name: 'gcr.io/cloud-builders/docker'
     args:
       - 'push'
-      - '$_GCR_HOSTNAME/$PROJECT_ID/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA'
+      - 'asia-northeast1-docker.pkg.dev/${PROJECT_ID}/trend-article-crawler'
     id: 'Push'
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:slim'
     args:
@@ -19,7 +19,7 @@ steps:
       - 'jobs'
       - 'update'
       - '$_SERVICE_NAME'
-      - '--image=$_GCR_HOSTNAME/$PROJECT_ID/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA'
+      - '--image=asia-northeast1-docker.pkg.dev/${PROJECT_ID}/trend-article-crawler'
       - >-
         --labels=managed-by=gcp-cloud-build-deploy-cloud-run,commit-sha=$COMMIT_SHA,gcb-build-id=$BUILD_ID,gcb-trigger-id=$_TRIGGER_ID,$_LABELS
       - '--region=$_DEPLOY_REGION'
