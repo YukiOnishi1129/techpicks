@@ -104,7 +104,7 @@ export const ArticleSearchForm: FC<ArticleSearchFormProps> = ({
     <div className="w-auto">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-          <div className="h-[500px] overflow-y-scroll border-2  p-4 md:h-[450px]">
+          <div className="h-[400px] overflow-y-scroll border-2  p-4 md:h-[450px]">
             <FormField
               control={form.control}
               name="keyword"
