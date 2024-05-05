@@ -20,7 +20,7 @@ export const MyFeedFolderListTemplate: FC<
   const feeds = resFeeds.data.feeds;
   return (
     <div className="w-auto">
-      <h1 className="mb-4 mt-8 text-2xl font-bold">Personal Feed Folder</h1>
+      <h1 className="mb-4 mt-8 text-2xl font-bold">My Feed Folders</h1>
       <div>
         <CreateMyFeedFolderDialog />
       </div>
