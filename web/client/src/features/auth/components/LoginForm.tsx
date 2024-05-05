@@ -2,8 +2,8 @@
 
 import GoogleButton from "react-google-button";
 
-import { googleLogin } from "../actions/auth";
+import { loginWithGoogle } from "../actions/auth";
 
 export const LoginForm = async () => {
-  return <GoogleButton type="light" onClick={() => googleLogin()} />;
+  return <GoogleButton type="light" onClick={() => loginWithGoogle()} />;
 };
