@@ -9,16 +9,44 @@ const LIMIT = 20;
 export type GetFeedParams = {
   userId?: string;
   offset?: number;
+  keyword?: string;
 };
 
-export const getFeed = async ({ userId, offset = 1 }: GetFeedParams) => {
+export const getFeed = async ({
+  userId,
+  offset = 1,
+  keyword,
+}: GetFeedParams) => {
+  let where = {};
+  if (keyword) {
+    where = {
+      AND: [
+        {
+          OR: [
+            {
+              name: {
+                contains: keyword,
+              },
+            },
+            {
+              description: {
+                contains: keyword,
+              },
+            },
+          ],
+        },
+      ],
+    };
+  }
+  where = {
+    ...where,
+    deletedAt: null,
+  };
   try {
     const res = await prisma.feed.findMany({
       take: 20,
       skip: (offset - 1) * LIMIT,
-      where: {
-        deletedAt: null,
-      },
+      where,
       orderBy: [
         {
           platform: {

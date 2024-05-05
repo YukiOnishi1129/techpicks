@@ -1,19 +1,30 @@
+import { FC } from "react";
+
 import { fetchMyFeedFoldersAPI } from "@/features/myFeedFolders/actions/myFeedFolder";
+import { FeedKeywordSearchInput } from "@/features/search/components/feeds/FeedKeywordSearchInput";
 
 import { FeedList } from "./FeedList";
 import { fetchFeedsAPI } from "../actions/feed";
 
-export const FeedTemplate = async () => {
-  const res = await fetchFeedsAPI({});
+type FeedTemplateProps = {
+  keyword?: string;
+};
+
+export const FeedTemplate: FC<FeedTemplateProps> = async ({ keyword }) => {
+  const res = await fetchFeedsAPI({ keyword: keyword });
   const resMyFeedList = await fetchMyFeedFoldersAPI();
   return (
     <div className="w-auto">
       <h1 className="hidden text-2xl font-bold md:mb-4 md:mt-8 md:block">
         Feed List
       </h1>
+      <div className="mt-4 md:mt-0">
+        <FeedKeywordSearchInput />
+      </div>
 
       <div className="mt-4 md:mt-0">
         <FeedList
+          keyword={keyword}
           initialFeeds={res.data.feeds}
           myFeedFolders={resMyFeedList.data.myFeedFolders}
           fetchFeedsAPI={fetchFeedsAPI}

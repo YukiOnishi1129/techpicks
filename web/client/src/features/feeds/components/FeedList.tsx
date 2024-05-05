@@ -11,16 +11,20 @@ import { FeedCardWrapper } from "./FeedCardWrapper";
 import { FetchFeedsAPIResponse } from "../actions/feed";
 
 type FeedListProps = {
+  keyword?: string;
   initialFeeds: Array<FeedType>;
   myFeedFolders: Array<MyFeedFolderType>;
   fetchFeedsAPI: ({
+    keyword,
     offset,
   }: {
     offset?: string;
+    keyword?: string;
   }) => Promise<FetchFeedsAPIResponse>;
 };
 
 export function FeedList({
+  keyword,
   initialFeeds,
   myFeedFolders,
   fetchFeedsAPI,
@@ -35,7 +39,10 @@ export function FeedList({
 
   const loadMore = useCallback(
     async (offset: number) => {
-      const res = await fetchFeedsAPI({ offset: offset.toString() });
+      const res = await fetchFeedsAPI({
+        offset: offset.toString(),
+        keyword: keyword,
+      });
       setFeeds((prev) => [...prev, ...res.data.feeds]);
 
       const count = res.data.feeds.length;

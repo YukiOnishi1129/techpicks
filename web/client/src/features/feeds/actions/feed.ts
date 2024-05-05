@@ -14,10 +14,15 @@ export type FetchFeedsAPIResponse = {
 
 export const fetchFeedsAPI = async ({
   offset = "1",
+  keyword,
 }: {
   offset?: string;
+  keyword?: string;
 }): Promise<FetchFeedsAPIResponse> => {
-  const url = `${process.env.WEB_DOMAIN}/api/feeds?offset=${offset}`;
+  let url = `${process.env.WEB_DOMAIN}/api/feeds?offset=${offset}`;
+  if (keyword) {
+    url += `&keyword=${keyword}`;
+  }
   const response = await getFetch({
     url,
     tagName: "feeds",
