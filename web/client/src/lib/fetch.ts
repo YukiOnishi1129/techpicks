@@ -14,7 +14,7 @@ export const getFetch = async ({
   cacheType = "no-store",
 }: GetFetchArgs) => {
   return fetch(url, {
-    headers: headers(),
+    headers: new Headers(headers()),
     next: { tags: [tagName] },
     cache: cacheType,
   });
@@ -28,10 +28,7 @@ type PostFetchArgs = {
 export const postFetch = async ({ url, body }: PostFetchArgs) => {
   return fetch(url, {
     method: "POST",
-    headers: {
-      "content-type": "application/json",
-      ...headers(),
-    },
+    headers: new Headers(headers()),
     body: JSON.stringify(body),
   });
 };
@@ -49,7 +46,7 @@ export const deleteFetch = async ({
 }: DeleteFetchArg) => {
   return fetch(url, {
     method: "DELETE",
-    headers: headers(),
+    headers: new Headers(headers()),
     next: { tags: [tagName] },
     cache: cacheType,
   });
