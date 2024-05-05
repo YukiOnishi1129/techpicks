@@ -83,7 +83,7 @@ export function Sidebar({ user }: SidebarProps) {
             </div>
           </>
         )}
-        <div className="md:hidden mt-8 ml-4 px-4 py-2">
+        <div className="ml-4 mt-8 px-4 py-2 md:hidden">
           <LogoutLink />
         </div>
       </div>

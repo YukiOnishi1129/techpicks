@@ -1,8 +1,8 @@
 "use client";
 import Link from "next/link";
 import { BiSolidSearch } from "react-icons/bi";
+import { CiLogin } from "react-icons/ci";
 import { IoHomeSharp } from "react-icons/io5";
-import { IoIosLogIn } from "react-icons/io";
 
 export const NotLoggedBottomNavigationMenu = () => {
   return (
@@ -26,7 +26,7 @@ export const NotLoggedBottomNavigationMenu = () => {
           href="/login"
           className="flex flex-col items-center justify-center"
         >
-          <IoIosLogIn className="mt-2" size={36} />
+          <CiLogin className="mt-2" size={36} />
         </Link>
       </div>
     </div>
