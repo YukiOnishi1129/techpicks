@@ -76,7 +76,7 @@ export const FeedDetailHeader: FC<FeedDetailHeaderProps> = ({
               name: showFeed.platform.name,
               siteUrl: showFeed.platform.siteUrl,
               faviconUrl: showFeed.platform.faviconUrl,
-              platformType: showFeed.platform.platformType,
+              platformSiteType: showFeed.platform.platformSiteType,
               isEng: showFeed.platform.isEng,
             },
             myFeedId: myFeedId,

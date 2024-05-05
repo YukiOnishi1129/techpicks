@@ -27,7 +27,7 @@ func (u *Usecase) BatchCrawlSiteAndSummaryArticleContents(ctx context.Context) e
 		qm.Where("feeds.deleted_at IS NULL"),
 		qm.And("feeds.trend_platform_type = ?", 0),
 		qm.InnerJoin("platforms on feeds.platform_id = platforms.id"),
-		qm.WhereIn("platforms.platform_type IN ?", platformTypes...),
+		qm.WhereIn("platforms.platform_site_type IN ?", platformTypes...),
 		qm.OrderBy("feeds.created_at asc"),
 		qm.Load("Platform"),
 	).All(ctx, u.db)

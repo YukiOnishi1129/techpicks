@@ -1,17 +1,17 @@
 "use server";
 
-import { Platform } from "@prisma/client";
+import { PlatformType } from "@/types/platform";
 
 export const fetchPlatformAPI = async ({
   languageStatus = "0",
-  platformType,
+  platformSiteType,
 }: {
   languageStatus?: string;
-  platformType?: string;
+  platformSiteType?: string;
 }) => {
   let url = `${process.env.WEB_DOMAIN}/api/platforms/?languageStatus=${languageStatus}`;
-  if (platformType) {
-    url += `&platformType=${platformType}`;
+  if (platformSiteType) {
+    url += `&platformSiteType=${platformSiteType}`;
   }
 
   const response = await fetch(url, {
@@ -23,5 +23,5 @@ export const fetchPlatformAPI = async ({
   });
   const data = await response.json();
 
-  return data.platforms as Platform[];
+  return data.platforms as PlatformType[];
 };

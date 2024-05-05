@@ -233,7 +233,7 @@ model Platform {
   id           String  @id @default(uuid())
   name         String
   siteUrl      String @map("site_url")
-  platformType Int @map("platform_type")
+  platformSiteType Int @map("platform_site_type")
   faviconUrl   String @map("favicon_url")
   isEng        Boolean @default(false) @map("is_eng")
   createdAt    DateTime @default(now()) @map("created_at")

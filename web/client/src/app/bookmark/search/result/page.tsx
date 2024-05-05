@@ -4,7 +4,7 @@ import { BookmarkSearchResultTemplate } from "@/features/search/components/bookm
 import { getUser } from "@/features/users/actions/user";
 
 import { LanguageStatus } from "@/types/language";
-import { PlatformType } from "@/types/platform";
+import { PlatformSiteType } from "@/types/platform";
 
 type PageProps = {
   params: { slug: string };
@@ -28,9 +28,9 @@ export default async function BookmarkSearchResultPage({
       ? searchParams["keyword"]
       : undefined;
 
-  const platformType =
-    typeof searchParams["platformType"] === "string"
-      ? (parseInt(searchParams["platformType"]) as PlatformType)
+  const platformSiteType =
+    typeof searchParams["platformSiteType"] === "string"
+      ? (parseInt(searchParams["platformSiteType"]) as PlatformSiteType)
       : undefined;
 
   let platformIdList: Array<string> = [];
@@ -48,7 +48,7 @@ export default async function BookmarkSearchResultPage({
       user={user}
       languageStatus={languageStatus}
       keyword={keyword}
-      platformType={platformType}
+      platformSiteType={platformSiteType}
       platformIdList={platformIdList}
     />
   );

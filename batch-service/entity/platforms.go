@@ -24,86 +24,86 @@ import (
 
 // Platform is an object representing the database table.
 type Platform struct {
-	ID           string    `boil:"id" json:"id" toml:"id" yaml:"id"`
-	Name         string    `boil:"name" json:"name" toml:"name" yaml:"name"`
-	SiteURL      string    `boil:"site_url" json:"site_url" toml:"site_url" yaml:"site_url"`
-	PlatformType int       `boil:"platform_type" json:"platform_type" toml:"platform_type" yaml:"platform_type"`
-	FaviconURL   string    `boil:"favicon_url" json:"favicon_url" toml:"favicon_url" yaml:"favicon_url"`
-	IsEng        bool      `boil:"is_eng" json:"is_eng" toml:"is_eng" yaml:"is_eng"`
-	CreatedAt    time.Time `boil:"created_at" json:"created_at" toml:"created_at" yaml:"created_at"`
-	UpdatedAt    time.Time `boil:"updated_at" json:"updated_at" toml:"updated_at" yaml:"updated_at"`
-	DeletedAt    null.Time `boil:"deleted_at" json:"deleted_at,omitempty" toml:"deleted_at" yaml:"deleted_at,omitempty"`
+	ID               string    `boil:"id" json:"id" toml:"id" yaml:"id"`
+	Name             string    `boil:"name" json:"name" toml:"name" yaml:"name"`
+	SiteURL          string    `boil:"site_url" json:"site_url" toml:"site_url" yaml:"site_url"`
+	PlatformSiteType int       `boil:"platform_site_type" json:"platform_site_type" toml:"platform_site_type" yaml:"platform_site_type"`
+	FaviconURL       string    `boil:"favicon_url" json:"favicon_url" toml:"favicon_url" yaml:"favicon_url"`
+	IsEng            bool      `boil:"is_eng" json:"is_eng" toml:"is_eng" yaml:"is_eng"`
+	CreatedAt        time.Time `boil:"created_at" json:"created_at" toml:"created_at" yaml:"created_at"`
+	UpdatedAt        time.Time `boil:"updated_at" json:"updated_at" toml:"updated_at" yaml:"updated_at"`
+	DeletedAt        null.Time `boil:"deleted_at" json:"deleted_at,omitempty" toml:"deleted_at" yaml:"deleted_at,omitempty"`
 
 	R *platformR `boil:"-" json:"-" toml:"-" yaml:"-"`
 	L platformL  `boil:"-" json:"-" toml:"-" yaml:"-"`
 }
 
 var PlatformColumns = struct {
-	ID           string
-	Name         string
-	SiteURL      string
-	PlatformType string
-	FaviconURL   string
-	IsEng        string
-	CreatedAt    string
-	UpdatedAt    string
-	DeletedAt    string
+	ID               string
+	Name             string
+	SiteURL          string
+	PlatformSiteType string
+	FaviconURL       string
+	IsEng            string
+	CreatedAt        string
+	UpdatedAt        string
+	DeletedAt        string
 }{
-	ID:           "id",
-	Name:         "name",
-	SiteURL:      "site_url",
-	PlatformType: "platform_type",
-	FaviconURL:   "favicon_url",
-	IsEng:        "is_eng",
-	CreatedAt:    "created_at",
-	UpdatedAt:    "updated_at",
-	DeletedAt:    "deleted_at",
+	ID:               "id",
+	Name:             "name",
+	SiteURL:          "site_url",
+	PlatformSiteType: "platform_site_type",
+	FaviconURL:       "favicon_url",
+	IsEng:            "is_eng",
+	CreatedAt:        "created_at",
+	UpdatedAt:        "updated_at",
+	DeletedAt:        "deleted_at",
 }
 
 var PlatformTableColumns = struct {
-	ID           string
-	Name         string
-	SiteURL      string
-	PlatformType string
-	FaviconURL   string
-	IsEng        string
-	CreatedAt    string
-	UpdatedAt    string
-	DeletedAt    string
+	ID               string
+	Name             string
+	SiteURL          string
+	PlatformSiteType string
+	FaviconURL       string
+	IsEng            string
+	CreatedAt        string
+	UpdatedAt        string
+	DeletedAt        string
 }{
-	ID:           "platforms.id",
-	Name:         "platforms.name",
-	SiteURL:      "platforms.site_url",
-	PlatformType: "platforms.platform_type",
-	FaviconURL:   "platforms.favicon_url",
-	IsEng:        "platforms.is_eng",
-	CreatedAt:    "platforms.created_at",
-	UpdatedAt:    "platforms.updated_at",
-	DeletedAt:    "platforms.deleted_at",
+	ID:               "platforms.id",
+	Name:             "platforms.name",
+	SiteURL:          "platforms.site_url",
+	PlatformSiteType: "platforms.platform_site_type",
+	FaviconURL:       "platforms.favicon_url",
+	IsEng:            "platforms.is_eng",
+	CreatedAt:        "platforms.created_at",
+	UpdatedAt:        "platforms.updated_at",
+	DeletedAt:        "platforms.deleted_at",
 }
 
 // Generated where
 
 var PlatformWhere = struct {
-	ID           whereHelperstring
-	Name         whereHelperstring
-	SiteURL      whereHelperstring
-	PlatformType whereHelperint
-	FaviconURL   whereHelperstring
-	IsEng        whereHelperbool
-	CreatedAt    whereHelpertime_Time
-	UpdatedAt    whereHelpertime_Time
-	DeletedAt    whereHelpernull_Time
+	ID               whereHelperstring
+	Name             whereHelperstring
+	SiteURL          whereHelperstring
+	PlatformSiteType whereHelperint
+	FaviconURL       whereHelperstring
+	IsEng            whereHelperbool
+	CreatedAt        whereHelpertime_Time
+	UpdatedAt        whereHelpertime_Time
+	DeletedAt        whereHelpernull_Time
 }{
-	ID:           whereHelperstring{field: "\"platforms\".\"id\""},
-	Name:         whereHelperstring{field: "\"platforms\".\"name\""},
-	SiteURL:      whereHelperstring{field: "\"platforms\".\"site_url\""},
-	PlatformType: whereHelperint{field: "\"platforms\".\"platform_type\""},
-	FaviconURL:   whereHelperstring{field: "\"platforms\".\"favicon_url\""},
-	IsEng:        whereHelperbool{field: "\"platforms\".\"is_eng\""},
-	CreatedAt:    whereHelpertime_Time{field: "\"platforms\".\"created_at\""},
-	UpdatedAt:    whereHelpertime_Time{field: "\"platforms\".\"updated_at\""},
-	DeletedAt:    whereHelpernull_Time{field: "\"platforms\".\"deleted_at\""},
+	ID:               whereHelperstring{field: "\"platforms\".\"id\""},
+	Name:             whereHelperstring{field: "\"platforms\".\"name\""},
+	SiteURL:          whereHelperstring{field: "\"platforms\".\"site_url\""},
+	PlatformSiteType: whereHelperint{field: "\"platforms\".\"platform_site_type\""},
+	FaviconURL:       whereHelperstring{field: "\"platforms\".\"favicon_url\""},
+	IsEng:            whereHelperbool{field: "\"platforms\".\"is_eng\""},
+	CreatedAt:        whereHelpertime_Time{field: "\"platforms\".\"created_at\""},
+	UpdatedAt:        whereHelpertime_Time{field: "\"platforms\".\"updated_at\""},
+	DeletedAt:        whereHelpernull_Time{field: "\"platforms\".\"deleted_at\""},
 }
 
 // PlatformRels is where relationship names are stored.
@@ -174,8 +174,8 @@ func (r *platformR) GetTrendArticles() TrendArticleSlice {
 type platformL struct{}
 
 var (
-	platformAllColumns            = []string{"id", "name", "site_url", "platform_type", "favicon_url", "is_eng", "created_at", "updated_at", "deleted_at"}
-	platformColumnsWithoutDefault = []string{"name", "site_url", "platform_type", "favicon_url"}
+	platformAllColumns            = []string{"id", "name", "site_url", "platform_site_type", "favicon_url", "is_eng", "created_at", "updated_at", "deleted_at"}
+	platformColumnsWithoutDefault = []string{"name", "site_url", "platform_site_type", "favicon_url"}
 	platformColumnsWithDefault    = []string{"id", "is_eng", "created_at", "updated_at", "deleted_at"}
 	platformPrimaryKeyColumns     = []string{"id"}
 	platformGeneratedColumns      = []string{}

@@ -1,15 +1,8 @@
-export type Platform = {
-  id: string;
-  name: string;
-  siteUrl: string;
-  faviconUrl: string;
-  platformType: number;
-  isEng: boolean;
-  createdAt: Date;
-  updatedAt: Date;
-};
+import { Platform as PrismaPlatform } from "@prisma/client";
 
-export type PlatformType =
+export type PlatformType = Omit<PrismaPlatform, "deletedAt">;
+
+export type PlatformSiteType =
   | PlatformTypeUnknown
   | PlatformTypeSite
   | PlatformTypeCompany

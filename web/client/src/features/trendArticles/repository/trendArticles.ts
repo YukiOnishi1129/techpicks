@@ -183,7 +183,7 @@ export const getTrendArticles = async ({
             name: trendArticle.platform.name,
             siteUrl: trendArticle.platform.siteUrl,
             faviconUrl: trendArticle.platform.faviconUrl,
-            platformType: trendArticle.platform.platformType,
+            platformSiteType: trendArticle.platform.platformSiteType,
             isEng: trendArticle.platform.isEng,
           },
           feeds: trendArticle.article.feedArticleRelatoins.map(

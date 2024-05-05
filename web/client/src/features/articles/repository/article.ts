@@ -98,7 +98,7 @@ export const getArticles = async ({
       where = {
         ...where,
         platform: {
-          platformType: 1,
+          platformSiteType: 1,
         },
       };
       if (languageStatus !== 0) {
@@ -106,7 +106,7 @@ export const getArticles = async ({
           ...where,
           isEng: languageStatus === 2,
           platform: {
-            platformType: 1,
+            platformSiteType: 1,
           },
         };
       }
@@ -115,7 +115,7 @@ export const getArticles = async ({
       where = {
         ...where,
         platform: {
-          platformType: 2,
+          platformSiteType: 2,
         },
       };
       if (languageStatus !== 0) {
@@ -123,7 +123,7 @@ export const getArticles = async ({
           ...where,
           isEng: languageStatus === 2,
           platform: {
-            platformType: 2,
+            platformSiteType: 2,
           },
         };
       }
@@ -132,7 +132,7 @@ export const getArticles = async ({
       where = {
         ...where,
         platform: {
-          platformType: 3,
+          platformSiteType: 3,
         },
       };
       if (languageStatus !== 0) {
@@ -140,7 +140,7 @@ export const getArticles = async ({
           ...where,
           isEng: languageStatus === 2,
           platform: {
-            platformType: 3,
+            platformSiteType: 3,
           },
         };
       }
@@ -208,7 +208,7 @@ export const getArticles = async ({
             name: true,
             siteUrl: true,
             faviconUrl: true,
-            platformType: true,
+            platformSiteType: true,
             isEng: true,
           },
         },
@@ -268,7 +268,7 @@ export const getArticles = async ({
         resArticle.platform = {
           id: article.platform.id,
           name: article.platform.name,
-          platformType: article.platform.platformType,
+          platformSiteType: article.platform.platformSiteType,
           siteUrl: article.platform.siteUrl,
           faviconUrl: article.platform.faviconUrl,
           isEng: article.platform.isEng,
@@ -396,7 +396,7 @@ export const getArticlesByFeedIds = async ({
                 name: true,
                 siteUrl: true,
                 faviconUrl: true,
-                platformType: true,
+                platformSiteType: true,
                 isEng: true,
               },
             },
@@ -477,7 +477,7 @@ export const getArticlesByFeedIds = async ({
           name: article.platform.name,
           siteUrl: article.platform.siteUrl,
           faviconUrl: article.platform.faviconUrl,
-          platformType: article.platform.platformType,
+          platformSiteType: article.platform.platformSiteType,
           isEng: article.platform.isEng,
         };
       }
@@ -569,7 +569,7 @@ export const getArticleById = async ({ id, userId }: GetArticleByIdParam) => {
             name: true,
             siteUrl: true,
             faviconUrl: true,
-            platformType: true,
+            platformSiteType: true,
             isEng: true,
           },
         },
@@ -631,7 +631,7 @@ export const getArticleById = async ({ id, userId }: GetArticleByIdParam) => {
       resArticle.platform = {
         id: article.platform.id,
         name: article.platform.name,
-        platformType: article.platform.platformType,
+        platformSiteType: article.platform.platformSiteType,
         siteUrl: article.platform.siteUrl,
         faviconUrl: article.platform.faviconUrl,
         isEng: article.platform.isEng,
@@ -742,7 +742,7 @@ export const getArticleByArticleAndPlatformUrl = async ({
             name: true,
             siteUrl: true,
             faviconUrl: true,
-            platformType: true,
+            platformSiteType: true,
             isEng: true,
           },
         },
@@ -804,7 +804,7 @@ export const getArticleByArticleAndPlatformUrl = async ({
       resArticle.platform = {
         id: article.platform.id,
         name: article.platform.name,
-        platformType: article.platform.platformType,
+        platformSiteType: article.platform.platformSiteType,
         siteUrl: article.platform.siteUrl,
         faviconUrl: article.platform.faviconUrl,
         isEng: article.platform.isEng,

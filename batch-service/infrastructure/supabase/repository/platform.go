@@ -3,6 +3,7 @@ package repository
 import (
 	"context"
 	"database/sql"
+
 	"github.com/YukiOnishi1129/techpicks/batch-service/domain"
 	"github.com/YukiOnishi1129/techpicks/batch-service/entity"
 	"github.com/volatiletech/sqlboiler/v4/queries/qm"
@@ -47,13 +48,13 @@ func (pr *PlatformRepository) GetPlatForm(ctx context.Context, id string) (domai
 
 func convertDBtoPlatformDomain(p *entity.Platform) domain.Platform {
 	platform := domain.Platform{
-		ID:           p.ID,
-		Name:         p.Name,
-		SiteURL:      p.SiteURL,
-		PlatformType: domain.PlatformType(p.PlatformType),
-		IsEng:        p.IsEng,
-		CreatedAt:    p.CreatedAt,
-		UpdatedAt:    p.UpdatedAt,
+		ID:               p.ID,
+		Name:             p.Name,
+		SiteURL:          p.SiteURL,
+		PlatformSiteType: domain.PlatformSiteType(p.PlatformSiteType),
+		IsEng:            p.IsEng,
+		CreatedAt:        p.CreatedAt,
+		UpdatedAt:        p.UpdatedAt,
 	}
 
 	if p.DeletedAt.Valid {

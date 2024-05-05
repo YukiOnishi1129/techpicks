@@ -9,7 +9,7 @@ import { fetchPlatformAPI } from "@/features/platforms/actions/platform";
 import { BreadCrumbType, PageBreadcrumb } from "@/components/ui/breadcrumb";
 
 import { LanguageStatus } from "@/types/language";
-import { PlatformType } from "@/types/platform";
+import { PlatformSiteType } from "@/types/platform";
 
 import { BookmarkSearchDialog } from "./Dialog";
 
@@ -17,22 +17,28 @@ export type BookmarkSearchResultTemplateProps = {
   user: User;
   languageStatus: LanguageStatus;
   keyword?: string;
-  platformType?: PlatformType;
+  platformSiteType?: PlatformSiteType;
   platformIdList: Array<string>;
 };
 
 export const BookmarkSearchResultTemplate: FC<
   BookmarkSearchResultTemplateProps
-> = async ({ user, languageStatus, keyword, platformType, platformIdList }) => {
+> = async ({
+  user,
+  languageStatus,
+  keyword,
+  platformSiteType,
+  platformIdList,
+}) => {
   const res = await fetchBookmarkListAPI({
     languageStatus: languageStatus.toString(),
     keyword,
-    platformType: String(platformType),
+    platformSiteType: String(platformSiteType),
     platformIdList,
   });
   const platforms = await fetchPlatformAPI({
     languageStatus: languageStatus.toString(),
-    platformType: String(platformType),
+    platformSiteType: String(platformSiteType),
   });
   const resFavoriteArticleFolders = await fetchFavoriteArticleFoldersAPI({});
 
@@ -41,8 +47,8 @@ export const BookmarkSearchResultTemplate: FC<
     keywordPath = `&keyword=${keyword}`;
   }
   let platformTypePath = "";
-  if (String(platformType)) {
-    platformTypePath = `&platformType=${String(platformType)}`;
+  if (String(platformSiteType)) {
+    platformTypePath = `&platformSiteType=${String(platformSiteType)}`;
   }
   let platformIdPath = "";
   if (platformIdList.length) {
@@ -73,7 +79,7 @@ export const BookmarkSearchResultTemplate: FC<
             platforms={platforms}
             languageStatus={languageStatus}
             keyword={keyword}
-            platformType={platformType}
+            platformSiteType={platformSiteType}
             platformIdList={platformIdList}
           />
         </div>
