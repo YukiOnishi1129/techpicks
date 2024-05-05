@@ -2,6 +2,7 @@ import { FC } from "react";
 
 import { fetchArticlesByFeedIdsAPI } from "@/features/articles/actions/article";
 import { fetchFavoriteArticleFoldersAPI } from "@/features/favoriteArticleFolders/actions/favoriteArticleFolders";
+import { fetchMyFeedFoldersAPI } from "@/features/myFeedFolders/actions/myFeedFolder";
 import { MyFeedFolderArticleList } from "@/features/myFeedFolders/components/MyFeedFolderArtcleList";
 import { getUser } from "@/features/users/actions/user";
 
@@ -26,6 +27,7 @@ export const FeedDetailTemplate: FC<FeedDetailPageProps> = async ({
     keyword: keyword,
   });
   const resFeed = await fetchFeedByIdAPI(id);
+  const resMyFeedList = await fetchMyFeedFoldersAPI();
   const resFavoriteArticleFolders = await fetchFavoriteArticleFoldersAPI({});
 
   const title = resFeed.data.feed?.name;
@@ -49,11 +51,12 @@ export const FeedDetailTemplate: FC<FeedDetailPageProps> = async ({
     <div className="mb-2 mt-4">
       <PageBreadcrumb breadcrumbs={breadcrumbs} />
       <div className="my-2">
-        <FeedDetailHeader
-          title={title || ""}
-          description={resFeed.data.feed?.description}
-          imageUrl={resFeed.data.feed?.thumbnailUrl}
-        />
+        {resFeed.data.feed && (
+          <FeedDetailHeader
+            feed={resFeed.data.feed}
+            myFeedFolders={resMyFeedList.data.myFeedFolders}
+          />
+        )}
       </div>
       <div className="mt-4">
         <MyFeedFolderArticleList

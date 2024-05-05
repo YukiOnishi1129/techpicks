@@ -6,7 +6,7 @@ CREATE TABLE bookmarks
     id uuid NOT NULL DEFAULT uuid_generate_v4(),
     user_id uuid NOT NULL,
     platform_id uuid NULL,
-    article_id uuid NULL,
+    article_id uuid NOT NULL,
     title VARCHAR(255) NOT NULL,
     description TEXT NOT NULL,
     article_url TEXT NOT NULL,

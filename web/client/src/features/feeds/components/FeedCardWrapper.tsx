@@ -3,7 +3,10 @@
 import { FC, useCallback, useState } from "react";
 
 import { fetchMyFeedFolderByIdAPI } from "@/features/myFeedFolders/actions/myFeedFolder";
-import { fetchMyFeedCountByMyFeedFolderIdAndFeedIdAPI } from "@/features/myFeeds/actions/myFeed";
+import {
+  fetchMyFeedById,
+  fetchMyFeedCountByMyFeedFolderIdAndFeedIdAPI,
+} from "@/features/myFeeds/actions/myFeed";
 import {
   createMyFeed,
   deleteMyFeed,
@@ -190,7 +193,16 @@ export const FeedCardWrapper: FC<FeedCardWrapperProps> = ({
 
   const handleRemoveMyFeed = useCallback(
     async (myFeedId: string, myFeedFolderId: string) => {
-      // TODO: check count myFeed by myFeedId
+      // check count myFeed by myFeedId
+      const targetId = await fetchMyFeedById({
+        id: myFeedId,
+      });
+      if (!targetId) {
+        failToast({
+          description: "Failed to unfollow the feed",
+        });
+        return;
+      }
       const user = await getUser();
       if (!user) {
         failToast({

@@ -17,9 +17,6 @@ export const FavoriteArticleCard: FC<FavoriteArticleCardProps> = ({
   const imageUrl = useCheckImageExist(
     favoriteArticle?.thumbnailURL || undefined
   );
-  //   const faviconUrl = useCheckImageExist(
-  //     favoriteArticle?.platformFaviconUrl || undefined
-  //   );
 
   return (
     <div className="relative w-full cursor-pointer rounded">
@@ -28,10 +25,10 @@ export const FavoriteArticleCard: FC<FavoriteArticleCardProps> = ({
           <h3 className="mb-4 line-clamp-3 block text-left text-lg font-bold tracking-wide md:hidden md:w-full md:text-xl">
             {favoriteArticle.title}
           </h3>
-          <div className="w-full  md:h-36 md:w-48">
+          <div className="flex w-full justify-center md:h-36 md:w-48">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              className="h-full rounded-lg border-2 object-cover object-center shadow-md"
+              className="h-full rounded-lg border-2 object-cover object-center shadow-md md:h-full"
               src={imageUrl}
               alt=""
             />
@@ -46,16 +43,6 @@ export const FavoriteArticleCard: FC<FavoriteArticleCardProps> = ({
           <p className="flex pt-2 text-sm">
             {`register: ${showDiffDateToCurrentDate(favoriteArticle.createdAt)}`}
           </p>
-
-          {/* <div className="flex w-full items-center pt-2">
-           
-            <img
-              className="mr-2 inline-block size-[24px]"
-              src={faviconUrl}
-              alt=""
-            />
-            <PlatformNameBadge name={bookmark.platformName || ""} />
-          </div> */}
         </div>
       </div>
     </div>

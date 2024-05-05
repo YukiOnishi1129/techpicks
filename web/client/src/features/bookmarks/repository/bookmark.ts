@@ -117,7 +117,7 @@ export const getBookmarkList = async ({
     const bookmarkList: Array<BookmarkType> = res.map((bookmark) => {
       const bookmarkData: BookmarkType = {
         id: bookmark.id,
-        articleId: bookmark?.articleId || undefined,
+        articleId: bookmark.articleId,
         title: bookmark.title,
         description: bookmark.description,
         articleUrl: bookmark.articleUrl,
@@ -205,7 +205,7 @@ export const getBookmark = async ({ bookmarkId, userId }: GetBookmarkDTO) => {
 
     const bookmarkData: BookmarkType = {
       id: data.id,
-      articleId: data?.articleId || undefined,
+      articleId: data.articleId,
       title: data.title,
       description: data.description,
       articleUrl: data.articleUrl,
@@ -301,7 +301,7 @@ export const getBookmarkCountByArticleUrl = async ({
 type CreateBookmarkDTO = {
   title: string;
   description: string;
-  articleId?: string;
+  articleId: string;
   articleUrl: string;
   publishedAt?: Date;
   thumbnailURL: string;

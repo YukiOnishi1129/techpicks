@@ -28,7 +28,7 @@ type FavoriteArticle struct {
 	UserID                  string      `boil:"user_id" json:"user_id" toml:"user_id" yaml:"user_id"`
 	FavoriteArticleFolderID string      `boil:"favorite_article_folder_id" json:"favorite_article_folder_id" toml:"favorite_article_folder_id" yaml:"favorite_article_folder_id"`
 	PlatformID              null.String `boil:"platform_id" json:"platform_id,omitempty" toml:"platform_id" yaml:"platform_id,omitempty"`
-	ArticleID               null.String `boil:"article_id" json:"article_id,omitempty" toml:"article_id" yaml:"article_id,omitempty"`
+	ArticleID               string      `boil:"article_id" json:"article_id" toml:"article_id" yaml:"article_id"`
 	Title                   string      `boil:"title" json:"title" toml:"title" yaml:"title"`
 	Description             string      `boil:"description" json:"description" toml:"description" yaml:"description"`
 	ArticleURL              string      `boil:"article_url" json:"article_url" toml:"article_url" yaml:"article_url"`
@@ -144,7 +144,7 @@ var FavoriteArticleWhere = struct {
 	UserID                  whereHelperstring
 	FavoriteArticleFolderID whereHelperstring
 	PlatformID              whereHelpernull_String
-	ArticleID               whereHelpernull_String
+	ArticleID               whereHelperstring
 	Title                   whereHelperstring
 	Description             whereHelperstring
 	ArticleURL              whereHelperstring
@@ -165,7 +165,7 @@ var FavoriteArticleWhere = struct {
 	UserID:                  whereHelperstring{field: "\"favorite_articles\".\"user_id\""},
 	FavoriteArticleFolderID: whereHelperstring{field: "\"favorite_articles\".\"favorite_article_folder_id\""},
 	PlatformID:              whereHelpernull_String{field: "\"favorite_articles\".\"platform_id\""},
-	ArticleID:               whereHelpernull_String{field: "\"favorite_articles\".\"article_id\""},
+	ArticleID:               whereHelperstring{field: "\"favorite_articles\".\"article_id\""},
 	Title:                   whereHelperstring{field: "\"favorite_articles\".\"title\""},
 	Description:             whereHelperstring{field: "\"favorite_articles\".\"description\""},
 	ArticleURL:              whereHelperstring{field: "\"favorite_articles\".\"article_url\""},
@@ -242,8 +242,8 @@ type favoriteArticleL struct{}
 
 var (
 	favoriteArticleAllColumns            = []string{"id", "user_id", "favorite_article_folder_id", "platform_id", "article_id", "title", "description", "article_url", "published_at", "author_name", "tags", "thumbnail_url", "platform_name", "platform_url", "platform_favicon_url", "is_eng", "is_read", "is_private", "created_at", "updated_at"}
-	favoriteArticleColumnsWithoutDefault = []string{"user_id", "favorite_article_folder_id", "title", "description", "article_url", "thumbnail_url", "platform_name", "platform_url", "platform_favicon_url"}
-	favoriteArticleColumnsWithDefault    = []string{"id", "platform_id", "article_id", "published_at", "author_name", "tags", "is_eng", "is_read", "is_private", "created_at", "updated_at"}
+	favoriteArticleColumnsWithoutDefault = []string{"user_id", "favorite_article_folder_id", "article_id", "title", "description", "article_url", "thumbnail_url", "platform_name", "platform_url", "platform_favicon_url"}
+	favoriteArticleColumnsWithDefault    = []string{"id", "platform_id", "published_at", "author_name", "tags", "is_eng", "is_read", "is_private", "created_at", "updated_at"}
 	favoriteArticlePrimaryKeyColumns     = []string{"id"}
 	favoriteArticleGeneratedColumns      = []string{}
 )
@@ -630,9 +630,7 @@ func (favoriteArticleL) LoadArticle(ctx context.Context, e boil.ContextExecutor,
 		if object.R == nil {
 			object.R = &favoriteArticleR{}
 		}
-		if !queries.IsNil(object.ArticleID) {
-			args[object.ArticleID] = struct{}{}
-		}
+		args[object.ArticleID] = struct{}{}
 
 	} else {
 		for _, obj := range slice {
@@ -640,9 +638,7 @@ func (favoriteArticleL) LoadArticle(ctx context.Context, e boil.ContextExecutor,
 				obj.R = &favoriteArticleR{}
 			}
 
-			if !queries.IsNil(obj.ArticleID) {
-				args[obj.ArticleID] = struct{}{}
-			}
+			args[obj.ArticleID] = struct{}{}
 
 		}
 	}
@@ -707,7 +703,7 @@ func (favoriteArticleL) LoadArticle(ctx context.Context, e boil.ContextExecutor,
 
 	for _, local := range slice {
 		for _, foreign := range resultSlice {
-			if queries.Equal(local.ArticleID, foreign.ID) {
+			if local.ArticleID == foreign.ID {
 				local.R.Article = foreign
 				if foreign.R == nil {
 					foreign.R = &articleR{}
@@ -1112,7 +1108,7 @@ func (o *FavoriteArticle) SetArticle(ctx context.Context, exec boil.ContextExecu
 		return errors.Wrap(err, "failed to update local table")
 	}
 
-	queries.Assign(&o.ArticleID, related.ID)
+	o.ArticleID = related.ID
 	if o.R == nil {
 		o.R = &favoriteArticleR{
 			Article: related,
@@ -1129,39 +1125,6 @@ func (o *FavoriteArticle) SetArticle(ctx context.Context, exec boil.ContextExecu
 		related.R.FavoriteArticles = append(related.R.FavoriteArticles, o)
 	}
 
-	return nil
-}
-
-// RemoveArticle relationship.
-// Sets o.R.Article to nil.
-// Removes o from all passed in related items' relationships struct.
-func (o *FavoriteArticle) RemoveArticle(ctx context.Context, exec boil.ContextExecutor, related *Article) error {
-	var err error
-
-	queries.SetScanner(&o.ArticleID, nil)
-	if _, err = o.Update(ctx, exec, boil.Whitelist("article_id")); err != nil {
-		return errors.Wrap(err, "failed to update local table")
-	}
-
-	if o.R != nil {
-		o.R.Article = nil
-	}
-	if related == nil || related.R == nil {
-		return nil
-	}
-
-	for i, ri := range related.R.FavoriteArticles {
-		if queries.Equal(o.ArticleID, ri.ArticleID) {
-			continue
-		}
-
-		ln := len(related.R.FavoriteArticles)
-		if ln > 1 && i < ln-1 {
-			related.R.FavoriteArticles[i] = related.R.FavoriteArticles[ln-1]
-		}
-		related.R.FavoriteArticles = related.R.FavoriteArticles[:ln-1]
-		break
-	}
 	return nil
 }
 

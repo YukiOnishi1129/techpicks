@@ -24,7 +24,11 @@ func ArticleContentsCrawler(ctx context.Context, tx *sql.Tx, f *entity.Feed, r r
 	isSkip := false
 	isCreatedFeedArticleRelation := false
 	// 1. check article table at article_url
-	article, _ := entity.Articles(qm.Where("article_url = ?", r.Link), qm.Where("platform_id = ?", f.PlatformID)).One(ctx, tx)
+	article, _ := entity.Articles(
+		qm.Where("article_url = ?", r.Link),
+		qm.Where("platform_id = ?", f.PlatformID),
+		qm.Where("is_private = ?", false),
+	).One(ctx, tx)
 	if article != nil {
 		feedArticleRelation, _ := entity.FeedArticleRelations(qm.Where("feed_id = ?", f.ID), qm.Where("article_id = ?", article.ID)).One(ctx, tx)
 		if feedArticleRelation == nil {

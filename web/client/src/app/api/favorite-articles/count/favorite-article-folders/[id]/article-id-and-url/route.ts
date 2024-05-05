@@ -28,7 +28,7 @@ export async function GET(
   const count =
     await getFavoriteArticleCountByFavoriteArticleFolderIdAndArticleIdAndArticleUrl(
       {
-        articleId: articleId,
+        articleId: articleId || "",
         favoriteArticleFolderId: id,
         userId: user.id,
         articleUrl: articleUrl || "",

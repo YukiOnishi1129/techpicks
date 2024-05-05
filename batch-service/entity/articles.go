@@ -935,7 +935,7 @@ func (articleL) LoadBookmarks(ctx context.Context, e boil.ContextExecutor, singu
 
 	for _, foreign := range resultSlice {
 		for _, local := range slice {
-			if queries.Equal(local.ID, foreign.ArticleID) {
+			if local.ID == foreign.ArticleID {
 				local.R.Bookmarks = append(local.R.Bookmarks, foreign)
 				if foreign.R == nil {
 					foreign.R = &bookmarkR{}
@@ -1048,7 +1048,7 @@ func (articleL) LoadFavoriteArticles(ctx context.Context, e boil.ContextExecutor
 
 	for _, foreign := range resultSlice {
 		for _, local := range slice {
-			if queries.Equal(local.ID, foreign.ArticleID) {
+			if local.ID == foreign.ArticleID {
 				local.R.FavoriteArticles = append(local.R.FavoriteArticles, foreign)
 				if foreign.R == nil {
 					foreign.R = &favoriteArticleR{}
@@ -1376,7 +1376,7 @@ func (o *Article) AddBookmarks(ctx context.Context, exec boil.ContextExecutor, i
 	var err error
 	for _, rel := range related {
 		if insert {
-			queries.Assign(&rel.ArticleID, o.ID)
+			rel.ArticleID = o.ID
 			if err = rel.Insert(ctx, exec, boil.Infer()); err != nil {
 				return errors.Wrap(err, "failed to insert into foreign table")
 			}
@@ -1397,7 +1397,7 @@ func (o *Article) AddBookmarks(ctx context.Context, exec boil.ContextExecutor, i
 				return errors.Wrap(err, "failed to update foreign table")
 			}
 
-			queries.Assign(&rel.ArticleID, o.ID)
+			rel.ArticleID = o.ID
 		}
 	}
 
@@ -1421,80 +1421,6 @@ func (o *Article) AddBookmarks(ctx context.Context, exec boil.ContextExecutor, i
 	return nil
 }
 
-// SetBookmarks removes all previously related items of the
-// article replacing them completely with the passed
-// in related items, optionally inserting them as new records.
-// Sets o.R.Article's Bookmarks accordingly.
-// Replaces o.R.Bookmarks with related.
-// Sets related.R.Article's Bookmarks accordingly.
-func (o *Article) SetBookmarks(ctx context.Context, exec boil.ContextExecutor, insert bool, related ...*Bookmark) error {
-	query := "update \"bookmarks\" set \"article_id\" = null where \"article_id\" = $1"
-	values := []interface{}{o.ID}
-	if boil.IsDebug(ctx) {
-		writer := boil.DebugWriterFrom(ctx)
-		fmt.Fprintln(writer, query)
-		fmt.Fprintln(writer, values)
-	}
-	_, err := exec.ExecContext(ctx, query, values...)
-	if err != nil {
-		return errors.Wrap(err, "failed to remove relationships before set")
-	}
-
-	if o.R != nil {
-		for _, rel := range o.R.Bookmarks {
-			queries.SetScanner(&rel.ArticleID, nil)
-			if rel.R == nil {
-				continue
-			}
-
-			rel.R.Article = nil
-		}
-		o.R.Bookmarks = nil
-	}
-
-	return o.AddBookmarks(ctx, exec, insert, related...)
-}
-
-// RemoveBookmarks relationships from objects passed in.
-// Removes related items from R.Bookmarks (uses pointer comparison, removal does not keep order)
-// Sets related.R.Article.
-func (o *Article) RemoveBookmarks(ctx context.Context, exec boil.ContextExecutor, related ...*Bookmark) error {
-	if len(related) == 0 {
-		return nil
-	}
-
-	var err error
-	for _, rel := range related {
-		queries.SetScanner(&rel.ArticleID, nil)
-		if rel.R != nil {
-			rel.R.Article = nil
-		}
-		if _, err = rel.Update(ctx, exec, boil.Whitelist("article_id")); err != nil {
-			return err
-		}
-	}
-	if o.R == nil {
-		return nil
-	}
-
-	for _, rel := range related {
-		for i, ri := range o.R.Bookmarks {
-			if rel != ri {
-				continue
-			}
-
-			ln := len(o.R.Bookmarks)
-			if ln > 1 && i < ln-1 {
-				o.R.Bookmarks[i] = o.R.Bookmarks[ln-1]
-			}
-			o.R.Bookmarks = o.R.Bookmarks[:ln-1]
-			break
-		}
-	}
-
-	return nil
-}
-
 // AddFavoriteArticles adds the given related objects to the existing relationships
 // of the article, optionally inserting them as new records.
 // Appends related to o.R.FavoriteArticles.
@@ -1503,7 +1429,7 @@ func (o *Article) AddFavoriteArticles(ctx context.Context, exec boil.ContextExec
 	var err error
 	for _, rel := range related {
 		if insert {
-			queries.Assign(&rel.ArticleID, o.ID)
+			rel.ArticleID = o.ID
 			if err = rel.Insert(ctx, exec, boil.Infer()); err != nil {
 				return errors.Wrap(err, "failed to insert into foreign table")
 			}
@@ -1524,7 +1450,7 @@ func (o *Article) AddFavoriteArticles(ctx context.Context, exec boil.ContextExec
 				return errors.Wrap(err, "failed to update foreign table")
 			}
 
-			queries.Assign(&rel.ArticleID, o.ID)
+			rel.ArticleID = o.ID
 		}
 	}
 
@@ -1545,80 +1471,6 @@ func (o *Article) AddFavoriteArticles(ctx context.Context, exec boil.ContextExec
 			rel.R.Article = o
 		}
 	}
-	return nil
-}
-
-// SetFavoriteArticles removes all previously related items of the
-// article replacing them completely with the passed
-// in related items, optionally inserting them as new records.
-// Sets o.R.Article's FavoriteArticles accordingly.
-// Replaces o.R.FavoriteArticles with related.
-// Sets related.R.Article's FavoriteArticles accordingly.
-func (o *Article) SetFavoriteArticles(ctx context.Context, exec boil.ContextExecutor, insert bool, related ...*FavoriteArticle) error {
-	query := "update \"favorite_articles\" set \"article_id\" = null where \"article_id\" = $1"
-	values := []interface{}{o.ID}
-	if boil.IsDebug(ctx) {
-		writer := boil.DebugWriterFrom(ctx)
-		fmt.Fprintln(writer, query)
-		fmt.Fprintln(writer, values)
-	}
-	_, err := exec.ExecContext(ctx, query, values...)
-	if err != nil {
-		return errors.Wrap(err, "failed to remove relationships before set")
-	}
-
-	if o.R != nil {
-		for _, rel := range o.R.FavoriteArticles {
-			queries.SetScanner(&rel.ArticleID, nil)
-			if rel.R == nil {
-				continue
-			}
-
-			rel.R.Article = nil
-		}
-		o.R.FavoriteArticles = nil
-	}
-
-	return o.AddFavoriteArticles(ctx, exec, insert, related...)
-}
-
-// RemoveFavoriteArticles relationships from objects passed in.
-// Removes related items from R.FavoriteArticles (uses pointer comparison, removal does not keep order)
-// Sets related.R.Article.
-func (o *Article) RemoveFavoriteArticles(ctx context.Context, exec boil.ContextExecutor, related ...*FavoriteArticle) error {
-	if len(related) == 0 {
-		return nil
-	}
-
-	var err error
-	for _, rel := range related {
-		queries.SetScanner(&rel.ArticleID, nil)
-		if rel.R != nil {
-			rel.R.Article = nil
-		}
-		if _, err = rel.Update(ctx, exec, boil.Whitelist("article_id")); err != nil {
-			return err
-		}
-	}
-	if o.R == nil {
-		return nil
-	}
-
-	for _, rel := range related {
-		for i, ri := range o.R.FavoriteArticles {
-			if rel != ri {
-				continue
-			}
-
-			ln := len(o.R.FavoriteArticles)
-			if ln > 1 && i < ln-1 {
-				o.R.FavoriteArticles[i] = o.R.FavoriteArticles[ln-1]
-			}
-			o.R.FavoriteArticles = o.R.FavoriteArticles[:ln-1]
-			break
-		}
-	}
-
 	return nil
 }
 
