@@ -31,9 +31,6 @@ export const ArticleDetail = ({ article, user }: ArticleDetailProps) => {
   const { bookmarkId, handleAddBookmark, handleRemoveBookmark } =
     useArticleBookmark({ article });
 
-  const shareUrl = `${process.env.NEXT_PUBLIC_SITE_DOMAIN}/article/${article.id}`;
-  const shareTitle = article.title;
-
   const breadcrumbs: BreadCrumbType[] = [
     {
       title: "Home",
@@ -83,7 +80,10 @@ export const ArticleDetail = ({ article, user }: ArticleDetailProps) => {
           </Link>
           {user && (
             <div className="flex justify-between">
-              <TwitterShareButton title={shareTitle} url={shareUrl}>
+              <TwitterShareButton
+                title={article.title}
+                url={article.articleUrl}
+              >
                 <XIcon className="inline-block" size={36} />
               </TwitterShareButton>
               {bookmarkId ? (

@@ -15,7 +15,7 @@ export const fetchFavoriteArticlesByFavoriteArticleFolderIdAPI = async ({
   offset = "1",
   keyword,
 }: FetchFavoriteArticlesByFavoriteArticleFolderIdAPIArg): Promise<FetchFavoriteArticlesAPIResponse> => {
-  let url = `http://localhost:80/api/favorite-articles/favorite-article-folders/${favoriteArticleFolderId}?offset=${offset}`;
+  let url = `${process.env.WEB_DOMAIN}/api/favorite-articles/favorite-article-folders/${favoriteArticleFolderId}?offset=${offset}`;
   if (keyword) {
     url += `&keyword=${keyword}`;
   }
@@ -55,7 +55,7 @@ export const fetchFavoriteArticleCountByFolderIdAndArticleUrlAPI = async ({
   articleUrl,
   favoriteArticleFolderId,
 }: FetchFavoriteArticleCountByFolderIdAndArticleUrlAPIResponse): Promise<FetchCountAPIResponse> => {
-  const url = `http://localhost:80/api/favorite-articles/favorite-article-folders/${favoriteArticleFolderId}/article-url?articleUrl=${articleUrl}`;
+  const url = `${process.env.WEB_DOMAIN}//api/favorite-articles/favorite-article-folders/${favoriteArticleFolderId}/article-url?articleUrl=${articleUrl}`;
   const response = await getFetch({
     url,
     tagName: "favorite-articles/favorite-article-folder-id/article-url",
@@ -86,7 +86,7 @@ export const fetchFavoriteArticleCountByFolderIdAndArticleUrlAPI = async ({
 export const fetchFavoriteArticleAPI = async (
   id: string
 ): Promise<FetchFavoriteArticleAPIResponse> => {
-  const url = `http://localhost:80/api/favorite-articles/${id}`;
+  const url = `${process.env.WEB_DOMAIN}/api/favorite-articles/${id}`;
   const response = await getFetch({
     url,
     tagName: "favorite-articles",
@@ -123,7 +123,7 @@ export const fetchFavoriteArticleCountByFavoriteArticleFolderIdAndArticleIdAndAr
     articleId: string;
     articleUrl: string;
   }): Promise<FetchCountAPIResponse> => {
-    let url = `http://localhost:80/api/favorite-articles/count/favorite-article-folders/${favoriteArticleFolderId}/article-id-and-url?articleId=${articleId}&articleUrl=${articleUrl}`;
+    let url = `${process.env.WEB_DOMAIN}/api/favorite-articles/count/favorite-article-folders/${favoriteArticleFolderId}/article-id-and-url?articleId=${articleId}&articleUrl=${articleUrl}`;
     const response = await getFetch({
       url,
       tagName:

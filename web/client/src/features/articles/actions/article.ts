@@ -27,7 +27,7 @@ export const fetchArticlesAPI = async ({
   platformIdList: Array<string>;
   tab: ArticleTabType;
 }): Promise<FetchArticlesAPIResponse> => {
-  let url = `http://localhost:80/api/articles/?offset=${offset}&tab=${tab}`;
+  let url = `${process.env.WEB_DOMAIN}/api/articles/?offset=${offset}&tab=${tab}`;
   if (languageStatus) {
     url += `&languageStatus=${languageStatus}`;
   }
@@ -69,7 +69,7 @@ export const fetchArticlesByFeedIdsAPI = async ({
   keyword?: string;
   offset?: string;
 }): Promise<FetchArticlesAPIResponse> => {
-  let url = `http://localhost:80/api/articles/feed-ids/?offset=${offset}}`;
+  let url = `${process.env.WEB_DOMAIN}/api/articles/feed-ids/?offset=${offset}}`;
   if (keyword) {
     url += `&keyword=${keyword}`;
   }
@@ -103,7 +103,7 @@ export const fetchPrivateArticlesByArticleUrlAPI = async ({
   articleUrl,
 }: FetchPrivateArticlesByArticleUrlAPIRequest): Promise<FetchArticlesAPIResponse> => {
   {
-    let url = `http://localhost:80/api/articles/private/article-url?articleUrl=${articleUrl}`;
+    let url = `${process.env.WEB_DOMAIN}/api/articles/private/article-url?articleUrl=${articleUrl}`;
     const response = await getFetch({
       url,
       tagName: "articles/private/article-url",
@@ -133,7 +133,7 @@ export type FetchArticleAPIResponse = {
 export const fetchArticleByIdAPI = async (
   id: string
 ): Promise<FetchArticleAPIResponse> => {
-  const url = `${process.env.NEXT_PUBLIC_SITE_DOMAIN}/api/articles/${id}`;
+  const url = `${process.env.WEB_DOMAIN}/api/articles/${id}`;
   const response = await getFetch({
     url,
     tagName: "article",
@@ -157,7 +157,7 @@ export const fetchArticleByArticleAndPlatformUrlAPI = async ({
   articleUrl: string;
   platformUrl: string;
 }): Promise<FetchArticleAPIResponse> => {
-  let url = `http://localhost:80/api/articles/article-platform-url?articleUrl=${articleUrl}&platformUrl=${platformUrl}`;
+  let url = `${process.env.WEB_DOMAIN}/api/articles/article-platform-url?articleUrl=${articleUrl}&platformUrl=${platformUrl}`;
   const response = await getFetch({
     url,
     tagName: "articles/byArticleAndPlatformUrl",
@@ -178,7 +178,7 @@ export const fetchArticleByArticleAndPlatformUrlAPI = async ({
 export const fetchPrivateArticleByIdAPI = async (
   id: string
 ): Promise<FetchArticleAPIResponse> => {
-  const url = `http://localhost:80/api/articles/private/${id}`;
+  const url = `${process.env.WEB_DOMAIN}/api/articles/private/${id}`;
   const response = await getFetch({
     url,
     tagName: "articles/private",

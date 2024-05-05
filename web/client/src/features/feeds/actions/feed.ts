@@ -17,7 +17,7 @@ export const fetchFeedsAPI = async ({
 }: {
   offset?: string;
 }): Promise<FetchFeedsAPIResponse> => {
-  const url = `http://localhost:80/api/feeds?offset=${offset}`;
+  const url = `${process.env.WEB_DOMAIN}/api/feeds?offset=${offset}`;
   const response = await getFetch({
     url,
     tagName: "feeds",
@@ -36,7 +36,7 @@ export const fetchFeedsAPI = async ({
 };
 
 export const fetchAllFeedAPI = async (): Promise<FetchFeedsAPIResponse> => {
-  const url = `http://localhost:80/api/feeds/all`;
+  const url = `${process.env.WEB_DOMAIN}/api/feeds/all`;
   const response = await getFetch({
     url,
     tagName: "feeds/all",
@@ -65,7 +65,7 @@ type FetchFeedByIdAPIResponse = {
 export const fetchFeedByIdAPI = async (
   id: string
 ): Promise<FetchFeedByIdAPIResponse> => {
-  const url = `http://localhost:80/api/feeds/${id}`;
+  const url = `${process.env.WEB_DOMAIN}/api/feeds/${id}`;
   const response = await getFetch({
     url,
     tagName: "feed",

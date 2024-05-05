@@ -138,9 +138,6 @@ const ArticleDetailSheetContent: FC<ArticleDetailSheetContentProps> = ({
   const imageUrl = useCheckImageExist(article.thumbnailURL);
   const { convertParseHtml } = useParseHtml();
 
-  const shareUrl = `${process.env.NEXT_PUBLIC_SITE_DOMAIN}/article/${article.id}`;
-  const shareTitle = article.title;
-
   return (
     <>
       <SheetHeader className="mb-4">
@@ -175,7 +172,10 @@ const ArticleDetailSheetContent: FC<ArticleDetailSheetContentProps> = ({
           </Link>
           {user && (
             <div className="flex justify-between">
-              <TwitterShareButton title={shareTitle} url={article.articleUrl}>
+              <TwitterShareButton
+                title={article.title}
+                url={article.articleUrl}
+              >
                 <XIcon className="inline-block" size={36} />
               </TwitterShareButton>
               {bookmarkId ? (

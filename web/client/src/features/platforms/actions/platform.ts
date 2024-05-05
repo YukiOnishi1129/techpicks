@@ -9,7 +9,7 @@ export const fetchPlatformAPI = async ({
   languageStatus?: string;
   platformType?: string;
 }) => {
-  let url = `http://localhost:80/api/platforms/?languageStatus=${languageStatus}`;
+  let url = `${process.env.WEB_DOMAIN}/api/platforms/?languageStatus=${languageStatus}`;
   if (platformType) {
     url += `&platformType=${platformType}`;
   }
