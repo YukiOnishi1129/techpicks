@@ -120,7 +120,7 @@ export const fetchFavoriteArticleCountByFavoriteArticleFolderIdAndArticleIdAndAr
     articleUrl,
   }: {
     favoriteArticleFolderId: string;
-    articleId?: string;
+    articleId: string;
     articleUrl: string;
   }): Promise<FetchCountAPIResponse> => {
     let url = `http://localhost:80/api/favorite-articles/count/favorite-article-folders/${favoriteArticleFolderId}/article-id-and-url?articleUrl=${articleUrl}`;

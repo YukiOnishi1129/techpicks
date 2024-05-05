@@ -101,9 +101,9 @@ export const FavoriteArticleCardWrapper: FC<
       const resCount =
         await fetchFavoriteArticleCountByFavoriteArticleFolderIdAndArticleIdAndArticleUrlAPI(
           {
-            articleId: favoriteArticle?.articleId || undefined,
+            articleId: favoriteArticle.articleId,
             favoriteArticleFolderId: targetFavoriteArticleFolderId,
-            articleUrl: favoriteArticle?.articleUrl || "",
+            articleUrl: favoriteArticle.articleUrl,
           }
         );
       if (resCount.data?.count && resCount.data.count > 0) {

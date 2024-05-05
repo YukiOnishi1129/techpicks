@@ -151,7 +151,7 @@ export const getFavoriteArticleById = async ({
 type GetFavoriteArticleCountByFavoriteArticleFolderIdAndArticleIdAndArticleUrlDTO =
   {
     userId: string;
-    articleId: string | null;
+    articleId: string;
     favoriteArticleFolderId: string;
     articleUrl: string;
   };
@@ -225,7 +225,7 @@ export type CreateFavoriteArticleDTO = {
   userId: string;
   favoriteArticleFolderId: string;
   platformId?: string;
-  articleId?: string;
+  articleId: string;
   title: string;
   description: string;
   articleUrl: string;

@@ -57,7 +57,7 @@ export const BookmarkCardWrapper: FC<BookmarkCardWrapperProps> = ({
           {
             id: favoriteArticleId,
             favoriteArticleFolderId: targetFavoriteArticleFolder.id,
-            articleId: showBookmark.articleId || null,
+            articleId: showBookmark.articleId,
             platformId: showBookmark.platformId || null,
             title: showBookmark.title,
             description: showBookmark.description,

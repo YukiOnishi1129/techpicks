@@ -27,7 +27,7 @@ type Bookmark struct {
 	ID                 string      `boil:"id" json:"id" toml:"id" yaml:"id"`
 	UserID             string      `boil:"user_id" json:"user_id" toml:"user_id" yaml:"user_id"`
 	PlatformID         null.String `boil:"platform_id" json:"platform_id,omitempty" toml:"platform_id" yaml:"platform_id,omitempty"`
-	ArticleID          null.String `boil:"article_id" json:"article_id,omitempty" toml:"article_id" yaml:"article_id,omitempty"`
+	ArticleID          string      `boil:"article_id" json:"article_id" toml:"article_id" yaml:"article_id"`
 	Title              string      `boil:"title" json:"title" toml:"title" yaml:"title"`
 	Description        string      `boil:"description" json:"description" toml:"description" yaml:"description"`
 	ArticleURL         string      `boil:"article_url" json:"article_url" toml:"article_url" yaml:"article_url"`
@@ -123,7 +123,7 @@ var BookmarkWhere = struct {
 	ID                 whereHelperstring
 	UserID             whereHelperstring
 	PlatformID         whereHelpernull_String
-	ArticleID          whereHelpernull_String
+	ArticleID          whereHelperstring
 	Title              whereHelperstring
 	Description        whereHelperstring
 	ArticleURL         whereHelperstring
@@ -140,7 +140,7 @@ var BookmarkWhere = struct {
 	ID:                 whereHelperstring{field: "\"bookmarks\".\"id\""},
 	UserID:             whereHelperstring{field: "\"bookmarks\".\"user_id\""},
 	PlatformID:         whereHelpernull_String{field: "\"bookmarks\".\"platform_id\""},
-	ArticleID:          whereHelpernull_String{field: "\"bookmarks\".\"article_id\""},
+	ArticleID:          whereHelperstring{field: "\"bookmarks\".\"article_id\""},
 	Title:              whereHelperstring{field: "\"bookmarks\".\"title\""},
 	Description:        whereHelperstring{field: "\"bookmarks\".\"description\""},
 	ArticleURL:         whereHelperstring{field: "\"bookmarks\".\"article_url\""},
@@ -204,8 +204,8 @@ type bookmarkL struct{}
 
 var (
 	bookmarkAllColumns            = []string{"id", "user_id", "platform_id", "article_id", "title", "description", "article_url", "published_at", "thumbnail_url", "platform_name", "platform_url", "platform_favicon_url", "is_eng", "is_read", "created_at", "updated_at"}
-	bookmarkColumnsWithoutDefault = []string{"user_id", "title", "description", "article_url", "thumbnail_url", "platform_name", "platform_url", "platform_favicon_url"}
-	bookmarkColumnsWithDefault    = []string{"id", "platform_id", "article_id", "published_at", "is_eng", "is_read", "created_at", "updated_at"}
+	bookmarkColumnsWithoutDefault = []string{"user_id", "article_id", "title", "description", "article_url", "thumbnail_url", "platform_name", "platform_url", "platform_favicon_url"}
+	bookmarkColumnsWithDefault    = []string{"id", "platform_id", "published_at", "is_eng", "is_read", "created_at", "updated_at"}
 	bookmarkPrimaryKeyColumns     = []string{"id"}
 	bookmarkGeneratedColumns      = []string{}
 )
@@ -581,9 +581,7 @@ func (bookmarkL) LoadArticle(ctx context.Context, e boil.ContextExecutor, singul
 		if object.R == nil {
 			object.R = &bookmarkR{}
 		}
-		if !queries.IsNil(object.ArticleID) {
-			args[object.ArticleID] = struct{}{}
-		}
+		args[object.ArticleID] = struct{}{}
 
 	} else {
 		for _, obj := range slice {
@@ -591,9 +589,7 @@ func (bookmarkL) LoadArticle(ctx context.Context, e boil.ContextExecutor, singul
 				obj.R = &bookmarkR{}
 			}
 
-			if !queries.IsNil(obj.ArticleID) {
-				args[obj.ArticleID] = struct{}{}
-			}
+			args[obj.ArticleID] = struct{}{}
 
 		}
 	}
@@ -658,7 +654,7 @@ func (bookmarkL) LoadArticle(ctx context.Context, e boil.ContextExecutor, singul
 
 	for _, local := range slice {
 		for _, foreign := range resultSlice {
-			if queries.Equal(local.ArticleID, foreign.ID) {
+			if local.ArticleID == foreign.ID {
 				local.R.Article = foreign
 				if foreign.R == nil {
 					foreign.R = &articleR{}
@@ -943,7 +939,7 @@ func (o *Bookmark) SetArticle(ctx context.Context, exec boil.ContextExecutor, in
 		return errors.Wrap(err, "failed to update local table")
 	}
 
-	queries.Assign(&o.ArticleID, related.ID)
+	o.ArticleID = related.ID
 	if o.R == nil {
 		o.R = &bookmarkR{
 			Article: related,
@@ -960,39 +956,6 @@ func (o *Bookmark) SetArticle(ctx context.Context, exec boil.ContextExecutor, in
 		related.R.Bookmarks = append(related.R.Bookmarks, o)
 	}
 
-	return nil
-}
-
-// RemoveArticle relationship.
-// Sets o.R.Article to nil.
-// Removes o from all passed in related items' relationships struct.
-func (o *Bookmark) RemoveArticle(ctx context.Context, exec boil.ContextExecutor, related *Article) error {
-	var err error
-
-	queries.SetScanner(&o.ArticleID, nil)
-	if _, err = o.Update(ctx, exec, boil.Whitelist("article_id")); err != nil {
-		return errors.Wrap(err, "failed to update local table")
-	}
-
-	if o.R != nil {
-		o.R.Article = nil
-	}
-	if related == nil || related.R == nil {
-		return nil
-	}
-
-	for i, ri := range related.R.Bookmarks {
-		if queries.Equal(o.ArticleID, ri.ArticleID) {
-			continue
-		}
-
-		ln := len(related.R.Bookmarks)
-		if ln > 1 && i < ln-1 {
-			related.R.Bookmarks[i] = related.R.Bookmarks[ln-1]
-		}
-		related.R.Bookmarks = related.R.Bookmarks[:ln-1]
-		break
-	}
 	return nil
 }
 
