@@ -26,10 +26,10 @@ export const ArticleSearchTemplate = async () => {
         <PageBreadcrumb breadcrumbs={breadcrumbs} />
       </div>
 
-      <div className="hidden w-full items-end justify-between  px-4 md:flex">
-        <h1 className="mb-4 mt-8 text-2xl font-bold">Article Search</h1>
+      <div className="my-4 hidden w-full items-end justify-between px-4  md:flex">
+        <h1 className="text-2xl font-bold">Article Search</h1>
       </div>
-      <div className="mt-8">
+      <div className="mt-8 md:mt-2">
         <ArticleSearchForm platforms={platforms} />
       </div>
     </div>

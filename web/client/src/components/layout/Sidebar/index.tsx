@@ -1,5 +1,6 @@
 import { User } from "@supabase/supabase-js";
 import Link from "next/link";
+import { BiSolidSearch } from "react-icons/bi";
 import { FaRegBookmark } from "react-icons/fa";
 import { MdFeed, MdCalendarToday, MdRssFeed } from "react-icons/md";
 
@@ -34,6 +35,10 @@ export function Sidebar({ user }: SidebarProps) {
             <div className="flex cursor-pointer items-center space-x-2 rounded-md px-2 hover:bg-secondary">
               <MdRssFeed />
               <Link href="/feed">Feeds</Link>
+            </div>
+            <div className="flex cursor-pointer items-center space-x-2 rounded-md px-2 hover:bg-secondary">
+              <BiSolidSearch />
+              <Link href="/article/search">Search</Link>
             </div>
           </div>
         </div>
