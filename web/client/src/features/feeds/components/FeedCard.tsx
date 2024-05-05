@@ -43,7 +43,7 @@ export const FeedCard: FC<FeedCardProps> = ({ feed }: FeedCardProps) => {
               <div className="max-h-[200px] w-full md:h-36 md:max-h-[70px] md:w-48">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  className="mx-auto h-full rounded-lg border-2 object-cover object-center shadow-md"
+                  className="mx-auto max-h-[170px] rounded-lg border-2 object-cover object-center shadow-md md:h-full"
                   src={imageUrl}
                   alt=""
                 />
