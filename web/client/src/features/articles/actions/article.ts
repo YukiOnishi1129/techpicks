@@ -95,6 +95,33 @@ export const fetchArticlesByFeedIdsAPI = async ({
   };
 };
 
+type FetchPrivateArticlesByArticleUrlAPIRequest = {
+  articleUrl: string;
+};
+
+export const fetchPrivateArticlesByArticleUrlAPI = async ({
+  articleUrl,
+}: FetchPrivateArticlesByArticleUrlAPIRequest): Promise<FetchArticlesAPIResponse> => {
+  {
+    let url = `http://localhost:80/api/articles/private/article-url?articleUrl=${articleUrl}`;
+    const response = await getFetch({
+      url,
+      tagName: "articles/private/article-url",
+      cacheType: "no-store",
+    });
+    const data = await response.json();
+    const status = response.status;
+
+    return {
+      data: {
+        articles: data.articles as ArticleType[],
+        message: "success",
+      },
+      status,
+    };
+  }
+};
+
 export type FetchArticleAPIResponse = {
   data: {
     article: ArticleType | undefined;
