@@ -3,6 +3,7 @@ package repository
 import (
 	"context"
 	"database/sql"
+
 	"github.com/YukiOnishi1129/techpicks/batch-service/domain"
 	"github.com/YukiOnishi1129/techpicks/batch-service/entity"
 	"github.com/volatiletech/sqlboiler/v4/boil"
@@ -68,13 +69,13 @@ func convertDBtoFeedDomain(f *entity.Feed) domain.Feed {
 		Name:   f.Name,
 		RssURL: f.RSSURL,
 		Platform: domain.Platform{
-			ID:           f.R.Platform.ID,
-			Name:         f.R.Platform.Name,
-			SiteURL:      f.R.Platform.SiteURL,
-			PlatformType: domain.PlatformType(f.R.Platform.PlatformType),
-			IsEng:        f.R.Platform.IsEng,
-			CreatedAt:    f.R.Platform.CreatedAt,
-			UpdatedAt:    f.R.Platform.UpdatedAt,
+			ID:               f.R.Platform.ID,
+			Name:             f.R.Platform.Name,
+			SiteURL:          f.R.Platform.SiteURL,
+			PlatformSiteType: domain.PlatformSiteType(f.R.Platform.PlatformSiteType),
+			IsEng:            f.R.Platform.IsEng,
+			CreatedAt:        f.R.Platform.CreatedAt,
+			UpdatedAt:        f.R.Platform.UpdatedAt,
 		},
 		Category: domain.Category{
 			ID:        f.R.Category.ID,

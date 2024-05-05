@@ -51,15 +51,6 @@ export const FeedCard: FC<FeedCardProps> = ({ feed }: FeedCardProps) => {
             </Link>
           </div>
 
-          {/* <div className="flex w-full items-center pt-2 md:w-4/5">
-            <div>
-              <PlatformTypeBadge platformType={feed.platform.platformType} />
-            </div>
-            <div className="ml-2">
-              <LanguageBadge isEng={feed.platform.isEng} />
-            </div>
-          </div> */}
-
           {/* TODO: description */}
           <div className="mt-2">
             <Link href={`/feed/${feed.id}`} target="_blank">

@@ -24,7 +24,7 @@ func (u *Usecase) BatchCrawlCompanyArticleContents(ctx context.Context) error {
 		qm.Where("feeds.deleted_at IS NULL"),
 		qm.And("feeds.trend_platform_type = ?", 0),
 		qm.InnerJoin("platforms on feeds.platform_id = platforms.id"),
-		qm.Where("platforms.platform_type = ?", strconv.Itoa(int(domain.PlatformTypeCompany))),
+		qm.Where("platforms.platform_site_type = ?", strconv.Itoa(int(domain.PlatformTypeCompany))),
 		qm.OrderBy("feeds.created_at asc"),
 		qm.Load("Platform"),
 	).All(ctx, u.db)

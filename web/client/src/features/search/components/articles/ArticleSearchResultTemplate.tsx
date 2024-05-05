@@ -10,14 +10,14 @@ import { BreadCrumbType, PageBreadcrumb } from "@/components/ui/breadcrumb";
 
 import { ArticleTabType } from "@/types/article";
 import { LanguageStatus } from "@/types/language";
-import { PlatformType } from "@/types/platform";
+import { PlatformSiteType } from "@/types/platform";
 
 import { ArticleSearchDialog } from "./Dialog";
 
 export type ArticleSearchResultTemplateProps = {
   languageStatus: LanguageStatus;
   keyword?: string;
-  platformType?: PlatformType;
+  platformSiteType?: PlatformSiteType;
   platformIdList: Array<string>;
   tab: ArticleTabType;
 };
@@ -27,20 +27,20 @@ export const ArticleSearchResultTemplate: FC<
 > = async ({
   languageStatus,
   keyword,
-  platformType,
+  platformSiteType,
   platformIdList,
   tab,
 }: ArticleSearchResultTemplateProps) => {
   const res = await fetchArticlesAPI({
     languageStatus: languageStatus.toString(),
     keyword,
-    platformType: String(platformType),
+    platformSiteType: String(platformSiteType),
     platformIdList,
     tab,
   });
   const platforms = await fetchPlatformAPI({
     languageStatus: languageStatus.toString(),
-    platformType: String(platformType),
+    platformSiteType: String(platformSiteType),
   });
   const user = await getUser();
   const resFavoriteArticleFolders = await fetchFavoriteArticleFoldersAPI({});
@@ -50,8 +50,8 @@ export const ArticleSearchResultTemplate: FC<
     keywordPath = `&keyword=${keyword}`;
   }
   let platformTypePath = "";
-  if (String(platformType)) {
-    platformTypePath = `&platformType=${String(platformType)}`;
+  if (String(platformSiteType)) {
+    platformTypePath = `&platformSiteType=${String(platformSiteType)}`;
   }
   let platformIdPath = "";
   if (platformIdList.length) {
@@ -82,7 +82,7 @@ export const ArticleSearchResultTemplate: FC<
             platforms={platforms}
             languageStatus={languageStatus}
             keyword={keyword}
-            platformType={platformType}
+            platformSiteType={platformSiteType}
             platformIdList={platformIdList}
           />
         </div>

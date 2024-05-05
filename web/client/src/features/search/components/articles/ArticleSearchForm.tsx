@@ -23,7 +23,7 @@ import { Input } from "@/components/ui/input";
 import { Loader } from "@/components/ui/loader";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
-import { Platform } from "@/types/platform";
+import { PlatformType } from "@/types/platform";
 
 import { serverRevalidateArticleSearchResult } from "../../actions/serverAction";
 
@@ -31,11 +31,11 @@ const formSchema = z.object({
   keyword: z.string().optional(),
   platformIdList: z.array(z.string()).optional(),
   language: z.string().optional(),
-  platformType: z.string(),
+  platformSiteType: z.string(),
 });
 
 type ArticleSearchFormProps = {
-  platforms: Array<Platform>;
+  platforms: Array<PlatformType>;
 };
 
 export const ArticleSearchForm: FC<ArticleSearchFormProps> = ({
@@ -43,20 +43,20 @@ export const ArticleSearchForm: FC<ArticleSearchFormProps> = ({
 }: ArticleSearchFormProps) => {
   const [loading, setLoading] = useState(false);
   const [showPlatforms, setShowPlatforms] =
-    useState<Array<Platform>>(platforms);
+    useState<Array<PlatformType>>(platforms);
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       keyword: "",
       language: "0",
-      platformType: "0",
+      platformSiteType: "0",
       platformIdList: [],
     },
   });
 
   const watchLanguage = form.watch("language");
-  const watchPlatformType = form.watch("platformType");
+  const watchPlatformType = form.watch("platformSiteType");
 
   const resetDialog = useCallback(() => {
     form.reset();
@@ -69,8 +69,8 @@ export const ArticleSearchForm: FC<ArticleSearchFormProps> = ({
       keywordPath = `&keyword=${values.keyword}`;
     }
     let platformTypePath = "";
-    if (values.platformType) {
-      platformTypePath = `&platformType=${values.platformType}`;
+    if (values.platformSiteType) {
+      platformTypePath = `&platformSiteType=${values.platformSiteType}`;
     }
     let platformIdPath = "";
     if (values.platformIdList) {
@@ -89,7 +89,8 @@ export const ArticleSearchForm: FC<ArticleSearchFormProps> = ({
     setLoading(true);
     const response = await fetchPlatformAPI({
       languageStatus: watchLanguage,
-      platformType: watchPlatformType !== "0" ? watchPlatformType : undefined,
+      platformSiteType:
+        watchPlatformType !== "0" ? watchPlatformType : undefined,
     });
     setShowPlatforms(response);
     setLoading(false);
@@ -155,7 +156,7 @@ export const ArticleSearchForm: FC<ArticleSearchFormProps> = ({
             {/* platform type*/}
             <FormField
               control={form.control}
-              name="platformType"
+              name="platformSiteType"
               render={({ field }) => (
                 <FormItem className="mb-8">
                   <FormLabel>PlatformType</FormLabel>

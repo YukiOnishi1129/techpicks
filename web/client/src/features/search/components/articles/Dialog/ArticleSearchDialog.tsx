@@ -34,21 +34,21 @@ import { Loader } from "@/components/ui/loader";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 import { LanguageStatus } from "@/types/language";
-import { Platform, PlatformType } from "@/types/platform";
+import { PlatformType, PlatformSiteType } from "@/types/platform";
 
 const formSchema = z.object({
   keyword: z.string().optional(),
   platformIdList: z.array(z.string()).optional(),
   language: z.string().optional(),
-  platformType: z.string(),
+  platformSiteType: z.string(),
 });
 
 type ArticleSearchDialogProps = {
-  platforms: Array<Platform>;
+  platforms: Array<PlatformType>;
   languageStatus?: LanguageStatus;
   keyword?: string;
   platformIdList?: Array<string>;
-  platformType?: PlatformType;
+  platformSiteType?: PlatformSiteType;
 };
 
 export const ArticleSearchDialog: FC<ArticleSearchDialogProps> = ({
@@ -56,7 +56,7 @@ export const ArticleSearchDialog: FC<ArticleSearchDialogProps> = ({
   languageStatus,
   keyword,
   platformIdList = [],
-  platformType,
+  platformSiteType,
 }: ArticleSearchDialogProps) => {
   const [open, setOpen] = useState(false);
 
@@ -75,7 +75,7 @@ export const ArticleSearchDialog: FC<ArticleSearchDialogProps> = ({
           languageStatus={languageStatus}
           keyword={keyword}
           platformIdList={platformIdList}
-          platformType={platformType}
+          platformSiteType={platformSiteType}
           handleClose={handleClose}
         />
       )}
@@ -84,11 +84,11 @@ export const ArticleSearchDialog: FC<ArticleSearchDialogProps> = ({
 };
 
 type ArticleSearchDialogContentProps = {
-  platforms: Array<Platform>;
+  platforms: Array<PlatformType>;
   languageStatus?: LanguageStatus;
   keyword?: string;
   platformIdList?: Array<string>;
-  platformType?: PlatformType;
+  platformSiteType?: PlatformSiteType;
   handleClose: () => void;
 };
 
@@ -97,25 +97,25 @@ const ArticleSearchDialogContent: FC<ArticleSearchDialogContentProps> = ({
   languageStatus,
   keyword,
   platformIdList = [],
-  platformType,
+  platformSiteType,
   handleClose,
 }: ArticleSearchDialogContentProps) => {
   const [loading, setLoading] = useState(false);
   const [showPlatforms, setShowPlatforms] =
-    useState<Array<Platform>>(platforms);
+    useState<Array<PlatformType>>(platforms);
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       keyword: keyword ?? "",
       language: languageStatus?.toString() ?? "0",
-      platformType: platformType?.toString() ?? "0",
+      platformSiteType: platformSiteType?.toString() ?? "0",
       platformIdList: platformIdList,
     },
   });
 
   const watchLanguage = form.watch("language");
-  const watchPlatformType = form.watch("platformType");
+  const watchPlatformType = form.watch("platformSiteType");
 
   const resetDialog = useCallback(() => {
     form.reset();
@@ -127,8 +127,8 @@ const ArticleSearchDialogContent: FC<ArticleSearchDialogContentProps> = ({
       keywordPath = `&keyword=${values.keyword}`;
     }
     let platformTypePath = "";
-    if (values.platformType) {
-      platformTypePath = `&platformType=${values.platformType}`;
+    if (values.platformSiteType) {
+      platformTypePath = `&platformSiteType=${values.platformSiteType}`;
     }
     let platformIdPath = "";
     if (values.platformIdList) {
@@ -148,7 +148,8 @@ const ArticleSearchDialogContent: FC<ArticleSearchDialogContentProps> = ({
     setLoading(true);
     const response = await fetchPlatformAPI({
       languageStatus: watchLanguage,
-      platformType: watchPlatformType !== "0" ? watchPlatformType : undefined,
+      platformSiteType:
+        watchPlatformType !== "0" ? watchPlatformType : undefined,
     });
     setShowPlatforms(response);
     form.setValue("platformIdList", []);
@@ -225,7 +226,7 @@ const ArticleSearchDialogContent: FC<ArticleSearchDialogContentProps> = ({
               {/* platform type*/}
               <FormField
                 control={form.control}
-                name="platformType"
+                name="platformSiteType"
                 render={({ field }) => (
                   <FormItem className="mb-4">
                     <FormLabel>PlatformType</FormLabel>

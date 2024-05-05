@@ -3,6 +3,7 @@ package repository
 import (
 	"context"
 	"database/sql"
+
 	"github.com/YukiOnishi1129/techpicks/batch-service/domain"
 	"github.com/YukiOnishi1129/techpicks/batch-service/entity"
 	"github.com/volatiletech/sqlboiler/v4/queries/qm"
@@ -62,14 +63,14 @@ func convertDBtoFeedArticleRelationDomain(far *entity.FeedArticleRelation) domai
 			Name:   far.R.Feed.Name,
 			RssURL: far.R.Feed.RSSURL,
 			Platform: domain.Platform{
-				ID:           far.R.Feed.R.Platform.ID,
-				Name:         far.R.Feed.R.Platform.Name,
-				SiteURL:      far.R.Feed.R.Platform.SiteURL,
-				PlatformType: domain.PlatformType(far.R.Feed.R.Platform.PlatformType),
-				IsEng:        far.R.Feed.R.Platform.IsEng,
-				FaviconURL:   far.R.Feed.R.Platform.FaviconURL,
-				CreatedAt:    far.R.Feed.R.Platform.CreatedAt,
-				UpdatedAt:    far.R.Feed.R.Platform.UpdatedAt,
+				ID:               far.R.Feed.R.Platform.ID,
+				Name:             far.R.Feed.R.Platform.Name,
+				SiteURL:          far.R.Feed.R.Platform.SiteURL,
+				PlatformSiteType: domain.PlatformSiteType(far.R.Feed.R.Platform.PlatformSiteType),
+				IsEng:            far.R.Feed.R.Platform.IsEng,
+				FaviconURL:       far.R.Feed.R.Platform.FaviconURL,
+				CreatedAt:        far.R.Feed.R.Platform.CreatedAt,
+				UpdatedAt:        far.R.Feed.R.Platform.UpdatedAt,
 			},
 			Category: domain.Category{
 				ID:        far.R.Feed.R.Category.ID,

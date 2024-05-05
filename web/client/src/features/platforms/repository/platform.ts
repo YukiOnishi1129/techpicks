@@ -3,17 +3,17 @@
 import prisma from "@/lib/prisma";
 
 import { LanguageStatus } from "@/types/language";
-import { Platform, PlatformType } from "@/types/platform";
+import { PlatformType, PlatformSiteType } from "@/types/platform";
 
 export type GetPlatformParams = {
   languageStatus?: LanguageStatus;
-  platformType?: PlatformType;
+  platformSiteType?: PlatformSiteType;
   platformIdList?: Array<string>;
 };
 
 export const getPlatforms = async ({
   languageStatus = 1,
-  platformType,
+  platformSiteType,
   platformIdList,
 }: GetPlatformParams) => {
   let where = {};
@@ -28,10 +28,10 @@ export const getPlatforms = async ({
     };
   }
 
-  if (platformType) {
+  if (platformSiteType) {
     where = {
       ...where,
-      platformType: platformType,
+      platformSiteType: platformSiteType,
     };
   }
 
@@ -50,22 +50,22 @@ export const getPlatforms = async ({
       id: true,
       name: true,
       isEng: true,
-      platformType: true,
+      platformSiteType: true,
       siteUrl: true,
       faviconUrl: true,
       createdAt: true,
       updatedAt: true,
     },
-    orderBy: [{ platformType: "asc" }, { name: "asc" }],
+    orderBy: [{ platformSiteType: "asc" }, { name: "asc" }],
   });
 
-  const platforms: Array<Platform> = res.map((platform) => {
+  const platforms: Array<PlatformType> = res.map((platform) => {
     return {
       id: platform.id,
       name: platform.name,
       siteUrl: platform.siteUrl,
       faviconUrl: platform.faviconUrl,
-      platformType: platform.platformType,
+      platformSiteType: platform.platformSiteType,
       isEng: platform.isEng,
       createdAt: platform.createdAt,
       updatedAt: platform.updatedAt,

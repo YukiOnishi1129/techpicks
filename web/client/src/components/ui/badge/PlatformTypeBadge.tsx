@@ -3,14 +3,14 @@ import { FC } from "react";
 import { Badge } from "./badge";
 
 type PlatformTypeBadgeProps = {
-  platformType: number;
+  platformSiteType: number;
 };
 
 export const PlatformTypeBadge: FC<PlatformTypeBadgeProps> = ({
-  platformType,
+  platformSiteType,
 }: PlatformTypeBadgeProps) => {
   let typeName = "";
-  switch (platformType) {
+  switch (platformSiteType) {
     case 1:
       typeName = "Article Site";
       break;

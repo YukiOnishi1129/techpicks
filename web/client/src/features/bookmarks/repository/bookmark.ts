@@ -181,7 +181,7 @@ export const getBookmark = async ({ bookmarkId, userId }: GetBookmarkDTO) => {
             name: true,
             siteUrl: true,
             faviconUrl: true,
-            platformType: true,
+            platformSiteType: true,
             isEng: true,
             createdAt: true,
             updatedAt: true,

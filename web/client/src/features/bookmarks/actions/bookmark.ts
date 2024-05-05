@@ -23,13 +23,13 @@ export const fetchBookmarkListAPI = async ({
   languageStatus,
   keyword,
   offset = "1",
-  platformType,
+  platformSiteType,
   platformIdList,
 }: {
   languageStatus?: string;
   keyword?: string;
   offset?: string;
-  platformType?: string;
+  platformSiteType?: string;
   platformIdList: Array<string>;
 }): Promise<FetchBookmarkListAPIResponse> => {
   let url = `${process.env.WEB_DOMAIN}/api/bookmarks/?offset=${offset}`;
@@ -39,8 +39,8 @@ export const fetchBookmarkListAPI = async ({
   if (keyword) {
     url += `&keyword=${keyword}`;
   }
-  if (platformType) {
-    url += `&platformType=${platformType}`;
+  if (platformSiteType) {
+    url += `&platformSiteType=${platformSiteType}`;
   }
   if (platformIdList.length) {
     const platformIdPath = platformIdList

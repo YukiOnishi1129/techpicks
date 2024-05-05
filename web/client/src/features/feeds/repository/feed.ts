@@ -22,7 +22,7 @@ export const getFeed = async ({ userId, offset = 1 }: GetFeedParams) => {
       orderBy: [
         {
           platform: {
-            platformType: "asc",
+            platformSiteType: "asc",
           },
         },
         {
@@ -137,7 +137,7 @@ export const getAllFeed = async ({ userId }: GetAllFeedType) => {
       orderBy: [
         {
           platform: {
-            platformType: "asc",
+            platformSiteType: "asc",
           },
         },
         {

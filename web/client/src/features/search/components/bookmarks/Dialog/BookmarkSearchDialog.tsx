@@ -34,21 +34,21 @@ import { Loader } from "@/components/ui/loader";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 import { LanguageStatus } from "@/types/language";
-import { Platform, PlatformType } from "@/types/platform";
+import { PlatformType, PlatformSiteType } from "@/types/platform";
 
 const formSchema = z.object({
   keyword: z.string().optional(),
   platformIdList: z.array(z.string()).optional(),
   language: z.string().optional(),
-  platformType: z.string(),
+  platformSiteType: z.string(),
 });
 
 type BookmarkSearchDialogProps = {
-  platforms: Array<Platform>;
+  platforms: Array<PlatformType>;
   languageStatus?: LanguageStatus;
   keyword?: string;
   platformIdList?: Array<string>;
-  platformType?: PlatformType;
+  platformSiteType?: PlatformSiteType;
 };
 
 export const BookmarkSearchDialog: FC<BookmarkSearchDialogProps> = ({
@@ -56,7 +56,7 @@ export const BookmarkSearchDialog: FC<BookmarkSearchDialogProps> = ({
   languageStatus,
   keyword,
   platformIdList = [],
-  platformType,
+  platformSiteType,
 }: BookmarkSearchDialogProps) => {
   const [open, setOpen] = useState(false);
 
@@ -75,7 +75,7 @@ export const BookmarkSearchDialog: FC<BookmarkSearchDialogProps> = ({
           languageStatus={languageStatus}
           keyword={keyword}
           platformIdList={platformIdList}
-          platformType={platformType}
+          platformSiteType={platformSiteType}
           handleClose={handleClose}
         />
       )}
@@ -84,11 +84,11 @@ export const BookmarkSearchDialog: FC<BookmarkSearchDialogProps> = ({
 };
 
 type BookmarkSearchDialogContentProps = {
-  platforms: Array<Platform>;
+  platforms: Array<PlatformType>;
   languageStatus?: LanguageStatus;
   keyword?: string;
   platformIdList?: Array<string>;
-  platformType?: PlatformType;
+  platformSiteType?: PlatformSiteType;
   handleClose: () => void;
 };
 
@@ -97,25 +97,25 @@ const BookmarkSearchDialogContent: FC<BookmarkSearchDialogContentProps> = ({
   languageStatus,
   keyword,
   platformIdList = [],
-  platformType,
+  platformSiteType,
   handleClose,
 }: BookmarkSearchDialogContentProps) => {
   const [loading, setLoading] = useState(false);
   const [showPlatforms, setShowPlatforms] =
-    useState<Array<Platform>>(platforms);
+    useState<Array<PlatformType>>(platforms);
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       keyword: keyword ?? "",
       language: languageStatus?.toString() ?? "0",
-      platformType: platformType?.toString() ?? "0",
+      platformSiteType: platformSiteType?.toString() ?? "0",
       platformIdList: platformIdList,
     },
   });
 
   const watchLanguage = form.watch("language");
-  const watchPlatformType = form.watch("platformType");
+  const watchPlatformType = form.watch("platformSiteType");
 
   const resetDialog = useCallback(() => {
     form.reset();
@@ -127,8 +127,8 @@ const BookmarkSearchDialogContent: FC<BookmarkSearchDialogContentProps> = ({
       keywordPath = `&keyword=${values.keyword}`;
     }
     let platformTypePath = "";
-    if (values.platformType) {
-      platformTypePath = `&platformType=${values.platformType}`;
+    if (values.platformSiteType) {
+      platformTypePath = `&platformSiteType=${values.platformSiteType}`;
     }
     let platformIdPath = "";
     if (values.platformIdList) {
@@ -148,7 +148,8 @@ const BookmarkSearchDialogContent: FC<BookmarkSearchDialogContentProps> = ({
     setLoading(true);
     const response = await fetchPlatformAPI({
       languageStatus: watchLanguage,
-      platformType: watchPlatformType !== "0" ? watchPlatformType : undefined,
+      platformSiteType:
+        watchPlatformType !== "0" ? watchPlatformType : undefined,
     });
     setShowPlatforms(response);
     form.setValue("platformIdList", []);
@@ -215,9 +216,6 @@ const BookmarkSearchDialogContent: FC<BookmarkSearchDialogContentProps> = ({
                         </div>
                       </RadioGroup>
                     </FormControl>
-                    {/* <FormDescription>
-                      Let&apos;s select the language you want to search.
-                    </FormDescription> */}
                     <FormMessage />
                   </FormItem>
                 )}
@@ -225,7 +223,7 @@ const BookmarkSearchDialogContent: FC<BookmarkSearchDialogContentProps> = ({
               {/* platform type*/}
               <FormField
                 control={form.control}
-                name="platformType"
+                name="platformSiteType"
                 render={({ field }) => (
                   <FormItem className="mb-4">
                     <FormLabel>PlatformType</FormLabel>

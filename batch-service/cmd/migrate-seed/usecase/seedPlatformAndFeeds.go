@@ -14,7 +14,7 @@ type seedPlatformFeed struct {
 	seedCategoryID    int
 	PlatformSiteURL   string
 	FeedSiteURL       string
-	PlatformType      domain.PlatformType
+	PlatformType      domain.PlatformSiteType
 	FaviconURL        string
 	IsEng             bool
 	RssURL            string

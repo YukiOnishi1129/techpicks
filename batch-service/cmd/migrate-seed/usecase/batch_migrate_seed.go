@@ -75,13 +75,13 @@ func (u *Usecase) BatchMigrateSeed(ctx context.Context) error {
 
 				platformID, _ := uuid.NewUUID()
 				err = createPlatform(ctx, tx, createPlatformArg{
-					ID:           platformID.String(),
-					Name:         sp.PlatformName,
-					SiteURL:      sp.PlatformSiteURL,
-					PlatformType: sp.PlatformType,
-					FaviconURL:   sp.FaviconURL,
-					IsEng:        sp.IsEng,
-					DeletedAt:    sp.DeletedAt,
+					ID:               platformID.String(),
+					Name:             sp.PlatformName,
+					SiteURL:          sp.PlatformSiteURL,
+					PlatformSiteType: sp.PlatformType,
+					FaviconURL:       sp.FaviconURL,
+					IsEng:            sp.IsEng,
+					DeletedAt:        sp.DeletedAt,
 				})
 				if err != nil {
 					return err
@@ -116,23 +116,23 @@ func (u *Usecase) BatchMigrateSeed(ctx context.Context) error {
 }
 
 type createPlatformArg struct {
-	ID           string
-	Name         string
-	SiteURL      string
-	PlatformType domain.PlatformType
-	FaviconURL   string
-	IsEng        bool
-	DeletedAt    *time.Time
+	ID               string
+	Name             string
+	SiteURL          string
+	PlatformSiteType domain.PlatformSiteType
+	FaviconURL       string
+	IsEng            bool
+	DeletedAt        *time.Time
 }
 
 func createPlatform(ctx context.Context, tx *sql.Tx, arg createPlatformArg) error {
 	platform := entity.Platform{
-		ID:           arg.ID,
-		Name:         arg.Name,
-		SiteURL:      arg.SiteURL,
-		PlatformType: int(arg.PlatformType),
-		FaviconURL:   arg.FaviconURL,
-		IsEng:        arg.IsEng,
+		ID:               arg.ID,
+		Name:             arg.Name,
+		SiteURL:          arg.SiteURL,
+		PlatformSiteType: int(arg.PlatformSiteType),
+		FaviconURL:       arg.FaviconURL,
+		IsEng:            arg.IsEng,
 	}
 	if arg.DeletedAt != nil {
 		platform.DeletedAt = null.TimeFromPtr(arg.DeletedAt)

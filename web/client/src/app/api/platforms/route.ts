@@ -3,25 +3,25 @@ import { NextRequest } from "next/server";
 import { getPlatforms } from "@/features/platforms/repository/platform";
 
 import { LanguageStatus } from "@/types/language";
-import { PlatformType } from "@/types/platform";
+import { PlatformSiteType } from "@/types/platform";
 
 export async function GET(req: NextRequest) {
   const searchParams = req.nextUrl.searchParams;
   const languageStatus = searchParams.get("languageStatus");
-  const platformType = searchParams.get("platformType");
+  const platformSiteType = searchParams.get("platformSiteType");
   const platformIdList = searchParams.getAll("platformId");
 
   const status =
     typeof languageStatus === "string"
       ? (parseInt(languageStatus) as LanguageStatus)
       : 1;
-  const type = platformType
-    ? (parseInt(platformType) as PlatformType)
+  const type = platformSiteType
+    ? (parseInt(platformSiteType) as PlatformSiteType)
     : undefined;
 
   const platforms = await getPlatforms({
     languageStatus: status,
-    platformType: type,
+    platformSiteType: type,
     platformIdList: platformIdList,
   });
 

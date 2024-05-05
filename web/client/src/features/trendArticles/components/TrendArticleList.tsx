@@ -164,7 +164,7 @@ const convertTrendArticleToArticle = (
     platform: {
       id: trendArticle.platform.id,
       name: trendArticle.platform.name,
-      platformType: trendArticle.platform.platformType,
+      platformSiteType: trendArticle.platform.platformSiteType,
       siteUrl: trendArticle.platform.siteUrl,
       faviconUrl: trendArticle.platform.faviconUrl,
       isEng: trendArticle.platform.isEng,
