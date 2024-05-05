@@ -644,6 +644,52 @@ export const getArticleById = async ({ id, userId }: GetArticleByIdParam) => {
   }
 };
 
+export const getPrivateArticlesById = async (id: string) => {
+  try {
+    const res = await prisma.article.findMany({
+      where: {
+        id: id,
+        isPrivate: true,
+      },
+      include: {
+        bookmarks: {
+          select: {
+            id: true,
+          },
+        },
+        favoriteArticles: {},
+      },
+    });
+
+    const articleList: Array<ArticleType> = res.map((article) => {
+      return {
+        id: article.id,
+        title: article.title,
+        description: article.description,
+        thumbnailURL: article.thumbnailURL,
+        articleUrl: article.articleUrl,
+        publishedAt: article.publishedAt,
+        authorName: article.authorName,
+        tags: article.tags,
+        isEng: article.isEng,
+        isPrivate: article.isPrivate,
+        createdAt: article.createdAt,
+        updatedAt: article.updatedAt,
+        feeds: [],
+        isBookmarked: article.bookmarks.length > 0,
+        bookmarkId:
+          article.bookmarks.length > 0 ? article.bookmarks[0].id : undefined,
+        isFollowing: article.favoriteArticles.length > 0,
+        favoriteArticles: article.favoriteArticles,
+      };
+    });
+
+    return articleList;
+  } catch (err) {
+    throw new Error(`Failed to fetch articles: ${err}`);
+  }
+};
+
 type GetArticleByArticleUrlParam = {
   articleUrl: string;
   platformUrl: string;

@@ -178,11 +178,11 @@ export const CreateFavoriteArticleDialog: FC<
       if (privateArticlesRes.data.articles.length > 0) {
         const article = privateArticlesRes.data.articles[0];
         const data = await createFavoriteArticle({
-          title: article.title,
-          description: article.description,
+          title: ogpData?.title || "",
+          description: ogpData?.description || "",
           articleId: article.id,
-          articleUrl: article.articleUrl,
-          thumbnailURL: article.thumbnailURL,
+          articleUrl: url,
+          thumbnailURL: ogpData?.image || "",
           isRead: false,
           userId: user?.id || "",
           platformName: ogpData?.siteName || "",

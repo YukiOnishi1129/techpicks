@@ -16,7 +16,10 @@ import {
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { fetchArticleByArticleAndPlatformUrlAPI } from "@/features/articles/actions/article";
+import {
+  fetchArticleByArticleAndPlatformUrlAPI,
+  fetchPrivateArticlesByArticleUrlAPI,
+} from "@/features/articles/actions/article";
 import { createArticle } from "@/features/articles/repository/article";
 import { getOgpData } from "@/features/ogp/actions/ogp";
 
@@ -162,7 +165,42 @@ export const CreateBookmarkDialog: FC<CreateBookmarkDialogProps> = ({
         return;
       }
 
-      // 3. If not, get ogp data and register that data to article table and bookmark table.
+      // 3. If same article url and private are in article table, only register that data to favorite article table.
+      const privateArticlesRes = await fetchPrivateArticlesByArticleUrlAPI({
+        articleUrl: url,
+      });
+      if (privateArticlesRes.data.articles.length > 0) {
+        const article = privateArticlesRes.data.articles[0];
+        const id = await createBookmark({
+          articleId: article.id,
+          title: ogpData?.title || "",
+          description: ogpData?.description || "",
+          articleUrl: url,
+          thumbnailURL: ogpData?.image || "",
+          isRead: false,
+          userId: user?.id || "",
+          platformName: ogpData?.siteName || "",
+          platformUrl: ogpData?.siteUrl || "",
+          platformFaviconUrl: ogpData?.faviconImage || "",
+          isEng: article.isEng,
+        });
+        if (!id) {
+          failToast({
+            description: "Fail: add bookmark failed",
+          });
+          return;
+        }
+        successToast({
+          description: "Success: add bookmark",
+        });
+        await revalidatePage();
+        router.replace(`/bookmark`);
+        resetDialog();
+        setOpen(false);
+        return;
+      }
+
+      // 4. If not, get ogp data and register that data to article table and bookmark table.
       const isEng = !checkJapaneseArticle({
         title: ogpData?.title || "",
         description: ogpData?.description || "",

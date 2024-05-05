@@ -174,3 +174,24 @@ export const fetchArticleByArticleAndPlatformUrlAPI = async ({
     status,
   };
 };
+
+export const fetchPrivateArticleByIdAPI = async (
+  id: string
+): Promise<FetchArticleAPIResponse> => {
+  const url = `http://localhost:80/api/articles/private/${id}`;
+  const response = await getFetch({
+    url,
+    tagName: "articles/private",
+    cacheType: "no-store",
+  });
+  const data = await response.json();
+  const status = response.status;
+
+  return {
+    data: {
+      article: data.article as ArticleType | undefined,
+      message: data.message as string,
+    },
+    status,
+  };
+};
