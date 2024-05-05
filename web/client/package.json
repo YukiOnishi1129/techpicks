@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev -- -p 80",
-    "build": "next build",
+    "build": "prisma generate && next build",
     "start": "next start -- -p 80",
     "serve": "npm run build && npm run start",
     "test": "vitest",
