@@ -23,7 +23,7 @@ export const BaseLayout = async ({ children }: { children: ReactNode }) => {
         </div>
       </header>
 
-      <div className="h-16" />
+      <div className="h-12 md:h-16" />
       <main className="md:flex">
         {user && (
           <>

@@ -25,13 +25,15 @@ export function MobileHeader({ user }: MobileHeaderProps) {
         return "Search";
       case NAVIGATION_LISTS.ARTICLE_SEARCH_RESULT:
         return "Search Result";
+      case NAVIGATION_LISTS.FEED:
+        return "Feed List";
       default:
         return "Tech Picks";
     }
   }, [pathname]);
 
   return (
-    <div className="fixed z-50 flex h-16 w-screen items-center justify-between border-b border-gray-300  px-8 shadow-md">
+    <div className="fixed z-50 flex h-12 w-screen items-center justify-between border-b border-gray-300  px-8 shadow-md">
       <div></div>
       <h1 className="text-2xl font-bold ">{pageName}</h1>
       <div className="flex items-center justify-end">

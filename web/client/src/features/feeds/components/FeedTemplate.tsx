@@ -8,14 +8,17 @@ export const FeedTemplate = async () => {
   const resMyFeedList = await fetchMyFeedFoldersAPI();
   return (
     <div className="w-auto">
-      <h1 className="mb-4 mt-8 text-2xl font-bold ">Feed List</h1>
-      <div className="w-full border-b-2  py-4"></div>
+      <h1 className="hidden text-2xl font-bold md:mb-4 md:mt-8 md:block">
+        Feed List
+      </h1>
 
-      <FeedList
-        initialFeeds={res.data.feeds}
-        myFeedFolders={resMyFeedList.data.myFeedFolders}
-        fetchFeedsAPI={fetchFeedsAPI}
-      />
+      <div className="mt-4 md:mt-0">
+        <FeedList
+          initialFeeds={res.data.feeds}
+          myFeedFolders={resMyFeedList.data.myFeedFolders}
+          fetchFeedsAPI={fetchFeedsAPI}
+        />
+      </div>
     </div>
   );
 };
