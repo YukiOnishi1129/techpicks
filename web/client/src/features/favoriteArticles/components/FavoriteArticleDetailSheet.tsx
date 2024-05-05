@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { FC, useState } from "react";
+import { TwitterShareButton, XIcon } from "react-share";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -18,10 +19,28 @@ import { useParseHtml } from "@/hooks/useParseHtml";
 import { formatShowDateTime } from "@/lib/date";
 
 import { FavoriteArticleType } from "@/types/favoriteArticle";
+import { FavoriteArticleFolderType } from "@/types/favoriteArticleFolder";
+
+import { RemoveFavoriteArticleAlertDialog } from "./Dialog/RemoveFavoriteArticleAlertDialog";
+import { CopyFavoriteArticleDropdownMenu } from "./DropdownMenu";
+import { AddFavoriteArticleTooltip } from "./Tooltip/AddFavoriteArticleTooltip";
 
 type FavoriteArticleDetailSheetProps = {
   favoriteArticleFolderId: string;
   favoriteArticle: FavoriteArticleType;
+  isFollowing: boolean;
+  otherFavoriteArticleFolders: Array<FavoriteArticleFolderType>;
+  handleCreateFavoriteArticle: (
+    targetFavoriteArticleFolderId: string,
+    targetFavoriteArticleFolder?: FavoriteArticleFolderType
+  ) => Promise<string | undefined>;
+  handleRemoveFavoriteArticle: (
+    favoriteArticleId: string,
+    favoriteArticleFolderId?: string
+  ) => Promise<string | undefined>;
+  handleCreateFavoriteArticleFolder: (
+    favoriteArticleFolderId: string
+  ) => Promise<void>;
   children: React.ReactNode;
 };
 
@@ -30,6 +49,11 @@ export const FavoriteArticleDetailSheet: FC<
 > = ({
   favoriteArticleFolderId,
   favoriteArticle,
+  isFollowing,
+  otherFavoriteArticleFolders,
+  handleCreateFavoriteArticle,
+  handleRemoveFavoriteArticle,
+  handleCreateFavoriteArticleFolder,
   children,
 }: FavoriteArticleDetailSheetProps) => {
   const [open, setOpen] = useState(false);
@@ -55,6 +79,13 @@ export const FavoriteArticleDetailSheet: FC<
           <FavoriteArticleContent
             favoriteArticleFolderId={favoriteArticleFolderId}
             favoriteArticle={favoriteArticle}
+            isFollowing={isFollowing}
+            otherFavoriteArticleFolders={otherFavoriteArticleFolders}
+            handleCreateFavoriteArticle={handleCreateFavoriteArticle}
+            handleRemoveFavoriteArticle={handleRemoveFavoriteArticle}
+            handleCreateFavoriteArticleFolder={
+              handleCreateFavoriteArticleFolder
+            }
           />
         )}
       </SheetContent>
@@ -65,11 +96,29 @@ export const FavoriteArticleDetailSheet: FC<
 type FavoriteArticleContentProps = {
   favoriteArticleFolderId: string;
   favoriteArticle: FavoriteArticleType;
+  isFollowing: boolean;
+  otherFavoriteArticleFolders: Array<FavoriteArticleFolderType>;
+  handleCreateFavoriteArticle: (
+    targetFavoriteArticleFolderId: string,
+    targetFavoriteArticleFolder?: FavoriteArticleFolderType
+  ) => Promise<string | undefined>;
+  handleRemoveFavoriteArticle: (
+    favoriteArticleId: string,
+    favoriteArticleFolderId?: string
+  ) => Promise<string | undefined>;
+  handleCreateFavoriteArticleFolder: (
+    favoriteArticleFolderId: string
+  ) => Promise<void>;
 };
 
 const FavoriteArticleContent: FC<FavoriteArticleContentProps> = ({
   favoriteArticleFolderId,
   favoriteArticle,
+  isFollowing,
+  otherFavoriteArticleFolders,
+  handleCreateFavoriteArticle,
+  handleRemoveFavoriteArticle,
+  handleCreateFavoriteArticleFolder,
 }) => {
   const imageUrl = useCheckImageExist(
     favoriteArticle?.thumbnailURL || undefined
@@ -106,6 +155,41 @@ const FavoriteArticleContent: FC<FavoriteArticleContentProps> = ({
               alt=""
             />
           </Link>
+          <div className="flex items-center justify-center p-4">
+            <div className="mr-4">
+              <TwitterShareButton
+                title={favoriteArticle.title}
+                url={favoriteArticle.articleUrl}
+              >
+                <XIcon className="inline-block" size={36} />
+              </TwitterShareButton>
+            </div>
+            <div className="mr-4">
+              <CopyFavoriteArticleDropdownMenu
+                articleId={favoriteArticle.articleId || ""}
+                favoriteArticleFolders={otherFavoriteArticleFolders}
+                handleCreateFavoriteArticle={handleCreateFavoriteArticle}
+                handleRemoveFavoriteArticle={handleRemoveFavoriteArticle}
+                handleCreateFavoriteArticleFolder={
+                  handleCreateFavoriteArticleFolder
+                }
+              />
+            </div>
+            <div>
+              {isFollowing ? (
+                <RemoveFavoriteArticleAlertDialog
+                  favoriteArticleId={favoriteArticle.id}
+                  favoriteArticleTitle={favoriteArticle.title}
+                  handleRemoveFavoriteArticle={handleRemoveFavoriteArticle}
+                />
+              ) : (
+                <AddFavoriteArticleTooltip
+                  favoriteArticleFolderId={favoriteArticleFolderId}
+                  handleCreateFavoriteArticle={handleCreateFavoriteArticle}
+                />
+              )}
+            </div>
+          </div>
         </div>
 
         <div className="my-10 flex justify-around">

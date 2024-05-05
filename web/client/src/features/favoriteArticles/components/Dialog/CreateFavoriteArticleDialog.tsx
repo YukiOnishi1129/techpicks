@@ -236,7 +236,7 @@ export const CreateFavoriteArticleDialog: FC<
       </DialogTrigger>
       <DialogContent onCloseAutoFocus={resetDialog}>
         <DialogHeader>
-          <DialogTitle>{"Add New Bookmark Article"}</DialogTitle>
+          <DialogTitle>{"Add New Favorite Article"}</DialogTitle>
         </DialogHeader>
         <div>
           <Form {...form}>
