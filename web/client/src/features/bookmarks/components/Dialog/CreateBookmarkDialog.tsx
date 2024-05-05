@@ -174,7 +174,7 @@ export const CreateBookmarkDialog: FC<CreateBookmarkDialogProps> = ({
         articleUrl: url,
         thumbnailURL: ogpData?.image || "",
         isEng: isEng,
-        isPrivate: false,
+        isPrivate: true,
       });
 
       if (!createdArticleId) {

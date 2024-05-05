@@ -23,18 +23,43 @@ import { useParseHtml } from "@/hooks/useParseHtml";
 import { showDiffDateToCurrentDate } from "@/lib/date";
 
 import { ArticleType } from "@/types/article";
+import { FavoriteArticleFolderType } from "@/types/favoriteArticleFolder";
 
-import { useArticleBookmark } from "../hooks/useArticleBookmark";
+import { FollowFavoriteArticleDropdownMenu } from "./DropdownMenu";
 
 type ArticleDetailSheetProps = {
   article: ArticleType;
   user: User | undefined;
+  bookmarkId?: string;
+  isFollowing: boolean;
+  favoriteArticleFolders: Array<FavoriteArticleFolderType>;
+  handleAddBookmark: (articleId: string) => Promise<void>;
+  handleRemoveBookmark: (bookmarkId: string) => Promise<void>;
+  handleCreateFavoriteArticle: (
+    favoriteArticleFolderId: string,
+    createdFavoriteArticleFolder?: FavoriteArticleFolderType
+  ) => Promise<string | undefined>;
+  handleRemoveFavoriteArticle: (
+    favoriteArticleId: string,
+    favoriteArticleFolderId: string
+  ) => Promise<string | undefined>;
+  handleCreateFavoriteArticleFolder: (
+    favoriteArticleFolderId: string
+  ) => Promise<void>;
   children: React.ReactNode;
 };
 
 export const ArticleDetailSheet: FC<ArticleDetailSheetProps> = ({
   article,
   user,
+  bookmarkId,
+  isFollowing,
+  favoriteArticleFolders,
+  handleAddBookmark,
+  handleRemoveBookmark,
+  handleCreateFavoriteArticle,
+  handleRemoveFavoriteArticle,
+  handleCreateFavoriteArticleFolder,
   children,
 }: ArticleDetailSheetProps) => {
   const [open, setOpen] = useState(false);
@@ -56,23 +81,62 @@ export const ArticleDetailSheet: FC<ArticleDetailSheetProps> = ({
         </div>
       </SheetTrigger>
       <SheetContent className="w-[360px] sm:w-[700px] sm:max-w-[700px]">
-        {open && <ArticleContent article={article} user={user} />}
+        {open && (
+          <ArticleDetailSheetContent
+            article={article}
+            user={user}
+            bookmarkId={bookmarkId}
+            isFollowing={isFollowing}
+            favoriteArticleFolders={favoriteArticleFolders}
+            handleAddBookmark={handleAddBookmark}
+            handleRemoveBookmark={handleRemoveBookmark}
+            handleCreateFavoriteArticle={handleCreateFavoriteArticle}
+            handleRemoveFavoriteArticle={handleRemoveFavoriteArticle}
+            handleCreateFavoriteArticleFolder={
+              handleCreateFavoriteArticleFolder
+            }
+          />
+        )}
       </SheetContent>
     </Sheet>
   );
 };
 
-const ArticleContent = ({
+type ArticleDetailSheetContentProps = {
+  article: ArticleType;
+  user?: User;
+  bookmarkId?: string;
+  isFollowing: boolean;
+  favoriteArticleFolders: Array<FavoriteArticleFolderType>;
+  handleAddBookmark: (articleId: string) => Promise<void>;
+  handleRemoveBookmark: (bookmarkId: string) => Promise<void>;
+  handleCreateFavoriteArticle: (
+    favoriteArticleFolderId: string,
+    createdFavoriteArticleFolder?: FavoriteArticleFolderType
+  ) => Promise<string | undefined>;
+  handleRemoveFavoriteArticle: (
+    favoriteArticleId: string,
+    favoriteArticleFolderId: string
+  ) => Promise<string | undefined>;
+  handleCreateFavoriteArticleFolder: (
+    favoriteArticleFolderId: string
+  ) => Promise<void>;
+};
+
+const ArticleDetailSheetContent: FC<ArticleDetailSheetContentProps> = ({
   article,
   user,
-}: {
-  article: ArticleType;
-  user: User | undefined;
+  bookmarkId,
+  isFollowing,
+  favoriteArticleFolders,
+  handleAddBookmark,
+  handleRemoveBookmark,
+  handleCreateFavoriteArticle,
+  handleRemoveFavoriteArticle,
+  handleCreateFavoriteArticleFolder,
 }) => {
   const imageUrl = useCheckImageExist(article.thumbnailURL);
   const { convertParseHtml } = useParseHtml();
-  const { bookmarkId, handleAddBookmark, handleRemoveBookmark } =
-    useArticleBookmark({ article });
 
   const shareUrl = `${process.env.NEXT_PUBLIC_SITE_DOMAIN}/article/${article.id}`;
   const shareTitle = article.title;
@@ -111,7 +175,7 @@ const ArticleContent = ({
           </Link>
           {user && (
             <div className="flex justify-between">
-              <TwitterShareButton title={shareTitle} url={shareUrl}>
+              <TwitterShareButton title={shareTitle} url={article.articleUrl}>
                 <XIcon className="inline-block" size={36} />
               </TwitterShareButton>
               {bookmarkId ? (
@@ -131,6 +195,18 @@ const ArticleContent = ({
                   <MdOutlineBookmarkAdd className="inline-block" size={36} />
                 </Button>
               )}
+              <div className="mx-4  mt-2">
+                <FollowFavoriteArticleDropdownMenu
+                  isFollowing={isFollowing}
+                  articleId={article.id}
+                  favoriteArticleFolders={favoriteArticleFolders}
+                  handleCreateFavoriteArticle={handleCreateFavoriteArticle}
+                  handleRemoveFavoriteArticle={handleRemoveFavoriteArticle}
+                  handleCreateFavoriteArticleFolder={
+                    handleCreateFavoriteArticleFolder
+                  }
+                />
+              </div>
             </div>
           )}
         </div>
@@ -152,7 +228,7 @@ const ArticleContent = ({
         </div>
       </SheetHeader>
 
-      <div className="h-[400px] overflow-y-scroll md:h-[400px]">
+      <div className="h-[500px] overflow-y-scroll">
         <Link href={article.articleUrl} target="_blank">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img

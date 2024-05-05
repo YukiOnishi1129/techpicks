@@ -187,6 +187,15 @@ export const getBookmark = async ({ bookmarkId, userId }: GetBookmarkDTO) => {
             updatedAt: true,
           },
         },
+        article: {
+          select: {
+            favoriteArticles: {
+              where: {
+                userId: userId,
+              },
+            },
+          },
+        },
       },
     });
 
@@ -216,6 +225,8 @@ export const getBookmark = async ({ bookmarkId, userId }: GetBookmarkDTO) => {
         createdAt: data.profile.createdAt,
         updatedAt: data.profile.updatedAt,
       },
+      favoriteArticles: data?.article?.favoriteArticles || [],
+      isFollowing: data?.article?.favoriteArticles?.length ? true : false,
       createdAt: data.createdAt,
       updatedAt: data.updatedAt,
     };

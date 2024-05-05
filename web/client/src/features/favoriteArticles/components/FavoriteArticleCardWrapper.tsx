@@ -320,6 +320,11 @@ export const FavoriteArticleCardWrapper: FC<
         <FavoriteArticleDetailSheet
           favoriteArticleFolderId={favoriteArticleFolderId}
           favoriteArticle={favoriteArticle}
+          isFollowing={isFollowing}
+          otherFavoriteArticleFolders={showOtherFavoriteArticleFolders}
+          handleCreateFavoriteArticle={handleCreateFavoriteArticle}
+          handleRemoveFavoriteArticle={handleRemoveFavoriteArticle}
+          handleCreateFavoriteArticleFolder={handleCreateFavoriteArticleFolder}
         >
           <FavoriteArticleCard favoriteArticle={favoriteArticle} />
         </FavoriteArticleDetailSheet>

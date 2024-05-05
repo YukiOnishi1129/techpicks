@@ -196,9 +196,9 @@ const ArticleContent = ({
           <Link href={article.articleUrl} target="_blank">
             <Button
               size={"lg"}
-              className="w-1/2 bg-blue-700 text-xl hover:bg-blue-900"
+              className="w-1/2 bg-blue-700 text-xl text-white hover:bg-blue-900"
             >
-              本文を読む
+              READ MORE
             </Button>
           </Link>
         </div>
@@ -211,9 +211,9 @@ const ArticleContent = ({
           <Link href={article.articleUrl} target="_blank">
             <Button
               size={"lg"}
-              className="w-1/2 bg-blue-700 text-xl hover:bg-blue-900"
+              className="w-1/2 bg-blue-700 text-xl text-white hover:bg-blue-900"
             >
-              本文を読む
+              READ MORE
             </Button>
           </Link>
         </div>
