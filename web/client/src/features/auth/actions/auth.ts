@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 
 import { createServerSideClient } from "@/lib/supabase/client/serverClient";
 
-export async function login() {
+export async function googleLogin() {
   const supabase = await createServerSideClient();
 
   const { data, error } = await supabase.auth.signInWithOAuth({
