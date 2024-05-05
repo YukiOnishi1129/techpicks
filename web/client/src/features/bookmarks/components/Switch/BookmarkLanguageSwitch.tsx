@@ -26,12 +26,12 @@ export const BookmarkLanguageSwitch: FC<BookmarkLanguageSwitchProps> = ({
       setIsLoading(true);
       const language = checked ? 2 : 1;
       setIsEng(checked);
-      let path = `/bookmark/?languageStatus=${language}`;
+      let addPath = "";
       if (keyword) {
-        path += `&keyword=${keyword}`;
+        addPath += `&keyword=${keyword}`;
       }
       setIsLoading(false);
-      router.replace(path);
+      router.replace(`/bookmark?languageStatus=${language}${addPath}`);
     },
     [keyword, router]
   );

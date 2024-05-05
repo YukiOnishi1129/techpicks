@@ -14,7 +14,7 @@ export const NotLoggedBottomNavigationMenu = () => {
 
       <div className="w-1/2 border-r px-4 py-2">
         <Link
-          href="/article/search/"
+          href="/article/search"
           className="flex flex-col items-center justify-center"
         >
           <BiSolidSearch className="mt-2" size={36} />

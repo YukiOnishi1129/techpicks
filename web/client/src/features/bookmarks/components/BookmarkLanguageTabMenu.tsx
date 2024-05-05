@@ -20,11 +20,11 @@ export const BookmarkLanguageTabMenu: FC<BookmarkLanguageTabMenuProps> = ({
 
   const onClick = useCallback(
     async (language: LanguageStatus) => {
-      let query = `/?languageStatus=${language}`;
+      let query = "";
       if (keyword) {
         query += `&keyword=${keyword}`;
       }
-      router.push(`${pathname}${query}`);
+      router.push(`/?languageStatus=${language}${pathname}${query}`);
     },
     [router, keyword, pathname]
   );

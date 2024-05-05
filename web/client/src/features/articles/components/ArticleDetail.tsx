@@ -55,7 +55,7 @@ export const ArticleDetail = ({ article, user }: ArticleDetailProps) => {
         <h1 className="mb-4 flex">
           <Link
             className="inline-block w-full cursor-pointer  text-lg font-semibold tracking-wide hover:text-blue-500"
-            href={article.articleUrl}
+            href={new URL(article.articleUrl)}
             target="_blank"
           >
             <span className="pb-4">{article.title}</span>
@@ -71,7 +71,7 @@ export const ArticleDetail = ({ article, user }: ArticleDetailProps) => {
         <div className="flex w-full items-center justify-between pt-2">
           <Link
             className="mb-2 hover:opacity-80"
-            href={article.platform?.siteUrl || ""}
+            href={new URL(article.platform?.siteUrl || "")}
             target="_blank"
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -108,7 +108,7 @@ export const ArticleDetail = ({ article, user }: ArticleDetailProps) => {
         </div>
 
         <div className="mb-4 flex justify-around">
-          <Link href={article.articleUrl} target="_blank">
+          <Link href={new URL(article.articleUrl)} target="_blank">
             <Button
               size={"lg"}
               className="w-full bg-blue-700 text-xl text-white hover:bg-blue-900"
@@ -120,7 +120,7 @@ export const ArticleDetail = ({ article, user }: ArticleDetailProps) => {
       </div>
 
       <div className="h-[400px] overflow-y-scroll md:h-[400px]">
-        <Link href={article.articleUrl} target="_blank">
+        <Link href={new URL(article.articleUrl)} target="_blank">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             className="m-auto cursor-pointer rounded-md object-cover object-center pb-8 hover:opacity-80 md:h-[370px]"
@@ -139,7 +139,7 @@ export const ArticleDetail = ({ article, user }: ArticleDetailProps) => {
               <Link
                 key={`${feed.id}-${feed.category.id}`}
                 className="mb-2 ml-2 hover:opacity-80"
-                href={feed.siteUrl}
+                href={new URL(feed.siteUrl)}
                 target="_blank"
               >
                 <FeedNameBadge name={feed.name} />
@@ -148,7 +148,7 @@ export const ArticleDetail = ({ article, user }: ArticleDetailProps) => {
         </div>
 
         <div className="my-10 flex justify-around">
-          <Link href={article.articleUrl} target="_blank">
+          <Link href={new URL(article.articleUrl)} target="_blank">
             <Button
               size={"lg"}
               className="w-full bg-blue-700 text-xl text-white hover:bg-blue-900"

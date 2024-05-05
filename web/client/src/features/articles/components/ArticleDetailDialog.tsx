@@ -116,7 +116,7 @@ const ArticleContent = ({
         <DialogTitle>
           <Link
             className="cursor-pointer text-lg font-semibold  tracking-wide hover:text-blue-500"
-            href={article.articleUrl}
+            href={new URL(article.articleUrl)}
             target="_blank"
           >
             <h1 className="pb-4">{article.title}</h1>
@@ -125,7 +125,7 @@ const ArticleContent = ({
         <div className="pb-0">
           <Link
             className="hover:opacity-80"
-            href={article.platform?.siteUrl || ""}
+            href={new URL(article.platform?.siteUrl || "")}
             target="_blank"
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -137,7 +137,7 @@ const ArticleContent = ({
           </Link>
           <Link
             className="hover:opacity-80"
-            href={article.platform?.siteUrl || ""}
+            href={new URL(article.platform?.siteUrl || "")}
             target="_blank"
           >
             <span className="rounded-lg bg-sky-500 px-2 py-1 text-xs font-bold text-white md:text-base">
@@ -150,7 +150,7 @@ const ArticleContent = ({
               <Link
                 key={`${feed.id}-${feed.category.id}`}
                 className="ml-2 hover:opacity-80"
-                href={feed.siteUrl}
+                href={new URL(feed.siteUrl)}
                 target="_blank"
               >
                 <span className="rounded-lg bg-yellow-600 px-2 py-1 text-xs font-bold text-white md:text-base">
@@ -183,7 +183,7 @@ const ArticleContent = ({
       </DialogHeader>
 
       <div className="overflow-y-scroll">
-        <Link href={article.articleUrl} target="_blank">
+        <Link href={new URL(article.articleUrl)} target="_blank">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             className="m-auto h-[370px] cursor-pointer rounded-md object-cover object-center pb-8 hover:opacity-80"
@@ -193,7 +193,7 @@ const ArticleContent = ({
         </Link>
 
         <div className="my-10 text-center">
-          <Link href={article.articleUrl} target="_blank">
+          <Link href={new URL(article.articleUrl)} target="_blank">
             <Button
               size={"lg"}
               className="w-1/2 bg-blue-700 text-xl text-white hover:bg-blue-900"
@@ -208,7 +208,7 @@ const ArticleContent = ({
         </div>
 
         <div className="my-10 text-center">
-          <Link href={article.articleUrl} target="_blank">
+          <Link href={new URL(article.articleUrl)} target="_blank">
             <Button
               size={"lg"}
               className="w-1/2 bg-blue-700 text-xl text-white hover:bg-blue-900"

@@ -120,7 +120,7 @@ const FavoriteArticleContent: FC<FavoriteArticleContentProps> = ({
         <SheetTitle className="flex">
           <Link
             className="inline-block w-full cursor-pointer text-lg font-semibold  tracking-wide hover:text-blue-500"
-            href={favoriteArticle.articleUrl}
+            href={new URL(favoriteArticle.articleUrl)}
             target="_blank"
           >
             <h1 className="pb-4">{favoriteArticle.title}</h1>
@@ -134,7 +134,7 @@ const FavoriteArticleContent: FC<FavoriteArticleContentProps> = ({
         <div className="flex w-full items-center justify-between pt-2">
           <Link
             className="mb-2 hover:opacity-80"
-            href={favoriteArticle?.platformUrl || ""}
+            href={new URL(favoriteArticle?.platformUrl || "")}
             target="_blank"
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -175,7 +175,7 @@ const FavoriteArticleContent: FC<FavoriteArticleContentProps> = ({
         </div>
 
         <div className="my-10 flex justify-around">
-          <Link href={favoriteArticle.articleUrl} target="_blank">
+          <Link href={new URL(favoriteArticle.articleUrl)} target="_blank">
             <Button
               size={"lg"}
               className="w-full bg-blue-700 text-xl text-white hover:bg-blue-900"
@@ -192,7 +192,7 @@ const FavoriteArticleContent: FC<FavoriteArticleContentProps> = ({
       </SheetHeader>
 
       <div className="h-[400px] overflow-y-scroll">
-        <Link href={favoriteArticle.articleUrl} target="_blank">
+        <Link href={new URL(favoriteArticle.articleUrl)} target="_blank">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             className="m-auto h-[370px] cursor-pointer rounded-md object-cover object-center pb-8 hover:opacity-80"
@@ -206,7 +206,7 @@ const FavoriteArticleContent: FC<FavoriteArticleContentProps> = ({
         </div>
 
         <div className="my-10 flex justify-around">
-          <Link href={favoriteArticle.articleUrl} target="_blank">
+          <Link href={new URL(favoriteArticle.articleUrl)} target="_blank">
             <Button
               size={"lg"}
               className="w-full bg-blue-700 text-xl text-white hover:bg-blue-900"

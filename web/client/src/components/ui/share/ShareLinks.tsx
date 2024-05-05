@@ -19,7 +19,7 @@ export const ShareLinks: FC<ShareLinksProps> = ({
   return (
     <div className="flex items-center justify-center">
       <div className="mr-4">
-        <ReadPostTooltip postUrl={shareUrl} size={postIconSize} />
+        <ReadPostTooltip postUrl={new URL(shareUrl)} size={postIconSize} />
       </div>
       <div>
         <XShareTooltip

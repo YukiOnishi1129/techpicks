@@ -28,12 +28,12 @@ export const ArticleLanguageSwitch: FC<ArticleLanguageSwitchProps> = ({
       setIsLoading(true);
       const language = checked ? 2 : 1;
       setIsEng(checked);
-      let path = `/?languageStatus=${language}&tab=${tab}`;
+      let addPath = "";
       if (keyword) {
-        path += `&keyword=${keyword}`;
+        addPath += `&keyword=${keyword}`;
       }
       setIsLoading(false);
-      router.replace(path);
+      router.replace(`/?languageStatus=${language}&tab=${tab}${addPath}`);
     },
     [keyword, tab, router]
   );
