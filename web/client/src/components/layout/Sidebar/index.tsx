@@ -8,6 +8,7 @@ import { CreateFavoriteArticleFolderDialog } from "@/features/favoriteArticleFol
 import { CreateMyFeedFolderDialog } from "@/features/myFeedFolders/components/Dialog";
 
 import { FavoriteArticleFolderLinks } from "./FavoriteArticleFolderLinks";
+import { LogoutLink } from "./LogoutLink";
 import { MyFeedFolderLinks } from "./MyFeedFolderLinks";
 
 type SidebarProps = {
@@ -82,6 +83,9 @@ export function Sidebar({ user }: SidebarProps) {
             </div>
           </>
         )}
+        <div className="md:hidden mt-8 ml-4 px-4 py-2">
+          <LogoutLink />
+        </div>
       </div>
     </div>
   );
