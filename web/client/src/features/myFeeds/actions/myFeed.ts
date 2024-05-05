@@ -17,7 +17,7 @@ export const fetchMyFeedsByMyFeedFolderIdAPI = async ({
 }: {
   myFeedFolderId: string;
 }): Promise<FetchMyFeedsResponse> => {
-  const url = `http://localhost:80/api/my-feeds/my-feed-folders/${myFeedFolderId}`;
+  const url = `${process.env.WEB_DOMAIN}/api/my-feeds/my-feed-folders/${myFeedFolderId}`;
   const response = await getFetch({
     url,
     tagName: "myFeed/myFeedFolders",
@@ -47,7 +47,7 @@ export const fetchMyFeedsByMyFeedFolderIdAPI = async ({
 };
 
 export const fetchMyFeedById = async ({ id }: { id: string }) => {
-  const url = `http://localhost:80/api/my-feeds/${id}`;
+  const url = `${process.env.WEB_DOMAIN}/api/my-feeds/${id}`;
 
   const response = await getFetch({
     url,
@@ -91,7 +91,7 @@ export const fetchMyFeedCountByMyFeedFolderIdAndFeedIdAPI = async ({
   feedId: string;
   myFeedFolderId: string;
 }): Promise<FetchMyFeedCountAPIResponse> => {
-  const url = `http://localhost:80/api/my-feeds/count/by-myfeed-list-and-feed-id?myFeedFolderId=${myFeedFolderId}&feedId=${feedId}`;
+  const url = `${process.env.WEB_DOMAIN}/api/my-feeds/count/by-myfeed-list-and-feed-id?myFeedFolderId=${myFeedFolderId}&feedId=${feedId}`;
 
   const response = await getFetch({
     url,

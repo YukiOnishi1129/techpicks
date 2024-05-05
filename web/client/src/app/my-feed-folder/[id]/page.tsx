@@ -1,4 +1,7 @@
+import { redirect } from "next/navigation";
+
 import { MyFeedFolderDetailTemplate } from "@/features/myFeedFolders/components/MyFeedFolderDetailTemplate";
+import { getUser } from "@/features/users/actions/user";
 
 type MyFeedFolderDetailPageProps = {
   params: {
@@ -7,14 +10,18 @@ type MyFeedFolderDetailPageProps = {
   searchParams: { [key: string]: string | string[] | undefined };
 };
 
-export default function MyFeedFolderDetailPage({
+export default async function MyFeedFolderDetailPage({
   params,
   searchParams,
 }: MyFeedFolderDetailPageProps) {
+  const user = await getUser();
+  if (!user) {
+    redirect("/login");
+  }
   const { id } = params;
   const keyword =
     typeof searchParams["keyword"] === "string"
       ? searchParams["keyword"]
       : undefined;
-  return <MyFeedFolderDetailTemplate id={id} keyword={keyword} />;
+  return <MyFeedFolderDetailTemplate user={user} id={id} keyword={keyword} />;
 }

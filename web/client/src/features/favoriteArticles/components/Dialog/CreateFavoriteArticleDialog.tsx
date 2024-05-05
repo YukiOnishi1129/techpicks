@@ -327,7 +327,7 @@ export const CreateFavoriteArticleDialog: FC<
                   <img className="size-6" src={ogpData.faviconImage} alt="" />
 
                   <span className="text-sm">
-                    <Link href={ogpData.siteUrl} target="_blank">
+                    <Link href={new URL(ogpData.siteUrl)} target="_blank">
                       {ogpData.siteName}
                     </Link>
                   </span>

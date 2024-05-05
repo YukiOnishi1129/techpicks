@@ -1,4 +1,7 @@
+import { redirect } from "next/navigation";
+
 import { FavoriteArticleFolderDetailTemplate } from "@/features/favoriteArticleFolders/components/FavoriteArticleFolderDetailTemplate";
+import { getUser } from "@/features/users/actions/user";
 
 type FavoriteArticleFolderDetailPageProps = {
   params: {
@@ -7,14 +10,24 @@ type FavoriteArticleFolderDetailPageProps = {
   searchParams: { [key: string]: string | string[] | undefined };
 };
 
-export default function FavoriteArticleFolderDetailPage({
+export default async function FavoriteArticleFolderDetailPage({
   params,
   searchParams,
 }: FavoriteArticleFolderDetailPageProps) {
+  const user = await getUser();
+  if (!user) {
+    redirect("/login");
+  }
   const { id } = params;
   const keyword =
     typeof searchParams["keyword"] === "string"
       ? searchParams["keyword"]
       : undefined;
-  return <FavoriteArticleFolderDetailTemplate id={id} keyword={keyword} />;
+  return (
+    <FavoriteArticleFolderDetailTemplate
+      user={user}
+      id={id}
+      keyword={keyword}
+    />
+  );
 }

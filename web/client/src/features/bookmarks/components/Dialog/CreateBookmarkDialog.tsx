@@ -159,7 +159,7 @@ export const CreateBookmarkDialog: FC<CreateBookmarkDialogProps> = ({
           description: "Success: add bookmark",
         });
         await revalidatePage();
-        router.replace(`/bookmark/`);
+        router.replace("/bookmark");
         resetDialog();
         setOpen(false);
         return;
@@ -319,7 +319,7 @@ export const CreateBookmarkDialog: FC<CreateBookmarkDialogProps> = ({
                   <img className="size-6" src={ogpData.faviconImage} alt="" />
 
                   <span className="text-sm">
-                    <Link href={ogpData.siteUrl} target="_blank">
+                    <Link href={new URL(ogpData.siteUrl)} target="_blank">
                       {ogpData.siteName}
                     </Link>
                   </span>

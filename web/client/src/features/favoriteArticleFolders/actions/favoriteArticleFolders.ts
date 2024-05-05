@@ -19,7 +19,7 @@ type FetchFavoriteArticleFolderAPIRequest = {
 export const fetchFavoriteArticleFoldersAPI = async ({
   keyword,
 }: FetchFavoriteArticleFolderAPIRequest): Promise<FetchFavoriteArticleFolderListAPIResponse> => {
-  let url = "http://localhost:80/api/favorite-article-folders/";
+  let url = `${process.env.WEB_DOMAIN}/api/favorite-article-folders/`;
   if (keyword) {
     url += `?keyword=${keyword}`;
   }
@@ -72,7 +72,7 @@ type FetchFavoriteArticleFolderAPIResponse = {
 export const fetchFavoriteArticleFolderByIdAPI = async (
   id: string
 ): Promise<FetchFavoriteArticleFolderAPIResponse> => {
-  const url = `http://localhost:80/api/favorite-article-folders/${id}`;
+  const url = `${process.env.WEB_DOMAIN}/api/favorite-article-folders/${id}`;
   const response = await getFetch({
     url,
     tagName: "favorite-article-folder",

@@ -1,10 +1,10 @@
+import { User } from "@supabase/supabase-js";
 import { FC } from "react";
 
 import { fetchFavoriteArticlesByFavoriteArticleFolderIdAPI } from "@/features/favoriteArticles/actions/favoriteArticle";
 import { CreateFavoriteArticleDialog } from "@/features/favoriteArticles/components/Dialog/CreateFavoriteArticleDialog";
 import { FavoriteArticleList } from "@/features/favoriteArticles/components/FavoriteArticleList";
 import { FavoriteArticleFolderArticleKeywordSearchInput } from "@/features/search/components/favoriteArticleFolder/FavoriteArticleFolderArticleKeywordSearchInput";
-import { getUser } from "@/features/users/actions/user";
 
 import { BreadCrumbType, PageBreadcrumb } from "@/components/ui/breadcrumb";
 
@@ -14,14 +14,14 @@ import {
 } from "../actions/favoriteArticleFolders";
 
 type FavoriteArticleFolderDetailTemplateProps = {
+  user: User;
   id: string;
   keyword?: string;
 };
 
 export const FavoriteArticleFolderDetailTemplate: FC<
   FavoriteArticleFolderDetailTemplateProps
-> = async ({ id, keyword }) => {
-  const user = await getUser();
+> = async ({ user, id, keyword }) => {
   const res = await fetchFavoriteArticleFolderByIdAPI(id);
   const resFavoriteArticles =
     await fetchFavoriteArticlesByFavoriteArticleFolderIdAPI({

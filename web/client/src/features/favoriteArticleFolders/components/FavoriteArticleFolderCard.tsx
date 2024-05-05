@@ -66,7 +66,7 @@ export const FavoriteArticleFolderCard: FC<FavoriteArticleFolderCardProps> = ({
             )}
           </Link>
         </p>
-        <div className=" border-t-2 py-2">
+        <div className="border-t-2 py-2">
           {latestFavoriteArticle ? (
             <div>
               <h3 className="mb-2">Latest article</h3>

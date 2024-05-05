@@ -32,7 +32,7 @@ export const fetchBookmarkListAPI = async ({
   platformType?: string;
   platformIdList: Array<string>;
 }): Promise<FetchBookmarkListAPIResponse> => {
-  let url = `http://localhost:80/api/bookmarks/?offset=${offset}`;
+  let url = `${process.env.WEB_DOMAIN}/api/bookmarks/?offset=${offset}`;
   if (languageStatus) {
     url += `&languageStatus=${languageStatus}`;
   }
@@ -82,7 +82,7 @@ export const fetchBookmarkByIdCountAPI = async ({
 }: {
   bookmarkId: string;
 }): Promise<FetchBookmarkCountAPIResponse> => {
-  let url = `http://localhost:80/api/bookmarks/count/${bookmarkId}`;
+  let url = `${process.env.WEB_DOMAIN}/api/bookmarks/count/${bookmarkId}`;
   const response = await getFetch({
     url,
     tagName: "bookmarks/count",
@@ -110,7 +110,7 @@ export const fetchBookmarkCountByArticleIdAPI = async ({
 }: {
   articleId: string;
 }): Promise<FetchBookmarkCountAPIResponse> => {
-  let url = `http://localhost:80/api/bookmarks/count/by-article-id/?articleId=${articleId}`;
+  let url = `${process.env.WEB_DOMAIN}/api/bookmarks/count/by-article-id/?articleId=${articleId}`;
   const response = await getFetch({
     url,
     tagName: "bookmarks/count",
@@ -138,7 +138,7 @@ export const fetchBookmarkCountByArticleUrlAPI = async ({
 }: {
   articleUrl: string;
 }): Promise<FetchBookmarkCountAPIResponse> => {
-  let url = `http://localhost:80/api/bookmarks/count/by-article-url/?articleUrl=${articleUrl}`;
+  let url = `${process.env.WEB_DOMAIN}/api/bookmarks/count/by-article-url/?articleUrl=${articleUrl}`;
   const response = await getFetch({
     url,
     tagName: "bookmarks/count",
@@ -199,7 +199,7 @@ export const fetchBookmarkCountByArticleUrlAPI = async ({
 //   platformFaviconUrl,
 //   isEng,
 // }: CreateBookmarkAPIRequest): Promise<CreateBookmarkAPIResponse> => {
-//   let url = `http://localhost:80/api/bookmarks/`;
+//   let url = `${process.env.WEB_DOMAIN}/api/bookmarks/`;
 //   const response = await postFetch({
 //     url,
 //     body: {
@@ -251,7 +251,7 @@ export const fetchBookmarkCountByArticleUrlAPI = async ({
 // }: {
 //   bookmarkId: string;
 // }): Promise<DeleteBookmarkAPIResponse> => {
-//   let url = `http://localhost:80/api/bookmarks/${bookmarkId}`;
+//   let url = `${process.env.WEB_DOMAIN}/api/bookmarks/${bookmarkId}`;
 //   const response = await deleteFetch({
 //     url,
 //     tagName: "bookmarks/delete",

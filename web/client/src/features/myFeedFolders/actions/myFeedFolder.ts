@@ -10,7 +10,7 @@ import {
 
 export const fetchMyFeedFoldersAPI =
   async (): Promise<FetchMyFeedFolderAPIResponse> => {
-    const url = `http://localhost:80/api/my-feed-folders`;
+    const url = `${process.env.WEB_DOMAIN}/api/my-feed-folders`;
     const response = await getFetch({
       url,
       tagName: "my-feed-folders",
@@ -40,7 +40,7 @@ export const fetchMyFeedFoldersAPI =
 export const fetchMyFeedFolderByIdAPI = async (
   id: string
 ): Promise<FetchMyFeedFolderByIdAPIResponse> => {
-  const url = `http://localhost:80/api/my-feed-folders/${id}`;
+  const url = `${process.env.WEB_DOMAIN}/api/my-feed-folders/${id}`;
   const response = await getFetch({
     url,
     tagName: "my-feed-folder",

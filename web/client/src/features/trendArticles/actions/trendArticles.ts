@@ -30,7 +30,7 @@ export const fetchTrendArticlesAPI = async ({
   startTime?: string;
   endTime?: string;
 }): Promise<FetchTrendArticlesAPIResponse> => {
-  let url = `http://localhost:80/api/trend-articles/?offset=${offset}&tab=${tab}`;
+  let url = `${process.env.WEB_DOMAIN}/api/trend-articles/?offset=${offset}&tab=${tab}`;
   if (languageStatus) {
     url += `&languageStatus=${languageStatus}`;
   }

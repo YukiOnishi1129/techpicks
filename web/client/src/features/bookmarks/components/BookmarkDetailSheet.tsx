@@ -135,7 +135,7 @@ const BookmarkDetailSheetContent: FC<BookmarkDetailSheetContentProps> = ({
         <SheetTitle>
           <Link
             className="cursor-pointer text-lg font-semibold  tracking-wide hover:text-blue-500"
-            href={bookmark.articleUrl}
+            href={new URL(bookmark.articleUrl)}
             target="_blank"
           >
             <h1 className="pb-4">{bookmark.title}</h1>
@@ -149,7 +149,7 @@ const BookmarkDetailSheetContent: FC<BookmarkDetailSheetContentProps> = ({
         <div className="flex w-full items-center justify-between pt-2">
           <Link
             className="mb-2 hover:opacity-80"
-            href={bookmark.platformFaviconUrl || ""}
+            href={new URL(bookmark.platformFaviconUrl || "")}
             target="_blank"
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -191,7 +191,7 @@ const BookmarkDetailSheetContent: FC<BookmarkDetailSheetContentProps> = ({
         </div>
 
         <div className="my-10 flex justify-around">
-          <Link href={bookmark.articleUrl} target="_blank">
+          <Link href={new URL(bookmark.articleUrl)} target="_blank">
             <Button
               size={"lg"}
               className="w-full bg-blue-700 text-xl text-white hover:bg-blue-900"
@@ -208,7 +208,7 @@ const BookmarkDetailSheetContent: FC<BookmarkDetailSheetContentProps> = ({
       </SheetHeader>
 
       <div className="h-[500px] overflow-y-scroll">
-        <Link href={bookmark.articleUrl} target="_blank">
+        <Link href={new URL(bookmark.articleUrl)} target="_blank">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             className="m-auto h-[370px] cursor-pointer rounded-md object-cover object-center pb-8 hover:opacity-80  md:h-[300px]"
@@ -222,7 +222,7 @@ const BookmarkDetailSheetContent: FC<BookmarkDetailSheetContentProps> = ({
         </div>
 
         <div className="my-10 flex justify-around">
-          <Link href={bookmark.articleUrl} target="_blank">
+          <Link href={new URL(bookmark.articleUrl)} target="_blank">
             <Button
               size={"lg"}
               className="w-full bg-blue-700 text-xl text-white hover:bg-blue-900"

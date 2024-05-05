@@ -35,11 +35,11 @@ export const FavoriteArticleFolderArticleKeywordSearchInput: FC<
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     let keywordPath = "";
     if (!!values.keyword && values.keyword.trim() !== "") {
-      keywordPath = `?keyword=${values.keyword}`;
+      keywordPath = `keyword=${values.keyword}`;
     }
     await serverRevalidatePage(pathname);
     router.replace(
-      `/favorite-article-folder/${favoriteArticleFolderId}/${keywordPath}`
+      `/favorite-article-folder?${favoriteArticleFolderId}/${keywordPath}`
     );
   };
 

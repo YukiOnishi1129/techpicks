@@ -24,7 +24,7 @@ export const LoggedBottomNavigationMenu: FC<
 
       <div className="w-1/5 border-r  px-4 py-2">
         <Link
-          href="/bookmark/"
+          href="/bookmark"
           className="flex flex-col items-center justify-center"
         >
           <FaBookmark className="mt-2" size={36} />
@@ -39,7 +39,7 @@ export const LoggedBottomNavigationMenu: FC<
 
       <div className="w-1/5 border-r px-4 py-2">
         <Link
-          href="/article/search/"
+          href="/article/search"
           className="flex flex-col items-center justify-center"
         >
           <BiSolidSearch className="mt-2" size={36} />
@@ -47,12 +47,9 @@ export const LoggedBottomNavigationMenu: FC<
       </div>
 
       <div className="w-1/5 border-r  px-4 py-2">
-        <Link
-          href="/article/search/"
-          className="flex flex-col items-center justify-center"
-        >
+        <div className="flex flex-col items-center justify-center">
           <UserAvatar user={user} />
-        </Link>
+        </div>
       </div>
     </div>
   );

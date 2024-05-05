@@ -1,8 +1,8 @@
+import { User } from "@supabase/supabase-js";
 import { FC } from "react";
 
 import { fetchFavoriteArticleFoldersAPI } from "@/features/favoriteArticleFolders/actions/favoriteArticleFolders";
 import { BookmarkArticleKeywordSearchInput } from "@/features/search/components/bookmarks/BookmarkArticleKeywordSearchInput";
-import { getUser } from "@/features/users/actions/user";
 
 import { LanguageStatus } from "@/types/language";
 
@@ -10,24 +10,25 @@ import { BookmarkList } from "./BookmarkList";
 import { CreateBookmarkDialog } from "./Dialog";
 import { fetchBookmarkListAPI } from "../actions/bookmark";
 
-type ArticleListProps = {
+type BookmarkListTemplateProps = {
+  user: User;
   languageStatus?: LanguageStatus;
   keyword?: string;
   platformIdList: Array<string>;
 };
 
-export const BookmarkListTemplate: FC<ArticleListProps> = async ({
+export const BookmarkListTemplate: FC<BookmarkListTemplateProps> = async ({
+  user,
   languageStatus,
   keyword,
   platformIdList,
-}: ArticleListProps) => {
+}) => {
   const res = await fetchBookmarkListAPI({
     languageStatus: languageStatus?.toString() || undefined,
     keyword,
     platformIdList,
   });
   const resFavoriteArticleFolders = await fetchFavoriteArticleFoldersAPI({});
-  const user = await getUser();
   return (
     <div className="w-auto">
       <div className="mb-4 mt-8 flex w-full items-center justify-between px-4">

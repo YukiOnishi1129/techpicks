@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/tooltip";
 
 type ReadPostTooltipProps = {
-  postUrl: string;
+  postUrl: URL;
   size?: number;
 };
 

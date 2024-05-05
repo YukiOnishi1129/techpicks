@@ -19,11 +19,11 @@ export const ArticleLanguageTabMenu: FC<ArticleLanguageTabMenuProps> = ({
 
   const onClick = useCallback(
     async (language: LanguageStatus) => {
-      let path = `/?languageStatus=${language}`;
+      let addPath = "";
       if (keyword) {
-        path += `&keyword=${keyword}`;
+        addPath += `&keyword=${keyword}`;
       }
-      router.replace(path);
+      router.replace(`/?languageStatus=${language}${addPath}`);
     },
     [router, keyword]
   );
