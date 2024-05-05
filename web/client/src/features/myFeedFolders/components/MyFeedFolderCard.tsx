@@ -180,10 +180,14 @@ export const MyFeedFolderCard: FC<MyFeedFolderCardProps> = ({
 
         <p className="line-clamp-3 h-[62px] w-full text-sm">
           <Link href={`/my-feed-folder/${myFeedFolder.id}`}>
-            {myFeedFolder.description}
+            {myFeedFolder?.description ? (
+              myFeedFolder.description
+            ) : (
+              <span className="text-gray-500">{"No description"}</span>
+            )}
           </Link>
         </p>
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 ">
+        <div className="grid grid-cols-1 gap-4 border-t-2 py-2 md:grid-cols-2 ">
           {showFeedList.map((feed) => {
             return (
               <div key={`${myFeedFolder}-${feed.id}`} className="mb-2">
