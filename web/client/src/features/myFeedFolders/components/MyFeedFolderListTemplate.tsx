@@ -1,14 +1,21 @@
+import { User } from "@supabase/supabase-js";
+import { FC } from "react";
+
 import { fetchAllFeedAPI } from "@/features/feeds/actions/feed";
-import { getUser } from "@/features/users/actions/user";
 
 import { CreateMyFeedFolderDialog } from "./Dialog";
 import { MyFeedFolderList } from "./MyFeedFolderList";
 import { fetchMyFeedFoldersAPI } from "../actions/myFeedFolder";
 
-export const MyFeedFolderListTemplate = async () => {
+type MyFeedFolderListTemplateProps = {
+  user: User;
+};
+
+export const MyFeedFolderListTemplate: FC<
+  MyFeedFolderListTemplateProps
+> = async ({ user }) => {
   const res = await fetchMyFeedFoldersAPI();
   const resFeeds = await fetchAllFeedAPI();
-  const user = await getUser();
   const myFeedFolders = res.data.myFeedFolders;
   const feeds = resFeeds.data.feeds;
   return (

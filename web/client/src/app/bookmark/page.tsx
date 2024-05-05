@@ -1,6 +1,8 @@
+import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
 import { BookmarkListTemplate } from "@/features/bookmarks/components/BookmarkListTemplate";
+import { getUser } from "@/features/users/actions/user";
 
 import { ScreenLoader } from "@/components/layout/ScreenLoader/ScreenLoader";
 
@@ -11,7 +13,13 @@ type PageProps = {
   searchParams: { [key: string]: string | string[] | undefined };
 };
 
-export default function Bookmark({ searchParams }: PageProps) {
+export default async function Bookmark({ searchParams }: PageProps) {
+  const user = await getUser();
+
+  if (!user) {
+    redirect("/login");
+  }
+
   const languageStatus =
     typeof searchParams["languageStatus"] === "string"
       ? (parseInt(searchParams["languageStatus"]) as LanguageStatus)
@@ -36,6 +44,7 @@ export default function Bookmark({ searchParams }: PageProps) {
   return (
     <Suspense fallback={<ScreenLoader />}>
       <BookmarkListTemplate
+        user={user}
         languageStatus={languageStatus}
         keyword={keyword}
         platformIdList={platformIdList}

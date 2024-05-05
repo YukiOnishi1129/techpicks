@@ -1,10 +1,10 @@
+import { User } from "@supabase/supabase-js";
 import { FC } from "react";
 
 import { fetchBookmarkListAPI } from "@/features/bookmarks/actions/bookmark";
 import { BookmarkList } from "@/features/bookmarks/components/BookmarkList";
 import { fetchFavoriteArticleFoldersAPI } from "@/features/favoriteArticleFolders/actions/favoriteArticleFolders";
 import { fetchPlatformAPI } from "@/features/platforms/actions/platform";
-import { getUser } from "@/features/users/actions/user";
 
 import { BreadCrumbType, PageBreadcrumb } from "@/components/ui/breadcrumb";
 
@@ -14,6 +14,7 @@ import { PlatformType } from "@/types/platform";
 import { BookmarkSearchDialog } from "./Dialog";
 
 export type BookmarkSearchResultTemplateProps = {
+  user: User;
   languageStatus: LanguageStatus;
   keyword?: string;
   platformType?: PlatformType;
@@ -22,12 +23,7 @@ export type BookmarkSearchResultTemplateProps = {
 
 export const BookmarkSearchResultTemplate: FC<
   BookmarkSearchResultTemplateProps
-> = async ({
-  languageStatus,
-  keyword,
-  platformType,
-  platformIdList,
-}: BookmarkSearchResultTemplateProps) => {
+> = async ({ user, languageStatus, keyword, platformType, platformIdList }) => {
   const res = await fetchBookmarkListAPI({
     languageStatus: languageStatus.toString(),
     keyword,
@@ -39,7 +35,6 @@ export const BookmarkSearchResultTemplate: FC<
     platformType: String(platformType),
   });
   const resFavoriteArticleFolders = await fetchFavoriteArticleFoldersAPI({});
-  const user = await getUser();
 
   let keywordPath = "";
   if (!!keyword && keyword.trim() !== "") {

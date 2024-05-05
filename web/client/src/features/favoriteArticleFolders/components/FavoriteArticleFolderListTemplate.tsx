@@ -1,22 +1,22 @@
+import { User } from "@supabase/supabase-js";
 import { FC } from "react";
 import { FaHeart } from "react-icons/fa";
 
 import { FavoriteArticleFolderKeywordSearchInput } from "@/features/search/components/favoriteArticleFolder/FavoriteArticleFolderKeywordSearchInput";
-import { getUser } from "@/features/users/actions/user";
 
 import { CreateFavoriteArticleFolderDialog } from "./Dialog";
 import { FavoriteArticleFolderList } from "./FavoriteArticleFolderList";
 import { fetchFavoriteArticleFoldersAPI } from "../actions/favoriteArticleFolders";
 
 type FavoriteArticleFolderListTemplateProps = {
+  user: User;
   keyword?: string;
 };
 
 export const FavoriteArticleFolderListTemplate: FC<
   FavoriteArticleFolderListTemplateProps
-> = async ({ keyword }) => {
+> = async ({ user, keyword }) => {
   const res = await fetchFavoriteArticleFoldersAPI({ keyword });
-  const user = await getUser();
   return (
     <div className="w-auto">
       <h1 className="mb-4 mt-8 flex items-center text-2xl font-bold">

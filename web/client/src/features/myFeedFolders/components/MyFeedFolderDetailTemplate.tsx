@@ -1,24 +1,24 @@
+import { User } from "@supabase/supabase-js";
 import { FC } from "react";
 
 import { fetchArticlesByFeedIdsAPI } from "@/features/articles/actions/article";
 import { fetchFavoriteArticleFoldersAPI } from "@/features/favoriteArticleFolders/actions/favoriteArticleFolders";
 import { fetchMyFeedsByMyFeedFolderIdAPI } from "@/features/myFeeds/actions/myFeed";
 import { MyFeedFolderArticleKeywordSearchInput } from "@/features/search/components/myFeedFolders/MyFeedFolderArticleKeywordSearchInput";
-import { getUser } from "@/features/users/actions/user";
 
 import { BreadCrumbType, PageBreadcrumb } from "@/components/ui/breadcrumb";
 
 import { MyFeedFolderArticleList } from "./MyFeedFolderArtcleList";
 
 type MyFeedFolderDetailTemplateProps = {
+  user: User;
   id: string;
   keyword?: string;
 };
 
 export const MyFeedFolderDetailTemplate: FC<
   MyFeedFolderDetailTemplateProps
-> = async ({ id, keyword }) => {
-  const user = await getUser();
+> = async ({ user, id, keyword }) => {
   const resMyFeeds = await fetchMyFeedsByMyFeedFolderIdAPI({
     myFeedFolderId: id,
   });
