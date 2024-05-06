@@ -20,7 +20,12 @@ export const getCurrentDate = () => {
   return getDayjsTz();
 };
 
-// 24時間前の日付を取得
+//  get data 6 hours 30 minutes ago
+export const get6Hours30minutesAgoDate = () => {
+  return getDayjsTz().subtract(6, "hour").subtract(30, "minute");
+};
+
+// get 24 hours ago date
 export const get24HoursAgoDate = () => {
   return getDayjsTz().subtract(24, "hour");
 };
