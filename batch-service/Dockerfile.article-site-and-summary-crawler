@@ -4,14 +4,15 @@ RUN apk update && apk add git
 
 WORKDIR /app
 
-COPY go.mod go.sum  ./
-COPY ./cmd/article-site-and-summary-crawler ./cmd/article-site-and-summary-crawler
-COPY ./database/init_db.go ./database/init_db.go
-COPY ./domain ./domain
-COPY ./entity ./entity
-COPY ./infrastructure/api ./infrastructure/api
-COPY ./infrastructure/rss ./infrastructure/rss
-COPY ./internal ./internal
+COPY ./batch-service/go.mod ./
+COPY ./batch-service/go.sum ./
+COPY ./batch-service/cmd/article-site-and-summary-crawler ./cmd/article-site-and-summary-crawler
+COPY ./batch-service/database/init_db.go ./database/init_db.go
+COPY ./batch-service/domain ./domain
+COPY ./batch-service/entity ./entity
+COPY ./batch-service/infrastructure/api ./infrastructure/api
+COPY ./batch-service/infrastructure/rss ./infrastructure/rss
+COPY ./batch-service/internal ./internal
 
 RUN go mod download \
 && go build -o main /app/cmd/article-site-and-summary-crawler/main.go
