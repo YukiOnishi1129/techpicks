@@ -20,9 +20,9 @@ export const getCurrentDate = () => {
   return getDayjsTz();
 };
 
-//  get data 6 hours 30 minutes ago
-export const get6Hours30minutesAgoDate = () => {
-  return getDayjsTz().subtract(6, "hour").subtract(30, "minute");
+//  get data 6 hours ago
+export const get6HoursAgoDate = () => {
+  return getDayjsTz().subtract(6, "hour");
 };
 
 // get 24 hours ago date
