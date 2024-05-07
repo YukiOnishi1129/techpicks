@@ -1,0 +1,26 @@
+substitutions:
+  _IMAGE: 'asia-northeast1-docker.pkg.dev/geek-picks-staging/trend-article-crawler/latest'
+  _JOB_NAME: 'trend-article-crawler'
+  _REGION: 'asia-northeast1'
+steps:
+# Build the container image
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/$PROJECT_ID/$_IMAGE',' -f ', 'Dockerfile.trend-article-crawler', '.']
+# Push the container image to Container Registry
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'gcr.io/$PROJECT_ID/$_IMAGE']
+# Deploy container image to Cloud Run
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: gcloud
+  args:
+  - 'run'
+  - 'jobs'
+  - 'deploy'
+  - '$_JOB_NAME'
+  - '--image'
+  - 'gcr.io/$PROJECT_ID/$_IMAGE'
+  - '--region'
+  - '$_REGION'
+  - '--execute-now'
+images:
+- gcr.io/$PROJECT_ID/$_IMAGE
