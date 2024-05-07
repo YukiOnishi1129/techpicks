@@ -267,7 +267,12 @@ export const getAllFeed = async ({ userId }: GetAllFeedType) => {
   }
 };
 
-export const getFeedById = async (id: string) => {
+type GetFeedByIdDTO = {
+  id: string;
+  userId?: string;
+};
+
+export const getFeedById = async ({ id, userId }: GetFeedByIdDTO) => {
   try {
     const res = await prisma.feed.findUnique({
       where: {
@@ -294,6 +299,11 @@ export const getFeedById = async (id: string) => {
                 updatedAt: true,
               },
             },
+          },
+        },
+        myFeeds: {
+          where: {
+            userId: userId,
           },
         },
       },
@@ -328,6 +338,8 @@ export const getFeedById = async (id: string) => {
           updatedAt: feedArticleRelatoins.article.updatedAt,
         };
       }),
+      myFeeds: res.myFeeds,
+      isFollowing: res.myFeeds.length > 0,
     };
 
     return resFeed;

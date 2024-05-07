@@ -1,5 +1,5 @@
 "use client";
-
+import { User } from "@supabase/supabase-js";
 import { FC, useCallback, useState } from "react";
 
 import { fetchMyFeedFolderByIdAPI } from "@/features/myFeedFolders/actions/myFeedFolder";
@@ -22,11 +22,13 @@ import { MyFeedFolderType } from "@/types/myFeedFolder";
 import { FollowDropdownMenu } from "./DropdownMenu";
 
 type FeedDetailHeaderProps = {
+  user?: User;
   feed: FeedType;
   myFeedFolders: Array<MyFeedFolderType>;
 };
 
 export const FeedDetailHeader: FC<FeedDetailHeaderProps> = ({
+  user,
   feed,
   myFeedFolders,
 }) => {
@@ -270,16 +272,18 @@ export const FeedDetailHeader: FC<FeedDetailHeaderProps> = ({
           </div>
         </div>
       </div>
-      <div className="mt-4 flex justify-end  md:block">
-        <FollowDropdownMenu
-          isFollowing={isFollowing}
-          feedId={showFeed.id}
-          myFeedFolders={showMyFeedFolders}
-          handleCreateMyFeed={handleCreateMyFeed}
-          handleRemoveMyFeed={handleRemoveMyFeed}
-          handleCreatedMyFeedFolder={handleCreatedMyFeedFolder}
-        />
-      </div>
+      {user && (
+        <div className="mt-4 flex justify-end  md:block">
+          <FollowDropdownMenu
+            isFollowing={isFollowing}
+            feedId={showFeed.id}
+            myFeedFolders={showMyFeedFolders}
+            handleCreateMyFeed={handleCreateMyFeed}
+            handleRemoveMyFeed={handleRemoveMyFeed}
+            handleCreatedMyFeedFolder={handleCreatedMyFeedFolder}
+          />
+        </div>
+      )}
     </div>
   );
 };
