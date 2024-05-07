@@ -5,10 +5,10 @@ substitutions:
 steps:
 # Build the container image
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'gcr.io/$PROJECT_ID/$_IMAGE',' -f ', 'Dockerfile.trend-article-crawler', '.']
+  args: ['build', '-t', '$_IMAGE',' -f ', 'Dockerfile.trend-article-crawler', '.']
 # Push the container image to Container Registry
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'gcr.io/$PROJECT_ID/$_IMAGE']
+  args: ['push', '$_IMAGE']
 # Deploy container image to Cloud Run
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   entrypoint: gcloud
@@ -18,9 +18,9 @@ steps:
   - 'deploy'
   - '$_JOB_NAME'
   - '--image'
-  - 'gcr.io/$PROJECT_ID/$_IMAGE'
+  - '$_IMAGE'
   - '--region'
   - '$_REGION'
   - '--execute-now'
 images:
-- gcr.io/$PROJECT_ID/$_IMAGE
+- $_IMAGE
