@@ -34,6 +34,7 @@ export const FeedDetailHeader: FC<FeedDetailHeaderProps> = ({
 }) => {
   const { successToast, failToast } = useStatusToast();
   const image = useCheckImageExist(feed.thumbnailUrl);
+  const faviconImage = useCheckImageExist(feed.platform.faviconUrl);
   const [isFollowing, setIsFollowing] = useState<boolean>(
     feed.isFollowing || false
   );
@@ -261,19 +262,18 @@ export const FeedDetailHeader: FC<FeedDetailHeaderProps> = ({
   );
 
   return (
-    <div className="md:flex">
-      <div className="flex w-auto items-center space-x-4 space-y-4 md:static">
+    <div className="flex justify-between">
+      <div className="mt-4 flex w-auto items-center space-x-4 space-y-4 md:static md:mt-0">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img className="ml-2 w-24" src={image} alt="" />
+        <img className="ml-2 w-12" src={faviconImage} alt="" />
         <div className="w-3/4">
-          <h1 className="text-2xl font-bold">{feed.name}</h1>
-          <div className="mt-2">
-            <p>{feed.description}</p>
-          </div>
+          <h1 className="mb-4 line-clamp-3 text-base font-bold md:mb-0 md:text-2xl">
+            {feed.name}
+          </h1>
         </div>
       </div>
       {user && (
-        <div className="mt-4 flex justify-end  md:block">
+        <div className="mt-8 flex justify-end md:mt-4">
           <FollowDropdownMenu
             isFollowing={isFollowing}
             feedId={showFeed.id}
