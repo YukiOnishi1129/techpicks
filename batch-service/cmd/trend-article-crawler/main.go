@@ -3,6 +3,9 @@ package main
 import (
 	"context"
 	"database/sql"
+	"log"
+	"os"
+
 	"github.com/YukiOnishi1129/techpicks/batch-service/cmd/trend-article-crawler/usecase"
 	"github.com/YukiOnishi1129/techpicks/batch-service/database"
 	apiClient "github.com/YukiOnishi1129/techpicks/batch-service/infrastructure/api/client"
@@ -10,17 +13,19 @@ import (
 	rssClient "github.com/YukiOnishi1129/techpicks/batch-service/infrastructure/rss/client"
 	rssRepository "github.com/YukiOnishi1129/techpicks/batch-service/infrastructure/rss/repository"
 	"github.com/joho/godotenv"
-	"log"
 )
 
 func main() {
 	log.Printf("Start batch service")
 	ctx := context.Background()
-	err := godotenv.Load(".env")
-	if err != nil {
-		log.Fatalf("Error loading .env file")
-		return
+	if os.Getenv("GO_ENV") != "production" && os.Getenv("GO_ENV") != "staging"{
+		err := godotenv.Load()
+		if err != nil {
+			log.Fatalf("Error loading .env file")
+			return
+		}
 	}
+	
 
 	db, err := database.Init()
 	if err != nil {
