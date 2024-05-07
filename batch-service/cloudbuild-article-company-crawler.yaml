@@ -21,6 +21,6 @@ steps:
   - '$_REGION-docker.pkg.dev/$PROJECT_ID/$_IMAGE'
   - '--region'
   - '$_REGION'
-  - '--execute-now'
+  # - '--execute-now'
 images:
 - $_REGION-docker.pkg.dev/$PROJECT_ID/$_IMAGE
