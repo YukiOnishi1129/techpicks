@@ -1,5 +1,5 @@
 "use client";
-
+import {User} from "@supabase/supabase-js"
 import { FC, useCallback, useState } from "react";
 
 import { fetchMyFeedFolderByIdAPI } from "@/features/myFeedFolders/actions/myFeedFolder";
@@ -22,11 +22,13 @@ import { FollowDropdownMenu } from "./DropdownMenu";
 import { FeedCard } from "./FeedCard";
 
 type FeedCardWrapperProps = {
+  user?:User
   feed: FeedType;
   myFeedFolders: Array<MyFeedFolderType>;
 };
 
 export const FeedCardWrapper: FC<FeedCardWrapperProps> = ({
+  user,
   feed,
   myFeedFolders,
 }: FeedCardWrapperProps) => {
@@ -262,16 +264,19 @@ export const FeedCardWrapper: FC<FeedCardWrapperProps> = ({
   return (
     <div key={showFeed.id} className="mb-4 rounded-2xl border-2 md:py-2">
       <div className="relative w-full rounded">
-        <div className="absolute right-4  top-2 z-10">
-          <FollowDropdownMenu
-            feedId={showFeed.id}
-            isFollowing={isFollowing}
-            myFeedFolders={showMyFeedFolders}
-            handleCreateMyFeed={handleCreateMyFeed}
-            handleRemoveMyFeed={handleRemoveMyFeed}
-            handleCreatedMyFeedFolder={handleCreatedMyFeedFolder}
-          />
-        </div>
+        {user && (
+          <div className="absolute right-4  top-2 z-10">
+            <FollowDropdownMenu
+              feedId={showFeed.id}
+              isFollowing={isFollowing}
+              myFeedFolders={showMyFeedFolders}
+              handleCreateMyFeed={handleCreateMyFeed}
+              handleRemoveMyFeed={handleRemoveMyFeed}
+              handleCreatedMyFeedFolder={handleCreatedMyFeedFolder}
+            />
+          </div>
+        )}
+
         <FeedCard feed={showFeed} />
       </div>
     </div>

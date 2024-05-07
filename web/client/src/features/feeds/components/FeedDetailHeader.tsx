@@ -33,7 +33,6 @@ export const FeedDetailHeader: FC<FeedDetailHeaderProps> = ({
   myFeedFolders,
 }) => {
   const { successToast, failToast } = useStatusToast();
-  const image = useCheckImageExist(feed.thumbnailUrl);
   const faviconImage = useCheckImageExist(feed.platform.faviconUrl);
   const [isFollowing, setIsFollowing] = useState<boolean>(
     feed.isFollowing || false

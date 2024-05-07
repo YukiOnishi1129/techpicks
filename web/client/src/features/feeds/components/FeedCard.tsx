@@ -51,7 +51,6 @@ export const FeedCard: FC<FeedCardProps> = ({ feed }: FeedCardProps) => {
             </Link>
           </div>
 
-          {/* TODO: description */}
           <div className="mt-2">
             <Link href={`/feed/${feed.id}`}>
               <p className="line-clamp-3 h-[62px] text-sm">
