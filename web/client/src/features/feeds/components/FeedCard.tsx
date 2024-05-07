@@ -20,7 +20,7 @@ export const FeedCard: FC<FeedCardProps> = ({ feed }: FeedCardProps) => {
   return (
     <div className="relative h-[450px] w-full cursor-pointer rounded px-4 py-2 md:h-[210px]">
       <div className="mt-2 flex h-10 md:mt-0">
-        <Link href={`/feed/${feed.id}`} target="_blank">
+        <Link href={`/feed/${feed.id}`}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             className="inline-block size-8 rounded-full shadow-md"
@@ -32,14 +32,14 @@ export const FeedCard: FC<FeedCardProps> = ({ feed }: FeedCardProps) => {
 
       <div>
         <div className="mt-0 md:mt-4">
-          <Link href={`/feed/${feed.id}`} target="_blank">
+          <Link href={`/feed/${feed.id}`}>
             <h3 className="line-clamp-2 h-[48px] text-left text-lg font-bold tracking-wide md:h-full md:text-xl">
               {feed.name}
             </h3>
           </Link>
 
           <div className="mt-2 flex justify-center md:hidden md:w-[30%]">
-            <Link href={`/feed/${feed.id}`} target="_blank">
+            <Link href={`/feed/${feed.id}`}>
               <div className="max-h-[200px] w-full md:h-36 md:max-h-[70px] md:w-48">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
@@ -53,7 +53,7 @@ export const FeedCard: FC<FeedCardProps> = ({ feed }: FeedCardProps) => {
 
           {/* TODO: description */}
           <div className="mt-2">
-            <Link href={`/feed/${feed.id}`} target="_blank">
+            <Link href={`/feed/${feed.id}`}>
               <p className="line-clamp-3 h-[62px] text-sm">
                 {feed.description}
               </p>
