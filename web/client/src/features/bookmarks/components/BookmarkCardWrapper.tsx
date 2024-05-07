@@ -317,7 +317,9 @@ export const BookmarkCardWrapper: FC<BookmarkCardWrapperProps> = ({
                 src={bookmark.platformFaviconUrl}
                 alt=""
               />
-              <span className="font-bold">{bookmark.platformName}</span>
+              <span className="hidden font-bold md:inline-block">
+                {bookmark.platformName}
+              </span>
             </div>
           </div>
 

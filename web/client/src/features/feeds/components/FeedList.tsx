@@ -1,4 +1,5 @@
 "use client";
+import { User } from "@supabase/supabase-js";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import { NotFoundList } from "@/components/layout/NotFoundList";
@@ -11,6 +12,7 @@ import { FeedCardWrapper } from "./FeedCardWrapper";
 import { FetchFeedsAPIResponse } from "../actions/feed";
 
 type FeedListProps = {
+  user?: User;
   keyword?: string;
   initialFeeds: Array<FeedType>;
   myFeedFolders: Array<MyFeedFolderType>;
@@ -24,6 +26,7 @@ type FeedListProps = {
 };
 
 export function FeedList({
+  user,
   keyword,
   initialFeeds,
   myFeedFolders,
@@ -95,7 +98,11 @@ export function FeedList({
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-5">
           {flatFeeds.map((feed) => (
             <div key={feed.id} className="mb-4">
-              <FeedCardWrapper feed={feed} myFeedFolders={myFeedFolders} />
+              <FeedCardWrapper
+                user={user}
+                feed={feed}
+                myFeedFolders={myFeedFolders}
+              />
             </div>
           ))}
           <div ref={observerTarget}>

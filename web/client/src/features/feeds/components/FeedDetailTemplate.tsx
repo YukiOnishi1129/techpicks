@@ -53,6 +53,7 @@ export const FeedDetailTemplate: FC<FeedDetailPageProps> = async ({
       <div className="my-2">
         {resFeed.data.feed && (
           <FeedDetailHeader
+            user={user}
             feed={resFeed.data.feed}
             myFeedFolders={resMyFeedList.data.myFeedFolders}
           />

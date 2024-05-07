@@ -170,45 +170,45 @@ const ArticleDetailSheetContent: FC<ArticleDetailSheetContentProps> = ({
               alt=""
             />
           </Link>
-          {user && (
-            <div className="flex justify-between">
-              <TwitterShareButton
-                title={article.title}
-                url={article.articleUrl}
-              >
-                <XIcon className="inline-block" size={36} />
-              </TwitterShareButton>
-              {bookmarkId ? (
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={() => handleRemoveBookmark(bookmarkId)}
-                >
-                  <FcBookmark className="inline-block" size={36} />
-                </Button>
-              ) : (
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={() => handleAddBookmark(article.id)}
-                >
-                  <MdOutlineBookmarkAdd className="inline-block" size={36} />
-                </Button>
-              )}
-              <div className="mx-4  mt-2">
-                <FollowFavoriteArticleDropdownMenu
-                  isFollowing={isFollowing}
-                  articleId={article.id}
-                  favoriteArticleFolders={favoriteArticleFolders}
-                  handleCreateFavoriteArticle={handleCreateFavoriteArticle}
-                  handleRemoveFavoriteArticle={handleRemoveFavoriteArticle}
-                  handleCreateFavoriteArticleFolder={
-                    handleCreateFavoriteArticleFolder
-                  }
-                />
-              </div>
-            </div>
-          )}
+
+          <div className="flex justify-between">
+            <TwitterShareButton title={article.title} url={article.articleUrl}>
+              <XIcon className="inline-block" size={36} />
+            </TwitterShareButton>
+            {user && (
+              <>
+                {bookmarkId ? (
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={() => handleRemoveBookmark(bookmarkId)}
+                  >
+                    <FcBookmark className="inline-block" size={36} />
+                  </Button>
+                ) : (
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={() => handleAddBookmark(article.id)}
+                  >
+                    <MdOutlineBookmarkAdd className="inline-block" size={36} />
+                  </Button>
+                )}
+                <div className="mx-4  mt-2">
+                  <FollowFavoriteArticleDropdownMenu
+                    isFollowing={isFollowing}
+                    articleId={article.id}
+                    favoriteArticleFolders={favoriteArticleFolders}
+                    handleCreateFavoriteArticle={handleCreateFavoriteArticle}
+                    handleRemoveFavoriteArticle={handleRemoveFavoriteArticle}
+                    handleCreateFavoriteArticleFolder={
+                      handleCreateFavoriteArticleFolder
+                    }
+                  />
+                </div>
+              </>
+            )}
+          </div>
         </div>
 
         <div className="my-10 flex justify-around">

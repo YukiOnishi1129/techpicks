@@ -53,11 +53,6 @@ export const getFavoriteArticlesByFavoriteArticleFolderId = async ({
             contains: keyword,
           },
         },
-        {
-          platformName: {
-            contains: keyword,
-          },
-        },
       ],
     };
   }
