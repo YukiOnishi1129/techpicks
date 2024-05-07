@@ -1,14 +1,14 @@
 substitutions:
-  _IMAGE: 'asia-northeast1-docker.pkg.dev/geek-picks-staging/trend-article-crawler/latest'
+  _IMAGE: 'trend-article-crawler/latest'
   _JOB_NAME: 'trend-article-crawler'
   _REGION: 'asia-northeast1'
 steps:
 # Build the container image
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'asia-northeast1-docker.pkg.dev/geek-picks-staging/trend-article-crawler/latest','-f', 'batch-service/Dockerfile.trend-article-crawler', '.']
+  args: ['build', '-t', '$_REGION-docker.pkg.dev/$PROJECT_ID/$_IMAGE','-f', 'batch-service/Dockerfile.trend-article-crawler', '.']
 # Push the container image to Container Registry
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['push', '$_IMAGE']
+  args: ['push', '$_REGION-docker.pkg.dev/$PROJECT_ID/$_IMAGE']
 # Deploy container image to Cloud Run
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   entrypoint: gcloud
@@ -18,9 +18,9 @@ steps:
   - 'deploy'
   - '$_JOB_NAME'
   - '--image'
-  - '$_IMAGE'
+  - '$_REGION-docker.pkg.dev/$PROJECT_ID/$_IMAGE'
   - '--region'
   - '$_REGION'
   - '--execute-now'
 images:
-- $_IMAGE
+- $_REGION-docker.pkg.dev/$PROJECT_ID/$_IMAGE
