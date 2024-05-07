@@ -286,7 +286,9 @@ export const FavoriteArticleCardWrapper: FC<
                 src={faviconImageUrl}
                 alt=""
               />
-              <span className="font-bold">{favoriteArticle.platformName}</span>
+              <span className="hidden font-bold md:inline-block">
+                {favoriteArticle.platformName}
+              </span>
             </div>
           </div>
 
