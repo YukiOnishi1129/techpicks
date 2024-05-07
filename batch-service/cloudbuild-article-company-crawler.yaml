@@ -1,11 +1,11 @@
 substitutions:
-  _IMAGE: 'trend-article-crawler/latest'
-  _JOB_NAME: 'trend-article-crawler'
+  _IMAGE: 'article-company-crawler/latest'
+  _JOB_NAME: 'article-company-crawler'
   _REGION: 'asia-northeast1'
 steps:
 # Build the container image
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', '$_REGION-docker.pkg.dev/$PROJECT_ID/$_IMAGE','-f', 'batch-service/Dockerfile.trend-article-crawler', '.']
+  args: ['build', '-t', '$_REGION-docker.pkg.dev/$PROJECT_ID/$_IMAGE','-f', 'batch-service/Dockerfile.article-company-crawler', '.']
 # Push the container image to Container Registry
 - name: 'gcr.io/cloud-builders/docker'
   args: ['push', '$_REGION-docker.pkg.dev/$PROJECT_ID/$_IMAGE']
@@ -21,6 +21,6 @@ steps:
   - '$_REGION-docker.pkg.dev/$PROJECT_ID/$_IMAGE'
   - '--region'
   - '$_REGION'
-  # - '--execute-now'
+  - '--execute-now'
 images:
 - $_REGION-docker.pkg.dev/$PROJECT_ID/$_IMAGE
