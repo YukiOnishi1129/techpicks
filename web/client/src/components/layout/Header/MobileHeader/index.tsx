@@ -28,7 +28,7 @@ export function MobileHeader({ user }: MobileHeaderProps) {
       case NAVIGATION_LISTS.FEED:
         return "Feed List";
       default:
-        return "Tech Picks";
+        return "Geek Picks";
     }
   }, [pathname]);
 

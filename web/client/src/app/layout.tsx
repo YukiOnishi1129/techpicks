@@ -12,8 +12,8 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Teck Picks",
-  description: "Tech Picks is a collection of tech articles.",
+  title: "Geek Picks",
+  description: "Geek Picks is a collection of tech articles.",
 };
 
 export default function RootLayout({
