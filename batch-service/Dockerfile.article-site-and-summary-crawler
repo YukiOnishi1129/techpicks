@@ -1,18 +1,24 @@
-FROM golang:1.22-alpine3.18
+FROM golang:1.22-alpine3.18 AS go-builder
 
 RUN apk update && apk add git
 
 WORKDIR /app
 
-COPY ./ ./
-# COPY .env go.mod go.sum ./
-# COPY ./database ./database
-# COPY ./entity ./entity
-# COPY ./domain ./domain
+COPY go.mod go.sum  ./
+COPY ./cmd/article-site-and-summary-crawler ./cmd/article-site-and-summary-crawler
+COPY ./database/init_db.go ./database/init_db.go
+COPY ./domain ./domain
+COPY ./entity ./entity
+COPY ./infrastructure/api ./infrastructure/api
+COPY ./infrastructure/rss ./infrastructure/rss
+COPY ./internal ./internal
 
-RUN go mod download
+RUN go mod download \
+&& go build -o main /app/cmd/article-site-and-summary-crawler/main.go
 
-# Build
-RUN go build -o main /app/cmd/article-site-and-summary-crawler/main.go
+
+FROM alpine:3.18
+WORKDIR /app
+COPY --from=go-builder /app/main .
 
 CMD ["/app/main"]

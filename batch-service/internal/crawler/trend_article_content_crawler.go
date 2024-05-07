@@ -3,12 +3,13 @@ package crawler
 import (
 	"context"
 	"database/sql"
+	"log"
+	"time"
+
 	"github.com/YukiOnishi1129/techpicks/batch-service/entity"
 	"github.com/google/uuid"
 	"github.com/volatiletech/sqlboiler/v4/boil"
 	"github.com/volatiletech/sqlboiler/v4/queries/qm"
-	"log"
-	"time"
 )
 
 type TrendArticleContentsCrawlerArg struct {
@@ -43,11 +44,11 @@ func TrendArticleContentsCrawler(ctx context.Context, tx *sql.Tx, arg TrendArtic
 	).One(ctx, tx)
 	if article != nil {
 		// 2. check trend_article table at article_id
-		trandArticle, _ := entity.TrendArticles(
+		trendArticle, _ := entity.TrendArticles(
 			qm.Where("article_id = ?", article.ID),
 			qm.Where("platform_id = ?", arg.Feed.PlatformID),
 		).One(ctx, tx)
-		if trandArticle == nil {
+		if trendArticle == nil {
 			// insert trend_article
 			err := CreateTrendArticle(ctx, tx, CreateTrendArticleArg{
 				ArticleID:  article.ID,
@@ -68,10 +69,10 @@ func TrendArticleContentsCrawler(ctx context.Context, tx *sql.Tx, arg TrendArtic
 			IsCreatedTrendArticle = true
 		}
 
-		if trandArticle != nil && trandArticle.UpdatedAt.Before(oneHoursAgo) {
+		if trendArticle != nil && trendArticle.UpdatedAt.Before(oneHoursAgo) && trendArticle.LikeCount < arg.ArticleLikeCount{
 			// update trend_article
-			trandArticle.LikeCount = arg.ArticleLikeCount
-			_, err := trandArticle.Update(ctx, tx, boil.Infer())
+			trendArticle.LikeCount = arg.ArticleLikeCount
+			_, err := trendArticle.Update(ctx, tx, boil.Infer())
 			if err != nil {
 				log.Printf("【error update trend article】: %s", arg.ArticleTitle)
 				return TrendArticleContentsCrawlerResponse{
