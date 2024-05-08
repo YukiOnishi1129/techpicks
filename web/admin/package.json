@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "lint:fix": "eslint --ext .js,.jsx,.ts,.tsx --fix ."
+    "lint:fix": "eslint --ext .js,.jsx,.ts,.tsx --fix .",
+    "format": "npx prettier --write .",
+    "gen:prisma": "prisma generate"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
@@ -20,7 +22,6 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "cmdk": "^1.0.0",
-    "D": "^1.0.0",
     "dayjs": "^1.11.11",
     "eslint-plugin-import": "^2.29.1",
     "highlight.js": "^11.9.0",
