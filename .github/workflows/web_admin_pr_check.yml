@@ -9,7 +9,7 @@ on:
       - "feat/*"
       - "YL-*"
     paths:
-      - "web/client/**"
+      - "web/admin/**"
       - ".github/workflows/web_admin_pr_check.yml"
 #
 jobs:
