@@ -1,5 +1,6 @@
 import { FC } from "react";
 
+import { Sidebar } from "@/components/layouts/Sidebar";
 import {
   ResizableHandle,
   ResizablePanel,
@@ -37,9 +38,10 @@ export const MainBaseLayout: FC<MainBaseLayoutProps> = async ({
             defaultSize={25}
             className="min-w-[200px] max-w-[200px]"
           >
-            <div className="flex h-full items-center justify-center p-6">
+            {/* <div className="flex h-full items-center justify-center p-6">
               <span className="font-semibold">Sidebar</span>
-            </div>
+            </div> */}
+            {adminUser && <Sidebar adminUser={adminUser} />}
           </ResizablePanel>
           <ResizableHandle withHandle />
           <ResizablePanel defaultSize={75}>

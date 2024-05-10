@@ -1,9 +1,7 @@
-import { FC } from "react";
-
-export const UserPage: FC = () => {
+export default function UserPage() {
   return (
     <div>
       <h3>User Page</h3>
     </div>
   );
-};
+}

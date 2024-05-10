@@ -1,9 +1,7 @@
-import { FC } from "react";
-
-export const PlatformPage: FC = () => {
+export default function PlatformPage() {
   return (
     <div>
       <h3>Platform Page</h3>
     </div>
   );
-};
+}
