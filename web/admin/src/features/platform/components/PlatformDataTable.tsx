@@ -42,11 +42,22 @@ export const columns: ColumnDef<PlatformTableState>[] = [
   },
   {
     accessorKey: "deletedAt",
-    header: "Status",
+    header: () => <div className="text-left">status</div>,
+    cell: ({ row }) => {
+      return (
+        <>{row.original.deletedAt ? <span>active</span> : <span>stop</span>}</>
+      );
+    },
   },
   {
     accessorKey: "faviconUrl",
-    header: "Icon",
+    header: () => <div className="text-left">icon</div>,
+    cell: ({ row }) => (
+      <div className="text-right">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img className="size-6" src={row.original.faviconUrl} alt="" />
+      </div>
+    ),
   },
   {
     accessorKey: "name",
@@ -54,7 +65,25 @@ export const columns: ColumnDef<PlatformTableState>[] = [
   },
   {
     accessorKey: "platformSiteType",
-    header: "type",
+    header: () => <div className="text-left">type</div>,
+    cell: ({ row }) => {
+      const type = row.original.platformSiteType;
+      let showType = "unknown";
+      switch (type) {
+        case 1:
+          showType = "site";
+          break;
+        case 2:
+          showType = "company";
+          break;
+        case 3:
+          showType = "summary";
+          break;
+        default:
+          break;
+      }
+      return <div className="text-left">{showType}</div>;
+    },
   },
 ];
 
