@@ -4,10 +4,12 @@ import {
   ColumnDef,
   flexRender,
   getCoreRowModel,
+  getPaginationRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 import * as React from "react";
 
+import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -45,7 +47,7 @@ export const columns: ColumnDef<PlatformTableState>[] = [
     header: () => <div className="text-left">status</div>,
     cell: ({ row }) => {
       return (
-        <>{row.original.deletedAt ? <span>active</span> : <span>stop</span>}</>
+        <>{row.original.deletedAt ? <span>stop</span> : <span>active</span>}</>
       );
     },
   },
@@ -100,10 +102,30 @@ function PlatformDataTable<TData, TValue>({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
   });
 
   return (
     <div className="rounded-md border">
+      <div className="flex items-center justify-end space-x-2 py-4">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => table.previousPage()}
+          disabled={!table.getCanPreviousPage()}
+        >
+          Previous
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => table.nextPage()}
+          disabled={!table.getCanNextPage()}
+        >
+          Next
+        </Button>
+      </div>
+
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (

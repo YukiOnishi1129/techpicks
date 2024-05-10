@@ -23,7 +23,7 @@ export const MainBaseLayout: FC<MainBaseLayoutProps> = async ({
   return (
     <ResizablePanelGroup
       direction="vertical"
-      className="min-h-screen w-full rounded-lg border"
+      className="min-h-screen w-full  rounded-lg border"
     >
       <ResizablePanel defaultSize={10} className="max-h-[60px] min-h-[60px]">
         <Header adminUser={adminUser} />
@@ -42,7 +42,7 @@ export const MainBaseLayout: FC<MainBaseLayoutProps> = async ({
           </ResizablePanel>
           <ResizableHandle withHandle />
           <ResizablePanel defaultSize={75}>
-            <div className="h-full p-6">{children}</div>
+            <div className="h-full overflow-y-auto p-6">{children}</div>
           </ResizablePanel>
         </ResizablePanelGroup>
       </ResizablePanel>

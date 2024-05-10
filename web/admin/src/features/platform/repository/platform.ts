@@ -5,11 +5,8 @@ import prisma from "@/lib/prisma";
 import { PlatformType } from "@/types/platform";
 
 export const getPlatforms = async () => {
-  const limit = 8;
   try {
     const platforms = await prisma.platform.findMany({
-      take: limit,
-
       orderBy: {
         createdAt: "asc",
       },

@@ -9,7 +9,7 @@ export const PlatformTemplate: FC<PlatformTemplateProps> = async () => {
   const res = await fetchPlatformsAPI();
   return (
     <div>
-      <h1>Platform Template</h1>
+      <h1 className="mb-16">Platform Template</h1>
       <div>
         <PlatformTable platforms={res.data.platforms} />
       </div>
