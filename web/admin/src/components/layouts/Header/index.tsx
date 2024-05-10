@@ -11,7 +11,7 @@ export type HeaderType = {
 export const Header: FC<HeaderType> = ({ adminUser: AdminUserType }) => {
   return (
     <div className="flex size-full items-center justify-between px-4 shadow-md">
-      <h1>{"Admin"}</h1>
+      <h1 className="text-2xl font-bold">Admin | Check Picks</h1>
       <div>
         <LogoutButton />
       </div>
