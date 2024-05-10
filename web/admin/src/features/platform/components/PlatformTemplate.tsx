@@ -11,7 +11,7 @@ export const PlatformTemplate: FC<PlatformTemplateProps> = async () => {
     <div>
       <h1>Platform Template</h1>
       <div>
-        <PlatformTable />
+        <PlatformTable platforms={res.data.platforms} />
       </div>
     </div>
   );
