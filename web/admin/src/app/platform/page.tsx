@@ -1,7 +1,5 @@
+import { PlatformTemplate } from "@/features/platform/components/PlatformTemplate";
+
 export default function PlatformPage() {
-  return (
-    <div>
-      <h3>Platform Page</h3>
-    </div>
-  );
+  return <PlatformTemplate />;
 }
