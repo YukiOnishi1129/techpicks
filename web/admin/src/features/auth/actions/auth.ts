@@ -15,8 +15,7 @@ export async function loginWithGoogle() {
   if (error) {
     redirect("/error");
   }
-
-  if (data?.url) redirect("/dashboard");
+  if (data?.url) redirect(data.url);
 }
 
 export async function logout() {
