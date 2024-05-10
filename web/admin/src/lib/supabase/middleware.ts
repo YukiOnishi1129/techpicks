@@ -1,4 +1,3 @@
-import { fetchAdminUserAPI } from "@/features/admin/actions/admin";
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
@@ -55,8 +54,15 @@ export async function updateSession(request: NextRequest) {
     }
   );
 
-  const res = await fetchAdminUserAPI();
-  if (!res.data.adminUser) {
+  const user = await supabase.auth.getUser();
+
+  const { data } = await supabase
+    .from("profiles")
+    .select()
+    .eq("id", user.data.user?.id)
+    .eq("is_super_admin", "true")
+    .single();
+  if (!data) {
     await supabase.auth.signOut();
     return NextResponse.redirect(new URL("/", request.url));
   }
