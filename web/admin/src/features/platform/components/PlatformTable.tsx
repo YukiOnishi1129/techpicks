@@ -6,6 +6,7 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useCallback } from "react";
 
@@ -32,11 +33,11 @@ type PlatformTableProps = {
 type PlatformTableState = {
   id: string;
   name: string;
-  //   siteUrl: string;
+  siteUrl: string;
   platformSiteType: number;
   faviconUrl: string;
-  //   isEng: boolean;
-  //   createdAt: Date;
+  isEng: boolean;
+  createdAt: Date;
   //   updatedAt: Date;
   deletedAt?: Date;
 };
@@ -51,7 +52,13 @@ export const columns: ColumnDef<PlatformTableState>[] = [
     header: () => <div className="text-left">status</div>,
     cell: ({ row }) => {
       return (
-        <>{row.original.deletedAt ? <span>stop</span> : <span>active</span>}</>
+        <>
+          {row.original.deletedAt ? (
+            <span className="text-gray-500">stop</span>
+          ) : (
+            <span className="text-emerald-500">active</span>
+          )}
+        </>
       );
     },
   },
@@ -68,6 +75,19 @@ export const columns: ColumnDef<PlatformTableState>[] = [
   {
     accessorKey: "name",
     header: "name",
+  },
+  {
+    accessorKey: "isEng",
+    header: () => <div className="text-left">lang</div>,
+    cell: ({ row }) => (
+      <div className="text-left">
+        {row.original.isEng ? (
+          <Image src="/static/english.png" alt="EN" width={20} height={20} />
+        ) : (
+          <Image src="/static/japanese.png" alt="JP" width={20} height={20} />
+        )}
+      </div>
+    ),
   },
   {
     accessorKey: "platformSiteType",
