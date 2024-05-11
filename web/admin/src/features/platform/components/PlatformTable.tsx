@@ -4,10 +4,10 @@ import {
   ColumnDef,
   flexRender,
   getCoreRowModel,
-  getPaginationRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import * as React from "react";
+import { useRouter } from "next/navigation";
+import { useCallback } from "react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -19,10 +19,14 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
+import { useServerRevalidatePage } from "@/hooks/useServerRevalidatePage";
+
 import { PlatformType } from "@/types/platform";
 
 type PlatformTableProps = {
   platforms: PlatformType[];
+  offset?: number;
+  keyword?: string;
 };
 
 type PlatformTableState = {
@@ -92,18 +96,35 @@ export const columns: ColumnDef<PlatformTableState>[] = [
 interface PlatformDataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  offset?: number;
+  keyword?: string;
 }
 
 function PlatformDataTable<TData, TValue>({
   columns,
   data,
+  offset,
+  keyword,
 }: PlatformDataTableProps<TData, TValue>) {
+  const router = useRouter();
+  const { revalidatePage } = useServerRevalidatePage();
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
   });
+
+  const handlePreviousPage = useCallback(async () => {
+    const requestOffset = offset ? offset - 1 : 1;
+    await revalidatePage();
+    router.replace(`/platform?offset=${requestOffset}&keyword=${keyword}`);
+  }, [keyword, offset, router, revalidatePage]);
+
+  const handleNextPage = useCallback(async () => {
+    let requestOffset = offset ? offset + 1 : 1;
+    await revalidatePage();
+    router.replace(`/platform?offset=${requestOffset}&keyword=${keyword}`);
+  }, [keyword, offset, router, revalidatePage]);
 
   return (
     <div className="rounded-md border">
@@ -111,16 +132,16 @@ function PlatformDataTable<TData, TValue>({
         <Button
           variant="outline"
           size="sm"
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
+          onClick={handlePreviousPage}
+          disabled={offset === 1 || !offset}
         >
           Previous
         </Button>
         <Button
           variant="outline"
           size="sm"
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
+          onClick={handleNextPage}
+          disabled={data.length < 8}
         >
           Next
         </Button>
@@ -172,20 +193,31 @@ function PlatformDataTable<TData, TValue>({
   );
 }
 
-export function PlatformTable({ platforms }: PlatformTableProps) {
+export function PlatformTable({
+  platforms,
+  offset,
+  keyword,
+}: PlatformTableProps) {
   const data: Array<PlatformTableState> = platforms.map((platform) => {
     return {
       id: platform.id,
       name: platform.name,
-      //   siteUrl: platform.siteUrl,
+      siteUrl: platform.siteUrl,
       platformSiteType: platform.platformSiteType,
       faviconUrl: platform.faviconUrl,
-      //   isEng: platform.isEng,
+      isEng: platform.isEng,
       //   createdAt: platform.createdAt,
       //   updatedAt: platform.updatedAt,
       deletedAt: platform?.deletedAt,
     };
   });
 
-  return <PlatformDataTable columns={columns} data={data} />;
+  return (
+    <PlatformDataTable
+      columns={columns}
+      data={data}
+      offset={offset}
+      keyword={keyword}
+    />
+  );
 }

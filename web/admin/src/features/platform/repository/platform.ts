@@ -4,9 +4,20 @@ import prisma from "@/lib/prisma";
 
 import { PlatformType } from "@/types/platform";
 
-export const getPlatforms = async () => {
+export type GetPlatformsDT0 = {
+  offset?: number;
+  keyword?: string;
+};
+
+export const getPlatforms = async ({
+  offset = 1,
+  keyword,
+}: GetPlatformsDT0) => {
+  const limit = 8;
   try {
     const platforms = await prisma.platform.findMany({
+      take: limit,
+      skip: (offset - 1) * limit,
       orderBy: {
         createdAt: "asc",
       },
