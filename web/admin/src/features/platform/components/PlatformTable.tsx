@@ -1,14 +1,12 @@
 "use client";
 
 import {
-  ColumnDef,
   flexRender,
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -24,13 +22,15 @@ import { useServerRevalidatePage } from "@/hooks/useServerRevalidatePage";
 
 import { PlatformType } from "@/types/platform";
 
+import { usePlatformDataTable } from "./usePlatformDatatable";
+
 type PlatformTableProps = {
   platforms: PlatformType[];
   offset?: number;
   keyword?: string;
 };
 
-type PlatformTableState = {
+export type PlatformTableState = {
   id: string;
   name: string;
   siteUrl: string;
@@ -42,97 +42,38 @@ type PlatformTableState = {
   deletedAt?: Date;
 };
 
-export const columns: ColumnDef<PlatformTableState>[] = [
-  {
-    id: "select",
-    header: "id",
-  },
-  {
-    accessorKey: "deletedAt",
-    header: () => <div className="text-left">status</div>,
-    cell: ({ row }) => {
-      return (
-        <>
-          {row.original.deletedAt ? (
-            <span className="text-gray-500">stop</span>
-          ) : (
-            <span className="text-emerald-500">active</span>
-          )}
-        </>
-      );
-    },
-  },
-  {
-    accessorKey: "faviconUrl",
-    header: () => <div className="text-left">icon</div>,
-    cell: ({ row }) => (
-      <div className="text-right">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img className="size-6" src={row.original.faviconUrl} alt="" />
-      </div>
-    ),
-  },
-  {
-    accessorKey: "name",
-    header: "name",
-  },
-  {
-    accessorKey: "isEng",
-    header: () => <div className="text-left">lang</div>,
-    cell: ({ row }) => (
-      <div className="text-left">
-        {row.original.isEng ? (
-          <Image src="/static/english.png" alt="EN" width={20} height={20} />
-        ) : (
-          <Image src="/static/japanese.png" alt="JP" width={20} height={20} />
-        )}
-      </div>
-    ),
-  },
-  {
-    accessorKey: "platformSiteType",
-    header: () => <div className="text-left">type</div>,
-    cell: ({ row }) => {
-      const type = row.original.platformSiteType;
-      let showType = "unknown";
-      switch (type) {
-        case 1:
-          showType = "site";
-          break;
-        case 2:
-          showType = "company";
-          break;
-        case 3:
-          showType = "summary";
-          break;
-        default:
-          break;
-      }
-      return <div className="text-left">{showType}</div>;
-    },
-  },
-];
-
-interface PlatformDataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[];
-  data: TData[];
+interface PlatformDataTableProps {
+  platforms: PlatformType[];
   offset?: number;
   keyword?: string;
 }
 
-function PlatformDataTable<TData, TValue>({
-  columns,
-  data,
+function PlatformDataTable({
+  platforms,
   offset,
   keyword,
-}: PlatformDataTableProps<TData, TValue>) {
+}: PlatformDataTableProps) {
   const router = useRouter();
   const { revalidatePage } = useServerRevalidatePage();
+  const [rowSelection, setRowSelection] = useState({});
+
+  const { data, columns } = usePlatformDataTable({
+    platforms,
+    offset,
+    keyword,
+  });
+
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
+    onRowSelectionChange: setRowSelection,
+    state: {
+      rowSelection,
+    },
   });
+
+  console.log(rowSelection);
 
   const handlePreviousPage = useCallback(async () => {
     const requestOffset = offset ? offset - 1 : 1;
@@ -218,24 +159,9 @@ export function PlatformTable({
   offset,
   keyword,
 }: PlatformTableProps) {
-  const data: Array<PlatformTableState> = platforms.map((platform) => {
-    return {
-      id: platform.id,
-      name: platform.name,
-      siteUrl: platform.siteUrl,
-      platformSiteType: platform.platformSiteType,
-      faviconUrl: platform.faviconUrl,
-      isEng: platform.isEng,
-      //   createdAt: platform.createdAt,
-      //   updatedAt: platform.updatedAt,
-      deletedAt: platform?.deletedAt,
-    };
-  });
-
   return (
     <PlatformDataTable
-      columns={columns}
-      data={data}
+      platforms={platforms}
       offset={offset}
       keyword={keyword}
     />
