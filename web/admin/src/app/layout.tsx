@@ -1,6 +1,8 @@
 import { Inter as FontSans } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 
+import { BaseLayout } from "@/components/layouts/BaseLayout";
+
 import { cn } from "@/lib/utils";
 
 import type { Metadata } from "next";
@@ -36,7 +38,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {children}
+          <BaseLayout>{children}</BaseLayout>
         </ThemeProvider>
       </body>
     </html>

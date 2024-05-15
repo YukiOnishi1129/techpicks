@@ -54,7 +54,18 @@ export async function updateSession(request: NextRequest) {
     }
   );
 
-  await supabase.auth.getUser();
+  const user = await supabase.auth.getUser();
+
+  const { data } = await supabase
+    .from("profiles")
+    .select()
+    .eq("id", user.data.user?.id)
+    .eq("is_super_admin", "true")
+    .single();
+  if (!data) {
+    await supabase.auth.signOut();
+    return NextResponse.redirect(new URL("/", request.url));
+  }
 
   return response;
 }

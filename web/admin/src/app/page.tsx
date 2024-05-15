@@ -1,10 +1,5 @@
-import { Button } from "@/components/ui/button";
+import { LoginTemplate } from "@/features/auth/components/LoginTemplate";
 
 export default function Home() {
-  return (
-    <div>
-      Admin
-      <Button>Click me</Button>
-    </div>
-  );
+  return <LoginTemplate />;
 }
