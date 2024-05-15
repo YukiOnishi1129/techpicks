@@ -149,6 +149,10 @@ export const getTrendArticles = async ({
       },
     });
 
+    console.log("🔥");
+    console.log(res[0].article);
+    console.log(userId);
+
     const trendArticleList: Array<TrendArticleType> = res.map(
       (trendArticle) => {
         const isBookmarked = !!trendArticle.article.bookmarks.length;
