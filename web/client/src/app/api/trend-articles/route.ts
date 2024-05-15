@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import { getTrendArticles } from "@/features/trendArticles/repository/trendArticles";
+import { getUser } from "@/features/users/actions/user";
 
 import { get6HoursAgoDate, getCurrentDate, getDayjsTz } from "@/lib/date";
 
@@ -8,6 +9,7 @@ import { ArticleTabType } from "@/types/article";
 import { LanguageStatus } from "@/types/language";
 
 export async function GET(req: NextRequest) {
+  const user = await getUser();
   const searchParams = req.nextUrl.searchParams;
   const languageStatus = searchParams.get("languageStatus");
   const keyword = searchParams.get("keyword") || undefined;
@@ -26,6 +28,7 @@ export async function GET(req: NextRequest) {
 
   const endTime = searchParams.get("endTime") || currentDate.format();
   const trendArticles = await getTrendArticles({
+    userId: user?.id,
     languageStatus: status,
     keyword: keyword,
     platformIdList: platformIdList,

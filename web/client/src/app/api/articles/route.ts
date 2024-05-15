@@ -1,11 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import { getArticles } from "@/features/articles/repository/article";
+import { getUser } from "@/features/users/actions/user";
 
 import { ArticleTabType } from "@/types/article";
 import { LanguageStatus } from "@/types/language";
 
 export async function GET(req: NextRequest) {
+  const user = await getUser();
   const searchParams = req.nextUrl.searchParams;
   const languageStatus = searchParams.get("languageStatus");
   const keyword = searchParams.get("keyword") || undefined;
@@ -18,6 +20,7 @@ export async function GET(req: NextRequest) {
   const tab = searchParams.get("tab") as ArticleTabType;
 
   const articles = await getArticles({
+    userId: user?.id,
     languageStatus: status,
     keyword: keyword,
     platformIdList: platformIdList,
