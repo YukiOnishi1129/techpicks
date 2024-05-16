@@ -1,8 +1,10 @@
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FC, useCallback, useState, useTransition } from "react";
+import { FC, useCallback, useEffect, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+
+import { fetchAllFeedAPI } from "@/features/feeds/actions/feed";
 
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -23,6 +25,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Loader } from "@/components/ui/loader";
 
 import { FeedType } from "@/types/feed";
 
@@ -41,7 +44,6 @@ const formSchema = z.object({
 
 type UpdateMyFeedFolderDialogProps = {
   myFeedFolderId: string;
-  feeds: FeedType[];
   title: string;
   description: string;
   feedIdList: Array<string>;
@@ -61,7 +63,6 @@ type UpdateMyFeedFolderDialogProps = {
 
 export const UpdateMyFeedFolderDialog: FC<UpdateMyFeedFolderDialogProps> = ({
   myFeedFolderId,
-  feeds,
   title,
   description,
   feedIdList,
@@ -72,6 +73,7 @@ export const UpdateMyFeedFolderDialog: FC<UpdateMyFeedFolderDialogProps> = ({
   const handleClose = useCallback(() => {
     setOpen(false);
   }, []);
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
@@ -86,7 +88,6 @@ export const UpdateMyFeedFolderDialog: FC<UpdateMyFeedFolderDialogProps> = ({
       {open && (
         <UpdateMyFeedFolderDialogContent
           myFeedFolderId={myFeedFolderId}
-          feeds={feeds}
           title={title}
           description={description}
           feedIdList={feedIdList}
@@ -101,7 +102,6 @@ export const UpdateMyFeedFolderDialog: FC<UpdateMyFeedFolderDialogProps> = ({
 
 type UpdateMyFeedFolderDialogContentProps = {
   myFeedFolderId: string;
-  feeds: FeedType[];
   title: string;
   description: string;
   feedIdList: Array<string>;
@@ -124,7 +124,6 @@ export const UpdateMyFeedFolderDialogContent: FC<
   UpdateMyFeedFolderDialogContentProps
 > = ({
   myFeedFolderId,
-  feeds,
   title,
   description,
   feedIdList,
@@ -140,7 +139,10 @@ export const UpdateMyFeedFolderDialogContent: FC<
       feedIdList: feedIdList,
     },
   });
+
+  const [feeds, setFeeds] = useState<FeedType[]>([]);
   const [isPending, startTransition] = useTransition();
+  const [isFetchFeedPending, startFetchFeedTransition] = useTransition();
   const resetDialog = useCallback(() => {
     form.reset();
   }, [form]);
@@ -163,6 +165,17 @@ export const UpdateMyFeedFolderDialogContent: FC<
     await handleDeleteMyFeedFolder(myFeedFolderId);
     handleClose();
   }, [myFeedFolderId, handleDeleteMyFeedFolder, handleClose]);
+
+  const fetchFeedList = useCallback(async () => {
+    startFetchFeedTransition(async () => {
+      const resFeeds = await fetchAllFeedAPI();
+      setFeeds(resFeeds.data.feeds);
+    });
+  }, []);
+
+  useEffect(() => {
+    fetchFeedList();
+  }, [fetchFeedList]);
 
   return (
     <DialogContent onCloseAutoFocus={resetDialog}>
@@ -209,8 +222,13 @@ export const UpdateMyFeedFolderDialogContent: FC<
                       <div className="mb-4">
                         <FormLabel className="text-base">Feeds</FormLabel>
                       </div>
+                      {isFetchFeedPending && (
+                        <div className="flex h-20 w-full items-center justify-center">
+                          <Loader />
+                        </div>
+                      )}
                       <div className="grid grid-cols-2 gap-2">
-                        {feeds?.length &&
+                        {!isFetchFeedPending &&
                           feeds.map((feed) => (
                             <FormField
                               key={feed.id}
