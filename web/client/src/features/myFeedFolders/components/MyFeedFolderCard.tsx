@@ -14,7 +14,6 @@ import { useStatusToast } from "@/hooks/useStatusToast";
 
 import { diffStringArray } from "@/lib/convert";
 
-import { FeedType } from "@/types/feed";
 import { MyFeedType } from "@/types/myFeed";
 import { MyFeedFolderType } from "@/types/myFeedFolder";
 
@@ -24,7 +23,6 @@ import { serverRevalidateMyFeedFolders } from "../actions/serverAction";
 type MyFeedFolderCardProps = {
   user?: User;
   myFeedFolder: MyFeedFolderType;
-  feeds: FeedType[];
   handleUpdateMyFeedFolder: ({
     id,
     title,
@@ -40,7 +38,6 @@ type MyFeedFolderCardProps = {
 export const MyFeedFolderCard: FC<MyFeedFolderCardProps> = ({
   user,
   myFeedFolder,
-  feeds,
   handleUpdateMyFeedFolder,
   handleDeleteMyFeedFolder,
 }) => {
@@ -166,7 +163,6 @@ export const MyFeedFolderCard: FC<MyFeedFolderCardProps> = ({
           </h3>
 
           <UpdateMyFeedFolderDialog
-            feeds={feeds}
             myFeedFolderId={myFeedFolder.id}
             title={myFeedFolder.title}
             description={myFeedFolder?.description || ""}

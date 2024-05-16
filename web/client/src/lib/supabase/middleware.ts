@@ -54,7 +54,10 @@ export async function updateSession(request: NextRequest) {
     }
   );
 
-  await supabase.auth.getUser();
+  const user = await supabase.auth.getUser();
+  if (!user) {
+    return NextResponse.redirect("/login");
+  }
 
   return response;
 }
