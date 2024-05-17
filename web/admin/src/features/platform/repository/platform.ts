@@ -69,9 +69,6 @@ export const getPlatforms = async ({
     };
   }
 
-  console.log("💧");
-  console.log(where);
-
   try {
     const platforms = await prisma.platform.findMany({
       take: limit,
@@ -221,9 +218,6 @@ export const getPlatformsCount = async ({
       },
     };
   }
-
-  console.log("🔥");
-  console.log(where);
 
   try {
     const count = await prisma.platform.count({
