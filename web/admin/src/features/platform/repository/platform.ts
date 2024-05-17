@@ -14,10 +14,28 @@ export const getPlatforms = async ({
   keyword,
 }: GetPlatformsDT0) => {
   const limit = 8;
+  let where = {};
+  if (keyword) {
+    where = {
+      AND: [
+        {
+          OR: [
+            {
+              name: {
+                contains: keyword,
+              },
+            },
+          ],
+        },
+      ],
+    };
+  }
+
   try {
     const platforms = await prisma.platform.findMany({
       take: limit,
       skip: (offset - 1) * limit,
+      where,
       orderBy: {
         createdAt: "asc",
       },

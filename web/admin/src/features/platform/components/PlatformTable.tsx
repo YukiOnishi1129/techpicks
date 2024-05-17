@@ -1,5 +1,6 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
   ColumnDef,
   flexRender,
@@ -10,9 +11,13 @@ import { clsx } from "clsx";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useCallback, useMemo, useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Form, FormField, FormItem, FormControl } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
@@ -44,6 +49,10 @@ export type PlatformTableState = {
   deletedAt?: Date;
 };
 
+const FormSchema = z.object({
+  keyword: z.string().optional(),
+});
+
 interface PlatformDataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
@@ -59,6 +68,12 @@ function PlatformDataTable<TData, TValue>({
 }: PlatformDataTableProps<TData, TValue>) {
   const router = useRouter();
   const { revalidatePage } = useServerRevalidatePage();
+  const form = useForm<z.infer<typeof FormSchema>>({
+    resolver: zodResolver(FormSchema),
+    defaultValues: {
+      keyword: "",
+    },
+  });
 
   const [rowSelection, setRowSelection] = useState({});
 
@@ -72,8 +87,18 @@ function PlatformDataTable<TData, TValue>({
     },
   });
 
-  console.log("🔥");
-  console.log(rowSelection);
+  const handleSearch = useCallback(
+    async (values: z.infer<typeof FormSchema>) => {
+      let keywordPath = "";
+      const requestOffset = offset ? offset - 1 : 1;
+      if (!!values.keyword && values.keyword.trim() !== "") {
+        keywordPath = `&keyword=${values.keyword}`;
+      }
+      await revalidatePage();
+      router.replace(`/platform?$offset=${requestOffset}${keywordPath}`);
+    },
+    [offset, router, revalidatePage]
+  );
 
   const handlePreviousPage = useCallback(async () => {
     const requestOffset = offset ? offset - 1 : 1;
@@ -89,23 +114,46 @@ function PlatformDataTable<TData, TValue>({
 
   return (
     <div className="rounded-md border">
-      <div className="flex items-center justify-end space-x-2 py-4">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={handlePreviousPage}
-          disabled={offset === 1 || !offset}
-        >
-          Previous
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={handleNextPage}
-          disabled={data.length < 8}
-        >
-          Next
-        </Button>
+      <div className="flex items-center justify-between border-b px-4 py-2">
+        <div>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(handleSearch)}>
+              <FormField
+                control={form.control}
+                name="keyword"
+                render={({ field }) => (
+                  <FormItem className="mb-4 flex items-center">
+                    <FormControl>
+                      <Input
+                        className="border-primary bg-secondary text-primary"
+                        placeholder="search keyword"
+                        {...field}
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+            </form>
+          </Form>
+        </div>
+        <div className="flex items-center justify-end space-x-2 py-4">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handlePreviousPage}
+            disabled={offset === 1 || !offset}
+          >
+            Previous
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleNextPage}
+            disabled={data.length < 8}
+          >
+            Next
+          </Button>
+        </div>
       </div>
 
       <Table>
