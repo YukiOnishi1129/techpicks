@@ -15,6 +15,8 @@ import {
 
 import { PlatformType } from "@/types/platform";
 
+import { ENGLISH_IMAGE, JAPANESE_IMAGE } from "@/constants/image";
+
 import { PlatformDataTable } from "./PlatformDataTable";
 
 type PlatformTableProps = {
@@ -118,9 +120,7 @@ export const PlatformTable = ({
         accessorKey: "isEng",
         header: () => <div className="text-left">lang</div>,
         cell: ({ row }) => {
-          const imageUrl = row.original.isEng
-            ? "/static/english.png"
-            : "/static/japanese.png";
+          const imageUrl = row.original.isEng ? ENGLISH_IMAGE : JAPANESE_IMAGE;
           const imageAlt = row.original.isEng ? "EN" : "JP";
           return (
             <div className="text-left">

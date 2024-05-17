@@ -1,6 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useCallback, FC } from "react";
 import { useForm } from "react-hook-form";
@@ -16,6 +17,8 @@ import {
 } from "@/components/ui/select";
 
 import { useServerRevalidatePage } from "@/hooks/useServerRevalidatePage";
+
+import { ENGLISH_IMAGE, JAPANESE_IMAGE } from "@/constants/image";
 
 type PlatformLanguageSelectProps = {
   offset?: number;
@@ -63,7 +66,7 @@ export const PlatformLanguageSelect: FC<PlatformLanguageSelectProps> = ({
 
   return (
     <Form {...form}>
-      <form className="w-32">
+      <form className="w-40">
         <FormField
           control={form.control}
           name="language"
@@ -85,8 +88,26 @@ export const PlatformLanguageSelect: FC<PlatformLanguageSelectProps> = ({
                 </FormControl>
                 <SelectContent>
                   <SelectItem value="0">all language</SelectItem>
-                  <SelectItem value="2">english</SelectItem>
-                  <SelectItem value="1">japanese</SelectItem>
+                  <SelectItem value="2" className="flex">
+                    <Image
+                      className="inline-block"
+                      src={ENGLISH_IMAGE}
+                      alt={"EN"}
+                      width={20}
+                      height={20}
+                    />
+                    <span className="ml-2 inline-block">english</span>
+                  </SelectItem>
+                  <SelectItem value="1">
+                    <Image
+                      className="inline-block"
+                      src={JAPANESE_IMAGE}
+                      alt={"JP"}
+                      width={20}
+                      height={20}
+                    />
+                    <span className="ml-2 inline-block">japanese</span>
+                  </SelectItem>
                 </SelectContent>
               </Select>
             </FormItem>
