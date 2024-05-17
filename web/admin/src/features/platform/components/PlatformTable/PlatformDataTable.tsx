@@ -1,15 +1,12 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
 import {
   ColumnDef,
   useReactTable,
   getCoreRowModel,
   flexRender,
 } from "@tanstack/react-table";
-import { useRouter } from "next/navigation";
-import { useState, useCallback, useMemo } from "react";
-import { useForm } from "react-hook-form";
+import { useState, useMemo } from "react";
 import { z } from "zod";
 
 import { MAX_SHOW_PLATFORM_TABLE_DATA_COUNT } from "@/features/platform/constants/table";
@@ -23,8 +20,7 @@ import {
   TableCell,
 } from "@/components/ui/table";
 
-import { useServerRevalidatePage } from "@/hooks/useServerRevalidatePage";
-
+import { PlatformLanguageSelect } from "./PlatformLangaugeSelect";
 import { PlatformSearchInput } from "./PlatformSearchInput";
 
 interface PlatformDataTableProps<TData, TValue> {
@@ -45,15 +41,6 @@ export function PlatformDataTable<TData, TValue>({
   offset,
   keyword,
 }: PlatformDataTableProps<TData, TValue>) {
-  const router = useRouter();
-  const { revalidatePage } = useServerRevalidatePage();
-  const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
-    defaultValues: {
-      keyword: keyword || "",
-    },
-  });
-
   const [rowSelection, setRowSelection] = useState({});
 
   const currentDataCount = useMemo(() => {
@@ -71,30 +58,29 @@ export function PlatformDataTable<TData, TValue>({
     },
   });
 
-  const handleSearch = useCallback(
-    async (values: z.infer<typeof FormSchema>) => {
-      let keywordPath = "";
-      const requestOffset = offset ? offset - 1 : 1;
-      if (!!values.keyword && values.keyword.trim() !== "") {
-        keywordPath = `&keyword=${values.keyword}`;
-      }
-      await revalidatePage();
-      router.replace(`/platform?$offset=${requestOffset}${keywordPath}`);
-    },
-    [offset, router, revalidatePage]
-  );
-
   return (
     <div className="rounded-md border">
       <div className="flex items-center justify-between border-b  px-4 py-2">
         <h1 className="text-lg font-bold">Platform Table</h1>
         <p className="text-sm ">
-          {currentDataCount} of {allCount} results
+          {currentDataCount} / {allCount}
         </p>
       </div>
+
       <div className="flex items-center justify-between border-b px-4 py-2">
-        <div>
+        <div className="flex w-1/2 items-center justify-between">
           <PlatformSearchInput keyword={keyword} offset={offset} />
+          {/* lang */}
+          <div className="ml-2">
+            <PlatformLanguageSelect offset={offset} keyword={keyword} />
+          </div>
+
+          <div></div>
+          {/* type */}
+        </div>
+        <div>
+          {/* active */}
+          {/* stop */}
         </div>
       </div>
 
