@@ -8,7 +8,7 @@ import {
   flexRender,
 } from "@tanstack/react-table";
 import { useRouter } from "next/navigation";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -37,6 +37,8 @@ const FormSchema = z.object({
   keyword: z.string().optional(),
 });
 
+const MAX_SHOW_DATA_COUNT = 8;
+
 export function PlatformDataTable<TData, TValue>({
   allCount,
   columns,
@@ -54,6 +56,11 @@ export function PlatformDataTable<TData, TValue>({
   });
 
   const [rowSelection, setRowSelection] = useState({});
+
+  const currentDataCount = useMemo(() => {
+    if (!offset) return data.length;
+    return data.length + (offset - 1) * MAX_SHOW_DATA_COUNT;
+  }, [data, offset]);
 
   const table = useReactTable({
     data,
@@ -79,15 +86,23 @@ export function PlatformDataTable<TData, TValue>({
   );
 
   const handlePreviousPage = useCallback(async () => {
+    let keywordPath = "";
     const requestOffset = offset ? offset - 1 : 1;
+    if (!!keyword && keyword.trim() !== "") {
+      keywordPath = `&keyword=${keyword}`;
+    }
     await revalidatePage();
-    router.replace(`/platform?offset=${requestOffset}&keyword=${keyword}`);
+    router.replace(`/platform?offset=${requestOffset}${keywordPath}`);
   }, [keyword, offset, router, revalidatePage]);
 
   const handleNextPage = useCallback(async () => {
+    let keywordPath = "";
     let requestOffset = offset ? offset + 1 : 1;
+    if (!!keyword && keyword.trim() !== "") {
+      keywordPath = `&keyword=${keyword}`;
+    }
     await revalidatePage();
-    router.replace(`/platform?offset=${requestOffset}&keyword=${keyword}`);
+    router.replace(`/platform?offset=${requestOffset}${keywordPath}`);
   }, [keyword, offset, router, revalidatePage]);
 
   return (
@@ -96,7 +111,7 @@ export function PlatformDataTable<TData, TValue>({
         <div>
           <h1 className="text-lg font-bold">Platform Table</h1>
           <p className="text-sm text-gray-500">
-            {allCount} results found. Showing {data.length} results.
+            {allCount} results found. Showing {currentDataCount} results.
           </p>
         </div>
         <div>
