@@ -118,3 +118,36 @@ export const getPlatforms = async ({
     throw new Error(`Failed to get platforms: ${err}`);
   }
 };
+
+export type GetPlatformsCountDT0 = {
+  keyword?: string;
+};
+
+export const getPlatformsCount = async ({ keyword }: GetPlatformsCountDT0) => {
+  let where = {};
+  if (keyword) {
+    where = {
+      AND: [
+        {
+          OR: [
+            {
+              name: {
+                contains: keyword,
+              },
+            },
+          ],
+        },
+      ],
+    };
+  }
+
+  try {
+    const count = await prisma.platform.count({
+      where,
+    });
+
+    return count;
+  } catch (err) {
+    throw new Error(`Failed to get platforms count: ${err}`);
+  }
+};

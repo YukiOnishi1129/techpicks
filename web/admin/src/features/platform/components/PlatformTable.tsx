@@ -32,6 +32,7 @@ import { useServerRevalidatePage } from "@/hooks/useServerRevalidatePage";
 import { PlatformType } from "@/types/platform";
 
 type PlatformTableProps = {
+  allCount: number;
   platforms: PlatformType[];
   offset?: number;
   keyword?: string;
@@ -54,6 +55,7 @@ const FormSchema = z.object({
 });
 
 interface PlatformDataTableProps<TData, TValue> {
+  allCount: number;
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   offset?: number;
@@ -61,6 +63,7 @@ interface PlatformDataTableProps<TData, TValue> {
 }
 
 function PlatformDataTable<TData, TValue>({
+  allCount,
   columns,
   data,
   offset,
@@ -115,6 +118,12 @@ function PlatformDataTable<TData, TValue>({
   return (
     <div className="rounded-md border">
       <div className="flex items-center justify-between border-b px-4 py-2">
+        <div>
+          <h1 className="text-lg font-bold">Platform Table</h1>
+          <p className="text-sm text-gray-500">
+            {allCount} results found. Showing {data.length} results.
+          </p>
+        </div>
         <div>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(handleSearch)}>
@@ -203,6 +212,7 @@ function PlatformDataTable<TData, TValue>({
 }
 
 export function PlatformTable({
+  allCount,
   platforms,
   offset,
   keyword,
@@ -327,6 +337,7 @@ export function PlatformTable({
 
   return (
     <PlatformDataTable
+      allCount={allCount}
       data={data}
       columns={columns}
       offset={offset}
