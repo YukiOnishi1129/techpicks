@@ -26,6 +26,8 @@ import {
 
 import { useServerRevalidatePage } from "@/hooks/useServerRevalidatePage";
 
+import { MAX_SHOW_PLATFORM_TABLE_DATA_COUNT } from "../../constants/constant";
+
 interface PlatformDataTableProps<TData, TValue> {
   allCount: number;
   columns: ColumnDef<TData, TValue>[];
@@ -59,7 +61,7 @@ export function PlatformDataTable<TData, TValue>({
 
   const currentDataCount = useMemo(() => {
     if (!offset) return data.length;
-    return data.length + (offset - 1) * MAX_SHOW_DATA_COUNT;
+    return data.length + (offset - 1) * MAX_SHOW_PLATFORM_TABLE_DATA_COUNT;
   }, [data, offset]);
 
   const table = useReactTable({

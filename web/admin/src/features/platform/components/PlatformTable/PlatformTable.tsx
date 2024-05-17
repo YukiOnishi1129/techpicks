@@ -10,6 +10,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { PlatformType } from "@/types/platform";
 
 import { PlatformDataTable } from "./PlatformDataTable";
+import { PaginationUrl, TablePagination } from "./TablePagination";
+import { MAX_SHOW_PLATFORM_TABLE_DATA_COUNT } from "../../constants/constant";
 
 type PlatformTableProps = {
   allCount: number;
@@ -154,13 +156,45 @@ export const PlatformTable = ({
     [platformIds]
   );
 
+  const currentPage = offset || 1;
+  const lastPage = Math.ceil(allCount / MAX_SHOW_PLATFORM_TABLE_DATA_COUNT);
+
+  const paginationUrl: PaginationUrl = useMemo(() => {
+    let keywordPath = "";
+    if (!!keyword && keyword.trim() !== "") {
+      keywordPath = `&keyword=${keyword}`;
+    }
+    const previousUrl =
+      currentPage !== 1
+        ? `/platform?offset=${currentPage - 1}${keywordPath}`
+        : undefined;
+    const nextUrl =
+      currentPage < lastPage
+        ? `/platform?offset=${currentPage + 1}${keywordPath}`
+        : undefined;
+    return {
+      previous: previousUrl,
+      next: nextUrl,
+    };
+  }, [keyword, currentPage, lastPage]);
+
   return (
-    <PlatformDataTable
-      allCount={allCount}
-      data={data}
-      columns={columns}
-      offset={offset}
-      keyword={keyword}
-    />
+    <>
+      <PlatformDataTable
+        allCount={allCount}
+        data={data}
+        columns={columns}
+        offset={offset}
+        keyword={keyword}
+      />
+
+      <div className="mt-4">
+        <TablePagination
+          currentPage={currentPage}
+          lastPage={lastPage}
+          url={paginationUrl}
+        />
+      </div>
+    </>
   );
 };

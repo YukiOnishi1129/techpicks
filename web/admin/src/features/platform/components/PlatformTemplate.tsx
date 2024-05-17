@@ -21,16 +21,11 @@ export const PlatformTemplate: FC<PlatformTemplateProps> = async ({
   });
 
   return (
-    <div>
-      <h1 className="mb-16">Platform Template</h1>
-      <div>
-        <PlatformTable
-          platforms={res.data.platforms}
-          allCount={resCount.data.count}
-          offset={offset}
-          keyword={keyword}
-        />
-      </div>
-    </div>
+    <PlatformTable
+      platforms={res.data.platforms}
+      allCount={resCount.data.count}
+      offset={offset}
+      keyword={keyword}
+    />
   );
 };
