@@ -9,7 +9,7 @@ import {
 import { clsx } from "clsx";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -47,7 +47,6 @@ export type PlatformTableState = {
 interface PlatformDataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
-  platforms: PlatformType[];
   offset?: number;
   keyword?: string;
 }
@@ -55,7 +54,6 @@ interface PlatformDataTableProps<TData, TValue> {
 function PlatformDataTable<TData, TValue>({
   columns,
   data,
-  platforms,
   offset,
   keyword,
 }: PlatformDataTableProps<TData, TValue>) {
@@ -63,7 +61,6 @@ function PlatformDataTable<TData, TValue>({
   const { revalidatePage } = useServerRevalidatePage();
 
   const [rowSelection, setRowSelection] = useState({});
-  const [selectedWorkIds, setSelectedWorkIds] = useState<string[]>([]);
 
   const table = useReactTable({
     data,
@@ -162,6 +159,8 @@ export function PlatformTable({
   offset,
   keyword,
 }: PlatformTableProps) {
+  const [selectedIds, setSelectedIds] = useState<Array<string>>([]);
+  const platformIds = platforms.map((platform) => platform.id);
   const data: Array<PlatformTableState> = platforms.map((platform) => {
     return {
       id: platform.id,
@@ -176,99 +175,112 @@ export function PlatformTable({
     };
   });
 
-  const columns: ColumnDef<PlatformTableState>[] = [
-    {
-      id: "select",
-      header: ({ table }) => (
-        <Checkbox
-          checked={
-            table.getIsAllPageRowsSelected() ||
-            (table.getIsSomePageRowsSelected() && "indeterminate")
-          }
-          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-          aria-label="Select all"
-        />
-      ),
-      cell: ({ row }) => (
-        <Checkbox
-          checked={row.getIsSelected()}
-          onCheckedChange={(value) => row.toggleSelected(!!value)}
-          aria-label="Select row"
-        />
-      ),
-      enableSorting: false,
-      enableHiding: false,
-    },
-    {
-      accessorKey: "name",
-      header: "name",
-      cell: ({ row }) => {
-        const style = row.original.deletedAt ? "text-gray-500" : "";
-        return (
-          <div className="flex text-left">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img className="size-6" src={row.original.faviconUrl} alt="" />
-            <span className={clsx(style, "ml-4")}>{row.original.name}</span>
-          </div>
-        );
+  const columns: ColumnDef<PlatformTableState>[] = useMemo(
+    () => [
+      {
+        id: "select",
+        header: ({ table }) => (
+          <Checkbox
+            checked={
+              table.getIsAllPageRowsSelected() ||
+              (table.getIsSomePageRowsSelected() && "indeterminate")
+            }
+            onCheckedChange={(value) => {
+              table.toggleAllPageRowsSelected(!!value);
+              setSelectedIds(value ? platformIds : []);
+            }}
+            aria-label="Select all"
+          />
+        ),
+        cell: ({ row }) => (
+          <Checkbox
+            checked={row.getIsSelected()}
+            onCheckedChange={(value) => {
+              row.toggleSelected(!!value);
+              setSelectedIds((prev) => {
+                if (value) {
+                  return [...prev, row.original.id];
+                }
+                return prev.filter((id) => id !== row.original.id);
+              });
+            }}
+            aria-label="Select row"
+          />
+        ),
+        enableSorting: false,
+        enableHiding: false,
       },
-    },
+      {
+        accessorKey: "name",
+        header: "name",
+        cell: ({ row }) => {
+          const style = row.original.deletedAt ? "text-gray-500" : "";
+          return (
+            <div className="flex text-left">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img className="size-6" src={row.original.faviconUrl} alt="" />
+              <span className={clsx(style, "ml-4")}>{row.original.name}</span>
+            </div>
+          );
+        },
+      },
 
-    {
-      accessorKey: "isEng",
-      header: () => <div className="text-left">lang</div>,
-      cell: ({ row }) => {
-        const imageUrl = row.original.isEng
-          ? "/static/english.png"
-          : "/static/japanese.png";
-        const imageAlt = row.original.isEng ? "EN" : "JP";
-        return (
-          <div className="text-left">
-            <Image src={imageUrl} alt={imageAlt} width={20} height={20} />
-          </div>
-        );
+      {
+        accessorKey: "isEng",
+        header: () => <div className="text-left">lang</div>,
+        cell: ({ row }) => {
+          const imageUrl = row.original.isEng
+            ? "/static/english.png"
+            : "/static/japanese.png";
+          const imageAlt = row.original.isEng ? "EN" : "JP";
+          return (
+            <div className="text-left">
+              <Image src={imageUrl} alt={imageAlt} width={20} height={20} />
+            </div>
+          );
+        },
       },
-    },
-    {
-      accessorKey: "platformSiteType",
-      header: () => <div className="text-left">type</div>,
-      cell: ({ row }) => {
-        const type = row.original.platformSiteType;
-        let showType = "unknown";
-        switch (type) {
-          case 1:
-            showType = "site";
-            break;
-          case 2:
-            showType = "company";
-            break;
-          case 3:
-            showType = "summary";
-            break;
-          default:
-            break;
-        }
-        return <div className="text-left">{showType}</div>;
+      {
+        accessorKey: "platformSiteType",
+        header: () => <div className="text-left">type</div>,
+        cell: ({ row }) => {
+          const type = row.original.platformSiteType;
+          let showType = "unknown";
+          switch (type) {
+            case 1:
+              showType = "site";
+              break;
+            case 2:
+              showType = "company";
+              break;
+            case 3:
+              showType = "summary";
+              break;
+            default:
+              break;
+          }
+          return <div className="text-left">{showType}</div>;
+        },
       },
-    },
-    {
-      accessorKey: "deletedAt",
-      header: () => <div className="text-left">status</div>,
-      cell: ({ row }) => {
-        const style = row.original.deletedAt
-          ? "text-gray-500"
-          : "text-emerald-500";
-        const label = row.original.deletedAt ? "stop" : "active";
-        return <span className={clsx(style)}>{label}</span>;
+      {
+        accessorKey: "deletedAt",
+        header: () => <div className="text-left">status</div>,
+        cell: ({ row }) => {
+          const style = row.original.deletedAt
+            ? "text-gray-500"
+            : "text-emerald-500";
+          const label = row.original.deletedAt ? "stop" : "active";
+          return <span className={clsx(style)}>{label}</span>;
+        },
       },
-    },
-  ];
+    ],
+    [platformIds]
+  );
 
   return (
     <PlatformDataTable
       data={data}
       columns={columns}
-      platforms={platforms}
       offset={offset}
       keyword={keyword}
     />
