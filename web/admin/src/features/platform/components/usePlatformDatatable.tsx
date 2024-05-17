@@ -12,7 +12,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 
 import { PlatformType } from "@/types/platform";
 
-import { PlatformTableState } from "./PlatformTable";
+import { PlatformTableState } from "./PlatformTable/PlatformTable";
 
 type usePlatformDataTableProps = {
   platforms: PlatformType[];
