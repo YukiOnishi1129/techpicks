@@ -7,11 +7,13 @@ import { PlatformType } from "@/types/platform";
 export type GetPlatformsDT0 = {
   offset?: number;
   keyword?: string;
+  language?: string;
 };
 
 export const getPlatforms = async ({
   offset = 1,
   keyword,
+  language,
 }: GetPlatformsDT0) => {
   const limit = 8;
   let where = {};
@@ -28,6 +30,15 @@ export const getPlatforms = async ({
           ],
         },
       ],
+    };
+  }
+
+  if (language) {
+    where = {
+      ...where,
+      isEng: {
+        equals: language === "2" ? true : false,
+      },
     };
   }
 
@@ -121,9 +132,13 @@ export const getPlatforms = async ({
 
 export type GetPlatformsCountDT0 = {
   keyword?: string;
+  language?: string;
 };
 
-export const getPlatformsCount = async ({ keyword }: GetPlatformsCountDT0) => {
+export const getPlatformsCount = async ({
+  keyword,
+  language,
+}: GetPlatformsCountDT0) => {
   let where = {};
   if (keyword) {
     where = {
@@ -138,6 +153,15 @@ export const getPlatformsCount = async ({ keyword }: GetPlatformsCountDT0) => {
           ],
         },
       ],
+    };
+  }
+
+  if (language) {
+    where = {
+      ...where,
+      isEng: {
+        equals: language === "2" ? true : false,
+      },
     };
   }
 

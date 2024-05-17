@@ -18,11 +18,13 @@ const FormSchema = z.object({
 type PlatformSearchInputProps = {
   offset?: number;
   keyword?: string;
+  language?: string;
 };
 
 export const PlatformSearchInput: FC<PlatformSearchInputProps> = ({
   offset,
   keyword,
+  language,
 }) => {
   const router = useRouter();
   const { revalidatePage } = useServerRevalidatePage();
@@ -40,10 +42,16 @@ export const PlatformSearchInput: FC<PlatformSearchInputProps> = ({
       if (!!values.keyword && values.keyword.trim() !== "") {
         keywordPath = `&keyword=${values.keyword}`;
       }
+      let languagePath = "";
+      if (language) {
+        languagePath = `&language=${language}`;
+      }
       await revalidatePage();
-      router.replace(`/platform?$offset=${requestOffset}${keywordPath}`);
+      router.replace(
+        `/platform?$offset=${requestOffset}${keywordPath}${languagePath}`
+      );
     },
-    [offset, router, revalidatePage]
+    [offset, language, router, revalidatePage]
   );
 
   return (

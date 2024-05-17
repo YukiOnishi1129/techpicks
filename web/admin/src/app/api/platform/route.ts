@@ -6,9 +6,11 @@ export async function GET(req: NextRequest) {
   const searchParams = req.nextUrl.searchParams;
   const keyword = searchParams.get("keyword") || undefined;
   const offset = searchParams.get("offset");
+  const language = searchParams.get("language") || undefined;
   const platforms = await getPlatforms({
     keyword: keyword,
     offset: parseInt(offset || "1"),
+    language: language,
   });
   return NextResponse.json(
     {

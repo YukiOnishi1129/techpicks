@@ -22,6 +22,7 @@ type PlatformTableProps = {
   platforms: PlatformType[];
   offset?: number;
   keyword?: string;
+  language?: string;
 };
 
 export type PlatformTableState = {
@@ -41,6 +42,7 @@ export const PlatformTable = ({
   platforms,
   offset,
   keyword,
+  language,
 }: PlatformTableProps) => {
   const [selectedIds, setSelectedIds] = useState<Array<string>>([]);
   const platformIds = platforms.map((platform) => platform.id);
@@ -177,19 +179,23 @@ export const PlatformTable = ({
     if (!!keyword && keyword.trim() !== "") {
       keywordPath = `&keyword=${keyword}`;
     }
+    let languagePath = "";
+    if (language) {
+      languagePath = `&language=${language}`;
+    }
     const previousUrl =
       currentPage !== 1
-        ? `/platform?offset=${currentPage - 1}${keywordPath}`
+        ? `/platform?offset=${currentPage - 1}${keywordPath}${languagePath}`
         : undefined;
     const nextUrl =
       currentPage < lastPage
-        ? `/platform?offset=${currentPage + 1}${keywordPath}`
+        ? `/platform?offset=${currentPage + 1}${keywordPath}${languagePath}`
         : undefined;
     return {
       previous: previousUrl,
       next: nextUrl,
     };
-  }, [keyword, currentPage, lastPage]);
+  }, [keyword, language, currentPage, lastPage]);
 
   return (
     <>
@@ -199,6 +205,7 @@ export const PlatformTable = ({
         columns={columns}
         offset={offset}
         keyword={keyword}
+        language={language}
       />
 
       <div className="mt-4">

@@ -29,6 +29,7 @@ interface PlatformDataTableProps<TData, TValue> {
   data: TData[];
   offset?: number;
   keyword?: string;
+  language?: string;
 }
 const FormSchema = z.object({
   keyword: z.string().optional(),
@@ -40,6 +41,7 @@ export function PlatformDataTable<TData, TValue>({
   data,
   offset,
   keyword,
+  language,
 }: PlatformDataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = useState({});
 
@@ -69,10 +71,18 @@ export function PlatformDataTable<TData, TValue>({
 
       <div className="flex items-center justify-between border-b px-4 py-2">
         <div className="flex w-1/2 items-center justify-between">
-          <PlatformSearchInput keyword={keyword} offset={offset} />
+          <PlatformSearchInput
+            keyword={keyword}
+            offset={offset}
+            language={language}
+          />
           {/* lang */}
           <div className="ml-2">
-            <PlatformLanguageSelect offset={offset} keyword={keyword} />
+            <PlatformLanguageSelect
+              offset={offset}
+              keyword={keyword}
+              language={language}
+            />
           </div>
 
           <div></div>

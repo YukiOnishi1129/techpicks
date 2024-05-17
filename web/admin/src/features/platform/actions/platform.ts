@@ -8,15 +8,20 @@ import { FetchPlatformAPIResponse, PlatformType } from "@/types/platform";
 type FetchPlatformsAPIRequest = {
   offset?: string;
   keyword?: string;
+  language?: string;
 };
 
 export const fetchPlatformsAPI = async ({
   offset = "1",
   keyword,
+  language,
 }: FetchPlatformsAPIRequest): Promise<FetchPlatformAPIResponse> => {
   let url = `${process.env.WEB_DOMAIN}/api/platform/?offset=${offset}`;
   if (keyword) {
     url += `&keyword=${keyword}`;
+  }
+  if (language) {
+    url += `&language=${language}`;
   }
 
   const res = await getFetch({
@@ -38,14 +43,19 @@ export const fetchPlatformsAPI = async ({
 
 type FetchPlatformsCountAPIRequest = {
   keyword?: string;
+  language?: string;
 };
 
 export const fetchPlatformsCountAPI = async ({
   keyword,
-}: FetchPlatformsAPIRequest): Promise<FetchCountAPIResponse> => {
+  language,
+}: FetchPlatformsCountAPIRequest): Promise<FetchCountAPIResponse> => {
   let url = `${process.env.WEB_DOMAIN}/api/platform/count/`;
   if (keyword) {
     url += `?keyword=${keyword}`;
+  }
+  if (language) {
+    url += `?language=${language}`;
   }
 
   const res = await getFetch({
