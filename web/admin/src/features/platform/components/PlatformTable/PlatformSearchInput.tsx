@@ -19,12 +19,14 @@ type PlatformSearchInputProps = {
   offset?: number;
   keyword?: string;
   language?: string;
+  platformSiteType?: string;
 };
 
 export const PlatformSearchInput: FC<PlatformSearchInputProps> = ({
   offset,
   keyword,
   language,
+  platformSiteType,
 }) => {
   const router = useRouter();
   const { revalidatePage } = useServerRevalidatePage();
@@ -46,12 +48,16 @@ export const PlatformSearchInput: FC<PlatformSearchInputProps> = ({
       if (language) {
         languagePath = `&language=${language}`;
       }
+      let platformSiteTypePath = "";
+      if (platformSiteType) {
+        platformSiteTypePath = `&platformSiteType=${platformSiteType}`;
+      }
       await revalidatePage();
       router.replace(
         `/platform?$offset=${requestOffset}${keywordPath}${languagePath}`
       );
     },
-    [offset, language, router, revalidatePage]
+    [offset, language, platformSiteType, router, revalidatePage]
   );
 
   return (

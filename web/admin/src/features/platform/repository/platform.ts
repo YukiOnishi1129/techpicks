@@ -8,12 +8,14 @@ export type GetPlatformsDT0 = {
   offset?: number;
   keyword?: string;
   language?: string;
+  platformSiteType?: string;
 };
 
 export const getPlatforms = async ({
   offset = 1,
   keyword,
   language,
+  platformSiteType,
 }: GetPlatformsDT0) => {
   const limit = 8;
   let where = {};
@@ -41,6 +43,34 @@ export const getPlatforms = async ({
       },
     };
   }
+
+  let argPlatformSiteType = 0;
+  switch (platformSiteType) {
+    case "1":
+      argPlatformSiteType = 1;
+      break;
+    case "2":
+      argPlatformSiteType = 2;
+      break;
+    case "3":
+      argPlatformSiteType = 3;
+      break;
+    default:
+      argPlatformSiteType = 0;
+      break;
+  }
+
+  if (argPlatformSiteType) {
+    where = {
+      ...where,
+      platformSiteType: {
+        equals: argPlatformSiteType,
+      },
+    };
+  }
+
+  console.log("💧");
+  console.log(where);
 
   try {
     const platforms = await prisma.platform.findMany({
@@ -133,11 +163,13 @@ export const getPlatforms = async ({
 export type GetPlatformsCountDT0 = {
   keyword?: string;
   language?: string;
+  platformSiteType?: string;
 };
 
 export const getPlatformsCount = async ({
   keyword,
   language,
+  platformSiteType,
 }: GetPlatformsCountDT0) => {
   let where = {};
   if (keyword) {
@@ -164,6 +196,34 @@ export const getPlatformsCount = async ({
       },
     };
   }
+
+  let argPlatformSiteType = 0;
+  switch (platformSiteType) {
+    case "1":
+      argPlatformSiteType = 1;
+      break;
+    case "2":
+      argPlatformSiteType = 2;
+      break;
+    case "3":
+      argPlatformSiteType = 3;
+      break;
+    default:
+      argPlatformSiteType = 0;
+      break;
+  }
+
+  if (argPlatformSiteType) {
+    where = {
+      ...where,
+      platformSiteType: {
+        equals: argPlatformSiteType,
+      },
+    };
+  }
+
+  console.log("🔥");
+  console.log(where);
 
   try {
     const count = await prisma.platform.count({

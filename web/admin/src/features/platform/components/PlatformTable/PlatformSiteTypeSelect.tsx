@@ -1,7 +1,6 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useCallback, FC } from "react";
 import { useForm } from "react-hook-form";
@@ -18,9 +17,7 @@ import {
 
 import { useServerRevalidatePage } from "@/hooks/useServerRevalidatePage";
 
-import { ENGLISH_IMAGE, JAPANESE_IMAGE } from "@/constants/image";
-
-type PlatformLanguageSelectProps = {
+type PlatformSiteTypeSelectProps = {
   offset?: number;
   keyword?: string;
   language?: string;
@@ -28,10 +25,10 @@ type PlatformLanguageSelectProps = {
 };
 
 const FormSchema = z.object({
-  language: z.string(),
+  platformSiteType: z.string(),
 });
 
-export const PlatformLanguageSelect: FC<PlatformLanguageSelectProps> = ({
+export const PlatformSiteTypeSelect: FC<PlatformSiteTypeSelectProps> = ({
   offset,
   keyword,
   language,
@@ -42,7 +39,7 @@ export const PlatformLanguageSelect: FC<PlatformLanguageSelectProps> = ({
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      language: language,
+      platformSiteType: platformSiteType,
     },
   });
 
@@ -55,19 +52,19 @@ export const PlatformLanguageSelect: FC<PlatformLanguageSelectProps> = ({
         keywordPath = `&keyword=${keyword}`;
       }
       let languagePath = "";
-      if (value !== "0") {
-        languagePath = `&language=${value}`;
+      if (language) {
+        languagePath = `&language=${language}`;
       }
       let platformSiteTypePath = "";
-      if (platformSiteType) {
-        platformSiteTypePath = `&platformSiteType=${platformSiteType}`;
+      if (value !== "0") {
+        platformSiteTypePath = `&platformSiteType=${value}`;
       }
       await revalidatePage();
       router.replace(
-        `/platform?$offset=${requestOffset}${keywordPath}${languagePath}`
+        `/platform?$offset=${requestOffset}${keywordPath}${languagePath}${platformSiteTypePath}`
       );
     },
-    [keyword, offset, platformSiteType, router, revalidatePage]
+    [keyword, language, offset, router, revalidatePage]
   );
 
   return (
@@ -75,7 +72,7 @@ export const PlatformLanguageSelect: FC<PlatformLanguageSelectProps> = ({
       <form className="w-40">
         <FormField
           control={form.control}
-          name="language"
+          name="platformSiteType"
           render={({ field }) => (
             <FormItem>
               <Select
@@ -87,32 +84,21 @@ export const PlatformLanguageSelect: FC<PlatformLanguageSelectProps> = ({
                 <FormControl>
                   <SelectTrigger className="border-primary bg-secondary">
                     <SelectValue
-                      placeholder="language"
+                      placeholder="site type"
                       className="text-gray-400"
                     />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="0">all language</SelectItem>
-                  <SelectItem value="2" className="flex">
-                    <Image
-                      className="inline-block"
-                      src={ENGLISH_IMAGE}
-                      alt={"EN"}
-                      width={20}
-                      height={20}
-                    />
-                    <span className="ml-2 inline-block">english</span>
-                  </SelectItem>
+                  <SelectItem value="0">all type</SelectItem>
                   <SelectItem value="1">
-                    <Image
-                      className="inline-block"
-                      src={JAPANESE_IMAGE}
-                      alt={"JP"}
-                      width={20}
-                      height={20}
-                    />
-                    <span className="ml-2 inline-block">japanese</span>
+                    <span>site</span>
+                  </SelectItem>
+                  <SelectItem value="2">
+                    <span>company</span>
+                  </SelectItem>
+                  <SelectItem value="3">
+                    <span>summary</span>
                   </SelectItem>
                 </SelectContent>
               </Select>

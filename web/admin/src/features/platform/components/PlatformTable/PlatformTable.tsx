@@ -25,6 +25,7 @@ type PlatformTableProps = {
   offset?: number;
   keyword?: string;
   language?: string;
+  platformSiteType?: string;
 };
 
 export type PlatformTableState = {
@@ -45,6 +46,7 @@ export const PlatformTable = ({
   offset,
   keyword,
   language,
+  platformSiteType,
 }: PlatformTableProps) => {
   const [selectedIds, setSelectedIds] = useState<Array<string>>([]);
   const platformIds = platforms.map((platform) => platform.id);
@@ -166,11 +168,6 @@ export const PlatformTable = ({
     [platformIds]
   );
 
-  const currentDataCount = useMemo(() => {
-    if (!offset) return data.length;
-    return data.length + (offset - 1) * MAX_SHOW_PLATFORM_TABLE_DATA_COUNT;
-  }, [data, offset]);
-
   const currentPage = offset || 1;
   const lastPage = Math.ceil(allCount / MAX_SHOW_PLATFORM_TABLE_DATA_COUNT);
 
@@ -183,19 +180,23 @@ export const PlatformTable = ({
     if (language) {
       languagePath = `&language=${language}`;
     }
+    let platformSiteTypePath = "";
+    if (platformSiteType) {
+      platformSiteTypePath = `&platformSiteType=${platformSiteType}`;
+    }
     const previousUrl =
       currentPage !== 1
-        ? `/platform?offset=${currentPage - 1}${keywordPath}${languagePath}`
+        ? `/platform?offset=${currentPage - 1}${keywordPath}${languagePath}${platformSiteTypePath}`
         : undefined;
     const nextUrl =
       currentPage < lastPage
-        ? `/platform?offset=${currentPage + 1}${keywordPath}${languagePath}`
+        ? `/platform?offset=${currentPage + 1}${keywordPath}${languagePath}${platformSiteTypePath}`
         : undefined;
     return {
       previous: previousUrl,
       next: nextUrl,
     };
-  }, [keyword, language, currentPage, lastPage]);
+  }, [keyword, language, platformSiteType, currentPage, lastPage]);
 
   return (
     <>
@@ -206,6 +207,7 @@ export const PlatformTable = ({
         offset={offset}
         keyword={keyword}
         language={language}
+        platformSiteType={platformSiteType}
       />
 
       <div className="mt-4">

@@ -7,21 +7,25 @@ type PlatformTemplateProps = {
   offset?: number;
   keyword?: string;
   language?: string;
+  platformSiteType?: string;
 };
 
 export const PlatformTemplate: FC<PlatformTemplateProps> = async ({
   offset,
   keyword,
   language,
+  platformSiteType,
 }) => {
   const res = await fetchPlatformsAPI({
     offset: offset?.toString(),
     keyword: keyword,
     language: language,
+    platformSiteType: platformSiteType,
   });
   const resCount = await fetchPlatformsCountAPI({
     keyword: keyword,
     language: language,
+    platformSiteType: platformSiteType,
   });
 
   return (
@@ -31,6 +35,7 @@ export const PlatformTemplate: FC<PlatformTemplateProps> = async ({
       offset={offset}
       keyword={keyword}
       language={language}
+      platformSiteType={platformSiteType}
     />
   );
 };

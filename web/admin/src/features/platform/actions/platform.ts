@@ -9,12 +9,14 @@ type FetchPlatformsAPIRequest = {
   offset?: string;
   keyword?: string;
   language?: string;
+  platformSiteType?: string;
 };
 
 export const fetchPlatformsAPI = async ({
   offset = "1",
   keyword,
   language,
+  platformSiteType,
 }: FetchPlatformsAPIRequest): Promise<FetchPlatformAPIResponse> => {
   let url = `${process.env.WEB_DOMAIN}/api/platform/?offset=${offset}`;
   if (keyword) {
@@ -22,6 +24,9 @@ export const fetchPlatformsAPI = async ({
   }
   if (language) {
     url += `&language=${language}`;
+  }
+  if (platformSiteType) {
+    url += `&platformSiteType=${platformSiteType}`;
   }
 
   const res = await getFetch({
@@ -44,18 +49,23 @@ export const fetchPlatformsAPI = async ({
 type FetchPlatformsCountAPIRequest = {
   keyword?: string;
   language?: string;
+  platformSiteType?: string;
 };
 
 export const fetchPlatformsCountAPI = async ({
   keyword,
   language,
+  platformSiteType,
 }: FetchPlatformsCountAPIRequest): Promise<FetchCountAPIResponse> => {
-  let url = `${process.env.WEB_DOMAIN}/api/platform/count/`;
+  let url = `${process.env.WEB_DOMAIN}/api/platform/count/?dummy=dummy`;
   if (keyword) {
-    url += `?keyword=${keyword}`;
+    url += `&keyword=${keyword}`;
   }
   if (language) {
-    url += `?language=${language}`;
+    url += `&language=${language}`;
+  }
+  if (platformSiteType) {
+    url += `&platformSiteType=${platformSiteType}`;
   }
 
   const res = await getFetch({

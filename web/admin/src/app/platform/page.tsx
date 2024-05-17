@@ -19,7 +19,17 @@ export default function PlatformPage({ searchParams }: PageProps) {
       ? searchParams["keyword"]
       : undefined;
 
+  const platformSiteType =
+    typeof searchParams["platformSiteType"] === "string"
+      ? searchParams["platformSiteType"]
+      : undefined;
+
   return (
-    <PlatformTemplate offset={offset} keyword={keyword} language={language} />
+    <PlatformTemplate
+      offset={offset}
+      keyword={keyword}
+      language={language}
+      platformSiteType={platformSiteType}
+    />
   );
 }

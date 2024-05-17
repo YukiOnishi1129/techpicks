@@ -7,7 +7,6 @@ import {
   flexRender,
 } from "@tanstack/react-table";
 import { useState, useMemo } from "react";
-import { z } from "zod";
 
 import { MAX_SHOW_PLATFORM_TABLE_DATA_COUNT } from "@/features/platform/constants/table";
 
@@ -22,6 +21,7 @@ import {
 
 import { PlatformLanguageSelect } from "./PlatformLangaugeSelect";
 import { PlatformSearchInput } from "./PlatformSearchInput";
+import { PlatformSiteTypeSelect } from "./PlatformSiteTypeSelect";
 
 interface PlatformDataTableProps<TData, TValue> {
   allCount: number;
@@ -30,10 +30,8 @@ interface PlatformDataTableProps<TData, TValue> {
   offset?: number;
   keyword?: string;
   language?: string;
+  platformSiteType?: string;
 }
-const FormSchema = z.object({
-  keyword: z.string().optional(),
-});
 
 export function PlatformDataTable<TData, TValue>({
   allCount,
@@ -42,6 +40,7 @@ export function PlatformDataTable<TData, TValue>({
   offset,
   keyword,
   language,
+  platformSiteType,
 }: PlatformDataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = useState({});
 
@@ -70,23 +69,32 @@ export function PlatformDataTable<TData, TValue>({
       </div>
 
       <div className="flex items-center justify-between border-b px-4 py-2">
-        <div className="flex w-1/2 items-center justify-between">
-          <PlatformSearchInput
-            keyword={keyword}
-            offset={offset}
-            language={language}
-          />
-          {/* lang */}
+        <div className="flex  items-center justify-between">
+          <div>
+            <PlatformSearchInput
+              keyword={keyword}
+              offset={offset}
+              language={language}
+              platformSiteType={platformSiteType}
+            />
+          </div>
+
           <div className="ml-2">
             <PlatformLanguageSelect
               offset={offset}
               keyword={keyword}
               language={language}
+              platformSiteType={platformSiteType}
             />
           </div>
-
-          <div></div>
-          {/* type */}
+          <div className="ml-2">
+            <PlatformSiteTypeSelect
+              offset={offset}
+              keyword={keyword}
+              language={language}
+              platformSiteType={platformSiteType}
+            />
+          </div>
         </div>
         <div>
           {/* active */}
