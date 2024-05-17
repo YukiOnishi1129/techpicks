@@ -1,14 +1,18 @@
 "use client";
 
 import {
+  ColumnDef,
   flexRender,
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
+import { clsx } from "clsx";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Table,
   TableBody,
@@ -21,8 +25,6 @@ import {
 import { useServerRevalidatePage } from "@/hooks/useServerRevalidatePage";
 
 import { PlatformType } from "@/types/platform";
-
-import { usePlatformDataTable } from "./usePlatformDatatable";
 
 type PlatformTableProps = {
   platforms: PlatformType[];
@@ -42,26 +44,26 @@ export type PlatformTableState = {
   deletedAt?: Date;
 };
 
-interface PlatformDataTableProps {
+interface PlatformDataTableProps<TData, TValue> {
+  columns: ColumnDef<TData, TValue>[];
+  data: TData[];
   platforms: PlatformType[];
   offset?: number;
   keyword?: string;
 }
 
-function PlatformDataTable({
+function PlatformDataTable<TData, TValue>({
+  columns,
+  data,
   platforms,
   offset,
   keyword,
-}: PlatformDataTableProps) {
+}: PlatformDataTableProps<TData, TValue>) {
   const router = useRouter();
   const { revalidatePage } = useServerRevalidatePage();
-  const [rowSelection, setRowSelection] = useState({});
 
-  const { data, columns } = usePlatformDataTable({
-    platforms,
-    offset,
-    keyword,
-  });
+  const [rowSelection, setRowSelection] = useState({});
+  const [selectedWorkIds, setSelectedWorkIds] = useState<string[]>([]);
 
   const table = useReactTable({
     data,
@@ -73,6 +75,7 @@ function PlatformDataTable({
     },
   });
 
+  console.log("🔥");
   console.log(rowSelection);
 
   const handlePreviousPage = useCallback(async () => {
@@ -159,8 +162,112 @@ export function PlatformTable({
   offset,
   keyword,
 }: PlatformTableProps) {
+  const data: Array<PlatformTableState> = platforms.map((platform) => {
+    return {
+      id: platform.id,
+      name: platform.name,
+      siteUrl: platform.siteUrl,
+      platformSiteType: platform.platformSiteType,
+      faviconUrl: platform.faviconUrl,
+      isEng: platform.isEng,
+      createdAt: platform.createdAt,
+      //   updatedAt: platform.updatedAt,
+      deletedAt: platform?.deletedAt,
+    };
+  });
+
+  const columns: ColumnDef<PlatformTableState>[] = [
+    {
+      id: "select",
+      header: ({ table }) => (
+        <Checkbox
+          checked={
+            table.getIsAllPageRowsSelected() ||
+            (table.getIsSomePageRowsSelected() && "indeterminate")
+          }
+          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+          aria-label="Select all"
+        />
+      ),
+      cell: ({ row }) => (
+        <Checkbox
+          checked={row.getIsSelected()}
+          onCheckedChange={(value) => row.toggleSelected(!!value)}
+          aria-label="Select row"
+        />
+      ),
+      enableSorting: false,
+      enableHiding: false,
+    },
+    {
+      accessorKey: "name",
+      header: "name",
+      cell: ({ row }) => {
+        const style = row.original.deletedAt ? "text-gray-500" : "";
+        return (
+          <div className="flex text-left">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img className="size-6" src={row.original.faviconUrl} alt="" />
+            <span className={clsx(style, "ml-4")}>{row.original.name}</span>
+          </div>
+        );
+      },
+    },
+
+    {
+      accessorKey: "isEng",
+      header: () => <div className="text-left">lang</div>,
+      cell: ({ row }) => {
+        const imageUrl = row.original.isEng
+          ? "/static/english.png"
+          : "/static/japanese.png";
+        const imageAlt = row.original.isEng ? "EN" : "JP";
+        return (
+          <div className="text-left">
+            <Image src={imageUrl} alt={imageAlt} width={20} height={20} />
+          </div>
+        );
+      },
+    },
+    {
+      accessorKey: "platformSiteType",
+      header: () => <div className="text-left">type</div>,
+      cell: ({ row }) => {
+        const type = row.original.platformSiteType;
+        let showType = "unknown";
+        switch (type) {
+          case 1:
+            showType = "site";
+            break;
+          case 2:
+            showType = "company";
+            break;
+          case 3:
+            showType = "summary";
+            break;
+          default:
+            break;
+        }
+        return <div className="text-left">{showType}</div>;
+      },
+    },
+    {
+      accessorKey: "deletedAt",
+      header: () => <div className="text-left">status</div>,
+      cell: ({ row }) => {
+        const style = row.original.deletedAt
+          ? "text-gray-500"
+          : "text-emerald-500";
+        const label = row.original.deletedAt ? "stop" : "active";
+        return <span className={clsx(style)}>{label}</span>;
+      },
+    },
+  ];
+
   return (
     <PlatformDataTable
+      data={data}
+      columns={columns}
       platforms={platforms}
       offset={offset}
       keyword={keyword}

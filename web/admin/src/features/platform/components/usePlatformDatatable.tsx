@@ -1,5 +1,9 @@
 "use client";
-import { ColumnDef } from "@tanstack/react-table";
+import {
+  ColumnDef,
+  getCoreRowModel,
+  useReactTable,
+} from "@tanstack/react-table";
 import { clsx } from "clsx";
 import Image from "next/image";
 import { useState } from "react";
@@ -21,6 +25,7 @@ export const usePlatformDataTable = ({
   offset,
   keyword,
 }: usePlatformDataTableProps) => {
+  const [rowSelection, setRowSelection] = useState({});
   const [selectedWorkIds, setSelectedWorkIds] = useState<string[]>([]);
   const data: Array<PlatformTableState> = platforms.map((platform) => {
     return {
@@ -52,15 +57,7 @@ export const usePlatformDataTable = ({
       cell: ({ row }) => (
         <Checkbox
           checked={row.getIsSelected()}
-          onCheckedChange={(value) => {
-            setSelectedWorkIds((prev) => {
-              if (value) {
-                return [...prev, row.original.id];
-              }
-              return prev.filter((id) => id !== row.original.id);
-            });
-            row.toggleSelected(!!value);
-          }}
+          onCheckedChange={(value) => row.toggleSelected(!!value)}
           aria-label="Select row"
         />
       ),
@@ -130,5 +127,15 @@ export const usePlatformDataTable = ({
     },
   ];
 
-  return { data, columns };
+  const table = useReactTable({
+    data,
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+    onRowSelectionChange: setRowSelection,
+    state: {
+      rowSelection,
+    },
+  });
+
+  return { data, columns, table };
 };
