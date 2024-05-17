@@ -14,8 +14,6 @@ import { z } from "zod";
 
 import { MAX_SHOW_PLATFORM_TABLE_DATA_COUNT } from "@/features/platform/constants/table";
 
-import { Form, FormField, FormItem, FormControl } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import {
   Table,
   TableHeader,
@@ -26,6 +24,8 @@ import {
 } from "@/components/ui/table";
 
 import { useServerRevalidatePage } from "@/hooks/useServerRevalidatePage";
+
+import { PlatformSearchInput } from "./PlatformSearchInput";
 
 interface PlatformDataTableProps<TData, TValue> {
   allCount: number;
@@ -94,25 +94,7 @@ export function PlatformDataTable<TData, TValue>({
       </div>
       <div className="flex items-center justify-between border-b px-4 py-2">
         <div>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(handleSearch)}>
-              <FormField
-                control={form.control}
-                name="keyword"
-                render={({ field }) => (
-                  <FormItem className="flex items-center">
-                    <FormControl>
-                      <Input
-                        className="border-primary bg-secondary text-primary"
-                        placeholder="search keyword"
-                        {...field}
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-            </form>
-          </Form>
+          <PlatformSearchInput keyword={keyword} offset={offset} />
         </div>
       </div>
 
