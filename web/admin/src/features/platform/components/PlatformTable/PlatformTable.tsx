@@ -101,7 +101,11 @@ export const PlatformTable = ({
           return (
             <div className="flex text-left">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img className="size-6" src={row.original.faviconUrl} alt="" />
+              <img
+                className="size-6 bg-white"
+                src={row.original.faviconUrl}
+                alt=""
+              />
               <span className={clsx(style, "ml-4")}>{row.original.name}</span>
             </div>
           );
@@ -160,6 +164,11 @@ export const PlatformTable = ({
     [platformIds]
   );
 
+  const currentDataCount = useMemo(() => {
+    if (!offset) return data.length;
+    return data.length + (offset - 1) * MAX_SHOW_PLATFORM_TABLE_DATA_COUNT;
+  }, [data, offset]);
+
   const currentPage = offset || 1;
   const lastPage = Math.ceil(allCount / MAX_SHOW_PLATFORM_TABLE_DATA_COUNT);
 
@@ -193,11 +202,13 @@ export const PlatformTable = ({
       />
 
       <div className="mt-4">
-        <TablePagination
-          currentPage={currentPage}
-          lastPage={lastPage}
-          url={paginationUrl}
-        />
+        <div className="flex items-center justify-between px-4 py-2">
+          <TablePagination
+            currentPage={currentPage}
+            lastPage={lastPage}
+            url={paginationUrl}
+          />
+        </div>
       </div>
     </>
   );

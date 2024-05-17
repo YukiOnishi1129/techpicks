@@ -14,7 +14,6 @@ import { z } from "zod";
 
 import { MAX_SHOW_PLATFORM_TABLE_DATA_COUNT } from "@/features/platform/constants/table";
 
-import { Button } from "@/components/ui/button";
 import { Form, FormField, FormItem, FormControl } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import {
@@ -39,8 +38,6 @@ const FormSchema = z.object({
   keyword: z.string().optional(),
 });
 
-const MAX_SHOW_DATA_COUNT = 8;
-
 export function PlatformDataTable<TData, TValue>({
   allCount,
   columns,
@@ -53,7 +50,7 @@ export function PlatformDataTable<TData, TValue>({
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      keyword: "",
+      keyword: keyword || "",
     },
   });
 
@@ -87,35 +84,15 @@ export function PlatformDataTable<TData, TValue>({
     [offset, router, revalidatePage]
   );
 
-  const handlePreviousPage = useCallback(async () => {
-    let keywordPath = "";
-    const requestOffset = offset ? offset - 1 : 1;
-    if (!!keyword && keyword.trim() !== "") {
-      keywordPath = `&keyword=${keyword}`;
-    }
-    await revalidatePage();
-    router.replace(`/platform?offset=${requestOffset}${keywordPath}`);
-  }, [keyword, offset, router, revalidatePage]);
-
-  const handleNextPage = useCallback(async () => {
-    let keywordPath = "";
-    let requestOffset = offset ? offset + 1 : 1;
-    if (!!keyword && keyword.trim() !== "") {
-      keywordPath = `&keyword=${keyword}`;
-    }
-    await revalidatePage();
-    router.replace(`/platform?offset=${requestOffset}${keywordPath}`);
-  }, [keyword, offset, router, revalidatePage]);
-
   return (
     <div className="rounded-md border">
+      <div className="flex items-center justify-between border-b  px-4 py-2">
+        <h1 className="text-lg font-bold">Platform Table</h1>
+        <p className="text-sm ">
+          {currentDataCount} of {allCount} results
+        </p>
+      </div>
       <div className="flex items-center justify-between border-b px-4 py-2">
-        <div>
-          <h1 className="text-lg font-bold">Platform Table</h1>
-          <p className="text-sm text-gray-500">
-            {allCount} results found. Showing {currentDataCount} results.
-          </p>
-        </div>
         <div>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(handleSearch)}>
@@ -123,7 +100,7 @@ export function PlatformDataTable<TData, TValue>({
                 control={form.control}
                 name="keyword"
                 render={({ field }) => (
-                  <FormItem className="mb-4 flex items-center">
+                  <FormItem className="flex items-center">
                     <FormControl>
                       <Input
                         className="border-primary bg-secondary text-primary"
@@ -136,24 +113,6 @@ export function PlatformDataTable<TData, TValue>({
               />
             </form>
           </Form>
-        </div>
-        <div className="flex items-center justify-end space-x-2 py-4">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handlePreviousPage}
-            disabled={offset === 1 || !offset}
-          >
-            Previous
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handleNextPage}
-            disabled={data.length < 8}
-          >
-            Next
-          </Button>
         </div>
       </div>
 
