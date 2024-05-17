@@ -12,6 +12,8 @@ import { useState, useCallback, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
+import { MAX_SHOW_PLATFORM_TABLE_DATA_COUNT } from "@/features/platform/constants/table";
+
 import { Button } from "@/components/ui/button";
 import { Form, FormField, FormItem, FormControl } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -25,8 +27,6 @@ import {
 } from "@/components/ui/table";
 
 import { useServerRevalidatePage } from "@/hooks/useServerRevalidatePage";
-
-import { MAX_SHOW_PLATFORM_TABLE_DATA_COUNT } from "../../constants/constant";
 
 interface PlatformDataTableProps<TData, TValue> {
   allCount: number;

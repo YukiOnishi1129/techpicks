@@ -5,13 +5,17 @@ import { clsx } from "clsx";
 import Image from "next/image";
 import { useMemo, useState } from "react";
 
+import { MAX_SHOW_PLATFORM_TABLE_DATA_COUNT } from "@/features/platform/constants/table";
+
 import { Checkbox } from "@/components/ui/checkbox";
+import {
+  PaginationUrl,
+  TablePagination,
+} from "@/components/ui/pagination/TablePagination";
 
 import { PlatformType } from "@/types/platform";
 
 import { PlatformDataTable } from "./PlatformDataTable";
-import { PaginationUrl, TablePagination } from "./TablePagination";
-import { MAX_SHOW_PLATFORM_TABLE_DATA_COUNT } from "../../constants/constant";
 
 type PlatformTableProps = {
   allCount: number;
