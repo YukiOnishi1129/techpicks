@@ -9,10 +9,19 @@ const meta = {
     layout: "centered",
   },
   tags: ["autodocs"],
-  argTypes: {
-    backgroundColor: { control: "color" },
+  args: {
+    platform: {
+      id: "1",
+      name: "Pedro Duarte",
+      siteUrl: "https://peduarte.com",
+      platformSiteType: 1,
+      faviconUrl: "https://peduarte.com/favicon.ico",
+      isEng: true,
+      feeds: [],
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
   },
-  args: {},
 } satisfies Meta<typeof EditPlatformSheet>;
 
 export default meta;

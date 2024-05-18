@@ -4,10 +4,10 @@ import { ColumnDef } from "@tanstack/react-table";
 import { clsx } from "clsx";
 import Image from "next/image";
 import { useMemo, useState } from "react";
+import Link from "next/link";
 
 import { MAX_SHOW_PLATFORM_TABLE_DATA_COUNT } from "@/features/platform/constants/table";
 
-import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   PaginationUrl,
@@ -19,6 +19,8 @@ import { PlatformType } from "@/types/platform";
 import { ENGLISH_IMAGE, JAPANESE_IMAGE } from "@/constants/image";
 
 import { PlatformDataTable } from "./PlatformDataTable";
+import { EditPlatformSheet } from "../EditPlatformSheet";
+import { Target } from "lucide-react";
 
 type PlatformTableProps = {
   allCount: number;
@@ -37,7 +39,7 @@ export type PlatformTableState = {
   faviconUrl: string;
   isEng: boolean;
   createdAt: Date;
-  //   updatedAt: Date;
+  updatedAt: Date;
   deletedAt?: Date;
 };
 
@@ -60,7 +62,7 @@ export const PlatformTable = ({
       faviconUrl: platform.faviconUrl,
       isEng: platform.isEng,
       createdAt: platform.createdAt,
-      //   updatedAt: platform.updatedAt,
+      updatedAt: platform.updatedAt,
       deletedAt: platform?.deletedAt,
     };
   });
@@ -106,15 +108,20 @@ export const PlatformTable = ({
         cell: ({ row }) => {
           const style = row.original.deletedAt ? "text-gray-500" : "";
           return (
-            <div className="flex text-left">
+            <Link
+              href={new URL(row.original.siteUrl)}
+              target="_blank"
+              className="flex text-left hover:text-teal-500"
+            >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 className="size-6 bg-white"
                 src={row.original.faviconUrl}
                 alt=""
               />
+
               <span className={clsx(style, "ml-4")}>{row.original.name}</span>
-            </div>
+            </Link>
           );
         },
       },
@@ -168,7 +175,9 @@ export const PlatformTable = ({
         accessorKey: "id",
         header: () => <div className="text-left">edit</div>,
         cell: ({ row }) => {
-          return <Button variant={"secondary"}>{"EDIT"}</Button>;
+          const platform = platforms.find((p) => p.id === row.original.id);
+          if (!platform) return;
+          return <EditPlatformSheet platform={platform} />;
         },
       },
     ],
