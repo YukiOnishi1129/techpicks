@@ -1,9 +1,19 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { FC } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+
 import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormField,
+  FormControl,
+  FormLabel,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -13,22 +23,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import {
-  Form,
-  FormField,
-  FormControl,
-  FormLabel,
-  FormItem,
-  FormMessage,
-} from "@/components/ui/form";
-import {
   SheetContent,
   SheetHeader,
   SheetTitle,
   SheetClose,
 } from "@/components/ui/sheet";
-import { PlatformType } from "@/types/platform";
 
-import { FC } from "react";
+import { PlatformType } from "@/types/platform";
 
 const FormSchema = z.object({
   name: z.string().min(1, { message: "Name is required" }),
@@ -137,7 +138,7 @@ export const EditPlatformSheetContent: FC<EditPlatformSheetContentProps> = ({
           />
         </form>
 
-        <div className="mt-8 flex justify-between items-center">
+        <div className="mt-8 flex items-center justify-between">
           <SheetClose asChild className="inline-block">
             <Button variant={"secondary"}>{"CLOSE"}</Button>
           </SheetClose>

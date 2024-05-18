@@ -1,6 +1,6 @@
-import type { Meta, StoryObj } from "@storybook/react";
-import { fn } from "@storybook/test";
 import { EditPlatformSheet } from "./EditPlatformSheet";
+
+import type { Meta, StoryObj } from "@storybook/react";
 
 const meta = {
   title: "feature/platform/EditPlatformSheet",

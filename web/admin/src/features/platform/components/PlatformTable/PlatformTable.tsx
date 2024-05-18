@@ -3,8 +3,8 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { clsx } from "clsx";
 import Image from "next/image";
-import { useMemo, useState } from "react";
 import Link from "next/link";
+import { useMemo, useState } from "react";
 
 import { MAX_SHOW_PLATFORM_TABLE_DATA_COUNT } from "@/features/platform/constants/table";
 
@@ -20,7 +20,6 @@ import { ENGLISH_IMAGE, JAPANESE_IMAGE } from "@/constants/image";
 
 import { PlatformDataTable } from "./PlatformDataTable";
 import { EditPlatformSheet } from "../EditPlatformSheet";
-import { Target } from "lucide-react";
 
 type PlatformTableProps = {
   allCount: number;
@@ -181,7 +180,7 @@ export const PlatformTable = ({
         },
       },
     ],
-    [platformIds]
+    [platformIds, platforms]
   );
 
   const currentPage = offset || 1;
