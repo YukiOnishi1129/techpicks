@@ -1,7 +1,8 @@
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
-import { FC, useCallback, useTransition } from "react";
+import { useRouter } from "next/navigation";
+import { FC, useCallback, useMemo, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -29,9 +30,13 @@ import {
   SheetClose,
 } from "@/components/ui/sheet";
 
+import { useServerRevalidatePage } from "@/hooks/useServerRevalidatePage";
+
 import { PlatformType } from "@/types/platform";
 
 import { ENGLISH_IMAGE, JAPANESE_IMAGE } from "@/constants/image";
+
+import { updatePlatform } from "../../repository/platform";
 
 const FormSchema = z.object({
   name: z
@@ -70,6 +75,8 @@ export const EditPlatformSheetContent: FC<EditPlatformSheetContentProps> = ({
   platform,
   handleSheetClose,
 }) => {
+  const router = useRouter();
+  const { revalidatePage } = useServerRevalidatePage();
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -83,18 +90,55 @@ export const EditPlatformSheetContent: FC<EditPlatformSheetContentProps> = ({
 
   const [isPending, startTransition] = useTransition();
 
+  const inputName = form.watch("name");
+  const inputUrl = form.watch("url");
+  const inputPlatformSiteType = form.watch("platformSiteType");
+  const inputFaviconUrl = form.watch("faviconUrl");
+  const inputIsEng = form.watch("isEng");
+
+  const isEditDisabledCheck = useMemo(() => {
+    return (
+      platform.name === inputName &&
+      platform.siteUrl === inputUrl &&
+      platform.platformSiteType === Number(inputPlatformSiteType) &&
+      platform.faviconUrl === inputFaviconUrl &&
+      platform.isEng === (inputIsEng === "2")
+    );
+  }, [
+    platform,
+    inputName,
+    inputUrl,
+    inputPlatformSiteType,
+    inputFaviconUrl,
+    inputIsEng,
+  ]);
+
   const handleSubmitEditPlatform = useCallback(
     (values: z.infer<typeof FormSchema>) => {
       startTransition(async () => {
-        console.log("🔥");
-        const editedName = values.name;
-        const editedUrl = values.url;
-        const editedPlatformSiteType = Number(values.platformSiteType);
-        const editedFaviconUrl = values.faviconUrl;
-        const editedIsEng = values.isEng === "2";
+        if (isEditDisabledCheck) return;
+
+        const updatedId = await updatePlatform({
+          id: platform.id,
+          name: values.name,
+          siteUrl: values.url,
+          platformSiteType: Number(values.platformSiteType),
+          faviconUrl: values.faviconUrl,
+          isEng: values.isEng === "2",
+        });
+        if (!updatedId) {
+          // TODO: show toast
+          console.log("failed to update platform");
+        }
+        // TODO: show toast
+        console.log("success updated platform", updatedId);
+
+        // 3. revalidate
+        await revalidatePage();
+        router.replace(`/platform`);
       });
     },
-    []
+    [isEditDisabledCheck, platform, revalidatePage, router, startTransition]
   );
 
   return (
@@ -196,7 +240,11 @@ export const EditPlatformSheetContent: FC<EditPlatformSheetContentProps> = ({
                         {...field}
                       />
                       {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={field.value} alt="" />
+                      <img
+                        className="size-8 bg-white"
+                        src={field.value}
+                        alt=""
+                      />
                     </div>
                   </FormControl>
                   <FormMessage />
@@ -257,7 +305,9 @@ export const EditPlatformSheetContent: FC<EditPlatformSheetContentProps> = ({
                 {"CLOSE"}
               </Button>
             </SheetClose>
-            <Button>{"EDIT"}</Button>
+            <Button disabled={!form.formState.isValid || isEditDisabledCheck}>
+              {"EDIT"}
+            </Button>
           </div>
         </form>
       </Form>

@@ -229,3 +229,35 @@ export const getPlatformsCount = async ({
     throw new Error(`Failed to get platforms count: ${err}`);
   }
 };
+
+type UpdatePlatformDTO = {
+  id: string;
+  name: string;
+  siteUrl: string;
+  platformSiteType: number;
+  faviconUrl: string;
+  isEng: boolean;
+  deletedAt?: Date;
+};
+
+export const updatePlatform = async (dto: UpdatePlatformDTO) => {
+  try {
+    const platform = await prisma.platform.update({
+      where: {
+        id: dto.id,
+      },
+      data: {
+        name: dto.name,
+        siteUrl: dto.siteUrl,
+        platformSiteType: dto.platformSiteType,
+        faviconUrl: dto.faviconUrl,
+        isEng: dto.isEng,
+        deletedAt: dto.deletedAt,
+      },
+    });
+
+    return platform.id;
+  } catch (err) {
+    throw new Error(`Failed to update platform: ${err}`);
+  }
+};
