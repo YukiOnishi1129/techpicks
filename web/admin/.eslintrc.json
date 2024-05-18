@@ -7,11 +7,7 @@
     "plugin:tailwindcss/recommended",
     "plugin:storybook/recommended"
   ],
-  "plugins": [
-    "import",
-    "unused-imports",
-    "tailwindcss"
-  ],
+  "plugins": ["import", "unused-imports", "tailwindcss"],
   "rules": {
     "import/order": [
       "error",
@@ -20,10 +16,7 @@
           "builtin",
           "external",
           "internal",
-          [
-            "parent",
-            "sibling"
-          ],
+          ["parent", "sibling"],
           "object",
           "type",
           "index"
@@ -71,26 +64,15 @@
   },
   "settings": {
     "import/parsers": {
-      "@typescript-eslint/parser": [
-        ".ts",
-        ".tsx"
-      ]
+      "@typescript-eslint/parser": [".ts", ".tsx"]
     },
     "import/resolver": {
       "typescript": {
         "project": "./"
       },
       "alias": {
-        "extensions": [
-          ".ts",
-          ".tsx"
-        ],
-        "map": [
-          [
-            "@/",
-            "./src/"
-          ]
-        ]
+        "extensions": [".ts", ".tsx"],
+        "map": [["@/", "./src/"]]
       }
     }
   }
