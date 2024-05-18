@@ -10,9 +10,26 @@ export default function PlatformPage({ searchParams }: PageProps) {
     typeof searchParams["offset"] === "string"
       ? parseInt(searchParams["offset"])
       : undefined;
+  const language =
+    typeof searchParams["language"] === "string"
+      ? searchParams["language"]
+      : undefined;
   const keyword =
     typeof searchParams["keyword"] === "string"
       ? searchParams["keyword"]
       : undefined;
-  return <PlatformTemplate offset={offset} keyword={keyword} />;
+
+  const platformSiteType =
+    typeof searchParams["platformSiteType"] === "string"
+      ? searchParams["platformSiteType"]
+      : undefined;
+
+  return (
+    <PlatformTemplate
+      offset={offset}
+      keyword={keyword}
+      language={language}
+      platformSiteType={platformSiteType}
+    />
+  );
 }

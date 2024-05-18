@@ -4,7 +4,8 @@
     "prettier",
     "plugin:import/recommended",
     "plugin:import/warnings",
-    "plugin:tailwindcss/recommended"
+    "plugin:tailwindcss/recommended",
+    "plugin:storybook/recommended"
   ],
   "plugins": ["import", "unused-imports", "tailwindcss"],
   "rules": {
@@ -66,7 +67,9 @@
       "@typescript-eslint/parser": [".ts", ".tsx"]
     },
     "import/resolver": {
-      "typescript": { "project": "./" },
+      "typescript": {
+        "project": "./"
+      },
       "alias": {
         "extensions": [".ts", ".tsx"],
         "map": [["@/", "./src/"]]

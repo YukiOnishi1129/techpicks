@@ -4,10 +4,10 @@ import { AdminUserType, FetchAdminUserAPIResponse } from "@/types/admin";
 
 export const fetchAdminUserAPI =
   async (): Promise<FetchAdminUserAPIResponse> => {
-    const url = new URL(`${process.env.WEB_DOMAIN}/api/admin/user`);
+    const url = `${process.env.WEB_DOMAIN}/api/admin/user`;
 
     const response = await getFetch({
-      url: url.toString(),
+      url: url,
       tagName: "admin/user",
       cacheType: "no-store",
     });

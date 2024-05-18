@@ -7,17 +7,73 @@ import { PlatformType } from "@/types/platform";
 export type GetPlatformsDT0 = {
   offset?: number;
   keyword?: string;
+  language?: string;
+  platformSiteType?: string;
 };
 
 export const getPlatforms = async ({
   offset = 1,
   keyword,
+  language,
+  platformSiteType,
 }: GetPlatformsDT0) => {
   const limit = 8;
+  let where = {};
+  if (keyword) {
+    where = {
+      AND: [
+        {
+          OR: [
+            {
+              name: {
+                contains: keyword,
+              },
+            },
+          ],
+        },
+      ],
+    };
+  }
+
+  if (language) {
+    where = {
+      ...where,
+      isEng: {
+        equals: language === "2" ? true : false,
+      },
+    };
+  }
+
+  let argPlatformSiteType = 0;
+  switch (platformSiteType) {
+    case "1":
+      argPlatformSiteType = 1;
+      break;
+    case "2":
+      argPlatformSiteType = 2;
+      break;
+    case "3":
+      argPlatformSiteType = 3;
+      break;
+    default:
+      argPlatformSiteType = 0;
+      break;
+  }
+
+  if (argPlatformSiteType) {
+    where = {
+      ...where,
+      platformSiteType: {
+        equals: argPlatformSiteType,
+      },
+    };
+  }
+
   try {
     const platforms = await prisma.platform.findMany({
       take: limit,
       skip: (offset - 1) * limit,
+      where,
       orderBy: {
         createdAt: "asc",
       },
@@ -98,5 +154,78 @@ export const getPlatforms = async ({
     return resPlatforms;
   } catch (err) {
     throw new Error(`Failed to get platforms: ${err}`);
+  }
+};
+
+export type GetPlatformsCountDT0 = {
+  keyword?: string;
+  language?: string;
+  platformSiteType?: string;
+};
+
+export const getPlatformsCount = async ({
+  keyword,
+  language,
+  platformSiteType,
+}: GetPlatformsCountDT0) => {
+  let where = {};
+  if (keyword) {
+    where = {
+      AND: [
+        {
+          OR: [
+            {
+              name: {
+                contains: keyword,
+              },
+            },
+          ],
+        },
+      ],
+    };
+  }
+
+  if (language) {
+    where = {
+      ...where,
+      isEng: {
+        equals: language === "2" ? true : false,
+      },
+    };
+  }
+
+  let argPlatformSiteType = 0;
+  switch (platformSiteType) {
+    case "1":
+      argPlatformSiteType = 1;
+      break;
+    case "2":
+      argPlatformSiteType = 2;
+      break;
+    case "3":
+      argPlatformSiteType = 3;
+      break;
+    default:
+      argPlatformSiteType = 0;
+      break;
+  }
+
+  if (argPlatformSiteType) {
+    where = {
+      ...where,
+      platformSiteType: {
+        equals: argPlatformSiteType,
+      },
+    };
+  }
+
+  try {
+    const count = await prisma.platform.count({
+      where,
+    });
+
+    return count;
+  } catch (err) {
+    throw new Error(`Failed to get platforms count: ${err}`);
   }
 };
