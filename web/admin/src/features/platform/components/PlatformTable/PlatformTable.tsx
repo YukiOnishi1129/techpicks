@@ -7,6 +7,7 @@ import { useMemo, useState } from "react";
 
 import { MAX_SHOW_PLATFORM_TABLE_DATA_COUNT } from "@/features/platform/constants/table";
 
+import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   PaginationUrl,
@@ -117,7 +118,6 @@ export const PlatformTable = ({
           );
         },
       },
-
       {
         accessorKey: "isEng",
         header: () => <div className="text-left">lang</div>,
@@ -162,6 +162,13 @@ export const PlatformTable = ({
             : "text-emerald-500";
           const label = row.original.deletedAt ? "stop" : "active";
           return <span className={clsx(style)}>{label}</span>;
+        },
+      },
+      {
+        accessorKey: "id",
+        header: () => <div className="text-left">edit</div>,
+        cell: ({ row }) => {
+          return <Button variant={"secondary"}>{"EDIT"}</Button>;
         },
       },
     ],
