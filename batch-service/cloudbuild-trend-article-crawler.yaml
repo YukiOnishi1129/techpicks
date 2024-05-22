@@ -25,8 +25,8 @@ steps:
 # Delete container image from Artifact Registry, remains only three latest images
 - name: '$_REGION-docker.pkg.dev/$PROJECT_ID/$_IMAGE'
   args:
-  -  --repo=$_REGION-docker.pkg.dev/$PROJECT_ID/$_IMAGE
-  -  --keep=2
-  - --tag-filter-any=.*
+  - '--repo=$_REGION-docker.pkg.dev/$PROJECT_ID/$_IMAGE'
+  - '--keep=2'
+  - '--tag-filter-any=.*'
 images:
 - $_REGION-docker.pkg.dev/$PROJECT_ID/$_IMAGE
