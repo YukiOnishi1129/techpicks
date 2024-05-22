@@ -23,7 +23,7 @@ steps:
   - '$_REGION'
   # - '--execute-now'
 # Delete container image from Artifact Registry, remains only three latest images
-- name: '$_REGION-docker.pkg.dev/$PROJECT_ID/$_IMAGE'
+- name: 'asia-docker.pkg.dev/gcr-cleaner/gcr-cleaner/gcr-cleaner'
   args:
   - '--repo=$_REGION-docker.pkg.dev/$PROJECT_ID/$_IMAGE'
   - '--keep=2'
