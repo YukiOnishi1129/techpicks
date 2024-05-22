@@ -1,5 +1,6 @@
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { ReloadIcon } from "@radix-ui/react-icons";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { FC, useCallback, useMemo, useTransition } from "react";
@@ -305,9 +306,16 @@ export const EditPlatformSheetContent: FC<EditPlatformSheetContentProps> = ({
                 {"CLOSE"}
               </Button>
             </SheetClose>
-            <Button disabled={!form.formState.isValid || isEditDisabledCheck}>
-              {"EDIT"}
-            </Button>
+            {isPending ? (
+              <Button disabled>
+                <ReloadIcon className="mr-2 size-4 animate-spin" />
+                PLEASE WAIT
+              </Button>
+            ) : (
+              <Button disabled={!form.formState.isValid || isEditDisabledCheck}>
+                {"EDIT"}
+              </Button>
+            )}
           </div>
         </form>
       </Form>

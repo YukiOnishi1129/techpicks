@@ -19,7 +19,7 @@ export const EditPlatformSheet: FC<EditPlatformSheetProps> = ({ platform }) => {
   return (
     <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
       <SheetTrigger asChild>
-        <Button variant="outline" onClick={handleSheetOpen}>
+        <Button variant="secondary" onClick={handleSheetOpen}>
           {"EDIT"}
         </Button>
       </SheetTrigger>
