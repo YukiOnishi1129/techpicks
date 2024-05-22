@@ -22,6 +22,7 @@ import {
 import { PlatformLanguageSelect } from "./PlatformLangaugeSelect";
 import { PlatformSearchInput } from "./PlatformSearchInput";
 import { PlatformSiteTypeSelect } from "./PlatformSiteTypeSelect";
+import { CreatePlatformDialog } from "../CreatePlatformDialog";
 
 interface PlatformDataTableProps<TData, TValue> {
   allCount: number;
@@ -62,10 +63,14 @@ export function PlatformDataTable<TData, TValue>({
   return (
     <div className="rounded-md border">
       <div className="flex items-center justify-between border-b  px-4 py-2">
-        <h1 className="text-lg font-bold">Platform Table</h1>
-        <p className="text-sm ">
-          {currentDataCount} / {allCount}
-        </p>
+        <div className="flex items-end">
+          <h1 className="text-lg font-bold">Platform Table</h1>
+          <p className="ml-4 pb-1  text-sm ">
+            {currentDataCount} / {allCount}
+          </p>
+        </div>
+
+        <CreatePlatformDialog />
       </div>
 
       <div className="flex items-center justify-between border-b px-4 py-2">

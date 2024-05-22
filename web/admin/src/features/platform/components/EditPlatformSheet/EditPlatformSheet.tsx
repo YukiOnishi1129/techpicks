@@ -15,14 +15,20 @@ type EditPlatformSheetProps = {
 export const EditPlatformSheet: FC<EditPlatformSheetProps> = ({ platform }) => {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const handleSheetOpen = useCallback(() => setIsSheetOpen(true), []);
+  const handleSheetClose = useCallback(() => setIsSheetOpen(false), []);
   return (
-    <Sheet>
+    <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
       <SheetTrigger asChild>
-        <Button variant="outline" onClick={handleSheetOpen}>
+        <Button variant="secondary" onClick={handleSheetOpen}>
           {"EDIT"}
         </Button>
       </SheetTrigger>
-      {isSheetOpen && <EditPlatformSheetContent platform={platform} />}
+      {isSheetOpen && (
+        <EditPlatformSheetContent
+          platform={platform}
+          handleSheetClose={handleSheetClose}
+        />
+      )}
     </Sheet>
   );
 };
