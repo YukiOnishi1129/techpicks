@@ -9,7 +9,7 @@ steps:
 # Push the container image to Container Registry
 - name: 'gcr.io/cloud-builders/docker'
   args: ['push', '$_REGION-docker.pkg.dev/$PROJECT_ID/$_IMAGE']
-# Deploy container image to Cloud Run
+# Deploy container image to Cloud Run a
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   entrypoint: gcloud
   args:
