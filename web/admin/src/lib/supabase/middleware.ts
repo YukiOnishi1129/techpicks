@@ -8,6 +8,8 @@ export async function updateSession(request: NextRequest) {
     },
   });
 
+  console.log("🌪️ middleware request", request);
+
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -55,6 +57,8 @@ export async function updateSession(request: NextRequest) {
   );
 
   const user = await supabase.auth.getUser();
+
+  console.log("🌪️ middleware user", user);
 
   const { data } = await supabase
     .from("profiles")
