@@ -2,6 +2,8 @@
 import { User } from "@supabase/supabase-js";
 import { FC, useCallback } from "react";
 
+import { logoutToLoginPage } from "@/features/auth/actions/auth";
+
 import { NotFoundList } from "@/components/layout/NotFoundList";
 
 import { useStatusToast } from "@/hooks/useStatusToast";
@@ -41,6 +43,7 @@ export const FavoriteArticleFolderList: FC<FavoriteArticleFolderListProps> = ({
         failToast({
           description: "Please login to edit a  favorite folder",
         });
+        await logoutToLoginPage();
         return;
       }
       // 1. folder check
@@ -85,6 +88,7 @@ export const FavoriteArticleFolderList: FC<FavoriteArticleFolderListProps> = ({
         failToast({
           description: "Please login to delete a  favorite folder",
         });
+        await logoutToLoginPage();
         return;
       }
       // 2. folder check

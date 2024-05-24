@@ -20,7 +20,6 @@ export async function loginWithGoogle() {
 }
 
 export async function logout() {
-  "use server";
   const supabase = await createServerSideClient();
   const { error } = await supabase.auth.signOut();
 
@@ -28,4 +27,14 @@ export async function logout() {
     redirect("/error");
   }
   if (!error) redirect("/");
+}
+
+export async function logoutToLoginPage() {
+  const supabase = await createServerSideClient();
+  const { error } = await supabase.auth.signOut();
+
+  if (error) {
+    redirect("/error");
+  }
+  if (!error) redirect("/login");
 }

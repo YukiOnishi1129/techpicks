@@ -5,8 +5,6 @@ import { FC } from "react";
 
 import { Button } from "@/components/ui/button";
 
-import { useStatusToast } from "@/hooks/useStatusToast";
-
 import { FavoriteArticleFolderType } from "@/types/favoriteArticleFolder";
 
 import { UpdateFavoriteArticleFolderDialog } from "./Dialog/UpdateFavoriteArticleFolderDialog";
@@ -30,7 +28,6 @@ export const FavoriteArticleFolderCard: FC<FavoriteArticleFolderCardProps> = ({
   handleUpdateFavoriteArticleFolder,
   handleDeleteFavoriteArticleFolder,
 }) => {
-  const { successToast, failToast } = useStatusToast();
   const latestFavoriteArticle =
     favoriteArticleFolder.favoriteArticles.length > 0
       ? favoriteArticleFolder.favoriteArticles[0]

@@ -7,6 +7,7 @@ import { useState, useCallback, FC, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
+import { logoutToLoginPage } from "@/features/auth/actions/auth";
 import { getUser } from "@/features/users/actions/user";
 
 import { Button } from "@/components/ui/button";
@@ -115,6 +116,7 @@ const CreateFavoriteArticleFolderDialogContent: FC<
           failToast({
             description: "Please login to create a favorite article folder",
           });
+          await logoutToLoginPage();
           return;
         }
 

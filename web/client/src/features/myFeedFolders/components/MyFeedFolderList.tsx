@@ -2,6 +2,7 @@
 import { User } from "@supabase/supabase-js";
 import { FC, useCallback } from "react";
 
+import { logoutToLoginPage } from "@/features/auth/actions/auth";
 import { getUser } from "@/features/users/actions/user";
 
 import { NotFoundList } from "@/components/layout/NotFoundList";
@@ -44,6 +45,7 @@ export const MyFeedFolderList: FC<MyFeedFolderListProps> = ({
         failToast({
           description: "Please login to create a new feed folder",
         });
+        await logoutToLoginPage();
         return;
       }
       // 1. folder check

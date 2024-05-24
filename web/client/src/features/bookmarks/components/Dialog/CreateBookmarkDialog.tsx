@@ -21,6 +21,7 @@ import {
   fetchPrivateArticlesByArticleUrlAPI,
 } from "@/features/articles/actions/article";
 import { createArticle } from "@/features/articles/repository/article";
+import { logoutToLoginPage } from "@/features/auth/actions/auth";
 import { getOgpData } from "@/features/ogp/actions/ogp";
 
 import { Button } from "@/components/ui/button";
@@ -106,6 +107,7 @@ export const CreateBookmarkDialog: FC<CreateBookmarkDialogProps> = ({
         failToast({
           description: "Fail: Please login to bookmark this article",
         });
+        await logoutToLoginPage();
         return;
       }
       // 1. check article is already bookmarked

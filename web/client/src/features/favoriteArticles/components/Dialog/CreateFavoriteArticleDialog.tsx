@@ -21,6 +21,7 @@ import {
   fetchPrivateArticlesByArticleUrlAPI,
 } from "@/features/articles/actions/article";
 import { createArticle } from "@/features/articles/repository/article";
+import { logoutToLoginPage } from "@/features/auth/actions/auth";
 import { getOgpData } from "@/features/ogp/actions/ogp";
 
 import { Button } from "@/components/ui/button";
@@ -107,6 +108,7 @@ export const CreateFavoriteArticleDialog: FC<
         failToast({
           description: "Fail: Please login to add favorite article",
         });
+        await logoutToLoginPage();
         return;
       }
 
