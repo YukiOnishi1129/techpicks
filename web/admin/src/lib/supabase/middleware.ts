@@ -60,6 +60,9 @@ export async function updateSession(request: NextRequest) {
 
   console.log("🌪️ middleware user", user);
 
+  const res = await supabase.from("profiles").select();
+  console.log("🌪️ data all: ", res);
+
   const { data } = await supabase
     .from("profiles")
     .select()
