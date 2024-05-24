@@ -12,12 +12,9 @@ export async function loginWithGoogle() {
       redirectTo: `${process.env.WEB_DOMAIN}/auth/callback`,
     },
   });
-  console.log("🧚 login data", data);
   if (error) {
     redirect("/error");
   }
-  console.log("🧚 login after data", data);
-  console.log("🧚 login after data url", data.url);
   if (data?.url) redirect(data.url);
 }
 
