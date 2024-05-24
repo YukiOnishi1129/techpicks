@@ -7,6 +7,13 @@ export async function GET(request: Request) {
   const code = searchParams.get("code");
   // if "next" is in param, use it as the redirect URL
   const next = searchParams.get("next") ?? "/dashboard";
+  console.log("💧: auth route code", code);
+  console.log("💧: auth route next", next);
+  console.log("💧: auth route env url", process.env.NEXT_PUBLIC_SUPABASE_URL);
+  console.log(
+    "💧: auth route env key",
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  );
   if (code) {
     const cookieStore = cookies();
     const supabase = createServerClient(
