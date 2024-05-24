@@ -35,6 +35,10 @@ export async function GET(request: Request) {
     );
     const { error } = await supabase.auth.exchangeCodeForSession(code);
 
+    console.log("💧: auth route error", error);
+    console.log("💧: auth route next", next);
+    console.log("💧: auth route origin", origin);
+
     if (!error) {
       return NextResponse.redirect(`${origin}${next}`);
     }
