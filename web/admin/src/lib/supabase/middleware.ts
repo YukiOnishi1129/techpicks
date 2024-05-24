@@ -66,6 +66,7 @@ export async function updateSession(request: NextRequest) {
     .eq("id", user.data.user?.id)
     .eq("is_super_admin", "true")
     .single();
+  console.log("🌪️ data", data);
   if (!data) {
     await supabase.auth.signOut();
     return NextResponse.redirect(new URL("/", request.url));
