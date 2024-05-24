@@ -56,6 +56,7 @@ export async function updateSession(request: NextRequest) {
 
   const user = await supabase.auth.getUser();
   if (!user) {
+    await supabase.auth.signOut();
     return NextResponse.redirect("/login");
   }
 

@@ -3,6 +3,7 @@ import { User } from "@supabase/supabase-js";
 import { clsx } from "clsx";
 import { FC, useCallback, useMemo, useState } from "react";
 
+import { logoutToLoginPage } from "@/features/auth/actions/auth";
 import { fetchFavoriteArticleFolderByIdAPI } from "@/features/favoriteArticleFolders/actions/favoriteArticleFolders";
 import {
   fetchFavoriteArticleAPI,
@@ -102,6 +103,7 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
         failToast({
           description: "Please login to follow the article",
         });
+        await logoutToLoginPage();
         return;
       }
       // 2. check out favoriteArticle by favoriteArticleFolderId and articleId

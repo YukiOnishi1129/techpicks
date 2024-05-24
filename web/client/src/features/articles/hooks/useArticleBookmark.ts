@@ -1,5 +1,6 @@
 import { useState, useCallback } from "react";
 
+import { logoutToLoginPage } from "@/features/auth/actions/auth";
 import {
   fetchBookmarkByIdCountAPI,
   fetchBookmarkCountByArticleIdAPI,
@@ -22,20 +23,21 @@ export const useArticleBookmark = ({ article }: { article: ArticleType }) => {
 
   const handleAddBookmark = useCallback(
     async (articleId: string) => {
+      const user = await getUser();
+      if (!user) {
+        failToast({
+          description: "Fail: Please login to bookmark this article",
+        });
+        await logoutToLoginPage();
+        return;
+      }
+
       const { data } = await fetchBookmarkCountByArticleIdAPI({
         articleId: articleId,
       });
       if (data?.count && data.count > 0) {
         failToast({
           description: "Fail: This article is already bookmarked",
-        });
-        return;
-      }
-
-      const user = await getUser();
-      if (!user) {
-        failToast({
-          description: "Fail: Please login to bookmark this article",
         });
         return;
       }
@@ -72,16 +74,19 @@ export const useArticleBookmark = ({ article }: { article: ArticleType }) => {
 
   const handleRemoveBookmark = useCallback(
     async (bookmarkId: string) => {
+      const user = await getUser();
+      if (!user) {
+        failToast({
+          description: "Fail: Please login to remove bookmark",
+        });
+        await logoutToLoginPage();
+        return;
+      }
+
       if (!bookmarkId) return;
       const res = await fetchBookmarkByIdCountAPI({
         bookmarkId: bookmarkId,
       });
-      if (res.status === 401) {
-        failToast({
-          description: "Fail: Unauthorized",
-        });
-        return;
-      }
       if (res.status !== 200) {
         failToast({
           description: "Fail: Something went wrong",
@@ -91,14 +96,6 @@ export const useArticleBookmark = ({ article }: { article: ArticleType }) => {
       if (!res.data?.count) {
         failToast({
           description: "Fail: Bookmark not found",
-        });
-        return;
-      }
-
-      const user = await getUser();
-      if (!user) {
-        failToast({
-          description: "Fail: Please login to remove bookmark",
         });
         return;
       }

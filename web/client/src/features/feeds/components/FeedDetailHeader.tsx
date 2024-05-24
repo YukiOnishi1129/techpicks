@@ -2,6 +2,7 @@
 import { User } from "@supabase/supabase-js";
 import { FC, useCallback, useState } from "react";
 
+import { logoutToLoginPage } from "@/features/auth/actions/auth";
 import { fetchMyFeedFolderByIdAPI } from "@/features/myFeedFolders/actions/myFeedFolder";
 import {
   fetchMyFeedById,
@@ -98,6 +99,7 @@ export const FeedDetailHeader: FC<FeedDetailHeaderProps> = ({
         failToast({
           description: "Please sign in to follow the feed",
         });
+        await logoutToLoginPage();
         return;
       }
 
@@ -194,6 +196,15 @@ export const FeedDetailHeader: FC<FeedDetailHeaderProps> = ({
 
   const handleRemoveMyFeed = useCallback(
     async (myFeedId: string, myFeedFolderId: string) => {
+      const user = await getUser();
+      if (!user) {
+        failToast({
+          description: "Please sign in to follow the feed",
+        });
+        await logoutToLoginPage();
+        return;
+      }
+
       // check count myFeed by myFeedId
       const targetId = await fetchMyFeedById({
         id: myFeedId,
@@ -204,13 +215,7 @@ export const FeedDetailHeader: FC<FeedDetailHeaderProps> = ({
         });
         return;
       }
-      const user = await getUser();
-      if (!user) {
-        failToast({
-          description: "Please sign in to follow the feed",
-        });
-        return;
-      }
+
       const id = await deleteMyFeed({
         id: myFeedId,
         userId: user.id,

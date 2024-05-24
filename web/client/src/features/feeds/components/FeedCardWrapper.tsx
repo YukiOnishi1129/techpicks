@@ -1,7 +1,8 @@
 "use client";
-import {User} from "@supabase/supabase-js"
+import { User } from "@supabase/supabase-js";
 import { FC, useCallback, useState } from "react";
 
+import { logoutToLoginPage } from "@/features/auth/actions/auth";
 import { fetchMyFeedFolderByIdAPI } from "@/features/myFeedFolders/actions/myFeedFolder";
 import {
   fetchMyFeedById,
@@ -22,7 +23,7 @@ import { FollowDropdownMenu } from "./DropdownMenu";
 import { FeedCard } from "./FeedCard";
 
 type FeedCardWrapperProps = {
-  user?:User
+  user?: User;
   feed: FeedType;
   myFeedFolders: Array<MyFeedFolderType>;
 };
@@ -99,6 +100,7 @@ export const FeedCardWrapper: FC<FeedCardWrapperProps> = ({
         failToast({
           description: "Please sign in to follow the feed",
         });
+        await logoutToLoginPage();
         return;
       }
 
@@ -195,6 +197,15 @@ export const FeedCardWrapper: FC<FeedCardWrapperProps> = ({
 
   const handleRemoveMyFeed = useCallback(
     async (myFeedId: string, myFeedFolderId: string) => {
+      const user = await getUser();
+      if (!user) {
+        failToast({
+          description: "Please sign in to follow the feed",
+        });
+        await logoutToLoginPage();
+        return;
+      }
+
       // check count myFeed by myFeedId
       const targetId = await fetchMyFeedById({
         id: myFeedId,
@@ -205,13 +216,7 @@ export const FeedCardWrapper: FC<FeedCardWrapperProps> = ({
         });
         return;
       }
-      const user = await getUser();
-      if (!user) {
-        failToast({
-          description: "Please sign in to follow the feed",
-        });
-        return;
-      }
+
       const id = await deleteMyFeed({
         id: myFeedId,
         userId: user.id,

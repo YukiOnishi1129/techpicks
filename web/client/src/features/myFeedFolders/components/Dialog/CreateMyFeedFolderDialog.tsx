@@ -2,11 +2,12 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ReloadIcon } from "@radix-ui/react-icons";
-import { useRouter, usePathname } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { FC, useCallback, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
+import { logoutToLoginPage } from "@/features/auth/actions/auth";
 import { createMyFeedFolder } from "@/features/myFeedFolders/repository/myFeedFolder";
 import { getUser } from "@/features/users/actions/user";
 
@@ -92,7 +93,6 @@ const CreateMyFeedFolderDialogContent: FC<
 }: CreateMyFeedFolderDialogContentProps) => {
   const { successToast, failToast } = useStatusToast();
   const [isPending, startTransition] = useTransition();
-  const router = useRouter();
   const pathname = usePathname();
 
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -116,6 +116,7 @@ const CreateMyFeedFolderDialogContent: FC<
           failToast({
             description: "Please login to create a new feed folder",
           });
+          await logoutToLoginPage();
           return;
         }
         const createdId = await createMyFeedFolder({

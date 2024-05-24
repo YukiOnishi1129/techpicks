@@ -51,7 +51,7 @@ export function FeedList({
       const count = res.data.feeds.length;
       setHashMore(count > 0);
     },
-    [fetchFeedsAPI]
+    [fetchFeedsAPI, keyword]
   );
 
   useEffect(() => {

@@ -3,6 +3,7 @@ import { User } from "@supabase/supabase-js";
 import { FC, useState, useCallback } from "react";
 
 import { FollowFavoriteArticleDropdownMenu } from "@/features/articles/components/DropdownMenu";
+import { logoutToLoginPage } from "@/features/auth/actions/auth";
 import { fetchFavoriteArticleFolderByIdAPI } from "@/features/favoriteArticleFolders/actions/favoriteArticleFolders";
 import {
   fetchFavoriteArticleAPI,
@@ -90,6 +91,7 @@ export const BookmarkCardWrapper: FC<BookmarkCardWrapperProps> = ({
         failToast({
           description: "Please login to follow the article",
         });
+        await logoutToLoginPage();
         return;
       }
 
@@ -232,6 +234,14 @@ export const BookmarkCardWrapper: FC<BookmarkCardWrapperProps> = ({
 
   const handleRemoveFavoriteArticle = useCallback(
     async (favoriteArticleId: string, favoriteArticleFolderId: string) => {
+      if (!user) {
+        failToast({
+          description: "Please login to unfollow the article",
+        });
+        await logoutToLoginPage();
+        return;
+      }
+
       // check count favoriteArticle by favoriteArticleId
       const res = await fetchFavoriteArticleAPI(favoriteArticleId);
       if (!res.data) {
@@ -240,12 +250,7 @@ export const BookmarkCardWrapper: FC<BookmarkCardWrapperProps> = ({
         });
         return;
       }
-      if (!user) {
-        failToast({
-          description: "Please login to unfollow the article",
-        });
-        return;
-      }
+
       const id = await deleteFavoriteArticle({
         id: favoriteArticleId,
         userId: user.id,
