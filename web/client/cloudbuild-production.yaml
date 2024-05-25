@@ -17,3 +17,5 @@ steps:
   # Push the container image to Container Registry
   - name: "gcr.io/cloud-builders/docker"
     args: ["push", "$_REGION-docker.pkg.dev/$PROJECT_ID/$_IMAGE"]
+images:
+  - $_REGION-docker.pkg.dev/$PROJECT_ID/$_IMAGE
