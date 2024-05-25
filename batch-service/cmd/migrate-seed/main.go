@@ -2,13 +2,15 @@ package main
 
 import (
 	"context"
+	"log"
+
 	"github.com/YukiOnishi1129/techpicks/batch-service/cmd/migrate-seed/usecase"
 	"github.com/YukiOnishi1129/techpicks/batch-service/database"
 	"github.com/joho/godotenv"
-	"log"
 )
 
 func main() {
+	log.Printf("Start migrate seed")
 	ctx := context.Background()
 	err := godotenv.Load(".env")
 	if err != nil {
