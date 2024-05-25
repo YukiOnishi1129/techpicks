@@ -1,3 +1,4 @@
+# staging environment
 substitutions:
   _IMAGE: 'article-company-crawler/latest'
   _JOB_NAME: 'article-company-crawler'

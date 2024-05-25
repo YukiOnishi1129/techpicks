@@ -1,3 +1,4 @@
+# staging environment
 substitutions:
   _IMAGE: 'trend-article-crawler/latest'
   _JOB_NAME: 'trend-article-crawler'
