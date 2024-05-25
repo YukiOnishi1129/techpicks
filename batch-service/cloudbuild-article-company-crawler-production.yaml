@@ -10,17 +10,17 @@ steps:
 - name: 'gcr.io/cloud-builders/docker'
   args: ['push', '$_REGION-docker.pkg.dev/$PROJECT_ID/$_IMAGE']
 # Deploy container image to Cloud Run
-# - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-#   entrypoint: gcloud
-#   args:
-#   - 'run'
-#   - 'jobs'
-#   - 'deploy'
-#   - '$_JOB_NAME'
-#   - '--image'
-#   - '$_REGION-docker.pkg.dev/$PROJECT_ID/$_IMAGE'
-#   - '--region'
-#   - '$_REGION'
-#   # - '--execute-now'
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: gcloud
+  args:
+  - 'run'
+  - 'jobs'
+  - 'deploy'
+  - '$_JOB_NAME'
+  - '--image'
+  - '$_REGION-docker.pkg.dev/$PROJECT_ID/$_IMAGE'
+  - '--region'
+  - '$_REGION'
+  # - '--execute-now'
 images:
 - $_REGION-docker.pkg.dev/$PROJECT_ID/$_IMAGE
