@@ -24,3 +24,5 @@ steps:
   # - '--execute-now'
 images:
 - $_REGION-docker.pkg.dev/$PROJECT_ID/$_IMAGE
+options:
+  logging: 'CLOUD_LOGGING_ONLY'
