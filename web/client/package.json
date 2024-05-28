@@ -12,7 +12,8 @@
     "lint:fix": "eslint --ext .js,.jsx,.ts,.tsx --fix .",
     "format": "npx prettier --write .",
     "prepare": "cd ../.. && husky web/client/.husky",
-    "gen:prisma": "prisma generate"
+    "gen:prisma": "prisma generate",
+    "gen:supabase-types": "supabase gen types typescript --linked > src/types/database.types.ts"
   },
   "lint-staged": {
     "*.{ts,tsx}": [

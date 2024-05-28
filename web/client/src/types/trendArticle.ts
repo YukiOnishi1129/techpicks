@@ -1,19 +1,25 @@
-import {
-  TrendArticle as PrismaTrendArticle,
-  Article as PrismaArticle,
-  Platform as PrismaPlatform,
-  Feed as PrismaFeed,
-  Category as PrismaCategory,
-  FavoriteArticle as PrismaFavoriteArticle,
-} from "@prisma/client";
+import { OriginArticleType } from "./article";
+import { OriginCategoryType } from "./category";
+import { OriginFavoriteArticleType } from "./favoriteArticle";
+import { OriginFeedType } from "./feed";
+import { OriginPlatformType } from "./platform";
 
-export type TrendArticleType = Omit<PrismaTrendArticle, "platformId"> & {
-  article: Omit<PrismaArticle, "platformId">;
-  platform: Omit<PrismaPlatform, "createdAt" | "updatedAt" | "deletedAt">;
+export type OriginTrendArticleType = {
+  id: string;
+  articleId: string;
+  platformId: string;
+  likeCount: number;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type TrendArticleType = Omit<OriginTrendArticleType, "platformId"> & {
+  article: Omit<OriginArticleType, "platformId">;
+  platform: Omit<OriginPlatformType, "createdAt" | "updatedAt" | "deletedAt">;
   feeds: Array<
     Omit<
-      PrismaFeed & {
-        category: PrismaCategory;
+      OriginFeedType & {
+        category: OriginCategoryType;
       },
       | "platformId"
       | "categoryId"
@@ -25,6 +31,6 @@ export type TrendArticleType = Omit<PrismaTrendArticle, "platformId"> & {
   >;
   isBookmarked: boolean;
   bookmarkId?: string;
-  favoriteArticles?: Array<PrismaFavoriteArticle>;
+  favoriteArticles?: Array<Pick<OriginFavoriteArticleType, "id">>;
   isFollowing?: boolean;
 };

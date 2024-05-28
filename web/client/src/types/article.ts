@@ -6,6 +6,22 @@ import {
   FavoriteArticle as PrismaFavoriteArticle,
 } from "@prisma/client";
 
+export type OriginArticleType = {
+  id: string;
+  platformId?: string;
+  title: string;
+  description: string;
+  thumbnailUrl: string;
+  articleUrl: string;
+  publishedAt?: string;
+  authorName?: string;
+  tags?: string;
+  isEng: boolean;
+  isPrivate: boolean;
+  createdAt: string;
+  updatedAt: string;
+};
+
 export type ArticleType = Omit<PrismaArticle, "platformId"> & {
   platform?: Omit<PrismaPlatform, "createdAt" | "updatedAt" | "deletedAt">;
   feeds: Array<
