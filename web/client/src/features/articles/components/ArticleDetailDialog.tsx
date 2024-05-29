@@ -70,7 +70,7 @@ const ArticleContent = ({
   article: ArticleType;
   user: User | undefined;
 }) => {
-  const imageUrl = useCheckImageExist(article.thumbnailURL);
+  const imageUrl = useCheckImageExist(article.thumbnailUrl);
   const { convertParseHtml } = useParseHtml();
 
   const [bookmarkId, setBookmarkId] = useState<string | undefined>(
@@ -85,7 +85,7 @@ const ArticleContent = ({
       articleId: article.id,
       articleUrl: article.articleUrl,
       publishedAt: article?.publishedAt || undefined,
-      thumbnailURL: article.thumbnailURL,
+      thumbnailURL: article.thumbnailUrl,
       platformId: article.platform?.id,
       isRead: false,
       isEng: article.platform?.isEng || false,

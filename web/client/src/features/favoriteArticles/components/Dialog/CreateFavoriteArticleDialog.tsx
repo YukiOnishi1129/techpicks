@@ -146,7 +146,7 @@ export const CreateFavoriteArticleDialog: FC<
           description: article.description,
           articleId: article.id,
           articleUrl: article.articleUrl,
-          thumbnailURL: article.thumbnailURL,
+          thumbnailURL: article.thumbnailUrl,
           isRead: false,
           userId: user?.id || "",
           platformId: article.platform?.id,
@@ -219,7 +219,7 @@ export const CreateFavoriteArticleDialog: FC<
         title: ogpData?.title || "",
         description: ogpData?.description || "",
         articleUrl: url,
-        thumbnailURL: ogpData?.image || "",
+        thumbnailUrl: ogpData?.image || "",
         isEng: isEng,
         isPrivate: true,
       });

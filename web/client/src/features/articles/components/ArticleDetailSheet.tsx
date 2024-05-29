@@ -135,7 +135,7 @@ const ArticleDetailSheetContent: FC<ArticleDetailSheetContentProps> = ({
   handleRemoveFavoriteArticle,
   handleCreateFavoriteArticleFolder,
 }) => {
-  const imageUrl = useCheckImageExist(article.thumbnailURL);
+  const imageUrl = useCheckImageExist(article.thumbnailUrl);
   const { convertParseHtml } = useParseHtml();
 
   return (

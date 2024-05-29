@@ -5,6 +5,15 @@ import {
   Category as PrismaCategory,
 } from "@prisma/client";
 
+export type OriginMyFeedFolderType = {
+  id: string;
+  user_id: string;
+  title: string;
+  description?: string;
+  created_at: string;
+  updated_at: string;
+};
+
 export type MyFeedFolderType = Omit<PrismaMMyFeedFolder, "userId"> & {
   feeds: Array<
     Omit<

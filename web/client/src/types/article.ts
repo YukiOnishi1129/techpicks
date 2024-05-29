@@ -1,10 +1,7 @@
-import {
-  Article as PrismaArticle,
-  Platform as PrismaPlatform,
-  Feed as PrismaFeed,
-  Category as PrismaCategory,
-  FavoriteArticle as PrismaFavoriteArticle,
-} from "@prisma/client";
+import { OriginCategoryType } from "./category";
+import { OriginFavoriteArticleType } from "./favoriteArticle";
+import { OriginFeedType } from "./feed";
+import { OriginPlatformType } from "./platform";
 
 export type OriginArticleType = {
   id: string;
@@ -22,12 +19,15 @@ export type OriginArticleType = {
   updatedAt: string;
 };
 
-export type ArticleType = Omit<PrismaArticle, "platformId"> & {
-  platform?: Omit<PrismaPlatform, "createdAt" | "updatedAt" | "deletedAt">;
+export type ArticleType = Omit<OriginArticleType, "platformId"> & {
+  platform?: Omit<OriginPlatformType, "createdAt" | "updatedAt" | "deletedAt">;
   feeds: Array<
     Omit<
-      PrismaFeed & {
-        category: Omit<PrismaCategory, "createdAt" | "updatedAt" | "deletedAt">;
+      OriginFeedType & {
+        category: Omit<
+          OriginCategoryType,
+          "createdAt" | "updatedAt" | "deletedAt"
+        >;
       },
       | "platformId"
       | "categoryId"
@@ -40,7 +40,7 @@ export type ArticleType = Omit<PrismaArticle, "platformId"> & {
   isBookmarked: boolean;
   bookmarkId?: string;
   likeCount?: number;
-  favoriteArticles?: Array<Omit<PrismaFavoriteArticle, "userId">>;
+  favoriteArticles?: Array<Pick<OriginFavoriteArticleType, "id">>;
   isFollowing?: boolean;
 };
 

@@ -48,7 +48,7 @@ export const useArticleBookmark = ({ article }: { article: ArticleType }) => {
         articleId: article.id,
         articleUrl: article.articleUrl,
         publishedAt: article?.publishedAt || undefined,
-        thumbnailURL: article.thumbnailURL,
+        thumbnailURL: article.thumbnailUrl,
         isRead: false,
         userId: user?.id || "",
         platformId: article.platform?.id,
