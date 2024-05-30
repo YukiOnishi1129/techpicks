@@ -30,8 +30,8 @@ export const getFavoriteArticlesByFavoriteArticleFolderId = async ({
     const query = supabase
       .from("favorite_articles")
       .select("*")
-      .eq("userId", userId)
-      .eq("favoriteArticleFolderId", favoriteArticleFolderId);
+      .eq("user_id", userId)
+      .eq("favorite_article_folder_id", favoriteArticleFolderId);
 
     if (keyword) {
       query.or(
@@ -40,7 +40,7 @@ export const getFavoriteArticlesByFavoriteArticleFolderId = async ({
     }
 
     const { data, error } = await query
-      .order("createdAt", { ascending: false })
+      .order("created_at", { ascending: false })
       .range((offset - 1) * LIMIT, offset * LIMIT - 1);
 
     if (error || !data) return [];
@@ -69,7 +69,7 @@ export const getFavoriteArticleById = async ({
       .from("favorite_articles")
       .select("*")
       .eq("id", id)
-      .eq("userId", userId);
+      .eq("user_id", userId);
 
     const { data, error } = await query.single();
 
@@ -101,10 +101,10 @@ export const getFavoriteArticleCountByFavoriteArticleFolderIdAndArticleIdAndArti
       const query = supabase
         .from("favorite_articles")
         .select("*")
-        .eq("userId", userId)
-        .eq("favoriteArticleFolderId", favoriteArticleFolderId)
-        .eq("articleId", articleId)
-        .eq("articleUrl", articleUrl);
+        .eq("user_id", userId)
+        .eq("favorite_article_folder_id", favoriteArticleFolderId)
+        .eq("article_id", articleId)
+        .eq("article_url", articleUrl);
 
       const { error, count } = await query;
 
@@ -132,9 +132,9 @@ export const getFavoriteArticleCountByFolderIdAndArticleUrl = async ({
     const query = supabase
       .from("favorite_articles")
       .select("*")
-      .eq("userId", userId)
-      .eq("favoriteArticleFolderId", favoriteArticleFolderId)
-      .eq("articleUrl", articleUrl);
+      .eq("user_id", userId)
+      .eq("favorite_article_folder_id", favoriteArticleFolderId)
+      .eq("article_url", articleUrl);
     const { error, count } = await query;
 
     if (error || !count) return 0;
@@ -155,9 +155,9 @@ export const getFavoriteArticleCountByFolderIdAndArticleUrlAndArticle = async ({
     const query = supabase
       .from("favorite_articles")
       .select("*")
-      .eq("userId", userId)
-      .eq("favoriteArticleFolderId", favoriteArticleFolderId)
-      .eq("articleUrl", articleUrl);
+      .eq("user_id", userId)
+      .eq("favorite_article_folder_id", favoriteArticleFolderId)
+      .eq("article_url", articleUrl);
 
     const { error, count } = await query;
 

@@ -72,6 +72,7 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
             favoriteArticleFolderId: targetFavoriteArticleFolder.id,
             articleId: showArticle.id,
             platformId: showArticle.platform?.id || undefined,
+            userId: targetFavoriteArticleFolder.userId,
             title: showArticle.title,
             description: showArticle.description,
             articleUrl: showArticle.articleUrl,
@@ -85,6 +86,8 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
             isEng: showArticle.platform?.isEng || false,
             isRead: false,
             isPrivate: showArticle.isPrivate,
+            createdAt: targetFavoriteArticleFolder.createdAt,
+            updatedAt: targetFavoriteArticleFolder.updatedAt,
           },
         ],
       };

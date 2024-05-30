@@ -13,9 +13,7 @@ export type OriginFavoriteArticleFolderType = {
 };
 
 export type FavoriteArticleFolderType = OriginFavoriteArticleFolderType & {
-  favoriteArticles: Array<
-    Omit<OriginFavoriteArticleType, "userId" | "createdAt" | "updatedAt">
-  >;
+  favoriteArticles: Array<OriginFavoriteArticleType>;
 };
 
 export type FetchFavoriteArticlesAPIResponse = {

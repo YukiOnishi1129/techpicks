@@ -63,6 +63,7 @@ export const FavoriteArticleCardWrapper: FC<
           {
             id: favoriteArticleId,
             favoriteArticleFolderId: targetFavoriteArticleFolder.id,
+            userId: favoriteArticle.userId,
             articleId: favoriteArticle.articleId,
             platformId: favoriteArticle.platformId,
             title: favoriteArticle.title,
@@ -78,6 +79,8 @@ export const FavoriteArticleCardWrapper: FC<
             isEng: favoriteArticle.isEng,
             isRead: favoriteArticle.isRead,
             isPrivate: favoriteArticle.isPrivate,
+            createdAt: favoriteArticle.createdAt,
+            updatedAt: favoriteArticle.updatedAt,
           },
         ],
       };
