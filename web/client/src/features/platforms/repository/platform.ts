@@ -12,7 +12,7 @@ export type GetPlatformParams = {
 };
 
 export const getPlatforms = async ({
-  languageStatus = 1,
+  languageStatus,
   platformSiteType,
   platformIdList,
 }: GetPlatformParams) => {
@@ -25,11 +25,14 @@ export const getPlatforms = async ({
         *
       `
     )
-    .eq("is_eng", languageStatus === 2)
-    .not("deletedAt", "is", null);
+    .is("deleted_at", null);
+
+  if (languageStatus) {
+    query.eq("is_eng", languageStatus === 2);
+  }
 
   if (platformSiteType) {
-    query.eq("platformSiteType", platformSiteType);
+    query.eq("platform_site_type", platformSiteType);
   }
 
   if (platformIdList?.length) {
