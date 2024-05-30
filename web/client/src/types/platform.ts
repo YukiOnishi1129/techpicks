@@ -1,5 +1,3 @@
-import { Platform as PrismaPlatform } from "@prisma/client";
-
 export type OriginPlatformType = {
   id: string;
   name: string;
@@ -12,7 +10,7 @@ export type OriginPlatformType = {
   deletedAt?: string;
 };
 
-export type PlatformType = Omit<PrismaPlatform, "deletedAt">;
+export type PlatformType = OriginPlatformType;
 
 export type PlatformSiteType =
   | PlatformTypeUnknown
