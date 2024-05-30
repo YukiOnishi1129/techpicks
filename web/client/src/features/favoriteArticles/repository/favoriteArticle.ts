@@ -100,7 +100,7 @@ export const getFavoriteArticleCountByFavoriteArticleFolderIdAndArticleIdAndArti
       const supabase = await createGetOnlyServerSideClient();
       const query = supabase
         .from("favorite_articles")
-        .select("*")
+        .select("*", { count: "exact" })
         .eq("user_id", userId)
         .eq("favorite_article_folder_id", favoriteArticleFolderId)
         .eq("article_id", articleId)
@@ -131,7 +131,7 @@ export const getFavoriteArticleCountByFolderIdAndArticleUrl = async ({
     const supabase = await createGetOnlyServerSideClient();
     const query = supabase
       .from("favorite_articles")
-      .select("*")
+      .select("*", { count: "exact" })
       .eq("user_id", userId)
       .eq("favorite_article_folder_id", favoriteArticleFolderId)
       .eq("article_url", articleUrl);
@@ -154,7 +154,7 @@ export const getFavoriteArticleCountByFolderIdAndArticleUrlAndArticle = async ({
     const supabase = await createGetOnlyServerSideClient();
     const query = supabase
       .from("favorite_articles")
-      .select("*")
+      .select("*", { count: "exact" })
       .eq("user_id", userId)
       .eq("favorite_article_folder_id", favoriteArticleFolderId)
       .eq("article_url", articleUrl);

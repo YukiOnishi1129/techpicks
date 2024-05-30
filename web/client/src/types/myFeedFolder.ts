@@ -10,8 +10,8 @@ export type OriginMyFeedFolderType = {
   user_id: string;
   title: string;
   description?: string;
-  created_at: string;
-  updated_at: string;
+  createdAt: string;
+  updatedAt: string;
 };
 
 export type MyFeedFolderType = Omit<PrismaMMyFeedFolder, "userId"> & {

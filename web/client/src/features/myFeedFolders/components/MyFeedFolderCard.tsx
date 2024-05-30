@@ -92,7 +92,7 @@ export const MyFeedFolderCard: FC<MyFeedFolderCardProps> = ({
       });
       // 2-3. create MyFeed
       const data = await bulkCreateMyFeed(myFeedList);
-      if (data.count !== createFeedIds.length) {
+      if (data.length !== createFeedIds.length) {
         failToast({
           description: "Fail: create my feeds error",
         });
