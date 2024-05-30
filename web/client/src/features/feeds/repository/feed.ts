@@ -1,7 +1,8 @@
 "use server";
 
-import prisma from "@/lib/prisma";
+import { createGetOnlyServerSideClient } from "@/lib/supabase/client/serverClient";
 
+import { Database } from "@/types/database.types";
 import { FeedType } from "@/types/feed";
 
 const LIMIT = 20;
@@ -17,136 +18,53 @@ export const getFeed = async ({
   offset = 1,
   keyword,
 }: GetFeedParams) => {
-  let where = {};
-  if (keyword) {
-    where = {
-      AND: [
-        {
-          OR: [
-            {
-              name: {
-                contains: keyword,
-              },
-            },
-            {
-              description: {
-                contains: keyword,
-              },
-            },
-          ],
-        },
-      ],
-    };
-  }
-  where = {
-    ...where,
-    deletedAt: null,
-  };
   try {
-    const res = await prisma.feed.findMany({
-      take: 20,
-      skip: (offset - 1) * LIMIT,
-      where,
-      orderBy: [
-        {
-          platform: {
-            platformSiteType: "asc",
-          },
-        },
-        {
-          platform: {
-            isEng: "asc",
-          },
-        },
-        {
-          platform: {
-            name: "asc",
-          },
-        },
-        {
-          category: {
-            type: "asc",
-          },
-        },
-        {
-          category: {
-            name: "asc",
-          },
-        },
-      ],
-      include: {
-        category: true,
-        platform: true,
-        myFeeds: {
-          where: {
-            userId: userId,
-          },
-        },
-        feedArticleRelatoins: {
-          select: {
-            article: {
-              select: {
-                id: true,
-                title: true,
-                description: true,
-                articleUrl: true,
-                publishedAt: true,
-                thumbnailURL: true,
-                authorName: true,
-                tags: true,
-                isEng: true,
-                isPrivate: true,
-                createdAt: true,
-                updatedAt: true,
-              },
-            },
-          },
-          orderBy: {
-            article: {
-              publishedAt: "desc",
-            },
-          },
-        },
-      },
-    });
+    const supabase = await createGetOnlyServerSideClient();
 
-    const feeds: Array<FeedType> = res.map((feed) => {
-      const resFeed: FeedType = {
-        id: feed.id,
-        name: feed.name,
-        description: feed.description,
-        thumbnailUrl: feed.thumbnailUrl,
-        siteUrl: feed.siteUrl,
-        apiQueryParam: feed.apiQueryParam,
-        trendPlatformType: feed.trendPlatformType,
-        createdAt: feed.createdAt,
-        updatedAt: feed.updatedAt,
-        category: feed.category,
-        platform: feed.platform,
-        myFeeds: feed.myFeeds,
-        isFollowing: feed.myFeeds.length > 0,
-        articles: feed.feedArticleRelatoins.map((relation) => {
-          return {
-            id: relation.article.id,
-            title: relation.article.title,
-            description: relation.article.description,
-            articleUrl: relation.article.articleUrl,
-            publishedAt: relation.article.publishedAt,
-            thumbnailURL: relation.article.thumbnailURL,
-            authorName: relation.article.authorName,
-            tags: relation.article.tags,
-            isEng: relation.article.isEng,
-            isPrivate: relation.article.isPrivate,
-            createdAt: relation.article.createdAt,
-            updatedAt: relation.article.updatedAt,
-          };
-        }),
-      };
+    const query = supabase
+      .from("feeds")
+      .select(
+        `
+          *,
+          categories!inner(*),
+          platforms!inner(*),
+          my_feeds(*),
+          feed_article_relations!inner(articles!inner(*))
+        `
+      )
+      .not("deleted_at", "is", null)
+      .eq("my_feeds.user_id", userId || "")
+      .order("platform.platform_site_type", {
+        ascending: true,
+      })
+      .order("platforms.is_eng", {
+        ascending: true,
+      })
+      .order("articles.name", {
+        ascending: true,
+      })
+      .order("categories.type", {
+        ascending: true,
+      })
+      .order("categories.name", {
+        ascending: true,
+      })
+      .order("feed_article_relations.articles.published_at", {
+        ascending: false,
+      });
 
-      return resFeed;
-    });
+    if (keyword) {
+      query.or(`name.ilike.*${keyword}*`);
+      query.or(`description.ilike.*${keyword}*`);
+    }
 
-    return feeds;
+    const { data, error } = await query.range(
+      (offset - 1) * LIMIT,
+      offset * LIMIT
+    );
+    if (error || !data) return [];
+
+    return data.map((feed) => convertDatabaseResponseToFeedResponse(feed));
   } catch (err) {
     throw new Error("Failed to get feed");
   }
@@ -158,110 +76,44 @@ export type GetAllFeedType = {
 
 export const getAllFeed = async ({ userId }: GetAllFeedType) => {
   try {
-    const res = await prisma.feed.findMany({
-      where: {
-        deletedAt: null,
-      },
-      orderBy: [
-        {
-          platform: {
-            platformSiteType: "asc",
-          },
-        },
-        {
-          platform: {
-            isEng: "asc",
-          },
-        },
-        {
-          platform: {
-            name: "asc",
-          },
-        },
-        {
-          category: {
-            type: "asc",
-          },
-        },
-        {
-          category: {
-            name: "asc",
-          },
-        },
-      ],
-      include: {
-        category: true,
-        platform: true,
-        myFeeds: {
-          where: {
-            userId: userId,
-          },
-        },
-        feedArticleRelatoins: {
-          select: {
-            article: {
-              select: {
-                id: true,
-                title: true,
-                description: true,
-                articleUrl: true,
-                publishedAt: true,
-                thumbnailURL: true,
-                authorName: true,
-                tags: true,
-                isEng: true,
-                isPrivate: true,
-                createdAt: true,
-                updatedAt: true,
-              },
-            },
-          },
-          orderBy: {
-            article: {
-              publishedAt: "desc",
-            },
-          },
-        },
-      },
-    });
+    const supabase = await createGetOnlyServerSideClient();
 
-    const feeds: Array<FeedType> = res.map((feed) => {
-      const resFeed: FeedType = {
-        id: feed.id,
-        name: feed.name,
-        description: feed.description,
-        thumbnailUrl: feed.thumbnailUrl,
-        siteUrl: feed.siteUrl,
-        apiQueryParam: feed.apiQueryParam,
-        trendPlatformType: feed.trendPlatformType,
-        createdAt: feed.createdAt,
-        updatedAt: feed.updatedAt,
-        category: feed.category,
-        platform: feed.platform,
-        myFeeds: feed.myFeeds,
-        isFollowing: feed.myFeeds.length > 0,
-        articles: feed.feedArticleRelatoins.map((relation) => {
-          return {
-            id: relation.article.id,
-            title: relation.article.title,
-            description: relation.article.description,
-            articleUrl: relation.article.articleUrl,
-            publishedAt: relation.article.publishedAt,
-            thumbnailURL: relation.article.thumbnailURL,
-            authorName: relation.article.authorName,
-            tags: relation.article.tags,
-            isEng: relation.article.isEng,
-            isPrivate: relation.article.isPrivate,
-            createdAt: relation.article.createdAt,
-            updatedAt: relation.article.updatedAt,
-          };
-        }),
-      };
+    const query = supabase
+      .from("feeds")
+      .select(
+        `
+          *,
+          categories!inner(*),
+          platforms!inner(*),
+          my_feeds(*),
+          feed_article_relations!inner(articles!inner(*))
+        `
+      )
+      .not("deleted_at", "is", null)
+      .eq("my_feeds.user_id", userId || "")
+      .order("platform.platform_site_type", {
+        ascending: true,
+      })
+      .order("platforms.is_eng", {
+        ascending: true,
+      })
+      .order("articles.name", {
+        ascending: true,
+      })
+      .order("categories.type", {
+        ascending: true,
+      })
+      .order("categories.name", {
+        ascending: true,
+      })
+      .order("feed_article_relations.articles.published_at", {
+        ascending: false,
+      });
 
-      return resFeed;
-    });
+    const { data, error } = await query;
+    if (error || !data) return [];
 
-    return feeds;
+    return data.map((feed) => convertDatabaseResponseToFeedResponse(feed));
   } catch (err) {
     throw new Error("Failed to get feed");
   }
@@ -274,76 +126,100 @@ type GetFeedByIdDTO = {
 
 export const getFeedById = async ({ id, userId }: GetFeedByIdDTO) => {
   try {
-    const res = await prisma.feed.findUnique({
-      where: {
-        id: id,
-      },
-      include: {
-        category: true,
-        platform: true,
-        feedArticleRelatoins: {
-          select: {
-            article: {
-              select: {
-                id: true,
-                title: true,
-                description: true,
-                articleUrl: true,
-                publishedAt: true,
-                thumbnailURL: true,
-                authorName: true,
-                tags: true,
-                isEng: true,
-                isPrivate: true,
-                createdAt: true,
-                updatedAt: true,
-              },
-            },
-          },
-        },
-        myFeeds: {
-          where: {
-            userId: userId,
-          },
-        },
-      },
-    });
+    const supabase = await createGetOnlyServerSideClient();
+    const query = supabase
+      .from("feeds")
+      .select(
+        `
+          *,
+          categories!inner(*),
+          platforms!inner(*),
+          my_feeds(*),
+          feed_article_relations!inner(articles!inner(*))
+        `
+      )
+      .eq("id", id)
+      .eq("my_feeds.user_id", userId || "");
 
-    if (!res) throw new Error(`My feed list not found`);
-    const resFeed: FeedType = {
-      id: res.id,
-      name: res.name,
-      description: res.description,
-      thumbnailUrl: res.thumbnailUrl,
-      siteUrl: res.siteUrl,
-      apiQueryParam: res.apiQueryParam,
-      trendPlatformType: res.trendPlatformType,
-      createdAt: res.createdAt,
-      updatedAt: res.updatedAt,
-      category: res.category,
-      platform: res.platform,
-      articles: res.feedArticleRelatoins.map((feedArticleRelatoins) => {
-        return {
-          id: feedArticleRelatoins.article.id,
-          title: feedArticleRelatoins.article.title,
-          description: feedArticleRelatoins.article.description,
-          articleUrl: feedArticleRelatoins.article.articleUrl,
-          publishedAt: feedArticleRelatoins.article.publishedAt,
-          thumbnailURL: feedArticleRelatoins.article.thumbnailURL,
-          authorName: feedArticleRelatoins.article.authorName,
-          tags: feedArticleRelatoins.article.tags,
-          isEng: feedArticleRelatoins.article.isEng,
-          isPrivate: feedArticleRelatoins.article.isPrivate,
-          createdAt: feedArticleRelatoins.article.createdAt,
-          updatedAt: feedArticleRelatoins.article.updatedAt,
-        };
-      }),
-      myFeeds: res.myFeeds,
-      isFollowing: res.myFeeds.length > 0,
-    };
+    const { data, error } = await query.single();
 
-    return resFeed;
+    if (error || !data) return;
+
+    return convertDatabaseResponseToFeedResponse(data);
   } catch (err) {
     throw new Error(`Failed to get feed by id: ${err}`);
   }
+};
+
+type FeedGetDatabaseResponseType =
+  Database["public"]["Tables"]["feeds"]["Row"] & {
+    categories: Database["public"]["Tables"]["categories"]["Row"];
+    platforms: Database["public"]["Tables"]["platforms"]["Row"];
+    my_feeds: Array<Database["public"]["Tables"]["my_feeds"]["Row"]>;
+    feed_article_relations: Array<{
+      articles: Database["public"]["Tables"]["articles"]["Row"];
+    }>;
+  };
+
+const convertDatabaseResponseToFeedResponse = (
+  feed: FeedGetDatabaseResponseType
+): FeedType => {
+  return {
+    id: feed.id,
+    platformId: feed.platform_id,
+    categoryId: feed.category_id,
+    name: feed.name,
+    description: feed.description,
+    thumbnailUrl: feed.thumbnail_url,
+    siteUrl: feed.site_url,
+    rssUrl: feed.rss_url,
+    apiQueryParam: feed.api_query_param || undefined,
+    trendPlatformType: feed.trend_platform_type,
+    createdAt: feed.created_at,
+    updatedAt: feed.updated_at,
+    category: {
+      id: feed.categories.id,
+      type: feed.categories.type,
+      name: feed.categories.name,
+      createdAt: feed.categories.created_at,
+      updatedAt: feed.categories.updated_at,
+    },
+    platform: {
+      id: feed.platforms.id,
+      name: feed.platforms.name,
+      siteUrl: feed.platforms.site_url,
+      faviconUrl: feed.platforms.favicon_url,
+      platformSiteType: feed.platforms.platform_site_type,
+      isEng: feed.platforms.is_eng,
+      createdAt: feed.platforms.created_at,
+      updatedAt: feed.platforms.updated_at,
+    },
+    isFollowing: feed.my_feeds.length > 0,
+    myFeeds: feed.my_feeds.map((myFeed) => {
+      return {
+        id: myFeed.id,
+        userId: myFeed.user_id,
+        feedId: myFeed.feed_id,
+        myFeedFolderId: myFeed.my_feed_folder_id,
+        createdAt: myFeed.created_at,
+        updatedAt: myFeed.updated_at,
+      };
+    }),
+    articles: feed.feed_article_relations.map((far) => {
+      return {
+        id: far.articles.id,
+        title: far.articles.title,
+        description: far.articles.description,
+        articleUrl: far.articles.article_url,
+        publishedAt: far.articles.published_at || undefined,
+        thumbnailUrl: far.articles.thumbnail_url,
+        authorName: far.articles.author_name || undefined,
+        tags: far.articles.tags || undefined,
+        isEng: far.articles.is_eng,
+        isPrivate: far.articles.is_private,
+        createdAt: far.articles.created_at,
+        updatedAt: far.articles.updated_at,
+      };
+    }),
+  };
 };
