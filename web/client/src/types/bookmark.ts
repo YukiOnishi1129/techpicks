@@ -1,19 +1,34 @@
-import {
-  Bookmark as PrismaPrismaBookmark,
-  Profile as PrismaProfile,
-  FavoriteArticle as PrismaFavoriteArticle,
-} from "@prisma/client";
-
+import { OriginFavoriteArticleType } from "./favoriteArticle";
+import { OriginProfileType } from "./profile";
 import { OptionalNullable } from "./util";
 
+export type OriginBookmarkType = {
+  id: string;
+  articleId: string;
+  userId: string;
+  platformId?: string;
+  title: string;
+  description: string;
+  articleUrl: string;
+  thumbnailUrl: string;
+  publishedAt?: string;
+  platformName: string;
+  platformUrl: string;
+  platformFaviconUrl: string;
+  isEng: boolean;
+  isRead: boolean;
+  createdAt: string;
+  updatedAt: string;
+};
+
 export type BookmarkType = Omit<
-  OptionalNullable<PrismaPrismaBookmark>,
+  OptionalNullable<OriginBookmarkType>,
   "userId"
 > & {
   user: Omit<
-    PrismaProfile,
+    OriginProfileType,
     "emailVerifiedAt" | "isSuperAdmin" | "provider" | "deletedAt"
   >;
-  favoriteArticles?: Array<Omit<PrismaFavoriteArticle, "userId">>;
+  favoriteArticles?: Array<OriginFavoriteArticleType>;
   isFollowing?: boolean;
 };

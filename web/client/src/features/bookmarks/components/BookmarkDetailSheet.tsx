@@ -125,7 +125,7 @@ const BookmarkDetailSheetContent: FC<BookmarkDetailSheetContentProps> = ({
   handleRemoveFavoriteArticle,
   handleCreateFavoriteArticleFolder,
 }) => {
-  const imageUrl = useCheckImageExist(bookmark.thumbnailURL);
+  const imageUrl = useCheckImageExist(bookmark.thumbnailUrl);
   const { convertParseHtml } = useParseHtml();
   const { handleRemoveBookmark } = useBookmark();
 

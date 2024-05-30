@@ -85,15 +85,16 @@ const ArticleContent = ({
       articleId: article.id,
       articleUrl: article.articleUrl,
       publishedAt: article?.publishedAt || undefined,
-      thumbnailURL: article.thumbnailUrl,
+      thumbnailUrl: article.thumbnailUrl,
       platformId: article.platform?.id,
       isRead: false,
       isEng: article.platform?.isEng || false,
       userId: user.id,
-      platformName: article.platform?.name,
-      platformUrl: article.platform?.siteUrl,
-      platformFaviconUrl: article.platform?.faviconUrl,
+      platformName: article.platform?.name || "",
+      platformUrl: article.platform?.siteUrl || "",
+      platformFaviconUrl: article.platform?.faviconUrl || "",
     });
+    if (!data) return;
     setBookmarkId(data.id);
   }, [article, user]);
 

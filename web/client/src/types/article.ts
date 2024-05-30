@@ -40,7 +40,7 @@ export type ArticleType = Omit<OriginArticleType, "platformId"> & {
   isBookmarked: boolean;
   bookmarkId?: string;
   likeCount?: number;
-  favoriteArticles?: Array<Pick<OriginFavoriteArticleType, "id">>;
+  favoriteArticles?: Array<OriginFavoriteArticleType>;
   isFollowing?: boolean;
 };
 

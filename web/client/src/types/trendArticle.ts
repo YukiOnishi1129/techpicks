@@ -31,6 +31,6 @@ export type TrendArticleType = Omit<OriginTrendArticleType, "platformId"> & {
   >;
   isBookmarked: boolean;
   bookmarkId?: string;
-  favoriteArticles?: Array<Pick<OriginFavoriteArticleType, "id">>;
+  favoriteArticles?: Array<OriginFavoriteArticleType>;
   isFollowing?: boolean;
 };

@@ -76,8 +76,7 @@ export const getTrendArticles = async ({
               user_id
             ),
             favorite_articles (
-              id,
-              user_id
+              *
             )
           )
           `
@@ -168,9 +167,28 @@ export const getTrendArticles = async ({
           isBookmarked: isBookmarked,
           bookmarkId: bookmarkId,
           favoriteArticles: trendArticle.articles.favorite_articles.map(
-            (favoriteArticle) => {
+            (favorite) => {
               return {
-                id: favoriteArticle.id,
+                id: favorite.id,
+                favoriteArticleFolderId: favorite.favorite_article_folder_id,
+                articleId: favorite.article_id,
+                platformId: favorite.platform_id || undefined,
+                userId: favorite.user_id,
+                title: favorite.title,
+                description: favorite.description,
+                thumbnailUrl: favorite.thumbnail_url,
+                articleUrl: favorite.article_url,
+                platformFaviconUrl: favorite.platform_favicon_url,
+                publishedAt: favorite.published_at || undefined,
+                authorName: favorite.author_name || undefined,
+                tags: favorite.tags || undefined,
+                platformName: favorite.platform_name,
+                platformUrl: favorite.platform_url,
+                isEng: favorite.is_eng,
+                isPrivate: favorite.is_private,
+                isRead: favorite.is_read,
+                createdAt: favorite.created_at,
+                updatedAt: favorite.updated_at,
               };
             }
           ),

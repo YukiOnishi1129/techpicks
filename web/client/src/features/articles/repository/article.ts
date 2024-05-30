@@ -62,8 +62,7 @@ export const getArticles = async ({
           user_id
         ),
         favorite_articles (
-          id,
-          user_id
+          *
         )
       `
       )
@@ -157,8 +156,7 @@ export const getArticlesByFeedIds = async ({
           user_id
         ),
         favorite_articles (
-          id,
-          user_id
+          *
         ),
         trend_articles!inner (
           id,
@@ -278,8 +276,7 @@ export const getArticleById = async ({ id, userId }: GetArticleByIdParam) => {
           user_id
         ),
         favorite_articles (
-          id,
-          user_id
+          *
         )
       `
       )
@@ -308,7 +305,7 @@ export const getPrivateArticlesById = async (id: string) => {
             id
           ),
           favorite_articles (
-            id
+            *
           )
         `
       )
@@ -336,9 +333,28 @@ export const getPrivateArticlesById = async (id: string) => {
       isBookmarked: data.bookmarks.length > 0,
       bookmarkId: data.bookmarks.length > 0 ? data.bookmarks[0].id : undefined,
       isFollowing: data.favorite_articles.length > 0,
-      favoriteArticles: data.favorite_articles.map((favoriteArticle) => {
+      favoriteArticles: data.favorite_articles.map((favorite) => {
         return {
-          id: favoriteArticle.id,
+          id: favorite.id,
+          favoriteArticleFolderId: favorite.favorite_article_folder_id,
+          articleId: favorite.article_id,
+          platformId: favorite.platform_id || undefined,
+          userId: favorite.user_id,
+          title: favorite.title,
+          description: favorite.description,
+          thumbnailUrl: favorite.thumbnail_url,
+          articleUrl: favorite.article_url,
+          platformFaviconUrl: favorite.platform_favicon_url,
+          publishedAt: favorite.published_at || undefined,
+          authorName: favorite.author_name || undefined,
+          tags: favorite.tags || undefined,
+          platformName: favorite.platform_name,
+          platformUrl: favorite.platform_url,
+          isEng: favorite.is_eng,
+          isPrivate: favorite.is_private,
+          isRead: favorite.is_read,
+          createdAt: favorite.created_at,
+          updatedAt: favorite.updated_at,
         };
       }),
     };
@@ -388,8 +404,7 @@ export const getArticleByArticleAndPlatformUrl = async ({
             user_id
           ),
           favorite_articles (
-            id,
-            user_id
+            *
           )
         `
       )
@@ -423,10 +438,7 @@ type ArticleGetDatabaseResponseType =
       Pick<Database["public"]["Tables"]["bookmarks"]["Row"], "id" | "user_id">
     >;
     favorite_articles: Array<
-      Pick<
-        Database["public"]["Tables"]["favorite_articles"]["Row"],
-        "id" | "user_id"
-      >
+      Database["public"]["Tables"]["favorite_articles"]["Row"]
     >;
   };
 
@@ -466,9 +478,28 @@ const convertDatabaseResponseToArticleResponse = (
       };
     }),
     isFollowing: article.favorite_articles.length > 0,
-    favoriteArticles: article.favorite_articles.map((favoriteArticle) => {
+    favoriteArticles: article.favorite_articles.map((favorite) => {
       return {
-        id: favoriteArticle.id,
+        id: favorite.id,
+        favoriteArticleFolderId: favorite.favorite_article_folder_id,
+        articleId: favorite.article_id,
+        platformId: favorite.platform_id || undefined,
+        userId: favorite.user_id,
+        title: favorite.title,
+        description: favorite.description,
+        thumbnailUrl: favorite.thumbnail_url,
+        articleUrl: favorite.article_url,
+        platformFaviconUrl: favorite.platform_favicon_url,
+        publishedAt: favorite.published_at || undefined,
+        authorName: favorite.author_name || undefined,
+        tags: favorite.tags || undefined,
+        platformName: favorite.platform_name,
+        platformUrl: favorite.platform_url,
+        isEng: favorite.is_eng,
+        isPrivate: favorite.is_private,
+        isRead: favorite.is_read,
+        createdAt: favorite.created_at,
+        updatedAt: favorite.updated_at,
       };
     }),
   };

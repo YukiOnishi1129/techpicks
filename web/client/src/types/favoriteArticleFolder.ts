@@ -1,25 +1,20 @@
 import {
-  FavoriteArticle as PrismaFavoriteArticle,
-  favoriteArticleFolder as PrismaFavoriteArticleFolder,
-} from "@prisma/client";
-
-import { FavoriteArticleType } from "./favoriteArticle";
+  FavoriteArticleType,
+  OriginFavoriteArticleType,
+} from "./favoriteArticle";
 
 export type OriginFavoriteArticleFolderType = {
   id: string;
-  user_id: string;
+  userId: string;
   title: string;
   description?: string;
-  created_at: string;
-  updated_at: string;
+  createdAt: string;
+  updatedAt: string;
 };
 
-export type FavoriteArticleFolderType = Omit<
-  PrismaFavoriteArticleFolder,
-  "userId"
-> & {
+export type FavoriteArticleFolderType = OriginFavoriteArticleFolderType & {
   favoriteArticles: Array<
-    Omit<PrismaFavoriteArticle, "userId" | "createdAt" | "updatedAt">
+    Omit<OriginFavoriteArticleType, "userId" | "createdAt" | "updatedAt">
   >;
 };
 

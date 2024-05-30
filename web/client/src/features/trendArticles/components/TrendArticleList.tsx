@@ -151,7 +151,7 @@ const convertTrendArticleToArticle = (
     id: trendArticle.article.id,
     title: trendArticle.article.title,
     description: trendArticle.article.description,
-    thumbnailURL: trendArticle.article.thumbnailURL,
+    thumbnailUrl: trendArticle.article.thumbnailUrl,
     articleUrl: trendArticle.article.articleUrl,
     publishedAt: trendArticle.article.publishedAt,
     authorName: trendArticle.article.authorName,

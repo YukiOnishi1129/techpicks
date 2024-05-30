@@ -1,5 +1,3 @@
-import { FavoriteArticle as PrismaFavoriteArticle } from "@prisma/client";
-
 export type OriginFavoriteArticleType = {
   id: string;
   articleId: string;
@@ -14,8 +12,8 @@ export type OriginFavoriteArticleType = {
   publishedAt?: string;
   authorName?: string;
   tags?: string;
-  platform_name: string;
-  platform_url: string;
+  platformName: string;
+  platformUrl: string;
   isEng: boolean;
   isPrivate: boolean;
   isRead: boolean;
@@ -23,4 +21,4 @@ export type OriginFavoriteArticleType = {
   updatedAt: string;
 };
 
-export type FavoriteArticleType = Omit<PrismaFavoriteArticle, "userId">;
+export type FavoriteArticleType = Omit<OriginFavoriteArticleType, "userId">;
