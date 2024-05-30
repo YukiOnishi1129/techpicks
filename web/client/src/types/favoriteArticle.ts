@@ -21,4 +21,4 @@ export type OriginFavoriteArticleType = {
   updatedAt: string;
 };
 
-export type FavoriteArticleType = Omit<OriginFavoriteArticleType, "userId">;
+export type FavoriteArticleType = OriginFavoriteArticleType;

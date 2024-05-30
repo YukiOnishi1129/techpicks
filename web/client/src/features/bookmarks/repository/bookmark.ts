@@ -132,14 +132,18 @@ export const getBookmarkCountById = async ({
   userId: string;
 }) => {
   try {
-    const res = await prisma.bookmark.count({
-      where: {
-        id: bookmarkId,
-        userId: userId,
-      },
-    });
+    const supabase = await createGetOnlyServerSideClient();
+    const query = supabase
+      .from("bookmarks")
+      .select(`*`, { count: "exact", head: true })
+      .eq("id", bookmarkId)
+      .eq("user_id", userId);
 
-    return res;
+    const { error, count } = await query;
+
+    if (error || !count) return 0;
+
+    return count;
   } catch (err) {
     throw new Error(`Failed to get bookmark count: ${err}`);
   }

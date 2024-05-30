@@ -56,7 +56,6 @@ export const getTrendArticles = async ({
             is_private,
             created_at,
             updated_at,
-            
             feed_article_relations!inner (
               feeds!inner (
                 id,

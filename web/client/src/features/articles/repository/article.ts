@@ -40,6 +40,9 @@ export const getArticles = async ({
       .select(
         `
         *,
+        platforms!fk_article_platform_id!inner (
+          *
+        ),
         feed_article_relations!inner (
           feeds!inner (
             id,
@@ -53,9 +56,6 @@ export const getArticles = async ({
               *
             )
           )
-        ),
-        platforms (
-          *
         ),
         bookmarks (
           id,
@@ -71,25 +71,25 @@ export const getArticles = async ({
       .eq("bookmarks.user_id", userId || "")
       .eq("favorite_articles.user_id", userId || "");
 
-    if (keyword) {
-      query.or(
-        `title.contains.${keyword},description.contains.${keyword},tags.contains.${keyword}`
-      );
-    }
-
     switch (tab) {
       case "trend":
         query.eq("feed_article_relations.feeds.trend_platform_type", 0);
         break;
       case "site":
-        query.eq("platform.platform_site_type", 1);
+        query.eq("platforms.platform_site_type", 1);
         break;
       case "company":
-        query.eq("platform.platform_site_type", 2);
+        query.eq("platforms.platform_site_type", 2);
         break;
       case "summary":
-        query.eq("platform.platform_site_type", 3);
+        query.eq("platforms.platform_site_type", 3);
         break;
+    }
+
+    if (keyword) {
+      query.or(
+        `title.contains.${keyword},description.contains.${keyword},tags.contains.${keyword}`
+      );
     }
 
     if (platformIdList.length) {
@@ -148,7 +148,7 @@ export const getArticlesByFeedIds = async ({
             )
           )
         ),
-        platforms (
+        platforms!fk_article_platform_id!inner (
           *
         ),
         bookmarks (
@@ -268,7 +268,7 @@ export const getArticleById = async ({ id, userId }: GetArticleByIdParam) => {
             )
           )
         ),
-        platforms (
+        platforms!fk_article_platform_id!inner (
           *
         ),
         bookmarks (
@@ -396,7 +396,7 @@ export const getArticleByArticleAndPlatformUrl = async ({
               )
             )
           ),
-          platforms (
+          platforms!fk_article_platform_id!inner (
             *
           ),
           bookmarks (
