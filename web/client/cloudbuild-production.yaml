@@ -14,7 +14,7 @@ steps:
         "web/client/Dockerfile",
         ".",
       ]
-  # Push the container image to Container Registry
+  # Push the container image to Artifact Registry
   - name: "gcr.io/cloud-builders/docker"
     args: ["push", "$_REGION-docker.pkg.dev/$PROJECT_ID/$_IMAGE"]
   # Deploy container image to Cloud Run
@@ -26,7 +26,7 @@ steps:
         "deploy",
         "$_SERVICE_NAME",
         "--image",
-        "gcr.io/$PROJECT_ID/$_IMAGE",
+        "$_REGION-docker.pkg.dev/$PROJECT_ID/$_IMAGE",
         "--region",
         "$_REGION",
       ]
