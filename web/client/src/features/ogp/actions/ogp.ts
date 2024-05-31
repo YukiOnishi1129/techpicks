@@ -5,6 +5,7 @@ import { parse } from "node-html-parser";
 import { checkHTTPUrl } from "@/lib/check";
 
 import { OgpType } from "@/types/ogp";
+import { url } from "inspector";
 
 const allowedTags = [
   "title",
@@ -118,8 +119,8 @@ const getZennOgpData = async (url: URL) => {
     const { pathname } = url;
 
     const sliceUrl = pathname.substring(1);
-    const useName = sliceUrl.substring(0, sliceUrl.indexOf("/"));
-    const postSliceUrl = sliceUrl.substring(useName.length + 1);
+    const userName = sliceUrl.substring(0, sliceUrl.indexOf("/"));
+    const postSliceUrl = sliceUrl.substring(userName.length + 1);
     const postType = postSliceUrl.substring(0, postSliceUrl.indexOf("/"));
 
     if (
@@ -129,26 +130,97 @@ const getZennOgpData = async (url: URL) => {
     ) {
       return;
     }
+    let nextPage: number | null = 1;
+    let apiPath = `https://zenn.dev/api/${postType}?username=${userName}`;
 
-    const res = await fetch(
-      `https://zenn.dev/api/${postType}?username=${useName}`
-    );
+    const res = await fetch(`${apiPath}&order=latest&page=${nextPage}`);
 
-    const data = await res.json();
+    let data = await res.json();
+
+    let isUser = false;
+
+    if (data) {
+      switch (postType) {
+        case "articles":
+          isUser = data.articles[0].user.username === userName;
+          break;
+        case "books":
+          isUser = data.books[0].user.username === userName;
+          break;
+        case "scraps":
+          isUser = data.scraps[0].user.username === userName;
+          break;
+      }
+    }
+
+    if (!isUser) {
+      apiPath = `https://zenn.dev/api/${postType}?publication_name=${userName}`;
+      const publicRes = await fetch(`${apiPath}&order=latest&page=${nextPage}`);
+      data = await publicRes.json();
+    }
 
     let targetData: any = {};
-    if (postType === "articles") {
-      targetData = data.articles.find(
-        (article: { path: string }) => article.path === pathname
-      );
-    } else if (postType === "books") {
-      targetData = data.books.find(
-        (book: { path: string }) => book.path === pathname
-      );
-    } else if (postType === "scraps") {
-      targetData = data.scraps.find(
-        (scrap: { path: string }) => scrap.path === pathname
-      );
+
+    switch (postType) {
+      case "articles":
+        targetData = data.articles.find(
+          (article: { path: string }) => article.path === pathname
+        );
+        if (targetData) break;
+
+        nextPage = data.next_page;
+
+        while (nextPage !== null) {
+          const res = await fetch(`${apiPath}&order=latest&page=${nextPage}`);
+          data = await res.json();
+          targetData = data.articles.find(
+            (article: { path: string }) => article.path === pathname
+          );
+          if (targetData) nextPage = null;
+
+          nextPage = data.next_page;
+        }
+
+        break;
+      case "books":
+        targetData = data.books.find(
+          (book: { path: string }) => book.path === pathname
+        );
+        if (targetData) break;
+
+        nextPage = data.next_page;
+
+        while (nextPage !== null) {
+          const res = await fetch(`${apiPath}&order=latest&page=${nextPage}`);
+          data = await res.json();
+          targetData = data.books.find(
+            (book: { path: string }) => book.path === pathname
+          );
+          if (targetData) nextPage = null;
+
+          nextPage = data.next_page;
+        }
+
+        break;
+      case "scraps":
+        targetData = data.scraps.find(
+          (scrap: { path: string }) => scrap.path === pathname
+        );
+        if (targetData) break;
+
+        nextPage = data.next_page;
+
+        while (nextPage !== null) {
+          const res = await fetch(`${apiPath}&order=latest&page=${nextPage}`);
+          data = await res.json();
+          targetData = data.scraps.find(
+            (scrap: { path: string }) => scrap.path === pathname
+          );
+          if (targetData) nextPage = null;
+
+          nextPage = data.next_page;
+        }
+        break;
     }
 
     const favIconImage = `https://t0.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=${url.href}&size=128`;
@@ -156,14 +228,15 @@ const getZennOgpData = async (url: URL) => {
     const faviconUrl = await setFaviconUrl(url.href, favIconImage);
 
     const ogpData: OgpType = {
-      title: targetData.title,
+      title: targetData?.title || "",
       description: "",
       siteUrl: url.href,
       siteName: "Zenn",
-      image: "https://static.zenn.studio/images/logo-only-dark.png",
+      image:
+        targetData?.user?.avatar_small_url ||
+        "https://static.zenn.studio/images/logo-only-dark.png",
       faviconImage: faviconUrl,
     };
-
     return ogpData;
   } catch (error) {
     console.error(error);
