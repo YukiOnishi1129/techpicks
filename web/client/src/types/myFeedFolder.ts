@@ -1,43 +1,26 @@
-import {
-  myFeedFolder as PrismaMMyFeedFolder,
-  Platform as PrismaPlatform,
-  Feed as PrismaFeed,
-  Category as PrismaCategory,
-} from "@prisma/client";
+import { OriginCategoryType } from "./category";
+import { OriginFeedType } from "./feed";
+import { OriginPlatformType } from "./platform";
+import { OriginProfileType } from "./profile";
 
 export type OriginMyFeedFolderType = {
   id: string;
-  user_id: string;
+  userId: string;
   title: string;
   description?: string;
   createdAt: string;
   updatedAt: string;
 };
 
-export type MyFeedFolderType = Omit<PrismaMMyFeedFolder, "userId"> & {
+export type MyFeedFolderType = OriginMyFeedFolderType & {
   feeds: Array<
-    Omit<
-      PrismaFeed,
-      | "platformId"
-      | "categoryId"
-      | "rssUrl"
-      | "createdAt"
-      | "updatedAt"
-      | "deletedAt"
-    > & {
-      category: Omit<PrismaCategory, "createdAt" | "updatedAt" | "deletedAt">;
-      platform: Omit<PrismaPlatform, "createdAt" | "updatedAt" | "deletedAt">;
+    OriginFeedType & {
+      category: OriginCategoryType;
+      platform: OriginPlatformType;
       myFeedId: string;
     }
   >;
-  profile: {
-    id: string;
-    name: string;
-    email: string;
-    image: string;
-    createdAt: Date;
-    updatedAt: Date;
-  };
+  profile: OriginProfileType;
 };
 
 export type FetchMyFeedFolderAPIResponse = {

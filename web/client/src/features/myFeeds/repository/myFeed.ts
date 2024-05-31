@@ -146,7 +146,7 @@ const convertDatabaseResponseToMyFeedResponse = (
     },
     myFeedFolder: {
       id: myFeeds.my_feed_folders.id,
-      user_id: myFeeds.my_feed_folders.user_id,
+      userId: myFeeds.my_feed_folders.user_id,
       title: myFeeds.my_feed_folders.title,
       description: myFeeds.my_feed_folders.description || undefined,
       createdAt: myFeeds.my_feed_folders.created_at,
