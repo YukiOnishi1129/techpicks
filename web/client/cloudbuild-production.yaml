@@ -1,6 +1,6 @@
 substitutions:
   _IMAGE: "web-client-application/latest"
-  _JOB_NAME: "web-client-application"
+  _SERVICE_NAME: "web-client-application"
   _REGION: "us-west1"
 steps:
   # Build the container image
@@ -17,5 +17,18 @@ steps:
   # Push the container image to Container Registry
   - name: "gcr.io/cloud-builders/docker"
     args: ["push", "$_REGION-docker.pkg.dev/$PROJECT_ID/$_IMAGE"]
+  # Deploy container image to Cloud Run
+  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
+    entrypoint: gcloud
+    args:
+      [
+        "run",
+        "deploy",
+        "$_SERVICE_NAME",
+        "--image",
+        "gcr.io/$PROJECT_ID/$_IMAGE",
+        "--region",
+        "$_REGION",
+      ]
 images:
   - $_REGION-docker.pkg.dev/$PROJECT_ID/$_IMAGE
