@@ -1,5 +1,6 @@
 "use client";
 import { User } from "@supabase/supabase-js";
+import { usePathname } from "next/navigation";
 import { FC, useCallback } from "react";
 
 import { logoutToLoginPage } from "@/features/auth/actions/auth";
@@ -10,9 +11,10 @@ import { useStatusToast } from "@/hooks/useStatusToast";
 
 import { FavoriteArticleFolderType } from "@/types/favoriteArticleFolder";
 
+import { serverRevalidatePage } from "@/actions/serverAction";
+
 import { FavoriteArticleFolderCard } from "./FavoriteArticleFolderCard";
 import { fetchFavoriteArticleFolderByIdAPI } from "../actions/favoriteArticleFolders";
-import { serverRevalidateFavoriteArticleFolderPageTag } from "../actions/serverActions";
 import {
   deleteFavoriteArticleFolder,
   updateFavoriteArticleFolder,
@@ -28,6 +30,7 @@ export const FavoriteArticleFolderList: FC<FavoriteArticleFolderListProps> = ({
   user,
 }) => {
   const { successToast, failToast } = useStatusToast();
+  const pathname = usePathname();
 
   const handleUpdateFavoriteArticleFolder = useCallback(
     async ({
@@ -76,9 +79,9 @@ export const FavoriteArticleFolderList: FC<FavoriteArticleFolderListProps> = ({
       successToast({
         description: "Success: Update folder",
       });
-      await serverRevalidateFavoriteArticleFolderPageTag();
+      await serverRevalidatePage(pathname);
     },
-    [user, successToast, failToast]
+    [user, successToast, failToast, pathname]
   );
 
   const handleDeleteFavoriteArticleFolder = useCallback(
@@ -116,9 +119,9 @@ export const FavoriteArticleFolderList: FC<FavoriteArticleFolderListProps> = ({
       successToast({
         description: "Success: Delete folder",
       });
-      await serverRevalidateFavoriteArticleFolderPageTag();
+      await serverRevalidatePage(pathname);
     },
-    [user, successToast, failToast]
+    [user, successToast, failToast, pathname]
   );
 
   return (

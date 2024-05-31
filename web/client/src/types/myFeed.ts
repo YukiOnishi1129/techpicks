@@ -1,12 +1,18 @@
-import {
-  Article as PrismaArticle,
-  MyFeed as PrismaMyFeed,
-  Feed as PrismaFeed,
-  myFeedFolder as PrismaMyFeedFolder,
-} from "@prisma/client";
+import { OriginArticleType } from "./article";
+import { OriginFeedType } from "./feed";
+import { OriginMyFeedFolderType } from "./myFeedFolder";
 
-export type MyFeedType = Omit<PrismaMyFeed, "userId"> & {
-  feed: Omit<PrismaFeed, "rssUrl" | "deletedAt">;
-  myFeedFolder: Omit<PrismaMyFeedFolder, "userId">;
-  articles: Array<PrismaArticle>;
+export type OriginMyFeedType = {
+  id: string;
+  userId: string;
+  feedId: string;
+  myFeedFolderId: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type MyFeedType = OriginMyFeedType & {
+  feed: OriginFeedType;
+  myFeedFolder: OriginMyFeedFolderType;
+  articles: Array<OriginArticleType>;
 };

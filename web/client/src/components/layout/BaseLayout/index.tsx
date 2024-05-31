@@ -19,7 +19,7 @@ export const BaseLayout = async ({ children }: { children: ReactNode }) => {
           <Header user={user} />
         </div>
         <div className="block md:hidden">
-          <MobileHeader user={user} />
+          <MobileHeader />
         </div>
       </header>
 

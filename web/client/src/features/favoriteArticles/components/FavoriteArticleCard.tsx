@@ -15,7 +15,7 @@ export const FavoriteArticleCard: FC<FavoriteArticleCardProps> = ({
   favoriteArticle,
 }) => {
   const imageUrl = useCheckImageExist(
-    favoriteArticle?.thumbnailURL || undefined
+    favoriteArticle?.thumbnailUrl || undefined
   );
 
   return (

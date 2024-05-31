@@ -1,6 +1,5 @@
 "use server";
-
-import prisma from "@/lib/prisma";
+import { createGetOnlyServerSideClient } from "@/lib/supabase/client/serverClient";
 
 import { ArticleTabType } from "@/types/article";
 import { LanguageStatus } from "@/types/language";
@@ -18,8 +17,8 @@ export type GetTrendArticlesParams = {
   offset?: number;
   sort?: "asc" | "desc";
   sortColum?: string;
-  startTime: Date;
-  endTime: Date;
+  startTime: string;
+  endTime: string;
 };
 
 export const getTrendArticles = async ({
@@ -28,182 +27,162 @@ export const getTrendArticles = async ({
   languageStatus = 1,
   platformIdList,
   offset = 1,
-  sort = "desc",
-  sortColum = "publishedAt",
   startTime,
   endTime,
 }: GetTrendArticlesParams): Promise<TrendArticleType[]> => {
-  let where = {};
-  where = {
-    updatedAt: {
-      gte: startTime,
-      lte: endTime,
-    },
-    platform: {
-      isEng: languageStatus === 2,
-    },
-  };
-
-  if (keyword) {
-    where = {
-      ...where,
-      OR: [
-        {
-          article: {
-            title: {
-              contains: keyword,
-            },
-          },
-        },
-        {
-          article: {
-            description: {
-              contains: keyword,
-            },
-          },
-        },
-        {
-          article: {
-            tags: {
-              contains: keyword,
-            },
-          },
-        },
-      ],
-    };
-  }
-
-  if (platformIdList.length) {
-    where = {
-      ...where,
-      platformId: {
-        in: [...platformIdList],
-      },
-    };
-  }
-
   try {
-    const res = await prisma.trendArticle.findMany({
-      take: LIMIT,
-      skip: LIMIT * (offset - 1),
-      where,
-      orderBy: [
-        {
-          likeCount: "desc",
-        },
-        {
-          updatedAt: "desc",
-        },
-      ],
-      include: {
-        platform: true,
-        article: {
-          select: {
-            id: true,
-            title: true,
-            description: true,
-            articleUrl: true,
-            publishedAt: true,
-            authorName: true,
-            tags: true,
-            thumbnailURL: true,
-            isEng: true,
-            isPrivate: true,
-            platform: true,
-            createdAt: true,
-            updatedAt: true,
-            feedArticleRelatoins: {
-              select: {
-                feed: {
-                  select: {
-                    id: true,
-                    name: true,
-                    description: true,
-                    thumbnailUrl: true,
-                    siteUrl: true,
-                    rssUrl: true,
-                    apiQueryParam: true,
-                    trendPlatformType: true,
-                    createdAt: true,
-                    updatedAt: true,
-                    category: true,
-                  },
-                },
-              },
-            },
-            bookmarks: {
-              select: {
-                id: true,
-              },
-              where: {
-                userId: userId,
-              },
-            },
-            favoriteArticles: {
-              where: {
-                userId: userId,
-              },
-            },
-          },
-        },
-      },
-    });
+    const supabase = await createGetOnlyServerSideClient();
+    const query = supabase
+      .from("trend_articles")
+      .select(
+        `
+          *,
+          platforms (
+            *
+          ),
+          articles!inner (
+            *,
+            feed_article_relations!inner (
+              feeds!inner (
+                *,
+                categories!inner (
+                  *
+                )
+              )
+            ),
+            bookmarks (
+              id,
+              user_id
+            ),
+            favorite_articles (
+              *
+            )
+          )
+          `
+      )
+      .eq("articles.is_eng", languageStatus === 2)
+      .eq("articles.is_private", false);
 
-    const trendArticleList: Array<TrendArticleType> = res.map(
+    if (userId) {
+      query.eq("articles.bookmarks.user_id", userId);
+      query.eq("articles.favorite_articles.user_id", userId);
+    } else {
+      query.is("articles.bookmarks.user_id", null);
+      query.is("articles.favorite_articles.user_id", null);
+    }
+
+    if (keyword) {
+      query.or(
+        `articles.title.ilike.%${keyword}%,articles.description.ilike.%${keyword}%,articles.tags.ilike.%${keyword}%`
+      );
+    }
+
+    if (platformIdList.length) {
+      query.in("platforms.id", platformIdList);
+    }
+
+    const { data, error } = await query
+      .gte("updated_at", startTime)
+      .lte("updated_at", endTime)
+      .order("like_count", { ascending: false })
+      .order("updated_at", { ascending: false })
+      .range((offset - 1) * LIMIT + 1, offset * LIMIT);
+
+    if (error) return [];
+
+    const trendArticleList: Array<TrendArticleType> = data.map(
       (trendArticle) => {
-        const isBookmarked = !!trendArticle.article.bookmarks.length;
+        const isBookmarked = !!trendArticle.articles.bookmarks.length;
 
         let bookmarkId: string | undefined = "";
-        if (trendArticle.article.bookmarks.length > 0) {
-          bookmarkId = trendArticle.article.bookmarks[0].id;
+        if (trendArticle.articles.bookmarks.length > 0) {
+          bookmarkId = trendArticle.articles.bookmarks[0].id;
         }
 
         return {
           id: trendArticle.id,
-          articleId: trendArticle.articleId,
-          likeCount: trendArticle.likeCount,
-          createdAt: trendArticle.updatedAt,
-          updatedAt: trendArticle.updatedAt,
+          articleId: trendArticle.article_id,
+          platformId: trendArticle.platform_id,
+          likeCount: trendArticle.like_count,
+          createdAt: trendArticle.created_at,
+          updatedAt: trendArticle.updated_at,
           article: {
-            id: trendArticle.article.id,
-            title: trendArticle.article.title,
-            description: trendArticle.article.description,
-            articleUrl: trendArticle.article.articleUrl,
-            publishedAt: trendArticle.article.publishedAt,
-            authorName: trendArticle.article.authorName,
-            tags: trendArticle.article.tags,
-            thumbnailURL: trendArticle.article.thumbnailURL,
-            isEng: trendArticle.article.isEng,
-            isPrivate: trendArticle.article.isPrivate,
-            createdAt: trendArticle.article.createdAt,
-            updatedAt: trendArticle.article.updatedAt,
+            id: trendArticle.articles.id,
+            platformId: trendArticle.articles.platform_id || "",
+            title: trendArticle.articles.title,
+            description: trendArticle.articles.description,
+            articleUrl: trendArticle.articles.article_url,
+            publishedAt: trendArticle.articles.published_at || undefined,
+            authorName: trendArticle.articles.author_name || undefined,
+            tags: trendArticle.articles.tags || undefined,
+            thumbnailUrl: trendArticle.articles.thumbnail_url,
+            isEng: trendArticle.articles.is_eng,
+            isPrivate: trendArticle.articles.is_private,
+            createdAt: trendArticle.articles.created_at,
+            updatedAt: trendArticle.articles.updated_at,
           },
           platform: {
-            id: trendArticle.platform.id,
-            name: trendArticle.platform.name,
-            siteUrl: trendArticle.platform.siteUrl,
-            faviconUrl: trendArticle.platform.faviconUrl,
-            platformSiteType: trendArticle.platform.platformSiteType,
-            isEng: trendArticle.platform.isEng,
+            id: trendArticle.platforms?.id || "",
+            name: trendArticle.platforms?.name || "",
+            siteUrl: trendArticle.platforms?.site_url || "",
+            faviconUrl: trendArticle.platforms?.favicon_url || "",
+            platformSiteType: trendArticle.platforms?.platform_site_type || 0,
+            isEng: trendArticle.platforms?.is_eng || false,
+            createdAt: trendArticle.platforms?.created_at || "",
+            updatedAt: trendArticle.platforms?.updated_at || "",
           },
-          feeds: trendArticle.article.feedArticleRelatoins.map(
-            (feedArticleRelatoins) => {
+          feeds: trendArticle.articles.feed_article_relations.map((far) => {
+            return {
+              id: far.feeds.id,
+              platformId: far.feeds.platform_id,
+              categoryId: far.feeds.category_id,
+              name: far.feeds.name,
+              description: far.feeds.description,
+              thumbnailUrl: far.feeds.thumbnail_url,
+              siteUrl: far.feeds.site_url,
+              rssUrl: far.feeds.rss_url,
+              apiQueryParam: far.feeds.api_query_param || undefined,
+              trendPlatformType: far.feeds.trend_platform_type,
+              createdAt: far.feeds.created_at,
+              updatedAt: far.feeds.updated_at,
+              category: {
+                id: far.feeds.categories.id,
+                name: far.feeds.categories.name,
+                type: far.feeds.categories.type,
+                createdAt: far.feeds.categories.created_at,
+                updatedAt: far.feeds.categories.updated_at,
+              },
+            };
+          }),
+          isBookmarked: isBookmarked,
+          bookmarkId: bookmarkId,
+          favoriteArticles: trendArticle.articles.favorite_articles.map(
+            (favorite) => {
               return {
-                id: feedArticleRelatoins.feed.id,
-                name: feedArticleRelatoins.feed.name,
-                description: feedArticleRelatoins.feed.description,
-                thumbnailUrl: feedArticleRelatoins.feed.thumbnailUrl,
-                siteUrl: feedArticleRelatoins.feed.siteUrl,
-                apiQueryParam: feedArticleRelatoins.feed.apiQueryParam,
-                trendPlatformType: feedArticleRelatoins.feed.trendPlatformType,
-                category: feedArticleRelatoins.feed.category,
+                id: favorite.id,
+                favoriteArticleFolderId: favorite.favorite_article_folder_id,
+                articleId: favorite.article_id,
+                platformId: favorite.platform_id || undefined,
+                userId: favorite.user_id,
+                title: favorite.title,
+                description: favorite.description,
+                thumbnailUrl: favorite.thumbnail_url,
+                articleUrl: favorite.article_url,
+                platformFaviconUrl: favorite.platform_favicon_url,
+                publishedAt: favorite.published_at || undefined,
+                authorName: favorite.author_name || undefined,
+                tags: favorite.tags || undefined,
+                platformName: favorite.platform_name,
+                platformUrl: favorite.platform_url,
+                isEng: favorite.is_eng,
+                isPrivate: favorite.is_private,
+                isRead: favorite.is_read,
+                createdAt: favorite.created_at,
+                updatedAt: favorite.updated_at,
               };
             }
           ),
-          isBookmarked: isBookmarked,
-          bookmarkId: bookmarkId,
-          favoriteArticles: trendArticle.article.favoriteArticles,
-          isFollowing: trendArticle.article.favoriteArticles.length > 0,
+          isFollowing: trendArticle.articles.favorite_articles.length > 0,
         };
       }
     );

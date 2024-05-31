@@ -7,7 +7,7 @@ export const useUser = () => {
   const [user, setUser] = useState<User | undefined>(undefined);
   const fetchUser = async () => {
     const supabase = await createBrowserSideClient();
-    const { data, error } = await supabase.auth.getUser();
+    const { data } = await supabase.auth.getUser();
 
     setUser(data?.user || undefined);
   };

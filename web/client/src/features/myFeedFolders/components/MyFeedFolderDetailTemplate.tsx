@@ -24,6 +24,7 @@ export const MyFeedFolderDetailTemplate: FC<
   });
 
   const feedIdList = resMyFeeds.data.myFeeds.map((myFeed) => myFeed.feedId);
+
   const res = await fetchArticlesByFeedIdsAPI({
     feedIds: feedIdList,
     keyword: keyword,

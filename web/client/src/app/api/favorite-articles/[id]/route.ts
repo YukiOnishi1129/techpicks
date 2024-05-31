@@ -4,7 +4,7 @@ import { getFavoriteArticleById } from "@/features/favoriteArticles/repository/f
 import { getUser } from "@/features/users/actions/user";
 
 export async function GET(
-  req: NextRequest,
+  _: NextRequest,
   { params }: { params: { id: string } }
 ) {
   const { id } = params;

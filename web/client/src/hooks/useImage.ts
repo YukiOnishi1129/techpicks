@@ -22,10 +22,10 @@ export const useCheckImageExist = (src?: string) => {
   };
 
   checkImagePath()
-    .then((image) => {
+    .then(() => {
       setResult(true);
     })
-    .catch((error) => {
+    .catch(() => {
       setResult(false);
     });
 

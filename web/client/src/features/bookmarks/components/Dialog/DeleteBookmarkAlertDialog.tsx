@@ -1,3 +1,5 @@
+"use client";
+import { usePathname } from "next/navigation";
 import { FcBookmark } from "react-icons/fc";
 
 import {
@@ -29,7 +31,8 @@ export function DeleteBookmarkAlertDialog({
   bookmarkTitle,
   bookmarkId,
 }: DeleteBookmarkAlertDialogProps) {
-  const { handleRemoveBookmark } = useBookmark();
+  const pathname = usePathname();
+  const { handleRemoveBookmark } = useBookmark(pathname);
   return (
     <AlertDialog>
       <TooltipProvider>

@@ -1,16 +1,16 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { FC } from "react";
 import { useForm } from "react-hook-form";
 import { CiSearch } from "react-icons/ci";
 import { z } from "zod";
 
-import { serverRevalidateMyFeedFoldersBtId } from "@/features/myFeedFolders/actions/serverAction";
-
 import { Form, FormField, FormItem, FormControl } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+
+import { serverRevalidatePage } from "@/actions/serverAction";
 
 const formSchema = z.object({
   keyword: z.string().optional(),
@@ -24,6 +24,7 @@ export const MyFeedFolderArticleKeywordSearchInput: FC<
   MyFeedFolderArticleKeywordSearchInputProps
 > = ({ myFeedFolderId }) => {
   const router = useRouter();
+  const pathname = usePathname();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -36,7 +37,7 @@ export const MyFeedFolderArticleKeywordSearchInput: FC<
     if (!!values.keyword && values.keyword.trim() !== "") {
       keywordPath = `keyword=${values.keyword}`;
     }
-    await serverRevalidateMyFeedFoldersBtId(myFeedFolderId);
+    await serverRevalidatePage(pathname);
     router.replace(`/my-feed-folder/${myFeedFolderId}?${keywordPath}`);
   };
 
