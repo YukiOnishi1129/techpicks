@@ -64,9 +64,15 @@ export const getTrendArticles = async ({
           `
       )
       .eq("articles.is_eng", languageStatus === 2)
-      .eq("articles.is_private", false)
-      .eq("articles.bookmarks.user_id", userId || "")
-      .eq("articles.favorite_articles.user_id", userId || "");
+      .eq("articles.is_private", false);
+
+    if (userId) {
+      query.eq("articles.bookmarks.user_id", userId);
+      query.eq("articles.favorite_articles.user_id", userId);
+    } else {
+      query.is("articles.bookmarks.user_id", null);
+      query.is("articles.favorite_articles.user_id", null);
+    }
 
     if (keyword) {
       query.or(`articles.title.ilike.*${keyword}*`);

@@ -61,9 +61,15 @@ export const getArticles = async ({
       `
       )
       .eq("is_eng", languageStatus === 2)
-      .eq("is_private", false)
-      .eq("bookmarks.user_id", userId || "")
-      .eq("favorite_articles.user_id", userId || "");
+      .eq("is_private", false);
+
+    if (userId) {
+      query.eq("bookmarks.user_id", userId);
+      query.eq("favorite_articles.user_id", userId);
+    } else {
+      query.is("bookmarks.user_id", null);
+      query.is("favorite_articles.user_id", null);
+    }
 
     switch (tab) {
       case "trend":
@@ -153,9 +159,15 @@ export const getArticlesByFeedIds = async ({
       )
       `
       )
-      .eq("articles.is_private", false)
-      .eq("articles.bookmarks.user_id", userId || "")
-      .eq("articles.favorite_articles.user_id", userId || "");
+      .eq("articles.is_private", false);
+
+    if (userId) {
+      query.eq("bookmarks.user_id", userId);
+      query.eq("favorite_articles.user_id", userId);
+    } else {
+      query.is("bookmarks.user_id", null);
+      query.is("favorite_articles.user_id", null);
+    }
 
     if (feedIds.length) {
       query.in("feed_id", feedIds);
@@ -237,7 +249,7 @@ type GetArticleByIdParam = {
 export const getArticleById = async ({ id, userId }: GetArticleByIdParam) => {
   try {
     const supabase = await createGetOnlyServerSideClient();
-    const { data, error } = await supabase
+    const query = supabase
       .from("articles")
       .select(
         `
@@ -262,11 +274,17 @@ export const getArticleById = async ({ id, userId }: GetArticleByIdParam) => {
         )
       `
       )
-      .eq("id", id)
-      .eq("bookmarks.user_id", userId || "")
-      .eq("favorite_articles.user_id", userId || "")
-      .single();
+      .eq("id", id);
 
+    if (userId) {
+      query.eq("bookmarks.user_id", userId);
+      query.eq("favorite_articles.user_id", userId);
+    } else {
+      query.is("bookmarks.user_id", null);
+      query.is("favorite_articles.user_id", null);
+    }
+
+    const { data, error } = await query.single();
     if (error || !data) return;
 
     return convertDatabaseResponseToArticleResponse(data);
@@ -386,6 +404,14 @@ export const getArticleByArticleAndPlatformUrl = async ({
       )
       .eq("article_url", articleUrl)
       .eq("platform.site_url", platformUrl);
+
+    if (userId) {
+      query.eq("bookmarks.user_id", userId);
+      query.eq("favorite_articles.user_id", userId);
+    } else {
+      query.is("bookmarks.user_id", null);
+      query.is("favorite_articles.user_id", null);
+    }
 
     const { data, error } = await query.single();
     if (error || !data) return;
