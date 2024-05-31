@@ -1,11 +1,14 @@
 "use server";
 
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 import { getMyFeedFolderById } from "@/features/myFeedFolders/repository/myFeedFolder";
 import { getUser } from "@/features/users/actions/user";
 
-export const GET = async ({ params }: { params: { id: string } }) => {
+export const GET = async (
+  _: NextRequest,
+  { params }: { params: { id: string } }
+) => {
   const { id } = params;
 
   const user = await getUser();

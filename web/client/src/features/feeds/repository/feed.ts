@@ -87,8 +87,7 @@ export const getAllFeed = async ({ userId }: GetAllFeedType) => {
           feed_article_relations!inner(articles!inner(*))
         `
       )
-      .not("deleted_at", "is", null)
-      .eq("my_feeds.user_id", userId || "null")
+      .is("deleted_at", null)
       .order("platforms(platform_site_type)", {
         ascending: true,
       })
@@ -107,6 +106,12 @@ export const getAllFeed = async ({ userId }: GetAllFeedType) => {
       .order("categories(name)", {
         ascending: true,
       });
+
+    if (userId) {
+      query.eq("my_feeds.user_id", userId);
+    } else {
+      query.is("my_feeds.user_id", null);
+    }
 
     const { data, error } = await query;
     if (error || !data) return [];

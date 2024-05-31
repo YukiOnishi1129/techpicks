@@ -1,10 +1,11 @@
 "use server";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 import { getMyFeedFolders } from "@/features/myFeedFolders/repository/myFeedFolder";
 import { getUser } from "@/features/users/actions/user";
 
-export async function GET() {
+export async function GET(req: NextRequest) {
+  req.url;
   const user = await getUser();
   if (!user) {
     return NextResponse.json(
