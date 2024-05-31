@@ -1,5 +1,4 @@
 "use server";
-
 // eslint-disable-next-line import/named
 import { v4 as uuidv4 } from "uuid";
 
@@ -62,6 +61,7 @@ export const getMyFeedFolderById = async ({
           my_feeds(*, feeds!inner(*, platforms!inner(*), categories!inner(*)))
         `
       )
+      .eq("id", id)
       .eq("user_id", userId)
       .eq("my_feeds.user_id", userId);
 

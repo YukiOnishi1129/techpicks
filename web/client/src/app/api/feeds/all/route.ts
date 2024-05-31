@@ -1,11 +1,9 @@
 "use server";
-
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
 import { getAllFeed } from "@/features/feeds/repository/feed";
 
-export async function GET(req: NextRequest) {
-  const searchParams = req.nextUrl.searchParams;
+export async function GET() {
   const feeds = await getAllFeed({});
 
   if (!feeds) {

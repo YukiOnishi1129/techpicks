@@ -1,5 +1,4 @@
 "use server";
-
 import { createGetOnlyServerSideClient } from "@/lib/supabase/client/serverClient";
 
 import { ArticleTabType } from "@/types/article";
@@ -28,8 +27,6 @@ export const getTrendArticles = async ({
   languageStatus = 1,
   platformIdList,
   offset = 1,
-  sort = "desc",
-  sortColum = "publishedAt",
   startTime,
   endTime,
 }: GetTrendArticlesParams): Promise<TrendArticleType[]> => {

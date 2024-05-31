@@ -114,7 +114,7 @@ export const MyFeedFolderList: FC<MyFeedFolderListProps> = ({
       });
       await serverRevalidatePage(pathname);
     },
-    [successToast, failToast]
+    [successToast, failToast, pathname]
   );
 
   return (

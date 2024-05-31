@@ -29,8 +29,6 @@ export const getArticles = async ({
   platformIdList,
   tab,
   offset = 1,
-  sort = "desc",
-  sortColum = "publishedAt",
 }: GetArticleParams): Promise<Array<ArticleType>> => {
   try {
     const supabase = await createGetOnlyServerSideClient();
