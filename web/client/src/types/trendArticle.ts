@@ -13,21 +13,13 @@ export type OriginTrendArticleType = {
   updatedAt: string;
 };
 
-export type TrendArticleType = Omit<OriginTrendArticleType, "platformId"> & {
-  article: Omit<OriginArticleType, "platformId">;
-  platform: Omit<OriginPlatformType, "createdAt" | "updatedAt" | "deletedAt">;
+export type TrendArticleType = OriginTrendArticleType & {
+  article: OriginArticleType;
+  platform: OriginPlatformType;
   feeds: Array<
-    Omit<
-      OriginFeedType & {
-        category: OriginCategoryType;
-      },
-      | "platformId"
-      | "categoryId"
-      | "createdAt"
-      | "updatedAt"
-      | "deletedAt"
-      | "rssUrl"
-    >
+    OriginFeedType & {
+      category: OriginCategoryType;
+    }
   >;
   isBookmarked: boolean;
   bookmarkId?: string;

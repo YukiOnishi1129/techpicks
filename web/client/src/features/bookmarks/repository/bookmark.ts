@@ -39,12 +39,7 @@ export const getBookmarkList = async ({
         `
         *,
         profiles!inner(
-          id,
-          name,
-          email,
-          image,
-          created_at,
-          updated_at
+          *
         ),
         articles!inner(
           *,
@@ -96,12 +91,7 @@ export const getBookmark = async ({ bookmarkId, userId }: GetBookmarkDTO) => {
         `
         *,
         profiles!inner(
-          id,
-          name,
-          email,
-          image,
-          created_at,
-          updated_at
+          *
         ),
         articles!inner(
           *,
@@ -200,10 +190,7 @@ export const getBookmarkCountByArticleUrl = async ({
 
 type BookmarkGetDatabaseResponseType =
   Database["public"]["Tables"]["bookmarks"]["Row"] & {
-    profiles: Pick<
-      Database["public"]["Tables"]["profiles"]["Row"],
-      "id" | "name" | "email" | "image" | "created_at" | "updated_at"
-    >;
+    profiles: Database["public"]["Tables"]["profiles"]["Row"];
     articles: Database["public"]["Tables"]["articles"]["Row"] & {
       favorite_articles: Array<
         Database["public"]["Tables"]["favorite_articles"]["Row"]
@@ -216,6 +203,7 @@ const convertDatabaseResponseToBookmarkResponse = (
 ) => {
   const bookmarkData: BookmarkType = {
     id: bookmark.id,
+    userId: bookmark.user_id,
     articleId: bookmark.article_id,
     title: bookmark.title,
     description: bookmark.description,
@@ -232,7 +220,9 @@ const convertDatabaseResponseToBookmarkResponse = (
       id: bookmark.profiles.id,
       name: bookmark.profiles.name,
       email: bookmark.profiles.email,
+      emailVerifiedAt: bookmark.profiles.email_verified_at || undefined,
       image: bookmark.profiles.image,
+      isSuperAdmin: bookmark.profiles.is_super_admin,
       createdAt: bookmark.profiles.created_at,
       updatedAt: bookmark.profiles.updated_at,
     },

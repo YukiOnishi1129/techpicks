@@ -44,27 +44,10 @@ export const getTrendArticles = async ({
             *
           ),
           articles!inner (
-            id,
-            title,
-            description,
-            article_url,
-            published_at,
-            author_name,
-            tags,
-            thumbnail_url,
-            is_eng,
-            is_private,
-            created_at,
-            updated_at,
+            *,
             feed_article_relations!inner (
               feeds!inner (
-                id,
-                name,
-                description,
-                thumbnail_url,
-                site_url,
-                api_query_param,
-                trend_platform_type,
+                *,
                 categories!inner (
                   *
                 )
@@ -113,14 +96,16 @@ export const getTrendArticles = async ({
           bookmarkId = trendArticle.articles.bookmarks[0].id;
         }
 
-        const resTrendArticle: TrendArticleType = {
+        return {
           id: trendArticle.id,
           articleId: trendArticle.article_id,
+          platformId: trendArticle.platform_id,
           likeCount: trendArticle.like_count,
           createdAt: trendArticle.created_at,
           updatedAt: trendArticle.updated_at,
           article: {
             id: trendArticle.articles.id,
+            platformId: trendArticle.articles.platform_id || "",
             title: trendArticle.articles.title,
             description: trendArticle.articles.description,
             articleUrl: trendArticle.articles.article_url,
@@ -140,29 +125,32 @@ export const getTrendArticles = async ({
             faviconUrl: trendArticle.platforms?.favicon_url || "",
             platformSiteType: trendArticle.platforms?.platform_site_type || 0,
             isEng: trendArticle.platforms?.is_eng || false,
+            createdAt: trendArticle.platforms?.created_at || "",
+            updatedAt: trendArticle.platforms?.updated_at || "",
           },
-          feeds: trendArticle.articles.feed_article_relations.map(
-            (feedArticleRelatoins) => {
-              return {
-                id: feedArticleRelatoins.feeds.id,
-                name: feedArticleRelatoins.feeds.name,
-                description: feedArticleRelatoins.feeds.description,
-                thumbnailUrl: feedArticleRelatoins.feeds.thumbnail_url,
-                siteUrl: feedArticleRelatoins.feeds.site_url,
-                apiQueryParam:
-                  feedArticleRelatoins.feeds.api_query_param || undefined,
-                trendPlatformType:
-                  feedArticleRelatoins.feeds.trend_platform_type,
-                category: {
-                  id: feedArticleRelatoins.feeds.categories.id,
-                  name: feedArticleRelatoins.feeds.categories.name,
-                  type: feedArticleRelatoins.feeds.categories.type,
-                  createdAt: feedArticleRelatoins.feeds.categories.created_at,
-                  updatedAt: feedArticleRelatoins.feeds.categories.updated_at,
-                },
-              };
-            }
-          ),
+          feeds: trendArticle.articles.feed_article_relations.map((far) => {
+            return {
+              id: far.feeds.id,
+              platformId: far.feeds.platform_id,
+              categoryId: far.feeds.category_id,
+              name: far.feeds.name,
+              description: far.feeds.description,
+              thumbnailUrl: far.feeds.thumbnail_url,
+              siteUrl: far.feeds.site_url,
+              rssUrl: far.feeds.rss_url,
+              apiQueryParam: far.feeds.api_query_param || undefined,
+              trendPlatformType: far.feeds.trend_platform_type,
+              createdAt: far.feeds.created_at,
+              updatedAt: far.feeds.updated_at,
+              category: {
+                id: far.feeds.categories.id,
+                name: far.feeds.categories.name,
+                type: far.feeds.categories.type,
+                createdAt: far.feeds.categories.created_at,
+                updatedAt: far.feeds.categories.updated_at,
+              },
+            };
+          }),
           isBookmarked: isBookmarked,
           bookmarkId: bookmarkId,
           favoriteArticles: trendArticle.articles.favorite_articles.map(
@@ -193,8 +181,6 @@ export const getTrendArticles = async ({
           ),
           isFollowing: trendArticle.articles.favorite_articles.length > 0,
         };
-
-        return resTrendArticle;
       }
     );
     return trendArticleList;

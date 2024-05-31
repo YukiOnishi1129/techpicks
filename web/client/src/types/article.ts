@@ -19,23 +19,12 @@ export type OriginArticleType = {
   updatedAt: string;
 };
 
-export type ArticleType = Omit<OriginArticleType, "platformId"> & {
-  platform?: Omit<OriginPlatformType, "createdAt" | "updatedAt" | "deletedAt">;
+export type ArticleType = OriginArticleType & {
+  platform?: OriginPlatformType;
   feeds: Array<
-    Omit<
-      OriginFeedType & {
-        category: Omit<
-          OriginCategoryType,
-          "createdAt" | "updatedAt" | "deletedAt"
-        >;
-      },
-      | "platformId"
-      | "categoryId"
-      | "createdAt"
-      | "updatedAt"
-      | "deletedAt"
-      | "rssUrl"
-    >
+    OriginFeedType & {
+      category: OriginCategoryType;
+    }
   >;
   isBookmarked: boolean;
   bookmarkId?: string;

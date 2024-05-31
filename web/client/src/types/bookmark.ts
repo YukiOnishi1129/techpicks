@@ -21,14 +21,8 @@ export type OriginBookmarkType = {
   updatedAt: string;
 };
 
-export type BookmarkType = Omit<
-  OptionalNullable<OriginBookmarkType>,
-  "userId"
-> & {
-  user: Omit<
-    OriginProfileType,
-    "emailVerifiedAt" | "isSuperAdmin" | "provider" | "deletedAt"
-  >;
+export type BookmarkType = OptionalNullable<OriginBookmarkType> & {
+  user: OriginProfileType;
   favoriteArticles?: Array<OriginFavoriteArticleType>;
   isFollowing?: boolean;
 };

@@ -73,7 +73,7 @@ export const FavoriteArticleFolderCard: FC<FavoriteArticleFolderCardProps> = ({
               <div className="mt-2 flex w-full items-center justify-center">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src={latestFavoriteArticle?.thumbnailURL || ""}
+                  src={latestFavoriteArticle?.thumbnailUrl || ""}
                   alt=""
                   className="mt-2 max-h-[160px] rounded-md object-cover md:max-h-[100px]"
                 />

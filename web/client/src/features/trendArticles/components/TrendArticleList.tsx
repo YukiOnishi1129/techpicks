@@ -149,6 +149,7 @@ const convertTrendArticleToArticle = (
 ): ArticleType => {
   return {
     id: trendArticle.article.id,
+    platformId: trendArticle.article.platformId,
     title: trendArticle.article.title,
     description: trendArticle.article.description,
     thumbnailUrl: trendArticle.article.thumbnailUrl,
@@ -168,22 +169,31 @@ const convertTrendArticleToArticle = (
       siteUrl: trendArticle.platform.siteUrl,
       faviconUrl: trendArticle.platform.faviconUrl,
       isEng: trendArticle.platform.isEng,
+      createdAt: trendArticle.platform.createdAt,
+      updatedAt: trendArticle.platform.updatedAt,
     },
     isBookmarked: trendArticle.isBookmarked,
     bookmarkId: trendArticle.bookmarkId,
     feeds: trendArticle.feeds.map((feed) => {
       return {
         id: feed.id,
+        platformId: feed.platformId,
+        categoryId: feed.categoryId,
         name: feed.name,
         description: feed.description,
         thumbnailUrl: feed.thumbnailUrl,
         siteUrl: feed.siteUrl,
+        rssUrl: feed.rssUrl,
         apiQueryParam: feed.apiQueryParam,
         trendPlatformType: feed.trendPlatformType,
+        createdAt: feed.createdAt,
+        updatedAt: feed.updatedAt,
         category: {
           id: feed.category.id,
           name: feed.category.name,
           type: feed.category.type,
+          createdAt: feed.category.createdAt,
+          updatedAt: feed.category.updatedAt,
         },
       };
     }),

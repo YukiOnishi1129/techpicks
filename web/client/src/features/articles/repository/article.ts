@@ -45,13 +45,7 @@ export const getArticles = async ({
         ),
         feed_article_relations!inner (
           feeds!inner (
-            id,
-            name,
-            description,
-            thumbnail_url,
-            site_url,
-            api_query_param,
-            trend_platform_type,
+            *,
             categories!inner (
               *
             )
@@ -136,13 +130,7 @@ export const getArticlesByFeedIds = async ({
         *,
         feed_article_relations!inner (
           feeds!inner (
-            id,
-            name,
-            description,
-            thumbnail_url,
-            site_url,
-            api_query_param,
-            trend_platform_type,
+            *,
             categories!inner (
               *
             )
@@ -256,13 +244,7 @@ export const getArticleById = async ({ id, userId }: GetArticleByIdParam) => {
         *,
         feed_article_relations!inner (
           feeds!inner (
-            id,
-            name,
-            description,
-            thumbnail_url,
-            site_url,
-            api_query_param,
-            trend_platform_type,
+            *,
             categories!inner (
               *
             )
@@ -384,13 +366,7 @@ export const getArticleByArticleAndPlatformUrl = async ({
           *,
           feed_article_relations!inner (
             feeds!inner (
-              id,
-              name,
-              description,
-              thumbnail_url,
-              site_url,
-              api_query_param,
-              trend_platform_type,
+              *,
               categories!inner (
                 *
               )
@@ -423,15 +399,9 @@ export const getArticleByArticleAndPlatformUrl = async ({
 type ArticleGetDatabaseResponseType =
   Database["public"]["Tables"]["articles"]["Row"] & {
     feed_article_relations: Array<{
-      feeds: Omit<
-        Database["public"]["Tables"]["feeds"]["Row"],
-        | "rss_url"
-        | "created_at"
-        | "updated_at"
-        | "deleted_at"
-        | "category_id"
-        | "platform_id"
-      > & { categories: Database["public"]["Tables"]["categories"]["Row"] };
+      feeds: Database["public"]["Tables"]["feeds"]["Row"] & {
+        categories: Database["public"]["Tables"]["categories"]["Row"];
+      };
     }>;
     platforms: Database["public"]["Tables"]["platforms"]["Row"] | null;
     bookmarks: Array<
@@ -464,16 +434,23 @@ const convertDatabaseResponseToArticleResponse = (
     feeds: article.feed_article_relations.map((far) => {
       return {
         id: far.feeds.id,
+        platformId: far.feeds.platform_id,
+        categoryId: far.feeds.category_id,
         name: far.feeds.name,
         description: far.feeds.description,
         thumbnailUrl: far.feeds.thumbnail_url,
         siteUrl: far.feeds.site_url,
+        rssUrl: far.feeds.rss_url,
         apiQueryParam: far.feeds.api_query_param || undefined,
         trendPlatformType: far.feeds.trend_platform_type,
+        createdAt: far.feeds.created_at,
+        updatedAt: far.feeds.updated_at,
         category: {
           id: far.feeds.categories.id,
           name: far.feeds.categories.name,
           type: far.feeds.categories.type,
+          createdAt: far.feeds.categories.created_at,
+          updatedAt: far.feeds.categories.updated_at,
         },
       };
     }),
@@ -511,6 +488,8 @@ const convertDatabaseResponseToArticleResponse = (
       siteUrl: article.platforms.site_url,
       faviconUrl: article.platforms.favicon_url,
       isEng: article.platforms.is_eng,
+      createdAt: article.platforms.created_at,
+      updatedAt: article.platforms.updated_at,
     };
   }
   return resArticle;
