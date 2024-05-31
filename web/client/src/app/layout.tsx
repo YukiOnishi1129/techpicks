@@ -26,7 +26,7 @@ export default function RootLayout({
       <body className={clsx(inter.className, "fixed w-full")}>
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
+          defaultTheme="dark"
           enableSystem
           disableTransitionOnChange
         >
