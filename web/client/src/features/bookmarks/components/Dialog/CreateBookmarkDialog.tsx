@@ -89,6 +89,7 @@ export const CreateBookmarkDialog: FC<CreateBookmarkDialogProps> = ({
   const onSubmit = useCallback(async (data: z.infer<typeof FormSchema>) => {
     startTransition(async () => {
       const ogp = await getOgpData(data.url);
+      // TODO: handle error undefined
       if (ogp) setOgpData(ogp);
     });
   }, []);

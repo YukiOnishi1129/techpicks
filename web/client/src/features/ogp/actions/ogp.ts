@@ -25,6 +25,15 @@ const allowedTags = [
 export const getOgpData = async (url: string) => {
   if (!checkHTTPUrl(url)) return;
 
+  const targetUrl = new URL(url);
+  if (targetUrl.hostname === "zenn.dev") {
+    return await getZennOgpData(targetUrl);
+  }
+
+  return await getOrdinalOgpData(url);
+};
+
+const getOrdinalOgpData = async (url: string) => {
   const encodeUri = encodeURI(url);
 
   const res = await fetch(encodeUri, {
@@ -102,6 +111,64 @@ export const getOgpData = async (url: string) => {
   };
 
   return ogpData;
+};
+
+const getZennOgpData = async (url: URL) => {
+  try {
+    const { pathname } = url;
+
+    const sliceUrl = pathname.substring(1);
+    const useName = sliceUrl.substring(0, sliceUrl.indexOf("/"));
+    const postSliceUrl = sliceUrl.substring(useName.length + 1);
+    const postType = postSliceUrl.substring(0, postSliceUrl.indexOf("/"));
+
+    if (
+      postType !== "articles" &&
+      postType !== "books" &&
+      postType !== "scraps"
+    ) {
+      return;
+    }
+
+    const res = await fetch(
+      `https://zenn.dev/api/${postType}?username=${useName}`
+    );
+
+    const data = await res.json();
+
+    let targetData: any = {};
+    if (postType === "articles") {
+      targetData = data.articles.find(
+        (article: { path: string }) => article.path === pathname
+      );
+    } else if (postType === "books") {
+      targetData = data.books.find(
+        (book: { path: string }) => book.path === pathname
+      );
+    } else if (postType === "scraps") {
+      targetData = data.scraps.find(
+        (scrap: { path: string }) => scrap.path === pathname
+      );
+    }
+
+    const favIconImage = `https://t0.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=${url.href}&size=128`;
+
+    const faviconUrl = await setFaviconUrl(url.href, favIconImage);
+
+    const ogpData: OgpType = {
+      title: targetData.title,
+      description: "",
+      siteUrl: url.href,
+      siteName: "Zenn",
+      image: "https://static.zenn.studio/images/logo-only-dark.png",
+      faviconImage: faviconUrl,
+    };
+
+    return ogpData;
+  } catch (error) {
+    console.error(error);
+    return;
+  }
 };
 
 const setImagePath = async (url: string, imageUrl: string) => {
