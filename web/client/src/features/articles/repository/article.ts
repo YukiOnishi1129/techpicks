@@ -60,7 +60,6 @@ export const getArticles = async ({
         )
       `
       )
-      .eq("is_eng", languageStatus === 2)
       .eq("is_private", false);
 
     if (userId) {
@@ -69,6 +68,10 @@ export const getArticles = async ({
     } else {
       query.is("bookmarks.user_id", null);
       query.is("favorite_articles.user_id", null);
+    }
+
+    if (languageStatus) {
+      query.eq("is_eng", languageStatus === 2);
     }
 
     switch (tab) {
@@ -88,7 +91,7 @@ export const getArticles = async ({
 
     if (keyword) {
       query.or(
-        `title.contains.${keyword},description.contains.${keyword},tags.contains.${keyword}`
+        `title.ilike.%${keyword}%,description.ilike.%${keyword}%,tags.ilike.%${keyword}%`
       );
     }
 
@@ -175,7 +178,7 @@ export const getArticlesByFeedIds = async ({
 
     if (keyword) {
       query.or(
-        `articles.title.contains.${keyword},articles.description.contains.${keyword},articles.tags.contains.${keyword}`
+        `title.ilike.%${keyword}%,description.ilike.%${keyword}%,tags.ilike.%${keyword}%`
       );
     }
 
