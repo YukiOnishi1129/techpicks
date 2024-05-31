@@ -60,12 +60,12 @@ export const getMyFeedsByMyFeedFolderId = async ({
         `
           *,
           feeds!inner (
-            *
+            *,
+            feed_article_relations(articles!inner(*))
           ),
           my_feed_folders!inner (
             *
-          ),
-          feed_article_relations!inner(articles!inner(*))
+          )
         `
       )
       .eq("my_feed_folder_id", myFeedFolderId)
@@ -75,9 +75,9 @@ export const getMyFeedsByMyFeedFolderId = async ({
 
     if (error || !data) return [];
 
-    return data.map((myFeed) => {
-      convertDatabaseResponseToMyFeedResponse(myFeed);
-    });
+    return data.map((myFeed) =>
+      convertDatabaseResponseToMyFeedResponse(myFeed)
+    );
   } catch (err) {
     throw new Error(`Failed to get my feeds: ${err}`);
   }
@@ -113,11 +113,12 @@ export const getMyFeedCountByMyFeedFolderIdAndFeedId = async ({
 
 type MyFeedGetDatabaseResponseType =
   Database["public"]["Tables"]["my_feeds"]["Row"] & {
-    feeds: Database["public"]["Tables"]["feeds"]["Row"];
+    feeds: Database["public"]["Tables"]["feeds"]["Row"] & {
+      feed_article_relations?: Array<{
+        articles: Database["public"]["Tables"]["articles"]["Row"];
+      }>;
+    };
     my_feed_folders: Database["public"]["Tables"]["my_feed_folders"]["Row"];
-    feed_article_relations?: Array<{
-      articles: Database["public"]["Tables"]["articles"]["Row"];
-    }>;
   };
 
 const convertDatabaseResponseToMyFeedResponse = (
@@ -152,8 +153,8 @@ const convertDatabaseResponseToMyFeedResponse = (
       createdAt: myFeeds.my_feed_folders.created_at,
       updatedAt: myFeeds.my_feed_folders.updated_at,
     },
-    articles: myFeeds.feed_article_relations
-      ? myFeeds.feed_article_relations.map((feedArticle) => {
+    articles: myFeeds.feeds.feed_article_relations
+      ? myFeeds.feeds.feed_article_relations.map((feedArticle) => {
           return {
             id: feedArticle.articles.id,
             platformId: feedArticle.articles.platform_id || undefined,
