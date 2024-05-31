@@ -1,6 +1,6 @@
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FC, useCallback, useState, useTransition } from "react";
+import { FC, useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -123,21 +123,18 @@ export const UpdateFavoriteArticleFolderDialogContent: FC<
       description: description,
     },
   });
-  const [isPending, startTransition] = useTransition();
   const resetDialog = useCallback(() => {
     form.reset();
   }, [form]);
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    startTransition(async () => {
-      const inputDescription = values.description ?? "";
-      await handleUpdateFavoriteArticleFolder({
-        id: favoriteArticleFolderId,
-        title: values.title,
-        description: inputDescription,
-      });
-      handleClose();
+    const inputDescription = values.description ?? "";
+    await handleUpdateFavoriteArticleFolder({
+      id: favoriteArticleFolderId,
+      title: values.title,
+      description: inputDescription,
     });
+    handleClose();
   };
 
   const onDelete = useCallback(async () => {

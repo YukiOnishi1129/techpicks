@@ -1,5 +1,4 @@
 "use server";
-
 // eslint-disable-next-line import/named
 import { v4 as uuidv4 } from "uuid";
 
@@ -27,8 +26,6 @@ export const getBookmarkList = async ({
   languageStatus = 0,
   platformIdList,
   offset = 1,
-  sort = "desc",
-  sortColum = "createdAt",
 }: GetBookmarkList) => {
   try {
     const supabase = await createGetOnlyServerSideClient();

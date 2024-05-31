@@ -1,12 +1,10 @@
 import { fetchPlatformAPI } from "@/features/platforms/actions/platform";
-import { getUser } from "@/features/users/actions/user";
 
 import { BreadCrumbType, PageBreadcrumb } from "@/components/ui/breadcrumb";
 
 import { ArticleSearchForm } from "./ArticleSearchForm";
 
 export const ArticleSearchTemplate = async () => {
-  const user = await getUser();
   const platforms = await fetchPlatformAPI({});
 
   const breadcrumbs: BreadCrumbType[] = [

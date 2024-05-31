@@ -1,5 +1,4 @@
 "use client";
-
 import { User } from "@supabase/supabase-js";
 import { FC } from "react";
 import { FiLogOut } from "react-icons/fi";
@@ -23,7 +22,6 @@ type AvatarDropdownMenuProps = {
 export const AvatarDropdownMenu: FC<AvatarDropdownMenuProps> = ({
   user,
 }: AvatarDropdownMenuProps) => {
-  const image = user?.user_metadata["avatar_url"] || "no_image.png";
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>

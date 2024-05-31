@@ -3,7 +3,8 @@ import { createGetOnlyServerSideClient } from "@/lib/supabase/client/serverClien
 
 export const getUser = async () => {
   const supabase = await createGetOnlyServerSideClient();
-  const { data, error } = await supabase.auth.getUser();
+  const { data } = await supabase.auth.getUser();
+
   const user = data?.user ?? undefined;
 
   return user;

@@ -19,8 +19,6 @@ type ArticleCardProps = {
 
 export const ArticleCard: FC<ArticleCardProps> = ({
   article,
-  user,
-  tab,
 }: ArticleCardProps) => {
   const imageUrl = useCheckImageExist(article.thumbnailUrl);
 
