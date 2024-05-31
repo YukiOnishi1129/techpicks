@@ -134,42 +134,38 @@ export const getArticlesByFeedIds = async ({
       .from("feed_article_relations")
       .select(
         `
-      *,
-      articles!inner (
         *,
-        feed_article_relations!inner (
-          feeds!inner (
-            *,
-            categories!inner (
-              *
+        articles!inner (
+          *,
+          feed_article_relations!inner (
+            feeds!inner (
+              *,
+              categories!inner (
+                *
+              )
             )
+          ),
+          platforms!fk_article_platform_id!inner (
+            *
+          ),
+          bookmarks (
+            id,
+            user_id
+          ),
+          favorite_articles (
+            *
           )
-        ),
-        platforms!fk_article_platform_id!inner (
-          *
-        ),
-        bookmarks (
-          id,
-          user_id
-        ),
-        favorite_articles (
-          *
-        ),
-        trend_articles!inner (
-          id,
-          like_count
         )
-      )
       `
       )
       .eq("articles.is_private", false);
 
     if (userId) {
-      query.eq("bookmarks.user_id", userId);
-      query.eq("favorite_articles.user_id", userId);
+      query.eq("articles.bookmarks.user_id", userId);
+      query.eq("articles.favorite_articles.user_id", userId);
     } else {
-      query.is("bookmarks.user_id", null);
-      query.is("favorite_articles.user_id", null);
+      query.is("articles.bookmarks.user_id", null);
+      query.is("articles.favorite_articles.user_id", null);
     }
 
     if (feedIds.length) {
@@ -178,14 +174,16 @@ export const getArticlesByFeedIds = async ({
 
     if (keyword) {
       query.or(
-        `title.ilike.%${keyword}%,description.ilike.%${keyword}%,tags.ilike.%${keyword}%`
+        `articles.title.ilike.%${keyword}%,articles.description.ilike.%${keyword}%,articles.tags.ilike.%${keyword}%`
       );
     }
 
     const { data, error } = await query
-      .order("articles.trend_articles.like_count", { ascending: false })
-      .order("published_at", { ascending: false })
+      .order("articles(published_at)", { ascending: false })
       .range((offset - 1) * LIMIT + 1, offset * LIMIT);
+
+    console.log("🔥");
+    console.log(query);
 
     if (error) return [];
 

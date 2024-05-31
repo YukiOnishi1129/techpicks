@@ -75,9 +75,9 @@ export const getTrendArticles = async ({
     }
 
     if (keyword) {
-      query.or(`articles.title.ilike.*${keyword}*`);
-      query.or(`articles.description.ilike.*${keyword}*`);
-      query.or(`articles.tags.ilike.*${keyword}*`);
+      query.or(
+        `articles.title.ilike.%${keyword}%,articles.description.ilike.%${keyword}%,articles.tags.ilike.%${keyword}%`
+      );
     }
 
     if (platformIdList.length) {

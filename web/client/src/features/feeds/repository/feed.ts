@@ -36,8 +36,7 @@ export const getFeed = async ({
       .eq("my_feeds.user_id", userId || "null");
 
     if (keyword) {
-      query.or(`name.ilike.*${keyword}*`);
-      query.or(`description.ilike.*${keyword}*`);
+      query.or(`name.ilike.%${keyword}%,description.ilike.%${keyword}%`);
     }
 
     const { data, error } = await query
@@ -137,8 +136,13 @@ export const getFeedById = async ({ id, userId }: GetFeedByIdDTO) => {
           feed_article_relations!inner(articles!inner(*))
         `
       )
-      .eq("id", id)
-      .eq("my_feeds.user_id", userId || "null");
+      .eq("id", id);
+
+    if (userId) {
+      query.eq("my_feeds.user_id", userId);
+    } else {
+      query.is("my_feeds.user_id", null);
+    }
 
     const { data, error } = await query.single();
 
