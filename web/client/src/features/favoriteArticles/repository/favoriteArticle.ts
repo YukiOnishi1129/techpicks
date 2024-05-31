@@ -35,7 +35,7 @@ export const getFavoriteArticlesByFavoriteArticleFolderId = async ({
 
     if (keyword) {
       query.or(
-        `title.ilike.%${keyword}%,description.ilike.%${keyword}%,authorName.ilike.%${keyword}%,tags.ilike.%${keyword}%`
+        `title.ilike.%${keyword}%,description.ilike.%${keyword}%,tags.ilike.%${keyword}%`
       );
     }
 
