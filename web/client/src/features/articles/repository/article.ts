@@ -182,9 +182,6 @@ export const getArticlesByFeedIds = async ({
       .order("articles(published_at)", { ascending: false })
       .range((offset - 1) * LIMIT + 1, offset * LIMIT);
 
-    console.log("🔥");
-    console.log(query);
-
     if (error) return [];
 
     const articles = data.map((feedArticle) => feedArticle.articles);

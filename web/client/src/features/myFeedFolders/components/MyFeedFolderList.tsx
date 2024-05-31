@@ -1,5 +1,6 @@
 "use client";
 import { User } from "@supabase/supabase-js";
+import { usePathname } from "next/navigation";
 import { FC, useCallback } from "react";
 
 import { logoutToLoginPage } from "@/features/auth/actions/auth";
@@ -11,9 +12,10 @@ import { useStatusToast } from "@/hooks/useStatusToast";
 
 import { MyFeedFolderType } from "@/types/myFeedFolder";
 
+import { serverRevalidatePage } from "@/actions/serverAction";
+
 import { MyFeedFolderCard } from "./MyFeedFolderCard";
 import { fetchMyFeedFolderByIdAPI } from "../actions/myFeedFolder";
-import { serverRevalidateMyFeedFolders } from "../actions/serverAction";
 import {
   deleteMyFeedFolder,
   updateMyFeedFolder,
@@ -29,6 +31,7 @@ export const MyFeedFolderList: FC<MyFeedFolderListProps> = ({
   user,
 }) => {
   const { successToast, failToast } = useStatusToast();
+  const pathname = usePathname();
 
   const handleUpdateMyFeedFolder = useCallback(
     async ({
@@ -109,7 +112,7 @@ export const MyFeedFolderList: FC<MyFeedFolderListProps> = ({
       successToast({
         description: "Delete my feed folder",
       });
-      await serverRevalidateMyFeedFolders();
+      await serverRevalidatePage(pathname);
     },
     [successToast, failToast]
   );

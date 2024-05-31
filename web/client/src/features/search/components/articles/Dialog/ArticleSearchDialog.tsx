@@ -1,14 +1,13 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { FC, useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { CiSearch } from "react-icons/ci";
 import { z } from "zod";
 
 import { fetchPlatformAPI } from "@/features/platforms/actions/platform";
-import { serverRevalidateArticleSearchResult } from "@/features/search/actions/serverAction";
 
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -35,6 +34,8 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 import { LanguageStatus } from "@/types/language";
 import { PlatformType, PlatformSiteType } from "@/types/platform";
+
+import { serverRevalidatePage } from "@/actions/serverAction";
 
 const formSchema = z.object({
   keyword: z.string().optional(),
@@ -100,6 +101,7 @@ const ArticleSearchDialogContent: FC<ArticleSearchDialogContentProps> = ({
   platformSiteType,
   handleClose,
 }: ArticleSearchDialogContentProps) => {
+  const pathname = usePathname();
   const [loading, setLoading] = useState(false);
   const [showPlatforms, setShowPlatforms] =
     useState<Array<PlatformType>>(platforms);
@@ -136,7 +138,7 @@ const ArticleSearchDialogContent: FC<ArticleSearchDialogContentProps> = ({
         .map((platformId) => `&platformId=${platformId}`)
         .join("");
     }
-    await serverRevalidateArticleSearchResult();
+    await serverRevalidatePage(pathname);
     router.replace(
       `/article/search/result?languageStatus=${values.language}${keywordPath}${platformTypePath}${platformIdPath}`
     );
