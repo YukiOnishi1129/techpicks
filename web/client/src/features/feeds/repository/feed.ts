@@ -29,39 +29,38 @@ export const getFeed = async ({
           categories!inner(*),
           platforms!inner(*),
           my_feeds(*),
-          feed_article_relations!inner(articles!inner(*))
+          feed_article_relations(articles!inner(*))
         `
       )
-      .not("deleted_at", "is", null)
-      .eq("my_feeds.user_id", userId || "")
-      .order("platform.platform_site_type", {
-        ascending: true,
-      })
-      .order("platforms.is_eng", {
-        ascending: true,
-      })
-      .order("articles.name", {
-        ascending: true,
-      })
-      .order("categories.type", {
-        ascending: true,
-      })
-      .order("categories.name", {
-        ascending: true,
-      })
-      .order("feed_article_relations.articles.published_at", {
-        ascending: false,
-      });
+      .is("deleted_at", null)
+      .eq("my_feeds.user_id", userId || "null");
 
     if (keyword) {
       query.or(`name.ilike.*${keyword}*`);
       query.or(`description.ilike.*${keyword}*`);
     }
 
-    const { data, error } = await query.range(
-      (offset - 1) * LIMIT,
-      offset * LIMIT
-    );
+    const { data, error } = await query
+      .order("platforms(platform_site_type)", {
+        ascending: true,
+      })
+      .order("platforms(is_eng)", {
+        ascending: false,
+      })
+      .order("platforms(name)", {
+        ascending: true,
+      })
+      .order("name", {
+        ascending: true,
+      })
+      .order("categories(type)", {
+        ascending: true,
+      })
+      .order("categories(name)", {
+        ascending: true,
+      })
+      .range((offset - 1) * LIMIT, offset * LIMIT);
+
     if (error || !data) return [];
 
     return data.map((feed) => convertDatabaseResponseToFeedResponse(feed));
@@ -90,24 +89,24 @@ export const getAllFeed = async ({ userId }: GetAllFeedType) => {
         `
       )
       .not("deleted_at", "is", null)
-      .eq("my_feeds.user_id", userId || "")
-      .order("platform.platform_site_type", {
+      .eq("my_feeds.user_id", userId || "null")
+      .order("platforms(platform_site_type)", {
         ascending: true,
       })
-      .order("platforms.is_eng", {
-        ascending: true,
-      })
-      .order("articles.name", {
-        ascending: true,
-      })
-      .order("categories.type", {
-        ascending: true,
-      })
-      .order("categories.name", {
-        ascending: true,
-      })
-      .order("feed_article_relations.articles.published_at", {
+      .order("platforms(is_eng)", {
         ascending: false,
+      })
+      .order("platforms(name)", {
+        ascending: true,
+      })
+      .order("name", {
+        ascending: true,
+      })
+      .order("categories(type)", {
+        ascending: true,
+      })
+      .order("categories(name)", {
+        ascending: true,
       });
 
     const { data, error } = await query;
@@ -139,7 +138,7 @@ export const getFeedById = async ({ id, userId }: GetFeedByIdDTO) => {
         `
       )
       .eq("id", id)
-      .eq("my_feeds.user_id", userId || "");
+      .eq("my_feeds.user_id", userId || "null");
 
     const { data, error } = await query.single();
 
