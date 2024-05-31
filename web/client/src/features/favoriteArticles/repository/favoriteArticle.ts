@@ -278,10 +278,11 @@ export const deleteFavoriteArticle = async ({
 }: DeleteFavoriteArticleDTO) => {
   try {
     const supabase = await createGetOnlyServerSideClient();
-    const { error } = await supabase.from("favorite_articles").delete().match({
-      id: id,
-      userId: userId,
-    });
+    const { error } = await supabase
+      .from("favorite_articles")
+      .delete()
+      .eq("id", id)
+      .eq("user_id", userId);
     if (error) return;
     return id;
   } catch (err) {
