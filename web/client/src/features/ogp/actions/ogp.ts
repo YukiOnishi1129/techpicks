@@ -5,6 +5,8 @@ import { parse } from "node-html-parser";
 import { checkHTTPUrl } from "@/lib/check";
 
 import { OgpType } from "@/types/ogp";
+import { root } from "postcss";
+import console from "console";
 
 const allowedTags = [
   "title",
@@ -27,11 +29,18 @@ export const getOgpData = async (url: string) => {
 
   const encodeUri = encodeURI(url);
 
+  console.log("🔥: get ogp");
+
   const res = await fetch(encodeUri, {
     headers: { "User-Agent": "Googlebot" },
   });
+  console.log("🔥: after fetch");
+  console.log(res);
   const html = await res.text();
   let detect_charset = detectCharset(html);
+
+  console.log("🔥: detect_charset");
+  console.log(detect_charset);
 
   let fetchedHtml = html;
 
@@ -56,6 +65,9 @@ export const getOgpData = async (url: string) => {
       }
     });
 
+  console.log("🔥: root meta");
+  console.log(root.querySelectorAll("meta"));
+
   root
     .querySelectorAll("link")
     .forEach(({ attributes }: { attributes: { [key: string]: string } }) => {
@@ -65,11 +77,20 @@ export const getOgpData = async (url: string) => {
       }
     });
 
+  console.log("🔥: root link");
+  console.log(root.querySelectorAll("link"));
+
+  console.log("🔥 : objectMap");
+  console.log(objectMap);
+
   const title =
     objectMap["og:title"] ||
     objectMap["twitter:title"] ||
     root.querySelector("title")?.innerText ||
     "";
+
+  console.log("🔥: meta title");
+  console.log(title);
 
   const description =
     objectMap["og:description"] || objectMap["description"] || "";
