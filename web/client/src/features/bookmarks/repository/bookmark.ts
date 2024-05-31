@@ -1,19 +1,17 @@
 "use server";
-
 // eslint-disable-next-line import/named
 import { v4 as uuidv4 } from "uuid";
 
-import { getUser } from "@/features/users/actions/user";
-
-import prisma from "@/lib/prisma";
+import { createGetOnlyServerSideClient } from "@/lib/supabase/client/serverClient";
 
 import { BookmarkType } from "@/types/bookmark";
+import { Database } from "@/types/database.types";
 import { LanguageStatus } from "@/types/language";
 
 const LIMIT = 20;
 
 type GetBookmarkList = {
-  userId?: string;
+  userId: string;
   platformId?: string;
   keyword?: string;
   languageStatus?: LanguageStatus;
@@ -22,131 +20,54 @@ type GetBookmarkList = {
   sort?: "asc" | "desc";
   sortColum?: string;
 };
-
 export const getBookmarkList = async ({
   userId,
   keyword,
   languageStatus = 0,
   platformIdList,
   offset = 1,
-  sort = "desc",
-  sortColum = "createdAt",
 }: GetBookmarkList) => {
-  const user = await getUser();
-  let where = {};
-  if (keyword) {
-    where = {
-      AND: [
-        {
-          OR: [
-            {
-              title: {
-                contains: keyword,
-              },
-            },
-            {
-              description: {
-                contains: keyword,
-              },
-            },
-          ],
-        },
-      ],
-    };
-  }
-
-  if (languageStatus === 2) {
-    where = {
-      ...where,
-      isEng: true,
-    };
-  } else if (languageStatus === 1) {
-    where = {
-      ...where,
-      isEng: false,
-    };
-  }
-
-  if (platformIdList.length) {
-    where = {
-      ...where,
-      platformId: {
-        in: [...platformIdList],
-      },
-    };
-  }
-
-  where = {
-    ...where,
-    userId: user?.id,
-  };
-
   try {
-    const res = await prisma.bookmark.findMany({
-      take: 20,
-      skip: (offset - 1) * LIMIT,
-      where,
-      orderBy: [
-        {
-          createdAt: "desc",
-        },
-      ],
-      include: {
-        profile: {
-          select: {
-            id: true,
-            name: true,
-            email: true,
-            image: true,
-            createdAt: true,
-            updatedAt: true,
-          },
-        },
-        article: {
-          select: {
-            favoriteArticles: {
-              where: {
-                userId: userId,
-              },
-            },
-          },
-        },
-      },
+    const supabase = await createGetOnlyServerSideClient();
+
+    const query = supabase
+      .from("bookmarks")
+      .select(
+        `
+        *,
+        profiles!inner(
+          *
+        ),
+        articles!inner(
+          *,
+          favorite_articles(
+            *
+          )
+        )
+      `
+      )
+      .eq("user_id", userId)
+      .eq("articles.favorite_articles.user_id", userId);
+
+    if (keyword) {
+      query.or(`title.ilike.*${keyword}*,description.ilike.*${keyword}*`);
+    }
+    if (languageStatus) {
+      query.eq("is_eng", languageStatus === 2);
+    }
+    if (platformIdList.length) {
+      query.in("platform_id", platformIdList);
+    }
+
+    const { data, error } = await query
+      .order("created_at", { ascending: false })
+      .range((offset - 1) * LIMIT, offset * LIMIT);
+
+    if (error) return [];
+
+    return data.map((bookmark) => {
+      return convertDatabaseResponseToBookmarkResponse(bookmark);
     });
-
-    const bookmarkList: Array<BookmarkType> = res.map((bookmark) => {
-      const bookmarkData: BookmarkType = {
-        id: bookmark.id,
-        articleId: bookmark.articleId,
-        title: bookmark.title,
-        description: bookmark.description,
-        articleUrl: bookmark.articleUrl,
-        publishedAt: bookmark.publishedAt || undefined,
-        thumbnailURL: bookmark.thumbnailURL || undefined,
-        isRead: bookmark.isRead,
-        isEng: bookmark.isEng,
-        platformId: bookmark.platformId || undefined,
-        platformName: bookmark.platformName || undefined,
-        platformUrl: bookmark.platformUrl || undefined,
-        platformFaviconUrl: bookmark.platformFaviconUrl || undefined,
-        user: {
-          id: bookmark.profile.id,
-          name: bookmark.profile.name,
-          email: bookmark.profile.email,
-          image: bookmark.profile.image,
-          createdAt: bookmark.profile.createdAt,
-          updatedAt: bookmark.profile.updatedAt,
-        },
-        favoriteArticles: bookmark?.article?.favoriteArticles || [],
-        isFollowing: bookmark?.article?.favoriteArticles?.length ? true : false,
-        createdAt: bookmark.createdAt,
-        updatedAt: bookmark.updatedAt,
-      };
-
-      return bookmarkData;
-    });
-
-    return bookmarkList;
   } catch (err) {
     throw new Error(`Failed to get bookmark list: ${err}`);
   }
@@ -159,79 +80,32 @@ type GetBookmarkDTO = {
 
 export const getBookmark = async ({ bookmarkId, userId }: GetBookmarkDTO) => {
   try {
-    const data = await prisma.bookmark.findFirst({
-      where: {
-        id: bookmarkId,
-        userId: userId,
-      },
-      include: {
-        profile: {
-          select: {
-            id: true,
-            name: true,
-            email: true,
-            image: true,
-            createdAt: true,
-            updatedAt: true,
-          },
-        },
-        platform: {
-          select: {
-            id: true,
-            name: true,
-            siteUrl: true,
-            faviconUrl: true,
-            platformSiteType: true,
-            isEng: true,
-            createdAt: true,
-            updatedAt: true,
-          },
-        },
-        article: {
-          select: {
-            favoriteArticles: {
-              where: {
-                userId: userId,
-              },
-            },
-          },
-        },
-      },
-    });
+    const supabase = await createGetOnlyServerSideClient();
 
-    if (!data) {
-      return null;
-    }
+    const query = supabase
+      .from("bookmarks")
+      .select(
+        `
+        *,
+        profiles!inner(
+          *
+        ),
+        articles!inner(
+          *,
+          favorite_articles(
+            *
+          )
+        )
+      `
+      )
+      .eq("id", bookmarkId)
+      .eq("user_id", userId)
+      .eq("articles.favorite_articles.user_id", userId);
+    const { data, error } = await query.single();
 
-    const bookmarkData: BookmarkType = {
-      id: data.id,
-      articleId: data.articleId,
-      title: data.title,
-      description: data.description,
-      articleUrl: data.articleUrl,
-      publishedAt: data.publishedAt || undefined,
-      thumbnailURL: data.thumbnailURL || undefined,
-      isRead: data.isRead,
-      isEng: data.isEng,
-      platformId: data.platformId || undefined,
-      platformName: data.platformName || undefined,
-      platformUrl: data.platformUrl || undefined,
-      platformFaviconUrl: data.platformFaviconUrl || undefined,
-      user: {
-        id: data.profile.id,
-        name: data.profile.name,
-        email: data.profile.email,
-        image: data.profile.image,
-        createdAt: data.profile.createdAt,
-        updatedAt: data.profile.updatedAt,
-      },
-      favoriteArticles: data?.article?.favoriteArticles || [],
-      isFollowing: data?.article?.favoriteArticles?.length ? true : false,
-      createdAt: data.createdAt,
-      updatedAt: data.updatedAt,
-    };
+    if (error || !data) return null;
 
-    return bookmarkData;
+    return convertDatabaseResponseToBookmarkResponse(data);
   } catch (err) {
     throw new Error(`Failed to get bookmark: ${err}`);
   }
@@ -245,14 +119,18 @@ export const getBookmarkCountById = async ({
   userId: string;
 }) => {
   try {
-    const res = await prisma.bookmark.count({
-      where: {
-        id: bookmarkId,
-        userId: userId,
-      },
-    });
+    const supabase = await createGetOnlyServerSideClient();
+    const query = supabase
+      .from("bookmarks")
+      .select(`*`, { count: "exact", head: true })
+      .eq("id", bookmarkId)
+      .eq("user_id", userId);
 
-    return res;
+    const { error, count } = await query;
+
+    if (error || !count) return 0;
+
+    return count;
   } catch (err) {
     throw new Error(`Failed to get bookmark count: ${err}`);
   }
@@ -266,12 +144,17 @@ export const getBookmarkCountByArticleId = async ({
   userId: string;
 }) => {
   try {
-    const count = await prisma.bookmark.count({
-      where: {
-        userId: userId,
-        articleId: articleId,
-      },
-    });
+    const supabase = await createGetOnlyServerSideClient();
+    const query = supabase
+      .from("bookmarks")
+      .select(`*`, { count: "exact", head: true })
+      .eq("article_id", articleId)
+      .eq("user_id", userId);
+
+    const { error, count } = await query;
+
+    if (error || !count) return 0;
+
     return count;
   } catch (err) {
     throw new Error(`Failed to get bookmark count: ${err}`);
@@ -286,60 +169,152 @@ export const getBookmarkCountByArticleUrl = async ({
   userId: string;
 }) => {
   try {
-    const count = await prisma.bookmark.count({
-      where: {
-        userId: userId,
-        articleUrl: articleUrl,
-      },
-    });
+    const supabase = await createGetOnlyServerSideClient();
+    const query = supabase
+      .from("bookmarks")
+      .select(`*`, { count: "exact" })
+      .eq("article_url", articleUrl)
+      .eq("user_id", userId);
+
+    const { error, count } = await query;
+    if (error || !count) return 0;
+
     return count;
   } catch (err) {
     throw new Error(`Failed to get bookmark count: ${err}`);
   }
 };
 
+type BookmarkGetDatabaseResponseType =
+  Database["public"]["Tables"]["bookmarks"]["Row"] & {
+    profiles: Database["public"]["Tables"]["profiles"]["Row"];
+    articles: Database["public"]["Tables"]["articles"]["Row"] & {
+      favorite_articles: Array<
+        Database["public"]["Tables"]["favorite_articles"]["Row"]
+      >;
+    };
+  };
+
+const convertDatabaseResponseToBookmarkResponse = (
+  bookmark: BookmarkGetDatabaseResponseType
+) => {
+  const bookmarkData: BookmarkType = {
+    id: bookmark.id,
+    userId: bookmark.user_id,
+    articleId: bookmark.article_id,
+    title: bookmark.title,
+    description: bookmark.description,
+    articleUrl: bookmark.article_url,
+    publishedAt: bookmark.published_at || undefined,
+    thumbnailUrl: bookmark.thumbnail_url,
+    isRead: bookmark.is_read,
+    isEng: bookmark.is_eng,
+    platformId: bookmark.platform_id || undefined,
+    platformName: bookmark.platform_name,
+    platformUrl: bookmark.platform_url,
+    platformFaviconUrl: bookmark.platform_favicon_url,
+    user: {
+      id: bookmark.profiles.id,
+      name: bookmark.profiles.name,
+      email: bookmark.profiles.email,
+      emailVerifiedAt: bookmark.profiles.email_verified_at || undefined,
+      image: bookmark.profiles.image,
+      isSuperAdmin: bookmark.profiles.is_super_admin,
+      createdAt: bookmark.profiles.created_at,
+      updatedAt: bookmark.profiles.updated_at,
+    },
+    favoriteArticles: bookmark?.articles?.favorite_articles.map((favorite) => {
+      return {
+        id: favorite.id,
+        favoriteArticleFolderId: favorite.favorite_article_folder_id,
+        articleId: favorite.article_id,
+        platformId: favorite.platform_id || undefined,
+        userId: favorite.user_id,
+        title: favorite.title,
+        description: favorite.description,
+        thumbnailUrl: favorite.thumbnail_url,
+        articleUrl: favorite.article_url,
+        platformFaviconUrl: favorite.platform_favicon_url,
+        publishedAt: favorite.published_at || undefined,
+        authorName: favorite.author_name || undefined,
+        tags: favorite.tags || undefined,
+        platformName: favorite.platform_name,
+        platformUrl: favorite.platform_url,
+        isEng: favorite.is_eng,
+        isPrivate: favorite.is_private,
+        isRead: favorite.is_read,
+        createdAt: favorite.created_at,
+        updatedAt: favorite.updated_at,
+      };
+    }),
+    isFollowing: bookmark?.articles?.favorite_articles?.length ? true : false,
+    createdAt: bookmark.created_at,
+    updatedAt: bookmark.updated_at,
+  };
+
+  return bookmarkData;
+};
+
+/**
+ * ==========================================
+ * Create
+ * ==========================================
+ */
+
 type CreateBookmarkDTO = {
   title: string;
   description: string;
   articleId: string;
   articleUrl: string;
-  publishedAt?: Date;
-  thumbnailURL: string;
+  publishedAt?: string;
+  thumbnailUrl: string;
   isRead: boolean;
   userId: string;
   platformId?: string;
-  platformName?: string;
-  platformUrl?: string;
-  platformFaviconUrl?: string;
+  platformName: string;
+  platformUrl: string;
+  platformFaviconUrl: string;
   isEng: boolean;
 };
 
 export const createBookmark = async (dto: CreateBookmarkDTO) => {
   try {
     const uuid = uuidv4();
-    const data = await prisma.bookmark.create({
-      data: {
+    const supabase = await createGetOnlyServerSideClient();
+
+    const { data, error } = await supabase
+      .from("bookmarks")
+      .insert({
         id: uuid,
         title: dto.title,
         description: dto.description,
-        articleId: dto.articleId,
-        articleUrl: dto.articleUrl,
-        publishedAt: dto.publishedAt,
-        thumbnailURL: dto.thumbnailURL,
-        isRead: dto.isRead,
-        userId: dto.userId,
-        platformId: dto.platformId,
-        platformName: dto?.platformName || "",
-        platformUrl: dto?.platformUrl || "",
-        platformFaviconUrl: dto?.platformFaviconUrl || "",
-        isEng: dto.isEng,
-      },
-    });
-    return data;
+        article_id: dto.articleId,
+        article_url: dto.articleUrl,
+        published_at: dto.publishedAt,
+        thumbnail_url: dto.thumbnailUrl,
+        is_read: dto.isRead,
+        user_id: dto.userId,
+        platform_id: dto.platformId,
+        platform_name: dto.platformName,
+        platform_url: dto.platformUrl,
+        platform_favicon_url: dto.platformFaviconUrl,
+        is_eng: dto.isEng,
+      })
+      .select();
+
+    if (error || !data) return;
+
+    return data[0];
   } catch (err) {
     throw new Error(`Failed to create bookmark: ${err}`);
   }
 };
+
+/**
+ * ==========================================
+ * Delete
+ * ==========================================
+ */
 
 type DeleteBookmarkDTO = {
   bookmarkId: string;
@@ -351,13 +326,16 @@ export const deleteBookmark = async ({
   userId,
 }: DeleteBookmarkDTO) => {
   try {
-    const data = await prisma.bookmark.delete({
-      where: {
-        id: bookmarkId,
-        userId: userId,
-      },
-    });
-    return data.id;
+    const supabase = await createGetOnlyServerSideClient();
+
+    const { error } = await supabase
+      .from("bookmarks")
+      .delete()
+      .eq("id", bookmarkId)
+      .eq("user_id", userId);
+    if (error) return;
+
+    return bookmarkId;
   } catch (err) {
     throw new Error(`Failed to delete bookmark: ${err}`);
   }

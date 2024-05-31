@@ -5,7 +5,7 @@ import { getMyFeedFolders } from "@/features/myFeedFolders/repository/myFeedFold
 import { getUser } from "@/features/users/actions/user";
 
 export async function GET(req: NextRequest) {
-  const searchParams = req.nextUrl.searchParams;
+  req.url;
   const user = await getUser();
   if (!user) {
     return NextResponse.json(

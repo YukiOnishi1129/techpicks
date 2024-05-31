@@ -1,30 +1,35 @@
-import {
-  Article as PrismaArticle,
-  Platform as PrismaPlatform,
-  Feed as PrismaFeed,
-  Category as PrismaCategory,
-  FavoriteArticle as PrismaFavoriteArticle,
-} from "@prisma/client";
+import { OriginCategoryType } from "./category";
+import { OriginFavoriteArticleType } from "./favoriteArticle";
+import { OriginFeedType } from "./feed";
+import { OriginPlatformType } from "./platform";
 
-export type ArticleType = Omit<PrismaArticle, "platformId"> & {
-  platform?: Omit<PrismaPlatform, "createdAt" | "updatedAt" | "deletedAt">;
+export type OriginArticleType = {
+  id: string;
+  platformId?: string;
+  title: string;
+  description: string;
+  thumbnailUrl: string;
+  articleUrl: string;
+  publishedAt?: string;
+  authorName?: string;
+  tags?: string;
+  isEng: boolean;
+  isPrivate: boolean;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type ArticleType = OriginArticleType & {
+  platform?: OriginPlatformType;
   feeds: Array<
-    Omit<
-      PrismaFeed & {
-        category: Omit<PrismaCategory, "createdAt" | "updatedAt" | "deletedAt">;
-      },
-      | "platformId"
-      | "categoryId"
-      | "createdAt"
-      | "updatedAt"
-      | "deletedAt"
-      | "rssUrl"
-    >
+    OriginFeedType & {
+      category: OriginCategoryType;
+    }
   >;
   isBookmarked: boolean;
   bookmarkId?: string;
   likeCount?: number;
-  favoriteArticles?: Array<Omit<PrismaFavoriteArticle, "userId">>;
+  favoriteArticles?: Array<OriginFavoriteArticleType>;
   isFollowing?: boolean;
 };
 

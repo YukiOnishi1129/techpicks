@@ -6,7 +6,7 @@ import { getFeedById } from "@/features/feeds/repository/feed";
 import { getUser } from "@/features/users/actions/user";
 
 export const GET = async (
-  res: NextRequest,
+  _: NextRequest,
   { params }: { params: { id: string } }
 ) => {
   const { id } = params;

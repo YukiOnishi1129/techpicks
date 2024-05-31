@@ -2,8 +2,9 @@
 // eslint-disable-next-line import/named
 import { v4 as uuidv4 } from "uuid";
 
-import prisma from "@/lib/prisma";
+import { createGetOnlyServerSideClient } from "@/lib/supabase/client/serverClient";
 
+import { Database } from "@/types/database.types";
 import { FavoriteArticleType } from "@/types/favoriteArticle";
 
 const LIMIT = 20;
@@ -23,75 +24,30 @@ export const getFavoriteArticlesByFavoriteArticleFolderId = async ({
 }: GetFavoriteArticlesByFavoriteArticleFolderIdDTO): Promise<
   Array<FavoriteArticleType>
 > => {
-  let where = {};
-  where = {
-    userId: userId,
-    favoriteArticleFolderId: favoriteArticleFolderId,
-  };
-
-  if (keyword) {
-    where = {
-      ...where,
-      OR: [
-        {
-          title: {
-            contains: keyword,
-          },
-        },
-        {
-          description: {
-            contains: keyword,
-          },
-        },
-        {
-          authorName: {
-            contains: keyword,
-          },
-        },
-        {
-          tags: {
-            contains: keyword,
-          },
-        },
-      ],
-    };
-  }
-
   try {
-    const favoriteArticles = await prisma.favoriteArticle.findMany({
-      take: LIMIT,
-      skip: (offset - 1) * LIMIT,
-      where,
-      orderBy: {
-        createdAt: "desc",
-      },
-    });
+    const supabase = await createGetOnlyServerSideClient();
 
-    const resFavoriteArticles: Array<FavoriteArticleType> =
-      favoriteArticles.map((favoriteArticle) => {
-        return {
-          id: favoriteArticle.id,
-          favoriteArticleFolderId: favoriteArticle.favoriteArticleFolderId,
-          platformId: favoriteArticle.platformId,
-          articleId: favoriteArticle.articleId,
-          title: favoriteArticle.title,
-          description: favoriteArticle.description,
-          articleUrl: favoriteArticle.articleUrl,
-          publishedAt: favoriteArticle.publishedAt,
-          authorName: favoriteArticle.authorName,
-          tags: favoriteArticle.tags,
-          thumbnailURL: favoriteArticle.thumbnailURL,
-          platformName: favoriteArticle.platformName,
-          platformUrl: favoriteArticle.platformUrl,
-          platformFaviconUrl: favoriteArticle.platformFaviconUrl,
-          isEng: favoriteArticle.isEng,
-          isRead: favoriteArticle.isRead,
-          isPrivate: favoriteArticle.isPrivate,
-          createdAt: favoriteArticle.createdAt,
-          updatedAt: favoriteArticle.updatedAt,
-        };
-      });
-    return resFavoriteArticles;
+    const query = supabase
+      .from("favorite_articles")
+      .select("*")
+      .eq("user_id", userId)
+      .eq("favorite_article_folder_id", favoriteArticleFolderId);
+
+    if (keyword) {
+      query.or(
+        `title.ilike.%${keyword}%,description.ilike.%${keyword}%,tags.ilike.%${keyword}%`
+      );
+    }
+
+    const { data, error } = await query
+      .order("created_at", { ascending: false })
+      .range((offset - 1) * LIMIT, offset * LIMIT - 1);
+
+    if (error || !data) return [];
+
+    return data.map((favoriteArticle) =>
+      convertDatabaseResponseToFavoriteArticleResponse(favoriteArticle)
+    );
   } catch (err) {
     throw new Error(`Failed to get favorite articles: ${err}`);
   }
@@ -107,37 +63,19 @@ export const getFavoriteArticleById = async ({
   userId,
 }: GetFavoriteArticleByIdDTO) => {
   try {
-    const favoriteArticle = await prisma.favoriteArticle.findUnique({
-      where: {
-        id: id,
-        userId: userId,
-      },
-    });
+    const supabase = await createGetOnlyServerSideClient();
 
-    if (!favoriteArticle) return;
-    const resFavoriteArticle: FavoriteArticleType = {
-      id: favoriteArticle.id,
-      favoriteArticleFolderId: favoriteArticle.favoriteArticleFolderId,
-      platformId: favoriteArticle.platformId,
-      articleId: favoriteArticle.articleId,
-      title: favoriteArticle.title,
-      description: favoriteArticle.description,
-      articleUrl: favoriteArticle.articleUrl,
-      publishedAt: favoriteArticle.publishedAt,
-      authorName: favoriteArticle.authorName,
-      tags: favoriteArticle.tags,
-      thumbnailURL: favoriteArticle.thumbnailURL,
-      platformName: favoriteArticle.platformName,
-      platformUrl: favoriteArticle.platformUrl,
-      platformFaviconUrl: favoriteArticle.platformFaviconUrl,
-      isEng: favoriteArticle.isEng,
-      isRead: favoriteArticle.isRead,
-      isPrivate: favoriteArticle.isPrivate,
-      createdAt: favoriteArticle.createdAt,
-      updatedAt: favoriteArticle.updatedAt,
-    };
+    const query = supabase
+      .from("favorite_articles")
+      .select("*")
+      .eq("id", id)
+      .eq("user_id", userId);
 
-    return resFavoriteArticle;
+    const { data, error } = await query.single();
+
+    if (error || !data) return undefined;
+
+    return convertDatabaseResponseToFavoriteArticleResponse(data);
   } catch (err) {
     throw new Error(`Failed to get favorite article: ${err}`);
   }
@@ -158,16 +96,24 @@ export const getFavoriteArticleCountByFavoriteArticleFolderIdAndArticleIdAndArti
     favoriteArticleFolderId,
     articleUrl,
   }: GetFavoriteArticleCountByFavoriteArticleFolderIdAndArticleIdAndArticleUrlDTO): Promise<number> => {
-    const count = await prisma.favoriteArticle.count({
-      where: {
-        userId: userId,
-        favoriteArticleFolderId: favoriteArticleFolderId,
-        articleId: articleId,
-        articleUrl: articleUrl,
-      },
-    });
+    try {
+      const supabase = await createGetOnlyServerSideClient();
+      const query = supabase
+        .from("favorite_articles")
+        .select("*", { count: "exact" })
+        .eq("user_id", userId)
+        .eq("favorite_article_folder_id", favoriteArticleFolderId)
+        .eq("article_id", articleId)
+        .eq("article_url", articleUrl);
 
-    return count;
+      const { error, count } = await query;
+
+      if (error || !count) return 0;
+
+      return count;
+    } catch (err) {
+      throw new Error(`Failed to get favorite article count: ${err}`);
+    }
   };
 
 type GetFavoriteArticleCountByFolderIdAndArticleUrlDTO = {
@@ -182,13 +128,16 @@ export const getFavoriteArticleCountByFolderIdAndArticleUrl = async ({
   articleUrl,
 }: GetFavoriteArticleCountByFolderIdAndArticleUrlDTO) => {
   try {
-    const count = await prisma.favoriteArticle.count({
-      where: {
-        userId: userId,
-        favoriteArticleFolderId: favoriteArticleFolderId,
-        articleUrl: articleUrl,
-      },
-    });
+    const supabase = await createGetOnlyServerSideClient();
+    const query = supabase
+      .from("favorite_articles")
+      .select("*", { count: "exact" })
+      .eq("user_id", userId)
+      .eq("favorite_article_folder_id", favoriteArticleFolderId)
+      .eq("article_url", articleUrl);
+    const { error, count } = await query;
+
+    if (error || !count) return 0;
 
     return count;
   } catch (err) {
@@ -202,19 +151,59 @@ export const getFavoriteArticleCountByFolderIdAndArticleUrlAndArticle = async ({
   articleUrl,
 }: GetFavoriteArticleCountByFolderIdAndArticleUrlDTO) => {
   try {
-    const count = await prisma.favoriteArticle.count({
-      where: {
-        userId: userId,
-        favoriteArticleFolderId: favoriteArticleFolderId,
-        articleUrl: articleUrl,
-      },
-    });
+    const supabase = await createGetOnlyServerSideClient();
+    const query = supabase
+      .from("favorite_articles")
+      .select("*", { count: "exact" })
+      .eq("user_id", userId)
+      .eq("favorite_article_folder_id", favoriteArticleFolderId)
+      .eq("article_url", articleUrl);
+
+    const { error, count } = await query;
+
+    if (error || !count) return 0;
 
     return count;
   } catch (err) {
     throw new Error(`Failed to get favorite article count: ${err}`);
   }
 };
+
+type FavoriteArticleGetDatabaseResponseType =
+  Database["public"]["Tables"]["favorite_articles"]["Row"];
+
+const convertDatabaseResponseToFavoriteArticleResponse = (
+  favoriteArticle: FavoriteArticleGetDatabaseResponseType
+): FavoriteArticleType => {
+  return {
+    id: favoriteArticle.id,
+    favoriteArticleFolderId: favoriteArticle.favorite_article_folder_id,
+    platformId: favoriteArticle.platform_id || undefined,
+    articleId: favoriteArticle.article_id,
+    userId: favoriteArticle.user_id,
+    title: favoriteArticle.title,
+    description: favoriteArticle.description,
+    articleUrl: favoriteArticle.article_url,
+    publishedAt: favoriteArticle.published_at || undefined,
+    authorName: favoriteArticle.author_name || undefined,
+    tags: favoriteArticle.tags || undefined,
+    thumbnailUrl: favoriteArticle.thumbnail_url,
+    platformName: favoriteArticle.platform_name,
+    platformUrl: favoriteArticle.platform_url,
+    platformFaviconUrl: favoriteArticle.platform_favicon_url,
+    isEng: favoriteArticle.is_eng,
+    isRead: favoriteArticle.is_read,
+    isPrivate: favoriteArticle.is_private,
+    createdAt: favoriteArticle.created_at,
+    updatedAt: favoriteArticle.updated_at,
+  };
+};
+
+/**
+ * ==========================================
+ * Create
+ * ==========================================
+ */
 
 export type CreateFavoriteArticleDTO = {
   userId: string;
@@ -224,10 +213,10 @@ export type CreateFavoriteArticleDTO = {
   title: string;
   description: string;
   articleUrl: string;
-  publishedAt?: Date;
+  publishedAt?: string;
   authorName?: string;
   tags?: string;
-  thumbnailURL?: string;
+  thumbnailUrl?: string;
   platformName?: string;
   platformUrl?: string;
   platformFaviconUrl?: string;
@@ -239,48 +228,62 @@ export type CreateFavoriteArticleDTO = {
 export const createFavoriteArticle = async (dto: CreateFavoriteArticleDTO) => {
   try {
     const uuid = uuidv4();
-    const data = await prisma.favoriteArticle.create({
-      data: {
+    const supabase = await createGetOnlyServerSideClient();
+
+    const { data, error } = await supabase
+      .from("favorite_articles")
+      .insert({
         id: uuid,
-        userId: dto.userId,
-        favoriteArticleFolderId: dto.favoriteArticleFolderId,
-        platformId: dto?.platformId,
-        articleId: dto?.articleId,
+        user_id: dto.userId,
+        favorite_article_folder_id: dto.favoriteArticleFolderId,
+        platform_id: dto.platformId,
+        article_id: dto.articleId,
         title: dto.title,
         description: dto.description,
-        articleUrl: dto.articleUrl,
-        publishedAt: dto?.publishedAt,
-        authorName: dto?.authorName,
-        tags: dto?.tags,
-        thumbnailURL: dto?.thumbnailURL || "",
-        platformName: dto?.platformName || "",
-        platformUrl: dto?.platformUrl || "",
-        platformFaviconUrl: dto?.platformFaviconUrl || "",
-        isEng: dto?.isEng,
-        isRead: dto?.isRead,
-        isPrivate: dto?.isPrivate,
-      },
-    });
-    return data;
+        article_url: dto.articleUrl,
+        published_at: dto.publishedAt,
+        author_name: dto.authorName,
+        tags: dto.tags,
+        thumbnail_url: dto.thumbnailUrl || "",
+        platform_name: dto.platformName || "",
+        platform_url: dto.platformUrl || "",
+        platform_favicon_url: dto.platformFaviconUrl || "",
+        is_eng: dto.isEng,
+        is_read: dto.isRead,
+        is_private: dto.isPrivate,
+      })
+      .select();
+
+    if (error || !data) return;
+    return convertDatabaseResponseToFavoriteArticleResponse(data[0]);
   } catch (err) {
     throw new Error(`Failed to create favorite article: ${err}`);
   }
 };
+
+/**
+ * ==========================================
+ * Delete
+ * ==========================================
+ */
 
 type DeleteFavoriteArticleDTO = {
   id: string;
   userId: string;
 };
 
-export const deleteFavoriteArticle = async (dto: DeleteFavoriteArticleDTO) => {
+export const deleteFavoriteArticle = async ({
+  id,
+  userId,
+}: DeleteFavoriteArticleDTO) => {
   try {
-    const data = await prisma.favoriteArticle.delete({
-      where: {
-        id: dto.id,
-        userId: dto.userId,
-      },
+    const supabase = await createGetOnlyServerSideClient();
+    const { error } = await supabase.from("favorite_articles").delete().match({
+      id: id,
+      userId: userId,
     });
-    return data.id;
+    if (error) return;
+    return id;
   } catch (err) {
     throw new Error(`Failed to delete favorite article: ${err}`);
   }

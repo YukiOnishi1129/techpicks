@@ -59,6 +59,7 @@ export const FavoriteArticleFolderDetailTemplate: FC<
         <div className="w-3/5 pt-2">
           <FavoriteArticleFolderArticleKeywordSearchInput
             favoriteArticleFolderId={id}
+            keyword={keyword}
           />
         </div>
         <CreateFavoriteArticleDialog user={user} favoriteArticleFolderId={id} />

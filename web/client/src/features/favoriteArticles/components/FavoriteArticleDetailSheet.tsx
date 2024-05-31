@@ -110,7 +110,7 @@ const FavoriteArticleContent: FC<FavoriteArticleContentProps> = ({
   handleCreateFavoriteArticleFolder,
 }) => {
   const imageUrl = useCheckImageExist(
-    favoriteArticle?.thumbnailURL || undefined
+    favoriteArticle?.thumbnailUrl || undefined
   );
   const { convertParseHtml } = useParseHtml();
 

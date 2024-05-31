@@ -57,7 +57,7 @@ export function Sidebar({ user }: SidebarProps) {
                     All
                   </Link>
                 </div>
-                <MyFeedFolderLinks user={user} />
+                <MyFeedFolderLinks />
                 <div className="ml-4">
                   <CreateMyFeedFolderDialog buttonVariant="ghost" />
                 </div>

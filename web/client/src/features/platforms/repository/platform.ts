@@ -1,6 +1,6 @@
 "use server";
 
-import prisma from "@/lib/prisma";
+import { createGetOnlyServerSideClient } from "@/lib/supabase/client/serverClient";
 
 import { LanguageStatus } from "@/types/language";
 import { PlatformType, PlatformSiteType } from "@/types/platform";
@@ -12,63 +12,53 @@ export type GetPlatformParams = {
 };
 
 export const getPlatforms = async ({
-  languageStatus = 1,
+  languageStatus,
   platformSiteType,
   platformIdList,
 }: GetPlatformParams) => {
-  let where = {};
-  where = {
-    ...where,
-    deletedAt: null,
-  };
-  if (languageStatus === 1 || languageStatus === 2) {
-    where = {
-      ...where,
-      isEng: languageStatus === 2,
-    };
+  const supabase = await createGetOnlyServerSideClient();
+
+  const query = supabase
+    .from("platforms")
+    .select(
+      `
+        *
+      `
+    )
+    .is("deleted_at", null);
+
+  if (languageStatus) {
+    query.eq("is_eng", languageStatus === 2);
   }
 
   if (platformSiteType) {
-    where = {
-      ...where,
-      platformSiteType: platformSiteType,
-    };
+    query.eq("platform_site_type", platformSiteType);
   }
 
   if (platformIdList?.length) {
-    where = {
-      ...where,
-      id: {
-        in: [...platformIdList],
-      },
-    };
+    query.in("id", platformIdList);
   }
 
-  const res = await prisma.platform.findMany({
-    where,
-    select: {
-      id: true,
-      name: true,
-      isEng: true,
-      platformSiteType: true,
-      siteUrl: true,
-      faviconUrl: true,
-      createdAt: true,
-      updatedAt: true,
-    },
-    orderBy: [{ platformSiteType: "asc" }, { name: "asc" }],
-  });
+  const { data, error } = await query
+    .order("platform_site_type", {
+      ascending: true,
+    })
+    .order("created_at", {
+      ascending: true,
+    });
 
-  const platforms: Array<PlatformType> = res.map((platform) => {
+  if (error || !data) return [];
+
+  const platforms: Array<PlatformType> = data.map((platform) => {
     return {
       id: platform.id,
       name: platform.name,
-      siteUrl: platform.siteUrl,
-      faviconUrl: platform.faviconUrl,
-      platformSiteType: platform.platformSiteType,
-      isEng: platform.isEng,
-      createdAt: platform.createdAt,
-      updatedAt: platform.updatedAt,
+      siteUrl: platform.site_url,
+      faviconUrl: platform.favicon_url,
+      platformSiteType: platform.platform_site_type,
+      isEng: platform.is_eng,
+      createdAt: platform.created_at,
+      updatedAt: platform.updated_at,
     };
   });
 

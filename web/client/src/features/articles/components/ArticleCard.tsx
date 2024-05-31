@@ -19,10 +19,8 @@ type ArticleCardProps = {
 
 export const ArticleCard: FC<ArticleCardProps> = ({
   article,
-  user,
-  tab,
 }: ArticleCardProps) => {
-  const imageUrl = useCheckImageExist(article.thumbnailURL);
+  const imageUrl = useCheckImageExist(article.thumbnailUrl);
 
   return (
     <div className="relative w-full cursor-pointer rounded">

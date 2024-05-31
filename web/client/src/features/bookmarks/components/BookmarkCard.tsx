@@ -14,7 +14,7 @@ type BookmarkCardProps = {
 export const BookmarkCard: FC<BookmarkCardProps> = ({
   bookmark,
 }: BookmarkCardProps) => {
-  const imageUrl = useCheckImageExist(bookmark.thumbnailURL);
+  const imageUrl = useCheckImageExist(bookmark.thumbnailUrl);
 
   return (
     <div className="relative w-full cursor-pointer rounded">

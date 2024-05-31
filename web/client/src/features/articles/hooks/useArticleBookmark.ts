@@ -48,14 +48,14 @@ export const useArticleBookmark = ({ article }: { article: ArticleType }) => {
         articleId: article.id,
         articleUrl: article.articleUrl,
         publishedAt: article?.publishedAt || undefined,
-        thumbnailURL: article.thumbnailURL,
+        thumbnailUrl: article.thumbnailUrl,
         isRead: false,
         userId: user?.id || "",
         platformId: article.platform?.id,
         isEng: article.platform?.isEng || false,
-        platformName: article.platform?.name,
-        platformUrl: article.platform?.siteUrl,
-        platformFaviconUrl: article.platform?.faviconUrl,
+        platformName: article.platform?.name || "",
+        platformUrl: article.platform?.siteUrl || "",
+        platformFaviconUrl: article.platform?.faviconUrl || "",
       });
       if (!newData) {
         failToast({

@@ -1,18 +1,13 @@
 "use client";
-import { User } from "@supabase/supabase-js";
-import { usePathname, useSearchParams } from "next/navigation";
+
+import { usePathname } from "next/navigation";
 import { useMemo } from "react";
 
 import { NAVIGATION_LISTS } from "@/constant/navigation";
 
 import { ModeToggle } from "../DropdownMenu";
 
-type MobileHeaderProps = {
-  user?: User;
-};
-
-export function MobileHeader({ user }: MobileHeaderProps) {
-  const searchParams = useSearchParams();
+export function MobileHeader() {
   const pathname = usePathname();
 
   const pageName = useMemo(() => {

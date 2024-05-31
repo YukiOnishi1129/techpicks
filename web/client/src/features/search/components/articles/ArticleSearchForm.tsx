@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Label } from "@radix-ui/react-label";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { FC, useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -25,7 +25,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 import { PlatformType } from "@/types/platform";
 
-import { serverRevalidateArticleSearchResult } from "../../actions/serverAction";
+import { serverRevalidatePage } from "@/actions/serverAction";
 
 const formSchema = z.object({
   keyword: z.string().optional(),
@@ -41,6 +41,7 @@ type ArticleSearchFormProps = {
 export const ArticleSearchForm: FC<ArticleSearchFormProps> = ({
   platforms,
 }: ArticleSearchFormProps) => {
+  const pathname = usePathname();
   const [loading, setLoading] = useState(false);
   const [showPlatforms, setShowPlatforms] =
     useState<Array<PlatformType>>(platforms);
@@ -78,7 +79,7 @@ export const ArticleSearchForm: FC<ArticleSearchFormProps> = ({
         .map((platformId) => `&platformId=${platformId}`)
         .join("");
     }
-    await serverRevalidateArticleSearchResult();
+    await serverRevalidatePage(pathname);
     router.replace(
       `/article/search/result?languageStatus=${values.language}${keywordPath}${platformTypePath}${platformIdPath}`
     );

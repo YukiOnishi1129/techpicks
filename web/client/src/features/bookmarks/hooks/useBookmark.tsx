@@ -5,11 +5,12 @@ import { getUser } from "@/features/users/actions/user";
 
 import { useStatusToast } from "@/hooks/useStatusToast";
 
+import { serverRevalidatePage } from "@/actions/serverAction";
+
 import { fetchBookmarkByIdCountAPI } from "../actions/bookmark";
-import { serverRevalidateBookmark } from "../actions/serverAction";
 import { deleteBookmark } from "../repository/bookmark";
 
-export const useBookmark = () => {
+export const useBookmark = (pathname: string) => {
   const { successToast, failToast } = useStatusToast();
 
   const handleRemoveBookmark = useCallback(
@@ -53,9 +54,9 @@ export const useBookmark = () => {
       successToast({
         description: "Remove bookmark",
       });
-      await serverRevalidateBookmark();
+      await serverRevalidatePage(pathname);
     },
-    [successToast, failToast]
+    [successToast, failToast, pathname]
   );
 
   return { handleRemoveBookmark };

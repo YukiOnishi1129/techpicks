@@ -1,6 +1,7 @@
 "use client";
 import { User } from "@supabase/supabase-js";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { FC, useCallback } from "react";
 
 import { ShowMyFeedListDialog } from "@/features/myFeeds/components/Dialog/ShowMyFeedListDialog";
@@ -17,8 +18,9 @@ import { diffStringArray } from "@/lib/convert";
 import { MyFeedType } from "@/types/myFeed";
 import { MyFeedFolderType } from "@/types/myFeedFolder";
 
+import { serverRevalidatePage } from "@/actions/serverAction";
+
 import { UpdateMyFeedFolderDialog } from "./Dialog/UpdateMyFeedFolderDialog";
-import { serverRevalidateMyFeedFolders } from "../actions/serverAction";
 
 type MyFeedFolderCardProps = {
   user?: User;
@@ -42,6 +44,7 @@ export const MyFeedFolderCard: FC<MyFeedFolderCardProps> = ({
   handleDeleteMyFeedFolder,
 }) => {
   const { successToast, failToast } = useStatusToast();
+  const pathname = usePathname();
   const myFeedIdList = myFeedFolder.feeds.map((feed) => feed.id);
   const myFeeds: Array<Pick<MyFeedType, "id" | "feedId">> =
     myFeedFolder.feeds.map((feed) => {
@@ -92,7 +95,7 @@ export const MyFeedFolderCard: FC<MyFeedFolderCardProps> = ({
       });
       // 2-3. create MyFeed
       const data = await bulkCreateMyFeed(myFeedList);
-      if (data.count !== createFeedIds.length) {
+      if (data.length !== createFeedIds.length) {
         failToast({
           description: "Fail: create my feeds error",
         });
@@ -141,11 +144,12 @@ export const MyFeedFolderCard: FC<MyFeedFolderCardProps> = ({
         await handleBulkCreateMyFeed(createFeedIds, user.id);
       }
       // 3. my feed create or delete
-      await serverRevalidateMyFeedFolders();
+      await serverRevalidatePage(pathname);
     },
     [
       user,
       myFeeds,
+      pathname,
       handleUpdateMyFeedFolder,
       handleBulkDeleteMyFeed,
       handleBulkCreateMyFeed,

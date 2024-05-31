@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getTrendArticles } from "@/features/trendArticles/repository/trendArticles";
 import { getUser } from "@/features/users/actions/user";
 
-import { get6HoursAgoDate, getCurrentDate, getDayjsTz } from "@/lib/date";
+import { get6HoursAgoDate, getCurrentDate } from "@/lib/date";
 
 import { ArticleTabType } from "@/types/article";
 import { LanguageStatus } from "@/types/language";
@@ -34,8 +34,8 @@ export async function GET(req: NextRequest) {
     platformIdList: platformIdList,
     offset: parseInt(offset || "1"),
     tab: tab,
-    startTime: getDayjsTz(startTime).toDate(),
-    endTime: getDayjsTz(endTime).toDate(),
+    startTime: startTime,
+    endTime: endTime,
   });
 
   if (trendArticles.length === 0) {

@@ -1,13 +1,17 @@
 "use server";
 
-import prisma from "@/lib/prisma";
+import { createGetOnlyServerSideClient } from "@/lib/supabase/client/serverClient";
 
 export const getProfile = async (id: string) => {
-  const data = await prisma.profile.findFirst({
-    where: {
-      id: id,
-    },
-  });
+  try {
+    const supabase = await createGetOnlyServerSideClient();
+    const query = supabase.from("profiles").select("*").eq("id", id);
 
-  return data;
+    const { data, error } = await query.single();
+
+    if (error || !data) return;
+    return data;
+  } catch (err) {
+    throw new Error(`Failed to get profile: ${err}`);
+  }
 };

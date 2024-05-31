@@ -3,8 +3,9 @@
 // eslint-disable-next-line import/named
 import { v4 as uuidv4 } from "uuid";
 
-import prisma from "@/lib/prisma";
+import { createGetOnlyServerSideClient } from "@/lib/supabase/client/serverClient";
 
+import { Database } from "@/types/database.types";
 import { FavoriteArticleType } from "@/types/favoriteArticle";
 import { FavoriteArticleFolderType } from "@/types/favoriteArticleFolder";
 
@@ -17,105 +18,35 @@ export const getFavoriteArticleFolders = async ({
   userId,
   keyword,
 }: GetFavoriteArticleFolders): Promise<Array<FavoriteArticleFolderType>> => {
-  let where = {};
-  if (keyword) {
-    where = {
-      AND: [
-        {
-          OR: [
-            {
-              title: {
-                contains: keyword,
-              },
-            },
-            {
-              description: {
-                contains: keyword,
-              },
-            },
-          ],
-        },
-      ],
-    };
-  }
-
-  where = {
-    ...where,
-    userId: userId,
-  };
-
   try {
-    const res = await prisma.favoriteArticleFolder.findMany({
-      where,
-      orderBy: {
-        createdAt: "asc",
-      },
-      include: {
-        favoriteArticles: {
-          select: {
-            id: true,
-            favoriteArticleFolderId: true,
-            publishedAt: true,
-            articleUrl: true,
-            title: true,
-            description: true,
-            platformId: true,
-            articleId: true,
-            authorName: true,
-            tags: true,
-            thumbnailURL: true,
-            platformName: true,
-            platformUrl: true,
-            platformFaviconUrl: true,
-            isEng: true,
-            isRead: true,
-            isPrivate: true,
-            createdAt: true,
-            updatedAt: true,
-          },
-          orderBy: {
-            createdAt: "desc",
-          },
-        },
-      },
+    const supabase = await createGetOnlyServerSideClient();
+
+    const query = supabase
+      .from("favorite_article_folders")
+      .select(
+        `
+        *,
+        favorite_articles (
+          *
+        )
+      `
+      )
+      .eq("user_id", userId);
+
+    if (keyword) {
+      query.or(`title.ilike.%${keyword}%,description.ilike.%${keyword}%`);
+    }
+
+    const { data, error } = await query.order("created_at", {
+      ascending: true,
     });
 
-    const favoriteArticleFolders: Array<FavoriteArticleFolderType> = res.map(
-      (favoriteArticleFolder) => {
-        const favoriteArticles: Array<FavoriteArticleType> =
-          favoriteArticleFolder.favoriteArticles.map((favoriteArticle) => {
-            return {
-              id: favoriteArticle.id,
-              title: favoriteArticle.title,
-              description: favoriteArticle.description,
-              articleUrl: favoriteArticle.articleUrl,
-              publishedAt: favoriteArticle.publishedAt,
-              favoriteArticleFolderId: favoriteArticle.favoriteArticleFolderId,
-              platformId: favoriteArticle.platformId,
-              articleId: favoriteArticle.articleId,
-              authorName: favoriteArticle.authorName,
-              tags: favoriteArticle.tags,
-              thumbnailURL: favoriteArticle.thumbnailURL,
-              platformName: favoriteArticle.platformName,
-              platformUrl: favoriteArticle.platformUrl,
-              platformFaviconUrl: favoriteArticle.platformFaviconUrl,
-              isEng: favoriteArticle.isEng,
-              isRead: favoriteArticle.isRead,
-              isPrivate: favoriteArticle.isPrivate,
-              createdAt: favoriteArticle.createdAt,
-              updatedAt: favoriteArticle.updatedAt,
-            };
-          });
-
-        return {
-          id: favoriteArticleFolder.id,
-          title: favoriteArticleFolder.title,
-          description: favoriteArticleFolder.description,
-          favoriteArticles: favoriteArticles,
-          createdAt: favoriteArticleFolder.createdAt,
-          updatedAt: favoriteArticleFolder.updatedAt,
-        };
-      }
+    if (error || !data) return [];
+    const favoriteArticleFolders: Array<FavoriteArticleFolderType> = data.map(
+      (favoriteArticleFolder) =>
+        convertDatabaseResponseToFavoriteArticleFolderResponse(
+          favoriteArticleFolder
+        )
     );
 
     return favoriteArticleFolders;
@@ -134,84 +65,83 @@ export const getFavoriteArticleFolderById = async ({
   userId,
 }: GetFavoriteArticleFolderById) => {
   try {
-    const favoriteArticleFolder = await prisma.favoriteArticleFolder.findUnique(
-      {
-        where: {
-          id: id,
-          userId: userId,
-        },
-        include: {
-          favoriteArticles: {
-            select: {
-              id: true,
-              favoriteArticleFolderId: true,
-              publishedAt: true,
-              articleUrl: true,
-              title: true,
-              description: true,
-              platformId: true,
-              articleId: true,
-              authorName: true,
-              tags: true,
-              thumbnailURL: true,
-              platformName: true,
-              platformUrl: true,
-              platformFaviconUrl: true,
-              isEng: true,
-              isRead: true,
-              isPrivate: true,
-              createdAt: true,
-              updatedAt: true,
-            },
-            orderBy: {
-              createdAt: "desc",
-            },
-          },
-        },
-      }
-    );
+    const supabase = await createGetOnlyServerSideClient();
 
-    if (!favoriteArticleFolder) return;
+    const query = supabase
+      .from("favorite_article_folders")
+      .select(
+        `
+        *,
+        favorite_articles (
+          *
+        )
+      `
+      )
+      .eq("id", id)
+      .eq("user_id", userId);
 
-    const favoriteArticles: Array<FavoriteArticleType> =
-      favoriteArticleFolder.favoriteArticles.map((favoriteArticle) => {
-        return {
-          id: favoriteArticle.id,
-          title: favoriteArticle.title,
-          description: favoriteArticle.description,
-          articleUrl: favoriteArticle.articleUrl,
-          publishedAt: favoriteArticle.publishedAt,
-          favoriteArticleFolderId: favoriteArticle.favoriteArticleFolderId,
-          platformId: favoriteArticle.platformId,
-          articleId: favoriteArticle.articleId,
-          authorName: favoriteArticle.authorName,
-          tags: favoriteArticle.tags,
-          thumbnailURL: favoriteArticle.thumbnailURL,
-          platformName: favoriteArticle.platformName,
-          platformUrl: favoriteArticle.platformUrl,
-          platformFaviconUrl: favoriteArticle.platformFaviconUrl,
-          isEng: favoriteArticle.isEng,
-          isRead: favoriteArticle.isRead,
-          isPrivate: favoriteArticle.isPrivate,
-          createdAt: favoriteArticle.createdAt,
-          updatedAt: favoriteArticle.updatedAt,
-        };
-      });
+    const { data, error } = await query.single();
 
-    const resFavoriteArticleFolder: FavoriteArticleFolderType = {
-      id: favoriteArticleFolder.id,
-      title: favoriteArticleFolder.title,
-      description: favoriteArticleFolder.description,
-      favoriteArticles: favoriteArticles,
-      createdAt: favoriteArticleFolder.createdAt,
-      updatedAt: favoriteArticleFolder.updatedAt,
-    };
+    if (error || !data) return;
 
-    return resFavoriteArticleFolder;
+    return convertDatabaseResponseToFavoriteArticleFolderResponse(data);
   } catch (err) {
     throw new Error(`Failed to get favorite article folder: ${err}`);
   }
 };
+
+type FavoriteArticleFolderGetDatabaseResponseType =
+  Database["public"]["Tables"]["favorite_article_folders"]["Row"] & {
+    favorite_articles: Array<
+      Database["public"]["Tables"]["favorite_articles"]["Row"]
+    >;
+  };
+
+const convertDatabaseResponseToFavoriteArticleFolderResponse = (
+  favoriteArticleFolder: FavoriteArticleFolderGetDatabaseResponseType
+): FavoriteArticleFolderType => {
+  const favoriteArticles: Array<FavoriteArticleType> =
+    favoriteArticleFolder.favorite_articles.map((favoriteArticle) => {
+      return {
+        id: favoriteArticle.id,
+        platformId: favoriteArticle.platform_id || undefined,
+        articleId: favoriteArticle.article_id,
+        userId: favoriteArticle.user_id,
+        favoriteArticleFolderId: favoriteArticle.favorite_article_folder_id,
+        title: favoriteArticle.title,
+        description: favoriteArticle.description,
+        articleUrl: favoriteArticle.article_url,
+        publishedAt: favoriteArticle.published_at || undefined,
+        authorName: favoriteArticle.author_name || undefined,
+        tags: favoriteArticle.tags || undefined,
+        thumbnailUrl: favoriteArticle.thumbnail_url,
+        platformName: favoriteArticle.platform_name,
+        platformUrl: favoriteArticle.platform_url,
+        platformFaviconUrl: favoriteArticle.platform_favicon_url,
+        isEng: favoriteArticle.is_eng,
+        isRead: favoriteArticle.is_read,
+        isPrivate: favoriteArticle.is_private,
+        createdAt: favoriteArticle.created_at,
+        updatedAt: favoriteArticle.updated_at,
+      };
+    });
+
+  return {
+    id: favoriteArticleFolder.id,
+    userId: favoriteArticleFolder.user_id,
+    title: favoriteArticleFolder.title,
+    description: favoriteArticleFolder.description || undefined,
+    favoriteArticles: favoriteArticles,
+    createdAt: favoriteArticleFolder.created_at,
+    updatedAt: favoriteArticleFolder.updated_at,
+  };
+};
+
+/**
+ * ==========================================
+ * Create
+ * ==========================================
+ */
 
 export type CreateFavoriteArticleFolderDTO = {
   title: string;
@@ -224,19 +154,30 @@ export const createFavoriteArticleFolder = async (
 ) => {
   try {
     const uuid = uuidv4();
-    const data = await prisma.favoriteArticleFolder.create({
-      data: {
+
+    const supabase = await createGetOnlyServerSideClient();
+    const { data, error } = await supabase
+      .from("favorite_article_folders")
+      .insert({
         id: uuid,
+        user_id: dto.userId,
         title: dto.title,
         description: dto.description,
-        userId: dto.userId,
-      },
-    });
-    return data.id;
+      })
+      .select();
+    if (error || !data) return;
+
+    return data[0].id;
   } catch (err) {
     throw new Error(`Failed to create favorite article folder: ${err}`);
   }
 };
+
+/**
+ * ==========================================
+ * Update
+ * ==========================================
+ */
 
 export type UpdateFavoriteArticleFolderDTO = {
   id: string;
@@ -245,35 +186,47 @@ export type UpdateFavoriteArticleFolderDTO = {
   userId: string;
 };
 
-export const updateFavoriteArticleFolder = async (
-  dto: UpdateFavoriteArticleFolderDTO
-) => {
+export const updateFavoriteArticleFolder = async ({
+  id,
+  title,
+  description,
+  userId,
+}: UpdateFavoriteArticleFolderDTO) => {
   try {
-    const data = await prisma.favoriteArticleFolder.update({
-      where: {
-        id: dto.id,
-        userId: dto.userId,
-      },
-      data: {
-        title: dto.title,
-        description: dto.description,
-      },
-    });
-    return data.id;
+    const supabase = await createGetOnlyServerSideClient();
+    const { error } = await supabase
+      .from("favorite_article_folders")
+      .update({
+        title,
+        description,
+      })
+      .eq("id", id)
+      .eq("user_id", userId);
+
+    if (error) return;
+    return id;
   } catch (err) {
     throw new Error(`Failed to update favorite article folder: ${err}`);
   }
 };
 
+/**
+ * ==========================================
+ * Delete
+ * ==========================================
+ */
+
 export const deleteFavoriteArticleFolder = async (id: string) => {
   try {
-    const data = await prisma.favoriteArticleFolder.delete({
-      where: {
-        id: id,
-      },
-    });
+    const supabase = await createGetOnlyServerSideClient();
+    const { error } = await supabase
+      .from("favorite_article_folders")
+      .delete()
+      .eq("id", id);
 
-    return data.id;
+    if (error) return;
+
+    return id;
   } catch (err) {
     throw new Error(`Failed to delete favorite article folder: ${err}`);
   }

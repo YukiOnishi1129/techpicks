@@ -18,17 +18,18 @@ const formSchema = z.object({
 
 type FavoriteArticleFolderArticleKeywordSearchInputProps = {
   favoriteArticleFolderId: string;
+  keyword?: string;
 };
 
 export const FavoriteArticleFolderArticleKeywordSearchInput: FC<
   FavoriteArticleFolderArticleKeywordSearchInputProps
-> = ({ favoriteArticleFolderId }) => {
+> = ({ favoriteArticleFolderId, keyword }) => {
   const router = useRouter();
   const pathname = usePathname();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      keyword: "",
+      keyword: keyword,
     },
   });
 

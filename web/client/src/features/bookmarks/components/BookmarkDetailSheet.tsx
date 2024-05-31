@@ -1,6 +1,7 @@
 "use client";
 import { User } from "@supabase/supabase-js";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { FC, useState } from "react";
 import { FcBookmark } from "react-icons/fc";
 import { TwitterShareButton, XIcon } from "react-share";
@@ -125,9 +126,10 @@ const BookmarkDetailSheetContent: FC<BookmarkDetailSheetContentProps> = ({
   handleRemoveFavoriteArticle,
   handleCreateFavoriteArticleFolder,
 }) => {
-  const imageUrl = useCheckImageExist(bookmark.thumbnailURL);
+  const imageUrl = useCheckImageExist(bookmark.thumbnailUrl);
   const { convertParseHtml } = useParseHtml();
-  const { handleRemoveBookmark } = useBookmark();
+  const pathname = usePathname();
+  const { handleRemoveBookmark } = useBookmark(pathname);
 
   return (
     <>

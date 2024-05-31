@@ -25,7 +25,7 @@ type ArticleDetailProps = {
 };
 
 export const ArticleDetail = ({ article, user }: ArticleDetailProps) => {
-  const imageUrl = useCheckImageExist(article.thumbnailURL);
+  const imageUrl = useCheckImageExist(article.thumbnailUrl);
   const { convertParseHtml } = useParseHtml();
 
   const { bookmarkId, handleAddBookmark, handleRemoveBookmark } =

@@ -1,12 +1,14 @@
 "use server";
-
 import { NextRequest, NextResponse } from "next/server";
 
 import { getAllFeed } from "@/features/feeds/repository/feed";
+import { getUser } from "@/features/users/actions/user";
 
 export async function GET(req: NextRequest) {
-  const searchParams = req.nextUrl.searchParams;
-  const feeds = await getAllFeed({});
+  const user = await getUser();
+  const feeds = await getAllFeed({
+    userId: user?.id,
+  });
 
   if (!feeds) {
     return NextResponse.json(
@@ -22,7 +24,7 @@ export async function GET(req: NextRequest) {
   return NextResponse.json(
     {
       feeds: feeds,
-      message: "success",
+      message: `success:${req.url}`,
     },
     {
       status: 200,

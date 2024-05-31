@@ -63,7 +63,7 @@ export const diffDates = (nowUnixTime: number, targetUnixTime: number) => {
   return Math.floor(diff / 60 / 60 / 24);
 };
 
-export const showDiffDateToCurrentDate = (targetDate: Date) => {
+export const showDiffDateToCurrentDate = (targetDate: string) => {
   const convertedTargetDate = getDayjsTz(targetDate);
   const targetDateUnixTime = convertUnixTime(convertedTargetDate);
   const currentUnixTime = convertUnixTime(getDayjsTz());

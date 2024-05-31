@@ -1,5 +1,6 @@
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { ReloadIcon } from "@radix-ui/react-icons";
 import { FC, useCallback, useEffect, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -268,14 +269,23 @@ export const UpdateMyFeedFolderDialogContent: FC<
                     </FormItem>
                   )}
                 />
-                {/* category */}
-                {/*  */}
-
-                {/* <h3>sort condition</h3> */}
               </div>
 
               <div className="mt-4 flex w-full justify-center space-x-4">
-                <Button type="submit">{"EDIT"}</Button>
+                {isPending ? (
+                  <Button disabled>
+                    <ReloadIcon className="mr-2 size-4 animate-spin" />
+                    PLEASE WAIT
+                  </Button>
+                ) : (
+                  <Button
+                    type="submit"
+                    disabled={!form.formState.isValid || isPending}
+                  >
+                    {"EDIT"}
+                  </Button>
+                )}
+
                 <DialogClose>
                   <Button onClick={resetDialog}>{"CLOSE"}</Button>
                 </DialogClose>

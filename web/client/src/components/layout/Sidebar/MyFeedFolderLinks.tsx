@@ -1,17 +1,10 @@
-import { User } from "@supabase/supabase-js";
 import Link from "next/link";
-import { FC } from "react";
 
 import { fetchMyFeedFoldersAPI } from "@/features/myFeedFolders/actions/myFeedFolder";
 
 import { FeedAccordion } from "./Accordion";
 
-type MyFeedFolderLinksProps = {
-  user: User;
-};
-export const MyFeedFolderLinks: FC<MyFeedFolderLinksProps> = async ({
-  user,
-}: MyFeedFolderLinksProps) => {
+export const MyFeedFolderLinks = async () => {
   const res = await fetchMyFeedFoldersAPI();
   return (
     <div>
