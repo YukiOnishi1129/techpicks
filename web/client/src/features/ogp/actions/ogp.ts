@@ -5,7 +5,6 @@ import { parse } from "node-html-parser";
 import { checkHTTPUrl } from "@/lib/check";
 
 import { OgpType } from "@/types/ogp";
-import { url } from "inspector";
 
 const allowedTags = [
   "title",
