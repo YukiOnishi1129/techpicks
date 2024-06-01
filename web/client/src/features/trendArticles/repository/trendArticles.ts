@@ -86,7 +86,7 @@ export const getTrendArticles = async ({
       .lte("updated_at", endTime)
       .order("like_count", { ascending: false })
       .order("updated_at", { ascending: false })
-      .range((offset - 1) * LIMIT + 1, offset * LIMIT);
+      .range((offset - 1) * LIMIT, offset * LIMIT - 1);
 
     if (error) return [];
 

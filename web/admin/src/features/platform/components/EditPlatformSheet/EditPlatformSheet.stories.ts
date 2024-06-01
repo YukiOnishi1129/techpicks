@@ -7,6 +7,9 @@ const meta = {
   component: EditPlatformSheet,
   parameters: {
     layout: "centered",
+    nextjs: {
+      appDirectory: true,
+    },
   },
   tags: ["autodocs"],
   args: {
@@ -18,8 +21,8 @@ const meta = {
       faviconUrl: "https://peduarte.com/favicon.ico",
       isEng: true,
       feeds: [],
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      createdAt: new Date().toString(),
+      updatedAt: new Date().toString(),
     },
   },
 } satisfies Meta<typeof EditPlatformSheet>;
