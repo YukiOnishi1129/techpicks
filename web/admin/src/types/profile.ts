@@ -1,5 +1,14 @@
-import { Profile as PrismaProfile } from "@prisma/client";
+export type OriginProfileType = {
+  id: string;
+  name: string;
+  email: string;
+  emailVerifiedAt?: string;
+  image: string;
+  isSuperAdmin: boolean;
+  provider?: string;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt?: string;
+};
 
-import { OptionalNullable } from "./util";
-
-export type ProfileType = OptionalNullable<PrismaProfile>;
+export type ProfileType = OriginProfileType;

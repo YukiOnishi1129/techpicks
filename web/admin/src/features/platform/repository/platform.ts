@@ -1,6 +1,6 @@
 "use server";
 
-import prisma from "@/lib/prisma";
+import { createGetOnlyServerSideClient } from "@/lib/supabase/client/serverClient";
 
 import { PlatformType } from "@/types/platform";
 
@@ -18,137 +18,91 @@ export const getPlatforms = async ({
   platformSiteType,
 }: GetPlatformsDT0) => {
   const limit = 8;
-  let where = {};
-  if (keyword) {
-    where = {
-      AND: [
-        {
-          OR: [
-            {
-              name: {
-                contains: keyword,
-              },
-            },
-          ],
-        },
-      ],
-    };
-  }
-
-  if (language) {
-    where = {
-      ...where,
-      isEng: {
-        equals: language === "2" ? true : false,
-      },
-    };
-  }
-
-  let argPlatformSiteType = 0;
-  switch (platformSiteType) {
-    case "1":
-      argPlatformSiteType = 1;
-      break;
-    case "2":
-      argPlatformSiteType = 2;
-      break;
-    case "3":
-      argPlatformSiteType = 3;
-      break;
-    default:
-      argPlatformSiteType = 0;
-      break;
-  }
-
-  if (argPlatformSiteType) {
-    where = {
-      ...where,
-      platformSiteType: {
-        equals: argPlatformSiteType,
-      },
-    };
-  }
 
   try {
-    const platforms = await prisma.platform.findMany({
-      take: limit,
-      skip: (offset - 1) * limit,
-      where,
-      orderBy: {
-        createdAt: "asc",
-      },
-      include: {
-        feeds: {
-          select: {
-            id: true,
-            name: true,
-            description: true,
-            thumbnailUrl: true,
-            platformId: true,
-            categoryId: true,
-            siteUrl: true,
-            rssUrl: true,
-            apiQueryParam: true,
-            trendPlatformType: true,
-            deletedAt: true,
-            createdAt: true,
-            updatedAt: true,
-            category: {
-              select: {
-                id: true,
-                name: true,
-                type: true,
-                createdAt: true,
-                updatedAt: true,
-                deletedAt: true,
-              },
-            },
-          },
-          orderBy: {
-            createdAt: "asc",
-          },
-        },
-      },
-    });
+    const supabase = await createGetOnlyServerSideClient();
+    const query = supabase.from("platforms").select(
+      `
+        *,
+        feeds!inner(*,categories!inner(*))
+      `
+    );
 
-    const resPlatforms: Array<PlatformType> = platforms.map((platform) => {
-      const resPlatform: PlatformType = {
+    if (keyword) {
+      query.like("name", `%${keyword}%`);
+    }
+
+    if (language) {
+      query.eq("is_eng", language === "2");
+    }
+
+    let argPlatformSiteType = 0;
+    switch (platformSiteType) {
+      case "1":
+        argPlatformSiteType = 1;
+        break;
+      case "2":
+        argPlatformSiteType = 2;
+        break;
+      case "3":
+        argPlatformSiteType = 3;
+        break;
+      default:
+        argPlatformSiteType = 0;
+        break;
+    }
+
+    if (argPlatformSiteType) {
+      query.eq("platform_site_type", argPlatformSiteType);
+    }
+
+    query
+      .order("created_at", {
+        ascending: true,
+      })
+      .range((offset - 1) * limit, offset * limit - 1);
+
+    const { data, error } = await query;
+
+    if (error || !data) return [];
+
+    const resPlatforms: Array<PlatformType> = data.map((platform) => {
+      return {
         id: platform.id,
         name: platform.name,
-        siteUrl: platform.siteUrl,
-        platformSiteType: platform.platformSiteType,
-        faviconUrl: platform.faviconUrl,
-        isEng: platform.isEng,
-        deletedAt: platform?.deletedAt || undefined,
-        createdAt: platform.createdAt,
-        updatedAt: platform.updatedAt,
+        siteUrl: platform.site_url,
+        platformSiteType: platform.platform_site_type,
+        faviconUrl: platform.favicon_url,
+        isEng: platform.is_eng,
+        createdAt: platform.created_at,
+        updatedAt: platform.updated_at,
+        deletedAt: platform?.deleted_at || undefined,
         feeds: platform.feeds.map((feed) => {
           return {
             id: feed.id,
             name: feed.name,
             description: feed.description,
-            thumbnailUrl: feed.thumbnailUrl,
-            platformId: feed.platformId,
-            categoryId: feed.categoryId,
-            siteUrl: feed.siteUrl,
-            rssUrl: feed.rssUrl,
-            apiQueryParam: feed?.apiQueryParam || undefined,
-            trendPlatformType: feed.trendPlatformType,
-            deletedAt: feed?.deletedAt || undefined,
-            createdAt: feed.createdAt,
-            updatedAt: feed.updatedAt,
+            thumbnailUrl: feed.thumbnail_url,
+            platformId: feed.platform_id,
+            categoryId: feed.category_id,
+            siteUrl: feed.site_url,
+            rssUrl: feed.rss_url,
+            apiQueryParam: feed?.api_query_param || undefined,
+            trendPlatformType: feed.trend_platform_type,
+            createdAt: feed.created_at,
+            updatedAt: feed.updated_at,
+            deletedAt: feed?.deleted_at || undefined,
             category: {
-              id: feed.category.id,
-              name: feed.category.name,
-              type: feed.category.type,
-              createdAt: feed.category.createdAt,
-              updatedAt: feed.category.updatedAt,
-              deletedAt: feed.category?.deletedAt || undefined,
+              id: feed.categories.id,
+              name: feed.categories.name,
+              type: feed.categories.type,
+              createdAt: feed.categories.created_at,
+              updatedAt: feed.categories.updated_at,
+              deletedAt: feed.categories?.deleted_at || undefined,
             },
           };
         }),
       };
-      return resPlatform;
     });
 
     return resPlatforms;
@@ -168,67 +122,52 @@ export const getPlatformsCount = async ({
   language,
   platformSiteType,
 }: GetPlatformsCountDT0) => {
-  let where = {};
-  if (keyword) {
-    where = {
-      AND: [
-        {
-          OR: [
-            {
-              name: {
-                contains: keyword,
-              },
-            },
-          ],
-        },
-      ],
-    };
-  }
-
-  if (language) {
-    where = {
-      ...where,
-      isEng: {
-        equals: language === "2" ? true : false,
-      },
-    };
-  }
-
-  let argPlatformSiteType = 0;
-  switch (platformSiteType) {
-    case "1":
-      argPlatformSiteType = 1;
-      break;
-    case "2":
-      argPlatformSiteType = 2;
-      break;
-    case "3":
-      argPlatformSiteType = 3;
-      break;
-    default:
-      argPlatformSiteType = 0;
-      break;
-  }
-
-  if (argPlatformSiteType) {
-    where = {
-      ...where,
-      platformSiteType: {
-        equals: argPlatformSiteType,
-      },
-    };
-  }
-
   try {
-    const count = await prisma.platform.count({
-      where,
-    });
+    const supabase = await createGetOnlyServerSideClient();
+    const query = supabase.from("platforms").select(`*`, { count: "exact" });
 
+    if (keyword) {
+      query.like("name", `%${keyword}%`);
+    }
+
+    if (language) {
+      query.eq("is_eng", language === "2");
+    }
+
+    let argPlatformSiteType = 0;
+    switch (platformSiteType) {
+      case "1":
+        argPlatformSiteType = 1;
+        break;
+      case "2":
+        argPlatformSiteType = 2;
+        break;
+      case "3":
+        argPlatformSiteType = 3;
+        break;
+      default:
+        argPlatformSiteType = 0;
+        break;
+    }
+
+    if (argPlatformSiteType) {
+      query.eq("platform_site_type", argPlatformSiteType);
+    }
+
+    const { error, count } = await query;
+
+    if (error || !count) return 0;
     return count;
   } catch (err) {
     throw new Error(`Failed to get platforms count: ${err}`);
   }
 };
+
+/**
+ * ==========================================
+ * Update
+ * ==========================================
+ */
 
 type UpdatePlatformDTO = {
   id: string;
@@ -237,26 +176,35 @@ type UpdatePlatformDTO = {
   platformSiteType: number;
   faviconUrl: string;
   isEng: boolean;
-  deletedAt?: Date;
+  deletedAt?: string;
 };
 
-export const updatePlatform = async (dto: UpdatePlatformDTO) => {
+export const updatePlatform = async ({
+  id,
+  name,
+  siteUrl,
+  platformSiteType,
+  faviconUrl,
+  isEng,
+  deletedAt,
+}: UpdatePlatformDTO) => {
   try {
-    const platform = await prisma.platform.update({
-      where: {
-        id: dto.id,
-      },
-      data: {
-        name: dto.name,
-        siteUrl: dto.siteUrl,
-        platformSiteType: dto.platformSiteType,
-        faviconUrl: dto.faviconUrl,
-        isEng: dto.isEng,
-        deletedAt: dto.deletedAt,
-      },
-    });
+    const supabase = await createGetOnlyServerSideClient();
+    const { error } = await supabase
+      .from("platforms")
+      .update({
+        name,
+        site_url: siteUrl,
+        platform_site_type: platformSiteType,
+        favicon_url: faviconUrl,
+        is_eng: isEng,
+        deleted_at: deletedAt || null,
+      })
+      .eq("id", id);
 
-    return platform.id;
+    if (error) return;
+
+    return id;
   } catch (err) {
     throw new Error(`Failed to update platform: ${err}`);
   }

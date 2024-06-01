@@ -37,9 +37,9 @@ export type PlatformTableState = {
   platformSiteType: number;
   faviconUrl: string;
   isEng: boolean;
-  createdAt: Date;
-  updatedAt: Date;
-  deletedAt?: Date;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt?: string;
 };
 
 export const PlatformTable = ({
