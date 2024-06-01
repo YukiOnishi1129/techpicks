@@ -1,4 +1,6 @@
 "use server";
+// eslint-disable-next-line import/named
+import { v4 as uuidv4 } from "uuid";
 
 import { createGetOnlyServerSideClient } from "@/lib/supabase/client/serverClient";
 
@@ -123,6 +125,7 @@ export const getPlatformsCount = async ({
   platformSiteType,
 }: GetPlatformsCountDT0) => {
   try {
+    const uuid = uuidv4();
     const supabase = await createGetOnlyServerSideClient();
     const query = supabase.from("platforms").select(`*`, { count: "exact" });
 
@@ -185,11 +188,13 @@ export const createPlatform = async ({
   isEng,
 }: CreatePlatformDTO) => {
   try {
+    const uuid = uuidv4();
     const supabase = await createGetOnlyServerSideClient();
     const { data, error } = await supabase
       .from("platforms")
       .insert([
         {
+          id: uuid,
           name,
           site_url: siteUrl,
           platform_site_type: platformSiteType,

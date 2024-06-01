@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { FC, useTransition } from "react";
+import { FC, useCallback, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -35,6 +35,8 @@ import {
 import { useServerRevalidatePage } from "@/hooks/useServerRevalidatePage";
 
 import { ENGLISH_IMAGE, JAPANESE_IMAGE } from "@/constants/image";
+
+import { createPlatform } from "../../repository/platform";
 
 const FormSchema = z.object({
   name: z
@@ -81,11 +83,38 @@ export const CreatePlatformDialogContent: FC<
     resolver: zodResolver(FormSchema),
   });
   const [isPending, startTransition] = useTransition();
-  const inputName = form.watch("name");
-  const inputUrl = form.watch("url");
-  const inputPlatformSiteType = form.watch("platformSiteType");
-  const inputFaviconUrl = form.watch("faviconUrl");
-  const inputIsEng = form.watch("isEng");
+
+  const handleSubmitCreatePlatform = useCallback(
+    async (values: z.infer<typeof FormSchema>) => {
+      startTransition(async () => {
+        if (!form.formState.isValid) return;
+
+        // 1.check same platform
+
+        // 2. create platform
+        const createdId = await createPlatform({
+          name: values.name,
+          siteUrl: values.url,
+          platformSiteType: Number(values.platformSiteType),
+          faviconUrl: values.faviconUrl,
+          isEng: values.isEng === "2",
+        });
+        if (!createdId) {
+          // TODO: show toast
+          console.error("Failed: create platform");
+          return;
+        }
+        // TODO: show toast
+        console.log("Success: Platform created platform");
+
+        // 3. revalidate
+        await revalidatePage();
+        handleDialogClose();
+        router.replace(`/platform`);
+      });
+    },
+    [form, revalidatePage, router, handleDialogClose]
+  );
 
   return (
     <DialogContent>
@@ -96,7 +125,7 @@ export const CreatePlatformDialogContent: FC<
       <Form {...form}>
         <form
           className="mt-4 "
-          // onSubmit={form.handleSubmit(handleSubmitEditPlatform)}
+          onSubmit={form.handleSubmit(handleSubmitCreatePlatform)}
         >
           <div className="space-y-4">
             <FormField
@@ -257,7 +286,7 @@ export const CreatePlatformDialogContent: FC<
                 PLEASE WAIT
               </Button>
             ) : (
-              <Button disabled={!form.formState.isValid}>{"EDIT"}</Button>
+              <Button disabled={!form.formState.isValid}>{"ADD"}</Button>
             )}
           </div>
         </form>
