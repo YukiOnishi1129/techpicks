@@ -165,6 +165,50 @@ export const getPlatformsCount = async ({
 
 /**
  * ==========================================
+ * Create
+ * ==========================================
+ */
+
+type CreatePlatformDTO = {
+  name: string;
+  siteUrl: string;
+  platformSiteType: number;
+  faviconUrl: string;
+  isEng: boolean;
+};
+
+export const createPlatform = async ({
+  name,
+  siteUrl,
+  platformSiteType,
+  faviconUrl,
+  isEng,
+}: CreatePlatformDTO) => {
+  try {
+    const supabase = await createGetOnlyServerSideClient();
+    const { data, error } = await supabase
+      .from("platforms")
+      .insert([
+        {
+          name,
+          site_url: siteUrl,
+          platform_site_type: platformSiteType,
+          favicon_url: faviconUrl,
+          is_eng: isEng,
+        },
+      ])
+      .select();
+
+    if (error || !data) return;
+
+    return data[0].id;
+  } catch (err) {
+    throw new Error(`Failed to create platform: ${err}`);
+  }
+};
+
+/**
+ * ==========================================
  * Update
  * ==========================================
  */
