@@ -10,7 +10,7 @@
     "lint": "next lint",
     "lint:fix": "eslint --ext .js,.jsx,.ts,.tsx --fix .",
     "format": "npx prettier --write .",
-    "gen:prisma": "prisma generate",
+    "gen:supabase-types": "supabase gen types typescript --linked > src/types/database.types.ts",
     "storybook": "storybook dev -p 6001",
     "build-storybook": "storybook build"
   },
