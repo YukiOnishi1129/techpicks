@@ -7,10 +7,12 @@ export async function GET(req: NextRequest) {
   const keyword = searchParams.get("keyword") || undefined;
   const language = searchParams.get("language") || undefined;
   const platformSiteType = searchParams.get("platformSiteType") || undefined;
+  const siteUrl = searchParams.get("siteUrl") || undefined;
   const count = await getPlatformsCount({
     keyword: keyword,
     language: language,
     platformSiteType: platformSiteType,
+    siteUrl: siteUrl,
   });
   return NextResponse.json(
     {
