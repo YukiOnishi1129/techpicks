@@ -33,6 +33,7 @@ import {
 } from "@/components/ui/select";
 
 import { useServerRevalidatePage } from "@/hooks/useServerRevalidatePage";
+import { useStatusToast } from "@/hooks/useStatusToast";
 
 import { ENGLISH_IMAGE, JAPANESE_IMAGE } from "@/constants/image";
 
@@ -80,6 +81,7 @@ export const CreatePlatformDialogContent: FC<
 > = ({ handleDialogClose }) => {
   const router = useRouter();
   const { revalidatePage } = useServerRevalidatePage();
+  const { successToast, failToast } = useStatusToast();
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
   });
@@ -96,8 +98,9 @@ export const CreatePlatformDialogContent: FC<
         });
 
         if (res.data.count > 0) {
-          // TODO: show toast
-          console.log("Failed: already exists");
+          failToast({
+            description: "Failed: already exists",
+          });
           return;
         }
 
@@ -110,12 +113,14 @@ export const CreatePlatformDialogContent: FC<
           isEng: values.isEng === "2",
         });
         if (!createdId) {
-          // TODO: show toast
-          console.error("Failed: create platform");
+          failToast({
+            description: "Fail: created platform failed",
+          });
           return;
         }
-        // TODO: show toast
-        console.log("Success: Platform created platform");
+        successToast({
+          description: "Success: Create platform",
+        });
 
         // 3. revalidate
         await revalidatePage();
@@ -123,7 +128,7 @@ export const CreatePlatformDialogContent: FC<
         router.replace(`/platform`);
       });
     },
-    [form, revalidatePage, router, handleDialogClose]
+    [form, revalidatePage, router, handleDialogClose, successToast, failToast]
   );
 
   return (
