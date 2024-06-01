@@ -36,6 +36,7 @@ import { useServerRevalidatePage } from "@/hooks/useServerRevalidatePage";
 
 import { ENGLISH_IMAGE, JAPANESE_IMAGE } from "@/constants/image";
 
+import { fetchPlatformsCountAPI } from "../../actions/platform";
 import { createPlatform } from "../../repository/platform";
 
 const FormSchema = z.object({
@@ -90,6 +91,15 @@ export const CreatePlatformDialogContent: FC<
         if (!form.formState.isValid) return;
 
         // 1.check same platform
+        const res = await fetchPlatformsCountAPI({
+          siteUrl: values.url,
+        });
+
+        if (res.data.count > 0) {
+          // TODO: show toast
+          console.log("Failed: already exists");
+          return;
+        }
 
         // 2. create platform
         const createdId = await createPlatform({

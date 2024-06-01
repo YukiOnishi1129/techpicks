@@ -50,12 +50,14 @@ type FetchPlatformsCountAPIRequest = {
   keyword?: string;
   language?: string;
   platformSiteType?: string;
+  siteUrl?: string;
 };
 
 export const fetchPlatformsCountAPI = async ({
   keyword,
   language,
   platformSiteType,
+  siteUrl,
 }: FetchPlatformsCountAPIRequest): Promise<FetchCountAPIResponse> => {
   let url = `${process.env.WEB_DOMAIN}/api/platform/count/?dummy=dummy`;
   if (keyword) {
@@ -66,6 +68,9 @@ export const fetchPlatformsCountAPI = async ({
   }
   if (platformSiteType) {
     url += `&platformSiteType=${platformSiteType}`;
+  }
+  if (siteUrl) {
+    url += `&siteUrl=${siteUrl}`;
   }
 
   const res = await getFetch({

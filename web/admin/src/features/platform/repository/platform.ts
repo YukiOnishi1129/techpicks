@@ -26,7 +26,7 @@ export const getPlatforms = async ({
     const query = supabase.from("platforms").select(
       `
         *,
-        feeds!inner(*,categories!inner(*))
+        feeds(*,categories!inner(*))
       `
     );
 
@@ -117,15 +117,16 @@ export type GetPlatformsCountDT0 = {
   keyword?: string;
   language?: string;
   platformSiteType?: string;
+  siteUrl?: string;
 };
 
 export const getPlatformsCount = async ({
   keyword,
   language,
   platformSiteType,
+  siteUrl,
 }: GetPlatformsCountDT0) => {
   try {
-    const uuid = uuidv4();
     const supabase = await createGetOnlyServerSideClient();
     const query = supabase.from("platforms").select(`*`, { count: "exact" });
 
@@ -155,6 +156,10 @@ export const getPlatformsCount = async ({
 
     if (argPlatformSiteType) {
       query.eq("platform_site_type", argPlatformSiteType);
+    }
+
+    if (siteUrl) {
+      query.eq("site_url", siteUrl);
     }
 
     const { error, count } = await query;
