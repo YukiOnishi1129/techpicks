@@ -99,7 +99,7 @@ export const getArticles = async ({
 
     const { data, error } = await query
       .order("published_at", { ascending: false })
-      .range((offset - 1) * LIMIT + 1, offset * LIMIT);
+      .range((offset - 1) * LIMIT, offset * LIMIT - 1);
 
     if (error) return [];
 
@@ -178,7 +178,7 @@ export const getArticlesByFeedIds = async ({
 
     const { data, error } = await query
       .order("articles(published_at)", { ascending: false })
-      .range((offset - 1) * LIMIT + 1, offset * LIMIT);
+      .range((offset - 1) * LIMIT, offset * LIMIT - 1);
 
     if (error) return [];
 

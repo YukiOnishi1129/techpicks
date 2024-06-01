@@ -61,7 +61,7 @@ export const getBookmarkList = async ({
 
     const { data, error } = await query
       .order("created_at", { ascending: false })
-      .range((offset - 1) * LIMIT, offset * LIMIT);
+      .range((offset - 1) * LIMIT, offset * LIMIT - 1);
 
     if (error) return [];
 

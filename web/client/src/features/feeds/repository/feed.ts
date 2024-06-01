@@ -58,7 +58,7 @@ export const getFeed = async ({
       .order("categories(name)", {
         ascending: true,
       })
-      .range((offset - 1) * LIMIT, offset * LIMIT);
+      .range((offset - 1) * LIMIT, offset * LIMIT - 1);
 
     if (error || !data) return [];
 

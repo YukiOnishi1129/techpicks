@@ -1,15 +1,22 @@
-import {
-  Platform as PrismaPlatform,
-  Feed as PrismaFeed,
-  Category as PrismaCategory,
-} from "@prisma/client";
+import { OriginCategoryType } from "./category";
+import { OriginFeedType } from "./feed";
 
-import { OptionalNullable } from "./util";
+export type OriginPlatformType = {
+  id: string;
+  name: string;
+  siteUrl: string;
+  platformSiteType: number;
+  faviconUrl: string;
+  isEng: boolean;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt?: string;
+};
 
-export type PlatformType = OptionalNullable<PrismaPlatform> & {
+export type PlatformType = OriginPlatformType & {
   feeds: Array<
-    OptionalNullable<PrismaFeed> & {
-      category: OptionalNullable<PrismaCategory>;
+    OriginFeedType & {
+      category: OriginCategoryType;
     }
   >;
 };
