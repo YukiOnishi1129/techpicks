@@ -32,6 +32,7 @@ import {
 } from "@/components/ui/sheet";
 
 import { useServerRevalidatePage } from "@/hooks/useServerRevalidatePage";
+import { useStatusToast } from "@/hooks/useStatusToast";
 
 import { PlatformType } from "@/types/platform";
 
@@ -78,6 +79,7 @@ export const EditPlatformSheetContent: FC<EditPlatformSheetContentProps> = ({
 }) => {
   const router = useRouter();
   const { revalidatePage } = useServerRevalidatePage();
+  const { successToast, failToast } = useStatusToast();
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -128,18 +130,29 @@ export const EditPlatformSheetContent: FC<EditPlatformSheetContentProps> = ({
           isEng: values.isEng === "2",
         });
         if (!updatedId) {
-          // TODO: show toast
-          console.log("failed to update platform");
+          failToast({
+            description: "Failed: update platform",
+          });
+          return;
         }
-        // TODO: show toast
-        console.log("success updated platform", updatedId);
+        successToast({
+          description: "Success: Update platform",
+        });
 
         // 3. revalidate
         await revalidatePage();
         router.replace(`/platform`);
       });
     },
-    [isEditDisabledCheck, platform, revalidatePage, router, startTransition]
+    [
+      isEditDisabledCheck,
+      platform,
+      revalidatePage,
+      router,
+      startTransition,
+      successToast,
+      failToast,
+    ]
   );
 
   return (
