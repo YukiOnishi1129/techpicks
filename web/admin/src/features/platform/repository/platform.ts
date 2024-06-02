@@ -223,7 +223,7 @@ export const createPlatform = async ({
  * ==========================================
  */
 
-type UpdatePlatformDTO = {
+export type UpdatePlatformDTO = {
   id: string;
   name: string;
   siteUrl: string;
