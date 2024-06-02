@@ -263,3 +263,61 @@ export const updatePlatform = async ({
     throw new Error(`Failed to update platform: ${err}`);
   }
 };
+
+export const bulkUpdatePlatform = async (platforms: UpdatePlatformDTO[]) => {
+  try {
+    const supabase = await createGetOnlyServerSideClient();
+    const { data, error } = await supabase
+      .from("platforms")
+      .upsert(
+        platforms.map((platform) => {
+          return {
+            id: platform.id,
+            name: platform.name,
+            site_url: platform.siteUrl,
+            platform_site_type: platform.platformSiteType,
+            favicon_url: platform.faviconUrl,
+            is_eng: platform.isEng,
+            deleted_at: platform.deletedAt || null,
+          };
+        })
+      )
+      .select();
+
+    if (error || !data) return [];
+
+    return data.map((platform) => {
+      return {
+        id: platform.id,
+        name: platform.name,
+        siteUrl: platform.site_url,
+        platformSiteType: platform.platform_site_type,
+        faviconUrl: platform.favicon_url,
+        isEng: platform.is_eng,
+        createdAt: platform.created_at,
+        updatedAt: platform.updated_at,
+        deletedAt: platform?.deleted_at || undefined,
+      };
+    });
+  } catch (err) {
+    throw new Error(`Failed to bulk update platform: ${err}`);
+  }
+};
+
+/**
+ * ==========================================
+ * Delete
+ * ==========================================
+ */
+export const deletePlatform = async (id: string) => {
+  try {
+    const supabase = await createGetOnlyServerSideClient();
+    const { error } = await supabase.from("platforms").delete().eq("id", id);
+
+    if (error) return;
+
+    return id;
+  } catch (err) {
+    throw new Error(`Failed to delete platform: ${err}`);
+  }
+};

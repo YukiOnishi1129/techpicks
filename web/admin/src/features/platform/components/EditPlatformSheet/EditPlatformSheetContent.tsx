@@ -39,6 +39,7 @@ import { PlatformType } from "@/types/platform";
 import { ENGLISH_IMAGE, JAPANESE_IMAGE } from "@/constants/image";
 
 import { updatePlatform } from "../../repository/platform";
+import { DeletePlatformAlertDialog } from "../DeletePlatformAlertDialog";
 
 const FormSchema = z.object({
   name: z
@@ -315,7 +316,7 @@ export const EditPlatformSheetContent: FC<EditPlatformSheetContentProps> = ({
 
           <div className="mt-16 flex items-center justify-between">
             <SheetClose asChild className="inline-block">
-              <Button variant={"secondary"} onClick={handleSheetClose}>
+              <Button variant={"outline"} onClick={handleSheetClose}>
                 {"CLOSE"}
               </Button>
             </SheetClose>
@@ -332,6 +333,15 @@ export const EditPlatformSheetContent: FC<EditPlatformSheetContentProps> = ({
           </div>
         </form>
       </Form>
+
+      <div className="mt-12 flex ">
+        <DeletePlatformAlertDialog
+          platformId={platform.id}
+          platformTitle={platform.name}
+          disabled={platform.feeds.length !== 0}
+          handleDelete={handleSheetClose}
+        />
+      </div>
     </SheetContent>
   );
 };
