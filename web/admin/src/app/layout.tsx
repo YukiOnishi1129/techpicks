@@ -2,6 +2,7 @@ import { Inter as FontSans } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 
 import { BaseLayout } from "@/components/layouts/BaseLayout";
+import { Toaster } from "@/components/ui/sonner";
 
 import { cn } from "@/lib/utils";
 
@@ -39,6 +40,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <BaseLayout>{children}</BaseLayout>
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>

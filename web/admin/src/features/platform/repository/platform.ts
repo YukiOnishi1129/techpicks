@@ -1,4 +1,6 @@
 "use server";
+// eslint-disable-next-line import/named
+import { v4 as uuidv4 } from "uuid";
 
 import { createGetOnlyServerSideClient } from "@/lib/supabase/client/serverClient";
 
@@ -24,7 +26,7 @@ export const getPlatforms = async ({
     const query = supabase.from("platforms").select(
       `
         *,
-        feeds!inner(*,categories!inner(*))
+        feeds(*,categories!inner(*))
       `
     );
 
@@ -115,12 +117,14 @@ export type GetPlatformsCountDT0 = {
   keyword?: string;
   language?: string;
   platformSiteType?: string;
+  siteUrl?: string;
 };
 
 export const getPlatformsCount = async ({
   keyword,
   language,
   platformSiteType,
+  siteUrl,
 }: GetPlatformsCountDT0) => {
   try {
     const supabase = await createGetOnlyServerSideClient();
@@ -154,12 +158,62 @@ export const getPlatformsCount = async ({
       query.eq("platform_site_type", argPlatformSiteType);
     }
 
+    if (siteUrl) {
+      query.eq("site_url", siteUrl);
+    }
+
     const { error, count } = await query;
 
     if (error || !count) return 0;
     return count;
   } catch (err) {
     throw new Error(`Failed to get platforms count: ${err}`);
+  }
+};
+
+/**
+ * ==========================================
+ * Create
+ * ==========================================
+ */
+
+type CreatePlatformDTO = {
+  name: string;
+  siteUrl: string;
+  platformSiteType: number;
+  faviconUrl: string;
+  isEng: boolean;
+};
+
+export const createPlatform = async ({
+  name,
+  siteUrl,
+  platformSiteType,
+  faviconUrl,
+  isEng,
+}: CreatePlatformDTO) => {
+  try {
+    const uuid = uuidv4();
+    const supabase = await createGetOnlyServerSideClient();
+    const { data, error } = await supabase
+      .from("platforms")
+      .insert([
+        {
+          id: uuid,
+          name,
+          site_url: siteUrl,
+          platform_site_type: platformSiteType,
+          favicon_url: faviconUrl,
+          is_eng: isEng,
+        },
+      ])
+      .select();
+
+    if (error || !data) return;
+
+    return data[0].id;
+  } catch (err) {
+    throw new Error(`Failed to create platform: ${err}`);
   }
 };
 
@@ -207,5 +261,63 @@ export const updatePlatform = async ({
     return id;
   } catch (err) {
     throw new Error(`Failed to update platform: ${err}`);
+  }
+};
+
+export const bulkUpdatePlatform = async (platforms: UpdatePlatformDTO[]) => {
+  try {
+    const supabase = await createGetOnlyServerSideClient();
+    const { data, error } = await supabase
+      .from("platforms")
+      .upsert(
+        platforms.map((platform) => {
+          return {
+            id: platform.id,
+            name: platform.name,
+            site_url: platform.siteUrl,
+            platform_site_type: platform.platformSiteType,
+            favicon_url: platform.faviconUrl,
+            is_eng: platform.isEng,
+            deleted_at: platform.deletedAt || null,
+          };
+        })
+      )
+      .select();
+
+    if (error || !data) return [];
+
+    return data.map((platform) => {
+      return {
+        id: platform.id,
+        name: platform.name,
+        siteUrl: platform.site_url,
+        platformSiteType: platform.platform_site_type,
+        faviconUrl: platform.favicon_url,
+        isEng: platform.is_eng,
+        createdAt: platform.created_at,
+        updatedAt: platform.updated_at,
+        deletedAt: platform?.deleted_at || undefined,
+      };
+    });
+  } catch (err) {
+    throw new Error(`Failed to bulk update platform: ${err}`);
+  }
+};
+
+/**
+ * ==========================================
+ * Delete
+ * ==========================================
+ */
+export const deletePlatform = async (id: string) => {
+  try {
+    const supabase = await createGetOnlyServerSideClient();
+    const { error } = await supabase.from("platforms").delete().eq("id", id);
+
+    if (error) return;
+
+    return id;
+  } catch (err) {
+    throw new Error(`Failed to delete platform: ${err}`);
   }
 };

@@ -32,12 +32,14 @@ import {
 } from "@/components/ui/sheet";
 
 import { useServerRevalidatePage } from "@/hooks/useServerRevalidatePage";
+import { useStatusToast } from "@/hooks/useStatusToast";
 
 import { PlatformType } from "@/types/platform";
 
 import { ENGLISH_IMAGE, JAPANESE_IMAGE } from "@/constants/image";
 
 import { updatePlatform } from "../../repository/platform";
+import { DeletePlatformAlertDialog } from "../DeletePlatformAlertDialog";
 
 const FormSchema = z.object({
   name: z
@@ -78,6 +80,7 @@ export const EditPlatformSheetContent: FC<EditPlatformSheetContentProps> = ({
 }) => {
   const router = useRouter();
   const { revalidatePage } = useServerRevalidatePage();
+  const { successToast, failToast } = useStatusToast();
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -128,18 +131,29 @@ export const EditPlatformSheetContent: FC<EditPlatformSheetContentProps> = ({
           isEng: values.isEng === "2",
         });
         if (!updatedId) {
-          // TODO: show toast
-          console.log("failed to update platform");
+          failToast({
+            description: "Failed: update platform",
+          });
+          return;
         }
-        // TODO: show toast
-        console.log("success updated platform", updatedId);
+        successToast({
+          description: "Success: Update platform",
+        });
 
         // 3. revalidate
         await revalidatePage();
         router.replace(`/platform`);
       });
     },
-    [isEditDisabledCheck, platform, revalidatePage, router, startTransition]
+    [
+      isEditDisabledCheck,
+      platform,
+      revalidatePage,
+      router,
+      startTransition,
+      successToast,
+      failToast,
+    ]
   );
 
   return (
@@ -302,7 +316,7 @@ export const EditPlatformSheetContent: FC<EditPlatformSheetContentProps> = ({
 
           <div className="mt-16 flex items-center justify-between">
             <SheetClose asChild className="inline-block">
-              <Button variant={"secondary"} onClick={handleSheetClose}>
+              <Button variant={"outline"} onClick={handleSheetClose}>
                 {"CLOSE"}
               </Button>
             </SheetClose>
@@ -319,6 +333,15 @@ export const EditPlatformSheetContent: FC<EditPlatformSheetContentProps> = ({
           </div>
         </form>
       </Form>
+
+      <div className="mt-12 flex ">
+        <DeletePlatformAlertDialog
+          platformId={platform.id}
+          platformTitle={platform.name}
+          disabled={platform.feeds.length !== 0}
+          handleDelete={handleSheetClose}
+        />
+      </div>
     </SheetContent>
   );
 };
