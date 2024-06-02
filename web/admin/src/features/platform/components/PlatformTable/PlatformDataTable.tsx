@@ -7,9 +7,11 @@ import {
   flexRender,
 } from "@tanstack/react-table";
 import { useState, useMemo } from "react";
+import { FaRunning, FaRegStopCircle } from "react-icons/fa";
 
 import { MAX_SHOW_PLATFORM_TABLE_DATA_COUNT } from "@/features/platform/constants/table";
 
+import { Button } from "@/components/ui/button";
 import {
   Table,
   TableHeader,
@@ -18,6 +20,8 @@ import {
   TableBody,
   TableCell,
 } from "@/components/ui/table";
+
+import { PlatformType } from "@/types/platform";
 
 import { PlatformLanguageSelect } from "./PlatformLangaugeSelect";
 import { PlatformSearchInput } from "./PlatformSearchInput";
@@ -28,6 +32,8 @@ interface PlatformDataTableProps<TData, TValue> {
   allCount: number;
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  platforms: Array<PlatformType>;
+  selectedPlatformIds: Array<string>;
   offset?: number;
   keyword?: string;
   language?: string;
@@ -38,6 +44,8 @@ export function PlatformDataTable<TData, TValue>({
   allCount,
   columns,
   data,
+  platforms,
+  selectedPlatformIds,
   offset,
   keyword,
   language,
@@ -60,14 +68,52 @@ export function PlatformDataTable<TData, TValue>({
     },
   });
 
+  const isDisabledActive = useMemo(
+    () =>
+      !platforms.some((platform) =>
+        selectedPlatformIds.some(
+          (selectId) => selectId === platform.id && platform.deletedAt
+        )
+      ),
+    [platforms, selectedPlatformIds]
+  );
+
+  const isDisableStop = useMemo(
+    () =>
+      !platforms.some((platform) =>
+        selectedPlatformIds.some(
+          (selectId) => selectId === platform.id && !platform.deletedAt
+        )
+      ),
+    [platforms, selectedPlatformIds]
+  );
+
   return (
     <div className="rounded-md border">
       <div className="flex items-center justify-between border-b  px-4 py-2">
-        <div className="flex items-end">
+        <div className="flex items-center">
           <h1 className="text-lg font-bold">Platform Table</h1>
-          <p className="ml-4 pb-1  text-sm ">
+          <p className="ml-4 text-sm ">
             {currentDataCount} / {allCount}
           </p>
+
+          <div className="ml-12 flex items-center justify-between">
+            {/* active */}
+            <div className="mr-2">
+              <Button disabled={isDisabledActive} variant="ghost">
+                <FaRunning className="mr-1" />
+                <span className="text-xs">ACTIVE</span>
+              </Button>
+            </div>
+
+            {/* stop */}
+            <div>
+              <Button disabled={isDisableStop} variant="ghost">
+                <FaRegStopCircle className="mr-1" />
+                <span className="text-xs">STOP</span>
+              </Button>
+            </div>
+          </div>
         </div>
 
         <CreatePlatformDialog />
@@ -100,10 +146,6 @@ export function PlatformDataTable<TData, TValue>({
               platformSiteType={platformSiteType}
             />
           </div>
-        </div>
-        <div>
-          {/* active */}
-          {/* stop */}
         </div>
       </div>
 
