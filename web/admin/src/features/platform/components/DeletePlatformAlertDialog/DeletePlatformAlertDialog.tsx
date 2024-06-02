@@ -1,52 +1,46 @@
 "use client";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+import { useState, useCallback } from "react";
+
+import { AlertDialog, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 
+import { DeletePlatformAlertDialogContent } from "./DeletePlatformAlertDialogContent";
+
 type DeletePlatformAlertDialogProps = {
+  platformId: string;
   platformTitle: string;
   disabled?: boolean;
   handleDelete: () => void;
 };
 
 export const DeletePlatformAlertDialog = ({
+  platformId,
   platformTitle,
   disabled,
   handleDelete,
 }: DeletePlatformAlertDialogProps) => {
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const handleDialogOpen = useCallback(() => setIsDialogOpen(true), []);
+  const handleDialogClose = useCallback(() => setIsDialogOpen(false), []);
   return (
-    <AlertDialog>
+    <AlertDialog onOpenChange={setIsDialogOpen}>
       <AlertDialogTrigger asChild>
-        <Button variant="destructive" disabled={disabled}>
+        <Button
+          variant="destructive"
+          disabled={disabled}
+          onClick={handleDialogOpen}
+        >
           DELETE
         </Button>
       </AlertDialogTrigger>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>
-            Are you sure you want me to delete it?
-          </AlertDialogTitle>
-          <AlertDialogDescription>
-            This action cannot be undone. This will permanently remove your data
-            from our servers.
-            <br></br>
-            Delete platform title is ${platformTitle}
-          </AlertDialogDescription>
-        </AlertDialogHeader>
-
-        <div className="flex justify-between gap-4 p-4">
-          <AlertDialogCancel>CANCEL</AlertDialogCancel>
-          <AlertDialogAction onClick={handleDelete}>DELETE</AlertDialogAction>
-        </div>
-      </AlertDialogContent>
+      {isDialogOpen && (
+        <DeletePlatformAlertDialogContent
+          platformId={platformId}
+          platformTitle={platformTitle}
+          handleDialogClose={handleDialogClose}
+          handleDelete={handleDelete}
+        />
+      )}
     </AlertDialog>
   );
 };

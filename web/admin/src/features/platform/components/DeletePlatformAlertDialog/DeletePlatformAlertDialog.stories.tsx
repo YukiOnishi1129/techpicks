@@ -13,6 +13,7 @@ const meta = {
   },
   tags: ["autodocs"],
   args: {
+    platformId: "platform_id_1",
     platformTitle: "Pedro Duarte",
     handleDelete: () => {},
   },

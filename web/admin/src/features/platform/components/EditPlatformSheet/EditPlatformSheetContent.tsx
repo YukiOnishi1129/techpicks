@@ -336,6 +336,7 @@ export const EditPlatformSheetContent: FC<EditPlatformSheetContentProps> = ({
 
       <div className="mt-12 flex ">
         <DeletePlatformAlertDialog
+          platformId={platform.id}
           platformTitle={platform.name}
           disabled={platform.feeds.length !== 0}
           handleDelete={handleSheetClose}
