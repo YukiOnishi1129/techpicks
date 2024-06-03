@@ -42,7 +42,6 @@ export const fetchCategoriesAPI = async ({
 export const fetchCategoryByIdAPI = async (
   id: string
 ): Promise<FetchCategoryAPIResponse> => {
-  console.log("🔥");
   const res = await getFetch({
     url: `${process.env.WEB_DOMAIN}/api/categories/${id}`,
     tagName: "category",
