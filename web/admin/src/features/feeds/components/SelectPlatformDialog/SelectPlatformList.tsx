@@ -9,14 +9,20 @@ import { fetchPlatformsAPI } from "@/features/platforms/actions/platform";
 
 import { Checkbox } from "@/components/ui/checkbox";
 import {
+  Form,
   FormField,
   FormItem,
   FormLabel,
   FormControl,
 } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import { Loader } from "@/components/ui/loader";
 
 import { PlatformType } from "@/types/platform";
+
+const KeywordFormSchema = z.object({
+  keyword: z.string().optional(),
+});
 
 const FormSchema = z.object({
   platformId: z
@@ -46,6 +52,9 @@ export const SelectPlatformList: FC<SelectPlatformListProps> = ({
       platformThumbnailUrl: defaultSelectedPlatform?.faviconUrl,
     },
   });
+  const keywordForm = useForm<z.infer<typeof KeywordFormSchema>>({
+    resolver: zodResolver(KeywordFormSchema),
+  });
 
   const selectedPlatformName = form.watch("platformName");
 
@@ -59,17 +68,36 @@ export const SelectPlatformList: FC<SelectPlatformListProps> = ({
     ? platforms.flatMap((platform) => platform)
     : [];
 
-  const loadMore = useCallback(async (offset: number) => {
-    const res = await fetchPlatformsAPI({
-      offset: offset.toString(),
-    });
+  const handleSearch = useCallback(
+    async (values: z.infer<typeof KeywordFormSchema>) => {
+      const res = await fetchPlatformsAPI({
+        keyword: values.keyword,
+      });
 
-    if (res.data) {
-      setPlatforms((prev) => [...prev, ...res.data.platforms]);
-      const count = res.data.platforms.length;
-      setHashMore(count > 0);
-    }
-  }, []);
+      if (res.data) {
+        setPlatforms(res.data.platforms);
+        setOffset(1);
+        setHashMore(true);
+      }
+    },
+    [setPlatforms, setOffset, setHashMore]
+  );
+
+  const loadMore = useCallback(
+    async (offset: number) => {
+      const res = await fetchPlatformsAPI({
+        offset: offset.toString(),
+        keyword: keywordForm.watch("keyword"),
+      });
+
+      if (res.data) {
+        setPlatforms((prev) => [...prev, ...res.data.platforms]);
+        const count = res.data.platforms.length;
+        setHashMore(count > 0);
+      }
+    },
+    [keywordForm]
+  );
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -115,6 +143,28 @@ export const SelectPlatformList: FC<SelectPlatformListProps> = ({
         <span>{selectedPlatformName}</span>
       </div>
 
+      <div>
+        <Form {...keywordForm}>
+          <form onSubmit={keywordForm.handleSubmit(handleSearch)}>
+            <FormField
+              control={keywordForm.control}
+              name="keyword"
+              render={({ field }) => (
+                <FormItem className="flex items-center">
+                  <FormControl>
+                    <Input
+                      className="border-primary bg-secondary text-primary"
+                      placeholder="search keyword"
+                      {...field}
+                    />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+          </form>
+        </Form>
+      </div>
+
       <div className="h-[300px] w-full overflow-y-scroll border-2 border-secondary p-4">
         {flatPlatforms.length === 0 ? (
           <p>No platforms found</p>
@@ -128,7 +178,7 @@ export const SelectPlatformList: FC<SelectPlatformListProps> = ({
                 render={({ field }) => (
                   <FormItem
                     key={platform.id}
-                    className="w-full flex items-center border-t-2 border-t-secondary hover:bg-secondary hover:bg-opacity-10 cursor-pointer"
+                    className="flex w-full cursor-pointer items-center border-t-2 border-t-secondary hover:bg-secondary hover:opacity-10"
                   >
                     <FormControl>
                       <Checkbox
@@ -146,7 +196,7 @@ export const SelectPlatformList: FC<SelectPlatformListProps> = ({
                       />
                     </FormControl>
 
-                    <FormLabel className="ml-2 h-12 pb-2 flex w-full cursor-pointer items-center text-sm font-normal">
+                    <FormLabel className="ml-2 flex h-12 w-full cursor-pointer items-center pb-2 text-sm font-normal">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         className="mr-2 inline-block size-6 bg-white"
@@ -154,7 +204,7 @@ export const SelectPlatformList: FC<SelectPlatformListProps> = ({
                         alt=""
                       />
 
-                      <p className="w-full text-lg flex items-center">
+                      <p className="flex w-full items-center text-lg">
                         {platform.name}
                       </p>
                     </FormLabel>
