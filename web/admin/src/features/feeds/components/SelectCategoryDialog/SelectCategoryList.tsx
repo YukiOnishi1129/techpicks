@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { fetchCategoriesAPI } from "@/features/categories/actions/category";
+import { useCategory } from "@/features/categories/hooks/useCategory";
 
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -60,6 +61,8 @@ export const SelectCategoryList: FC<SelectCategoryListProps> = ({
   const keywordForm = useForm<z.infer<typeof KeywordFormSchema>>({
     resolver: zodResolver(KeywordFormSchema),
   });
+
+  const { showCategoryTypeName } = useCategory();
 
   const selectedCategoryName = form.watch("categoryName");
 
@@ -199,10 +202,13 @@ export const SelectCategoryList: FC<SelectCategoryListProps> = ({
                       />
                     </FormControl>
 
-                    <FormLabel className="ml-2 flex h-12 w-full cursor-pointer items-center pb-2 text-sm font-normal">
-                      <p className="flex w-full items-center text-lg">
+                    <FormLabel className="ml-2 flex h-12 w-full cursor-pointer items-center justify-between pb-2 text-sm font-normal">
+                      <p className="flex w-2/5 items-center text-lg">
                         {category.name}
                       </p>
+                      <div className="w-2/5">
+                        <p>{showCategoryTypeName(category.type)}</p>
+                      </div>
                     </FormLabel>
                   </FormItem>
                 )}

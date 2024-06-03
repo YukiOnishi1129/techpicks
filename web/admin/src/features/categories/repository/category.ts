@@ -36,7 +36,7 @@ export const getCategories = async ({
       .order("name", {
         ascending: true,
       })
-      .range(offset, offset + limit - 1);
+      .range((offset - 1) * limit, offset * limit - 1);
 
     if (error || !data) return [];
 
