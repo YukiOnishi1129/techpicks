@@ -28,14 +28,14 @@ export const SelectCategoryDialog: FC<SelectCategoryDialogProps> = ({
         <Button className="font-bold" onClick={handleDialogOpen}>
           {"SELECT"}
         </Button>
-        {openDialog && (
-          <SelectCategoryDialogContent
-            selectedCategory={selectedCategory}
-            handleDialogClose={handleDialogClose}
-            handleSelectCategory={handleSelectCategory}
-          />
-        )}
       </DialogTrigger>
+      {openDialog && (
+        <SelectCategoryDialogContent
+          selectedCategory={selectedCategory}
+          handleDialogClose={handleDialogClose}
+          handleSelectCategory={handleSelectCategory}
+        />
+      )}
     </Dialog>
   );
 };

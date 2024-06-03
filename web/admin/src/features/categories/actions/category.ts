@@ -2,7 +2,11 @@
 
 import { getFetch } from "@/lib/fetch";
 
-import { CategoryType, FetchCategoriesAPIResponse } from "@/types/category";
+import {
+  CategoryType,
+  FetchCategoriesAPIResponse,
+  FetchCategoryAPIResponse,
+} from "@/types/category";
 
 type FetchCategoriesAPIRequest = {
   offset?: string;
@@ -29,6 +33,27 @@ export const fetchCategoriesAPI = async ({
   return {
     data: {
       categories: data.categories as Array<CategoryType>,
+      message: "success",
+    },
+    status,
+  };
+};
+
+export const fetchCategoryByIdAPI = async (
+  id: string
+): Promise<FetchCategoryAPIResponse> => {
+  console.log("🔥");
+  const res = await getFetch({
+    url: `${process.env.WEB_DOMAIN}/api/categories/${id}`,
+    tagName: "category",
+    cacheType: "no-store",
+  });
+  const data = await res.json();
+  const status = res.status;
+
+  return {
+    data: {
+      category: data.category as CategoryType,
       message: "success",
     },
     status,

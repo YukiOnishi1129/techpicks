@@ -14,6 +14,7 @@ import {
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
+import { fetchCategoryByIdAPI } from "@/features/categories/actions/category";
 import { fetchPlatformByIdAPI } from "@/features/platforms/actions/platform";
 
 import { Button } from "@/components/ui/button";
@@ -45,9 +46,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { useServerRevalidatePage } from "@/hooks/useServerRevalidatePage";
 import { useStatusToast } from "@/hooks/useStatusToast";
 
+import { CategoryType } from "@/types/category";
 import { FeedType } from "@/types/feed";
 import { PlatformType } from "@/types/platform";
 
+import { SelectCategoryDialog } from "../SelectCategoryDialog";
 import { SelectPlatformDialog } from "../SelectPlatformDialog";
 
 const FormSchema = z.object({
@@ -119,9 +122,14 @@ export const EditFeedSheetContent: FC<EditFeedSheetContentProps> = ({
   });
   const [isPending, startTransition] = useTransition();
   const [isPlatformPending, startPlatformTransition] = useTransition();
+  const [isCategoryPending, startCategoryTransition] = useTransition();
 
   const [selectedPlatform, setSelectedPlatform] = useState<
     PlatformType | undefined
+  >(undefined);
+
+  const [selectedCategory, setSelectedCategory] = useState<
+    CategoryType | undefined
   >(undefined);
 
   const inputName = form.watch("name");
@@ -174,9 +182,24 @@ export const EditFeedSheetContent: FC<EditFeedSheetContentProps> = ({
     [form]
   );
 
+  const fetchCategory = useCallback(
+    async (categoryId: string) => {
+      startCategoryTransition(async () => {
+        const res = await fetchCategoryByIdAPI(categoryId);
+        if (res.data!.category) {
+          form.setValue("categoryName", res.data.category.name);
+          form.setValue("categoryId", res.data.category.id);
+          setSelectedCategory(res.data.category);
+        }
+      });
+    },
+    [form]
+  );
+
   useEffect(() => {
     fetchPlatform(feed.platform.id);
-  }, [fetchPlatform, feed.platform.id]);
+    fetchCategory(feed.category.id);
+  }, [fetchPlatform, fetchCategory, feed.platform.id, feed.category.id]);
 
   return (
     <SheetContent className="h-screen overflow-y-scroll">
@@ -266,14 +289,6 @@ export const EditFeedSheetContent: FC<EditFeedSheetContentProps> = ({
                       </div>
                     )}
                   </div>
-
-                  {/* <FormControl>
-                    <Input
-                      className="border-primary bg-secondary text-primary"
-                      placeholder="platformId"
-                      {...field}
-                    />
-                  </FormControl> */}
                   <FormMessage />
                 </FormItem>
               )}
@@ -288,14 +303,21 @@ export const EditFeedSheetContent: FC<EditFeedSheetContentProps> = ({
                     Category
                     <span className="text-red-700"> *</span>
                   </FormLabel>
-                  <p>{feed.category.name}</p>
-                  {/* <FormControl>
-                    <Input
-                      className="border-primary bg-secondary text-primary"
-                      placeholder="categoryId"
-                      {...field}
-                    />
-                  </FormControl> */}
+                  {isCategoryPending ? (
+                    <Loader />
+                  ) : (
+                    <div className="flex w-full items-center justify-between">
+                      <div className="flex">
+                        <p>{form.getValues("categoryName")}</p>
+                      </div>
+                      <div>
+                        <SelectCategoryDialog
+                          selectedCategory={selectedCategory}
+                          handleSelectCategory={fetchCategory}
+                        />
+                      </div>
+                    </div>
+                  )}
                   <FormMessage />
                 </FormItem>
               )}

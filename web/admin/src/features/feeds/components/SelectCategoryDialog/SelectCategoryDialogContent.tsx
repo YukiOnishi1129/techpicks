@@ -12,6 +12,8 @@ import {
 
 import { CategoryType } from "@/types/category";
 
+import { SelectCategoryList } from "./SelectCategoryList";
+
 type SelectCategoryDialogContentProps = {
   selectedCategory?: CategoryType;
   handleDialogClose: () => void;
@@ -48,12 +50,11 @@ export const SelectCategoryDialogContent: FC<
         <DialogTitle>{"Select category"}</DialogTitle>
       </DialogHeader>
       {categories.length > 0 && (
-        // <SelectPlatformList
-        //   defaultSelectedPlatform={selectedPlatform}
-        //   initialPlatforms={platforms}
-        //   handleSelectPlatform={onSelectPlatform}
-        // />
-        <div></div>
+        <SelectCategoryList
+          defaultSelectedCategory={selectedCategory}
+          initialCategories={categories}
+          handleSelectCategory={onSelectCategory}
+        />
       )}
     </DialogContent>
   );

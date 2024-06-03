@@ -27,7 +27,7 @@ export const SelectPlatformDialogContent: FC<SelectPlatformDialogContent> = ({
 }) => {
   const [platforms, setPlatforms] = useState<PlatformType[]>([]);
 
-  const fetchPlatform = useCallback(async () => {
+  const fetchPlatforms = useCallback(async () => {
     const res = await fetchPlatformsAPI({});
     if (res.data) {
       setPlatforms(res.data.platforms);
@@ -43,8 +43,8 @@ export const SelectPlatformDialogContent: FC<SelectPlatformDialogContent> = ({
   );
 
   useEffect(() => {
-    fetchPlatform();
-  }, [fetchPlatform]);
+    fetchPlatforms();
+  }, [fetchPlatforms]);
 
   return (
     <DialogContent>
