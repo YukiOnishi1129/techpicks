@@ -54,6 +54,21 @@ export const getFeeds = async ({
       query.eq("platforms.platform_site_type", argPlatformSiteType);
     }
     query
+      .order("trend_platform_type", {
+        ascending: false,
+      })
+      .order("platforms(platform_site_type)", {
+        ascending: true,
+      })
+      .order("platforms(is_eng)", {
+        ascending: false,
+      })
+      .order("name", {
+        ascending: true,
+      })
+      .order("categories(type)", {
+        ascending: true,
+      })
       .order("created_at", {
         ascending: true,
       })

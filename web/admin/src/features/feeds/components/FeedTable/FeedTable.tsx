@@ -5,6 +5,7 @@ import { clsx } from "clsx";
 import Image from "next/image";
 import Link from "next/link";
 import { FC, useMemo, useState } from "react";
+import { SlFeed } from "react-icons/sl";
 
 import { Checkbox } from "@/components/ui/checkbox";
 import { PaginationUrl, TablePagination } from "@/components/ui/pagination";
@@ -29,6 +30,7 @@ export type FeedTableState = OriginFeedType & {
   platformId: string;
   platformName: string;
   platformSiteType: number;
+  platformImage: string;
   isEng: boolean;
   categoryId: string;
   categoryName: string;
@@ -63,6 +65,7 @@ export const FeedTable: FC<FeedTableProps> = ({
         isEng: feed.platform.isEng,
         platformId: feed.platformId,
         platformName: feed.platform.name,
+        platformImage: feed.platform.faviconUrl,
         platformSiteType: feed.platform.platformSiteType,
         categoryId: feed.categoryId,
         categoryName: feed.category.name,
@@ -133,13 +136,46 @@ export const FeedTable: FC<FeedTableProps> = ({
         },
       },
       {
+        accessorKey: "platformId",
+        header: () => <div className="text-left">platform</div>,
+        cell: ({ row }) => {
+          return (
+            <Link
+              href={new URL(row.original.siteUrl)}
+              target="_blank"
+              className="flex text-left hover:text-teal-500"
+            >
+              <div className="flex">
+                <div className="flex w-12">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    className="h-6 max-w-12 bg-white"
+                    src={row.original.platformImage}
+                    alt=""
+                  />
+                </div>
+              </div>
+            </Link>
+          );
+        },
+      },
+      {
+        accessorKey: "categoryId",
+        header: () => <div className="text-left">category</div>,
+        cell: ({ row }) => {
+          return (
+            <div className="text-left">{`#${row.original.categoryName}`}</div>
+          );
+        },
+      },
+      {
         accessorKey: "isEng",
-        header: () => <div className="text-left">lang</div>,
+        header: () => <div className="text-center">lang</div>,
         cell: ({ row }) => {
           const imageUrl = row.original.isEng ? ENGLISH_IMAGE : JAPANESE_IMAGE;
           const imageAlt = row.original.isEng ? "EN" : "JP";
           return (
-            <div className="text-left">
+            <div className="flex justify-center">
               <Image src={imageUrl} alt={imageAlt} width={20} height={20} />
             </div>
           );
@@ -147,7 +183,7 @@ export const FeedTable: FC<FeedTableProps> = ({
       },
       {
         accessorKey: "platformSiteType",
-        header: () => <div className="text-left">type</div>,
+        header: () => <div className="text-center">type</div>,
         cell: ({ row }) => {
           const type = row.original.platformSiteType;
           let showType = "unknown";
@@ -164,23 +200,49 @@ export const FeedTable: FC<FeedTableProps> = ({
             default:
               break;
           }
-          return <div className="text-left">{showType}</div>;
+          return <div className="text-center">{showType}</div>;
+        },
+      },
+      {
+        accessorKey: "trendPlatformType",
+        header: () => <div className="text-center">trend</div>,
+        cell: ({ row }) => {
+          return (
+            <div className="text-center">
+              {row.original.trendPlatformType ? "⭐️" : "-"}
+            </div>
+          );
+        },
+      },
+      {
+        accessorKey: "rssUrl",
+        header: () => <div className="text-center">rss</div>,
+        cell: ({ row }) => {
+          return (
+            <Link
+              href={new URL(row.original.rssUrl)}
+              target="_blank"
+              className="flex justify-center hover:text-teal-500"
+            >
+              <SlFeed />
+            </Link>
+          );
         },
       },
       {
         accessorKey: "deletedAt",
-        header: () => <div className="text-left">status</div>,
+        header: () => <div className="text-center">status</div>,
         cell: ({ row }) => {
           const style = row.original.deletedAt
             ? "text-gray-500"
             : "text-emerald-500";
           const label = row.original.deletedAt ? "stop" : "active";
-          return <span className={clsx(style)}>{label}</span>;
+          return <div className={clsx(style, "text-center")}>{label}</div>;
         },
       },
       {
         accessorKey: "id",
-        header: () => <div className="text-left">edit</div>,
+        header: () => <div className="text-center">edit</div>,
         cell: ({ row }) => {
           //   const platform = platforms.find((p) => p.id === row.original.id);
           //   if (!platform) return;
