@@ -105,10 +105,17 @@ export const SelectPlatformList: FC<SelectPlatformListProps> = ({
 
   return (
     <div className="w-full">
-      <div>
-        <p>Selected Platform: {selectedPlatformName}</p>
+      <div className="mb-4 ml-2 w-full text-sm font-normal">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          className="mr-2 inline-block size-6 bg-white"
+          src={form.watch("platformThumbnailUrl")}
+          alt=""
+        />
+        <span>{selectedPlatformName}</span>
       </div>
-      <div className="h-[300px] w-full overflow-y-scroll">
+
+      <div className="h-[300px] w-full overflow-y-scroll border-2 border-secondary p-4">
         {flatPlatforms.length === 0 ? (
           <p>No platforms found</p>
         ) : (
@@ -119,7 +126,10 @@ export const SelectPlatformList: FC<SelectPlatformListProps> = ({
                 control={form.control}
                 name="platformId"
                 render={({ field }) => (
-                  <FormItem key={platform.id} className="mb-2">
+                  <FormItem
+                    key={platform.id}
+                    className="w-full flex items-center border-t-2 border-t-secondary hover:bg-secondary hover:bg-opacity-10 cursor-pointer"
+                  >
                     <FormControl>
                       <Checkbox
                         checked={field.value?.includes(platform.id)}
@@ -135,14 +145,18 @@ export const SelectPlatformList: FC<SelectPlatformListProps> = ({
                         }}
                       />
                     </FormControl>
-                    <FormLabel className="ml-2 w-full text-sm font-normal">
+
+                    <FormLabel className="ml-2 h-12 pb-2 flex w-full cursor-pointer items-center text-sm font-normal">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         className="mr-2 inline-block size-6 bg-white"
                         src={platform?.faviconUrl}
                         alt=""
                       />
-                      {platform.name}
+
+                      <p className="w-full text-lg flex items-center">
+                        {platform.name}
+                      </p>
                     </FormLabel>
                   </FormItem>
                 )}
