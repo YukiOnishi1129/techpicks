@@ -7,7 +7,9 @@ import { z } from "zod";
 
 import { fetchPlatformsAPI } from "@/features/platforms/actions/platform";
 
+import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
+import { DialogClose } from "@/components/ui/dialog";
 import {
   Form,
   FormField,
@@ -38,11 +40,13 @@ const FormSchema = z.object({
 type SelectPlatformListProps = {
   defaultSelectedPlatform?: PlatformType;
   initialPlatforms: Array<PlatformType>;
+  handleSelectPlatform: (platformId: string) => void;
 };
 
 export const SelectPlatformList: FC<SelectPlatformListProps> = ({
   defaultSelectedPlatform,
   initialPlatforms,
+  handleSelectPlatform,
 }) => {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -140,10 +144,12 @@ export const SelectPlatformList: FC<SelectPlatformListProps> = ({
           src={form.watch("platformThumbnailUrl")}
           alt=""
         />
-        <span>{selectedPlatformName}</span>
+        <span className="text-lg font-bold text-primary">
+          {selectedPlatformName}
+        </span>
       </div>
 
-      <div>
+      <div className="mb-2">
         <Form {...keywordForm}>
           <form onSubmit={keywordForm.handleSubmit(handleSearch)}>
             <FormField
@@ -178,7 +184,8 @@ export const SelectPlatformList: FC<SelectPlatformListProps> = ({
                 render={({ field }) => (
                   <FormItem
                     key={platform.id}
-                    className="flex w-full cursor-pointer items-center border-t-2 border-t-secondary hover:bg-secondary hover:opacity-10"
+                    // eslint-disable-next-line tailwindcss/migration-from-tailwind-2
+                    className="flex w-full cursor-pointer items-center border-t-2 border-t-secondary hover:bg-secondary hover:bg-opacity-10"
                   >
                     <FormControl>
                       <Checkbox
@@ -221,6 +228,17 @@ export const SelectPlatformList: FC<SelectPlatformListProps> = ({
             </div>
           </>
         )}
+      </div>
+
+      <div className="mt-8 flex items-center justify-between">
+        <DialogClose asChild className="inline-block">
+          <Button variant={"secondary"}>{"CLOSE"}</Button>
+        </DialogClose>
+        <Button
+          onClick={() => handleSelectPlatform(form.getValues("platformId"))}
+        >
+          {"DONE"}
+        </Button>
       </div>
     </div>
   );

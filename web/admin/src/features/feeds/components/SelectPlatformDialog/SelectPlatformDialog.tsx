@@ -11,10 +11,12 @@ import { SelectPlatformDialogContent } from "./SelectPlatformDialogContent";
 
 type SelectPlatformDialogProps = {
   selectedPlatform?: PlatformType;
+  handleSelectPlatform: (platformId: string) => void;
 };
 
 export const SelectPlatformDialog: FC<SelectPlatformDialogProps> = ({
   selectedPlatform,
+  handleSelectPlatform,
 }) => {
   const [openDialog, setOpenDialog] = useState(false);
   const handleDialogOpen = useCallback(() => setOpenDialog(true), []);
@@ -30,6 +32,7 @@ export const SelectPlatformDialog: FC<SelectPlatformDialogProps> = ({
         <SelectPlatformDialogContent
           handleDialogClose={handleDialogClose}
           selectedPlatform={selectedPlatform}
+          handleSelectPlatform={handleSelectPlatform}
         />
       )}
     </Dialog>

@@ -260,6 +260,7 @@ export const EditFeedSheetContent: FC<EditFeedSheetContentProps> = ({
                         <div>
                           <SelectPlatformDialog
                             selectedPlatform={selectedPlatform}
+                            handleSelectPlatform={fetchPlatform}
                           />
                         </div>
                       </div>

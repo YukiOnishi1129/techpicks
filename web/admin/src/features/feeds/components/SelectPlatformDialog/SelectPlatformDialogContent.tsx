@@ -4,12 +4,10 @@ import { FC, useCallback, useEffect, useState } from "react";
 
 import { fetchPlatformsAPI } from "@/features/platforms/actions/platform";
 
-import { Button } from "@/components/ui/button";
 import {
   DialogContent,
   DialogTitle,
   DialogHeader,
-  DialogClose,
 } from "@/components/ui/dialog";
 
 import { PlatformType } from "@/types/platform";
@@ -19,11 +17,13 @@ import { SelectPlatformList } from "./SelectPlatformList";
 type SelectPlatformDialogContent = {
   selectedPlatform?: PlatformType;
   handleDialogClose: () => void;
+  handleSelectPlatform: (platformId: string) => void;
 };
 
 export const SelectPlatformDialogContent: FC<SelectPlatformDialogContent> = ({
   selectedPlatform,
   handleDialogClose,
+  handleSelectPlatform,
 }) => {
   const [platforms, setPlatforms] = useState<PlatformType[]>([]);
 
@@ -33,6 +33,14 @@ export const SelectPlatformDialogContent: FC<SelectPlatformDialogContent> = ({
       setPlatforms(res.data.platforms);
     }
   }, []);
+
+  const onSelectPlatform = useCallback(
+    (platformId: string) => {
+      handleSelectPlatform(platformId);
+      handleDialogClose();
+    },
+    [handleSelectPlatform, handleDialogClose]
+  );
 
   useEffect(() => {
     fetchPlatform();
@@ -47,17 +55,9 @@ export const SelectPlatformDialogContent: FC<SelectPlatformDialogContent> = ({
         <SelectPlatformList
           defaultSelectedPlatform={selectedPlatform}
           initialPlatforms={platforms}
+          handleSelectPlatform={onSelectPlatform}
         />
       )}
-
-      <div className="flex items-center justify-between">
-        <DialogClose asChild className="inline-block">
-          <Button variant={"secondary"} onClick={handleDialogClose}>
-            {"CLOSE"}
-          </Button>
-        </DialogClose>
-        <Button>{"DONE"}</Button>
-      </div>
     </DialogContent>
   );
 };
