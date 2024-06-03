@@ -1,22 +1,22 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { getPlatformsCount } from "@/features/platforms/repository/platform";
+import { getFeeds } from "@/features/feeds/repository/feed";
 
 export async function GET(req: NextRequest) {
   const searchParams = req.nextUrl.searchParams;
   const keyword = searchParams.get("keyword") || undefined;
+  const offset = searchParams.get("offset");
   const language = searchParams.get("language") || undefined;
   const platformSiteType = searchParams.get("platformSiteType") || undefined;
-  const siteUrl = searchParams.get("siteUrl") || undefined;
-  const count = await getPlatformsCount({
+  const feeds = await getFeeds({
     keyword: keyword,
+    offset: parseInt(offset || "1"),
     language: language,
     platformSiteType: platformSiteType,
-    siteUrl: siteUrl,
   });
   return NextResponse.json(
     {
-      count: count,
+      feeds: feeds,
       message: "Success",
     },
     {

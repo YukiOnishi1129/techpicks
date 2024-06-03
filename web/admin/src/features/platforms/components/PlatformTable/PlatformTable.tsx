@@ -6,7 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 
-import { MAX_SHOW_PLATFORM_TABLE_DATA_COUNT } from "@/features/platform/constants/table";
+import { MAX_SHOW_PLATFORM_TABLE_DATA_COUNT } from "@/features/platforms/constants/table";
 
 import { Checkbox } from "@/components/ui/checkbox";
 import {

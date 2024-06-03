@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { getPlatformsCount } from "@/features/platforms/repository/platform";
+import { getFeedsCount } from "@/features/feeds/repository/feed";
 
 export async function GET(req: NextRequest) {
   const searchParams = req.nextUrl.searchParams;
@@ -8,7 +8,7 @@ export async function GET(req: NextRequest) {
   const language = searchParams.get("language") || undefined;
   const platformSiteType = searchParams.get("platformSiteType") || undefined;
   const siteUrl = searchParams.get("siteUrl") || undefined;
-  const count = await getPlatformsCount({
+  const count = await getFeedsCount({
     keyword: keyword,
     language: language,
     platformSiteType: platformSiteType,
