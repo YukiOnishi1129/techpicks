@@ -40,6 +40,8 @@ import { useStatusToast } from "@/hooks/useStatusToast";
 
 import { FeedType } from "@/types/feed";
 
+import { SelectPlatformDialog } from "../SelectPlatformDialog";
+
 const FormSchema = z.object({
   name: z
     .string({
@@ -243,7 +245,7 @@ export const EditFeedSheetContent: FC<EditFeedSheetContentProps> = ({
                           </p>
                         </div>
                         <div>
-                          <Button>{"SELECT"}</Button>
+                          <SelectPlatformDialog />
                         </div>
                       </div>
                     )}
