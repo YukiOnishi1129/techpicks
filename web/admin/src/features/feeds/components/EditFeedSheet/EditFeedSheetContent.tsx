@@ -3,7 +3,14 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import { useRouter } from "next/navigation";
-import { FC, useMemo, useCallback, useTransition, useEffect } from "react";
+import {
+  FC,
+  useMemo,
+  useCallback,
+  useTransition,
+  useEffect,
+  useState,
+} from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -39,6 +46,7 @@ import { useServerRevalidatePage } from "@/hooks/useServerRevalidatePage";
 import { useStatusToast } from "@/hooks/useStatusToast";
 
 import { FeedType } from "@/types/feed";
+import { PlatformType } from "@/types/platform";
 
 import { SelectPlatformDialog } from "../SelectPlatformDialog";
 
@@ -112,6 +120,10 @@ export const EditFeedSheetContent: FC<EditFeedSheetContentProps> = ({
   const [isPending, startTransition] = useTransition();
   const [isPlatformPending, startPlatformTransition] = useTransition();
 
+  const [selectedPlatform, setSelectedPlatform] = useState<
+    PlatformType | undefined
+  >(undefined);
+
   const inputName = form.watch("name");
   const inputDescription = form.watch("description");
   const inputPlatformId = form.watch("platformId");
@@ -147,7 +159,7 @@ export const EditFeedSheetContent: FC<EditFeedSheetContentProps> = ({
     inputApiQueryParam,
   ]);
 
-  const setPlatform = useCallback(
+  const fetchPlatform = useCallback(
     async (platformId: string) => {
       startPlatformTransition(async () => {
         const res = await fetchPlatformByIdAPI(platformId);
@@ -155,6 +167,7 @@ export const EditFeedSheetContent: FC<EditFeedSheetContentProps> = ({
           form.setValue("platformName", res.data.platform.name);
           form.setValue("platformId", res.data.platform.id);
           form.setValue("platformFaviconUrl", res.data.platform.faviconUrl);
+          setSelectedPlatform(res.data.platform);
         }
       });
     },
@@ -162,8 +175,8 @@ export const EditFeedSheetContent: FC<EditFeedSheetContentProps> = ({
   );
 
   useEffect(() => {
-    setPlatform(feed.platform.id);
-  }, [setPlatform, feed.platform.id]);
+    fetchPlatform(feed.platform.id);
+  }, [fetchPlatform, feed.platform.id]);
 
   return (
     <SheetContent className="h-screen overflow-y-scroll">
@@ -245,7 +258,9 @@ export const EditFeedSheetContent: FC<EditFeedSheetContentProps> = ({
                           </p>
                         </div>
                         <div>
-                          <SelectPlatformDialog />
+                          <SelectPlatformDialog
+                            selectedPlatform={selectedPlatform}
+                          />
                         </div>
                       </div>
                     )}
