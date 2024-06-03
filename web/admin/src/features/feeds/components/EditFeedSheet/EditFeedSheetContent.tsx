@@ -19,6 +19,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Loader } from "@/components/ui/loader";
 import {
   Select,
   SelectContent,
@@ -56,6 +57,7 @@ const FormSchema = z.object({
     })
     .min(1, { message: "Name is required" }),
   platformName: z.string().optional(),
+  platformFaviconUrl: z.string().optional(),
   categoryId: z
     .string({ required_error: "Please enter the name" })
     .min(1, { message: "Name is required" }),
@@ -106,6 +108,7 @@ export const EditFeedSheetContent: FC<EditFeedSheetContentProps> = ({
     },
   });
   const [isPending, startTransition] = useTransition();
+  const [isPlatformPending, startPlatformTransition] = useTransition();
 
   const inputName = form.watch("name");
   const inputDescription = form.watch("description");
@@ -144,17 +147,21 @@ export const EditFeedSheetContent: FC<EditFeedSheetContentProps> = ({
 
   const setPlatform = useCallback(
     async (platformId: string) => {
-      const res = await fetchPlatformByIdAPI(platformId);
-      if (res.data!.platform) {
-        form.setValue("platformName", res.data.platform.name);
-      }
+      startPlatformTransition(async () => {
+        const res = await fetchPlatformByIdAPI(platformId);
+        if (res.data!.platform) {
+          form.setValue("platformName", res.data.platform.name);
+          form.setValue("platformId", res.data.platform.id);
+          form.setValue("platformFaviconUrl", res.data.platform.faviconUrl);
+        }
+      });
     },
     [form]
   );
 
   useEffect(() => {
-    setPlatform(inputPlatformId);
-  }, [setPlatform, inputPlatformId]);
+    setPlatform(feed.platform.id);
+  }, [setPlatform, feed.platform.id]);
 
   return (
     <SheetContent className="h-screen overflow-y-scroll">
@@ -219,7 +226,29 @@ export const EditFeedSheetContent: FC<EditFeedSheetContentProps> = ({
                     Platform
                     <span className="text-red-700"> *</span>
                   </FormLabel>
-                  <p>{form.getValues("platformName")}</p>
+                  <div className="flex h-6 w-full items-center">
+                    {isPlatformPending ? (
+                      <Loader />
+                    ) : (
+                      <div className="flex w-full items-center justify-between">
+                        <div className="flex ">
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            className="size-6 bg-white"
+                            src={form.getValues("platformFaviconUrl")}
+                            alt=""
+                          />
+                          <p className="ml-2">
+                            {form.getValues("platformName")}
+                          </p>
+                        </div>
+                        <div>
+                          <Button>{"SELECT"}</Button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
                   {/* <FormControl>
                     <Input
                       className="border-primary bg-secondary text-primary"
