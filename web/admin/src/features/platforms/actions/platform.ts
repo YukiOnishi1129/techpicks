@@ -22,7 +22,7 @@ export const fetchPlatformsAPI = async ({
   language,
   platformSiteType,
 }: FetchPlatformsAPIRequest): Promise<FetchPlatformsAPIResponse> => {
-  let url = `${process.env.WEB_DOMAIN}/api/platform/?offset=${offset}`;
+  let url = `${process.env.WEB_DOMAIN}/api/platforms/?offset=${offset}`;
   if (keyword) {
     url += `&keyword=${keyword}`;
   }
@@ -63,7 +63,7 @@ export const fetchPlatformsCountAPI = async ({
   platformSiteType,
   siteUrl,
 }: FetchPlatformsCountAPIRequest): Promise<FetchCountAPIResponse> => {
-  let url = `${process.env.WEB_DOMAIN}/api/platform/count/?dummy=dummy`;
+  let url = `${process.env.WEB_DOMAIN}/api/platforms/count/?dummy=dummy`;
   if (keyword) {
     url += `&keyword=${keyword}`;
   }
@@ -98,7 +98,7 @@ export const fetchPlatformByIdAPI = async (
   id: string
 ): Promise<FetchPlatformAPIResponse> => {
   const res = await getFetch({
-    url: `${process.env.WEB_DOMAIN}/api/platform/${id}/`,
+    url: `${process.env.WEB_DOMAIN}/api/platforms/${id}/`,
     tagName: "platform",
     cacheType: "no-store",
   });
