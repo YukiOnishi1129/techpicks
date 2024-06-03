@@ -24,7 +24,7 @@ export type FeedType = OriginFeedType & {
 
 export type FetchFeedsAPIResponse = {
   data: {
-    platforms: Array<FeedType>;
+    feeds: Array<FeedType>;
     message: string;
   };
   status: number;

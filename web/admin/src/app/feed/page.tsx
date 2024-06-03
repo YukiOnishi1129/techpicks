@@ -1,3 +1,5 @@
+import { FeedTemplate } from "@/features/feeds/components/FeedTemplate";
+
 type PageProps = {
   params: { slug: string };
   searchParams: { [key: string]: string | string[] | undefined };
@@ -23,8 +25,11 @@ export default function FeedPage({ searchParams }: PageProps) {
       : undefined;
 
   return (
-    <div>
-      <h3>Feed Page</h3>
-    </div>
+    <FeedTemplate
+      offset={offset}
+      keyword={keyword}
+      language={language}
+      platformSiteType={platformSiteType}
+    />
   );
 }

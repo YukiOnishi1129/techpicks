@@ -39,7 +39,7 @@ export const fetchFeedsAPI = async ({
 
   return {
     data: {
-      platforms: data.platforms as Array<FeedType>,
+      feeds: data.feeds as Array<FeedType>,
       message: "success",
     },
     status,

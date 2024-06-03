@@ -1,0 +1,1 @@
+export const MAX_SHOW_FEED_TABLE_DATA_COUNT = 8;
