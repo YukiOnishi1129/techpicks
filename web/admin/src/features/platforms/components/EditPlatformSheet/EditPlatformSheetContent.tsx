@@ -173,7 +173,10 @@ export const EditPlatformSheetContent: FC<EditPlatformSheetContentProps> = ({
               name="name"
               render={({ field }) => (
                 <FormItem className="">
-                  <FormLabel>Platform name</FormLabel>
+                  <FormLabel>
+                    Platform name
+                    <span className="text-red-700"> *</span>
+                  </FormLabel>
                   <FormControl>
                     <Input
                       className="border-primary bg-secondary text-primary"
@@ -191,7 +194,10 @@ export const EditPlatformSheetContent: FC<EditPlatformSheetContentProps> = ({
               name="url"
               render={({ field }) => (
                 <FormItem className="">
-                  <FormLabel>Platform url</FormLabel>
+                  <FormLabel>
+                    Platform url
+                    <span className="text-red-700"> *</span>
+                  </FormLabel>
                   <FormControl>
                     <Input
                       className="border-primary bg-secondary text-primary"
@@ -209,7 +215,10 @@ export const EditPlatformSheetContent: FC<EditPlatformSheetContentProps> = ({
               name="platformSiteType"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Platform site type</FormLabel>
+                  <FormLabel>
+                    Platform site type
+                    <span className="text-red-700"> *</span>
+                  </FormLabel>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
@@ -244,7 +253,10 @@ export const EditPlatformSheetContent: FC<EditPlatformSheetContentProps> = ({
               name="faviconUrl"
               render={({ field }) => (
                 <FormItem className="">
-                  <FormLabel>Favicon url</FormLabel>
+                  <FormLabel>
+                    Favicon url
+                    <span className="text-red-700"> *</span>
+                  </FormLabel>
                   <FormControl>
                     <div className="flex justify-between">
                       <Input
@@ -272,7 +284,10 @@ export const EditPlatformSheetContent: FC<EditPlatformSheetContentProps> = ({
               name="isEng"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Language</FormLabel>
+                  <FormLabel>
+                    Language
+                    <span className="text-red-700"> *</span>
+                  </FormLabel>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}

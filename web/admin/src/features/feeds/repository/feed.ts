@@ -177,3 +177,59 @@ export const getFeedsCount = async ({
     throw new Error(`Failed to get feeds count: ${err}`);
   }
 };
+
+/**
+ * ==========================================
+ * Update
+ * ==========================================
+ */
+
+export type UpdateFeedDTO = {
+  id: string;
+  platformId: string;
+  categoryId: string;
+  name: string;
+  description: string;
+  rssUrl: string;
+  siteUrl: string;
+  thumbnailUrl: string;
+  trendPlatformType: number;
+  apiQueryParam?: string;
+};
+
+export const updateFeed = async ({
+  id,
+  platformId,
+  categoryId,
+  name,
+  description,
+  rssUrl,
+  siteUrl,
+  thumbnailUrl,
+  trendPlatformType,
+  apiQueryParam,
+}: UpdateFeedDTO) => {
+  try {
+    const supabase = await createGetOnlyServerSideClient();
+    const { error } = await supabase
+      .from("feeds")
+      .update({
+        platform_id: platformId,
+        category_id: categoryId,
+        name,
+        description,
+        rss_url: rssUrl,
+        site_url: siteUrl,
+        thumbnail_url: thumbnailUrl,
+        trend_platform_type: trendPlatformType,
+        api_query_param: apiQueryParam,
+      })
+      .eq("id", id);
+
+    if (error) return;
+
+    return id;
+  } catch (err) {
+    throw new Error(`Failed to update feed: ${err}`);
+  }
+};

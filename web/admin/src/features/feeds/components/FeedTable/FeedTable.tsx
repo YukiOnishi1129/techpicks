@@ -16,6 +16,7 @@ import { ENGLISH_IMAGE, JAPANESE_IMAGE } from "@/constants/image";
 
 import { FeedDataTable } from "./FeedDataTable";
 import { MAX_SHOW_FEED_TABLE_DATA_COUNT } from "../../constants/table";
+import { EditFeedSheet } from "../EditFeedSheet";
 
 type FeedTableProps = {
   allCount: number;
@@ -244,13 +245,13 @@ export const FeedTable: FC<FeedTableProps> = ({
         accessorKey: "id",
         header: () => <div className="text-center">edit</div>,
         cell: ({ row }) => {
-          //   const platform = platforms.find((p) => p.id === row.original.id);
-          //   if (!platform) return;
-          //   return <EditPlatformSheet platform={platform} />;
+          const feed = feeds.find((f) => f.id === row.original.id);
+          if (!feed) return;
+          return <EditFeedSheet feed={feed} />;
         },
       },
     ],
-    [feedIds]
+    [feedIds, feeds]
   );
 
   const currentPage = offset || 1;

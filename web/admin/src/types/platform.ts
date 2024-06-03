@@ -28,3 +28,11 @@ export type FetchPlatformsAPIResponse = {
   };
   status: number;
 };
+
+export type FetchPlatformAPIResponse = {
+  data: {
+    platform: PlatformType;
+    message: string;
+  };
+  status: number;
+};

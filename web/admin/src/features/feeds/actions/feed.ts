@@ -18,7 +18,7 @@ export const fetchFeedsAPI = async ({
   language,
   platformSiteType,
 }: FetchFeedsAPIRequest): Promise<FetchFeedsAPIResponse> => {
-  let url = `${process.env.WEB_DOMAIN}/api/feed/?offset=${offset}`;
+  let url = `${process.env.WEB_DOMAIN}/api/feeds/?offset=${offset}`;
   if (keyword) {
     url += `&keyword=${keyword}`;
   }
@@ -59,7 +59,7 @@ export const fetchFeedsCountAPI = async ({
   platformSiteType,
   siteUrl,
 }: FetchFeedsCountAPIRequest): Promise<FetchCountAPIResponse> => {
-  let url = `${process.env.WEB_DOMAIN}/api/feed/count/?dummy=dummy`;
+  let url = `${process.env.WEB_DOMAIN}/api/feeds/count/?dummy=dummy`;
   if (keyword) {
     url += `&keyword=${keyword}`;
   }
