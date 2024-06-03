@@ -50,6 +50,7 @@ import { CategoryType } from "@/types/category";
 import { FeedType } from "@/types/feed";
 import { PlatformType } from "@/types/platform";
 
+import { updateFeed } from "../../repository/feed";
 import { SelectCategoryDialog } from "../SelectCategoryDialog";
 import { SelectPlatformDialog } from "../SelectPlatformDialog";
 
@@ -196,6 +197,41 @@ export const EditFeedSheetContent: FC<EditFeedSheetContentProps> = ({
     [form]
   );
 
+  const handleSubmitEditCategory = useCallback(
+    async (values: z.infer<typeof FormSchema>) => {
+      startTransition(async () => {
+        if (isEditDisabledCheck) return;
+        const updatedId = await updateFeed({
+          id: feed.id,
+          platformId: values.platformId,
+          categoryId: values.categoryId,
+          name: values.name,
+          description: values.description,
+          rssUrl: values.rssUrl,
+          siteUrl: values.siteUrl,
+          thumbnailUrl: values.thumbnailUrl,
+          trendPlatformType: Number(values.trendPlatformType),
+          apiQueryParam: values.apiQueryParam,
+        });
+        if (!updatedId) {
+          failToast({
+            description: "Failed: Update feed",
+          });
+          return;
+        }
+
+        successToast({
+          description: "Success: Update feed",
+        });
+
+        // 3. revalidate
+        await revalidatePage();
+        router.replace(`/feed`);
+      });
+    },
+    [isEditDisabledCheck, feed, revalidatePage, router, successToast, failToast]
+  );
+
   useEffect(() => {
     fetchPlatform(feed.platform.id);
     fetchCategory(feed.category.id);
@@ -210,7 +246,7 @@ export const EditFeedSheetContent: FC<EditFeedSheetContentProps> = ({
       <Form {...form}>
         <form
           className="mt-4"
-          //   onSubmit={form.handleSubmit(handleSubmitEditPlatform)}
+          onSubmit={form.handleSubmit(handleSubmitEditCategory)}
         >
           <div className="space-y-4">
             <FormField
@@ -434,6 +470,24 @@ export const EditFeedSheetContent: FC<EditFeedSheetContentProps> = ({
                         alt=""
                       />
                     </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="apiQueryParam"
+              render={({ field }) => (
+                <FormItem className="">
+                  <FormLabel>Api query param</FormLabel>
+                  <FormControl>
+                    <Input
+                      className="border-primary bg-secondary text-primary"
+                      placeholder="api query param"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
