@@ -9,7 +9,7 @@ import {
 import { useState, useMemo, useCallback } from "react";
 import { FaRunning, FaRegStopCircle } from "react-icons/fa";
 
-import { MAX_SHOW_PLATFORM_TABLE_DATA_COUNT } from "@/features/platform/constants/table";
+import { MAX_SHOW_PLATFORM_TABLE_DATA_COUNT } from "@/features/platforms/constants/table";
 
 import { Button } from "@/components/ui/button";
 import {

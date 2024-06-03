@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { getPlatformsCount } from "@/features/platform/repository/platform";
+import { getPlatformsCount } from "@/features/platforms/repository/platform";
 
 export async function GET(req: NextRequest) {
   const searchParams = req.nextUrl.searchParams;
