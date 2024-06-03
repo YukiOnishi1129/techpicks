@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 
 import { createGetOnlyServerSideClient } from "@/lib/supabase/client/serverClient";
 
+import { Database } from "@/types/database.types";
 import { PlatformType } from "@/types/platform";
 
 export type GetPlatformsDT0 = {
@@ -68,46 +69,9 @@ export const getPlatforms = async ({
 
     if (error || !data) return [];
 
-    const resPlatforms: Array<PlatformType> = data.map((platform) => {
-      return {
-        id: platform.id,
-        name: platform.name,
-        siteUrl: platform.site_url,
-        platformSiteType: platform.platform_site_type,
-        faviconUrl: platform.favicon_url,
-        isEng: platform.is_eng,
-        createdAt: platform.created_at,
-        updatedAt: platform.updated_at,
-        deletedAt: platform?.deleted_at || undefined,
-        feeds: platform.feeds.map((feed) => {
-          return {
-            id: feed.id,
-            name: feed.name,
-            description: feed.description,
-            thumbnailUrl: feed.thumbnail_url,
-            platformId: feed.platform_id,
-            categoryId: feed.category_id,
-            siteUrl: feed.site_url,
-            rssUrl: feed.rss_url,
-            apiQueryParam: feed?.api_query_param || undefined,
-            trendPlatformType: feed.trend_platform_type,
-            createdAt: feed.created_at,
-            updatedAt: feed.updated_at,
-            deletedAt: feed?.deleted_at || undefined,
-            category: {
-              id: feed.categories.id,
-              name: feed.categories.name,
-              type: feed.categories.type,
-              createdAt: feed.categories.created_at,
-              updatedAt: feed.categories.updated_at,
-              deletedAt: feed.categories?.deleted_at || undefined,
-            },
-          };
-        }),
-      };
-    });
-
-    return resPlatforms;
+    return data.map((platform) =>
+      convertDatabaseResponseToPlatformResponse(platform)
+    );
   } catch (err) {
     throw new Error(`Failed to get platforms: ${err}`);
   }
@@ -169,6 +133,80 @@ export const getPlatformsCount = async ({
   } catch (err) {
     throw new Error(`Failed to get platforms count: ${err}`);
   }
+};
+
+export const getPlatformById = async (id: string) => {
+  try {
+    const supabase = await createGetOnlyServerSideClient();
+    const { data, error } = await supabase
+      .from("platforms")
+      .select(
+        `
+        *,
+        feeds(*,categories!inner(*))
+      `
+      )
+      .eq("id", id)
+      .single();
+
+    if (error || !data) return;
+
+    const platform = data;
+
+    return convertDatabaseResponseToPlatformResponse(platform);
+  } catch (err) {
+    throw new Error(`Failed to get platform: ${err}`);
+  }
+};
+
+type PlatformGetDatabaseResponseTypes =
+  Database["public"]["Tables"]["platforms"]["Row"] & {
+    feeds: Array<
+      Database["public"]["Tables"]["feeds"]["Row"] & {
+        categories: Database["public"]["Tables"]["categories"]["Row"];
+      }
+    >;
+  };
+
+const convertDatabaseResponseToPlatformResponse = (
+  platform: PlatformGetDatabaseResponseTypes
+): PlatformType => {
+  return {
+    id: platform.id,
+    name: platform.name,
+    siteUrl: platform.site_url,
+    platformSiteType: platform.platform_site_type,
+    faviconUrl: platform.favicon_url,
+    isEng: platform.is_eng,
+    createdAt: platform.created_at,
+    updatedAt: platform.updated_at,
+    deletedAt: platform?.deleted_at || undefined,
+    feeds: platform.feeds.map((feed) => {
+      return {
+        id: feed.id,
+        name: feed.name,
+        description: feed.description,
+        thumbnailUrl: feed.thumbnail_url,
+        platformId: feed.platform_id,
+        categoryId: feed.category_id,
+        siteUrl: feed.site_url,
+        rssUrl: feed.rss_url,
+        apiQueryParam: feed?.api_query_param || undefined,
+        trendPlatformType: feed.trend_platform_type,
+        createdAt: feed.created_at,
+        updatedAt: feed.updated_at,
+        deletedAt: feed?.deleted_at || undefined,
+        category: {
+          id: feed.categories.id,
+          name: feed.categories.name,
+          type: feed.categories.type,
+          createdAt: feed.categories.created_at,
+          updatedAt: feed.categories.updated_at,
+          deletedAt: feed.categories?.deleted_at || undefined,
+        },
+      };
+    }),
+  };
 };
 
 /**

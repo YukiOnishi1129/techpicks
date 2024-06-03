@@ -3,7 +3,11 @@
 import { getFetch } from "@/lib/fetch";
 
 import { FetchCountAPIResponse } from "@/types/api";
-import { FetchPlatformsAPIResponse, PlatformType } from "@/types/platform";
+import {
+  FetchPlatformAPIResponse,
+  FetchPlatformsAPIResponse,
+  PlatformType,
+} from "@/types/platform";
 
 type FetchPlatformsAPIRequest = {
   offset?: string;
@@ -84,6 +88,26 @@ export const fetchPlatformsCountAPI = async ({
   return {
     data: {
       count: data.count as number,
+      message: "success",
+    },
+    status,
+  };
+};
+
+export const fetchPlatformByIdAPI = async (
+  id: string
+): Promise<FetchPlatformAPIResponse> => {
+  const res = await getFetch({
+    url: `${process.env.WEB_DOMAIN}/api/platform/${id}/`,
+    tagName: "platform",
+    cacheType: "no-store",
+  });
+  const data = await res.json();
+  const status = res.status;
+
+  return {
+    data: {
+      platform: data.platform as PlatformType,
       message: "success",
     },
     status,

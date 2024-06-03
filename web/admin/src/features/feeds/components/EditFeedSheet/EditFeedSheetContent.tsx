@@ -3,9 +3,11 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import { useRouter } from "next/navigation";
-import { FC, useMemo, useTransition } from "react";
+import { FC, useMemo, useCallback, useTransition, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+
+import { fetchPlatformByIdAPI } from "@/features/platforms/actions/platform";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -53,9 +55,11 @@ const FormSchema = z.object({
       required_error: "Please enter the name",
     })
     .min(1, { message: "Name is required" }),
+  platformName: z.string().optional(),
   categoryId: z
     .string({ required_error: "Please enter the name" })
     .min(1, { message: "Name is required" }),
+  categoryName: z.string().optional(),
   rssUrl: z
     .string({
       required_error: "Please enter the URL",
@@ -138,6 +142,20 @@ export const EditFeedSheetContent: FC<EditFeedSheetContentProps> = ({
     inputApiQueryParam,
   ]);
 
+  const setPlatform = useCallback(
+    async (platformId: string) => {
+      const res = await fetchPlatformByIdAPI(platformId);
+      if (res.data!.platform) {
+        form.setValue("platformName", res.data.platform.name);
+      }
+    },
+    [form]
+  );
+
+  useEffect(() => {
+    setPlatform(inputPlatformId);
+  }, [setPlatform, inputPlatformId]);
+
   return (
     <SheetContent className="h-screen overflow-y-scroll">
       <SheetHeader>
@@ -201,13 +219,14 @@ export const EditFeedSheetContent: FC<EditFeedSheetContentProps> = ({
                     Platform
                     <span className="text-red-700"> *</span>
                   </FormLabel>
-                  <FormControl>
+                  <p>{form.getValues("platformName")}</p>
+                  {/* <FormControl>
                     <Input
                       className="border-primary bg-secondary text-primary"
                       placeholder="platformId"
                       {...field}
                     />
-                  </FormControl>
+                  </FormControl> */}
                   <FormMessage />
                 </FormItem>
               )}
@@ -222,13 +241,14 @@ export const EditFeedSheetContent: FC<EditFeedSheetContentProps> = ({
                     Category
                     <span className="text-red-700"> *</span>
                   </FormLabel>
-                  <FormControl>
+                  <p>{feed.category.name}</p>
+                  {/* <FormControl>
                     <Input
                       className="border-primary bg-secondary text-primary"
                       placeholder="categoryId"
                       {...field}
                     />
-                  </FormControl>
+                  </FormControl> */}
                   <FormMessage />
                 </FormItem>
               )}
