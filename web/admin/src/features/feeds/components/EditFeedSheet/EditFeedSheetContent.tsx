@@ -197,7 +197,7 @@ export const EditFeedSheetContent: FC<EditFeedSheetContentProps> = ({
     [form]
   );
 
-  const handleSubmitEditCategory = useCallback(
+  const handleSubmitEditFeed = useCallback(
     async (values: z.infer<typeof FormSchema>) => {
       startTransition(async () => {
         if (isEditDisabledCheck) return;
@@ -246,7 +246,7 @@ export const EditFeedSheetContent: FC<EditFeedSheetContentProps> = ({
       <Form {...form}>
         <form
           className="mt-4"
-          onSubmit={form.handleSubmit(handleSubmitEditCategory)}
+          onSubmit={form.handleSubmit(handleSubmitEditFeed)}
         >
           <div className="space-y-4">
             <FormField

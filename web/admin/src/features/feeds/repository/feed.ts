@@ -1,4 +1,6 @@
 "use server";
+// eslint-disable-next-line import/named
+import { v4 as uuidv4 } from "uuid";
 
 import { createGetOnlyServerSideClient } from "@/lib/supabase/client/serverClient";
 
@@ -175,6 +177,64 @@ export const getFeedsCount = async ({
     return count;
   } catch (err) {
     throw new Error(`Failed to get feeds count: ${err}`);
+  }
+};
+
+/**
+ * ==========================================
+ * Create
+ * ==========================================
+ */
+
+export type CreateFeedDTO = {
+  platformId: string;
+  categoryId: string;
+  name: string;
+  description: string;
+  rssUrl: string;
+  siteUrl: string;
+  thumbnailUrl: string;
+  trendPlatformType: number;
+  apiQueryParam?: string;
+};
+
+export const createFeed = async ({
+  platformId,
+  categoryId,
+  name,
+  description,
+  rssUrl,
+  siteUrl,
+  thumbnailUrl,
+  trendPlatformType,
+  apiQueryParam,
+}: CreateFeedDTO) => {
+  try {
+    const uuid = uuidv4();
+    const supabase = await createGetOnlyServerSideClient();
+    const { data, error } = await supabase
+      .from("feeds")
+      .insert([
+        {
+          id: uuid,
+          platform_id: platformId,
+          category_id: categoryId,
+          name,
+          description,
+          rss_url: rssUrl,
+          site_url: siteUrl,
+          thumbnail_url: thumbnailUrl,
+          trend_platform_type: trendPlatformType,
+          api_query_param: apiQueryParam,
+        },
+      ])
+      .select();
+
+    if (error || !data) return;
+
+    return data[0].id;
+  } catch (err) {
+    throw new Error(`Failed to create feed: ${err}`);
   }
 };
 
