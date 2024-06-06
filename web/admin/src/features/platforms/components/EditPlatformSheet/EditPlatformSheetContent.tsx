@@ -354,7 +354,6 @@ export const EditPlatformSheetContent: FC<EditPlatformSheetContentProps> = ({
           platformId={platform.id}
           platformTitle={platform.name}
           disabled={platform.feeds.length !== 0}
-          handleDelete={handleSheetClose}
         />
       </div>
     </SheetContent>

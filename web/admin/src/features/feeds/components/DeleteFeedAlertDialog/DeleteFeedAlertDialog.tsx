@@ -5,18 +5,18 @@ import { FC, useCallback, useState } from "react";
 import { AlertDialog, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 
+import { DeleteFeedAlertDialogContent } from "./DeleteFeedAlertDialogContent";
+
 type DeleteFeedAlertDialogProps = {
   feedId: string;
   feedTitle: string;
   disabled?: boolean;
-  handleDelete: () => void;
 };
 
 export const DeleteFeedAlertDialog: FC<DeleteFeedAlertDialogProps> = ({
   feedId,
   feedTitle,
   disabled,
-  handleDelete,
 }) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const handleDialogOpen = useCallback(() => setIsDialogOpen(true), []);
@@ -32,14 +32,13 @@ export const DeleteFeedAlertDialog: FC<DeleteFeedAlertDialogProps> = ({
           DELETE
         </Button>
       </AlertDialogTrigger>
-      {/* {isDialogOpen && (
-        <DeletePlatformAlertDialogContent
-          platformId={platformId}
-          platformTitle={platformTitle}
+      {isDialogOpen && (
+        <DeleteFeedAlertDialogContent
+          feedId={feedId}
+          feedTitle={feedTitle}
           handleDialogClose={handleDialogClose}
-          handleDelete={handleDelete}
         />
-      )} */}
+      )}
     </AlertDialog>
   );
 };

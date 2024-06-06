@@ -23,12 +23,11 @@ type DeletePlatformAlertDialogContentProps = {
   platformId: string;
   platformTitle: string;
   handleDialogClose: () => void;
-  handleDelete: () => void;
 };
 
 export const DeletePlatformAlertDialogContent: FC<
   DeletePlatformAlertDialogContentProps
-> = ({ platformId, platformTitle, handleDialogClose, handleDelete }) => {
+> = ({ platformId, platformTitle, handleDialogClose }) => {
   const router = useRouter();
   const { revalidatePage } = useServerRevalidatePage();
   const { successToast, failToast } = useStatusToast();

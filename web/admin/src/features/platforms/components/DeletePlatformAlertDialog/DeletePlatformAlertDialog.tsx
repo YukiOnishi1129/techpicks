@@ -10,14 +10,12 @@ type DeletePlatformAlertDialogProps = {
   platformId: string;
   platformTitle: string;
   disabled?: boolean;
-  handleDelete: () => void;
 };
 
 export const DeletePlatformAlertDialog = ({
   platformId,
   platformTitle,
   disabled,
-  handleDelete,
 }: DeletePlatformAlertDialogProps) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const handleDialogOpen = useCallback(() => setIsDialogOpen(true), []);
@@ -38,7 +36,6 @@ export const DeletePlatformAlertDialog = ({
           platformId={platformId}
           platformTitle={platformTitle}
           handleDialogClose={handleDialogClose}
-          handleDelete={handleDelete}
         />
       )}
     </AlertDialog>

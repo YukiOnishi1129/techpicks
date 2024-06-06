@@ -357,3 +357,21 @@ export const updateFeed = async ({
     throw new Error(`Failed to update feed: ${err}`);
   }
 };
+
+/**
+ * ==========================================
+ * Delete
+ * ==========================================
+ */
+export const deleteFeed = async (id: string) => {
+  try {
+    const supabase = await createGetOnlyServerSideClient();
+    const { error } = await supabase.from("feeds").delete().eq("id", id);
+
+    if (error) return;
+
+    return id;
+  } catch (err) {
+    throw new Error(`Failed to delete feed: ${err}`);
+  }
+};
