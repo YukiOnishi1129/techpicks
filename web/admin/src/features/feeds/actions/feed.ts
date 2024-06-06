@@ -36,7 +36,6 @@ export const fetchFeedsAPI = async ({
   });
   const data = await res.json();
   const status = res.status;
-
   return {
     data: {
       feeds: data.feeds as Array<FeedType>,

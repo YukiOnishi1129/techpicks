@@ -17,36 +17,37 @@ import { Button } from "@/components/ui/button";
 import { useServerRevalidatePage } from "@/hooks/useServerRevalidatePage";
 import { useStatusToast } from "@/hooks/useStatusToast";
 
-import { deletePlatform } from "../../repository/platform";
+import { deleteFeed } from "../../repository/feed";
 
-type DeletePlatformAlertDialogContentProps = {
-  platformId: string;
-  platformTitle: string;
+type DeleteFeedAlertDialogContentProps = {
+  feedId: string;
+  feedTitle: string;
+  disabled?: boolean;
   handleDialogClose: () => void;
 };
 
-export const DeletePlatformAlertDialogContent: FC<
-  DeletePlatformAlertDialogContentProps
-> = ({ platformId, platformTitle, handleDialogClose }) => {
+export const DeleteFeedAlertDialogContent: FC<
+  DeleteFeedAlertDialogContentProps
+> = ({ feedId, feedTitle, handleDialogClose }) => {
   const router = useRouter();
   const { revalidatePage } = useServerRevalidatePage();
   const { successToast, failToast } = useStatusToast();
   const [isPending, startTransition] = useTransition();
 
-  const handleDeletePlatform = useCallback(async () => {
+  const handleDeleteFeed = useCallback(async () => {
     startTransition(async () => {
-      const id = await deletePlatform(platformId);
+      const id = await deleteFeed(feedId);
       if (!id) {
         failToast({
-          description: "Failed: delete platform",
+          description: "Failed: Feed undeleted",
         });
       }
       successToast({
-        description: "Success: Platform deleted",
+        description: "Success: Feed deleted",
       });
       await revalidatePage();
       handleDialogClose();
-      router.replace(`/platform`);
+      router.replace(`/feed`);
     });
   }, [
     successToast,
@@ -54,10 +55,9 @@ export const DeletePlatformAlertDialogContent: FC<
     revalidatePage,
     handleDialogClose,
     router,
-    platformId,
+    feedId,
     startTransition,
   ]);
-
   return (
     <AlertDialogContent>
       <AlertDialogHeader>
@@ -68,7 +68,7 @@ export const DeletePlatformAlertDialogContent: FC<
           This action cannot be undone. This will permanently remove your data
           from our servers.
           <br></br>
-          Delete platform title is {platformTitle}
+          Delete feed title is {feedTitle}
         </AlertDialogDescription>
       </AlertDialogHeader>
 
@@ -81,7 +81,7 @@ export const DeletePlatformAlertDialogContent: FC<
             PLEASE WAIT
           </Button>
         ) : (
-          <AlertDialogAction onClick={handleDeletePlatform}>
+          <AlertDialogAction onClick={handleDeleteFeed}>
             DELETE
           </AlertDialogAction>
         )}

@@ -15,7 +15,6 @@ const meta = {
   args: {
     platformId: "platform_id_1",
     platformTitle: "Pedro Duarte",
-    handleDelete: () => {},
   },
 } satisfies Meta<typeof DeletePlatformAlertDialog>;
 

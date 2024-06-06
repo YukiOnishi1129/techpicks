@@ -1,3 +1,4 @@
+import { OriginArticleType } from "./article";
 import { OriginCategoryType } from "./category";
 import { OriginPlatformType } from "./platform";
 
@@ -20,6 +21,7 @@ export type OriginFeedType = {
 export type FeedType = OriginFeedType & {
   category: OriginCategoryType;
   platform: OriginPlatformType;
+  articles: Array<OriginArticleType>;
 };
 
 export type FetchFeedsAPIResponse = {
