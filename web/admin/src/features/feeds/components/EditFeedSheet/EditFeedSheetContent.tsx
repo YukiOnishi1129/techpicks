@@ -546,8 +546,7 @@ export const EditFeedSheetContent: FC<EditFeedSheetContentProps> = ({
         <DeleteFeedAlertDialog
           feedId={feed.id}
           feedTitle={feed.name}
-          disabled={articles.length > 0}
-          handleDelete={handleSheetClose}
+          disabled={isArticlePending || articles.length > 0}
         />
       </div>
     </SheetContent>
