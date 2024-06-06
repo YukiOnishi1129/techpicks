@@ -32,7 +32,7 @@ export const getFeeds = async ({
     );
 
     if (keyword) {
-      query.like("title", `%${keyword}%`);
+      query.or(`name.ilike.%${keyword}%,description.ilike.%${keyword}%`);
     }
     if (language) {
       query.eq("platforms.is_eng", language === "2");
@@ -107,7 +107,7 @@ export const getFeedsCount = async ({
     const query = supabase.from("feeds").select(`*`, { count: "exact" });
 
     if (keyword) {
-      query.like("title", `%${keyword}%`);
+      query.or(`name.ilike.%${keyword}%,description.ilike.%${keyword}%`);
     }
     if (language) {
       query.eq("platforms.is_eng", language === "2");

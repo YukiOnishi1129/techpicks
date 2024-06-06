@@ -23,6 +23,7 @@ import { FeedType } from "@/types/feed";
 
 import { MAX_SHOW_FEED_TABLE_DATA_COUNT } from "../../constants/table";
 import { CreateFeedDialog } from "../CreateFeedDialog";
+import { FeedSearchForm } from "../FeedSearchForm";
 
 interface FeedDataTableProps<TData, TValue> {
   allCount: number;
@@ -76,6 +77,12 @@ export function FeedDataTable<TData, TValue>({
 
         <CreateFeedDialog />
       </div>
+
+      <FeedSearchForm
+        keyword={keyword}
+        language={language}
+        platformSiteType={platformSiteType}
+      />
 
       <Table>
         <TableHeader>
