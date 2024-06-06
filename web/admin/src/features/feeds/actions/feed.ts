@@ -51,6 +51,7 @@ type FetchFeedsCountAPIRequest = {
   language?: string;
   platformSiteType?: string;
   siteUrl?: string;
+  rssUrl?: string;
 };
 
 export const fetchFeedsCountAPI = async ({
@@ -58,6 +59,7 @@ export const fetchFeedsCountAPI = async ({
   language,
   platformSiteType,
   siteUrl,
+  rssUrl,
 }: FetchFeedsCountAPIRequest): Promise<FetchCountAPIResponse> => {
   let url = `${process.env.WEB_DOMAIN}/api/feeds/count/?dummy=dummy`;
   if (keyword) {
@@ -71,6 +73,9 @@ export const fetchFeedsCountAPI = async ({
   }
   if (siteUrl) {
     url += `&siteUrl=${siteUrl}`;
+  }
+  if (rssUrl) {
+    url += `&rssUrl=${rssUrl}`;
   }
 
   const res = await getFetch({

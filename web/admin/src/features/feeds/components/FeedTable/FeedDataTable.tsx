@@ -22,6 +22,7 @@ import { useStatusToast } from "@/hooks/useStatusToast";
 import { FeedType } from "@/types/feed";
 
 import { MAX_SHOW_FEED_TABLE_DATA_COUNT } from "../../constants/table";
+import { CreateFeedDialog } from "../CreateFeedDialog";
 
 interface FeedDataTableProps<TData, TValue> {
   allCount: number;
@@ -72,6 +73,8 @@ export function FeedDataTable<TData, TValue>({
             {currentDataCount} / {allCount}
           </p>
         </div>
+
+        <CreateFeedDialog />
       </div>
 
       <Table>

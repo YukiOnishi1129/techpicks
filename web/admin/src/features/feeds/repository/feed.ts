@@ -1,4 +1,6 @@
 "use server";
+// eslint-disable-next-line import/named
+import { v4 as uuidv4 } from "uuid";
 
 import { createGetOnlyServerSideClient } from "@/lib/supabase/client/serverClient";
 
@@ -126,6 +128,7 @@ export type GetFeedsCountDT0 = {
   language?: string;
   platformSiteType?: string;
   siteUrl?: string;
+  rssUrl?: string;
 };
 
 export const getFeedsCount = async ({
@@ -133,6 +136,7 @@ export const getFeedsCount = async ({
   language,
   platformSiteType,
   siteUrl,
+  rssUrl,
 }: GetFeedsCountDT0) => {
   try {
     const supabase = await createGetOnlyServerSideClient();
@@ -168,6 +172,10 @@ export const getFeedsCount = async ({
       query.eq("platforms.site_url", siteUrl);
     }
 
+    if (rssUrl) {
+      query.like("rss_url", `%${rssUrl}%`);
+    }
+
     const { error, count } = await query;
 
     if (error || !count) return 0;
@@ -175,6 +183,64 @@ export const getFeedsCount = async ({
     return count;
   } catch (err) {
     throw new Error(`Failed to get feeds count: ${err}`);
+  }
+};
+
+/**
+ * ==========================================
+ * Create
+ * ==========================================
+ */
+
+export type CreateFeedDTO = {
+  platformId: string;
+  categoryId: string;
+  name: string;
+  description: string;
+  rssUrl: string;
+  siteUrl: string;
+  thumbnailUrl: string;
+  trendPlatformType: number;
+  apiQueryParam?: string;
+};
+
+export const createFeed = async ({
+  platformId,
+  categoryId,
+  name,
+  description,
+  rssUrl,
+  siteUrl,
+  thumbnailUrl,
+  trendPlatformType,
+  apiQueryParam,
+}: CreateFeedDTO) => {
+  try {
+    const uuid = uuidv4();
+    const supabase = await createGetOnlyServerSideClient();
+    const { data, error } = await supabase
+      .from("feeds")
+      .insert([
+        {
+          id: uuid,
+          platform_id: platformId,
+          category_id: categoryId,
+          name,
+          description,
+          rss_url: rssUrl,
+          site_url: siteUrl,
+          thumbnail_url: thumbnailUrl,
+          trend_platform_type: trendPlatformType,
+          api_query_param: apiQueryParam,
+        },
+      ])
+      .select();
+
+    if (error || !data) return;
+
+    return data[0].id;
+  } catch (err) {
+    throw new Error(`Failed to create feed: ${err}`);
   }
 };
 

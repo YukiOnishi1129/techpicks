@@ -21,6 +21,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Loader } from "@/components/ui/loader";
 
+import { useHookForm } from "@/hooks/useHookForm";
+
 import { CategoryType } from "@/types/category";
 
 const KeywordFormSchema = z.object({
@@ -63,6 +65,7 @@ export const SelectCategoryList: FC<SelectCategoryListProps> = ({
   });
 
   const { showCategoryTypeName } = useCategory();
+  const { stopPropagate } = useHookForm();
 
   const selectedCategoryName = form.watch("categoryName");
 
@@ -150,7 +153,9 @@ export const SelectCategoryList: FC<SelectCategoryListProps> = ({
 
       <div className="mb-2">
         <Form {...keywordForm}>
-          <form onSubmit={keywordForm.handleSubmit(handleSearch)}>
+          <form
+            onSubmit={stopPropagate(keywordForm.handleSubmit(handleSearch))}
+          >
             <FormField
               control={keywordForm.control}
               name="keyword"
@@ -161,6 +166,7 @@ export const SelectCategoryList: FC<SelectCategoryListProps> = ({
                       className="border-primary bg-secondary text-primary"
                       placeholder="search keyword"
                       {...field}
+                      onKeyDown={(e) => e.stopPropagation()}
                     />
                   </FormControl>
                 </FormItem>
@@ -174,54 +180,56 @@ export const SelectCategoryList: FC<SelectCategoryListProps> = ({
         {flatCategories.length === 0 ? (
           <p>No categories found</p>
         ) : (
-          <>
-            {flatCategories.map((category) => (
-              <FormField
-                key={category.id}
-                control={form.control}
-                name="categoryId"
-                render={({ field }) => (
-                  <FormItem
-                    key={category.id}
-                    // eslint-disable-next-line tailwindcss/migration-from-tailwind-2
-                    className="flex w-full cursor-pointer items-center border-t-2 border-t-secondary hover:bg-secondary hover:bg-opacity-10"
-                  >
-                    <FormControl>
-                      <Checkbox
-                        checked={field.value?.includes(category.id)}
-                        onCheckedChange={(checked) => {
-                          if (checked) {
-                            field.onChange(category.id);
-                            form.setValue("categoryName", category.name);
-                            form.setValue(
-                              "categoryType",
-                              Number(category.type)
-                            );
-                          }
-                        }}
-                      />
-                    </FormControl>
+          <Form {...form}>
+            <form>
+              {flatCategories.map((category) => (
+                <FormField
+                  key={category.id}
+                  control={form.control}
+                  name="categoryId"
+                  render={({ field }) => (
+                    <FormItem
+                      key={category.id}
+                      // eslint-disable-next-line tailwindcss/migration-from-tailwind-2
+                      className="flex w-full cursor-pointer items-center border-t-2 border-t-secondary hover:bg-secondary hover:bg-opacity-10"
+                    >
+                      <FormControl>
+                        <Checkbox
+                          checked={field.value?.includes(category.id)}
+                          onCheckedChange={(checked) => {
+                            if (checked) {
+                              field.onChange(category.id);
+                              form.setValue("categoryName", category.name);
+                              form.setValue(
+                                "categoryType",
+                                Number(category.type)
+                              );
+                            }
+                          }}
+                        />
+                      </FormControl>
 
-                    <FormLabel className="ml-2 flex h-12 w-full cursor-pointer items-center justify-between pb-2 text-sm font-normal">
-                      <p className="flex w-2/5 items-center text-lg">
-                        {category.name}
-                      </p>
-                      <div className="w-2/5">
-                        <p>{showCategoryTypeName(category.type)}</p>
-                      </div>
-                    </FormLabel>
-                  </FormItem>
+                      <FormLabel className="ml-2 flex h-12 w-full cursor-pointer items-center justify-between pb-2 text-sm font-normal">
+                        <p className="flex w-2/5 items-center text-lg">
+                          {category.name}
+                        </p>
+                        <div className="w-2/5">
+                          <p>{showCategoryTypeName(category.type)}</p>
+                        </div>
+                      </FormLabel>
+                    </FormItem>
+                  )}
+                />
+              ))}
+              <div ref={observerTarget}>
+                {hashMore && (
+                  <div className="flex justify-center py-4">
+                    <Loader />
+                  </div>
                 )}
-              />
-            ))}
-            <div ref={observerTarget}>
-              {hashMore && (
-                <div className="flex justify-center py-4">
-                  <Loader />
-                </div>
-              )}
-            </div>
-          </>
+              </div>
+            </form>
+          </Form>
         )}
       </div>
 

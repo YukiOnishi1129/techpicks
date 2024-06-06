@@ -3,14 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import { useRouter } from "next/navigation";
-import {
-  FC,
-  useMemo,
-  useCallback,
-  useTransition,
-  useEffect,
-  useState,
-} from "react";
+import { FC, useCallback, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -18,6 +11,11 @@ import { fetchCategoryByIdAPI } from "@/features/categories/actions/category";
 import { fetchPlatformByIdAPI } from "@/features/platforms/actions/platform";
 
 import { Button } from "@/components/ui/button";
+import {
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import {
   Form,
   FormField,
@@ -35,22 +33,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  SheetContent,
-  SheetHeader,
-  SheetClose,
-  SheetTitle,
-} from "@/components/ui/sheet";
+import { SheetClose } from "@/components/ui/sheet";
 import { Textarea } from "@/components/ui/textarea";
 
 import { useServerRevalidatePage } from "@/hooks/useServerRevalidatePage";
 import { useStatusToast } from "@/hooks/useStatusToast";
 
 import { CategoryType } from "@/types/category";
-import { FeedType } from "@/types/feed";
 import { PlatformType } from "@/types/platform";
 
-import { updateFeed } from "../../repository/feed";
+import { fetchFeedsCountAPI } from "../../actions/feed";
+import { createFeed } from "../../repository/feed";
 import { SelectCategoryDialog } from "../SelectCategoryDialog";
 import { SelectPlatformDialog } from "../SelectPlatformDialog";
 
@@ -95,32 +88,20 @@ const FormSchema = z.object({
   apiQueryParam: z.string().optional(),
 });
 
-type EditFeedSheetContentProps = {
-  feed: FeedType;
-  handleSheetClose: () => void;
+type CreateFeedDialogContentProps = {
+  handleDialogClose: () => void;
 };
 
-export const EditFeedSheetContent: FC<EditFeedSheetContentProps> = ({
-  feed,
-  handleSheetClose,
+export const CreateFeedDialogContent: FC<CreateFeedDialogContentProps> = ({
+  handleDialogClose,
 }) => {
   const router = useRouter();
   const { revalidatePage } = useServerRevalidatePage();
   const { successToast, failToast } = useStatusToast();
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
-    defaultValues: {
-      name: feed.name,
-      description: feed.description,
-      platformId: feed.platformId,
-      categoryId: feed.categoryId,
-      rssUrl: feed.rssUrl,
-      siteUrl: feed.siteUrl,
-      thumbnailUrl: feed.thumbnailUrl,
-      trendPlatformType: String(feed.trendPlatformType),
-      apiQueryParam: feed.apiQueryParam,
-    },
   });
+
   const [isPending, startTransition] = useTransition();
   const [isPlatformPending, startPlatformTransition] = useTransition();
   const [isCategoryPending, startCategoryTransition] = useTransition();
@@ -132,41 +113,6 @@ export const EditFeedSheetContent: FC<EditFeedSheetContentProps> = ({
   const [selectedCategory, setSelectedCategory] = useState<
     CategoryType | undefined
   >(undefined);
-
-  const inputName = form.watch("name");
-  const inputDescription = form.watch("description");
-  const inputPlatformId = form.watch("platformId");
-  const inputCategoryId = form.watch("categoryId");
-  const inputRssUrl = form.watch("rssUrl");
-  const inputSiteUrl = form.watch("siteUrl");
-  const inputThumbnailUrl = form.watch("thumbnailUrl");
-  const inputTrendPlatformType = form.watch("trendPlatformType");
-  const inputApiQueryParam = form.watch("apiQueryParam");
-
-  const isEditDisabledCheck = useMemo(() => {
-    return (
-      feed.name === inputName &&
-      feed.description === inputDescription &&
-      feed.platformId === inputPlatformId &&
-      feed.categoryId === inputCategoryId &&
-      feed.rssUrl === inputRssUrl &&
-      feed.siteUrl === inputSiteUrl &&
-      feed.thumbnailUrl === inputThumbnailUrl &&
-      feed.trendPlatformType === Number(inputTrendPlatformType) &&
-      feed.apiQueryParam === inputApiQueryParam
-    );
-  }, [
-    feed,
-    inputName,
-    inputDescription,
-    inputPlatformId,
-    inputCategoryId,
-    inputRssUrl,
-    inputSiteUrl,
-    inputThumbnailUrl,
-    inputTrendPlatformType,
-    inputApiQueryParam,
-  ]);
 
   const fetchPlatform = useCallback(
     async (platformId: string) => {
@@ -197,12 +143,37 @@ export const EditFeedSheetContent: FC<EditFeedSheetContentProps> = ({
     [form]
   );
 
-  const handleSubmitEditFeed = useCallback(
+  const isCheckExitSameRssUrl = useCallback(async () => {
+    let trendPlatformType = form.getValues("trendPlatformType");
+    if (!trendPlatformType) return;
+    let inputRssUrl = form.getValues("rssUrl");
+    if (!inputRssUrl) return;
+    if (
+      inputRssUrl.substring(inputRssUrl.length - 1, inputRssUrl.length) === "/"
+    ) {
+      inputRssUrl = inputRssUrl.substring(0, inputRssUrl.length - 1);
+    }
+
+    // url check
+    const res = await fetchFeedsCountAPI({
+      rssUrl: inputRssUrl,
+    });
+    const count = res.data.count;
+
+    return count > 0;
+  }, [form]);
+
+  const handleSubmitCreateFeed = useCallback(
     async (values: z.infer<typeof FormSchema>) => {
       startTransition(async () => {
-        if (isEditDisabledCheck) return;
-        const updatedId = await updateFeed({
-          id: feed.id,
+        // check same rss url
+        if (await isCheckExitSameRssUrl()) {
+          failToast({
+            description: "Failed: Same rss url",
+          });
+          return;
+        }
+        const createdId = await createFeed({
           platformId: values.platformId,
           categoryId: values.categoryId,
           name: values.name,
@@ -213,15 +184,15 @@ export const EditFeedSheetContent: FC<EditFeedSheetContentProps> = ({
           trendPlatformType: Number(values.trendPlatformType),
           apiQueryParam: values.apiQueryParam,
         });
-        if (!updatedId) {
+        if (!createdId) {
           failToast({
-            description: "Failed: Update feed",
+            description: "Failed: Create feed",
           });
           return;
         }
 
         successToast({
-          description: "Success: Update feed",
+          description: "Success: Create feed",
         });
 
         // 3. revalidate
@@ -229,24 +200,18 @@ export const EditFeedSheetContent: FC<EditFeedSheetContentProps> = ({
         router.replace(`/feed`);
       });
     },
-    [isEditDisabledCheck, feed, revalidatePage, router, successToast, failToast]
+    [revalidatePage, router, successToast, failToast, isCheckExitSameRssUrl]
   );
 
-  useEffect(() => {
-    fetchPlatform(feed.platform.id);
-    fetchCategory(feed.category.id);
-  }, [fetchPlatform, fetchCategory, feed.platform.id, feed.category.id]);
-
   return (
-    <SheetContent className="h-screen overflow-y-scroll">
-      <SheetHeader>
-        <SheetTitle>Edit platform</SheetTitle>
-      </SheetHeader>
-
+    <DialogContent className="h-screen overflow-y-scroll">
+      <DialogHeader>
+        <DialogTitle>{"Add feed"}</DialogTitle>
+      </DialogHeader>
       <Form {...form}>
         <form
           className="mt-4"
-          onSubmit={form.handleSubmit(handleSubmitEditFeed)}
+          onSubmit={form.handleSubmit(handleSubmitCreateFeed)}
         >
           <div className="space-y-4">
             <FormField
@@ -377,6 +342,7 @@ export const EditFeedSheetContent: FC<EditFeedSheetContentProps> = ({
                         <SelectValue
                           placeholder="platformSiteType"
                           className="text-gray-400"
+                          defaultValue={"0"}
                         />
                       </SelectTrigger>
                     </FormControl>
@@ -500,7 +466,7 @@ export const EditFeedSheetContent: FC<EditFeedSheetContentProps> = ({
 
           <div className="mt-16 flex items-center justify-between">
             <SheetClose asChild className="inline-block">
-              <Button variant={"outline"} onClick={handleSheetClose}>
+              <Button variant={"outline"} onClick={handleDialogClose}>
                 {"CLOSE"}
               </Button>
             </SheetClose>
@@ -510,22 +476,11 @@ export const EditFeedSheetContent: FC<EditFeedSheetContentProps> = ({
                 PLEASE WAIT
               </Button>
             ) : (
-              <Button disabled={!form.formState.isValid || isEditDisabledCheck}>
-                {"EDIT"}
-              </Button>
+              <Button disabled={!form.formState.isValid}>{"ADD"}</Button>
             )}
           </div>
         </form>
       </Form>
-
-      {/* <div className="mt-12 flex ">
-        <DeletePlatformAlertDialog
-          platformId={platform.id}
-          platformTitle={platform.name}
-          disabled={platform.feeds.length !== 0}
-          handleDelete={handleSheetClose}
-        />
-      </div> */}
-    </SheetContent>
+    </DialogContent>
   );
 };
