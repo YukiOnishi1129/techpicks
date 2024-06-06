@@ -15,6 +15,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { fetchCategoryByIdAPI } from "@/features/categories/actions/category";
+import { fetchFeedArticleRelationsToArticlesAPI } from "@/features/feedArticleRelations/actions/feedArticleRelation";
 import { fetchPlatformByIdAPI } from "@/features/platforms/actions/platform";
 
 import { Button } from "@/components/ui/button";
@@ -46,11 +47,13 @@ import { Textarea } from "@/components/ui/textarea";
 import { useServerRevalidatePage } from "@/hooks/useServerRevalidatePage";
 import { useStatusToast } from "@/hooks/useStatusToast";
 
+import { ArticleType } from "@/types/article";
 import { CategoryType } from "@/types/category";
 import { FeedType } from "@/types/feed";
 import { PlatformType } from "@/types/platform";
 
 import { updateFeed } from "../../repository/feed";
+import { DeleteFeedAlertDialog } from "../DeleteFeedAlertDialog";
 import { SelectCategoryDialog } from "../SelectCategoryDialog";
 import { SelectPlatformDialog } from "../SelectPlatformDialog";
 
@@ -124,6 +127,7 @@ export const EditFeedSheetContent: FC<EditFeedSheetContentProps> = ({
   const [isPending, startTransition] = useTransition();
   const [isPlatformPending, startPlatformTransition] = useTransition();
   const [isCategoryPending, startCategoryTransition] = useTransition();
+  const [isArticlePending, startArticleTransition] = useTransition();
 
   const [selectedPlatform, setSelectedPlatform] = useState<
     PlatformType | undefined
@@ -132,6 +136,8 @@ export const EditFeedSheetContent: FC<EditFeedSheetContentProps> = ({
   const [selectedCategory, setSelectedCategory] = useState<
     CategoryType | undefined
   >(undefined);
+
+  const [articles, setArticles] = useState<Array<ArticleType>>([]);
 
   const inputName = form.watch("name");
   const inputDescription = form.watch("description");
@@ -197,6 +203,17 @@ export const EditFeedSheetContent: FC<EditFeedSheetContentProps> = ({
     [form]
   );
 
+  const fetchFeedArticleRelationsToArticles = useCallback(async () => {
+    startArticleTransition(async () => {
+      const res = await fetchFeedArticleRelationsToArticlesAPI({
+        feedId: feed.id,
+      });
+      if (res.data!.articles) {
+        setArticles(res.data.articles);
+      }
+    });
+  }, [feed.id]);
+
   const handleSubmitEditFeed = useCallback(
     async (values: z.infer<typeof FormSchema>) => {
       startTransition(async () => {
@@ -235,7 +252,14 @@ export const EditFeedSheetContent: FC<EditFeedSheetContentProps> = ({
   useEffect(() => {
     fetchPlatform(feed.platform.id);
     fetchCategory(feed.category.id);
-  }, [fetchPlatform, fetchCategory, feed.platform.id, feed.category.id]);
+    fetchFeedArticleRelationsToArticles();
+  }, [
+    fetchPlatform,
+    fetchCategory,
+    fetchFeedArticleRelationsToArticles,
+    feed.platform.id,
+    feed.category.id,
+  ]);
 
   return (
     <SheetContent className="h-screen overflow-y-scroll">
@@ -518,14 +542,14 @@ export const EditFeedSheetContent: FC<EditFeedSheetContentProps> = ({
         </form>
       </Form>
 
-      {/* <div className="mt-12 flex ">
-        <DeletePlatformAlertDialog
-          platformId={platform.id}
-          platformTitle={platform.name}
-          disabled={platform.feeds.length !== 0}
+      <div className="mt-12 flex ">
+        <DeleteFeedAlertDialog
+          feedId={feed.id}
+          feedTitle={feed.name}
+          disabled={articles.length > 0}
           handleDelete={handleSheetClose}
         />
-      </div> */}
+      </div>
     </SheetContent>
   );
 };
