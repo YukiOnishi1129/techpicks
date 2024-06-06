@@ -381,6 +381,9 @@ export const EditFeedSheetContent: FC<EditFeedSheetContentProps> = ({
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
+                      <SelectItem value="0">
+                        <span>Unknown</span>
+                      </SelectItem>
                       <SelectItem value="1">
                         <span>Zenn</span>
                       </SelectItem>
@@ -430,7 +433,7 @@ export const EditFeedSheetContent: FC<EditFeedSheetContentProps> = ({
               render={({ field }) => (
                 <FormItem className="">
                   <FormLabel>
-                    Rss Url
+                    Site Url
                     <span className="text-red-700"> *</span>
                   </FormLabel>
                   <FormControl>

@@ -42,6 +42,7 @@ import { useStatusToast } from "@/hooks/useStatusToast";
 import { CategoryType } from "@/types/category";
 import { PlatformType } from "@/types/platform";
 
+import { fetchFeedsCountAPI } from "../../actions/feed";
 import { createFeed } from "../../repository/feed";
 import { SelectCategoryDialog } from "../SelectCategoryDialog";
 import { SelectPlatformDialog } from "../SelectPlatformDialog";
@@ -142,9 +143,36 @@ export const CreateFeedDialogContent: FC<CreateFeedDialogContentProps> = ({
     [form]
   );
 
+  const isCheckExitSameRssUrl = useCallback(async () => {
+    let trendPlatformType = form.getValues("trendPlatformType");
+    if (!trendPlatformType) return;
+    let inputRssUrl = form.getValues("rssUrl");
+    if (!inputRssUrl) return;
+    if (
+      inputRssUrl.substring(inputRssUrl.length - 1, inputRssUrl.length) === "/"
+    ) {
+      inputRssUrl = inputRssUrl.substring(0, inputRssUrl.length - 1);
+    }
+
+    // url check
+    const res = await fetchFeedsCountAPI({
+      rssUrl: inputRssUrl,
+    });
+    const count = res.data.count;
+
+    return count > 0;
+  }, [form]);
+
   const handleSubmitCreateFeed = useCallback(
     async (values: z.infer<typeof FormSchema>) => {
       startTransition(async () => {
+        // check same rss url
+        if (await isCheckExitSameRssUrl()) {
+          failToast({
+            description: "Failed: Same rss url",
+          });
+          return;
+        }
         const createdId = await createFeed({
           platformId: values.platformId,
           categoryId: values.categoryId,

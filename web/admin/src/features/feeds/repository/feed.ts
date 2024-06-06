@@ -128,6 +128,7 @@ export type GetFeedsCountDT0 = {
   language?: string;
   platformSiteType?: string;
   siteUrl?: string;
+  rssUrl?: string;
 };
 
 export const getFeedsCount = async ({
@@ -135,6 +136,7 @@ export const getFeedsCount = async ({
   language,
   platformSiteType,
   siteUrl,
+  rssUrl,
 }: GetFeedsCountDT0) => {
   try {
     const supabase = await createGetOnlyServerSideClient();
@@ -168,6 +170,10 @@ export const getFeedsCount = async ({
 
     if (siteUrl) {
       query.eq("platforms.site_url", siteUrl);
+    }
+
+    if (rssUrl) {
+      query.like("rss_url", `%${rssUrl}%`);
     }
 
     const { error, count } = await query;
