@@ -157,7 +157,7 @@ export const EditPlatformSheetContent: FC<EditPlatformSheetContentProps> = ({
   );
 
   return (
-    <SheetContent>
+    <SheetContent className="h-screen overflow-y-scroll">
       <SheetHeader>
         <SheetTitle>Edit platform</SheetTitle>
       </SheetHeader>
