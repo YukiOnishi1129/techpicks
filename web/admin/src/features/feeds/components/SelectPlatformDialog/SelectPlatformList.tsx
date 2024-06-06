@@ -175,58 +175,60 @@ export const SelectPlatformList: FC<SelectPlatformListProps> = ({
         {flatPlatforms.length === 0 ? (
           <p>No platforms found</p>
         ) : (
-          <>
-            {flatPlatforms.map((platform) => (
-              <FormField
-                key={platform.id}
-                control={form.control}
-                name="platformId"
-                render={({ field }) => (
-                  <FormItem
-                    key={platform.id}
-                    // eslint-disable-next-line tailwindcss/migration-from-tailwind-2
-                    className="flex w-full cursor-pointer items-center border-t-2 border-t-secondary hover:bg-secondary hover:bg-opacity-10"
-                  >
-                    <FormControl>
-                      <Checkbox
-                        checked={field.value?.includes(platform.id)}
-                        onCheckedChange={(checked) => {
-                          if (checked) {
-                            field.onChange(platform.id);
-                            form.setValue("platformName", platform.name);
-                            form.setValue(
-                              "platformThumbnailUrl",
-                              platform.faviconUrl
-                            );
-                          }
-                        }}
-                      />
-                    </FormControl>
+          <Form {...form}>
+            <form>
+              {flatPlatforms.map((platform) => (
+                <FormField
+                  key={platform.id}
+                  control={form.control}
+                  name="platformId"
+                  render={({ field }) => (
+                    <FormItem
+                      key={platform.id}
+                      // eslint-disable-next-line tailwindcss/migration-from-tailwind-2
+                      className="flex w-full cursor-pointer items-center border-t-2 border-t-secondary hover:bg-secondary hover:bg-opacity-10"
+                    >
+                      <FormControl>
+                        <Checkbox
+                          checked={field.value?.includes(platform.id)}
+                          onCheckedChange={(checked) => {
+                            if (checked) {
+                              field.onChange(platform.id);
+                              form.setValue("platformName", platform.name);
+                              form.setValue(
+                                "platformThumbnailUrl",
+                                platform.faviconUrl
+                              );
+                            }
+                          }}
+                        />
+                      </FormControl>
 
-                    <FormLabel className="ml-2 flex h-12 w-full cursor-pointer items-center pb-2 text-sm font-normal">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        className="mr-2 inline-block size-6 bg-white"
-                        src={platform?.faviconUrl}
-                        alt=""
-                      />
+                      <FormLabel className="ml-2 flex h-12 w-full cursor-pointer items-center pb-2 text-sm font-normal">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          className="mr-2 inline-block size-6 bg-white"
+                          src={platform?.faviconUrl}
+                          alt=""
+                        />
 
-                      <p className="flex w-full items-center text-lg">
-                        {platform.name}
-                      </p>
-                    </FormLabel>
-                  </FormItem>
+                        <p className="flex w-full items-center text-lg">
+                          {platform.name}
+                        </p>
+                      </FormLabel>
+                    </FormItem>
+                  )}
+                />
+              ))}
+              <div ref={observerTarget}>
+                {hashMore && (
+                  <div className="flex justify-center py-4">
+                    <Loader />
+                  </div>
                 )}
-              />
-            ))}
-            <div ref={observerTarget}>
-              {hashMore && (
-                <div className="flex justify-center py-4">
-                  <Loader />
-                </div>
-              )}
-            </div>
-          </>
+              </div>
+            </form>
+          </Form>
         )}
       </div>
 
