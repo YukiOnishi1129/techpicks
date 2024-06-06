@@ -16,14 +16,12 @@ const FormSchema = z.object({
 });
 
 type PlatformSearchInputProps = {
-  offset?: number;
   keyword?: string;
   language?: string;
   platformSiteType?: string;
 };
 
 export const PlatformSearchInput: FC<PlatformSearchInputProps> = ({
-  offset,
   keyword,
   language,
   platformSiteType,
@@ -40,7 +38,6 @@ export const PlatformSearchInput: FC<PlatformSearchInputProps> = ({
   const handleSearch = useCallback(
     async (values: z.infer<typeof FormSchema>) => {
       let keywordPath = "";
-      const requestOffset = offset ? offset - 1 : 1;
       if (!!values.keyword && values.keyword.trim() !== "") {
         keywordPath = `&keyword=${values.keyword}`;
       }
@@ -50,14 +47,14 @@ export const PlatformSearchInput: FC<PlatformSearchInputProps> = ({
       }
       let platformSiteTypePath = "";
       if (platformSiteType) {
-        platformSiteTypePath = `&platformSiteType=${platformSiteType}`;
+        platformSiteTypePath = `&platformSiteType=${platformSiteType}${platformSiteTypePath}`;
       }
       await revalidatePage();
       router.replace(
-        `/platform?$offset=${requestOffset}${keywordPath}${languagePath}${platformSiteTypePath}`
+        `/platform?$offset=1${keywordPath}${languagePath}${platformSiteTypePath}`
       );
     },
-    [offset, language, platformSiteType, router, revalidatePage]
+    [language, platformSiteType, router, revalidatePage]
   );
 
   return (

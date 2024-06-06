@@ -18,7 +18,6 @@ import {
 import { useServerRevalidatePage } from "@/hooks/useServerRevalidatePage";
 
 type PlatformSiteTypeSelectProps = {
-  offset?: number;
   keyword?: string;
   language?: string;
   platformSiteType?: string;
@@ -29,7 +28,6 @@ const FormSchema = z.object({
 });
 
 export const PlatformSiteTypeSelect: FC<PlatformSiteTypeSelectProps> = ({
-  offset,
   keyword,
   language,
   platformSiteType,
@@ -47,7 +45,6 @@ export const PlatformSiteTypeSelect: FC<PlatformSiteTypeSelectProps> = ({
     async (value: string, onChange: (...event: any[]) => void) => {
       onChange(value);
       let keywordPath = "";
-      const requestOffset = offset ? offset - 1 : 1;
       if (!!keyword && keyword.trim() !== "") {
         keywordPath = `&keyword=${keyword}`;
       }
@@ -61,10 +58,10 @@ export const PlatformSiteTypeSelect: FC<PlatformSiteTypeSelectProps> = ({
       }
       await revalidatePage();
       router.replace(
-        `/platform?$offset=${requestOffset}${keywordPath}${languagePath}${platformSiteTypePath}`
+        `/platform?$offset=1${keywordPath}${languagePath}${platformSiteTypePath}`
       );
     },
-    [keyword, language, offset, router, revalidatePage]
+    [keyword, language, router, revalidatePage]
   );
 
   return (

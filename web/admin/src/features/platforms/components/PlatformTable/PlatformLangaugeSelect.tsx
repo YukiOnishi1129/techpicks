@@ -21,7 +21,6 @@ import { useServerRevalidatePage } from "@/hooks/useServerRevalidatePage";
 import { ENGLISH_IMAGE, JAPANESE_IMAGE } from "@/constants/image";
 
 type PlatformLanguageSelectProps = {
-  offset?: number;
   keyword?: string;
   language?: string;
   platformSiteType?: string;
@@ -32,7 +31,6 @@ const FormSchema = z.object({
 });
 
 export const PlatformLanguageSelect: FC<PlatformLanguageSelectProps> = ({
-  offset,
   keyword,
   language,
   platformSiteType,
@@ -50,7 +48,6 @@ export const PlatformLanguageSelect: FC<PlatformLanguageSelectProps> = ({
     async (value: string, onChange: (...event: any[]) => void) => {
       onChange(value);
       let keywordPath = "";
-      const requestOffset = offset ? offset - 1 : 1;
       if (!!keyword && keyword.trim() !== "") {
         keywordPath = `&keyword=${keyword}`;
       }
@@ -64,10 +61,10 @@ export const PlatformLanguageSelect: FC<PlatformLanguageSelectProps> = ({
       }
       await revalidatePage();
       router.replace(
-        `/platform?$offset=${requestOffset}${keywordPath}${languagePath}`
+        `/platform?$offset=1${keywordPath}${languagePath}${platformSiteTypePath}`
       );
     },
-    [keyword, offset, platformSiteType, router, revalidatePage]
+    [keyword, platformSiteType, router, revalidatePage]
   );
 
   return (
