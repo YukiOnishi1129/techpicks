@@ -21,6 +21,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Loader } from "@/components/ui/loader";
 
+import { useHookForm } from "@/hooks/useHookForm";
+
 import { CategoryType } from "@/types/category";
 
 const KeywordFormSchema = z.object({
@@ -63,6 +65,7 @@ export const SelectCategoryList: FC<SelectCategoryListProps> = ({
   });
 
   const { showCategoryTypeName } = useCategory();
+  const { stopPropagate } = useHookForm();
 
   const selectedCategoryName = form.watch("categoryName");
 
@@ -150,7 +153,9 @@ export const SelectCategoryList: FC<SelectCategoryListProps> = ({
 
       <div className="mb-2">
         <Form {...keywordForm}>
-          <form onSubmit={keywordForm.handleSubmit(handleSearch)}>
+          <form
+            onSubmit={stopPropagate(keywordForm.handleSubmit(handleSearch))}
+          >
             <FormField
               control={keywordForm.control}
               name="keyword"
@@ -161,6 +166,7 @@ export const SelectCategoryList: FC<SelectCategoryListProps> = ({
                       className="border-primary bg-secondary text-primary"
                       placeholder="search keyword"
                       {...field}
+                      onKeyDown={(e) => e.stopPropagation()}
                     />
                   </FormControl>
                 </FormItem>

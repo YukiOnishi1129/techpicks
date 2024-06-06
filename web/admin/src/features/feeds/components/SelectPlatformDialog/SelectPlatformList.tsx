@@ -20,6 +20,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Loader } from "@/components/ui/loader";
 
+import { useHookForm } from "@/hooks/useHookForm";
+
 import { PlatformType } from "@/types/platform";
 
 const KeywordFormSchema = z.object({
@@ -67,6 +69,8 @@ export const SelectPlatformList: FC<SelectPlatformListProps> = ({
   const [platforms, setPlatforms] = useState<PlatformType[]>(initialPlatforms);
   const [hashMore, setHashMore] = useState(true);
   const [offset, setOffset] = useState(1);
+
+  const { stopPropagate } = useHookForm();
 
   const flatPlatforms = platforms
     ? platforms.flatMap((platform) => platform)
@@ -151,7 +155,9 @@ export const SelectPlatformList: FC<SelectPlatformListProps> = ({
 
       <div className="mb-2">
         <Form {...keywordForm}>
-          <form onSubmit={keywordForm.handleSubmit(handleSearch)}>
+          <form
+            onSubmit={stopPropagate(keywordForm.handleSubmit(handleSearch))}
+          >
             <FormField
               control={keywordForm.control}
               name="keyword"

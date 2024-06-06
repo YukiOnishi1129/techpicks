@@ -200,7 +200,7 @@ export const CreateFeedDialogContent: FC<CreateFeedDialogContentProps> = ({
         router.replace(`/feed`);
       });
     },
-    [revalidatePage, router, successToast, failToast]
+    [revalidatePage, router, successToast, failToast, isCheckExitSameRssUrl]
   );
 
   return (
