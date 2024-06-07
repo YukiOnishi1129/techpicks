@@ -26,6 +26,8 @@ type FeedTableProps = {
   language?: string;
   platformSiteType?: string;
   platformId?: string;
+  categoryId?: string;
+  trendPlatformType?: string;
 };
 
 export type FeedTableState = OriginFeedType & {
@@ -47,6 +49,8 @@ export const FeedTable: FC<FeedTableProps> = ({
   language,
   platformSiteType,
   platformId,
+  categoryId,
+  trendPlatformType,
 }) => {
   const [selectedIds, setSelectedIds] = useState<Array<string>>([]);
   const feedIds = feeds.map((feed) => feed.id);
@@ -272,19 +276,40 @@ export const FeedTable: FC<FeedTableProps> = ({
     if (platformSiteType) {
       platformSiteTypePath = `&platformSiteType=${platformSiteType}`;
     }
+    let platformIdPath = "";
+    if (platformId) {
+      platformIdPath = `&platformId=${platformId}`;
+    }
+    let categoryIdPath = "";
+    if (categoryId) {
+      categoryIdPath = `&categoryId=${categoryId}`;
+    }
+    let trendPlatformTypePath = "";
+    if (trendPlatformType) {
+      trendPlatformTypePath = `&trendPlatformType=${trendPlatformType}`;
+    }
     const previousUrl =
       currentPage !== 1
-        ? `/feed?offset=${currentPage - 1}${keywordPath}${languagePath}${platformSiteTypePath}`
+        ? `/feed?offset=${currentPage - 1}${keywordPath}${languagePath}${platformSiteTypePath}${platformIdPath}${categoryIdPath}${trendPlatformTypePath}`
         : undefined;
     const nextUrl =
       currentPage < lastPage
-        ? `/feed?offset=${currentPage + 1}${keywordPath}${languagePath}${platformSiteTypePath}`
+        ? `/feed?offset=${currentPage + 1}${keywordPath}${languagePath}${platformSiteTypePath}${platformIdPath}${categoryIdPath}${trendPlatformTypePath}`
         : undefined;
     return {
       previous: previousUrl,
       next: nextUrl,
     };
-  }, [keyword, language, platformSiteType, currentPage, lastPage]);
+  }, [
+    keyword,
+    language,
+    platformSiteType,
+    platformId,
+    categoryId,
+    trendPlatformType,
+    currentPage,
+    lastPage,
+  ]);
 
   return (
     <>
