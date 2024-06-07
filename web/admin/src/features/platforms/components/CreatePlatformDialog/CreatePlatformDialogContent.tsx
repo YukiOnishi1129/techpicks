@@ -91,13 +91,11 @@ export const CreatePlatformDialogContent: FC<
     async (values: z.infer<typeof FormSchema>) => {
       startTransition(async () => {
         if (!form.formState.isValid) return;
-        console.log("🔥１");
 
         // 1.check same platform
         const res = await fetchPlatformsCountAPI({
           siteUrl: values.url,
         });
-        console.log("🔥2");
 
         if (res.data.count > 0) {
           failToast({
@@ -105,7 +103,6 @@ export const CreatePlatformDialogContent: FC<
           });
           return;
         }
-        console.log("🔥3");
 
         // 2. create platform
         const createdId = await createPlatform({
@@ -115,14 +112,12 @@ export const CreatePlatformDialogContent: FC<
           faviconUrl: values.faviconUrl,
           isEng: values.isEng === "2",
         });
-        console.log("🔥4");
         if (!createdId) {
           failToast({
             description: "Fail: created platform failed",
           });
           return;
         }
-        console.log("🔥5");
         successToast({
           description: "Success: Create platform",
         });
