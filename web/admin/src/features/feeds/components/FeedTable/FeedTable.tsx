@@ -324,6 +324,8 @@ export const FeedTable: FC<FeedTableProps> = ({
         language={language}
         platformSiteType={platformSiteType}
         platformId={platformId}
+        categoryId={categoryId}
+        trendPlatformType={trendPlatformType}
       />
 
       <div className="mt-4">

@@ -36,6 +36,8 @@ interface FeedDataTableProps<TData, TValue> {
   language?: string;
   platformSiteType?: string;
   platformId?: string;
+  categoryId?: string;
+  trendPlatformType?: string;
 }
 
 export function FeedDataTable<TData, TValue>({
@@ -49,6 +51,8 @@ export function FeedDataTable<TData, TValue>({
   language,
   platformSiteType,
   platformId,
+  categoryId,
+  trendPlatformType,
 }: FeedDataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = useState({});
   const { successToast, failToast } = useStatusToast();
@@ -85,6 +89,8 @@ export function FeedDataTable<TData, TValue>({
         language={language}
         platformSiteType={platformSiteType}
         platformId={platformId}
+        categoryId={categoryId}
+        trendPlatformType={trendPlatformType}
       />
 
       <Table>

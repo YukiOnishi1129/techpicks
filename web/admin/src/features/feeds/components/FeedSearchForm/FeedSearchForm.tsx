@@ -27,6 +27,7 @@ type FeedSearchFormProps = {
   platformId?: string;
   categoryId?: string;
   platformSiteType?: string;
+  trendPlatformType?: string;
 };
 
 export const FeedSearchForm: FC<FeedSearchFormProps> = ({
@@ -35,6 +36,7 @@ export const FeedSearchForm: FC<FeedSearchFormProps> = ({
   platformId,
   categoryId,
   platformSiteType,
+  trendPlatformType,
 }) => {
   const router = useRouter();
   const [isPlatformPending, startPlatformTransition] = useTransition();
@@ -69,14 +71,27 @@ export const FeedSearchForm: FC<FeedSearchFormProps> = ({
       if (platformSiteType) {
         platformSiteTypePath = `&platformSiteType=${platformSiteType}`;
       }
+      let platformIdPath = "";
+      if (targetPlatformId) {
+        platformIdPath = `&platformId=${targetPlatformId}`;
+      }
+      let categoryIdPath = "";
+      if (categoryId) {
+        categoryIdPath = `&categoryId=${categoryId}`;
+      }
+      let trendPlatformTypePath = "";
+      if (trendPlatformType) {
+        trendPlatformTypePath = `&trendPlatformType=${trendPlatformType}`;
+      }
+
       await serverRevalidatePage(
-        `/feed?$offset=1${keywordPath}${languagePath}${platformSiteTypePath}&platformId=${targetPlatformId}`
+        `/feed?$offset=1${keywordPath}${languagePath}${platformSiteTypePath}${platformIdPath}${categoryIdPath}${trendPlatformTypePath}`
       );
       router.replace(
-        `/feed?$offset=1${keywordPath}${languagePath}${platformSiteTypePath}&platformId=${targetPlatformId}`
+        `/feed?$offset=1${keywordPath}${languagePath}${platformSiteTypePath}${platformIdPath}${categoryIdPath}${trendPlatformTypePath}`
       );
     },
-    [keyword, language, platformSiteType, router]
+    [keyword, language, platformSiteType, categoryId, trendPlatformType, router]
   );
 
   useEffect(() => {
@@ -91,6 +106,7 @@ export const FeedSearchForm: FC<FeedSearchFormProps> = ({
         platformId={platformId}
         categoryId={categoryId}
         platformSiteType={platformSiteType}
+        trendPlatformType={trendPlatformType}
       />
 
       {/* platform */}

@@ -11,6 +11,8 @@ import { Input } from "@/components/ui/input";
 
 import { useServerRevalidatePage } from "@/hooks/useServerRevalidatePage";
 
+import { serverRevalidatePage } from "@/actions/serverAction";
+
 const FormSchema = z.object({
   keyword: z.string().optional(),
 });
@@ -21,6 +23,7 @@ type FeedSearchKeywordProps = {
   platformId?: string;
   categoryId?: string;
   platformSiteType?: string;
+  trendPlatformType?: string;
 };
 
 export const FeedSearchKeyword: FC<FeedSearchKeywordProps> = ({
@@ -29,6 +32,7 @@ export const FeedSearchKeyword: FC<FeedSearchKeywordProps> = ({
   platformId,
   categoryId,
   platformSiteType,
+  trendPlatformType,
 }) => {
   const router = useRouter();
   const { revalidatePage } = useServerRevalidatePage();
@@ -53,12 +57,34 @@ export const FeedSearchKeyword: FC<FeedSearchKeywordProps> = ({
       if (platformSiteType) {
         platformSiteTypePath = `&platformSiteType=${platformSiteType}`;
       }
-      await revalidatePage();
+      let platformIdPath = "";
+      if (platformId) {
+        platformIdPath = `&platformId=${platformId}`;
+      }
+      let categoryIdPath = "";
+      if (categoryId) {
+        categoryIdPath = `&categoryId=${categoryId}`;
+      }
+      let trendPlatformTypePath = "";
+      if (trendPlatformType) {
+        trendPlatformTypePath = `&trendPlatformType=${trendPlatformType}`;
+      }
+
+      await serverRevalidatePage(
+        `/feed?$offset=1${keywordPath}${languagePath}${platformSiteTypePath}${platformIdPath}${categoryIdPath}${trendPlatformTypePath}`
+      );
       router.replace(
-        `/feed?$offset=1${keywordPath}${languagePath}${platformSiteTypePath}`
+        `/feed?$offset=1${keywordPath}${languagePath}${platformSiteTypePath}${platformIdPath}${categoryIdPath}${trendPlatformTypePath}`
       );
     },
-    [language, platformSiteType, router, revalidatePage]
+    [
+      router,
+      language,
+      platformSiteType,
+      platformId,
+      categoryId,
+      trendPlatformType,
+    ]
   );
 
   return (
