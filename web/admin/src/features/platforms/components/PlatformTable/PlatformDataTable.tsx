@@ -112,7 +112,7 @@ export function PlatformDataTable<TData, TValue>({
       platformSiteTypePath = `&platformSiteType=${platformSiteType}`;
     }
     await serverRevalidatePage(
-      `/platform?$offset=${requestOffset}${keywordPath}${languagePath}`
+      `/platform?$offset=${requestOffset}${keywordPath}${languagePath}${platformSiteTypePath}`
     );
   }, [keyword, language, platformSiteType, offset]);
 
@@ -228,7 +228,6 @@ export function PlatformDataTable<TData, TValue>({
           <div>
             <PlatformSearchInput
               keyword={keyword}
-              offset={offset}
               language={language}
               platformSiteType={platformSiteType}
             />
@@ -236,7 +235,6 @@ export function PlatformDataTable<TData, TValue>({
 
           <div className="ml-2">
             <PlatformLanguageSelect
-              offset={offset}
               keyword={keyword}
               language={language}
               platformSiteType={platformSiteType}
@@ -244,7 +242,6 @@ export function PlatformDataTable<TData, TValue>({
           </div>
           <div className="ml-2">
             <PlatformSiteTypeSelect
-              offset={offset}
               keyword={keyword}
               language={language}
               platformSiteType={platformSiteType}

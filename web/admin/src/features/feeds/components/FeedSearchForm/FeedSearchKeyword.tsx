@@ -15,15 +15,19 @@ const FormSchema = z.object({
   keyword: z.string().optional(),
 });
 
-type PlatformSearchInputProps = {
+type FeedSearchKeywordProps = {
   keyword?: string;
   language?: string;
+  platformId?: string;
+  categoryId?: string;
   platformSiteType?: string;
 };
 
-export const PlatformSearchInput: FC<PlatformSearchInputProps> = ({
+export const FeedSearchKeyword: FC<FeedSearchKeywordProps> = ({
   keyword,
   language,
+  platformId,
+  categoryId,
   platformSiteType,
 }) => {
   const router = useRouter();
@@ -47,11 +51,11 @@ export const PlatformSearchInput: FC<PlatformSearchInputProps> = ({
       }
       let platformSiteTypePath = "";
       if (platformSiteType) {
-        platformSiteTypePath = `&platformSiteType=${platformSiteType}${platformSiteTypePath}`;
+        platformSiteTypePath = `&platformSiteType=${platformSiteType}`;
       }
       await revalidatePage();
       router.replace(
-        `/platform?$offset=1${keywordPath}${languagePath}${platformSiteTypePath}`
+        `/feed?$offset=1${keywordPath}${languagePath}${platformSiteTypePath}`
       );
     },
     [language, platformSiteType, router, revalidatePage]

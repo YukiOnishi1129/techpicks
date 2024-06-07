@@ -1,6 +1,6 @@
 import { FC } from "react";
 
-import { FeedTable } from "./FeedTable/FeedTable";
+import { FeedTable } from "./FeedTable";
 import { fetchFeedsAPI, fetchFeedsCountAPI } from "../actions/feed";
 
 type FeedTemplateProps = {
@@ -8,6 +8,9 @@ type FeedTemplateProps = {
   keyword?: string;
   language?: string;
   platformSiteType?: string;
+  platformId?: string;
+  categoryId?: string;
+  trendPlatformType?: string;
 };
 
 export const FeedTemplate: FC<FeedTemplateProps> = async ({
@@ -15,17 +18,26 @@ export const FeedTemplate: FC<FeedTemplateProps> = async ({
   keyword,
   language,
   platformSiteType,
+  platformId,
+  categoryId,
+  trendPlatformType,
 }) => {
   const res = await fetchFeedsAPI({
     offset: offset?.toString(),
     keyword: keyword,
     language: language,
     platformSiteType: platformSiteType,
+    platformId: platformId,
+    categoryId: categoryId,
+    trendPlatformType: trendPlatformType,
   });
   const resCount = await fetchFeedsCountAPI({
     keyword: keyword,
     language: language,
     platformSiteType: platformSiteType,
+    platformId: platformId,
+    categoryId: categoryId,
+    trendPlatformType: trendPlatformType,
   });
 
   return (
@@ -36,6 +48,7 @@ export const FeedTemplate: FC<FeedTemplateProps> = async ({
       keyword={keyword}
       language={language}
       platformSiteType={platformSiteType}
+      platformId={platformId}
     />
   );
 };

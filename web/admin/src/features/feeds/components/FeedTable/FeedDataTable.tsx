@@ -23,6 +23,7 @@ import { FeedType } from "@/types/feed";
 
 import { MAX_SHOW_FEED_TABLE_DATA_COUNT } from "../../constants/table";
 import { CreateFeedDialog } from "../CreateFeedDialog";
+import { FeedSearchForm } from "../FeedSearchForm";
 
 interface FeedDataTableProps<TData, TValue> {
   allCount: number;
@@ -34,6 +35,7 @@ interface FeedDataTableProps<TData, TValue> {
   keyword?: string;
   language?: string;
   platformSiteType?: string;
+  platformId?: string;
 }
 
 export function FeedDataTable<TData, TValue>({
@@ -46,6 +48,7 @@ export function FeedDataTable<TData, TValue>({
   keyword,
   language,
   platformSiteType,
+  platformId,
 }: FeedDataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = useState({});
   const { successToast, failToast } = useStatusToast();
@@ -76,6 +79,13 @@ export function FeedDataTable<TData, TValue>({
 
         <CreateFeedDialog />
       </div>
+
+      <FeedSearchForm
+        keyword={keyword}
+        language={language}
+        platformSiteType={platformSiteType}
+        platformId={platformId}
+      />
 
       <Table>
         <TableHeader>

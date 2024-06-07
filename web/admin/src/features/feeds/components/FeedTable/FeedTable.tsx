@@ -25,6 +25,7 @@ type FeedTableProps = {
   keyword?: string;
   language?: string;
   platformSiteType?: string;
+  platformId?: string;
 };
 
 export type FeedTableState = OriginFeedType & {
@@ -45,6 +46,7 @@ export const FeedTable: FC<FeedTableProps> = ({
   keyword,
   language,
   platformSiteType,
+  platformId,
 }) => {
   const [selectedIds, setSelectedIds] = useState<Array<string>>([]);
   const feedIds = feeds.map((feed) => feed.id);
@@ -296,6 +298,7 @@ export const FeedTable: FC<FeedTableProps> = ({
         keyword={keyword}
         language={language}
         platformSiteType={platformSiteType}
+        platformId={platformId}
       />
 
       <div className="mt-4">
