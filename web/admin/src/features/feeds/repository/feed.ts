@@ -341,10 +341,6 @@ export const createFeed = async ({
       ])
       .select();
 
-    console.log("🔥");
-    console.log(error);
-    console.log(data);
-
     if (error || !data) return;
 
     return data[0].id;
