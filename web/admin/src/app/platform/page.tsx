@@ -1,4 +1,4 @@
-import { PlatformTemplate } from "@/features/platform/components/PlatformTemplate";
+import { PlatformTemplate } from "@/features/platforms/components/PlatformTemplate";
 
 type PageProps = {
   params: { slug: string };

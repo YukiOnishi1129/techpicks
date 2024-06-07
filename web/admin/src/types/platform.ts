@@ -21,9 +21,17 @@ export type PlatformType = OriginPlatformType & {
   >;
 };
 
-export type FetchPlatformAPIResponse = {
+export type FetchPlatformsAPIResponse = {
   data: {
     platforms: Array<PlatformType>;
+    message: string;
+  };
+  status: number;
+};
+
+export type FetchPlatformAPIResponse = {
+  data: {
+    platform: PlatformType;
     message: string;
   };
   status: number;
