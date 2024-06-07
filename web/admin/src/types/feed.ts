@@ -31,3 +31,11 @@ export type FetchFeedsAPIResponse = {
   };
   status: number;
 };
+
+export type FetchFeedAPIResponse = {
+  data: {
+    feed: FeedType;
+    message: string;
+  };
+  status: number;
+};

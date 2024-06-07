@@ -24,12 +24,29 @@ export default function FeedPage({ searchParams }: PageProps) {
       ? searchParams["platformSiteType"]
       : undefined;
 
+  const platformId =
+    typeof searchParams["platformId"] === "string"
+      ? searchParams["platformId"]
+      : undefined;
+
+  const categoryId =
+    typeof searchParams["categoryId"] === "string"
+      ? searchParams["categoryId"]
+      : undefined;
+  const trendPlatformType =
+    typeof searchParams["trendPlatformType"] === "string"
+      ? searchParams["trendPlatformType"]
+      : undefined;
+
   return (
     <FeedTemplate
       offset={offset}
       keyword={keyword}
       language={language}
       platformSiteType={platformSiteType}
+      platformId={platformId}
+      categoryId={categoryId}
+      trendPlatformType={trendPlatformType}
     />
   );
 }

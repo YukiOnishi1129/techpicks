@@ -12,6 +12,11 @@ export type GetPlatformsDTO = {
   keyword?: string;
   language?: string;
   platformSiteType?: string;
+  siteUrl?: string;
+  rssUrl?: string;
+  platformId?: string;
+  categoryId?: string;
+  trendPlatformType?: string;
 };
 
 export const getFeeds = async ({
@@ -19,6 +24,11 @@ export const getFeeds = async ({
   keyword,
   language,
   platformSiteType,
+  siteUrl,
+  rssUrl,
+  platformId,
+  categoryId,
+  trendPlatformType,
 }: GetPlatformsDTO) => {
   try {
     const limit = 8;
@@ -56,6 +66,27 @@ export const getFeeds = async ({
     if (argPlatformSiteType) {
       query.eq("platforms.platform_site_type", argPlatformSiteType);
     }
+
+    if (siteUrl) {
+      query.eq("platforms.site_url", siteUrl);
+    }
+
+    if (rssUrl) {
+      query.like("rss_url", `%${rssUrl}%`);
+    }
+
+    if (platformId) {
+      query.eq("platform_id", platformId);
+    }
+
+    if (categoryId) {
+      query.eq("category_id", categoryId);
+    }
+
+    if (trendPlatformType) {
+      query.eq("trend_platform_type", trendPlatformType);
+    }
+
     query
       .order("trend_platform_type", {
         ascending: false,
@@ -93,6 +124,9 @@ export type GetFeedsCountDTO = {
   platformSiteType?: string;
   siteUrl?: string;
   rssUrl?: string;
+  platformId?: string;
+  categoryId?: string;
+  trendPlatformType?: string;
 };
 
 export const getFeedsCount = async ({
@@ -101,6 +135,9 @@ export const getFeedsCount = async ({
   platformSiteType,
   siteUrl,
   rssUrl,
+  platformId,
+  categoryId,
+  trendPlatformType,
 }: GetFeedsCountDTO) => {
   try {
     const supabase = await createGetOnlyServerSideClient();
@@ -140,6 +177,18 @@ export const getFeedsCount = async ({
       query.like("rss_url", `%${rssUrl}%`);
     }
 
+    if (platformId) {
+      query.eq("platform_id", platformId);
+    }
+
+    if (categoryId) {
+      query.eq("category_id", categoryId);
+    }
+
+    if (trendPlatformType) {
+      query.eq("trend_platform_type", trendPlatformType);
+    }
+
     const { error, count } = await query;
 
     if (error || !count) return 0;
@@ -150,9 +199,7 @@ export const getFeedsCount = async ({
   }
 };
 
-export const getFeedById = async (
-  id: string
-): Promise<FeedType | undefined> => {
+export const getFeedById = async (id: string) => {
   try {
     const supabase = await createGetOnlyServerSideClient();
     const { data, error } = await supabase

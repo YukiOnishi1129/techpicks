@@ -35,6 +35,7 @@ interface FeedDataTableProps<TData, TValue> {
   keyword?: string;
   language?: string;
   platformSiteType?: string;
+  platformId?: string;
 }
 
 export function FeedDataTable<TData, TValue>({
@@ -47,6 +48,7 @@ export function FeedDataTable<TData, TValue>({
   keyword,
   language,
   platformSiteType,
+  platformId,
 }: FeedDataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = useState({});
   const { successToast, failToast } = useStatusToast();
@@ -82,6 +84,7 @@ export function FeedDataTable<TData, TValue>({
         keyword={keyword}
         language={language}
         platformSiteType={platformSiteType}
+        platformId={platformId}
       />
 
       <Table>

@@ -9,12 +9,19 @@ export async function GET(req: NextRequest) {
   const platformSiteType = searchParams.get("platformSiteType") || undefined;
   const siteUrl = searchParams.get("siteUrl") || undefined;
   const rssUrl = searchParams.get("rssUrl") || undefined;
+  const platformId = searchParams.get("platformId") || undefined;
+  const categoryId = searchParams.get("categoryId") || undefined;
+  const trendPlatformType = searchParams.get("trendPlatformType") || undefined;
+
   const count = await getFeedsCount({
     keyword: keyword,
     language: language,
     platformSiteType: platformSiteType,
     siteUrl: siteUrl,
     rssUrl: rssUrl,
+    platformId: platformId,
+    categoryId: categoryId,
+    trendPlatformType: trendPlatformType,
   });
   return NextResponse.json(
     {

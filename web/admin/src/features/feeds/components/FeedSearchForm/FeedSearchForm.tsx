@@ -1,8 +1,25 @@
 "use client";
 
-import { FC } from "react";
+import { useRouter } from "next/navigation";
+import {
+  FC,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+  useTransition,
+} from "react";
+
+import { fetchPlatformByIdAPI } from "@/features/platforms/actions/platform";
+
+import { Loader } from "@/components/ui/loader";
+
+import { PlatformType } from "@/types/platform";
+
+import { serverRevalidatePage } from "@/actions/serverAction";
 
 import { FeedSearchKeyword } from "./FeedSearchKeyword";
+import { SelectPlatformDialog } from "../SelectPlatformDialog";
 
 type FeedSearchFormProps = {
   keyword?: string;
@@ -19,8 +36,55 @@ export const FeedSearchForm: FC<FeedSearchFormProps> = ({
   categoryId,
   platformSiteType,
 }) => {
+  const router = useRouter();
+  const [isPlatformPending, startPlatformTransition] = useTransition();
+
+  const [selectedPlatform, setSelectedPlatform] = useState<
+    PlatformType | undefined
+  >(undefined);
+
+  const selectPlatformLabelName = useMemo(() => {
+    return selectedPlatform?.name || "Platform";
+  }, [selectedPlatform]);
+
+  const fetchPlatform = useCallback(async (targetPlatformId: string) => {
+    startPlatformTransition(async () => {
+      const res = await fetchPlatformByIdAPI(targetPlatformId);
+      if (!res.data.platform) return;
+      setSelectedPlatform(res.data.platform);
+    });
+  }, []);
+
+  const handleSearchPlatform = useCallback(
+    async (targetPlatformId: string) => {
+      let keywordPath = "";
+      if (!!keyword && keyword.trim() !== "") {
+        keywordPath = `&keyword=${keyword}`;
+      }
+      let languagePath = "";
+      if (language) {
+        languagePath = `&language=${language}`;
+      }
+      let platformSiteTypePath = "";
+      if (platformSiteType) {
+        platformSiteTypePath = `&platformSiteType=${platformSiteType}`;
+      }
+      await serverRevalidatePage(
+        `/feed?$offset=1${keywordPath}${languagePath}${platformSiteTypePath}&platformId=${targetPlatformId}`
+      );
+      router.replace(
+        `/feed?$offset=1${keywordPath}${languagePath}${platformSiteTypePath}&platformId=${targetPlatformId}`
+      );
+    },
+    [keyword, language, platformSiteType, router]
+  );
+
+  useEffect(() => {
+    if (platformId) fetchPlatform(platformId);
+  }, [fetchPlatform, platformId]);
+
   return (
-    <div className="flex items-center justify-between border-b px-4 py-2">
+    <div className="flex items-center border-b px-4 py-2">
       <FeedSearchKeyword
         keyword={keyword}
         language={language}
@@ -28,6 +92,24 @@ export const FeedSearchForm: FC<FeedSearchFormProps> = ({
         categoryId={categoryId}
         platformSiteType={platformSiteType}
       />
+
+      {/* platform */}
+      {isPlatformPending ? (
+        <Loader />
+      ) : (
+        <SelectPlatformDialog
+          label={selectPlatformLabelName}
+          variant="outline"
+          selectedPlatform={selectedPlatform}
+          handleSelectPlatform={handleSearchPlatform}
+        />
+      )}
+
+      {/* category */}
+      {/* language */}
+      {/* site type */}
+      {/* trend */}
+      {/* status */}
     </div>
   );
 };
