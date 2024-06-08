@@ -1,7 +1,8 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useCallback, FC, useEffect, useTransition } from "react";
+import Image from "next/image";
+import { useCallback, FC, useTransition, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -15,9 +16,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+import { ENGLISH_IMAGE, JAPANESE_IMAGE } from "@/constants/image";
+
 import { usePlatformRedirectPage } from "../../hooks/usePlatformRedirectPage";
 
-type PlatformSiteTypeSelectProps = {
+type PlatformSearchLanguageSelectProps = {
   keyword?: string;
   language?: string;
   platformSiteType?: string;
@@ -25,49 +28,58 @@ type PlatformSiteTypeSelectProps = {
 };
 
 const FormSchema = z.object({
-  platformSiteType: z.string(),
+  language: z.string(),
 });
 
-export const PlatformSiteTypeSelect: FC<PlatformSiteTypeSelectProps> = ({
-  keyword,
-  language,
-  platformSiteType,
-  status,
-}) => {
+export const PlatformSearchLanguageSelect: FC<
+  PlatformSearchLanguageSelectProps
+> = ({ keyword, language, platformSiteType, status }) => {
   const { redirectPage } = usePlatformRedirectPage();
   const [isInitSelect, startInitSelectTransition] = useTransition();
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      platformSiteType: platformSiteType,
+      language: language,
     },
   });
 
-  const handleSelectPlatformType = useCallback(
+  const handleSelectLanguage = useCallback(
     async (value: string, onChange: (...event: any[]) => void) => {
       onChange(value);
+      let keywordPath = "";
+      if (!!keyword && keyword.trim() !== "") {
+        keywordPath = `&keyword=${keyword}`;
+      }
+      let languagePath = "";
+      if (value !== "0") {
+        languagePath = `&language=${value}`;
+      }
+      let platformSiteTypePath = "";
+      if (platformSiteType) {
+        platformSiteTypePath = `&platformSiteType=${platformSiteType}`;
+      }
       await redirectPage({
         offset: 1,
         targetKeyword: keyword,
-        targetLanguage: language,
-        targetPlatformSiteType: value,
+        targetLanguage: value,
+        targetPlatformSiteType: platformSiteType,
         targetStatus: status,
       });
     },
-    [keyword, language, status, redirectPage]
+    [keyword, platformSiteType, status, redirectPage]
   );
 
-  const initSelectPlatformSiteType = useCallback(() => {
+  const initSelectLanguage = useCallback(() => {
     startInitSelectTransition(() => {
-      if (platformSiteType === undefined) {
-        form.setValue("platformSiteType", "0");
+      if (language === undefined) {
+        form.setValue("language", "0");
       }
     });
-  }, [form, platformSiteType]);
+  }, [form, language]);
 
   useEffect(() => {
-    initSelectPlatformSiteType();
-  }, [form, initSelectPlatformSiteType]);
+    initSelectLanguage();
+  }, [form, initSelectLanguage]);
 
   return (
     <Form {...form}>
@@ -79,33 +91,44 @@ export const PlatformSiteTypeSelect: FC<PlatformSiteTypeSelectProps> = ({
         ) : (
           <FormField
             control={form.control}
-            name="platformSiteType"
+            name="language"
             render={({ field }) => (
               <FormItem>
                 <Select
                   onValueChange={(value) =>
-                    handleSelectPlatformType(value, field.onChange)
+                    handleSelectLanguage(value, field.onChange)
                   }
                   defaultValue={field.value}
                 >
                   <FormControl>
                     <SelectTrigger className="border-primary bg-secondary">
                       <SelectValue
-                        placeholder="site type"
+                        placeholder="language"
                         className="text-gray-400"
                       />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="0">all type</SelectItem>
+                    <SelectItem value="0">all language</SelectItem>
+                    <SelectItem value="2" className="flex">
+                      <Image
+                        className="inline-block"
+                        src={ENGLISH_IMAGE}
+                        alt={"EN"}
+                        width={20}
+                        height={20}
+                      />
+                      <span className="ml-2 inline-block">english</span>
+                    </SelectItem>
                     <SelectItem value="1">
-                      <span>site</span>
-                    </SelectItem>
-                    <SelectItem value="2">
-                      <span>company</span>
-                    </SelectItem>
-                    <SelectItem value="3">
-                      <span>summary</span>
+                      <Image
+                        className="inline-block"
+                        src={JAPANESE_IMAGE}
+                        alt={"JP"}
+                        width={20}
+                        height={20}
+                      />
+                      <span className="ml-2 inline-block">japanese</span>
                     </SelectItem>
                   </SelectContent>
                 </Select>

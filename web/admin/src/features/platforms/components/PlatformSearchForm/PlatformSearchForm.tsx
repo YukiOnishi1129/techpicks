@@ -2,11 +2,11 @@
 
 import { FC } from "react";
 
-import { PlatformLanguageSelect } from "./PlatformLangaugeSelect";
 import { PlatformSearchKeyword } from "./PlatformSearchKeyword";
+import { PlatformSearchLanguageSelect } from "./PlatformSearchLanguageSelect";
+import { PlatformSearchPlatformSiteTypeSelect } from "./PlatformSearchPlatformSiteTypeSelect";
 import { PlatformSearchResetButton } from "./PlatformSearchResetButton";
 import { PlatformSearchStatusSelect } from "./PlatformSearchStatusSelect";
-import { PlatformSiteTypeSelect } from "./PlatformSiteTypeSelect";
 
 type PlatformSearchFormProps = {
   keyword?: string;
@@ -22,7 +22,7 @@ export const PlatformSearchForm: FC<PlatformSearchFormProps> = ({
   status,
 }) => {
   return (
-    <div className="grid grid-cols-4 gap-4 border-b px-4 py-2">
+    <div className="grid grid-cols-5 gap-5 border-b px-4 py-2">
       <PlatformSearchKeyword
         keyword={keyword}
         language={language}
@@ -30,14 +30,14 @@ export const PlatformSearchForm: FC<PlatformSearchFormProps> = ({
         status={status}
       />
       {/* language */}
-      <PlatformLanguageSelect
+      <PlatformSearchLanguageSelect
         keyword={keyword}
         language={language}
         platformSiteType={platformSiteType}
         status={status}
       />
       {/* site type */}
-      <PlatformSiteTypeSelect
+      <PlatformSearchPlatformSiteTypeSelect
         keyword={keyword}
         language={language}
         platformSiteType={platformSiteType}
