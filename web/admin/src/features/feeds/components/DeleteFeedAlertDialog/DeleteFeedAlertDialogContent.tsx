@@ -64,7 +64,7 @@ export const DeleteFeedAlertDialogContent: FC<
         <AlertDialogTitle>
           Are you sure you want me to delete it?
         </AlertDialogTitle>
-        <AlertDialogDescription>
+        <AlertDialogDescription className="text-left">
           This action cannot be undone. This will permanently remove your data
           from our servers.
           <br></br>
