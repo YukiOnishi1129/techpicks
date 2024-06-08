@@ -12,7 +12,7 @@ import {
 
 import { fetchPlatformByIdAPI } from "@/features/platforms/actions/platform";
 
-import { FadeLoaderComponent } from "@/components/ui/loader";
+import { SyncLoaderComponent } from "@/components/ui/loader";
 
 import { PlatformType } from "@/types/platform";
 
@@ -109,15 +109,11 @@ export const FeedSearchForm: FC<FeedSearchFormProps> = ({
         trendPlatformType={trendPlatformType}
       />
 
-      <div className="size-4">
-        <FadeLoaderComponent />
-      </div>
-
       <div className="ml-2 flex justify-center">
         {/* platform */}
         {isPlatformPending ? (
-          <div className="size-4">
-            <FadeLoaderComponent />
+          <div className="size-12">
+            <SyncLoaderComponent size={10} />
           </div>
         ) : (
           <SelectPlatformDialog
