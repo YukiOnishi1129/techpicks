@@ -2,7 +2,6 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import { useCallback, FC } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -16,9 +15,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import { useServerRevalidatePage } from "@/hooks/useServerRevalidatePage";
-
 import { ENGLISH_IMAGE, JAPANESE_IMAGE } from "@/constants/image";
+
+import { usePlatformRedirectPage } from "../../hooks/usePlatformRedirectPage";
 
 type PlatformLanguageSelectProps = {
   keyword?: string;
@@ -35,8 +34,7 @@ export const PlatformLanguageSelect: FC<PlatformLanguageSelectProps> = ({
   language,
   platformSiteType,
 }) => {
-  const router = useRouter();
-  const { revalidatePage } = useServerRevalidatePage();
+  const { redirectPage } = usePlatformRedirectPage();
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -59,12 +57,14 @@ export const PlatformLanguageSelect: FC<PlatformLanguageSelectProps> = ({
       if (platformSiteType) {
         platformSiteTypePath = `&platformSiteType=${platformSiteType}`;
       }
-      await revalidatePage();
-      router.replace(
-        `/platform?$offset=1${keywordPath}${languagePath}${platformSiteTypePath}`
-      );
+      await redirectPage({
+        offset: 1,
+        targetKeyword: keyword,
+        targetLanguage: value,
+        targetPlatformSiteType: platformSiteType,
+      });
     },
-    [keyword, platformSiteType, router, revalidatePage]
+    [keyword, platformSiteType, redirectPage]
   );
 
   return (

@@ -1,7 +1,6 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
 import { FC, useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -9,25 +8,24 @@ import { z } from "zod";
 import { Form, FormField, FormItem, FormControl } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
-import { useServerRevalidatePage } from "@/hooks/useServerRevalidatePage";
+import { usePlatformRedirectPage } from "../../hooks/usePlatformRedirectPage";
 
 const FormSchema = z.object({
   keyword: z.string().optional(),
 });
 
-type PlatformSearchInputProps = {
+type PlatformSearchKeywordProps = {
   keyword?: string;
   language?: string;
   platformSiteType?: string;
 };
 
-export const PlatformSearchInput: FC<PlatformSearchInputProps> = ({
+export const PlatformSearchKeyword: FC<PlatformSearchKeywordProps> = ({
   keyword,
   language,
   platformSiteType,
 }) => {
-  const router = useRouter();
-  const { revalidatePage } = useServerRevalidatePage();
+  const { redirectPage } = usePlatformRedirectPage();
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -49,12 +47,14 @@ export const PlatformSearchInput: FC<PlatformSearchInputProps> = ({
       if (platformSiteType) {
         platformSiteTypePath = `&platformSiteType=${platformSiteType}${platformSiteTypePath}`;
       }
-      await revalidatePage();
-      router.replace(
-        `/platform?$offset=1${keywordPath}${languagePath}${platformSiteTypePath}`
-      );
+      await redirectPage({
+        offset: 1,
+        targetKeyword: values.keyword,
+        targetLanguage: language,
+        targetPlatformSiteType: platformSiteType,
+      });
     },
-    [language, platformSiteType, router, revalidatePage]
+    [language, platformSiteType, redirectPage]
   );
 
   return (
