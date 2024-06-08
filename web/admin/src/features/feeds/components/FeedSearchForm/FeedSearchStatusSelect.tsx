@@ -87,7 +87,7 @@ export const FeedSearchStatusSelect: FC<FeedSearchStatusSelectProps> = ({
 
   return (
     <Form {...form}>
-      <form className="w-40">
+      <form>
         {isInitSelect ? (
           <div className="size-12">
             <SyncLoaderComponent size={10} />
