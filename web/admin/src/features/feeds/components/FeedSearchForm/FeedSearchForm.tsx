@@ -18,6 +18,7 @@ import { CategoryType } from "@/types/category";
 import { PlatformType } from "@/types/platform";
 
 import { FeedSearchKeyword } from "./FeedSearchKeyword";
+import { FeedSearchResetButton } from "./FeedSearchResetButton";
 import { SelectTrendPlatformType } from "./SelectTrendPlatformType";
 import { useRedirectPage } from "../../hooks/useRedirectPage";
 import { SelectCategoryDialog } from "../SelectCategoryDialog";
@@ -119,12 +120,20 @@ export const FeedSearchForm: FC<FeedSearchFormProps> = ({
   );
 
   useEffect(() => {
-    if (platformId) fetchPlatform(platformId);
-    if (categoryId) fetchCategory(categoryId);
+    if (platformId) {
+      fetchPlatform(platformId);
+    } else {
+      setSelectedPlatform(undefined);
+    }
+    if (categoryId) {
+      fetchCategory(categoryId);
+    } else {
+      setSelectedCategory(undefined);
+    }
   }, [fetchPlatform, fetchCategory, platformId, categoryId]);
 
   return (
-    <div className="flex items-center border-b px-4 py-2">
+    <div className="grid grid-cols-4 gap-4 border-b px-4 py-2">
       <FeedSearchKeyword
         keyword={keyword}
         language={language}
@@ -179,6 +188,10 @@ export const FeedSearchForm: FC<FeedSearchFormProps> = ({
         />
       </div>
       {/* status */}
+      {/* reset */}
+      <div className="ml-2">
+        <FeedSearchResetButton />
+      </div>
     </div>
   );
 };

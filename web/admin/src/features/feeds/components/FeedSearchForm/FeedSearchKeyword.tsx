@@ -1,17 +1,14 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
-import { FC, useCallback } from "react";
+import { FC, useCallback, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { Form, FormField, FormItem, FormControl } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
-import { useServerRevalidatePage } from "@/hooks/useServerRevalidatePage";
-
-import { serverRevalidatePage } from "@/actions/serverAction";
+import { useRedirectPage } from "../../hooks/useRedirectPage";
 
 const FormSchema = z.object({
   keyword: z.string().optional(),
@@ -34,8 +31,7 @@ export const FeedSearchKeyword: FC<FeedSearchKeywordProps> = ({
   platformSiteType,
   trendPlatformType,
 }) => {
-  const router = useRouter();
-  const { revalidatePage } = useServerRevalidatePage();
+  const { redirectPage } = useRedirectPage();
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -43,47 +39,28 @@ export const FeedSearchKeyword: FC<FeedSearchKeywordProps> = ({
     },
   });
 
+  useEffect(() => {
+    form.setValue("keyword", keyword);
+  }, [form, keyword]);
+
   const handleSearch = useCallback(
     async (values: z.infer<typeof FormSchema>) => {
-      let keywordPath = "";
-      if (!!values.keyword && values.keyword.trim() !== "") {
-        keywordPath = `&keyword=${values.keyword}`;
-      }
-      let languagePath = "";
-      if (language) {
-        languagePath = `&language=${language}`;
-      }
-      let platformSiteTypePath = "";
-      if (platformSiteType) {
-        platformSiteTypePath = `&platformSiteType=${platformSiteType}`;
-      }
-      let platformIdPath = "";
-      if (platformId) {
-        platformIdPath = `&platformId=${platformId}`;
-      }
-      let categoryIdPath = "";
-      if (categoryId) {
-        categoryIdPath = `&categoryId=${categoryId}`;
-      }
-      let trendPlatformTypePath = "";
-      if (trendPlatformType) {
-        trendPlatformTypePath = `&trendPlatformType=${trendPlatformType}`;
-      }
-
-      await serverRevalidatePage(
-        `/feed?$offset=1${keywordPath}${languagePath}${platformSiteTypePath}${platformIdPath}${categoryIdPath}${trendPlatformTypePath}`
-      );
-      router.replace(
-        `/feed?$offset=1${keywordPath}${languagePath}${platformSiteTypePath}${platformIdPath}${categoryIdPath}${trendPlatformTypePath}`
+      await redirectPage(
+        values.keyword,
+        language,
+        platformSiteType,
+        platformId,
+        categoryId,
+        trendPlatformType
       );
     },
     [
-      router,
       language,
       platformSiteType,
       platformId,
       categoryId,
       trendPlatformType,
+      redirectPage,
     ]
   );
 
