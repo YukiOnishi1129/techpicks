@@ -2,7 +2,6 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ReloadIcon } from "@radix-ui/react-icons";
-import { useRouter } from "next/navigation";
 import {
   FC,
   useMemo,
@@ -44,7 +43,6 @@ import {
 } from "@/components/ui/sheet";
 import { Textarea } from "@/components/ui/textarea";
 
-import { useServerRevalidatePage } from "@/hooks/useServerRevalidatePage";
 import { useStatusToast } from "@/hooks/useStatusToast";
 
 import { ArticleType } from "@/types/article";
@@ -52,6 +50,7 @@ import { CategoryType } from "@/types/category";
 import { FeedType } from "@/types/feed";
 import { PlatformType } from "@/types/platform";
 
+import { useRedirectPage } from "../../hooks/useRedirectPage";
 import { updateFeed } from "../../repository/feed";
 import { DeleteFeedAlertDialog } from "../DeleteFeedAlertDialog";
 import { SelectCategoryDialog } from "../SelectCategoryDialog";
@@ -100,15 +99,28 @@ const FormSchema = z.object({
 
 type EditFeedSheetContentProps = {
   feed: FeedType;
+  keyword?: string;
+  language?: string;
+  platformId?: string;
+  categoryId?: string;
+  platformSiteType?: string;
+  trendPlatformType?: string;
+  status?: string;
   handleSheetClose: () => void;
 };
 
 export const EditFeedSheetContent: FC<EditFeedSheetContentProps> = ({
   feed,
+  keyword,
+  language,
+  platformId,
+  categoryId,
+  platformSiteType,
+  trendPlatformType,
+  status,
   handleSheetClose,
 }) => {
-  const router = useRouter();
-  const { revalidatePage } = useServerRevalidatePage();
+  const { redirectPage } = useRedirectPage();
   const { successToast, failToast } = useStatusToast();
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -242,11 +254,31 @@ export const EditFeedSheetContent: FC<EditFeedSheetContentProps> = ({
         });
 
         // 3. revalidate
-        await revalidatePage();
-        router.replace(`/feed`);
+        await redirectPage(
+          keyword,
+          language,
+          platformSiteType,
+          platformId,
+          categoryId,
+          trendPlatformType,
+          status
+        );
       });
     },
-    [isEditDisabledCheck, feed, revalidatePage, router, successToast, failToast]
+    [
+      isEditDisabledCheck,
+      feed,
+      keyword,
+      language,
+      platformSiteType,
+      platformId,
+      categoryId,
+      trendPlatformType,
+      status,
+      redirectPage,
+      successToast,
+      failToast,
+    ]
   );
 
   useEffect(() => {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, FC } from "react";
 import { FiPlus } from "react-icons/fi";
 
 import { Button } from "@/components/ui/button";
@@ -8,7 +8,24 @@ import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 
 import { CreateFeedDialogContent } from "./CreateFeedDialogContent";
 
-export const CreateFeedDialog = () => {
+type CreateFeedDialogProps = {
+  keyword?: string;
+  language?: string;
+  platformId?: string;
+  categoryId?: string;
+  platformSiteType?: string;
+  trendPlatformType?: string;
+  status?: string;
+};
+export const CreateFeedDialog: FC<CreateFeedDialogProps> = ({
+  keyword,
+  language,
+  platformId,
+  categoryId,
+  platformSiteType,
+  trendPlatformType,
+  status,
+}) => {
   const [openDialog, setOpenDialog] = useState(false);
   const handleDialogOpen = useCallback(() => setOpenDialog(true), []);
   const handleDialogClose = useCallback(() => setOpenDialog(false), []);
@@ -21,7 +38,16 @@ export const CreateFeedDialog = () => {
         </Button>
       </DialogTrigger>
       {openDialog && (
-        <CreateFeedDialogContent handleDialogClose={handleDialogClose} />
+        <CreateFeedDialogContent
+          keyword={keyword}
+          language={language}
+          platformId={platformId}
+          categoryId={categoryId}
+          platformSiteType={platformSiteType}
+          trendPlatformType={trendPlatformType}
+          status={status}
+          handleDialogClose={handleDialogClose}
+        />
       )}
     </Dialog>
   );

@@ -233,7 +233,15 @@ export function FeedDataTable<TData, TValue>({
           </div>
         </div>
 
-        <CreateFeedDialog />
+        <CreateFeedDialog
+          keyword={keyword}
+          language={language}
+          platformId={platformId}
+          categoryId={categoryId}
+          platformSiteType={platformSiteType}
+          trendPlatformType={trendPlatformType}
+          status={status}
+        />
       </div>
 
       <FeedSearchForm

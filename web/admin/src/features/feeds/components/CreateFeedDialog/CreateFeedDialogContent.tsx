@@ -2,7 +2,6 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ReloadIcon } from "@radix-ui/react-icons";
-import { useRouter } from "next/navigation";
 import { FC, useCallback, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -36,13 +35,13 @@ import {
 import { SheetClose } from "@/components/ui/sheet";
 import { Textarea } from "@/components/ui/textarea";
 
-import { useServerRevalidatePage } from "@/hooks/useServerRevalidatePage";
 import { useStatusToast } from "@/hooks/useStatusToast";
 
 import { CategoryType } from "@/types/category";
 import { PlatformType } from "@/types/platform";
 
 import { fetchFeedsCountAPI } from "../../actions/feed";
+import { useRedirectPage } from "../../hooks/useRedirectPage";
 import { createFeed } from "../../repository/feed";
 import { SelectCategoryDialog } from "../SelectCategoryDialog";
 import { SelectPlatformDialog } from "../SelectPlatformDialog";
@@ -89,14 +88,27 @@ const FormSchema = z.object({
 });
 
 type CreateFeedDialogContentProps = {
+  keyword?: string;
+  language?: string;
+  platformId?: string;
+  categoryId?: string;
+  platformSiteType?: string;
+  trendPlatformType?: string;
+  status?: string;
   handleDialogClose: () => void;
 };
 
 export const CreateFeedDialogContent: FC<CreateFeedDialogContentProps> = ({
+  keyword,
+  language,
+  platformId,
+  categoryId,
+  platformSiteType,
+  trendPlatformType,
+  status,
   handleDialogClose,
 }) => {
-  const router = useRouter();
-  const { revalidatePage } = useServerRevalidatePage();
+  const { redirectPage } = useRedirectPage();
   const { successToast, failToast } = useStatusToast();
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -196,11 +208,32 @@ export const CreateFeedDialogContent: FC<CreateFeedDialogContentProps> = ({
         });
 
         // 3. revalidate
-        await revalidatePage();
-        router.replace(`/feed`);
+        await redirectPage(
+          keyword,
+          language,
+          platformSiteType,
+          platformId,
+          categoryId,
+          trendPlatformType,
+          status
+        );
+        handleDialogClose();
       });
     },
-    [revalidatePage, router, successToast, failToast, isCheckExitSameRssUrl]
+    [
+      keyword,
+      language,
+      platformSiteType,
+      platformId,
+      categoryId,
+      trendPlatformType,
+      status,
+      redirectPage,
+      successToast,
+      failToast,
+      isCheckExitSameRssUrl,
+      handleDialogClose,
+    ]
   );
 
   return (

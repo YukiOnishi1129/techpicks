@@ -255,7 +255,18 @@ export const FeedTable: FC<FeedTableProps> = ({
         cell: ({ row }) => {
           const feed = feeds.find((f) => f.id === row.original.id);
           if (!feed) return;
-          return <EditFeedSheet feed={feed} />;
+          return (
+            <EditFeedSheet
+              feed={feed}
+              keyword={keyword}
+              language={language}
+              platformSiteType={platformSiteType}
+              platformId={platformId}
+              categoryId={categoryId}
+              trendPlatformType={trendPlatformType}
+              status={status}
+            />
+          );
         },
       },
     ],
