@@ -52,15 +52,15 @@ export const FeedSearchStatusSelect: FC<FeedSearchStatusSelectProps> = ({
   const handleSelectTrendPlatformType = useCallback(
     async (value: string, onChange: (...event: any[]) => void) => {
       onChange(value);
-      await redirectPage(
-        keyword,
-        language,
-        platformSiteType,
-        platformId,
-        categoryId,
-        trendPlatformType,
-        value
-      );
+      await redirectPage({
+        targetKeyword: keyword,
+        targetLanguage: language,
+        targetPlatformSiteType: platformSiteType,
+        targetPlatformId: platformId,
+        targetCategoryId: categoryId,
+        targetTrendPlatformType: trendPlatformType,
+        targetStatus: value,
+      });
     },
     [
       keyword,
