@@ -12,7 +12,7 @@ import {
 
 import { fetchPlatformByIdAPI } from "@/features/platforms/actions/platform";
 
-import { Loader } from "@/components/ui/loader";
+import { FadeLoaderComponent } from "@/components/ui/loader";
 
 import { PlatformType } from "@/types/platform";
 
@@ -109,17 +109,25 @@ export const FeedSearchForm: FC<FeedSearchFormProps> = ({
         trendPlatformType={trendPlatformType}
       />
 
-      {/* platform */}
-      {isPlatformPending ? (
-        <Loader />
-      ) : (
-        <SelectPlatformDialog
-          label={selectPlatformLabelName}
-          variant="outline"
-          selectedPlatform={selectedPlatform}
-          handleSelectPlatform={handleSearchPlatform}
-        />
-      )}
+      <div className="size-4">
+        <FadeLoaderComponent />
+      </div>
+
+      <div className="ml-2 flex justify-center">
+        {/* platform */}
+        {isPlatformPending ? (
+          <div className="size-4">
+            <FadeLoaderComponent />
+          </div>
+        ) : (
+          <SelectPlatformDialog
+            label={selectPlatformLabelName}
+            variant="ghost"
+            selectedPlatform={selectedPlatform}
+            handleSelectPlatform={handleSearchPlatform}
+          />
+        )}
+      </div>
 
       {/* category */}
       {/* language */}

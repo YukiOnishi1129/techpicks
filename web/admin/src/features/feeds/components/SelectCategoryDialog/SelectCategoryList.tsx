@@ -19,7 +19,7 @@ import {
   FormControl,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Loader } from "@/components/ui/loader";
+import { FadeLoaderComponent } from "@/components/ui/loader";
 
 import { useHookForm } from "@/hooks/useHookForm";
 
@@ -224,7 +224,7 @@ export const SelectCategoryList: FC<SelectCategoryListProps> = ({
               <div ref={observerTarget}>
                 {hashMore && (
                   <div className="flex justify-center py-4">
-                    <Loader />
+                    <FadeLoaderComponent />
                   </div>
                 )}
               </div>

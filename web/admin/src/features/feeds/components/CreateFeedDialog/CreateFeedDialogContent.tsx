@@ -25,7 +25,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Loader } from "@/components/ui/loader";
+import { FadeLoaderComponent } from "@/components/ui/loader";
 import {
   Select,
   SelectContent,
@@ -267,7 +267,7 @@ export const CreateFeedDialogContent: FC<CreateFeedDialogContentProps> = ({
                   </FormLabel>
                   <div className="flex h-6 w-full items-center">
                     {isPlatformPending ? (
-                      <Loader />
+                      <FadeLoaderComponent />
                     ) : (
                       <div className="flex w-full items-center justify-between">
                         <div className="flex ">
@@ -305,7 +305,7 @@ export const CreateFeedDialogContent: FC<CreateFeedDialogContentProps> = ({
                     <span className="text-red-700"> *</span>
                   </FormLabel>
                   {isCategoryPending ? (
-                    <Loader />
+                    <FadeLoaderComponent />
                   ) : (
                     <div className="flex w-full items-center justify-between">
                       <div className="flex">
