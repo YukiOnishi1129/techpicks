@@ -86,7 +86,7 @@ export function PlatformDataTable<TData, TValue>({
     [platforms, selectedPlatformIds]
   );
 
-  const isDisableStop = useMemo(
+  const isDisabledStop = useMemo(
     () =>
       !platforms.some((platform) =>
         selectedPlatformIds.some(
@@ -195,7 +195,7 @@ export function PlatformDataTable<TData, TValue>({
           <div className="ml-12">
             <UpdateStatusForm
               isDisabledActive={isDisabledActive}
-              isDisableStop={isDisableStop}
+              isDisabledStop={isDisabledStop}
               handleUpdateStatusToActive={handleUpdateStatusToActive}
               handleUpdateStatusToStop={handleUpdateStatusToStop}
             />

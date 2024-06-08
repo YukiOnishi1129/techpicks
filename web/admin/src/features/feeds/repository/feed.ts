@@ -366,6 +366,7 @@ export type UpdateFeedDTO = {
   thumbnailUrl: string;
   trendPlatformType: number;
   apiQueryParam?: string;
+  deletedAt?: string;
 };
 
 export const updateFeed = async ({
@@ -379,6 +380,7 @@ export const updateFeed = async ({
   thumbnailUrl,
   trendPlatformType,
   apiQueryParam,
+  deletedAt,
 }: UpdateFeedDTO) => {
   try {
     const supabase = await createGetOnlyServerSideClient();
@@ -394,6 +396,7 @@ export const updateFeed = async ({
         thumbnail_url: thumbnailUrl,
         trend_platform_type: trendPlatformType,
         api_query_param: apiQueryParam,
+        deleted_at: deletedAt || null,
       })
       .eq("id", id);
 
@@ -405,6 +408,53 @@ export const updateFeed = async ({
   }
 };
 
+export const bulkUpdateFeed = async (feeds: Array<UpdateFeedDTO>) => {
+  try {
+    const supabase = await createGetOnlyServerSideClient();
+    const { data, error } = await supabase
+      .from("feeds")
+      .upsert(
+        feeds.map((feed) => {
+          return {
+            id: feed.id,
+            platform_id: feed.platformId,
+            category_id: feed.categoryId,
+            name: feed.name,
+            description: feed.description,
+            rss_url: feed.rssUrl,
+            site_url: feed.siteUrl,
+            thumbnail_url: feed.thumbnailUrl,
+            trend_platform_type: feed.trendPlatformType,
+            api_query_param: feed.apiQueryParam,
+            deleted_at: feed.deletedAt || null,
+          };
+        })
+      )
+      .select();
+
+    if (error || !data) return;
+
+    return data.map((feed) => {
+      return {
+        id: feed.id,
+        platformId: feed.platform_id,
+        categoryId: feed.category_id,
+        name: feed.name,
+        description: feed.description,
+        rssUrl: feed.rss_url,
+        siteUrl: feed.site_url,
+        thumbnailUrl: feed.thumbnail_url,
+        trendPlatformType: feed.trend_platform_type,
+        apiQueryParam: feed.api_query_param || undefined,
+        createdAt: feed.created_at,
+        updatedAt: feed.updated_at,
+        deletedAt: feed.deleted_at || undefined,
+      };
+    });
+  } catch (err) {
+    throw new Error(`Failed to bulk update feed: ${err}`);
+  }
+};
 /**
  * ==========================================
  * Delete

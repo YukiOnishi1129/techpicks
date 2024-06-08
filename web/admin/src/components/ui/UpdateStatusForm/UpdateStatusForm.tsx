@@ -6,14 +6,14 @@ import { Button } from "@/components/ui/button";
 
 type UpdateStatusFormProps = {
   isDisabledActive: boolean;
-  isDisableStop: boolean;
+  isDisabledStop: boolean;
   handleUpdateStatusToActive: () => void;
   handleUpdateStatusToStop: () => void;
 };
 
 export const UpdateStatusForm: React.FC<UpdateStatusFormProps> = ({
   isDisabledActive,
-  isDisableStop,
+  isDisabledStop,
   handleUpdateStatusToActive,
   handleUpdateStatusToStop,
 }) => {
@@ -34,7 +34,7 @@ export const UpdateStatusForm: React.FC<UpdateStatusFormProps> = ({
       {/* stop */}
       <div>
         <Button
-          disabled={isDisableStop}
+          disabled={isDisabledStop}
           variant="ghost"
           onClick={handleUpdateStatusToStop}
         >
