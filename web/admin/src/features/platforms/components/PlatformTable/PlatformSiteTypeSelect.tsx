@@ -41,7 +41,7 @@ export const PlatformSiteTypeSelect: FC<PlatformSiteTypeSelectProps> = ({
     },
   });
 
-  const handleSelectLanguage = useCallback(
+  const handleSelectPlatformType = useCallback(
     async (value: string, onChange: (...event: any[]) => void) => {
       onChange(value);
       let keywordPath = "";
@@ -74,7 +74,7 @@ export const PlatformSiteTypeSelect: FC<PlatformSiteTypeSelectProps> = ({
             <FormItem>
               <Select
                 onValueChange={(value) =>
-                  handleSelectLanguage(value, field.onChange)
+                  handleSelectPlatformType(value, field.onChange)
                 }
                 defaultValue={field.value}
               >

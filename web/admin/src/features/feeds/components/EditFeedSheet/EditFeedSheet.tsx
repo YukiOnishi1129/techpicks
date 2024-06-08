@@ -11,9 +11,27 @@ import { EditFeedSheetContent } from "./EditFeedSheetContent";
 
 type EditFeedSheetProps = {
   feed: FeedType;
+  offset?: number;
+  keyword?: string;
+  language?: string;
+  platformId?: string;
+  categoryId?: string;
+  platformSiteType?: string;
+  trendPlatformType?: string;
+  status?: string;
 };
 
-export const EditFeedSheet: FC<EditFeedSheetProps> = ({ feed }) => {
+export const EditFeedSheet: FC<EditFeedSheetProps> = ({
+  feed,
+  offset,
+  keyword,
+  language,
+  platformId,
+  categoryId,
+  platformSiteType,
+  trendPlatformType,
+  status,
+}) => {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const handleSheetOpen = useCallback(() => setIsSheetOpen(true), []);
   const handleSheetClose = useCallback(() => setIsSheetOpen(false), []);
@@ -24,7 +42,18 @@ export const EditFeedSheet: FC<EditFeedSheetProps> = ({ feed }) => {
         <Button onClick={handleSheetOpen}>{"EDIT"}</Button>
       </SheetTrigger>
       {isSheetOpen && (
-        <EditFeedSheetContent feed={feed} handleSheetClose={handleSheetClose} />
+        <EditFeedSheetContent
+          feed={feed}
+          offset={offset}
+          keyword={keyword}
+          language={language}
+          platformId={platformId}
+          categoryId={categoryId}
+          platformSiteType={platformSiteType}
+          trendPlatformType={trendPlatformType}
+          status={status}
+          handleSheetClose={handleSheetClose}
+        />
       )}
     </Sheet>
   );

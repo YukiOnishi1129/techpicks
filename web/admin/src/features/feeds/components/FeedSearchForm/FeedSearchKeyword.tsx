@@ -1,15 +1,14 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
-import { FC, useCallback } from "react";
+import { FC, useCallback, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { Form, FormField, FormItem, FormControl } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
-import { useServerRevalidatePage } from "@/hooks/useServerRevalidatePage";
+import { useRedirectPage } from "../../hooks/useRedirectPage";
 
 const FormSchema = z.object({
   keyword: z.string().optional(),
@@ -21,6 +20,8 @@ type FeedSearchKeywordProps = {
   platformId?: string;
   categoryId?: string;
   platformSiteType?: string;
+  trendPlatformType?: string;
+  status?: string;
 };
 
 export const FeedSearchKeyword: FC<FeedSearchKeywordProps> = ({
@@ -29,9 +30,10 @@ export const FeedSearchKeyword: FC<FeedSearchKeywordProps> = ({
   platformId,
   categoryId,
   platformSiteType,
+  trendPlatformType,
+  status,
 }) => {
-  const router = useRouter();
-  const { revalidatePage } = useServerRevalidatePage();
+  const { redirectPage } = useRedirectPage();
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -39,26 +41,31 @@ export const FeedSearchKeyword: FC<FeedSearchKeywordProps> = ({
     },
   });
 
+  useEffect(() => {
+    form.setValue("keyword", keyword);
+  }, [form, keyword]);
+
   const handleSearch = useCallback(
     async (values: z.infer<typeof FormSchema>) => {
-      let keywordPath = "";
-      if (!!values.keyword && values.keyword.trim() !== "") {
-        keywordPath = `&keyword=${values.keyword}`;
-      }
-      let languagePath = "";
-      if (language) {
-        languagePath = `&language=${language}`;
-      }
-      let platformSiteTypePath = "";
-      if (platformSiteType) {
-        platformSiteTypePath = `&platformSiteType=${platformSiteType}`;
-      }
-      await revalidatePage();
-      router.replace(
-        `/feed?$offset=1${keywordPath}${languagePath}${platformSiteTypePath}`
-      );
+      await redirectPage({
+        targetKeyword: values.keyword,
+        targetLanguage: language,
+        targetPlatformSiteType: platformSiteType,
+        targetPlatformId: platformId,
+        targetCategoryId: categoryId,
+        targetTrendPlatformType: trendPlatformType,
+        targetStatus: status,
+      });
     },
-    [language, platformSiteType, router, revalidatePage]
+    [
+      language,
+      platformSiteType,
+      platformId,
+      categoryId,
+      trendPlatformType,
+      status,
+      redirectPage,
+    ]
   );
 
   return (

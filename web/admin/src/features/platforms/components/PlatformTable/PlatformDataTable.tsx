@@ -7,11 +7,9 @@ import {
   flexRender,
 } from "@tanstack/react-table";
 import { useState, useMemo, useCallback } from "react";
-import { FaRunning, FaRegStopCircle } from "react-icons/fa";
 
 import { MAX_SHOW_PLATFORM_TABLE_DATA_COUNT } from "@/features/platforms/constants/table";
 
-import { Button } from "@/components/ui/button";
 import {
   Table,
   TableHeader,
@@ -20,6 +18,7 @@ import {
   TableBody,
   TableCell,
 } from "@/components/ui/table";
+import { UpdateStatusForm } from "@/components/ui/UpdateStatusForm";
 
 import { useStatusToast } from "@/hooks/useStatusToast";
 
@@ -87,7 +86,7 @@ export function PlatformDataTable<TData, TValue>({
     [platforms, selectedPlatformIds]
   );
 
-  const isDisableStop = useMemo(
+  const isDisabledStop = useMemo(
     () =>
       !platforms.some((platform) =>
         selectedPlatformIds.some(
@@ -193,30 +192,13 @@ export function PlatformDataTable<TData, TValue>({
             {currentDataCount} / {allCount}
           </p>
 
-          <div className="ml-12 flex items-center justify-between">
-            {/* active */}
-            <div className="mr-2">
-              <Button
-                disabled={isDisabledActive}
-                variant="ghost"
-                onClick={handleUpdateStatusToActive}
-              >
-                <FaRunning className="mr-1" />
-                <span className="text-xs">ACTIVE</span>
-              </Button>
-            </div>
-
-            {/* stop */}
-            <div>
-              <Button
-                disabled={isDisableStop}
-                variant="ghost"
-                onClick={handleUpdateStatusToStop}
-              >
-                <FaRegStopCircle className="mr-1" />
-                <span className="text-xs">STOP</span>
-              </Button>
-            </div>
+          <div className="ml-12">
+            <UpdateStatusForm
+              isDisabledActive={isDisabledActive}
+              isDisabledStop={isDisabledStop}
+              handleUpdateStatusToActive={handleUpdateStatusToActive}
+              handleUpdateStatusToStop={handleUpdateStatusToStop}
+            />
           </div>
         </div>
 
