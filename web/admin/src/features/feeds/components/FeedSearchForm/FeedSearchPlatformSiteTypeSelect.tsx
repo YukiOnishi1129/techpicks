@@ -24,6 +24,7 @@ type FeedSearchPlatformSiteTypeSelectProps = {
   categoryId?: string;
   platformSiteType?: string;
   trendPlatformType?: string;
+  status?: string;
 };
 
 const FormSchema = z.object({
@@ -39,6 +40,7 @@ export const FeedSearchPlatformSiteTypeSelect: FC<
   categoryId,
   platformSiteType,
   trendPlatformType,
+  status,
 }) => {
   const { redirectPage } = useRedirectPage();
   const [isInitSelect, startInitSelectTransition] = useTransition();
@@ -58,10 +60,19 @@ export const FeedSearchPlatformSiteTypeSelect: FC<
         value,
         platformId,
         categoryId,
-        trendPlatformType
+        trendPlatformType,
+        status
       );
     },
-    [keyword, language, platformId, categoryId, trendPlatformType, redirectPage]
+    [
+      keyword,
+      language,
+      platformId,
+      categoryId,
+      trendPlatformType,
+      status,
+      redirectPage,
+    ]
   );
 
   const initSelectPlatformSiteType = useCallback(() => {

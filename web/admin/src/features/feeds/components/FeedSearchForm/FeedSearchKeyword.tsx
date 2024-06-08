@@ -21,6 +21,7 @@ type FeedSearchKeywordProps = {
   categoryId?: string;
   platformSiteType?: string;
   trendPlatformType?: string;
+  status?: string;
 };
 
 export const FeedSearchKeyword: FC<FeedSearchKeywordProps> = ({
@@ -30,6 +31,7 @@ export const FeedSearchKeyword: FC<FeedSearchKeywordProps> = ({
   categoryId,
   platformSiteType,
   trendPlatformType,
+  status,
 }) => {
   const { redirectPage } = useRedirectPage();
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -51,7 +53,8 @@ export const FeedSearchKeyword: FC<FeedSearchKeywordProps> = ({
         platformSiteType,
         platformId,
         categoryId,
-        trendPlatformType
+        trendPlatformType,
+        status
       );
     },
     [
@@ -60,6 +63,7 @@ export const FeedSearchKeyword: FC<FeedSearchKeywordProps> = ({
       platformId,
       categoryId,
       trendPlatformType,
+      status,
       redirectPage,
     ]
   );

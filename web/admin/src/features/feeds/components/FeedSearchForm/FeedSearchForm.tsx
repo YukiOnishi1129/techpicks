@@ -111,7 +111,8 @@ export const FeedSearchForm: FC<FeedSearchFormProps> = ({
         platformSiteType,
         platformId,
         targetCategoryId,
-        trendPlatformType
+        trendPlatformType,
+        status
       );
     },
     [
@@ -120,6 +121,7 @@ export const FeedSearchForm: FC<FeedSearchFormProps> = ({
       platformSiteType,
       platformId,
       trendPlatformType,
+      status,
       redirectPage,
     ]
   );
@@ -146,6 +148,7 @@ export const FeedSearchForm: FC<FeedSearchFormProps> = ({
         categoryId={categoryId}
         platformSiteType={platformSiteType}
         trendPlatformType={trendPlatformType}
+        status={status}
       />
 
       {/* platform */}
@@ -183,6 +186,7 @@ export const FeedSearchForm: FC<FeedSearchFormProps> = ({
         platformId={platformId}
         categoryId={categoryId}
         trendPlatformType={trendPlatformType}
+        status={status}
       />
       {/* site type */}
       <FeedSearchPlatformSiteTypeSelect
@@ -192,6 +196,7 @@ export const FeedSearchForm: FC<FeedSearchFormProps> = ({
         categoryId={categoryId}
         platformSiteType={platformSiteType}
         trendPlatformType={trendPlatformType}
+        status={status}
       />
       {/* trend */}
       <FeedSearchTrendPlatformTypeSelect
@@ -201,6 +206,7 @@ export const FeedSearchForm: FC<FeedSearchFormProps> = ({
         categoryId={categoryId}
         platformSiteType={platformSiteType}
         trendPlatformType={trendPlatformType}
+        status={status}
       />
       {/* status */}
       <FeedSearchStatusSelect

@@ -27,6 +27,7 @@ type FeedSearchLanguageSelectProps = {
   categoryId?: string;
   platformSiteType?: string;
   trendPlatformType?: string;
+  status?: string;
 };
 
 const FormSchema = z.object({
@@ -40,6 +41,7 @@ export const FeedSearchLanguageSelect: FC<FeedSearchLanguageSelectProps> = ({
   categoryId,
   platformSiteType,
   trendPlatformType,
+  status,
 }) => {
   const { redirectPage } = useRedirectPage();
   const [isInitSelect, startInitSelectTransition] = useTransition();
@@ -59,7 +61,8 @@ export const FeedSearchLanguageSelect: FC<FeedSearchLanguageSelectProps> = ({
         platformSiteType,
         platformId,
         categoryId,
-        trendPlatformType
+        trendPlatformType,
+        status
       );
     },
     [
@@ -68,6 +71,7 @@ export const FeedSearchLanguageSelect: FC<FeedSearchLanguageSelectProps> = ({
       platformId,
       categoryId,
       trendPlatformType,
+      status,
       redirectPage,
     ]
   );

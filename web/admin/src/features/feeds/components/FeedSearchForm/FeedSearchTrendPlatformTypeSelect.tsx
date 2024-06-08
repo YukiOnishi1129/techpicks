@@ -28,6 +28,7 @@ type FeedSearchTrendPlatformTypeSelectProps = {
   categoryId?: string;
   platformSiteType?: string;
   trendPlatformType?: string;
+  status?: string;
 };
 
 export const FeedSearchTrendPlatformTypeSelect: FC<
@@ -39,6 +40,7 @@ export const FeedSearchTrendPlatformTypeSelect: FC<
   categoryId,
   platformSiteType,
   trendPlatformType,
+  status,
 }) => {
   const { redirectPage } = useRedirectPage();
   const [isInitSelect, startInitSelectTransition] = useTransition();
@@ -58,10 +60,19 @@ export const FeedSearchTrendPlatformTypeSelect: FC<
         platformSiteType,
         platformId,
         categoryId,
-        value
+        value,
+        status
       );
     },
-    [keyword, language, platformSiteType, platformId, categoryId, redirectPage]
+    [
+      keyword,
+      language,
+      platformSiteType,
+      platformId,
+      categoryId,
+      status,
+      redirectPage,
+    ]
   );
 
   const initSelectTrendPlatformType = useCallback(() => {
