@@ -1,6 +1,5 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import {
   FC,
   useCallback,
@@ -18,9 +17,9 @@ import { SyncLoaderComponent } from "@/components/ui/loader";
 import { CategoryType } from "@/types/category";
 import { PlatformType } from "@/types/platform";
 
-import { serverRevalidatePage } from "@/actions/serverAction";
-
 import { FeedSearchKeyword } from "./FeedSearchKeyword";
+import { SelectTrendPlatformType } from "./SelectTrendPlatformType";
+import { useRedirectPage } from "../../hooks/useRedirectPage";
 import { SelectCategoryDialog } from "../SelectCategoryDialog";
 import { SelectPlatformDialog } from "../SelectPlatformDialog";
 
@@ -41,7 +40,7 @@ export const FeedSearchForm: FC<FeedSearchFormProps> = ({
   platformSiteType,
   trendPlatformType,
 }) => {
-  const router = useRouter();
+  const { redirectPage } = useRedirectPage();
   const [isPlatformPending, startPlatformTransition] = useTransition();
   const [isCategoryPending, startCategoryTransition] = useTransition();
 
@@ -76,50 +75,6 @@ export const FeedSearchForm: FC<FeedSearchFormProps> = ({
       setSelectedCategory(resCategory.data.category);
     });
   }, []);
-
-  const redirectPage = useCallback(
-    async (
-      targetKeyword?: string,
-      targetLanguage?: string,
-      targetPlatformSiteType?: string,
-      targetPlatformId?: string,
-      targetCategoryId?: string,
-      targetTrendPlatformTypePath?: string
-    ) => {
-      let keywordPath = "";
-      if (!!targetKeyword && targetKeyword.trim() !== "") {
-        keywordPath = `&keyword=${targetKeyword}`;
-      }
-      let languagePath = "";
-      if (targetLanguage) {
-        languagePath = `&language=${targetLanguage}`;
-      }
-      let platformSiteTypePath = "";
-      if (targetPlatformSiteType) {
-        platformSiteTypePath = `&platformSiteType=${targetPlatformSiteType}`;
-      }
-      let platformIdPath = "";
-      if (targetPlatformId) {
-        platformIdPath = `&platformId=${targetPlatformId}`;
-      }
-      let categoryIdPath = "";
-      if (targetCategoryId) {
-        categoryIdPath = `&categoryId=${targetCategoryId}`;
-      }
-      let trendPlatformTypePath = "";
-      if (targetTrendPlatformTypePath) {
-        trendPlatformTypePath = `&trendPlatformType=${targetTrendPlatformTypePath}`;
-      }
-
-      await serverRevalidatePage(
-        `/feed?$offset=1${keywordPath}${languagePath}${platformSiteTypePath}${platformIdPath}${categoryIdPath}${trendPlatformTypePath}`
-      );
-      router.replace(
-        `/feed?$offset=1${keywordPath}${languagePath}${platformSiteTypePath}${platformIdPath}${categoryIdPath}${trendPlatformTypePath}`
-      );
-    },
-    []
-  );
 
   const handleSearchPlatform = useCallback(
     async (targetPlatformId: string) => {
@@ -213,6 +168,16 @@ export const FeedSearchForm: FC<FeedSearchFormProps> = ({
       {/* language */}
       {/* site type */}
       {/* trend */}
+      <div className="ml-2">
+        <SelectTrendPlatformType
+          keyword={keyword}
+          language={language}
+          platformId={platformId}
+          categoryId={categoryId}
+          platformSiteType={platformSiteType}
+          trendPlatformType={trendPlatformType}
+        />
+      </div>
       {/* status */}
     </div>
   );

@@ -83,8 +83,30 @@ export const getFeeds = async ({
       query.eq("category_id", categoryId);
     }
 
-    if (trendPlatformType) {
-      query.eq("trend_platform_type", trendPlatformType);
+    let argTrendPlatformType;
+    switch (trendPlatformType) {
+      case "1":
+        argTrendPlatformType = 1;
+        break;
+      case "2":
+        argTrendPlatformType = 2;
+        break;
+      case "3":
+        argTrendPlatformType = 3;
+        break;
+      case "4":
+        argTrendPlatformType = 4;
+        break;
+      case "5":
+        argTrendPlatformType = 5;
+        break;
+      case "0":
+        argTrendPlatformType = 0;
+        break;
+    }
+
+    if (argTrendPlatformType !== undefined) {
+      query.eq("trend_platform_type", argTrendPlatformType);
     }
 
     query

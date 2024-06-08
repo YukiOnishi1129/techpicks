@@ -1,8 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
-import { useCallback, FC } from "react";
+import { FC, useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -15,87 +14,95 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import { useServerRevalidatePage } from "@/hooks/useServerRevalidatePage";
-
-type PlatformSiteTypeSelectProps = {
-  keyword?: string;
-  language?: string;
-  platformSiteType?: string;
-};
+import { useRedirectPage } from "../../hooks/useRedirectPage";
 
 const FormSchema = z.object({
-  platformSiteType: z.string(),
+  trendPlatformType: z.string(),
 });
 
-export const PlatformSiteTypeSelect: FC<PlatformSiteTypeSelectProps> = ({
+type SelectTrendPlatformTypeProps = {
+  keyword?: string;
+  language?: string;
+  platformId?: string;
+  categoryId?: string;
+  platformSiteType?: string;
+  trendPlatformType?: string;
+};
+
+export const SelectTrendPlatformType: FC<SelectTrendPlatformTypeProps> = ({
   keyword,
   language,
+  platformId,
+  categoryId,
   platformSiteType,
+  trendPlatformType,
 }) => {
-  const router = useRouter();
-  const { revalidatePage } = useServerRevalidatePage();
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      platformSiteType: platformSiteType,
+      trendPlatformType: trendPlatformType,
     },
   });
 
-  const handleSelectPlatformType = useCallback(
+  const { redirectPage } = useRedirectPage();
+
+  const handleSelectTrendPlatformType = useCallback(
     async (value: string, onChange: (...event: any[]) => void) => {
       onChange(value);
-      let keywordPath = "";
-      if (!!keyword && keyword.trim() !== "") {
-        keywordPath = `&keyword=${keyword}`;
-      }
-      let languagePath = "";
-      if (language) {
-        languagePath = `&language=${language}`;
-      }
-      let platformSiteTypePath = "";
-      if (value !== "0") {
-        platformSiteTypePath = `&platformSiteType=${value}`;
-      }
-      await revalidatePage();
-      router.replace(
-        `/platform?$offset=1${keywordPath}${languagePath}${platformSiteTypePath}`
+      await redirectPage(
+        keyword,
+        language,
+        platformSiteType,
+        platformId,
+        categoryId,
+        value
       );
     },
-    [keyword, language, router, revalidatePage]
+    [keyword, language, platformSiteType, platformId, categoryId, redirectPage]
   );
-
   return (
     <Form {...form}>
       <form className="w-40">
         <FormField
           control={form.control}
-          name="platformSiteType"
+          name="trendPlatformType"
           render={({ field }) => (
             <FormItem>
               <Select
                 onValueChange={(value) =>
-                  handleSelectPlatformType(value, field.onChange)
+                  handleSelectTrendPlatformType(value, field.onChange)
                 }
                 defaultValue={field.value}
               >
                 <FormControl>
                   <SelectTrigger className="border-primary bg-secondary">
                     <SelectValue
-                      placeholder="site type"
+                      placeholder="Trend platform type"
                       className="text-gray-400"
                     />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="0">all type</SelectItem>
+                  <SelectItem value="dummy">
+                    <span>All trend type</span>
+                  </SelectItem>
+                  <SelectItem value="0">
+                    <span>Unknown</span>
+                  </SelectItem>
                   <SelectItem value="1">
-                    <span>site</span>
+                    <span>Zenn</span>
                   </SelectItem>
                   <SelectItem value="2">
-                    <span>company</span>
+                    <span>Qiita</span>
                   </SelectItem>
                   <SelectItem value="3">
-                    <span>summary</span>
+                    <span>Hatena</span>
+                  </SelectItem>
+                  <SelectItem value="4">
+                    <span>DevCommunity</span>
+                  </SelectItem>
+                  <SelectItem value="5">
+                    <span>Hashnode</span>
                   </SelectItem>
                 </SelectContent>
               </Select>
