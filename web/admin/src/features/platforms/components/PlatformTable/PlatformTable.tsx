@@ -178,11 +178,28 @@ export const PlatformTable = ({
         cell: ({ row }) => {
           const platform = platforms.find((p) => p.id === row.original.id);
           if (!platform) return;
-          return <EditPlatformSheet platform={platform} />;
+          return (
+            <EditPlatformSheet
+              platform={platform}
+              offset={offset}
+              keyword={keyword}
+              language={language}
+              platformSiteType={platformSiteType}
+              status={status}
+            />
+          );
         },
       },
     ],
-    [platformIds, platforms]
+    [
+      platformIds,
+      platforms,
+      offset,
+      keyword,
+      language,
+      platformSiteType,
+      status,
+    ]
   );
 
   const currentPage = offset || 1;

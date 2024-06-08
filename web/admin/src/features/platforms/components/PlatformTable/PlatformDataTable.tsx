@@ -215,7 +215,13 @@ export function PlatformDataTable<TData, TValue>({
           </div>
         </div>
 
-        <CreatePlatformDialog />
+        <CreatePlatformDialog
+          offset={offset}
+          keyword={keyword}
+          language={language}
+          platformSiteType={platformSiteType}
+          status={status}
+        />
       </div>
 
       <PlatformSearchForm

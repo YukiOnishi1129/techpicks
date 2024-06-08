@@ -10,9 +10,21 @@ import { EditPlatformSheetContent } from "./EditPlatformSheetContent";
 
 type EditPlatformSheetProps = {
   platform: PlatformType;
+  offset?: number;
+  keyword?: string;
+  language?: string;
+  platformSiteType?: string;
+  status?: string;
 };
 
-export const EditPlatformSheet: FC<EditPlatformSheetProps> = ({ platform }) => {
+export const EditPlatformSheet: FC<EditPlatformSheetProps> = ({
+  platform,
+  offset,
+  keyword,
+  language,
+  platformSiteType,
+  status,
+}) => {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const handleSheetOpen = useCallback(() => setIsSheetOpen(true), []);
   const handleSheetClose = useCallback(() => setIsSheetOpen(false), []);
@@ -24,6 +36,11 @@ export const EditPlatformSheet: FC<EditPlatformSheetProps> = ({ platform }) => {
       {isSheetOpen && (
         <EditPlatformSheetContent
           platform={platform}
+          offset={offset}
+          keyword={keyword}
+          language={language}
+          platformSiteType={platformSiteType}
+          status={status}
           handleSheetClose={handleSheetClose}
         />
       )}
