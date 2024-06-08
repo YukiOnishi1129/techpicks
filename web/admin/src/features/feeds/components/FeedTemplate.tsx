@@ -11,6 +11,7 @@ type FeedTemplateProps = {
   platformId?: string;
   categoryId?: string;
   trendPlatformType?: string;
+  status?: string;
 };
 
 export const FeedTemplate: FC<FeedTemplateProps> = async ({
@@ -21,6 +22,7 @@ export const FeedTemplate: FC<FeedTemplateProps> = async ({
   platformId,
   categoryId,
   trendPlatformType,
+  status,
 }) => {
   const res = await fetchFeedsAPI({
     offset: offset?.toString(),
@@ -30,6 +32,7 @@ export const FeedTemplate: FC<FeedTemplateProps> = async ({
     platformId: platformId,
     categoryId: categoryId,
     trendPlatformType: trendPlatformType,
+    operationStatus: status,
   });
   const resCount = await fetchFeedsCountAPI({
     keyword: keyword,
@@ -38,6 +41,7 @@ export const FeedTemplate: FC<FeedTemplateProps> = async ({
     platformId: platformId,
     categoryId: categoryId,
     trendPlatformType: trendPlatformType,
+    operationStatus: status,
   });
 
   return (
@@ -49,6 +53,9 @@ export const FeedTemplate: FC<FeedTemplateProps> = async ({
       language={language}
       platformSiteType={platformSiteType}
       platformId={platformId}
+      categoryId={categoryId}
+      trendPlatformType={trendPlatformType}
+      status={status}
     />
   );
 };

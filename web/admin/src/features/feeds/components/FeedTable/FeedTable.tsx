@@ -26,6 +26,9 @@ type FeedTableProps = {
   language?: string;
   platformSiteType?: string;
   platformId?: string;
+  categoryId?: string;
+  trendPlatformType?: string;
+  status?: string;
 };
 
 export type FeedTableState = OriginFeedType & {
@@ -47,6 +50,9 @@ export const FeedTable: FC<FeedTableProps> = ({
   language,
   platformSiteType,
   platformId,
+  categoryId,
+  trendPlatformType,
+  status,
 }) => {
   const [selectedIds, setSelectedIds] = useState<Array<string>>([]);
   const feedIds = feeds.map((feed) => feed.id);
@@ -249,11 +255,34 @@ export const FeedTable: FC<FeedTableProps> = ({
         cell: ({ row }) => {
           const feed = feeds.find((f) => f.id === row.original.id);
           if (!feed) return;
-          return <EditFeedSheet feed={feed} />;
+          return (
+            <EditFeedSheet
+              feed={feed}
+              offset={offset}
+              keyword={keyword}
+              language={language}
+              platformSiteType={platformSiteType}
+              platformId={platformId}
+              categoryId={categoryId}
+              trendPlatformType={trendPlatformType}
+              status={status}
+            />
+          );
         },
       },
     ],
-    [feedIds, feeds]
+    [
+      feedIds,
+      feeds,
+      offset,
+      keyword,
+      language,
+      platformSiteType,
+      platformId,
+      categoryId,
+      trendPlatformType,
+      status,
+    ]
   );
 
   const currentPage = offset || 1;
@@ -272,19 +301,45 @@ export const FeedTable: FC<FeedTableProps> = ({
     if (platformSiteType) {
       platformSiteTypePath = `&platformSiteType=${platformSiteType}`;
     }
+    let platformIdPath = "";
+    if (platformId) {
+      platformIdPath = `&platformId=${platformId}`;
+    }
+    let categoryIdPath = "";
+    if (categoryId) {
+      categoryIdPath = `&categoryId=${categoryId}`;
+    }
+    let trendPlatformTypePath = "";
+    if (trendPlatformType) {
+      trendPlatformTypePath = `&trendPlatformType=${trendPlatformType}`;
+    }
+    let statusPath = "";
+    if (status) {
+      statusPath = `&status=${status}`;
+    }
     const previousUrl =
       currentPage !== 1
-        ? `/feed?offset=${currentPage - 1}${keywordPath}${languagePath}${platformSiteTypePath}`
+        ? `/feed?offset=${currentPage - 1}${keywordPath}${languagePath}${platformSiteTypePath}${platformIdPath}${categoryIdPath}${trendPlatformTypePath}${statusPath}`
         : undefined;
     const nextUrl =
       currentPage < lastPage
-        ? `/feed?offset=${currentPage + 1}${keywordPath}${languagePath}${platformSiteTypePath}`
+        ? `/feed?offset=${currentPage + 1}${keywordPath}${languagePath}${platformSiteTypePath}${platformIdPath}${categoryIdPath}${trendPlatformTypePath}${statusPath}`
         : undefined;
     return {
       previous: previousUrl,
       next: nextUrl,
     };
-  }, [keyword, language, platformSiteType, currentPage, lastPage]);
+  }, [
+    keyword,
+    language,
+    platformSiteType,
+    platformId,
+    categoryId,
+    trendPlatformType,
+    status,
+    currentPage,
+    lastPage,
+  ]);
 
   return (
     <>
@@ -293,12 +348,15 @@ export const FeedTable: FC<FeedTableProps> = ({
         data={data}
         columns={columns}
         feeds={feeds}
-        selectedPlatformIds={selectedIds}
+        selectedFeedIds={selectedIds}
         offset={offset}
         keyword={keyword}
         language={language}
         platformSiteType={platformSiteType}
         platformId={platformId}
+        categoryId={categoryId}
+        trendPlatformType={trendPlatformType}
+        status={status}
       />
 
       <div className="mt-4">

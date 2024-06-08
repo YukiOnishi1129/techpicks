@@ -38,6 +38,11 @@ export default function FeedPage({ searchParams }: PageProps) {
       ? searchParams["trendPlatformType"]
       : undefined;
 
+  const status =
+    typeof searchParams["status"] === "string"
+      ? searchParams["status"]
+      : undefined;
+
   return (
     <FeedTemplate
       offset={offset}
@@ -47,6 +52,7 @@ export default function FeedPage({ searchParams }: PageProps) {
       platformId={platformId}
       categoryId={categoryId}
       trendPlatformType={trendPlatformType}
+      status={status}
     />
   );
 }

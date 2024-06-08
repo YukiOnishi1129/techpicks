@@ -7,6 +7,8 @@ import { createGetOnlyServerSideClient } from "@/lib/supabase/client/serverClien
 import { Database } from "@/types/database.types";
 import { FeedType } from "@/types/feed";
 
+import { STATUS_LIST } from "@/constants/status";
+
 export type GetPlatformsDTO = {
   offset?: number;
   keyword?: string;
@@ -17,6 +19,7 @@ export type GetPlatformsDTO = {
   platformId?: string;
   categoryId?: string;
   trendPlatformType?: string;
+  status?: string;
 };
 
 export const getFeeds = async ({
@@ -29,6 +32,7 @@ export const getFeeds = async ({
   platformId,
   categoryId,
   trendPlatformType,
+  status,
 }: GetPlatformsDTO) => {
   try {
     const limit = 8;
@@ -44,7 +48,7 @@ export const getFeeds = async ({
     if (keyword) {
       query.or(`name.ilike.%${keyword}%,description.ilike.%${keyword}%`);
     }
-    if (language) {
+    if (language === "1" || language === "2") {
       query.eq("platforms.is_eng", language === "2");
     }
     let argPlatformSiteType = 0;
@@ -83,8 +87,39 @@ export const getFeeds = async ({
       query.eq("category_id", categoryId);
     }
 
-    if (trendPlatformType) {
-      query.eq("trend_platform_type", trendPlatformType);
+    let argTrendPlatformType;
+    switch (trendPlatformType) {
+      case "1":
+        argTrendPlatformType = 1;
+        break;
+      case "2":
+        argTrendPlatformType = 2;
+        break;
+      case "3":
+        argTrendPlatformType = 3;
+        break;
+      case "4":
+        argTrendPlatformType = 4;
+        break;
+      case "5":
+        argTrendPlatformType = 5;
+        break;
+      case "0":
+        argTrendPlatformType = 0;
+        break;
+    }
+
+    if (argTrendPlatformType !== undefined) {
+      query.eq("trend_platform_type", argTrendPlatformType);
+    }
+
+    switch (status) {
+      case String(STATUS_LIST[1].value):
+        query.is("deleted_at", null);
+        break;
+      case String(STATUS_LIST[2].value):
+        query.not("deleted_at", "is", null);
+        break;
     }
 
     query
@@ -127,6 +162,7 @@ export type GetFeedsCountDTO = {
   platformId?: string;
   categoryId?: string;
   trendPlatformType?: string;
+  status?: string;
 };
 
 export const getFeedsCount = async ({
@@ -138,15 +174,23 @@ export const getFeedsCount = async ({
   platformId,
   categoryId,
   trendPlatformType,
+  status,
 }: GetFeedsCountDTO) => {
   try {
     const supabase = await createGetOnlyServerSideClient();
-    const query = supabase.from("feeds").select(`*`, { count: "exact" });
+    const query = supabase.from("feeds").select(
+      `
+        *,
+        categories!inner(*),
+        platforms!inner(*)
+      `,
+      { count: "exact" }
+    );
 
     if (keyword) {
       query.or(`name.ilike.%${keyword}%,description.ilike.%${keyword}%`);
     }
-    if (language) {
+    if (language === "1" || language === "2") {
       query.eq("platforms.is_eng", language === "2");
     }
     let argPlatformSiteType = 0;
@@ -185,8 +229,39 @@ export const getFeedsCount = async ({
       query.eq("category_id", categoryId);
     }
 
-    if (trendPlatformType) {
-      query.eq("trend_platform_type", trendPlatformType);
+    let argTrendPlatformType;
+    switch (trendPlatformType) {
+      case "1":
+        argTrendPlatformType = 1;
+        break;
+      case "2":
+        argTrendPlatformType = 2;
+        break;
+      case "3":
+        argTrendPlatformType = 3;
+        break;
+      case "4":
+        argTrendPlatformType = 4;
+        break;
+      case "5":
+        argTrendPlatformType = 5;
+        break;
+      case "0":
+        argTrendPlatformType = 0;
+        break;
+    }
+
+    if (argTrendPlatformType !== undefined) {
+      query.eq("trend_platform_type", argTrendPlatformType);
+    }
+
+    switch (status) {
+      case String(STATUS_LIST[1].value):
+        query.is("deleted_at", null);
+        break;
+      case String(STATUS_LIST[2].value):
+        query.not("deleted_at", "is", null);
+        break;
     }
 
     const { error, count } = await query;
@@ -366,6 +441,7 @@ export type UpdateFeedDTO = {
   thumbnailUrl: string;
   trendPlatformType: number;
   apiQueryParam?: string;
+  deletedAt?: string;
 };
 
 export const updateFeed = async ({
@@ -379,6 +455,7 @@ export const updateFeed = async ({
   thumbnailUrl,
   trendPlatformType,
   apiQueryParam,
+  deletedAt,
 }: UpdateFeedDTO) => {
   try {
     const supabase = await createGetOnlyServerSideClient();
@@ -394,6 +471,7 @@ export const updateFeed = async ({
         thumbnail_url: thumbnailUrl,
         trend_platform_type: trendPlatformType,
         api_query_param: apiQueryParam,
+        deleted_at: deletedAt || null,
       })
       .eq("id", id);
 
@@ -405,6 +483,53 @@ export const updateFeed = async ({
   }
 };
 
+export const bulkUpdateFeed = async (feeds: Array<UpdateFeedDTO>) => {
+  try {
+    const supabase = await createGetOnlyServerSideClient();
+    const { data, error } = await supabase
+      .from("feeds")
+      .upsert(
+        feeds.map((feed) => {
+          return {
+            id: feed.id,
+            platform_id: feed.platformId,
+            category_id: feed.categoryId,
+            name: feed.name,
+            description: feed.description,
+            rss_url: feed.rssUrl,
+            site_url: feed.siteUrl,
+            thumbnail_url: feed.thumbnailUrl,
+            trend_platform_type: feed.trendPlatformType,
+            api_query_param: feed.apiQueryParam,
+            deleted_at: feed.deletedAt || null,
+          };
+        })
+      )
+      .select();
+
+    if (error || !data) return;
+
+    return data.map((feed) => {
+      return {
+        id: feed.id,
+        platformId: feed.platform_id,
+        categoryId: feed.category_id,
+        name: feed.name,
+        description: feed.description,
+        rssUrl: feed.rss_url,
+        siteUrl: feed.site_url,
+        thumbnailUrl: feed.thumbnail_url,
+        trendPlatformType: feed.trend_platform_type,
+        apiQueryParam: feed.api_query_param || undefined,
+        createdAt: feed.created_at,
+        updatedAt: feed.updated_at,
+        deletedAt: feed.deleted_at || undefined,
+      };
+    });
+  } catch (err) {
+    throw new Error(`Failed to bulk update feed: ${err}`);
+  }
+};
 /**
  * ==========================================
  * Delete
