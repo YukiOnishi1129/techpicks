@@ -15,7 +15,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import { useRedirectPage } from "../../hooks/useRedirectPage";
+import { useFeedRedirectPage } from "../../hooks/useFeedRedirectPage";
 
 const FormSchema = z.object({
   trendPlatformType: z.string().optional(),
@@ -42,7 +42,7 @@ export const FeedSearchTrendPlatformTypeSelect: FC<
   trendPlatformType,
   status,
 }) => {
-  const { redirectPage } = useRedirectPage();
+  const { redirectPage } = useFeedRedirectPage();
   const [isInitSelect, startInitSelectTransition] = useTransition();
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),

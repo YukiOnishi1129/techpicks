@@ -50,7 +50,7 @@ import { CategoryType } from "@/types/category";
 import { FeedType } from "@/types/feed";
 import { PlatformType } from "@/types/platform";
 
-import { useRedirectPage } from "../../hooks/useRedirectPage";
+import { useFeedRedirectPage } from "../../hooks/useFeedRedirectPage";
 import { updateFeed } from "../../repository/feed";
 import { DeleteFeedAlertDialog } from "../DeleteFeedAlertDialog";
 import { SelectCategoryDialog } from "../SelectCategoryDialog";
@@ -122,7 +122,7 @@ export const EditFeedSheetContent: FC<EditFeedSheetContentProps> = ({
   status,
   handleSheetClose,
 }) => {
-  const { redirectPage } = useRedirectPage();
+  const { redirectPage } = useFeedRedirectPage();
   const { successToast, failToast } = useStatusToast();
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),

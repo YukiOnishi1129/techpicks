@@ -3,7 +3,7 @@ import { useCallback } from "react";
 
 import { serverRevalidatePage } from "@/actions/serverAction";
 
-type RedirectPageParams = {
+type FeedRedirectPageParams = {
   offset?: number;
   targetKeyword?: string;
   targetLanguage?: string;
@@ -14,7 +14,7 @@ type RedirectPageParams = {
   targetStatus?: string;
 };
 
-export const useRedirectPage = () => {
+export const useFeedRedirectPage = () => {
   const router = useRouter();
 
   const redirectPage = useCallback(
@@ -27,7 +27,7 @@ export const useRedirectPage = () => {
       targetCategoryId,
       targetTrendPlatformType,
       targetStatus,
-    }: RedirectPageParams) => {
+    }: FeedRedirectPageParams) => {
       let offsetPath = `offset=1`;
       if (offset) {
         offsetPath = `offset=${offset}

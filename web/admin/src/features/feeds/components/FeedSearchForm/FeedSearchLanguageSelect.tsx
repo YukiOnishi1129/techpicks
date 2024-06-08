@@ -18,7 +18,7 @@ import {
 
 import { ENGLISH_IMAGE, JAPANESE_IMAGE } from "@/constants/image";
 
-import { useRedirectPage } from "../../hooks/useRedirectPage";
+import { useFeedRedirectPage } from "../../hooks/useFeedRedirectPage";
 
 type FeedSearchLanguageSelectProps = {
   keyword?: string;
@@ -43,7 +43,7 @@ export const FeedSearchLanguageSelect: FC<FeedSearchLanguageSelectProps> = ({
   trendPlatformType,
   status,
 }) => {
-  const { redirectPage } = useRedirectPage();
+  const { redirectPage } = useFeedRedirectPage();
   const [isInitSelect, startInitSelectTransition] = useTransition();
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
