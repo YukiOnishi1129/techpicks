@@ -4,6 +4,7 @@ import { FC } from "react";
 
 import { PlatformLanguageSelect } from "./PlatformLangaugeSelect";
 import { PlatformSearchKeyword } from "./PlatformSearchKeyword";
+import { PlatformSearchResetButton } from "./PlatformSearchResetButton";
 import { PlatformSiteTypeSelect } from "./PlatformSiteTypeSelect";
 
 type PlatformSearchFormProps = {
@@ -36,6 +37,8 @@ export const PlatformSearchForm: FC<PlatformSearchFormProps> = ({
         language={language}
         platformSiteType={platformSiteType}
       />
+      {/* reset */}
+      <PlatformSearchResetButton />
     </div>
   );
 };

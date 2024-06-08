@@ -76,7 +76,7 @@ export const FeedSearchLanguageSelect: FC<FeedSearchLanguageSelectProps> = ({
     ]
   );
 
-  const initSelectTrendPlatformType = useCallback(() => {
+  const initSelectLanguage = useCallback(() => {
     startInitSelectTransition(() => {
       if (language === undefined) {
         form.setValue("language", "0");
@@ -85,8 +85,8 @@ export const FeedSearchLanguageSelect: FC<FeedSearchLanguageSelectProps> = ({
   }, [form, language]);
 
   useEffect(() => {
-    initSelectTrendPlatformType();
-  }, [form, initSelectTrendPlatformType]);
+    initSelectLanguage();
+  }, [form, initSelectLanguage]);
 
   return (
     <Form {...form}>

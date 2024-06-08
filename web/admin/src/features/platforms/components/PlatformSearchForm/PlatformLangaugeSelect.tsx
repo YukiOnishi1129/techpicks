@@ -2,11 +2,12 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
-import { useCallback, FC } from "react";
+import { useCallback, FC, useTransition, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
+import { SyncLoaderComponent } from "@/components/ui/loader";
 import {
   Select,
   SelectContent,
@@ -35,6 +36,7 @@ export const PlatformLanguageSelect: FC<PlatformLanguageSelectProps> = ({
   platformSiteType,
 }) => {
   const { redirectPage } = usePlatformRedirectPage();
+  const [isInitSelect, startInitSelectTransition] = useTransition();
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -67,55 +69,73 @@ export const PlatformLanguageSelect: FC<PlatformLanguageSelectProps> = ({
     [keyword, platformSiteType, redirectPage]
   );
 
+  const initSelectLanguage = useCallback(() => {
+    startInitSelectTransition(() => {
+      if (language === undefined) {
+        form.setValue("language", "0");
+      }
+    });
+  }, [form, language]);
+
+  useEffect(() => {
+    initSelectLanguage();
+  }, [form, initSelectLanguage]);
+
   return (
     <Form {...form}>
       <form className="w-40">
-        <FormField
-          control={form.control}
-          name="language"
-          render={({ field }) => (
-            <FormItem>
-              <Select
-                onValueChange={(value) =>
-                  handleSelectLanguage(value, field.onChange)
-                }
-                defaultValue={field.value}
-              >
-                <FormControl>
-                  <SelectTrigger className="border-primary bg-secondary">
-                    <SelectValue
-                      placeholder="language"
-                      className="text-gray-400"
-                    />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  <SelectItem value="0">all language</SelectItem>
-                  <SelectItem value="2" className="flex">
-                    <Image
-                      className="inline-block"
-                      src={ENGLISH_IMAGE}
-                      alt={"EN"}
-                      width={20}
-                      height={20}
-                    />
-                    <span className="ml-2 inline-block">english</span>
-                  </SelectItem>
-                  <SelectItem value="1">
-                    <Image
-                      className="inline-block"
-                      src={JAPANESE_IMAGE}
-                      alt={"JP"}
-                      width={20}
-                      height={20}
-                    />
-                    <span className="ml-2 inline-block">japanese</span>
-                  </SelectItem>
-                </SelectContent>
-              </Select>
-            </FormItem>
-          )}
-        />
+        {isInitSelect ? (
+          <div className="size-12">
+            <SyncLoaderComponent size={10} />
+          </div>
+        ) : (
+          <FormField
+            control={form.control}
+            name="language"
+            render={({ field }) => (
+              <FormItem>
+                <Select
+                  onValueChange={(value) =>
+                    handleSelectLanguage(value, field.onChange)
+                  }
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger className="border-primary bg-secondary">
+                      <SelectValue
+                        placeholder="language"
+                        className="text-gray-400"
+                      />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="0">all language</SelectItem>
+                    <SelectItem value="2" className="flex">
+                      <Image
+                        className="inline-block"
+                        src={ENGLISH_IMAGE}
+                        alt={"EN"}
+                        width={20}
+                        height={20}
+                      />
+                      <span className="ml-2 inline-block">english</span>
+                    </SelectItem>
+                    <SelectItem value="1">
+                      <Image
+                        className="inline-block"
+                        src={JAPANESE_IMAGE}
+                        alt={"JP"}
+                        width={20}
+                        height={20}
+                      />
+                      <span className="ml-2 inline-block">japanese</span>
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+              </FormItem>
+            )}
+          />
+        )}
       </form>
     </Form>
   );

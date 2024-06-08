@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FC, useCallback } from "react";
+import { FC, useCallback, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -56,6 +56,10 @@ export const PlatformSearchKeyword: FC<PlatformSearchKeywordProps> = ({
     },
     [language, platformSiteType, redirectPage]
   );
+
+  useEffect(() => {
+    form.setValue("keyword", keyword);
+  }, [form, keyword]);
 
   return (
     <Form {...form}>
