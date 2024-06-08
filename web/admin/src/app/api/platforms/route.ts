@@ -8,11 +8,13 @@ export async function GET(req: NextRequest) {
   const offset = searchParams.get("offset");
   const language = searchParams.get("language") || undefined;
   const platformSiteType = searchParams.get("platformSiteType") || undefined;
+  const status = searchParams.get("status") || undefined;
   const platforms = await getPlatforms({
     keyword: keyword,
     offset: parseInt(offset || "1"),
     language: language,
     platformSiteType: platformSiteType,
+    status: status,
   });
   return NextResponse.json(
     {

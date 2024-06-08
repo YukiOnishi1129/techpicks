@@ -23,7 +23,7 @@ import { FeedSearchPlatformSiteTypeSelect } from "./FeedSearchPlatformSiteTypeSe
 import { FeedSearchResetButton } from "./FeedSearchResetButton";
 import { FeedSearchStatusSelect } from "./FeedSearchStatusSelect";
 import { FeedSearchTrendPlatformTypeSelect } from "./FeedSearchTrendPlatformTypeSelect";
-import { useRedirectPage } from "../../hooks/useRedirectPage";
+import { useFeedRedirectPage } from "../../hooks/useFeedRedirectPage";
 import { SelectCategoryDialog } from "../SelectCategoryDialog";
 import { SelectPlatformDialog } from "../SelectPlatformDialog";
 
@@ -46,7 +46,7 @@ export const FeedSearchForm: FC<FeedSearchFormProps> = ({
   trendPlatformType,
   status,
 }) => {
-  const { redirectPage } = useRedirectPage();
+  const { redirectPage } = useFeedRedirectPage();
   const [isPlatformPending, startPlatformTransition] = useTransition();
   const [isCategoryPending, startCategoryTransition] = useTransition();
 

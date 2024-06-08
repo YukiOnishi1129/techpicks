@@ -2,7 +2,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import { FC, useCallback, useMemo, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -31,13 +30,13 @@ import {
   SheetClose,
 } from "@/components/ui/sheet";
 
-import { useServerRevalidatePage } from "@/hooks/useServerRevalidatePage";
 import { useStatusToast } from "@/hooks/useStatusToast";
 
 import { PlatformType } from "@/types/platform";
 
 import { ENGLISH_IMAGE, JAPANESE_IMAGE } from "@/constants/image";
 
+import { usePlatformRedirectPage } from "../../hooks/usePlatformRedirectPage";
 import { updatePlatform } from "../../repository/platform";
 import { DeletePlatformAlertDialog } from "../DeletePlatformAlertDialog";
 
@@ -71,15 +70,24 @@ const FormSchema = z.object({
 
 type EditPlatformSheetContentProps = {
   platform: PlatformType;
+  offset?: number;
+  keyword?: string;
+  language?: string;
+  platformSiteType?: string;
+  status?: string;
   handleSheetClose: () => void;
 };
 
 export const EditPlatformSheetContent: FC<EditPlatformSheetContentProps> = ({
   platform,
+  offset,
+  keyword,
+  language,
+  platformSiteType,
+  status,
   handleSheetClose,
 }) => {
-  const router = useRouter();
-  const { revalidatePage } = useServerRevalidatePage();
+  const { redirectPage } = usePlatformRedirectPage();
   const { successToast, failToast } = useStatusToast();
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -141,15 +149,24 @@ export const EditPlatformSheetContent: FC<EditPlatformSheetContentProps> = ({
         });
 
         // 3. revalidate
-        await revalidatePage();
-        router.replace(`/platform`);
+        await redirectPage({
+          offset,
+          targetKeyword: keyword,
+          targetLanguage: language,
+          targetPlatformSiteType: platformSiteType,
+          targetStatus: status,
+        });
       });
     },
     [
       isEditDisabledCheck,
       platform,
-      revalidatePage,
-      router,
+      offset,
+      keyword,
+      language,
+      platformSiteType,
+      status,
+      redirectPage,
       startTransition,
       successToast,
       failToast,

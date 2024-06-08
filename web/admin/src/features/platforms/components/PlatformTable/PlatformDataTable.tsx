@@ -24,16 +24,13 @@ import { useStatusToast } from "@/hooks/useStatusToast";
 
 import { PlatformType } from "@/types/platform";
 
-import { serverRevalidatePage } from "@/actions/serverAction";
-
-import { PlatformLanguageSelect } from "./PlatformLangaugeSelect";
-import { PlatformSearchInput } from "./PlatformSearchInput";
-import { PlatformSiteTypeSelect } from "./PlatformSiteTypeSelect";
+import { usePlatformRedirectPage } from "../../hooks/usePlatformRedirectPage";
 import {
   UpdatePlatformDTO,
   bulkUpdatePlatform,
 } from "../../repository/platform";
 import { CreatePlatformDialog } from "../CreatePlatformDialog";
+import { PlatformSearchForm } from "../PlatformSearchForm/PlatformSearchForm";
 
 interface PlatformDataTableProps<TData, TValue> {
   allCount: number;
@@ -45,6 +42,7 @@ interface PlatformDataTableProps<TData, TValue> {
   keyword?: string;
   language?: string;
   platformSiteType?: string;
+  status?: string;
 }
 
 export function PlatformDataTable<TData, TValue>({
@@ -57,9 +55,11 @@ export function PlatformDataTable<TData, TValue>({
   keyword,
   language,
   platformSiteType,
+  status,
 }: PlatformDataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = useState({});
   const { successToast, failToast } = useStatusToast();
+  const { redirectPage } = usePlatformRedirectPage();
 
   const currentDataCount = useMemo(() => {
     if (!offset) return data.length;
@@ -96,25 +96,6 @@ export function PlatformDataTable<TData, TValue>({
     [platforms, selectedPlatformIds]
   );
 
-  const redirectPage = useCallback(async () => {
-    let keywordPath = "";
-    const requestOffset = offset ? offset : 1;
-    if (keyword && keyword.trim() !== "") {
-      keywordPath = `&keyword=${keyword}`;
-    }
-    let languagePath = "";
-    if (language) {
-      languagePath = `&language=${language}`;
-    }
-    let platformSiteTypePath = "";
-    if (platformSiteType) {
-      platformSiteTypePath = `&platformSiteType=${platformSiteType}`;
-    }
-    await serverRevalidatePage(
-      `/platform?$offset=${requestOffset}${keywordPath}${languagePath}${platformSiteTypePath}`
-    );
-  }, [keyword, language, platformSiteType, offset]);
-
   const handleUpdateStatusToActive = useCallback(async () => {
     const targetUpdatePlatforms: Array<UpdatePlatformDTO> = [];
     platforms.forEach((platform) => {
@@ -147,8 +128,24 @@ export function PlatformDataTable<TData, TValue>({
     });
 
     // revalidate page
-    await redirectPage();
-  }, [platforms, selectedPlatformIds, successToast, failToast, redirectPage]);
+    await redirectPage({
+      offset,
+      targetKeyword: keyword,
+      targetLanguage: language,
+      targetPlatformSiteType: platformSiteType,
+      targetStatus: "",
+    });
+  }, [
+    offset,
+    keyword,
+    language,
+    platformSiteType,
+    platforms,
+    selectedPlatformIds,
+    successToast,
+    failToast,
+    redirectPage,
+  ]);
 
   const handleUpdateStatusToStop = useCallback(async () => {
     const targetUpdatePlatforms: Array<UpdatePlatformDTO> = [];
@@ -180,8 +177,24 @@ export function PlatformDataTable<TData, TValue>({
       description: "Success: status stop",
     });
     // revalidate page
-    await redirectPage();
-  }, [platforms, selectedPlatformIds, successToast, failToast, redirectPage]);
+    await redirectPage({
+      offset,
+      targetKeyword: keyword,
+      targetLanguage: language,
+      targetPlatformSiteType: platformSiteType,
+      targetStatus: "",
+    });
+  }, [
+    offset,
+    keyword,
+    language,
+    platformSiteType,
+    platforms,
+    selectedPlatformIds,
+    successToast,
+    failToast,
+    redirectPage,
+  ]);
 
   return (
     <div className="rounded-md border">
@@ -202,35 +215,21 @@ export function PlatformDataTable<TData, TValue>({
           </div>
         </div>
 
-        <CreatePlatformDialog />
+        <CreatePlatformDialog
+          offset={offset}
+          keyword={keyword}
+          language={language}
+          platformSiteType={platformSiteType}
+          status={status}
+        />
       </div>
 
-      <div className="flex items-center justify-between border-b px-4 py-2">
-        <div className="flex  items-center justify-between">
-          <div>
-            <PlatformSearchInput
-              keyword={keyword}
-              language={language}
-              platformSiteType={platformSiteType}
-            />
-          </div>
-
-          <div className="ml-2">
-            <PlatformLanguageSelect
-              keyword={keyword}
-              language={language}
-              platformSiteType={platformSiteType}
-            />
-          </div>
-          <div className="ml-2">
-            <PlatformSiteTypeSelect
-              keyword={keyword}
-              language={language}
-              platformSiteType={platformSiteType}
-            />
-          </div>
-        </div>
-      </div>
+      <PlatformSearchForm
+        keyword={keyword}
+        language={language}
+        platformSiteType={platformSiteType}
+        status={status}
+      />
 
       <Table>
         <TableHeader>

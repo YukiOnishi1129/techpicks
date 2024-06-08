@@ -8,7 +8,7 @@ import { z } from "zod";
 import { Form, FormField, FormItem, FormControl } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
-import { useRedirectPage } from "../../hooks/useRedirectPage";
+import { useFeedRedirectPage } from "../../hooks/useFeedRedirectPage";
 
 const FormSchema = z.object({
   keyword: z.string().optional(),
@@ -33,7 +33,7 @@ export const FeedSearchKeyword: FC<FeedSearchKeywordProps> = ({
   trendPlatformType,
   status,
 }) => {
-  const { redirectPage } = useRedirectPage();
+  const { redirectPage } = useFeedRedirectPage();
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {

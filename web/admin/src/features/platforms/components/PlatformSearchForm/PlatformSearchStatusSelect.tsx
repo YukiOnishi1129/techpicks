@@ -15,32 +15,23 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import { useFeedRedirectPage } from "../../hooks/useFeedRedirectPage";
+import { usePlatformRedirectPage } from "../../hooks/usePlatformRedirectPage";
 
 const FormSchema = z.object({
   status: z.string().optional(),
 });
 
-type FeedSearchStatusSelectProps = {
+type PlatformSearchStatusSelectProps = {
   keyword?: string;
   language?: string;
-  platformId?: string;
-  categoryId?: string;
   platformSiteType?: string;
-  trendPlatformType?: string;
   status?: string;
 };
 
-export const FeedSearchStatusSelect: FC<FeedSearchStatusSelectProps> = ({
-  keyword,
-  language,
-  platformId,
-  categoryId,
-  platformSiteType,
-  trendPlatformType,
-  status,
-}) => {
-  const { redirectPage } = useFeedRedirectPage();
+export const PlatformSearchStatusSelect: FC<
+  PlatformSearchStatusSelectProps
+> = ({ keyword, language, platformSiteType, status }) => {
+  const { redirectPage } = usePlatformRedirectPage();
   const [isInitSelect, startInitSelectTransition] = useTransition();
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -56,21 +47,10 @@ export const FeedSearchStatusSelect: FC<FeedSearchStatusSelectProps> = ({
         targetKeyword: keyword,
         targetLanguage: language,
         targetPlatformSiteType: platformSiteType,
-        targetPlatformId: platformId,
-        targetCategoryId: categoryId,
-        targetTrendPlatformType: trendPlatformType,
         targetStatus: value,
       });
     },
-    [
-      keyword,
-      language,
-      platformSiteType,
-      platformId,
-      categoryId,
-      trendPlatformType,
-      redirectPage,
-    ]
+    [keyword, language, platformSiteType, redirectPage]
   );
 
   const initSelectStatus = useCallback(() => {

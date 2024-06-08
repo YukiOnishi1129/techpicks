@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { FC, useCallback, useState } from "react";
 import { FiPlus } from "react-icons/fi";
 
 import { Button } from "@/components/ui/button";
@@ -8,7 +8,21 @@ import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 
 import { CreatePlatformDialogContent } from "./CreatePlatformDialogContent";
 
-export const CreatePlatformDialog = () => {
+type CreatePlatformDialogProps = {
+  offset?: number;
+  keyword?: string;
+  language?: string;
+  platformSiteType?: string;
+  status?: string;
+};
+
+export const CreatePlatformDialog: FC<CreatePlatformDialogProps> = ({
+  offset,
+  keyword,
+  language,
+  platformSiteType,
+  status,
+}) => {
   const [open, setOpen] = useState(false);
   const handleDialogOpen = useCallback(() => setOpen(true), []);
   const handleDialogClose = useCallback(() => setOpen(false), []);
@@ -22,7 +36,14 @@ export const CreatePlatformDialog = () => {
         </Button>
       </DialogTrigger>
       {open && (
-        <CreatePlatformDialogContent handleDialogClose={handleDialogClose} />
+        <CreatePlatformDialogContent
+          offset={offset}
+          keyword={keyword}
+          language={language}
+          platformSiteType={platformSiteType}
+          status={status}
+          handleDialogClose={handleDialogClose}
+        />
       )}
     </Dialog>
   );
