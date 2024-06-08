@@ -9,6 +9,7 @@ import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { CreateFeedDialogContent } from "./CreateFeedDialogContent";
 
 type CreateFeedDialogProps = {
+  offset?: number;
   keyword?: string;
   language?: string;
   platformId?: string;
@@ -18,6 +19,7 @@ type CreateFeedDialogProps = {
   status?: string;
 };
 export const CreateFeedDialog: FC<CreateFeedDialogProps> = ({
+  offset,
   keyword,
   language,
   platformId,
@@ -39,6 +41,7 @@ export const CreateFeedDialog: FC<CreateFeedDialogProps> = ({
       </DialogTrigger>
       {openDialog && (
         <CreateFeedDialogContent
+          offset={offset}
           keyword={keyword}
           language={language}
           platformId={platformId}

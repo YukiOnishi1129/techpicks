@@ -88,6 +88,7 @@ const FormSchema = z.object({
 });
 
 type CreateFeedDialogContentProps = {
+  offset?: number;
   keyword?: string;
   language?: string;
   platformId?: string;
@@ -99,6 +100,7 @@ type CreateFeedDialogContentProps = {
 };
 
 export const CreateFeedDialogContent: FC<CreateFeedDialogContentProps> = ({
+  offset,
   keyword,
   language,
   platformId,
@@ -208,19 +210,21 @@ export const CreateFeedDialogContent: FC<CreateFeedDialogContentProps> = ({
         });
 
         // 3. revalidate
-        await redirectPage(
-          keyword,
-          language,
-          platformSiteType,
-          platformId,
-          categoryId,
-          trendPlatformType,
-          status
-        );
+        await redirectPage({
+          offset: offset,
+          targetKeyword: keyword,
+          targetLanguage: language,
+          targetPlatformSiteType: platformSiteType,
+          targetPlatformId: platformId,
+          targetCategoryId: categoryId,
+          targetTrendPlatformType: trendPlatformType,
+          targetStatus: status,
+        });
         handleDialogClose();
       });
     },
     [
+      offset,
       keyword,
       language,
       platformSiteType,

@@ -234,6 +234,7 @@ export function FeedDataTable<TData, TValue>({
         </div>
 
         <CreateFeedDialog
+          offset={offset}
           keyword={keyword}
           language={language}
           platformId={platformId}

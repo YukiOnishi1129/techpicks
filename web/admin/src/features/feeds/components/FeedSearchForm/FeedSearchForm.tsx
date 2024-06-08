@@ -84,14 +84,15 @@ export const FeedSearchForm: FC<FeedSearchFormProps> = ({
 
   const handleSearchPlatform = useCallback(
     async (targetPlatformId: string) => {
-      await redirectPage(
-        keyword,
-        language,
-        platformSiteType,
-        targetPlatformId,
-        categoryId,
-        trendPlatformType
-      );
+      await redirectPage({
+        targetKeyword: keyword,
+        targetLanguage: language,
+        targetPlatformSiteType: platformSiteType,
+        targetPlatformId: targetPlatformId,
+        targetCategoryId: categoryId,
+        targetTrendPlatformType: trendPlatformType,
+        targetStatus: status,
+      });
     },
     [
       keyword,
@@ -99,21 +100,22 @@ export const FeedSearchForm: FC<FeedSearchFormProps> = ({
       platformSiteType,
       categoryId,
       trendPlatformType,
+      status,
       redirectPage,
     ]
   );
 
   const handleSearchCategory = useCallback(
     async (targetCategoryId: string) => {
-      await redirectPage(
-        keyword,
-        language,
-        platformSiteType,
-        platformId,
-        targetCategoryId,
-        trendPlatformType,
-        status
-      );
+      await redirectPage({
+        targetKeyword: keyword,
+        targetLanguage: language,
+        targetPlatformSiteType: platformSiteType,
+        targetPlatformId: platformId,
+        targetCategoryId: targetCategoryId,
+        targetTrendPlatformType: trendPlatformType,
+        targetStatus: status,
+      });
     },
     [
       keyword,

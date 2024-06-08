@@ -47,15 +47,15 @@ export const FeedSearchKeyword: FC<FeedSearchKeywordProps> = ({
 
   const handleSearch = useCallback(
     async (values: z.infer<typeof FormSchema>) => {
-      await redirectPage(
-        values.keyword,
-        language,
-        platformSiteType,
-        platformId,
-        categoryId,
-        trendPlatformType,
-        status
-      );
+      await redirectPage({
+        targetKeyword: values.keyword,
+        targetLanguage: language,
+        targetPlatformSiteType: platformSiteType,
+        targetPlatformId: platformId,
+        targetCategoryId: categoryId,
+        targetTrendPlatformType: trendPlatformType,
+        targetStatus: status,
+      });
     },
     [
       language,

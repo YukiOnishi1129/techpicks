@@ -258,6 +258,7 @@ export const FeedTable: FC<FeedTableProps> = ({
           return (
             <EditFeedSheet
               feed={feed}
+              offset={offset}
               keyword={keyword}
               language={language}
               platformSiteType={platformSiteType}
@@ -270,7 +271,18 @@ export const FeedTable: FC<FeedTableProps> = ({
         },
       },
     ],
-    [feedIds, feeds]
+    [
+      feedIds,
+      feeds,
+      offset,
+      keyword,
+      language,
+      platformSiteType,
+      platformId,
+      categoryId,
+      trendPlatformType,
+      status,
+    ]
   );
 
   const currentPage = offset || 1;

@@ -55,15 +55,15 @@ export const FeedSearchLanguageSelect: FC<FeedSearchLanguageSelectProps> = ({
   const handleSelectLanguage = useCallback(
     async (value: string, onChange: (...event: any[]) => void) => {
       onChange(value);
-      await redirectPage(
-        keyword,
-        value,
-        platformSiteType,
-        platformId,
-        categoryId,
-        trendPlatformType,
-        status
-      );
+      await redirectPage({
+        targetKeyword: keyword,
+        targetLanguage: value,
+        targetPlatformSiteType: platformSiteType,
+        targetPlatformId: platformId,
+        targetCategoryId: categoryId,
+        targetTrendPlatformType: trendPlatformType,
+        targetStatus: status,
+      });
     },
     [
       keyword,

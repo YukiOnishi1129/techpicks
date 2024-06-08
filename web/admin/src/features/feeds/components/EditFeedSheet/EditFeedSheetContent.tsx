@@ -99,6 +99,7 @@ const FormSchema = z.object({
 
 type EditFeedSheetContentProps = {
   feed: FeedType;
+  offset?: number;
   keyword?: string;
   language?: string;
   platformId?: string;
@@ -111,6 +112,7 @@ type EditFeedSheetContentProps = {
 
 export const EditFeedSheetContent: FC<EditFeedSheetContentProps> = ({
   feed,
+  offset,
   keyword,
   language,
   platformId,
@@ -254,20 +256,22 @@ export const EditFeedSheetContent: FC<EditFeedSheetContentProps> = ({
         });
 
         // 3. revalidate
-        await redirectPage(
-          keyword,
-          language,
-          platformSiteType,
-          platformId,
-          categoryId,
-          trendPlatformType,
-          status
-        );
+        await redirectPage({
+          offset: offset,
+          targetKeyword: keyword,
+          targetLanguage: language,
+          targetPlatformSiteType: platformSiteType,
+          targetPlatformId: platformId,
+          targetCategoryId: categoryId,
+          targetTrendPlatformType: trendPlatformType,
+          targetStatus: status,
+        });
       });
     },
     [
       isEditDisabledCheck,
       feed,
+      offset,
       keyword,
       language,
       platformSiteType,

@@ -11,6 +11,7 @@ import { EditFeedSheetContent } from "./EditFeedSheetContent";
 
 type EditFeedSheetProps = {
   feed: FeedType;
+  offset?: number;
   keyword?: string;
   language?: string;
   platformId?: string;
@@ -22,6 +23,7 @@ type EditFeedSheetProps = {
 
 export const EditFeedSheet: FC<EditFeedSheetProps> = ({
   feed,
+  offset,
   keyword,
   language,
   platformId,
@@ -42,6 +44,7 @@ export const EditFeedSheet: FC<EditFeedSheetProps> = ({
       {isSheetOpen && (
         <EditFeedSheetContent
           feed={feed}
+          offset={offset}
           keyword={keyword}
           language={language}
           platformId={platformId}
