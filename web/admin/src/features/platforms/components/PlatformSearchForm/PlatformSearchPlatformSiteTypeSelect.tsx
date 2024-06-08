@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FC, useCallback, useEffect, useTransition } from "react";
+import { useCallback, FC, useEffect, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -15,75 +15,56 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import { useFeedRedirectPage } from "../../hooks/useFeedRedirectPage";
+import { usePlatformRedirectPage } from "../../hooks/usePlatformRedirectPage";
 
-const FormSchema = z.object({
-  status: z.string().optional(),
-});
-
-type FeedSearchStatusSelectProps = {
+type PlatformSearchPlatformSiteTypeSelectProps = {
   keyword?: string;
   language?: string;
-  platformId?: string;
-  categoryId?: string;
   platformSiteType?: string;
-  trendPlatformType?: string;
   status?: string;
 };
 
-export const FeedSearchStatusSelect: FC<FeedSearchStatusSelectProps> = ({
-  keyword,
-  language,
-  platformId,
-  categoryId,
-  platformSiteType,
-  trendPlatformType,
-  status,
-}) => {
-  const { redirectPage } = useFeedRedirectPage();
+const FormSchema = z.object({
+  platformSiteType: z.string(),
+});
+
+export const PlatformSearchPlatformSiteTypeSelect: FC<
+  PlatformSearchPlatformSiteTypeSelectProps
+> = ({ keyword, language, platformSiteType, status }) => {
+  const { redirectPage } = usePlatformRedirectPage();
   const [isInitSelect, startInitSelectTransition] = useTransition();
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      status: status,
+      platformSiteType: platformSiteType,
     },
   });
 
-  const handleSelectStatus = useCallback(
+  const handleSelectPlatformType = useCallback(
     async (value: string, onChange: (...event: any[]) => void) => {
       onChange(value);
       await redirectPage({
+        offset: 1,
         targetKeyword: keyword,
         targetLanguage: language,
-        targetPlatformSiteType: platformSiteType,
-        targetPlatformId: platformId,
-        targetCategoryId: categoryId,
-        targetTrendPlatformType: trendPlatformType,
-        targetStatus: value,
+        targetPlatformSiteType: value,
+        targetStatus: status,
       });
     },
-    [
-      keyword,
-      language,
-      platformSiteType,
-      platformId,
-      categoryId,
-      trendPlatformType,
-      redirectPage,
-    ]
+    [keyword, language, status, redirectPage]
   );
 
-  const initSelectStatus = useCallback(() => {
+  const initSelectPlatformSiteType = useCallback(() => {
     startInitSelectTransition(() => {
-      if (status === undefined) {
-        form.setValue("status", "0");
+      if (platformSiteType === undefined) {
+        form.setValue("platformSiteType", "0");
       }
     });
-  }, [form, status]);
+  }, [form, platformSiteType]);
 
   useEffect(() => {
-    initSelectStatus();
-  }, [form, initSelectStatus]);
+    initSelectPlatformSiteType();
+  }, [form, initSelectPlatformSiteType]);
 
   return (
     <Form {...form}>
@@ -95,32 +76,33 @@ export const FeedSearchStatusSelect: FC<FeedSearchStatusSelectProps> = ({
         ) : (
           <FormField
             control={form.control}
-            name="status"
+            name="platformSiteType"
             render={({ field }) => (
               <FormItem>
                 <Select
                   onValueChange={(value) =>
-                    handleSelectStatus(value, field.onChange)
+                    handleSelectPlatformType(value, field.onChange)
                   }
                   defaultValue={field.value}
                 >
                   <FormControl>
                     <SelectTrigger className="border-primary bg-secondary">
                       <SelectValue
-                        placeholder="Status"
+                        placeholder="site type"
                         className="text-gray-400"
                       />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="0">
-                      <span>All status</span>
-                    </SelectItem>
+                    <SelectItem value="0">all type</SelectItem>
                     <SelectItem value="1">
-                      <span>active</span>
+                      <span>site</span>
                     </SelectItem>
                     <SelectItem value="2">
-                      <span>stop</span>
+                      <span>company</span>
+                    </SelectItem>
+                    <SelectItem value="3">
+                      <span>summary</span>
                     </SelectItem>
                   </SelectContent>
                 </Select>

@@ -3,7 +3,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import { FC, useCallback, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -32,12 +31,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import { useServerRevalidatePage } from "@/hooks/useServerRevalidatePage";
 import { useStatusToast } from "@/hooks/useStatusToast";
 
 import { ENGLISH_IMAGE, JAPANESE_IMAGE } from "@/constants/image";
 
 import { fetchPlatformsCountAPI } from "../../actions/platform";
+import { usePlatformRedirectPage } from "../../hooks/usePlatformRedirectPage";
 import { createPlatform } from "../../repository/platform";
 
 const FormSchema = z.object({
@@ -73,14 +72,25 @@ const FormSchema = z.object({
 });
 
 type CreatePlatformDialogContentProps = {
+  offset?: number;
+  keyword?: string;
+  language?: string;
+  platformSiteType?: string;
+  status?: string;
   handleDialogClose: () => void;
 };
 
 export const CreatePlatformDialogContent: FC<
   CreatePlatformDialogContentProps
-> = ({ handleDialogClose }) => {
-  const router = useRouter();
-  const { revalidatePage } = useServerRevalidatePage();
+> = ({
+  offset,
+  keyword,
+  language,
+  platformSiteType,
+  status,
+  handleDialogClose,
+}) => {
+  const { redirectPage } = usePlatformRedirectPage();
   const { successToast, failToast } = useStatusToast();
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -123,12 +133,28 @@ export const CreatePlatformDialogContent: FC<
         });
 
         // 3. revalidate
-        await revalidatePage();
+        await redirectPage({
+          offset,
+          targetKeyword: keyword,
+          targetLanguage: language,
+          targetPlatformSiteType: platformSiteType,
+          targetStatus: status,
+        });
         handleDialogClose();
-        router.replace(`/platform`);
       });
     },
-    [form, revalidatePage, router, handleDialogClose, successToast, failToast]
+    [
+      form,
+      handleDialogClose,
+      successToast,
+      failToast,
+      redirectPage,
+      offset,
+      keyword,
+      language,
+      platformSiteType,
+      status,
+    ]
   );
 
   return (

@@ -24,12 +24,18 @@ export default function PlatformPage({ searchParams }: PageProps) {
       ? searchParams["platformSiteType"]
       : undefined;
 
+  const status =
+    typeof searchParams["status"] === "string"
+      ? searchParams["status"]
+      : undefined;
+
   return (
     <PlatformTemplate
       offset={offset}
       keyword={keyword}
       language={language}
       platformSiteType={platformSiteType}
+      status={status}
     />
   );
 }

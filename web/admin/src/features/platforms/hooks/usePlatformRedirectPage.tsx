@@ -3,18 +3,15 @@ import { useCallback } from "react";
 
 import { serverRevalidatePage } from "@/actions/serverAction";
 
-type RedirectPageParams = {
+type PlatformRedirectPageParams = {
   offset?: number;
   targetKeyword?: string;
   targetLanguage?: string;
   targetPlatformSiteType?: string;
-  targetPlatformId?: string;
-  targetCategoryId?: string;
-  targetTrendPlatformType?: string;
   targetStatus?: string;
 };
 
-export const useRedirectPage = () => {
+export const usePlatformRedirectPage = () => {
   const router = useRouter();
 
   const redirectPage = useCallback(
@@ -23,15 +20,11 @@ export const useRedirectPage = () => {
       targetKeyword,
       targetLanguage,
       targetPlatformSiteType,
-      targetPlatformId,
-      targetCategoryId,
-      targetTrendPlatformType,
       targetStatus,
-    }: RedirectPageParams) => {
+    }: PlatformRedirectPageParams) => {
       let offsetPath = `offset=1`;
       if (offset) {
-        offsetPath = `offset=${offset}
-        `;
+        offsetPath = `offset=${offset}`;
       }
       let keywordPath = "";
       if (!!targetKeyword && targetKeyword.trim() !== "") {
@@ -45,28 +38,17 @@ export const useRedirectPage = () => {
       if (targetPlatformSiteType) {
         platformSiteTypePath = `&platformSiteType=${targetPlatformSiteType}`;
       }
-      let platformIdPath = "";
-      if (targetPlatformId) {
-        platformIdPath = `&platformId=${targetPlatformId}`;
-      }
-      let categoryIdPath = "";
-      if (targetCategoryId) {
-        categoryIdPath = `&categoryId=${targetCategoryId}`;
-      }
-      let trendPlatformTypePath = "";
-      if (targetTrendPlatformType) {
-        trendPlatformTypePath = `&trendPlatformType=${targetTrendPlatformType}`;
-      }
+
       let statusPath = "";
       if (targetStatus) {
         statusPath = `&status=${targetStatus}`;
       }
 
       await serverRevalidatePage(
-        `/feed?${offsetPath}${keywordPath}${languagePath}${platformSiteTypePath}${platformIdPath}${categoryIdPath}${trendPlatformTypePath}${statusPath}`
+        `/platform?${offsetPath}${keywordPath}${languagePath}${platformSiteTypePath}${statusPath}`
       );
       router.replace(
-        `/feed?${offsetPath}${keywordPath}${languagePath}${platformSiteTypePath}${platformIdPath}${categoryIdPath}${trendPlatformTypePath}${statusPath}`
+        `/platform?${offsetPath}${keywordPath}${languagePath}${platformSiteTypePath}${statusPath}`
       );
     },
     [router]

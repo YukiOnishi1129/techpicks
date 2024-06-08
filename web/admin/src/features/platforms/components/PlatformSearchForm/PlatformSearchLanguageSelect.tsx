@@ -18,15 +18,12 @@ import {
 
 import { ENGLISH_IMAGE, JAPANESE_IMAGE } from "@/constants/image";
 
-import { useFeedRedirectPage } from "../../hooks/useFeedRedirectPage";
+import { usePlatformRedirectPage } from "../../hooks/usePlatformRedirectPage";
 
-type FeedSearchLanguageSelectProps = {
+type PlatformSearchLanguageSelectProps = {
   keyword?: string;
   language?: string;
-  platformId?: string;
-  categoryId?: string;
   platformSiteType?: string;
-  trendPlatformType?: string;
   status?: string;
 };
 
@@ -34,16 +31,10 @@ const FormSchema = z.object({
   language: z.string(),
 });
 
-export const FeedSearchLanguageSelect: FC<FeedSearchLanguageSelectProps> = ({
-  keyword,
-  language,
-  platformId,
-  categoryId,
-  platformSiteType,
-  trendPlatformType,
-  status,
-}) => {
-  const { redirectPage } = useFeedRedirectPage();
+export const PlatformSearchLanguageSelect: FC<
+  PlatformSearchLanguageSelectProps
+> = ({ keyword, language, platformSiteType, status }) => {
+  const { redirectPage } = usePlatformRedirectPage();
   const [isInitSelect, startInitSelectTransition] = useTransition();
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -55,25 +46,27 @@ export const FeedSearchLanguageSelect: FC<FeedSearchLanguageSelectProps> = ({
   const handleSelectLanguage = useCallback(
     async (value: string, onChange: (...event: any[]) => void) => {
       onChange(value);
+      let keywordPath = "";
+      if (!!keyword && keyword.trim() !== "") {
+        keywordPath = `&keyword=${keyword}`;
+      }
+      let languagePath = "";
+      if (value !== "0") {
+        languagePath = `&language=${value}`;
+      }
+      let platformSiteTypePath = "";
+      if (platformSiteType) {
+        platformSiteTypePath = `&platformSiteType=${platformSiteType}`;
+      }
       await redirectPage({
+        offset: 1,
         targetKeyword: keyword,
         targetLanguage: value,
         targetPlatformSiteType: platformSiteType,
-        targetPlatformId: platformId,
-        targetCategoryId: categoryId,
-        targetTrendPlatformType: trendPlatformType,
         targetStatus: status,
       });
     },
-    [
-      keyword,
-      platformSiteType,
-      platformId,
-      categoryId,
-      trendPlatformType,
-      status,
-      redirectPage,
-    ]
+    [keyword, platformSiteType, status, redirectPage]
   );
 
   const initSelectLanguage = useCallback(() => {
@@ -116,7 +109,7 @@ export const FeedSearchLanguageSelect: FC<FeedSearchLanguageSelectProps> = ({
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="0">All language</SelectItem>
+                    <SelectItem value="0">all language</SelectItem>
                     <SelectItem value="2" className="flex">
                       <Image
                         className="inline-block"

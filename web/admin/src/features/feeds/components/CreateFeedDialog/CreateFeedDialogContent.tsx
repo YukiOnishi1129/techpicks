@@ -41,7 +41,7 @@ import { CategoryType } from "@/types/category";
 import { PlatformType } from "@/types/platform";
 
 import { fetchFeedsCountAPI } from "../../actions/feed";
-import { useRedirectPage } from "../../hooks/useRedirectPage";
+import { useFeedRedirectPage } from "../../hooks/useFeedRedirectPage";
 import { createFeed } from "../../repository/feed";
 import { SelectCategoryDialog } from "../SelectCategoryDialog";
 import { SelectPlatformDialog } from "../SelectPlatformDialog";
@@ -110,7 +110,7 @@ export const CreateFeedDialogContent: FC<CreateFeedDialogContentProps> = ({
   status,
   handleDialogClose,
 }) => {
-  const { redirectPage } = useRedirectPage();
+  const { redirectPage } = useFeedRedirectPage();
   const { successToast, failToast } = useStatusToast();
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
