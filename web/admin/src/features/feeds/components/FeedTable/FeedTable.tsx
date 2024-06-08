@@ -28,6 +28,7 @@ type FeedTableProps = {
   platformId?: string;
   categoryId?: string;
   trendPlatformType?: string;
+  status?: string;
 };
 
 export type FeedTableState = OriginFeedType & {
@@ -51,6 +52,7 @@ export const FeedTable: FC<FeedTableProps> = ({
   platformId,
   categoryId,
   trendPlatformType,
+  status,
 }) => {
   const [selectedIds, setSelectedIds] = useState<Array<string>>([]);
   const feedIds = feeds.map((feed) => feed.id);
@@ -288,13 +290,17 @@ export const FeedTable: FC<FeedTableProps> = ({
     if (trendPlatformType) {
       trendPlatformTypePath = `&trendPlatformType=${trendPlatformType}`;
     }
+    let statusPath = "";
+    if (status) {
+      statusPath = `&status=${status}`;
+    }
     const previousUrl =
       currentPage !== 1
-        ? `/feed?offset=${currentPage - 1}${keywordPath}${languagePath}${platformSiteTypePath}${platformIdPath}${categoryIdPath}${trendPlatformTypePath}`
+        ? `/feed?offset=${currentPage - 1}${keywordPath}${languagePath}${platformSiteTypePath}${platformIdPath}${categoryIdPath}${trendPlatformTypePath}${statusPath}`
         : undefined;
     const nextUrl =
       currentPage < lastPage
-        ? `/feed?offset=${currentPage + 1}${keywordPath}${languagePath}${platformSiteTypePath}${platformIdPath}${categoryIdPath}${trendPlatformTypePath}`
+        ? `/feed?offset=${currentPage + 1}${keywordPath}${languagePath}${platformSiteTypePath}${platformIdPath}${categoryIdPath}${trendPlatformTypePath}${statusPath}`
         : undefined;
     return {
       previous: previousUrl,
@@ -307,6 +313,7 @@ export const FeedTable: FC<FeedTableProps> = ({
     platformId,
     categoryId,
     trendPlatformType,
+    status,
     currentPage,
     lastPage,
   ]);
@@ -326,6 +333,7 @@ export const FeedTable: FC<FeedTableProps> = ({
         platformId={platformId}
         categoryId={categoryId}
         trendPlatformType={trendPlatformType}
+        status={status}
       />
 
       <div className="mt-4">

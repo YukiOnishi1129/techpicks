@@ -19,6 +19,7 @@ type FetchFeedsAPIRequest = {
   platformId?: string;
   categoryId?: string;
   trendPlatformType?: string;
+  operationStatus?: string;
 };
 
 export const fetchFeedsAPI = async ({
@@ -31,6 +32,7 @@ export const fetchFeedsAPI = async ({
   platformId,
   categoryId,
   trendPlatformType,
+  operationStatus,
 }: FetchFeedsAPIRequest): Promise<FetchFeedsAPIResponse> => {
   let url = `${process.env.WEB_DOMAIN}/api/feeds/?offset=${offset}`;
   if (keyword) {
@@ -56,6 +58,9 @@ export const fetchFeedsAPI = async ({
   }
   if (trendPlatformType) {
     url += `&trendPlatformType=${trendPlatformType}`;
+  }
+  if (operationStatus) {
+    url += `&status=${operationStatus}`;
   }
 
   const res = await getFetch({
@@ -83,6 +88,7 @@ type FetchFeedsCountAPIRequest = {
   platformId?: string;
   categoryId?: string;
   trendPlatformType?: string;
+  operationStatus?: string;
 };
 
 export const fetchFeedsCountAPI = async ({
@@ -94,6 +100,7 @@ export const fetchFeedsCountAPI = async ({
   platformId,
   categoryId,
   trendPlatformType,
+  operationStatus,
 }: FetchFeedsCountAPIRequest): Promise<FetchCountAPIResponse> => {
   let url = `${process.env.WEB_DOMAIN}/api/feeds/count/?dummy=dummy`;
   if (keyword) {
@@ -119,6 +126,9 @@ export const fetchFeedsCountAPI = async ({
   }
   if (trendPlatformType) {
     url += `&trendPlatformType=${trendPlatformType}`;
+  }
+  if (operationStatus) {
+    url += `&status=${operationStatus}`;
   }
 
   const res = await getFetch({

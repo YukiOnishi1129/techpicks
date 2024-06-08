@@ -11,6 +11,7 @@ export async function GET(req: NextRequest) {
   const platformId = searchParams.get("platformId") || undefined;
   const categoryId = searchParams.get("categoryId") || undefined;
   const trendPlatformType = searchParams.get("trendPlatformType") || undefined;
+  const status = searchParams.get("status") || undefined;
 
   const feeds = await getFeeds({
     keyword: keyword,
@@ -20,6 +21,7 @@ export async function GET(req: NextRequest) {
     platformId: platformId,
     categoryId: categoryId,
     trendPlatformType: trendPlatformType,
+    status: status,
   });
   return NextResponse.json(
     {

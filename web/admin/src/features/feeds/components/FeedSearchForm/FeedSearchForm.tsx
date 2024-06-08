@@ -19,7 +19,9 @@ import { PlatformType } from "@/types/platform";
 
 import { FeedSearchKeyword } from "./FeedSearchKeyword";
 import { FeedSearchLanguageSelect } from "./FeedSearchLanguageSelect";
+import { FeedSearchPlatformSiteTypeSelect } from "./FeedSearchPlatformSiteTypeSelect";
 import { FeedSearchResetButton } from "./FeedSearchResetButton";
+import { FeedSearchStatusSelect } from "./FeedSearchStatusSelect";
 import { FeedSearchTrendPlatformTypeSelect } from "./FeedSearchTrendPlatformTypeSelect";
 import { useRedirectPage } from "../../hooks/useRedirectPage";
 import { SelectCategoryDialog } from "../SelectCategoryDialog";
@@ -32,6 +34,7 @@ type FeedSearchFormProps = {
   categoryId?: string;
   platformSiteType?: string;
   trendPlatformType?: string;
+  status?: string;
 };
 
 export const FeedSearchForm: FC<FeedSearchFormProps> = ({
@@ -41,6 +44,7 @@ export const FeedSearchForm: FC<FeedSearchFormProps> = ({
   categoryId,
   platformSiteType,
   trendPlatformType,
+  status,
 }) => {
   const { redirectPage } = useRedirectPage();
   const [isPlatformPending, startPlatformTransition] = useTransition();
@@ -144,67 +148,72 @@ export const FeedSearchForm: FC<FeedSearchFormProps> = ({
         trendPlatformType={trendPlatformType}
       />
 
-      <div className="ml-2 flex justify-center">
-        {/* platform */}
-        {isPlatformPending ? (
-          <div className="size-12">
-            <SyncLoaderComponent size={10} />
-          </div>
-        ) : (
-          <SelectPlatformDialog
-            label={selectPlatformLabelName}
-            variant="secondary"
-            selectedPlatform={selectedPlatform}
-            handleSelectPlatform={handleSearchPlatform}
-          />
-        )}
-      </div>
+      {/* platform */}
+      {isPlatformPending ? (
+        <div className="size-12">
+          <SyncLoaderComponent size={10} />
+        </div>
+      ) : (
+        <SelectPlatformDialog
+          label={selectPlatformLabelName}
+          variant="secondary"
+          selectedPlatform={selectedPlatform}
+          handleSelectPlatform={handleSearchPlatform}
+        />
+      )}
 
       {/* category */}
-      <div className="ml-2">
-        {isCategoryPending ? (
-          <div className="size-12">
-            <SyncLoaderComponent size={10} />
-          </div>
-        ) : (
-          <SelectCategoryDialog
-            label={selectCategoryName}
-            variant="secondary"
-            selectedCategory={selectedCategory}
-            handleSelectCategory={handleSearchCategory}
-          />
-        )}
-      </div>
+      {isCategoryPending ? (
+        <div className="size-12">
+          <SyncLoaderComponent size={10} />
+        </div>
+      ) : (
+        <SelectCategoryDialog
+          label={selectCategoryName}
+          variant="secondary"
+          selectedCategory={selectedCategory}
+          handleSelectCategory={handleSearchCategory}
+        />
+      )}
       {/* language */}
-      <div className="ml-2">
-        <FeedSearchLanguageSelect
-          keyword={keyword}
-          language={language}
-          platformSiteType={platformSiteType}
-          platformId={platformId}
-          categoryId={categoryId}
-          trendPlatformType={trendPlatformType}
-        />
-      </div>
+      <FeedSearchLanguageSelect
+        keyword={keyword}
+        language={language}
+        platformSiteType={platformSiteType}
+        platformId={platformId}
+        categoryId={categoryId}
+        trendPlatformType={trendPlatformType}
+      />
       {/* site type */}
-      <div className="ml-2"></div>
+      <FeedSearchPlatformSiteTypeSelect
+        keyword={keyword}
+        language={language}
+        platformId={platformId}
+        categoryId={categoryId}
+        platformSiteType={platformSiteType}
+        trendPlatformType={trendPlatformType}
+      />
       {/* trend */}
-      <div className="ml-2">
-        <FeedSearchTrendPlatformTypeSelect
-          keyword={keyword}
-          language={language}
-          platformId={platformId}
-          categoryId={categoryId}
-          platformSiteType={platformSiteType}
-          trendPlatformType={trendPlatformType}
-        />
-      </div>
+      <FeedSearchTrendPlatformTypeSelect
+        keyword={keyword}
+        language={language}
+        platformId={platformId}
+        categoryId={categoryId}
+        platformSiteType={platformSiteType}
+        trendPlatformType={trendPlatformType}
+      />
       {/* status */}
-      <div className="ml-2"></div>
+      <FeedSearchStatusSelect
+        keyword={keyword}
+        language={language}
+        platformId={platformId}
+        categoryId={categoryId}
+        platformSiteType={platformSiteType}
+        trendPlatformType={trendPlatformType}
+        status={status}
+      />
       {/* reset */}
-      <div className="ml-2">
-        <FeedSearchResetButton />
-      </div>
+      <FeedSearchResetButton />
     </div>
   );
 };

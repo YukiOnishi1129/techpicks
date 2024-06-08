@@ -7,6 +7,8 @@ import { createGetOnlyServerSideClient } from "@/lib/supabase/client/serverClien
 import { Database } from "@/types/database.types";
 import { FeedType } from "@/types/feed";
 
+import { STATUS_LIST } from "@/constants/status";
+
 export type GetPlatformsDTO = {
   offset?: number;
   keyword?: string;
@@ -17,6 +19,7 @@ export type GetPlatformsDTO = {
   platformId?: string;
   categoryId?: string;
   trendPlatformType?: string;
+  status?: string;
 };
 
 export const getFeeds = async ({
@@ -29,6 +32,7 @@ export const getFeeds = async ({
   platformId,
   categoryId,
   trendPlatformType,
+  status,
 }: GetPlatformsDTO) => {
   try {
     const limit = 8;
@@ -109,6 +113,15 @@ export const getFeeds = async ({
       query.eq("trend_platform_type", argTrendPlatformType);
     }
 
+    switch (status) {
+      case String(STATUS_LIST[1].value):
+        query.is("deleted_at", null);
+        break;
+      case String(STATUS_LIST[2].value):
+        query.not("deleted_at", "is", null);
+        break;
+    }
+
     query
       .order("trend_platform_type", {
         ascending: false,
@@ -149,6 +162,7 @@ export type GetFeedsCountDTO = {
   platformId?: string;
   categoryId?: string;
   trendPlatformType?: string;
+  status?: string;
 };
 
 export const getFeedsCount = async ({
@@ -160,6 +174,7 @@ export const getFeedsCount = async ({
   platformId,
   categoryId,
   trendPlatformType,
+  status,
 }: GetFeedsCountDTO) => {
   try {
     const supabase = await createGetOnlyServerSideClient();
@@ -238,6 +253,15 @@ export const getFeedsCount = async ({
 
     if (argTrendPlatformType !== undefined) {
       query.eq("trend_platform_type", argTrendPlatformType);
+    }
+
+    switch (status) {
+      case String(STATUS_LIST[1].value):
+        query.is("deleted_at", null);
+        break;
+      case String(STATUS_LIST[2].value):
+        query.not("deleted_at", "is", null);
+        break;
     }
 
     const { error, count } = await query;
