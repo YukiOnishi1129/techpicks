@@ -97,8 +97,6 @@ export const fetchPlatformsCountAPI = async ({
 export const fetchPlatformByIdAPI = async (
   id: string
 ): Promise<FetchPlatformAPIResponse> => {
-  console.log("🔥");
-  console.log(process.env.WEB_DOMAIN);
   const res = await getFetch({
     url: `${process.env.WEB_DOMAIN}/api/platforms/${id}/`,
     tagName: "platform",
