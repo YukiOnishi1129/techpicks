@@ -10,15 +10,18 @@ import {
   useTransition,
 } from "react";
 
+import { fetchCategoryByIdAPI } from "@/features/categories/actions/category";
 import { fetchPlatformByIdAPI } from "@/features/platforms/actions/platform";
 
 import { SyncLoaderComponent } from "@/components/ui/loader";
 
+import { CategoryType } from "@/types/category";
 import { PlatformType } from "@/types/platform";
 
 import { serverRevalidatePage } from "@/actions/serverAction";
 
 import { FeedSearchKeyword } from "./FeedSearchKeyword";
+import { SelectCategoryDialog } from "../SelectCategoryDialog";
 import { SelectPlatformDialog } from "../SelectPlatformDialog";
 
 type FeedSearchFormProps = {
@@ -40,48 +43,72 @@ export const FeedSearchForm: FC<FeedSearchFormProps> = ({
 }) => {
   const router = useRouter();
   const [isPlatformPending, startPlatformTransition] = useTransition();
+  const [isCategoryPending, startCategoryTransition] = useTransition();
 
   const [selectedPlatform, setSelectedPlatform] = useState<
     PlatformType | undefined
+  >(undefined);
+
+  const [selectedCategory, setSelectedCategory] = useState<
+    CategoryType | undefined
   >(undefined);
 
   const selectPlatformLabelName = useMemo(() => {
     return selectedPlatform?.name || "Platform";
   }, [selectedPlatform]);
 
+  const selectCategoryName = useMemo(() => {
+    return selectedCategory?.name || "Category";
+  }, [selectedCategory]);
+
   const fetchPlatform = useCallback(async (targetPlatformId: string) => {
     startPlatformTransition(async () => {
-      const res = await fetchPlatformByIdAPI(targetPlatformId);
-      if (!res.data.platform) return;
-      setSelectedPlatform(res.data.platform);
+      const resPlatform = await fetchPlatformByIdAPI(targetPlatformId);
+      if (!resPlatform.data.platform) return;
+      setSelectedPlatform(resPlatform.data.platform);
     });
   }, []);
 
-  const handleSearchPlatform = useCallback(
-    async (targetPlatformId: string) => {
+  const fetchCategory = useCallback(async (targetCategoryId: string) => {
+    startCategoryTransition(async () => {
+      const resCategory = await fetchCategoryByIdAPI(targetCategoryId);
+      if (!resCategory.data.category) return;
+      setSelectedCategory(resCategory.data.category);
+    });
+  }, []);
+
+  const redirectPage = useCallback(
+    async (
+      targetKeyword?: string,
+      targetLanguage?: string,
+      targetPlatformSiteType?: string,
+      targetPlatformId?: string,
+      targetCategoryId?: string,
+      targetTrendPlatformTypePath?: string
+    ) => {
       let keywordPath = "";
-      if (!!keyword && keyword.trim() !== "") {
-        keywordPath = `&keyword=${keyword}`;
+      if (!!targetKeyword && targetKeyword.trim() !== "") {
+        keywordPath = `&keyword=${targetKeyword}`;
       }
       let languagePath = "";
-      if (language) {
-        languagePath = `&language=${language}`;
+      if (targetLanguage) {
+        languagePath = `&language=${targetLanguage}`;
       }
       let platformSiteTypePath = "";
-      if (platformSiteType) {
-        platformSiteTypePath = `&platformSiteType=${platformSiteType}`;
+      if (targetPlatformSiteType) {
+        platformSiteTypePath = `&platformSiteType=${targetPlatformSiteType}`;
       }
       let platformIdPath = "";
       if (targetPlatformId) {
         platformIdPath = `&platformId=${targetPlatformId}`;
       }
       let categoryIdPath = "";
-      if (categoryId) {
-        categoryIdPath = `&categoryId=${categoryId}`;
+      if (targetCategoryId) {
+        categoryIdPath = `&categoryId=${targetCategoryId}`;
       }
       let trendPlatformTypePath = "";
-      if (trendPlatformType) {
-        trendPlatformTypePath = `&trendPlatformType=${trendPlatformType}`;
+      if (targetTrendPlatformTypePath) {
+        trendPlatformTypePath = `&trendPlatformType=${targetTrendPlatformTypePath}`;
       }
 
       await serverRevalidatePage(
@@ -91,12 +118,55 @@ export const FeedSearchForm: FC<FeedSearchFormProps> = ({
         `/feed?$offset=1${keywordPath}${languagePath}${platformSiteTypePath}${platformIdPath}${categoryIdPath}${trendPlatformTypePath}`
       );
     },
-    [keyword, language, platformSiteType, categoryId, trendPlatformType, router]
+    []
+  );
+
+  const handleSearchPlatform = useCallback(
+    async (targetPlatformId: string) => {
+      await redirectPage(
+        keyword,
+        language,
+        platformSiteType,
+        targetPlatformId,
+        categoryId,
+        trendPlatformType
+      );
+    },
+    [
+      keyword,
+      language,
+      platformSiteType,
+      categoryId,
+      trendPlatformType,
+      redirectPage,
+    ]
+  );
+
+  const handleSearchCategory = useCallback(
+    async (targetCategoryId: string) => {
+      await redirectPage(
+        keyword,
+        language,
+        platformSiteType,
+        platformId,
+        targetCategoryId,
+        trendPlatformType
+      );
+    },
+    [
+      keyword,
+      language,
+      platformSiteType,
+      platformId,
+      trendPlatformType,
+      redirectPage,
+    ]
   );
 
   useEffect(() => {
     if (platformId) fetchPlatform(platformId);
-  }, [fetchPlatform, platformId]);
+    if (categoryId) fetchCategory(categoryId);
+  }, [fetchPlatform, fetchCategory, platformId, categoryId]);
 
   return (
     <div className="flex items-center border-b px-4 py-2">
@@ -126,6 +196,20 @@ export const FeedSearchForm: FC<FeedSearchFormProps> = ({
       </div>
 
       {/* category */}
+      <div className="ml-2">
+        {isCategoryPending ? (
+          <div className="size-12">
+            <SyncLoaderComponent size={10} />
+          </div>
+        ) : (
+          <SelectCategoryDialog
+            label={selectCategoryName}
+            variant="ghost"
+            selectedCategory={selectedCategory}
+            handleSelectCategory={handleSearchCategory}
+          />
+        )}
+      </div>
       {/* language */}
       {/* site type */}
       {/* trend */}

@@ -49,6 +49,8 @@ export const FeedTemplate: FC<FeedTemplateProps> = async ({
       language={language}
       platformSiteType={platformSiteType}
       platformId={platformId}
+      categoryId={categoryId}
+      trendPlatformType={trendPlatformType}
     />
   );
 };
