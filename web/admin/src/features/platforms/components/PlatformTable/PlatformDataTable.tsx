@@ -42,6 +42,7 @@ interface PlatformDataTableProps<TData, TValue> {
   keyword?: string;
   language?: string;
   platformSiteType?: string;
+  status?: string;
 }
 
 export function PlatformDataTable<TData, TValue>({
@@ -54,6 +55,7 @@ export function PlatformDataTable<TData, TValue>({
   keyword,
   language,
   platformSiteType,
+  status,
 }: PlatformDataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = useState({});
   const { successToast, failToast } = useStatusToast();
@@ -220,6 +222,7 @@ export function PlatformDataTable<TData, TValue>({
         keyword={keyword}
         language={language}
         platformSiteType={platformSiteType}
+        status={status}
       />
 
       <Table>

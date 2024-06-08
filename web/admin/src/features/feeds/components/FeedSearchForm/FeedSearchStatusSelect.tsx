@@ -49,7 +49,7 @@ export const FeedSearchStatusSelect: FC<FeedSearchStatusSelectProps> = ({
     },
   });
 
-  const handleSelectTrendPlatformType = useCallback(
+  const handleSelectStatus = useCallback(
     async (value: string, onChange: (...event: any[]) => void) => {
       onChange(value);
       await redirectPage({
@@ -73,7 +73,7 @@ export const FeedSearchStatusSelect: FC<FeedSearchStatusSelectProps> = ({
     ]
   );
 
-  const initSelectTrendPlatformType = useCallback(() => {
+  const initSelectStatus = useCallback(() => {
     startInitSelectTransition(() => {
       if (status === undefined) {
         form.setValue("status", "0");
@@ -82,8 +82,8 @@ export const FeedSearchStatusSelect: FC<FeedSearchStatusSelectProps> = ({
   }, [form, status]);
 
   useEffect(() => {
-    initSelectTrendPlatformType();
-  }, [form, initSelectTrendPlatformType]);
+    initSelectStatus();
+  }, [form, initSelectStatus]);
 
   return (
     <Form {...form}>
@@ -100,7 +100,7 @@ export const FeedSearchStatusSelect: FC<FeedSearchStatusSelectProps> = ({
               <FormItem>
                 <Select
                   onValueChange={(value) =>
-                    handleSelectTrendPlatformType(value, field.onChange)
+                    handleSelectStatus(value, field.onChange)
                   }
                   defaultValue={field.value}
                 >

@@ -28,6 +28,7 @@ type PlatformTableProps = {
   keyword?: string;
   language?: string;
   platformSiteType?: string;
+  status?: string;
 };
 
 export type PlatformTableState = {
@@ -49,6 +50,7 @@ export const PlatformTable = ({
   keyword,
   language,
   platformSiteType,
+  status,
 }: PlatformTableProps) => {
   const [selectedIds, setSelectedIds] = useState<Array<string>>([]);
   const platformIds = platforms.map((platform) => platform.id);
@@ -199,19 +201,23 @@ export const PlatformTable = ({
     if (platformSiteType) {
       platformSiteTypePath = `&platformSiteType=${platformSiteType}`;
     }
+    let statusPath = "";
+    if (status) {
+      statusPath = `&status=${status}`;
+    }
     const previousUrl =
       currentPage !== 1
-        ? `/platform?offset=${currentPage - 1}${keywordPath}${languagePath}${platformSiteTypePath}`
+        ? `/platform?offset=${currentPage - 1}${keywordPath}${languagePath}${platformSiteTypePath}${statusPath}`
         : undefined;
     const nextUrl =
       currentPage < lastPage
-        ? `/platform?offset=${currentPage + 1}${keywordPath}${languagePath}${platformSiteTypePath}`
+        ? `/platform?offset=${currentPage + 1}${keywordPath}${languagePath}${platformSiteTypePath}${statusPath}`
         : undefined;
     return {
       previous: previousUrl,
       next: nextUrl,
     };
-  }, [keyword, language, platformSiteType, currentPage, lastPage]);
+  }, [keyword, language, platformSiteType, status, currentPage, lastPage]);
 
   return (
     <>
@@ -225,6 +231,7 @@ export const PlatformTable = ({
         keyword={keyword}
         language={language}
         platformSiteType={platformSiteType}
+        status={status}
       />
 
       <div className="mt-4">

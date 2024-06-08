@@ -14,6 +14,7 @@ type FetchPlatformsAPIRequest = {
   keyword?: string;
   language?: string;
   platformSiteType?: string;
+  operationStatus?: string;
 };
 
 export const fetchPlatformsAPI = async ({
@@ -21,6 +22,7 @@ export const fetchPlatformsAPI = async ({
   keyword,
   language,
   platformSiteType,
+  operationStatus,
 }: FetchPlatformsAPIRequest): Promise<FetchPlatformsAPIResponse> => {
   let url = `${process.env.WEB_DOMAIN}/api/platforms/?offset=${offset}`;
   if (keyword) {
@@ -31,6 +33,9 @@ export const fetchPlatformsAPI = async ({
   }
   if (platformSiteType) {
     url += `&platformSiteType=${platformSiteType}`;
+  }
+  if (operationStatus) {
+    url += `&status=${operationStatus}`;
   }
 
   const res = await getFetch({
@@ -55,6 +60,7 @@ type FetchPlatformsCountAPIRequest = {
   language?: string;
   platformSiteType?: string;
   siteUrl?: string;
+  operationStatus?: string;
 };
 
 export const fetchPlatformsCountAPI = async ({
@@ -62,6 +68,7 @@ export const fetchPlatformsCountAPI = async ({
   language,
   platformSiteType,
   siteUrl,
+  operationStatus,
 }: FetchPlatformsCountAPIRequest): Promise<FetchCountAPIResponse> => {
   let url = `${process.env.WEB_DOMAIN}/api/platforms/count/?dummy=dummy`;
   if (keyword) {
@@ -75,6 +82,9 @@ export const fetchPlatformsCountAPI = async ({
   }
   if (siteUrl) {
     url += `&siteUrl=${siteUrl}`;
+  }
+  if (operationStatus) {
+    url += `&status=${operationStatus}`;
   }
 
   const res = await getFetch({

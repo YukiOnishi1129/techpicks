@@ -18,12 +18,14 @@ type PlatformSearchKeywordProps = {
   keyword?: string;
   language?: string;
   platformSiteType?: string;
+  status?: string;
 };
 
 export const PlatformSearchKeyword: FC<PlatformSearchKeywordProps> = ({
   keyword,
   language,
   platformSiteType,
+  status,
 }) => {
   const { redirectPage } = usePlatformRedirectPage();
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -52,9 +54,10 @@ export const PlatformSearchKeyword: FC<PlatformSearchKeywordProps> = ({
         targetKeyword: values.keyword,
         targetLanguage: language,
         targetPlatformSiteType: platformSiteType,
+        targetStatus: status,
       });
     },
-    [language, platformSiteType, redirectPage]
+    [language, platformSiteType, status, redirectPage]
   );
 
   useEffect(() => {

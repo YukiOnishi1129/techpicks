@@ -7,11 +7,14 @@ import { createGetOnlyServerSideClient } from "@/lib/supabase/client/serverClien
 import { Database } from "@/types/database.types";
 import { PlatformType } from "@/types/platform";
 
+import { STATUS_LIST } from "@/constants/status";
+
 export type GetPlatformsDT0 = {
   offset?: number;
   keyword?: string;
   language?: string;
   platformSiteType?: string;
+  status?: string;
 };
 
 export const getPlatforms = async ({
@@ -19,6 +22,7 @@ export const getPlatforms = async ({
   keyword,
   language,
   platformSiteType,
+  status,
 }: GetPlatformsDT0) => {
   const limit = 8;
 
@@ -59,6 +63,15 @@ export const getPlatforms = async ({
       query.eq("platform_site_type", argPlatformSiteType);
     }
 
+    switch (status) {
+      case String(STATUS_LIST[1].value):
+        query.is("deleted_at", null);
+        break;
+      case String(STATUS_LIST[2].value):
+        query.not("deleted_at", "is", null);
+        break;
+    }
+
     query
       .order("created_at", {
         ascending: true,
@@ -82,6 +95,7 @@ export type GetPlatformsCountDT0 = {
   language?: string;
   platformSiteType?: string;
   siteUrl?: string;
+  status?: string;
 };
 
 export const getPlatformsCount = async ({
@@ -89,6 +103,7 @@ export const getPlatformsCount = async ({
   language,
   platformSiteType,
   siteUrl,
+  status,
 }: GetPlatformsCountDT0) => {
   try {
     const supabase = await createGetOnlyServerSideClient();
@@ -124,6 +139,15 @@ export const getPlatformsCount = async ({
 
     if (siteUrl) {
       query.eq("site_url", siteUrl);
+    }
+
+    switch (status) {
+      case String(STATUS_LIST[1].value):
+        query.is("deleted_at", null);
+        break;
+      case String(STATUS_LIST[2].value):
+        query.not("deleted_at", "is", null);
+        break;
     }
 
     const { error, count } = await query;

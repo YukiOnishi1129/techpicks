@@ -8,11 +8,13 @@ export async function GET(req: NextRequest) {
   const language = searchParams.get("language") || undefined;
   const platformSiteType = searchParams.get("platformSiteType") || undefined;
   const siteUrl = searchParams.get("siteUrl") || undefined;
+  const status = searchParams.get("status") || undefined;
   const count = await getPlatformsCount({
     keyword: keyword,
     language: language,
     platformSiteType: platformSiteType,
     siteUrl: siteUrl,
+    status: status,
   });
   return NextResponse.json(
     {

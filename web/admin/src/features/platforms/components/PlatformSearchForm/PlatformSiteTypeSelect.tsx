@@ -21,6 +21,7 @@ type PlatformSiteTypeSelectProps = {
   keyword?: string;
   language?: string;
   platformSiteType?: string;
+  status?: string;
 };
 
 const FormSchema = z.object({
@@ -31,6 +32,7 @@ export const PlatformSiteTypeSelect: FC<PlatformSiteTypeSelectProps> = ({
   keyword,
   language,
   platformSiteType,
+  status,
 }) => {
   const { redirectPage } = usePlatformRedirectPage();
   const [isInitSelect, startInitSelectTransition] = useTransition();
@@ -44,26 +46,15 @@ export const PlatformSiteTypeSelect: FC<PlatformSiteTypeSelectProps> = ({
   const handleSelectPlatformType = useCallback(
     async (value: string, onChange: (...event: any[]) => void) => {
       onChange(value);
-      let keywordPath = "";
-      if (!!keyword && keyword.trim() !== "") {
-        keywordPath = `&keyword=${keyword}`;
-      }
-      let languagePath = "";
-      if (language) {
-        languagePath = `&language=${language}`;
-      }
-      let platformSiteTypePath = "";
-      if (value !== "0") {
-        platformSiteTypePath = `&platformSiteType=${value}`;
-      }
       await redirectPage({
         offset: 1,
         targetKeyword: keyword,
         targetLanguage: language,
         targetPlatformSiteType: value,
+        targetStatus: status,
       });
     },
-    [keyword, language, redirectPage]
+    [keyword, language, status, redirectPage]
   );
 
   const initSelectPlatformSiteType = useCallback(() => {
