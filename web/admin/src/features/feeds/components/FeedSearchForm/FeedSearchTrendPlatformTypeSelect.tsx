@@ -21,7 +21,7 @@ const FormSchema = z.object({
   trendPlatformType: z.string().optional(),
 });
 
-type SelectTrendPlatformTypeProps = {
+type FeedSearchTrendPlatformTypeSelectProps = {
   keyword?: string;
   language?: string;
   platformId?: string;
@@ -30,7 +30,9 @@ type SelectTrendPlatformTypeProps = {
   trendPlatformType?: string;
 };
 
-export const SelectTrendPlatformType: FC<SelectTrendPlatformTypeProps> = ({
+export const FeedSearchTrendPlatformTypeSelect: FC<
+  FeedSearchTrendPlatformTypeSelectProps
+> = ({
   keyword,
   language,
   platformId,
@@ -38,16 +40,14 @@ export const SelectTrendPlatformType: FC<SelectTrendPlatformTypeProps> = ({
   platformSiteType,
   trendPlatformType,
 }) => {
+  const { redirectPage } = useRedirectPage();
+  const [isInitSelect, startInitSelectTransition] = useTransition();
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
       trendPlatformType: trendPlatformType,
     },
   });
-
-  const [isInitSelect, startInitSelectTransition] = useTransition();
-
-  const { redirectPage } = useRedirectPage();
 
   const handleSelectTrendPlatformType = useCallback(
     async (value: string, onChange: (...event: any[]) => void) => {

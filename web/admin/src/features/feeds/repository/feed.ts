@@ -44,7 +44,7 @@ export const getFeeds = async ({
     if (keyword) {
       query.or(`name.ilike.%${keyword}%,description.ilike.%${keyword}%`);
     }
-    if (language) {
+    if (language === "1" || language === "2") {
       query.eq("platforms.is_eng", language === "2");
     }
     let argPlatformSiteType = 0;
@@ -163,12 +163,19 @@ export const getFeedsCount = async ({
 }: GetFeedsCountDTO) => {
   try {
     const supabase = await createGetOnlyServerSideClient();
-    const query = supabase.from("feeds").select(`*`, { count: "exact" });
+    const query = supabase.from("feeds").select(
+      `
+        *,
+        categories!inner(*),
+        platforms!inner(*)
+      `,
+      { count: "exact" }
+    );
 
     if (keyword) {
       query.or(`name.ilike.%${keyword}%,description.ilike.%${keyword}%`);
     }
-    if (language) {
+    if (language === "1" || language === "2") {
       query.eq("platforms.is_eng", language === "2");
     }
     let argPlatformSiteType = 0;
@@ -207,8 +214,30 @@ export const getFeedsCount = async ({
       query.eq("category_id", categoryId);
     }
 
-    if (trendPlatformType) {
-      query.eq("trend_platform_type", trendPlatformType);
+    let argTrendPlatformType;
+    switch (trendPlatformType) {
+      case "1":
+        argTrendPlatformType = 1;
+        break;
+      case "2":
+        argTrendPlatformType = 2;
+        break;
+      case "3":
+        argTrendPlatformType = 3;
+        break;
+      case "4":
+        argTrendPlatformType = 4;
+        break;
+      case "5":
+        argTrendPlatformType = 5;
+        break;
+      case "0":
+        argTrendPlatformType = 0;
+        break;
+    }
+
+    if (argTrendPlatformType !== undefined) {
+      query.eq("trend_platform_type", argTrendPlatformType);
     }
 
     const { error, count } = await query;

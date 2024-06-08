@@ -18,8 +18,9 @@ import { CategoryType } from "@/types/category";
 import { PlatformType } from "@/types/platform";
 
 import { FeedSearchKeyword } from "./FeedSearchKeyword";
+import { FeedSearchLanguageSelect } from "./FeedSearchLanguageSelect";
 import { FeedSearchResetButton } from "./FeedSearchResetButton";
-import { SelectTrendPlatformType } from "./SelectTrendPlatformType";
+import { FeedSearchTrendPlatformTypeSelect } from "./FeedSearchTrendPlatformTypeSelect";
 import { useRedirectPage } from "../../hooks/useRedirectPage";
 import { SelectCategoryDialog } from "../SelectCategoryDialog";
 import { SelectPlatformDialog } from "../SelectPlatformDialog";
@@ -152,7 +153,7 @@ export const FeedSearchForm: FC<FeedSearchFormProps> = ({
         ) : (
           <SelectPlatformDialog
             label={selectPlatformLabelName}
-            variant="ghost"
+            variant="secondary"
             selectedPlatform={selectedPlatform}
             handleSelectPlatform={handleSearchPlatform}
           />
@@ -168,17 +169,28 @@ export const FeedSearchForm: FC<FeedSearchFormProps> = ({
         ) : (
           <SelectCategoryDialog
             label={selectCategoryName}
-            variant="ghost"
+            variant="secondary"
             selectedCategory={selectedCategory}
             handleSelectCategory={handleSearchCategory}
           />
         )}
       </div>
       {/* language */}
+      <div className="ml-2">
+        <FeedSearchLanguageSelect
+          keyword={keyword}
+          language={language}
+          platformSiteType={platformSiteType}
+          platformId={platformId}
+          categoryId={categoryId}
+          trendPlatformType={trendPlatformType}
+        />
+      </div>
       {/* site type */}
+      <div className="ml-2"></div>
       {/* trend */}
       <div className="ml-2">
-        <SelectTrendPlatformType
+        <FeedSearchTrendPlatformTypeSelect
           keyword={keyword}
           language={language}
           platformId={platformId}
@@ -188,6 +200,7 @@ export const FeedSearchForm: FC<FeedSearchFormProps> = ({
         />
       </div>
       {/* status */}
+      <div className="ml-2"></div>
       {/* reset */}
       <div className="ml-2">
         <FeedSearchResetButton />
