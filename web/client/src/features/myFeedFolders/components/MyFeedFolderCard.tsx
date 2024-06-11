@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { FC, useCallback } from "react";
 
-import { ShowMyFeedListDialog } from "@/features/myFeeds/components/Dialog/ShowMyFeedListDialog";
+import { ShowMyFeedListDialog } from "@/features/myFeeds/components/Dialog";
 import {
   CreateMyFeedDTO,
   bulkCreateMyFeed,
