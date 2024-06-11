@@ -2,7 +2,6 @@ import { FC, ReactNode } from "react";
 
 import { NotLoggedBottomNavigationMenu } from "../BottomNavigationMenu";
 import { Header } from "../Header";
-import { MobileHeader } from "../Header/MobileHeader";
 
 type NotLoggedBaseLayoutProps = {
   children: ReactNode;
@@ -14,12 +13,7 @@ export const NotLoggedBaseLayout: FC<NotLoggedBaseLayoutProps> = async ({
   return (
     <div className="overflow-hidden">
       <header className="overflow-hidden">
-        <div className="hidden md:block">
-          <Header />
-        </div>
-        <div className="block md:hidden">
-          <MobileHeader />
-        </div>
+        <Header />
       </header>
 
       <div className="h-12 md:h-16" />

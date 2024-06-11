@@ -1,14 +1,9 @@
 import { User } from "@supabase/supabase-js";
 import { FC, ReactNode } from "react";
 
-import { getUser } from "@/features/users/actions/user";
+import { Header } from "@/components/layout/Header";
 
-import {
-  LoggedBottomNavigationMenu,
-  NotLoggedBottomNavigationMenu,
-} from "../BottomNavigationMenu";
-import { Header } from "../Header";
-import { MobileHeader } from "../Header/MobileHeader";
+import { LoggedBottomNavigationMenu } from "../BottomNavigationMenu";
 import { Sidebar } from "../Sidebar";
 
 type LoggedBaseLayoutProps = {
@@ -23,12 +18,7 @@ export const LoggedBaseLayout: FC<LoggedBaseLayoutProps> = async ({
   return (
     <div className="overflow-hidden">
       <header className="overflow-hidden">
-        <div className="hidden md:block">
-          <Header user={user} />
-        </div>
-        <div className="block md:hidden">
-          <MobileHeader />
-        </div>
+        <Header user={user} />
       </header>
 
       <div className="h-12 md:h-16" />
