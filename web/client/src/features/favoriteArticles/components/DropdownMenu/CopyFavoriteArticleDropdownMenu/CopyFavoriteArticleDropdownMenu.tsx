@@ -1,28 +1,25 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { FC, useMemo } from "react";
-import { useForm, Controller } from "react-hook-form";
-import { z } from "zod";
-
-import { CreateFavoriteArticleFolderDialog } from "@/features/favoriteArticleFolders/components/Dialog";
+import { FC } from "react";
+import { IconContext } from "react-icons";
+import { FaRegCopy } from "react-icons/fa";
 
 import {
-  DropdownMenuSeparator,
-  DropdownMenuContent,
-  DropdownMenuLabel,
+  DropdownMenu,
+  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
+import {
+  Tooltip,
+  TooltipProvider,
+  TooltipTrigger,
+  TooltipContent,
+} from "@/components/ui/tooltip";
 
 import { FavoriteArticleFolderType } from "@/types/favoriteArticleFolder";
 
-import { CopyTargetFavoriteArticleFolderList } from "./CopyTargetFavoriteArticleFolderList";
+import { CopyFavoriteArticleDropdownMenuContent } from "./CopyFavoriteArticleDropdownMenuContent";
 
-const formSchema = z.object({
-  keyword: z.string(),
-});
-
-type CopyFavoriteArticleDropdownMenuContentProps = {
+type CopyFavoriteArticleDropdownMenuProps = {
   articleId: string;
   favoriteArticleFolders: Array<FavoriteArticleFolderType>;
   handleCreateFavoriteArticle: (
@@ -38,8 +35,8 @@ type CopyFavoriteArticleDropdownMenuContentProps = {
   ) => Promise<void>;
 };
 
-export const CopyFavoriteArticleDropdownMenuContent: FC<
-  CopyFavoriteArticleDropdownMenuContentProps
+export const CopyFavoriteArticleDropdownMenu: FC<
+  CopyFavoriteArticleDropdownMenuProps
 > = ({
   articleId,
   favoriteArticleFolders,
@@ -47,52 +44,41 @@ export const CopyFavoriteArticleDropdownMenuContent: FC<
   handleRemoveFavoriteArticle,
   handleCreateFavoriteArticleFolder,
 }) => {
-  const { control, watch } = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      keyword: "",
-    },
-  });
-  const searchKeyword = watch("keyword");
-
-  const showFavoriteArticleFolders = useMemo(() => {
-    if (!searchKeyword) return favoriteArticleFolders;
-    return favoriteArticleFolders.filter((favoriteArticleFolder) =>
-      favoriteArticleFolder.title.includes(searchKeyword)
-    );
-  }, [favoriteArticleFolders, searchKeyword]);
+  const sortedFavoriteArticleFolders = favoriteArticleFolders.sort(
+    (prev, next) => {
+      if (prev.createdAt < next.createdAt) return -1;
+      if (prev.createdAt > next.createdAt) return 1;
+      return 0;
+    }
+  );
 
   return (
-    <DropdownMenuContent align="end" className="w-[200px]">
-      <Controller
-        name="keyword"
-        control={control}
-        rules={{ required: true }}
-        render={({ field }) => (
-          <Input
-            className="border-primary bg-secondary text-primary"
-            placeholder="search keyword"
-            {...field}
-          />
-        )}
+    <DropdownMenu>
+      <TooltipProvider>
+        <Tooltip>
+          <DropdownMenuTrigger asChild>
+            <TooltipTrigger>
+              <IconContext.Provider
+                value={{ className: "hover:text-rose-600" }}
+              >
+                <FaRegCopy size={30} className="cursor-pointer" />
+              </IconContext.Provider>
+            </TooltipTrigger>
+          </DropdownMenuTrigger>
+
+          <TooltipContent className="px-4 py-3 ">
+            <p>Copy article to other folder</p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+
+      <CopyFavoriteArticleDropdownMenuContent
+        articleId={articleId}
+        favoriteArticleFolders={sortedFavoriteArticleFolders}
+        handleCreateFavoriteArticle={handleCreateFavoriteArticle}
+        handleRemoveFavoriteArticle={handleRemoveFavoriteArticle}
+        handleCreateFavoriteArticleFolder={handleCreateFavoriteArticleFolder}
       />
-      <DropdownMenuSeparator />
-      <div className="max-h-[200px] overflow-y-auto">
-        {showFavoriteArticleFolders.map((favoriteArticleFolder) => (
-          <CopyTargetFavoriteArticleFolderList
-            key={favoriteArticleFolder.id}
-            articleId={articleId}
-            favoriteArticleFolder={favoriteArticleFolder}
-            handleCreateFavoriteArticle={handleCreateFavoriteArticle}
-            handleRemoveFavoriteArticle={handleRemoveFavoriteArticle}
-          />
-        ))}
-      </div>
-      <DropdownMenuLabel>
-        <CreateFavoriteArticleFolderDialog
-          handleCreateFavoriteArticleFolder={handleCreateFavoriteArticleFolder}
-        />
-      </DropdownMenuLabel>
-    </DropdownMenuContent>
+    </DropdownMenu>
   );
 };

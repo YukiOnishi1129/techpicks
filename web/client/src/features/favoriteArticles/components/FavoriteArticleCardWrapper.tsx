@@ -14,7 +14,7 @@ import { useStatusToast } from "@/hooks/useStatusToast";
 import { FavoriteArticleType } from "@/types/favoriteArticle";
 import { FavoriteArticleFolderType } from "@/types/favoriteArticleFolder";
 
-import { RemoveFavoriteArticleAlertDialog } from "./Dialog/RemoveFavoriteArticleAlertDialog";
+import { RemoveFavoriteArticleAlertDialog } from "./Dialog";
 import { CopyFavoriteArticleDropdownMenu } from "./DropdownMenu";
 import { FavoriteArticleCard } from "./FavoriteArticleCard";
 import { FavoriteArticleDetailSheet } from "./FavoriteArticleDetailSheet";
