@@ -5,8 +5,6 @@ import { useMemo } from "react";
 
 import { NAVIGATION_LISTS } from "@/constant/navigation";
 
-import { ModeToggle } from "../DropdownMenu";
-
 export function MobileHeader() {
   const pathname = usePathname();
 
@@ -29,13 +27,12 @@ export function MobileHeader() {
 
   return (
     <div className="fixed z-50 flex h-12 w-screen items-center justify-between border-b border-gray-300  px-8 shadow-md">
-      <div></div>
       <h1 className="text-2xl font-bold ">{pageName}</h1>
-      <div className="flex items-center justify-end">
+      {/* <div className="flex items-center justify-end">
         <div>
           <ModeToggle />
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }

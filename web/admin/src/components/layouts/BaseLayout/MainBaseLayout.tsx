@@ -1,11 +1,7 @@
 import { FC } from "react";
 
 import { Sidebar } from "@/components/layouts/Sidebar";
-import {
-  ResizableHandle,
-  ResizablePanel,
-  ResizablePanelGroup,
-} from "@/components/ui/resizable";
+import { ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
 
 import { AdminUserType } from "@/types/admin";
 
@@ -27,7 +23,7 @@ export const MainBaseLayout: FC<MainBaseLayoutProps> = async ({
     >
       <ResizablePanel
         defaultSize={10}
-        className="fixed top-0 z-10 h-[60px] w-full bg-card"
+        className="fixed top-0 z-10 h-[60px] w-full border-b-2 border-gray-800 bg-card"
       >
         <div className="flex h-full items-center">
           <Header adminUser={adminUser} />
@@ -35,7 +31,7 @@ export const MainBaseLayout: FC<MainBaseLayoutProps> = async ({
       </ResizablePanel>
       {/* dummy header */}
       <div className="h-[60px] w-full" />
-      <ResizableHandle />
+      {/* <ResizableHandle /> */}
       <ResizablePanel defaultSize={90} style={{ overflow: "visible" }}>
         <ResizablePanelGroup
           direction="horizontal"
@@ -45,9 +41,11 @@ export const MainBaseLayout: FC<MainBaseLayoutProps> = async ({
             defaultSize={25}
             className="min-w-[200px] max-w-[200px]"
           >
-            <Sidebar adminUser={adminUser} />
+            <div className="fixed w-[200px]">
+              <Sidebar adminUser={adminUser} />
+            </div>
           </ResizablePanel>
-          <ResizableHandle withHandle />
+          {/* <ResizableHandle withHandle /> */}
           <ResizablePanel defaultSize={75}>
             <div className="p-6">{children}</div>
           </ResizablePanel>
