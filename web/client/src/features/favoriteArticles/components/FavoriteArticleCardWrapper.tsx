@@ -284,7 +284,7 @@ export const FavoriteArticleCardWrapper: FC<
       key={favoriteArticle.id}
       className="mb-4 rounded-2xl border-2 px-4 pb-4 md:px-2 md:pb-2"
     >
-      <div className="border-t-4 border-t-rose-600">
+      <div>
         <div className="mb-4 flex h-16 justify-between border-b-2 py-4 md:ml-6">
           <div className="flex">
             <div>
