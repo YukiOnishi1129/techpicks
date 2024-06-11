@@ -12,8 +12,9 @@ import { LogoutLink } from "./LogoutLink";
 import { MyFeedFolderLinks } from "./MyFeedFolderLinks";
 
 type SidebarProps = {
-  user: User | undefined;
+  user?: User;
 };
+
 export function Sidebar({ user }: SidebarProps) {
   return (
     <div className="h-lvh w-full overflow-y-auto border-r-2 pb-12">
