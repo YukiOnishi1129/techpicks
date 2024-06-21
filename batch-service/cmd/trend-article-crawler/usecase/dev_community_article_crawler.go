@@ -2,10 +2,11 @@ package usecase
 
 import (
 	"context"
+	"log"
+
 	"github.com/Songmu/go-httpdate"
 	"github.com/YukiOnishi1129/techpicks/batch-service/entity"
 	"github.com/YukiOnishi1129/techpicks/batch-service/internal/crawler"
-	"log"
 )
 
 func (u *Usecase) devCommunityArticleCrawler(ctx context.Context, feed *entity.Feed) error {
@@ -34,7 +35,8 @@ func (u *Usecase) devCommunityArticleCrawler(ctx context.Context, feed *entity.F
 			return err
 		}
 		res, err := crawler.TrendArticleContentsCrawler(ctx, tx, crawler.TrendArticleContentsCrawlerArg{
-			Feed:               feed,
+			FeedID:             feed.ID,
+			PlatformID:         feed.PlatformID,
 			ArticleTitle:       d.Title,
 			ArticleURL:         d.URL,
 			ArticleLikeCount:   d.PublicReactionsCount,
@@ -42,6 +44,7 @@ func (u *Usecase) devCommunityArticleCrawler(ctx context.Context, feed *entity.F
 			ArticleAuthorName:  &d.User.UserName,
 			ArticleTags:        &d.Tags,
 			ArticleOGPImageURL: d.CoverImage,
+			IsEng:              feed.R.Platform.IsEng,
 		})
 		if err != nil && res.IsRollback {
 			log.Printf("【error rollback transaction】: %s", err)

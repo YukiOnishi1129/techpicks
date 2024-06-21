@@ -2,9 +2,10 @@ package usecase
 
 import (
 	"context"
+	"log"
+
 	"github.com/YukiOnishi1129/techpicks/batch-service/entity"
 	"github.com/YukiOnishi1129/techpicks/batch-service/internal/crawler"
-	"log"
 )
 
 func (u *Usecase) hatenaArticleCrawler(ctx context.Context, feed *entity.Feed) error {
@@ -34,7 +35,8 @@ func (u *Usecase) hatenaArticleCrawler(ctx context.Context, feed *entity.Feed) e
 			continue
 		}
 		res, err := crawler.TrendArticleContentsCrawler(ctx, tx, crawler.TrendArticleContentsCrawlerArg{
-			Feed:               feed,
+			FeedID:             feed.ID,
+			PlatformID:         feed.PlatformID,
 			ArticleTitle:       r.Title,
 			ArticleURL:         r.Link,
 			ArticleLikeCount:   count,
@@ -42,6 +44,7 @@ func (u *Usecase) hatenaArticleCrawler(ctx context.Context, feed *entity.Feed) e
 			ArticleAuthorName:  &r.AuthorName,
 			ArticleTags:        &r.Tags,
 			ArticleOGPImageURL: r.ImageURL,
+			IsEng:              feed.R.Platform.IsEng,
 		})
 		if err != nil && res.IsRollback {
 			log.Printf("【error rollback transaction】: %s", err)

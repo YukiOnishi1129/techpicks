@@ -2,11 +2,12 @@ package usecase
 
 import (
 	"context"
+	"log"
+	"strings"
+
 	"github.com/YukiOnishi1129/techpicks/batch-service/entity"
 	"github.com/YukiOnishi1129/techpicks/batch-service/internal"
 	"github.com/YukiOnishi1129/techpicks/batch-service/internal/crawler"
-	"log"
-	"strings"
 )
 
 const removePath = "/items/"
@@ -48,7 +49,8 @@ func (u *Usecase) qiitaArticleCrawler(ctx context.Context, feed *entity.Feed) er
 			continue
 		}
 		res, err := crawler.TrendArticleContentsCrawler(ctx, tx, crawler.TrendArticleContentsCrawlerArg{
-			Feed:               feed,
+			FeedID:             feed.ID,
+			PlatformID:         feed.PlatformID,
 			ArticleTitle:       r.Title,
 			ArticleURL:         r.Link,
 			ArticleLikeCount:   q.LikesCount,
@@ -56,6 +58,7 @@ func (u *Usecase) qiitaArticleCrawler(ctx context.Context, feed *entity.Feed) er
 			ArticleAuthorName:  &r.AuthorName,
 			ArticleTags:        &r.Tags,
 			ArticleOGPImageURL: r.ImageURL,
+			IsEng:              feed.R.Platform.IsEng,
 		})
 		if err != nil && res.IsRollback {
 			log.Printf("【error rollback transaction】: %s", err)
