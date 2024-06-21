@@ -3,11 +3,12 @@ package usecase
 import (
 	"context"
 	"fmt"
+	"log"
+
 	"github.com/Songmu/go-httpdate"
 	"github.com/YukiOnishi1129/techpicks/batch-service/entity"
 	"github.com/YukiOnishi1129/techpicks/batch-service/internal/crawler"
 	"github.com/YukiOnishi1129/techpicks/batch-service/internal/ogp"
-	"log"
 )
 
 func (u *Usecase) zennArticleCrawler(ctx context.Context, feed *entity.Feed) error {
@@ -42,7 +43,8 @@ func (u *Usecase) zennArticleCrawler(ctx context.Context, feed *entity.Feed) err
 			return err
 		}
 		res, err := crawler.TrendArticleContentsCrawler(ctx, tx, crawler.TrendArticleContentsCrawlerArg{
-			Feed:               feed,
+			FeedID:             feed.ID,
+			PlatformID:         feed.PlatformID,
 			ArticleTitle:       z.Title,
 			ArticleURL:         articleURL,
 			ArticleLikeCount:   z.LikedCount,

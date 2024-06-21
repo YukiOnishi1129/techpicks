@@ -1,14 +1,18 @@
-package testonly
+package testutil
 
 import (
 	"context"
 	"database/sql"
+	"fmt"
 	"log"
 	"os"
 	"testing"
 	"time"
 
 	_ "github.com/lib/pq"
+	"github.com/volatiletech/sqlboiler/v4/boil"
+
+	"github.com/YukiOnishi1129/techpicks/batch-service/testutil/mock"
 
 	"github.com/testcontainers/testcontainers-go"
 	"github.com/testcontainers/testcontainers-go/modules/postgres"
@@ -77,4 +81,53 @@ func SetupDB(t *testing.T, schemaPath string) (*PostgresContainer, error) {
 		ConnectionString:  connStr,
 		DB:                db,
 	}, nil
+}
+
+func SetupTest(ctx context.Context, t *testing.T, schemaPath string) (*PostgresContainer, error) {
+	t.Helper()
+
+	c, err := SetupDB(t, schemaPath)
+	if err != nil {
+		t.Fatal(err)
+		return nil, err
+	}
+
+	platforms := mock.GetPlatformMock()
+	if len(platforms) == 0 {
+		return nil, fmt.Errorf("platforms is empty %d", len(platforms))
+	}
+	categories := mock.GetCategoryMock()
+	if len(categories) == 0 {
+		return nil, fmt.Errorf("categories is empty %d", len(categories))
+	}
+	feeds := mock.GetFeedMock()
+	if len(feeds) == 0 {
+		return nil, fmt.Errorf("feeds is empty %d", len(feeds))
+	}
+
+	for _, v := range mock.GetPlatformMock() {
+		err = v.Insert(ctx, c.DB, boil.Infer())
+		if err != nil {
+			t.Fatal(err)
+			return nil, err
+		}
+	}
+
+	for _, v := range mock.GetCategoryMock() {
+		err = v.Insert(ctx, c.DB, boil.Infer())
+		if err != nil {
+			t.Fatal(err)
+			return nil, err
+		}
+	}
+
+	for _, v := range mock.GetFeedMock() {
+		err = v.Insert(ctx, c.DB, boil.Infer())
+		if err != nil {
+			t.Fatal(err)
+			return nil, err
+		}
+	}
+
+	return c, nil
 }
