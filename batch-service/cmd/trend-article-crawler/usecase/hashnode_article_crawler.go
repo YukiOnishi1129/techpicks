@@ -5,13 +5,20 @@ import (
 	"log"
 
 	"github.com/Songmu/go-httpdate"
-	"github.com/YukiOnishi1129/techpicks/batch-service/entity"
 	"github.com/YukiOnishi1129/techpicks/batch-service/infrastructure/api/repository"
 	"github.com/YukiOnishi1129/techpicks/batch-service/internal/crawler"
 )
 
-func (u *Usecase) hashnodeArticleCrawler(ctx context.Context, feed *entity.Feed) error {
-	log.Printf("【start hashnode article crawler】: %s", feed.Name)
+type hashnodeArticleCrawlerArg struct {
+	FeedID        string
+	PlatformID    string
+	FeedName      string
+	APIQueryParam *string
+	IsEng         bool
+}
+
+func (u *Usecase) hashnodeArticleCrawler(ctx context.Context, arg hashnodeArticleCrawlerArg) error {
+	log.Printf("【start hashnode article crawler】: %s", arg.FeedName)
 
 	aCount := 0
 	farCount := 0
@@ -19,10 +26,10 @@ func (u *Usecase) hashnodeArticleCrawler(ctx context.Context, feed *entity.Feed)
 	taUpdatedCount := 0
 	// get hashnode articles by api
 	hashRes, err := u.air.GetHashnodeArticles(repository.GetHashnodeArticlesArg{
-		Tag: &feed.APIQueryParam.String,
+		Tag: arg.APIQueryParam,
 	})
 	if err != nil {
-		log.Printf("【error get hashnode articles】: %s, %v", feed.Name, err)
+		log.Printf("【error get hashnode articles】: %s, %v", arg.FeedName, err)
 		return err
 	}
 	for _, d := range hashRes.Feed.Edges {
@@ -43,8 +50,8 @@ func (u *Usecase) hashnodeArticleCrawler(ctx context.Context, feed *entity.Feed)
 			articleTags += tag.Name + ","
 		}
 		res, err := crawler.TrendArticleContentsCrawler(ctx, tx, crawler.TrendArticleContentsCrawlerArg{
-			FeedID:             feed.ID,
-			PlatformID:         feed.PlatformID,
+			FeedID:             arg.FeedID,
+			PlatformID:         arg.PlatformID,
 			ArticleTitle:       d.Node.Title,
 			ArticleURL:         d.Node.URL,
 			ArticleLikeCount:   d.Node.ReactionCount,
@@ -52,7 +59,7 @@ func (u *Usecase) hashnodeArticleCrawler(ctx context.Context, feed *entity.Feed)
 			ArticleAuthorName:  &d.Node.Author.Name,
 			ArticleTags:        &articleTags,
 			ArticleOGPImageURL: d.Node.CoverImage.URL,
-			IsEng:              feed.R.Platform.IsEng,
+			IsEng:              arg.IsEng,
 		})
 		if err != nil && res.IsRollback {
 			log.Printf("【error rollback transaction】: %s", err)
@@ -64,7 +71,7 @@ func (u *Usecase) hashnodeArticleCrawler(ctx context.Context, feed *entity.Feed)
 		}
 
 		if err != nil {
-			log.Printf("【error create article】:feed: %s,  article: %s", feed.Name, d.Node.Title)
+			log.Printf("【error create article】:feed: %s,  article: %s", arg.FeedName, d.Node.Title)
 			continue
 		}
 		if res.IsCommit {
@@ -89,7 +96,7 @@ func (u *Usecase) hashnodeArticleCrawler(ctx context.Context, feed *entity.Feed)
 		}
 
 	}
-	log.Printf("【end hashnode article crawler】: %s", feed.Name)
+	log.Printf("【end hashnode article crawler】: %s", arg.FeedName)
 	log.Printf("【add article count】: %d", aCount)
 	log.Printf("【add feed_article_relationcount】: %d", farCount)
 	log.Printf("【add trend_article count】: %d", taCreatedCount)

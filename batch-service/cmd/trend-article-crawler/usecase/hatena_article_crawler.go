@@ -4,20 +4,27 @@ import (
 	"context"
 	"log"
 
-	"github.com/YukiOnishi1129/techpicks/batch-service/entity"
 	"github.com/YukiOnishi1129/techpicks/batch-service/internal/crawler"
 )
 
-func (u *Usecase) hatenaArticleCrawler(ctx context.Context, feed *entity.Feed) error {
-	log.Printf("【start haneta article crawler】: %s", feed.Name)
+type hatenaArticleCrawlerArg struct {
+	FeedID     string
+	PlatformID string
+	FeedName   string
+	RSSURL     string
+	IsEng      bool
+}
+
+func (u *Usecase) hatenaArticleCrawler(ctx context.Context, arg hatenaArticleCrawlerArg) error {
+	log.Printf("【start haneta article crawler】: %s", arg.FeedName)
 	aCount := 0
 	farCount := 0
 	taCreatedCount := 0
 	taUpdatedCount := 0
 	// get rss
-	rss, err := u.rr.GetRSS(feed.RSSURL)
+	rss, err := u.rr.GetRSS(arg.RSSURL)
 	if err != nil {
-		log.Printf("【error get rss】: %s, %v", feed.Name, err)
+		log.Printf("【error get rss】: %s, %v", arg.FeedName, err)
 		return err
 	}
 
@@ -31,12 +38,12 @@ func (u *Usecase) hatenaArticleCrawler(ctx context.Context, feed *entity.Feed) e
 
 		count, err := u.air.GetHatenaArticles(r.Link)
 		if err != nil {
-			log.Printf("【error get hatena articles api】: %s, %v", feed.Name, err)
+			log.Printf("【error get hatena articles api】: %s, %v", arg.FeedName, err)
 			continue
 		}
 		res, err := crawler.TrendArticleContentsCrawler(ctx, tx, crawler.TrendArticleContentsCrawlerArg{
-			FeedID:             feed.ID,
-			PlatformID:         feed.PlatformID,
+			FeedID:             arg.FeedID,
+			PlatformID:         arg.PlatformID,
 			ArticleTitle:       r.Title,
 			ArticleURL:         r.Link,
 			ArticleLikeCount:   count,
@@ -44,7 +51,7 @@ func (u *Usecase) hatenaArticleCrawler(ctx context.Context, feed *entity.Feed) e
 			ArticleAuthorName:  &r.AuthorName,
 			ArticleTags:        &r.Tags,
 			ArticleOGPImageURL: r.ImageURL,
-			IsEng:              feed.R.Platform.IsEng,
+			IsEng:              arg.IsEng,
 		})
 		if err != nil && res.IsRollback {
 			log.Printf("【error rollback transaction】: %s", err)
@@ -56,7 +63,7 @@ func (u *Usecase) hatenaArticleCrawler(ctx context.Context, feed *entity.Feed) e
 		}
 
 		if err != nil {
-			log.Printf("【error create article】:feed: %s,  article: %s", feed.Name, r.Title)
+			log.Printf("【error create article】:feed: %s,  article: %s", arg.FeedName, r.Title)
 			continue
 		}
 		if res.IsCommit {
@@ -80,7 +87,7 @@ func (u *Usecase) hatenaArticleCrawler(ctx context.Context, feed *entity.Feed) e
 			}
 		}
 	}
-	log.Printf("【end haneta article crawler】: %s", feed.Name)
+	log.Printf("【end haneta article crawler】: %s", arg.FeedName)
 	log.Printf("【add article count】: %d", aCount)
 	log.Printf("【add feed_article_relationcount】: %d", farCount)
 	log.Printf("【add trend_article count】: %d", taCreatedCount)
