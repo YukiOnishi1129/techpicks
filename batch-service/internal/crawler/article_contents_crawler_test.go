@@ -39,9 +39,9 @@ func Test_Crawler_ArticleContentsCrawler(t *testing.T) {
 		feed                       *entity.Feed
 		rss                        repository.RSS
 		isEng                      bool
-		wantResponse               ArticleContentsCrawlerResponse
 		wantArticles               []entity.Article
 		wantFeedArticleRelations   []entity.FeedArticleRelation
+		wantResponse               ArticleContentsCrawlerResponse
 	}{
 		"Success: create new article": {
 			feed: &mockFeed1,
