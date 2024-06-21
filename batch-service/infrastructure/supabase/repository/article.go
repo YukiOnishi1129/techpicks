@@ -44,11 +44,7 @@ func (ar *ArticleRepository) GetArticles(ctx context.Context, dto domain.GetArti
 	if err != nil {
 		return nil, err
 	}
-	articles := make([]*entity.Article, len(aRows))
-	for i, a := range aRows {
-		articles[i] = a
-	}
-	return articles, nil
+	return aRows, nil
 }
 
 // func (ar *ArticleRepository) GetArticles(ctx context.Context, dto domain.GetArticlesInputDTO) ([]domain.Article, error) {

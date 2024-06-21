@@ -2,6 +2,7 @@ package crawler
 
 import (
 	"context"
+	"database/sql"
 	"testing"
 	"time"
 
@@ -240,7 +241,7 @@ func Test_Internal_ArticleContentsCrawler(t *testing.T) {
 
 			if tt.recordPlatform != nil {
 				for _, v := range tt.recordPlatform {
-					err := v.Insert(ctx, db, boil.Infer())
+					err = v.Insert(ctx, db, boil.Infer())
 					if err != nil {
 						t.Fatalf("Failed to insert record: %s", err)
 					}
@@ -249,7 +250,7 @@ func Test_Internal_ArticleContentsCrawler(t *testing.T) {
 
 			if tt.recordCategories != nil {
 				for _, v := range tt.recordCategories {
-					err := v.Insert(ctx, db, boil.Infer())
+					err = v.Insert(ctx, db, boil.Infer())
 					if err != nil {
 						t.Fatalf("Failed to insert record: %s", err)
 					}
@@ -258,7 +259,7 @@ func Test_Internal_ArticleContentsCrawler(t *testing.T) {
 
 			if tt.recordFeeds != nil {
 				for _, v := range tt.recordFeeds {
-					err := v.Insert(ctx, db, boil.Infer())
+					err = v.Insert(ctx, db, boil.Infer())
 					if err != nil {
 						t.Fatalf("Failed to insert record: %s", err)
 					}
@@ -267,7 +268,7 @@ func Test_Internal_ArticleContentsCrawler(t *testing.T) {
 
 			if tt.recordArticles != nil {
 				for _, v := range tt.recordArticles {
-					err := v.Insert(ctx, db, boil.Infer())
+					err = v.Insert(ctx, db, boil.Infer())
 					if err != nil {
 						t.Fatalf("Failed to insert record: %s", err)
 					}
@@ -276,7 +277,7 @@ func Test_Internal_ArticleContentsCrawler(t *testing.T) {
 
 			if tt.recordFeedArticleRelations != nil {
 				for _, v := range tt.recordFeedArticleRelations {
-					err := v.Insert(ctx, db, boil.Infer())
+					err = v.Insert(ctx, db, boil.Infer())
 					if err != nil {
 						t.Fatalf("Failed to insert record: %s", err)
 					}
@@ -287,7 +288,12 @@ func Test_Internal_ArticleContentsCrawler(t *testing.T) {
 			if err != nil {
 				t.Fatalf("Failed to begin transaction: %s", err)
 			}
-			defer tx.Rollback()
+			defer func(tx *sql.Tx) {
+				err = tx.Rollback()
+				if err != nil {
+					t.Fatalf("Failed to rollback transaction: %s", err)
+				}
+			}(tx)
 
 			res, err := ArticleContentsCrawler(ctx, tx, tt.feed, tt.rss, tt.isEng)
 			if err != nil {
