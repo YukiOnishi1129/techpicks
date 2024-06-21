@@ -35,3 +35,11 @@ sqlboiler psql \
     -p entity \
     --no-tests --wipe
 
+# user-service
+sqlboiler psql \
+    -c micro-service/user-service/database/sqlboiler.toml \
+    -o micro-service/user-service/entity \
+    -p entity \
+    --no-tests --wipe
+
+
