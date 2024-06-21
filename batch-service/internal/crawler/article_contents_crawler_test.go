@@ -84,6 +84,47 @@ func Test_Internal_ArticleContentsCrawler(t *testing.T) {
 				},
 			},
 		},
+		"Success: create new article english": {
+			feed: &mockFeed1,
+			rss: repository.RSS{
+				Link:        "https://example.com/article_1",
+				Title:       "article_title_1",
+				Description: "article_description_1",
+				PublishedAt: int(publishedUnix),
+				ImageURL:    "https://example.com/image_1",
+				Tags:        "tag_1, tag_2",
+				AuthorName:  "author_name_1",
+			},
+			isEng: true,
+			wantResponse: ArticleContentsCrawlerResponse{
+				IsCreatedArticle:             true,
+				IsCreatedFeedArticleRelation: true,
+				IsRollback:                   false,
+				IsCommit:                     true,
+			},
+			wantArticles: []entity.Article{
+				{
+					ID:           articleID1.String(),
+					PlatformID:   null.String{Valid: true, String: mockPlatforms[0].ID},
+					Title:        "article_title_1",
+					Description:  "article_description_1",
+					ArticleURL:   "https://example.com/article_1",
+					PublishedAt:  null.TimeFrom(time.Unix(int64(publishedUnix), 0)),
+					AuthorName:   null.String{Valid: true, String: "author_name_1"},
+					Tags:         null.String{Valid: true, String: "tag_1, tag_2"},
+					ThumbnailURL: "https://example.com/image_1",
+					IsEng:        true,
+					IsPrivate:    false,
+				},
+			},
+			wantFeedArticleRelations: []entity.FeedArticleRelation{
+				{
+					ID:        feedArticleID1.String(),
+					FeedID:    mockFeed1.ID,
+					ArticleID: articleID1.String(),
+				},
+			},
+		},
 		"Success: exit article data same feed id and not exit feed article relation data": {
 			recordFeedArticleRelations: []entity.FeedArticleRelation{
 				{
