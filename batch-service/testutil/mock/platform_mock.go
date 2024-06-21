@@ -14,6 +14,11 @@ func CreatePlatformMock() {
 	platformID4, _ := uuid.NewUUID()
 	platformID5, _ := uuid.NewUUID()
 	platformID6, _ := uuid.NewUUID()
+	platformID7, _ := uuid.NewUUID()
+	platformID8, _ := uuid.NewUUID()
+	platformID9, _ := uuid.NewUUID()
+	platformID10, _ := uuid.NewUUID()
+	platformID11, _ := uuid.NewUUID()
 
 	mockPlatforms = []entity.Platform{
 		{
@@ -62,6 +67,47 @@ func CreatePlatformMock() {
 			PlatformSiteType: 3,
 			SiteURL:          "https://example6.com",
 			FaviconURL:       "https://example6.com/favicon",
+			IsEng:            true,
+		},
+		// trend
+		{
+			ID:               platformID7.String(),
+			Name:             "platform_name_7",
+			PlatformSiteType: 1,
+			SiteURL:          "https://example7.com",
+			FaviconURL:       "https://example7.com/favicon",
+			IsEng:            false,
+		},
+		{
+			ID:               platformID8.String(),
+			Name:             "platform_name_8",
+			PlatformSiteType: 1,
+			SiteURL:          "https://example8.com",
+			FaviconURL:       "https://example8.com/favicon",
+			IsEng:            false,
+		},
+		{
+			ID:               platformID9.String(),
+			Name:             "platform_name_9",
+			PlatformSiteType: 3,
+			SiteURL:          "https://example9.com",
+			FaviconURL:       "https://example9.com/favicon",
+			IsEng:            false,
+		},
+		{
+			ID:               platformID10.String(),
+			Name:             "platform_name_10",
+			PlatformSiteType: 1,
+			SiteURL:          "https://example10.com",
+			FaviconURL:       "https://example10.com/favicon",
+			IsEng:            true,
+		},
+		{
+			ID:               platformID11.String(),
+			Name:             "platform_name_11",
+			PlatformSiteType: 1,
+			SiteURL:          "https://example11.com",
+			FaviconURL:       "https://example11.com/favicon",
 			IsEng:            true,
 		},
 	}
