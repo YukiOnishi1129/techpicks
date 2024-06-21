@@ -27,7 +27,7 @@ func (c PostgresContainer) Down() {
 	}
 }
 
-func SetupDB(t *testing.T) (*PostgresContainer, error) {
+func SetupDB(t *testing.T, schemaPath string) (*PostgresContainer, error) {
 	t.Helper()
 	ctx := context.Background()
 
@@ -35,13 +35,13 @@ func SetupDB(t *testing.T) (*PostgresContainer, error) {
 	dbUser := "root"
 	dbPassword := "password"
 
-	entries, err := os.ReadDir("../testonly/schema/")
+	entries, err := os.ReadDir(schemaPath)
 	if err != nil {
 		t.Fatal(err)
 	}
 	scripts := make([]string, 0, len(entries))
 	for _, e := range entries {
-		scripts = append(scripts, "../testonly/schema/"+e.Name())
+		scripts = append(scripts, schemaPath+e.Name())
 	}
 
 	pgContainer, err := postgres.RunContainer(ctx,

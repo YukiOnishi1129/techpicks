@@ -3,6 +3,7 @@ package repository
 import (
 	"context"
 	"database/sql"
+
 	"github.com/YukiOnishi1129/techpicks/batch-service/domain"
 	"github.com/YukiOnishi1129/techpicks/batch-service/entity"
 	"github.com/volatiletech/null/v8"
@@ -28,7 +29,7 @@ func NewArticleRepository(db *sql.DB) *ArticleRepository {
 	}
 }
 
-func (ar *ArticleRepository) GetArticles(ctx context.Context, dto domain.GetArticlesInputDTO) ([]domain.Article, error) {
+func (ar *ArticleRepository) GetArticles(ctx context.Context, dto domain.GetArticlesInputDTO) ([]*entity.Article, error) {
 	q := make([]qm.QueryMod, 0)
 	if dto.Title != nil {
 		q = append(q, qm.Where("title = ?", *dto.Title))
@@ -39,17 +40,38 @@ func (ar *ArticleRepository) GetArticles(ctx context.Context, dto domain.GetArti
 	if dto.StartedAt != nil && dto.EndedAt != nil {
 		q = append(q, qm.Where("published_at BETWEEN ? AND ?", dto.StartedAt, dto.EndedAt))
 	}
-	q = append(q, qm.Where("deleted_at IS NULL"))
 	aRows, err := entity.Articles(q...).All(ctx, ar.db)
 	if err != nil {
 		return nil, err
 	}
-	resArticles := make([]domain.Article, len(aRows))
+	articles := make([]*entity.Article, len(aRows))
 	for i, a := range aRows {
-		resArticles[i] = convertDBtoArticleDomain(a)
+		articles[i] = a
 	}
-	return resArticles, nil
+	return articles, nil
 }
+
+// func (ar *ArticleRepository) GetArticles(ctx context.Context, dto domain.GetArticlesInputDTO) ([]domain.Article, error) {
+// 	q := make([]qm.QueryMod, 0)
+// 	if dto.Title != nil {
+// 		q = append(q, qm.Where("title = ?", *dto.Title))
+// 	}
+// 	if dto.ArticleURL != nil {
+// 		q = append(q, qm.Where("article_url = ?", *dto.ArticleURL))
+// 	}
+// 	if dto.StartedAt != nil && dto.EndedAt != nil {
+// 		q = append(q, qm.Where("published_at BETWEEN ? AND ?", dto.StartedAt, dto.EndedAt))
+// 	}
+// 	aRows, err := entity.Articles(q...).All(ctx, ar.db)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	resArticles := make([]domain.Article, len(aRows))
+// 	for i, a := range aRows {
+// 		resArticles[i] = convertDBtoArticleDomain(a)
+// 	}
+// 	return resArticles, nil
+// }
 
 func (ar *ArticleRepository) GetArticle(ctx context.Context, id string) (domain.Article, error) {
 	a, err := entity.Articles(qm.Where("id = ?", id), qm.Where("deleted_at IS NULL")).One(ctx, ar.db)
