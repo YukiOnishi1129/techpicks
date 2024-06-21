@@ -1,12 +1,16 @@
 {
   "folders": [
     {
-      "name": "💻 Client",
+      "name": "💻 Web",
       "path": "./web/client"
     },
     {
       "name": "🌉 Admin",
       "path": "./web/admin"
+    },
+    {
+      "name": "📱 Mobile",
+      "path": "./mobile/customer"
     },
     {
       "name": "⛩️ Gateway",
