@@ -23,11 +23,11 @@ func Test_Crawler_TrendArticleContentsCrawler(t *testing.T) {
 
 	// 2. article 1,trend 0,far 0, create trend, far, not create article
 
-	// 3. article 1, trend 1, far 1, trend.updateAt > 6 hour ago and trend.count < arg.count, update trend, not article, far
+	// 3. article 1, trend 1, far 1, trend.updateAt > 1 hour ago and trend.count < arg.count, update trend, not article, far
 
-	// 4. article 1, trend 1, far 1, trend.updateAt < 6 hour ago and trend.count < arg.count, not update trend, not article, far
+	// 4. article 1, trend 1, far 1, trend.updateAt < 1 hour ago and trend.count < arg.count, not update trend, not article, far
 
-	// 5. article 1, trend 1, far 1, trend.updateAt > 6 hour ago and trend.count > arg.count, not update trend, not article, far
+	// 5. article 1, trend 1, far 1, trend.updateAt > 1 hour ago and trend.count > arg.count, not update trend, not article, far
 
 	mockFeeds := mock.GetFeedMock()
 
@@ -40,6 +40,9 @@ func Test_Crawler_TrendArticleContentsCrawler(t *testing.T) {
 
 	articleAuthorName := "author_name_1"
 	articleTags := "tag_1, tag_2"
+
+	twoHoursAgo := time.Now().Add(-2 * time.Hour)
+	// thirtyMinutesAgo := time.Now().Add(-30 * time.Minute)
 
 	test := map[string]struct {
 		recordFeedArticleRelations []entity.FeedArticleRelation
@@ -178,6 +181,89 @@ func Test_Crawler_TrendArticleContentsCrawler(t *testing.T) {
 				IsUpdatedTrendArticle:        false,
 				IsCreatedArticle:             false,
 				IsCreatedFeedArticleRelation: true,
+				IsRollback:                   false,
+				IsCommit:                     true,
+			},
+		},
+		"Success: update trend article exit data publishedAt 2 hours ago": {
+			recordFeedArticleRelations: []entity.FeedArticleRelation{
+				{
+					ID:        feedArticleID1.String(),
+					FeedID:    mockFeeds[8].ID,
+					ArticleID: articleID1.String(),
+				},
+			},
+			recordArticles: []entity.Article{
+				{
+					ID:           articleID1.String(),
+					PlatformID:   null.String{Valid: true, String: mockFeeds[8].PlatformID},
+					Title:        "article_title_1",
+					Description:  "",
+					ArticleURL:   "https://article.example1.com",
+					PublishedAt:  null.TimeFrom(time.Unix(1620000000, 0)),
+					AuthorName:   null.String{Valid: true, String: "author_name_1"},
+					Tags:         null.String{Valid: true, String: "tag_1, tag_2"},
+					ThumbnailURL: "https://article.example1.com/ogp",
+					IsEng:        false,
+					IsPrivate:    false,
+				},
+			},
+			recordTrendArticles: []entity.TrendArticle{
+				{
+					ID:         trendArticleID1.String(),
+					ArticleID:  articleID1.String(),
+					PlatformID: mockFeeds[8].PlatformID,
+					LikeCount:  20,
+					UpdatedAt:  twoHoursAgo,
+				},
+			},
+			arg: TrendArticleContentsCrawlerArg{
+				FeedID:             mockFeeds[8].ID,
+				PlatformID:         mockFeeds[8].PlatformID,
+				ArticleTitle:       "article_title_1",
+				ArticleURL:         "https://article.example1.com",
+				ArticleLikeCount:   32,
+				ArticlePublishedAt: 1620000000,
+				ArticleAuthorName:  &articleAuthorName,
+				ArticleTags:        &articleTags,
+				ArticleOGPImageURL: "https://article.example1.com/ogp",
+				IsEng:              false,
+			},
+			wantFeedArticleRelations: []entity.FeedArticleRelation{
+				{
+					ID:        feedArticleID2.String(),
+					FeedID:    mockFeeds[8].ID,
+					ArticleID: articleID1.String(),
+				},
+			},
+			wantArticles: []entity.Article{
+				{
+					ID:           articleID1.String(),
+					PlatformID:   null.String{Valid: true, String: mockFeeds[8].PlatformID},
+					Title:        "article_title_1",
+					Description:  "",
+					ArticleURL:   "https://article.example1.com",
+					PublishedAt:  null.TimeFrom(time.Unix(1620000000, 0)),
+					AuthorName:   null.String{Valid: true, String: "author_name_1"},
+					Tags:         null.String{Valid: true, String: "tag_1, tag_2"},
+					ThumbnailURL: "https://article.example1.com/ogp",
+					IsEng:        false,
+					IsPrivate:    false,
+				},
+			},
+			wantTrendArticles: []entity.TrendArticle{
+				{
+					ID:         trendArticleID1.String(),
+					ArticleID:  articleID1.String(),
+					PlatformID: mockFeeds[8].PlatformID,
+					LikeCount:  32,
+				},
+			},
+			wantResponse: TrendArticleContentsCrawlerResponse{
+				IsCreatedTrendArticle:        false,
+				IsUpdatedTrendArticle:        true,
+				IsCreatedArticle:             false,
+				IsCreatedFeedArticleRelation: false,
 				IsRollback:                   false,
 				IsCommit:                     true,
 			},
