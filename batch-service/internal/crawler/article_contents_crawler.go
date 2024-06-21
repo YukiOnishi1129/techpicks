@@ -146,7 +146,6 @@ func CreateArticle(ctx context.Context, tx *sql.Tx, arg CreateArticleArg) error 
 	}
 	err := article.Insert(ctx, tx, boil.Infer())
 	if err != nil {
-		println("💧💧💧💧💧💧💧")
 		return err
 	}
 	return nil
