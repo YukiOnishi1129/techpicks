@@ -28,3 +28,10 @@ sqlboiler psql \
     -p entity \
     --no-tests --wipe
 
+# platform-service
+sqlboiler psql \
+    -c micro-service/platform-service/database/sqlboiler.toml \
+    -o micro-service/platform-service/entity \
+    -p entity \
+    --no-tests --wipe
+
