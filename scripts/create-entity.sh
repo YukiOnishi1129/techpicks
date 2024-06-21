@@ -21,3 +21,10 @@ sqlboiler psql \
     -p entity \
     --no-tests --wipe
 
+# feed-service
+sqlboiler psql \
+    -c micro-service/feed-service/database/sqlboiler.toml \
+    -o micro-service/feed-service/entity \
+    -p entity \
+    --no-tests --wipe
+
