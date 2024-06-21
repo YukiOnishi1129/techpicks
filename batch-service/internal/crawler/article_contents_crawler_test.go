@@ -2,7 +2,6 @@ package crawler
 
 import (
 	"context"
-	"database/sql"
 	"testing"
 	"time"
 
@@ -288,12 +287,6 @@ func Test_Internal_ArticleContentsCrawler(t *testing.T) {
 			if err != nil {
 				t.Fatalf("Failed to begin transaction: %s", err)
 			}
-			defer func(tx *sql.Tx) {
-				err = tx.Rollback()
-				if err != nil {
-					t.Fatalf("Failed to rollback transaction: %s", err)
-				}
-			}(tx)
 
 			res, err := ArticleContentsCrawler(ctx, tx, tt.feed, tt.rss, tt.isEng)
 			if err != nil {
