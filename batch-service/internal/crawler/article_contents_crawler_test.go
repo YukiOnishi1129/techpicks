@@ -43,7 +43,7 @@ func Test_Internal_ArticleContentsCrawler(t *testing.T) {
 		wantArticles               []entity.Article
 		wantFeedArticleRelations   []entity.FeedArticleRelation
 	}{
-		"Success": {
+		"Success: create new article": {
 			feed: &mockFeed1,
 			rss: repository.RSS{
 				Link:        "https://example.com/article_1",
@@ -84,7 +84,7 @@ func Test_Internal_ArticleContentsCrawler(t *testing.T) {
 				},
 			},
 		},
-		"Success: exit feed_article_relations data": {
+		"Success: exit article data same feed id and not exit feed article relation data": {
 			recordFeedArticleRelations: []entity.FeedArticleRelation{
 				{
 					ID:        feedArticleID1.String(),
@@ -148,6 +148,69 @@ func Test_Internal_ArticleContentsCrawler(t *testing.T) {
 				{
 					ID:        feedArticleID2.String(),
 					FeedID:    mockFeed3.ID,
+					ArticleID: articleID1.String(),
+				},
+			},
+		},
+		"Success: exit article data same feed id and feed article relation data": {
+			recordFeedArticleRelations: []entity.FeedArticleRelation{
+				{
+					ID:        feedArticleID1.String(),
+					FeedID:    mockFeed1.ID,
+					ArticleID: articleID1.String(),
+				},
+			},
+			recordArticles: []entity.Article{
+				{
+					ID:           articleID1.String(),
+					PlatformID:   null.String{Valid: true, String: mockPlatforms[0].ID},
+					Title:        "article_title_1",
+					Description:  "article_description_1",
+					ArticleURL:   "https://example.com/article_1",
+					PublishedAt:  null.TimeFrom(time.Unix(int64(publishedUnix), 0)),
+					AuthorName:   null.String{Valid: true, String: "author_name_1"},
+					Tags:         null.String{Valid: true, String: "tag_1, tag_2"},
+					ThumbnailURL: "https://example.com/image_1",
+					IsEng:        false,
+					IsPrivate:    false,
+				},
+			},
+			feed: &mockFeed1,
+			rss: repository.RSS{
+				Link:        "https://example.com/article_1",
+				Title:       "article_title_1",
+				Description: "article_description_1",
+				PublishedAt: 1111111,
+				ImageURL:    "https://example.com/image_1",
+				Tags:        "tag_1, tag_2",
+				AuthorName:  "author_name_1",
+			},
+			isEng: false,
+			wantResponse: ArticleContentsCrawlerResponse{
+				IsCreatedArticle:             false,
+				IsCreatedFeedArticleRelation: false,
+				IsRollback:                   false,
+				IsCommit:                     true,
+			},
+			wantArticles: []entity.Article{
+				{
+					ID:           articleID1.String(),
+					PlatformID:   null.String{Valid: true, String: mockPlatforms[0].ID},
+					Title:        "article_title_1",
+					Description:  "article_description_1",
+					ArticleURL:   "https://example.com/article_1",
+					PublishedAt:  null.TimeFrom(time.Unix(int64(publishedUnix), 0)),
+					AuthorName:   null.String{Valid: true, String: "author_name_1"},
+					Tags:         null.String{Valid: true, String: "tag_1, tag_2"},
+					ThumbnailURL: "https://example.com/image_1",
+					IsEng:        false,
+					IsPrivate:    false,
+				},
+			},
+			wantFeedArticleRelations: []entity.FeedArticleRelation{
+				{
+					ID:        feedArticleID1.String(),
+					FeedID:    mockFeed1.ID,
 					ArticleID: articleID1.String(),
 				},
 			},
