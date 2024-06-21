@@ -24,7 +24,7 @@ func NewFeedArticleRelationRepository(db *sql.DB) *FeedArticleRelationRepository
 	return &FeedArticleRelationRepository{db: db}
 }
 
-func (farr *FeedArticleRelationRepository) GetFeedArticleRelations(ctx context.Context, dto domain.GetFeedArticleRelationsInputDTO) ([]domain.FeedArticleRelation, error) {
+func (farr *FeedArticleRelationRepository) GetFeedArticleRelations(ctx context.Context, dto domain.GetFeedArticleRelationsInputDTO) ([]entity.FeedArticleRelation, error) {
 	q := make([]qm.QueryMod, 0)
 	if dto.FeedID != nil {
 		q = append(q, qm.Where("feed_id = ?", *dto.FeedID))
@@ -36,11 +36,14 @@ func (farr *FeedArticleRelationRepository) GetFeedArticleRelations(ctx context.C
 	if err != nil {
 		return nil, err
 	}
-	resFeedArticleRelations := make([]domain.FeedArticleRelation, len(farRow))
+
+	feedArticleRelations := make([]entity.FeedArticleRelation, len(farRow))
 	for i, far := range farRow {
-		resFeedArticleRelations[i] = convertDBtoFeedArticleRelationDomain(far)
+		feedArticleRelations[i] = *far
+
 	}
-	return resFeedArticleRelations, nil
+
+	return feedArticleRelations, nil
 }
 
 func (farr *FeedArticleRelationRepository) GetFeedArticleRelation(ctx context.Context, id string) (domain.FeedArticleRelation, error) {

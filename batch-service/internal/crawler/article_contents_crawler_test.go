@@ -10,6 +10,7 @@ import (
 	"github.com/YukiOnishi1129/techpicks/batch-service/infrastructure/rss/repository"
 	supaRepo "github.com/YukiOnishi1129/techpicks/batch-service/infrastructure/supabase/repository"
 	"github.com/YukiOnishi1129/techpicks/batch-service/testutil"
+	"github.com/YukiOnishi1129/techpicks/batch-service/testutil/mock"
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
 	"github.com/google/uuid"
@@ -19,68 +20,31 @@ import (
 
 func Test_Internal_ArticleContentsCrawler(t *testing.T) {
 
-	// platformID, _ := uuid.NewUUID()
-	platformID := "6ba7b810-9dad-11d1-80b4-00c04fd430c8"
-	feedID, _ := uuid.NewUUID()
-	categoryID, _ := uuid.NewUUID()
-	articleID, _ := uuid.NewUUID()
-	feedArticleRelationID, _ := uuid.NewUUID()
+	mockPlatforms := mock.GetPlatformMock()
+	mockFeeds := mock.GetFeedMock()
+
+	mockFeed1 := mockFeeds[0]
+	mockFeed3 := mockFeeds[2]
+
+	articleID1, _ := uuid.NewUUID()
+
+	feedArticleID1, _ := uuid.NewUUID()
+	feedArticleID2, _ := uuid.NewUUID()
 
 	publishedUnix := time.Now().Unix()
 
 	test := map[string]struct {
-		recordPlatform             []entity.Platform
 		recordFeedArticleRelations []entity.FeedArticleRelation
 		recordArticles             []entity.Article
-		recordFeeds                []entity.Feed
-		recordCategories           []entity.Category
 		feed                       *entity.Feed
 		rss                        repository.RSS
 		isEng                      bool
 		wantResponse               ArticleContentsCrawlerResponse
-		wantArticles               []*entity.Article
+		wantArticles               []entity.Article
 		wantFeedArticleRelations   []entity.FeedArticleRelation
 	}{
 		"Success": {
-			recordPlatform: []entity.Platform{
-				{
-					ID:               platformID,
-					Name:             "platform_name_1",
-					PlatformSiteType: 0,
-					SiteURL:          "https://example.com",
-					FaviconURL:       "https://example.com/favicon",
-					IsEng:            false,
-				},
-			},
-			recordFeeds: []entity.Feed{
-				{
-					ID:                feedID.String(),
-					Name:              "feed_title_1",
-					Description:       "feed_description_1",
-					PlatformID:        platformID,
-					CategoryID:        categoryID.String(),
-					SiteURL:           "https://example.com",
-					RSSURL:            "https://example.com/rss",
-					TrendPlatformType: 0,
-				},
-			},
-			recordCategories: []entity.Category{
-				{
-					ID:   categoryID.String(),
-					Name: "category_name_1",
-					Type: 1,
-				},
-			},
-			feed: &entity.Feed{
-				ID:                feedID.String(),
-				Name:              "feed_title_1",
-				Description:       "feed_description_1",
-				PlatformID:        platformID,
-				CategoryID:        categoryID.String(),
-				SiteURL:           "https://example.com",
-				RSSURL:            "https://example.com/rss",
-				TrendPlatformType: 0,
-			},
+			feed: &mockFeed1,
 			rss: repository.RSS{
 				Link:        "https://example.com/article_1",
 				Title:       "article_title_1",
@@ -97,10 +61,10 @@ func Test_Internal_ArticleContentsCrawler(t *testing.T) {
 				IsRollback:                   false,
 				IsCommit:                     true,
 			},
-			wantArticles: []*entity.Article{
+			wantArticles: []entity.Article{
 				{
-					ID:           articleID.String(),
-					PlatformID:   null.String{Valid: true, String: platformID},
+					ID:           articleID1.String(),
+					PlatformID:   null.String{Valid: true, String: mockPlatforms[0].ID},
 					Title:        "article_title_1",
 					Description:  "article_description_1",
 					ArticleURL:   "https://example.com/article_1",
@@ -114,38 +78,28 @@ func Test_Internal_ArticleContentsCrawler(t *testing.T) {
 			},
 			wantFeedArticleRelations: []entity.FeedArticleRelation{
 				{
-					ID:        feedArticleRelationID.String(),
-					FeedID:    feedID.String(),
-					ArticleID: articleID.String(),
+					ID:        feedArticleID1.String(),
+					FeedID:    mockFeed1.ID,
+					ArticleID: articleID1.String(),
 				},
 			},
 		},
 		"Success: exit feed_article_relations data": {
-			recordPlatform: []entity.Platform{
-				{
-					ID:               platformID,
-					Name:             "platform_name_1",
-					PlatformSiteType: 0,
-					SiteURL:          "https://example.com",
-					FaviconURL:       "https://example.com/favicon",
-					IsEng:            false,
-				},
-			},
 			recordFeedArticleRelations: []entity.FeedArticleRelation{
 				{
-					ID:        feedArticleRelationID.String(),
-					FeedID:    feedID.String(),
-					ArticleID: articleID.String(),
+					ID:        feedArticleID1.String(),
+					FeedID:    mockFeed1.ID,
+					ArticleID: articleID1.String(),
 				},
 			},
 			recordArticles: []entity.Article{
 				{
-					ID:          articleID.String(),
-					PlatformID:  null.String{Valid: true, String: platformID},
-					Title:       "article_title_1",
-					Description: "article_description_1",
-					ArticleURL:  "https://example.com/article_1",
-					// PublishedAt:  null.Time{},
+					ID:           articleID1.String(),
+					PlatformID:   null.String{Valid: true, String: mockPlatforms[0].ID},
+					Title:        "article_title_1",
+					Description:  "article_description_1",
+					ArticleURL:   "https://example.com/article_1",
+					PublishedAt:  null.TimeFrom(time.Unix(int64(publishedUnix), 0)),
 					AuthorName:   null.String{Valid: true, String: "author_name_1"},
 					Tags:         null.String{Valid: true, String: "tag_1, tag_2"},
 					ThumbnailURL: "https://example.com/image_1",
@@ -153,35 +107,7 @@ func Test_Internal_ArticleContentsCrawler(t *testing.T) {
 					IsPrivate:    false,
 				},
 			},
-			recordFeeds: []entity.Feed{
-				{
-					ID:                feedID.String(),
-					Name:              "feed_title_1",
-					Description:       "feed_description_1",
-					PlatformID:        platformID,
-					CategoryID:        categoryID.String(),
-					SiteURL:           "https://example.com",
-					RSSURL:            "https://example.com/rss",
-					TrendPlatformType: 0,
-				},
-			},
-			recordCategories: []entity.Category{
-				{
-					ID:   categoryID.String(),
-					Name: "category_name_1",
-					Type: 1,
-				},
-			},
-			feed: &entity.Feed{
-				ID:                feedID.String(),
-				Name:              "feed_title_1",
-				Description:       "feed_description_1",
-				PlatformID:        platformID,
-				CategoryID:        categoryID.String(),
-				SiteURL:           "https://example.com",
-				RSSURL:            "https://example.com/rss",
-				TrendPlatformType: 0,
-			},
+			feed: &mockFeed3,
 			rss: repository.RSS{
 				Link:        "https://example.com/article_1",
 				Title:       "article_title_1",
@@ -194,18 +120,18 @@ func Test_Internal_ArticleContentsCrawler(t *testing.T) {
 			isEng: false,
 			wantResponse: ArticleContentsCrawlerResponse{
 				IsCreatedArticle:             false,
-				IsCreatedFeedArticleRelation: false,
+				IsCreatedFeedArticleRelation: true,
 				IsRollback:                   false,
 				IsCommit:                     true,
 			},
-			wantArticles: []*entity.Article{
+			wantArticles: []entity.Article{
 				{
-					ID:          articleID.String(),
-					PlatformID:  null.String{Valid: true, String: platformID},
-					Title:       "article_title_1",
-					Description: "article_description_1",
-					ArticleURL:  "https://example.com/article_1",
-					// PublishedAt:  null.Time{},
+					ID:           articleID1.String(),
+					PlatformID:   null.String{Valid: true, String: mockPlatforms[0].ID},
+					Title:        "article_title_1",
+					Description:  "article_description_1",
+					ArticleURL:   "https://example.com/article_1",
+					PublishedAt:  null.TimeFrom(time.Unix(int64(publishedUnix), 0)),
 					AuthorName:   null.String{Valid: true, String: "author_name_1"},
 					Tags:         null.String{Valid: true, String: "tag_1, tag_2"},
 					ThumbnailURL: "https://example.com/image_1",
@@ -215,9 +141,14 @@ func Test_Internal_ArticleContentsCrawler(t *testing.T) {
 			},
 			wantFeedArticleRelations: []entity.FeedArticleRelation{
 				{
-					ID:        feedArticleRelationID.String(),
-					FeedID:    feedID.String(),
-					ArticleID: articleID.String(),
+					ID:        feedArticleID1.String(),
+					FeedID:    mockFeed1.ID,
+					ArticleID: articleID1.String(),
+				},
+				{
+					ID:        feedArticleID2.String(),
+					FeedID:    mockFeed3.ID,
+					ArticleID: articleID1.String(),
 				},
 			},
 		},
@@ -229,7 +160,7 @@ func Test_Internal_ArticleContentsCrawler(t *testing.T) {
 			t.Parallel()
 			ctx := context.Background()
 
-			pgContainer, err := testutil.SetupDB(t, "../../testutil/schema/")
+			pgContainer, err := testutil.SetupTest(ctx, t, "../../testutil/schema/")
 			if err != nil {
 				t.Fatalf("Failed to setup database: %s", err)
 			}
@@ -238,33 +169,7 @@ func Test_Internal_ArticleContentsCrawler(t *testing.T) {
 			db := pgContainer.DB
 
 			testArticleRepository := supaRepo.NewArticleRepository(db)
-
-			if tt.recordPlatform != nil {
-				for _, v := range tt.recordPlatform {
-					err = v.Insert(ctx, db, boil.Infer())
-					if err != nil {
-						t.Fatalf("Failed to insert record: %s", err)
-					}
-				}
-			}
-
-			if tt.recordCategories != nil {
-				for _, v := range tt.recordCategories {
-					err = v.Insert(ctx, db, boil.Infer())
-					if err != nil {
-						t.Fatalf("Failed to insert record: %s", err)
-					}
-				}
-			}
-
-			if tt.recordFeeds != nil {
-				for _, v := range tt.recordFeeds {
-					err = v.Insert(ctx, db, boil.Infer())
-					if err != nil {
-						t.Fatalf("Failed to insert record: %s", err)
-					}
-				}
-			}
+			testFeedArticleRelationRepository := supaRepo.NewFeedArticleRelationRepository(db)
 
 			if tt.recordArticles != nil {
 				for _, v := range tt.recordArticles {
@@ -312,21 +217,31 @@ func Test_Internal_ArticleContentsCrawler(t *testing.T) {
 				t.Fatalf("Failed to commit transaction: %s", err)
 			}
 
-			got, err := testArticleRepository.GetArticles(ctx, domain.GetArticlesInputDTO{})
+			gotArticles, err := testArticleRepository.GetArticles(ctx, domain.GetArticlesInputDTO{})
 			if err != nil {
 				t.Fatalf("Failed to get articles: %s", err)
 			}
 
-			opts := []cmp.Option{
-				cmpopts.IgnoreFields(entity.Article{}, "ID"),
-				cmpopts.IgnoreFields(entity.Article{}, "CreatedAt"),
-				cmpopts.IgnoreFields(entity.Article{}, "UpdatedAt"),
+			optsArticle := []cmp.Option{
+				cmpopts.IgnoreFields(entity.Article{}, "ID", "CreatedAt", "UpdatedAt"),
 			}
 
-			if diff := cmp.Diff(tt.wantArticles, got, opts...); diff != "" {
+			if diff := cmp.Diff(gotArticles, tt.wantArticles, optsArticle...); diff != "" {
 				t.Fatalf("request is not expected: %s", diff)
 			}
 
+			gotFeedArticleRelations, err := testFeedArticleRelationRepository.GetFeedArticleRelations(ctx, domain.GetFeedArticleRelationsInputDTO{})
+			if err != nil {
+				t.Fatalf("Failed to get feed article relations: %s", err)
+			}
+
+			optFeedArticleRelations := []cmp.Option{
+				cmpopts.IgnoreFields(entity.FeedArticleRelation{}, "ID", "CreatedAt", "UpdatedAt", "ArticleID"),
+			}
+
+			if diff := cmp.Diff(gotFeedArticleRelations, tt.wantFeedArticleRelations, optFeedArticleRelations...); diff != "" {
+				t.Fatalf("request is not expected: %s", diff)
+			}
 		})
 	}
 

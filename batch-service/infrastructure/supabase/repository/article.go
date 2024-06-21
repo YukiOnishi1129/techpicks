@@ -29,7 +29,7 @@ func NewArticleRepository(db *sql.DB) *ArticleRepository {
 	}
 }
 
-func (ar *ArticleRepository) GetArticles(ctx context.Context, dto domain.GetArticlesInputDTO) ([]*entity.Article, error) {
+func (ar *ArticleRepository) GetArticles(ctx context.Context, dto domain.GetArticlesInputDTO) ([]entity.Article, error) {
 	q := make([]qm.QueryMod, 0)
 	if dto.Title != nil {
 		q = append(q, qm.Where("title = ?", *dto.Title))
@@ -44,7 +44,11 @@ func (ar *ArticleRepository) GetArticles(ctx context.Context, dto domain.GetArti
 	if err != nil {
 		return nil, err
 	}
-	return aRows, nil
+	articles := make([]entity.Article, len(aRows))
+	for i, a := range aRows {
+		articles[i] = *a
+	}
+	return articles, nil
 }
 
 // func (ar *ArticleRepository) GetArticles(ctx context.Context, dto domain.GetArticlesInputDTO) ([]domain.Article, error) {
