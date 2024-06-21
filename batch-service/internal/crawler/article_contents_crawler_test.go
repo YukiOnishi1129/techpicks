@@ -19,7 +19,8 @@ import (
 
 func Test_Internal_ArticleContentsCrawler(t *testing.T) {
 
-	platformID, _ := uuid.NewUUID()
+	// platformID, _ := uuid.NewUUID()
+	platformID := "6ba7b810-9dad-11d1-80b4-00c04fd430c8"
 	feedID, _ := uuid.NewUUID()
 	categoryID, _ := uuid.NewUUID()
 	articleID, _ := uuid.NewUUID()
@@ -43,7 +44,7 @@ func Test_Internal_ArticleContentsCrawler(t *testing.T) {
 		"Success": {
 			recordPlatform: []entity.Platform{
 				{
-					ID:               platformID.String(),
+					ID:               platformID,
 					Name:             "platform_name_1",
 					PlatformSiteType: 0,
 					SiteURL:          "https://example.com",
@@ -56,7 +57,7 @@ func Test_Internal_ArticleContentsCrawler(t *testing.T) {
 					ID:                feedID.String(),
 					Name:              "feed_title_1",
 					Description:       "feed_description_1",
-					PlatformID:        platformID.String(),
+					PlatformID:        platformID,
 					CategoryID:        categoryID.String(),
 					SiteURL:           "https://example.com",
 					RSSURL:            "https://example.com/rss",
@@ -74,7 +75,7 @@ func Test_Internal_ArticleContentsCrawler(t *testing.T) {
 				ID:                feedID.String(),
 				Name:              "feed_title_1",
 				Description:       "feed_description_1",
-				PlatformID:        platformID.String(),
+				PlatformID:        platformID,
 				CategoryID:        categoryID.String(),
 				SiteURL:           "https://example.com",
 				RSSURL:            "https://example.com/rss",
@@ -99,7 +100,7 @@ func Test_Internal_ArticleContentsCrawler(t *testing.T) {
 			wantArticles: []*entity.Article{
 				{
 					ID:           articleID.String(),
-					PlatformID:   null.String{Valid: true, String: platformID.String()},
+					PlatformID:   null.String{Valid: true, String: platformID},
 					Title:        "article_title_1",
 					Description:  "article_description_1",
 					ArticleURL:   "https://example.com/article_1",
@@ -122,7 +123,7 @@ func Test_Internal_ArticleContentsCrawler(t *testing.T) {
 		"Success: exit feed_article_relations data": {
 			recordPlatform: []entity.Platform{
 				{
-					ID:               platformID.String(),
+					ID:               platformID,
 					Name:             "platform_name_1",
 					PlatformSiteType: 0,
 					SiteURL:          "https://example.com",
@@ -140,7 +141,7 @@ func Test_Internal_ArticleContentsCrawler(t *testing.T) {
 			recordArticles: []entity.Article{
 				{
 					ID:          articleID.String(),
-					PlatformID:  null.String{Valid: true, String: platformID.String()},
+					PlatformID:  null.String{Valid: true, String: platformID},
 					Title:       "article_title_1",
 					Description: "article_description_1",
 					ArticleURL:  "https://example.com/article_1",
@@ -157,7 +158,7 @@ func Test_Internal_ArticleContentsCrawler(t *testing.T) {
 					ID:                feedID.String(),
 					Name:              "feed_title_1",
 					Description:       "feed_description_1",
-					PlatformID:        platformID.String(),
+					PlatformID:        platformID,
 					CategoryID:        categoryID.String(),
 					SiteURL:           "https://example.com",
 					RSSURL:            "https://example.com/rss",
@@ -175,7 +176,7 @@ func Test_Internal_ArticleContentsCrawler(t *testing.T) {
 				ID:                feedID.String(),
 				Name:              "feed_title_1",
 				Description:       "feed_description_1",
-				PlatformID:        platformID.String(),
+				PlatformID:        platformID,
 				CategoryID:        categoryID.String(),
 				SiteURL:           "https://example.com",
 				RSSURL:            "https://example.com/rss",
@@ -200,7 +201,7 @@ func Test_Internal_ArticleContentsCrawler(t *testing.T) {
 			wantArticles: []*entity.Article{
 				{
 					ID:          articleID.String(),
-					PlatformID:  null.String{Valid: true, String: platformID.String()},
+					PlatformID:  null.String{Valid: true, String: platformID},
 					Title:       "article_title_1",
 					Description: "article_description_1",
 					ArticleURL:  "https://example.com/article_1",
