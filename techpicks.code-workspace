@@ -1,12 +1,40 @@
 {
   "folders": [
     {
-      "name": "💻 Client",
+      "name": "💻 Web",
       "path": "./web/client"
     },
     {
       "name": "🌉 Admin",
       "path": "./web/admin"
+    },
+    {
+      "name": "📱 Mobile",
+      "path": "./mobile/customer"
+    },
+    {
+      "name": "⛩️ Gateway",
+      "path": "./bff/apollo-gateway"
+    },
+    {
+      "name": "📔 Article-service",
+      "path": "./micro-service/article-service/"
+    },
+    {
+      "name": "🔖 Bookmark-service",
+      "path": "./micro-service/bookmark-service/"
+    },
+    {
+      "name": "📶 Feed-service",
+      "path": "./micro-service/feed-service/"
+    },
+    {
+      "name": "💎 Platform-service",
+      "path": "./micro-service/platform-service/"
+    },
+    {
+      "name": "😀 User-service",
+      "path": "./micro-service/user-service/"
     },
     {
       "name": "🤖 Batch-service",

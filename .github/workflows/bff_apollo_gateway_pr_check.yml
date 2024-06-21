@@ -1,0 +1,49 @@
+name: bff_apollo_gateway_pr_check
+
+on:
+  push:
+    branches:
+      - "main"
+      - "develop"
+      - "feature/*"
+      - "feat/*"
+      - "YL-*"
+    paths:
+      - "web/admin/**"
+      - ".github/workflows/bff_apollo_gateway_pr_check.yml"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [20.x]
+
+    defaults:
+      run:
+        working-directory: ./bff/apollo-gateway
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: npm
+          cache-dependency-path: ./web/admin/package-lock.json
+
+      - name: Install dependencies
+        run: npm install --frozen-lockfile
+
+      - name: Lint
+        run: npm run lint
+      
+    #   - name: Test
+    #     run: npm run test
+
+      - name: Build
+        run: npm run build
+       

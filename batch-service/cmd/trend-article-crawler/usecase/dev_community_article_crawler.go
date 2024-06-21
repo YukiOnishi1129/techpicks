@@ -5,21 +5,28 @@ import (
 	"log"
 
 	"github.com/Songmu/go-httpdate"
-	"github.com/YukiOnishi1129/techpicks/batch-service/entity"
 	"github.com/YukiOnishi1129/techpicks/batch-service/internal/crawler"
 )
 
-func (u *Usecase) devCommunityArticleCrawler(ctx context.Context, feed *entity.Feed) error {
-	log.Printf("【start dev community article crawler】: %s", feed.Name)
+type devCommunityArticleCrawlerArg struct {
+	FeedID        string
+	PlatformID    string
+	FeedName      string
+	APIQueryParam *string
+	IsEng         bool
+}
+
+func (u *Usecase) devCommunityArticleCrawler(ctx context.Context, arg devCommunityArticleCrawlerArg) error {
+	log.Printf("【start dev community article crawler】: %s", arg.FeedName)
 
 	aCount := 0
 	farCount := 0
 	taCreatedCount := 0
 	taUpdatedCount := 0
 	// get dev community articles by api
-	res, err := u.air.GetDevCommunityArticles(&feed.APIQueryParam.String)
+	res, err := u.air.GetDevCommunityArticles(arg.APIQueryParam)
 	if err != nil {
-		log.Printf("【error get dev community articles】: %s, %v", feed.Name, err)
+		log.Printf("【error get dev community articles】: %s, %v", arg.FeedName, err)
 		return err
 	}
 	for _, d := range res {
@@ -35,8 +42,8 @@ func (u *Usecase) devCommunityArticleCrawler(ctx context.Context, feed *entity.F
 			return err
 		}
 		res, err := crawler.TrendArticleContentsCrawler(ctx, tx, crawler.TrendArticleContentsCrawlerArg{
-			FeedID:             feed.ID,
-			PlatformID:         feed.PlatformID,
+			FeedID:             arg.FeedID,
+			PlatformID:         arg.PlatformID,
 			ArticleTitle:       d.Title,
 			ArticleURL:         d.URL,
 			ArticleLikeCount:   d.PublicReactionsCount,
@@ -44,7 +51,7 @@ func (u *Usecase) devCommunityArticleCrawler(ctx context.Context, feed *entity.F
 			ArticleAuthorName:  &d.User.UserName,
 			ArticleTags:        &d.Tags,
 			ArticleOGPImageURL: d.CoverImage,
-			IsEng:              feed.R.Platform.IsEng,
+			IsEng:              arg.IsEng,
 		})
 		if err != nil && res.IsRollback {
 			log.Printf("【error rollback transaction】: %s", err)
@@ -56,7 +63,7 @@ func (u *Usecase) devCommunityArticleCrawler(ctx context.Context, feed *entity.F
 		}
 
 		if err != nil {
-			log.Printf("【error create article】:feed: %s,  article: %s", feed.Name, d.Title)
+			log.Printf("【error create article】:feed: %s,  article: %s", arg.FeedName, d.Title)
 			continue
 		}
 		if res.IsCommit {
@@ -80,7 +87,7 @@ func (u *Usecase) devCommunityArticleCrawler(ctx context.Context, feed *entity.F
 			}
 		}
 	}
-	log.Printf("【end dev community article crawler】: %s", feed.Name)
+	log.Printf("【end dev community article crawler】: %s", arg.FeedName)
 	log.Printf("【add article count】: %d", aCount)
 	log.Printf("【add feed_article_relationcount】: %d", farCount)
 	log.Printf("【add trend_article count】: %d", taCreatedCount)
