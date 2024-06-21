@@ -6,13 +6,19 @@ import (
 	"log"
 
 	"github.com/Songmu/go-httpdate"
-	"github.com/YukiOnishi1129/techpicks/batch-service/entity"
 	"github.com/YukiOnishi1129/techpicks/batch-service/internal/crawler"
 	"github.com/YukiOnishi1129/techpicks/batch-service/internal/ogp"
 )
 
-func (u *Usecase) zennArticleCrawler(ctx context.Context, feed *entity.Feed) error {
-	log.Printf("【start zenn article crawler】: %s", feed.Name)
+type zennArticleCrawlerArg struct {
+	FeedID     string
+	PlatformID string
+	FeedName   string
+	IsEng      bool
+}
+
+func (u *Usecase) zennArticleCrawler(ctx context.Context, arg zennArticleCrawlerArg) error {
+	log.Printf("【start zenn article crawler】: %s", arg.FeedName)
 	aCount := 0
 	farCount := 0
 	taCreatedCount := 0
@@ -20,7 +26,7 @@ func (u *Usecase) zennArticleCrawler(ctx context.Context, feed *entity.Feed) err
 	// get zenn articles by api
 	res, err := u.air.GetZennArticles()
 	if err != nil {
-		log.Printf("【error get zenn articles】: %s, %v", feed.Name, err)
+		log.Printf("【error get zenn articles】: %s, %v", arg.FeedName, err)
 		return err
 	}
 
@@ -43,8 +49,8 @@ func (u *Usecase) zennArticleCrawler(ctx context.Context, feed *entity.Feed) err
 			return err
 		}
 		res, err := crawler.TrendArticleContentsCrawler(ctx, tx, crawler.TrendArticleContentsCrawlerArg{
-			FeedID:             feed.ID,
-			PlatformID:         feed.PlatformID,
+			FeedID:             arg.FeedID,
+			PlatformID:         arg.PlatformID,
 			ArticleTitle:       z.Title,
 			ArticleURL:         articleURL,
 			ArticleLikeCount:   z.LikedCount,
@@ -52,7 +58,7 @@ func (u *Usecase) zennArticleCrawler(ctx context.Context, feed *entity.Feed) err
 			ArticleAuthorName:  nil,
 			ArticleTags:        nil,
 			ArticleOGPImageURL: ogpImageURL,
-			IsEng:              feed.R.Platform.IsEng,
+			IsEng:              arg.IsEng,
 		})
 		if err != nil && res.IsRollback {
 			log.Printf("【error rollback transaction】: %s", err)
@@ -64,7 +70,7 @@ func (u *Usecase) zennArticleCrawler(ctx context.Context, feed *entity.Feed) err
 		}
 
 		if err != nil {
-			log.Printf("【error create article】:feed: %s,  article: %s", feed.Name, z.Title)
+			log.Printf("【error create article】:feed: %s,  article: %s", arg.FeedName, z.Title)
 			continue
 		}
 		if res.IsCommit {
@@ -88,7 +94,7 @@ func (u *Usecase) zennArticleCrawler(ctx context.Context, feed *entity.Feed) err
 			}
 		}
 	}
-	log.Printf("【end zenn article crawler】: %s", feed.Name)
+	log.Printf("【end zenn article crawler】: %s", arg.FeedName)
 	log.Printf("【add article count】: %d", aCount)
 	log.Printf("【add feed_article_relationcount】: %d", farCount)
 	log.Printf("【add trend_article count】: %d", taCreatedCount)

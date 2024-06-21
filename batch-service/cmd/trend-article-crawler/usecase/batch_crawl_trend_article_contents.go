@@ -2,11 +2,12 @@ package usecase
 
 import (
 	"context"
+	"log"
+	"time"
+
 	"github.com/YukiOnishi1129/techpicks/batch-service/domain"
 	"github.com/YukiOnishi1129/techpicks/batch-service/entity"
 	"github.com/volatiletech/sqlboiler/v4/queries/qm"
-	"log"
-	"time"
 )
 
 func (u *Usecase) BatchCrawlTrendArticleContents(ctx context.Context) error {
@@ -47,31 +48,60 @@ func (u *Usecase) BatchCrawlTrendArticleContents(ctx context.Context) error {
 		log.Printf("【start BatchCrawlTrendArticle】: %s", f.Name)
 		switch f.TrendPlatformType {
 		case int(domain.TrendPlatformTypeZenn):
-			err = u.zennArticleCrawler(ctx, f)
+			err = u.zennArticleCrawler(ctx, zennArticleCrawlerArg{
+				FeedID:     f.ID,
+				PlatformID: f.PlatformID,
+				FeedName:   f.Name,
+				IsEng:      f.R.Platform.IsEng,
+			})
 			if err != nil {
 				log.Printf("【error zenn article crawler】: %s", err)
 				continue
 			}
 		case int(domain.TrendPlatformTypeQiita):
-			err = u.qiitaArticleCrawler(ctx, f)
+			err = u.qiitaArticleCrawler(ctx, qiitaArticleCrawlerArg{
+				FeedID:     f.ID,
+				PlatformID: f.PlatformID,
+				FeedName:   f.Name,
+				RSSURL:     f.RSSURL,
+				IsEng:      f.R.Platform.IsEng,
+			})
 			if err != nil {
 				log.Printf("【error qiita article crawler】: %s", err)
 				continue
 			}
 		case int(domain.TrendPlatformTypeHatena):
-			err = u.hatenaArticleCrawler(ctx, f)
+			err = u.hatenaArticleCrawler(ctx, hatenaArticleCrawlerArg{
+				FeedID:     f.ID,
+				PlatformID: f.PlatformID,
+				FeedName:   f.Name,
+				RSSURL:     f.RSSURL,
+				IsEng:      f.R.Platform.IsEng,
+			})
 			if err != nil {
 				log.Printf("【error hatena article crawler】: %s", err)
 				continue
 			}
 		case int(domain.TrendPlatformTypeDevCommunity):
-			err = u.devCommunityArticleCrawler(ctx, f)
+			err = u.devCommunityArticleCrawler(ctx, devCommunityArticleCrawlerArg{
+				FeedID:        f.ID,
+				PlatformID:    f.PlatformID,
+				FeedName:      f.Name,
+				APIQueryParam: &f.APIQueryParam.String,
+				IsEng:         f.R.Platform.IsEng,
+			})
 			if err != nil {
 				log.Printf("【error dev community article crawler】: %s", err)
 				continue
 			}
 		case int(domain.TrendPlatformTypeHashnode):
-			err = u.hashnodeArticleCrawler(ctx, f)
+			err = u.hashnodeArticleCrawler(ctx, hashnodeArticleCrawlerArg{
+				FeedID:        f.ID,
+				PlatformID:    f.PlatformID,
+				FeedName:      f.Name,
+				APIQueryParam: &f.APIQueryParam.String,
+				IsEng:         f.R.Platform.IsEng,
+			})
 			if err != nil {
 				log.Printf("【error hashnode article crawler】: %s", err)
 				continue
