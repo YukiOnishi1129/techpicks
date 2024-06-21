@@ -9,7 +9,7 @@ import (
 	"github.com/YukiOnishi1129/techpicks/batch-service/entity"
 	"github.com/YukiOnishi1129/techpicks/batch-service/infrastructure/rss/repository"
 	supaRepo "github.com/YukiOnishi1129/techpicks/batch-service/infrastructure/supabase/repository"
-	"github.com/YukiOnishi1129/techpicks/batch-service/internal/testonly"
+	"github.com/YukiOnishi1129/techpicks/batch-service/testutil"
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
 	"github.com/google/uuid"
@@ -229,7 +229,7 @@ func Test_Internal_ArticleContentsCrawler(t *testing.T) {
 			t.Parallel()
 			ctx := context.Background()
 
-			pgContainer, err := testonly.SetupDB(t, "../testonly/schema/")
+			pgContainer, err := testutil.SetupDB(t, "../../testutil/schema/")
 			if err != nil {
 				t.Fatalf("Failed to setup database: %s", err)
 			}

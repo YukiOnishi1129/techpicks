@@ -1,4 +1,4 @@
-package testonly
+package testutil
 
 import (
 	"context"
