@@ -52,6 +52,7 @@ func (u *Usecase) zennArticleCrawler(ctx context.Context, feed *entity.Feed) err
 			ArticleAuthorName:  nil,
 			ArticleTags:        nil,
 			ArticleOGPImageURL: ogpImageURL,
+			IsEng:              feed.R.Platform.IsEng,
 		})
 		if err != nil && res.IsRollback {
 			log.Printf("【error rollback transaction】: %s", err)

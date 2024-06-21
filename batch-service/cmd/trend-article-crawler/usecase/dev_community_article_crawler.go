@@ -44,6 +44,7 @@ func (u *Usecase) devCommunityArticleCrawler(ctx context.Context, feed *entity.F
 			ArticleAuthorName:  &d.User.UserName,
 			ArticleTags:        &d.Tags,
 			ArticleOGPImageURL: d.CoverImage,
+			IsEng:              feed.R.Platform.IsEng,
 		})
 		if err != nil && res.IsRollback {
 			log.Printf("【error rollback transaction】: %s", err)
