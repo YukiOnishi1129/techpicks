@@ -18,7 +18,7 @@ import (
 	"github.com/volatiletech/sqlboiler/v4/boil"
 )
 
-func Test_Internal_ArticleContentsCrawler(t *testing.T) {
+func Test_Crawler_ArticleContentsCrawler(t *testing.T) {
 
 	mockPlatforms := mock.GetPlatformMock()
 	mockFeeds := mock.GetFeedMock()
@@ -348,5 +348,4 @@ func Test_Internal_ArticleContentsCrawler(t *testing.T) {
 			}
 		})
 	}
-
 }

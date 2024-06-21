@@ -13,7 +13,8 @@ import (
 )
 
 type TrendArticleContentsCrawlerArg struct {
-	Feed               *entity.Feed
+	FeedID             string
+	PlatformID         string
 	ArticleTitle       string
 	ArticleURL         string
 	ArticleLikeCount   int
@@ -21,6 +22,7 @@ type TrendArticleContentsCrawlerArg struct {
 	ArticleAuthorName  *string
 	ArticleTags        *string
 	ArticleOGPImageURL string
+	IsEng              bool
 }
 
 type TrendArticleContentsCrawlerResponse struct {
@@ -40,19 +42,19 @@ func TrendArticleContentsCrawler(ctx context.Context, tx *sql.Tx, arg TrendArtic
 	// 1. check article table at article_url
 	article, _ := entity.Articles(
 		qm.Where("article_url = ?", arg.ArticleURL),
-		qm.Where("platform_id = ?", arg.Feed.PlatformID),
+		qm.Where("platform_id = ?", arg.PlatformID),
 	).One(ctx, tx)
 	if article != nil {
 		// 2. check trend_article table at article_id
 		trendArticle, _ := entity.TrendArticles(
 			qm.Where("article_id = ?", article.ID),
-			qm.Where("platform_id = ?", arg.Feed.PlatformID),
+			qm.Where("platform_id = ?", arg.PlatformID),
 		).One(ctx, tx)
 		if trendArticle == nil {
 			// insert trend_article
 			err := CreateTrendArticle(ctx, tx, CreateTrendArticleArg{
 				ArticleID:  article.ID,
-				PlatformID: arg.Feed.PlatformID,
+				PlatformID: arg.PlatformID,
 				LikeCount:  arg.ArticleLikeCount,
 			})
 			if err != nil {
@@ -69,7 +71,7 @@ func TrendArticleContentsCrawler(ctx context.Context, tx *sql.Tx, arg TrendArtic
 			IsCreatedTrendArticle = true
 		}
 
-		if trendArticle != nil && trendArticle.UpdatedAt.Before(oneHoursAgo) && trendArticle.LikeCount < arg.ArticleLikeCount{
+		if trendArticle != nil && trendArticle.UpdatedAt.Before(oneHoursAgo) && trendArticle.LikeCount < arg.ArticleLikeCount {
 			// update trend_article
 			trendArticle.LikeCount = arg.ArticleLikeCount
 			_, err := trendArticle.Update(ctx, tx, boil.Infer())
@@ -89,12 +91,12 @@ func TrendArticleContentsCrawler(ctx context.Context, tx *sql.Tx, arg TrendArtic
 
 		// check feed_article_relation table at article_url
 		feedArticleRelation, _ := entity.FeedArticleRelations(
-			qm.Where("feed_id = ?", arg.Feed.ID),
+			qm.Where("feed_id = ?", arg.FeedID),
 			qm.Where("article_id = ?", article.ID),
 		).One(ctx, tx)
 		if feedArticleRelation == nil {
 			err := CreateFeedArticleRelation(ctx, tx, CreateFeedArticleRelationArg{
-				FeedID:    arg.Feed.ID,
+				FeedID:    arg.FeedID,
 				ArticleID: article.ID,
 			})
 			if err != nil {
@@ -126,7 +128,7 @@ func TrendArticleContentsCrawler(ctx context.Context, tx *sql.Tx, arg TrendArtic
 	// insert article table
 	err := CreateArticle(ctx, tx, CreateArticleArg{
 		ID:           articleID.String(),
-		PlatformID:   arg.Feed.PlatformID,
+		PlatformID:   arg.PlatformID,
 		Title:        arg.ArticleTitle,
 		Description:  "",
 		ThumbnailURL: arg.ArticleOGPImageURL,
@@ -134,7 +136,7 @@ func TrendArticleContentsCrawler(ctx context.Context, tx *sql.Tx, arg TrendArtic
 		PublishedAt:  arg.ArticlePublishedAt,
 		AuthorName:   arg.ArticleAuthorName,
 		Tags:         arg.ArticleTags,
-		IsEng:        arg.Feed.R.Platform.IsEng,
+		IsEng:        arg.IsEng,
 	})
 	if err != nil {
 		log.Printf("【error insert article】: %s, err: %v", arg.ArticleTitle, err)
@@ -150,7 +152,7 @@ func TrendArticleContentsCrawler(ctx context.Context, tx *sql.Tx, arg TrendArtic
 
 	// insert feed article relation table
 	err = CreateFeedArticleRelation(ctx, tx, CreateFeedArticleRelationArg{
-		FeedID:    arg.Feed.ID,
+		FeedID:    arg.FeedID,
 		ArticleID: articleID.String(),
 	})
 	if err != nil {
@@ -168,7 +170,7 @@ func TrendArticleContentsCrawler(ctx context.Context, tx *sql.Tx, arg TrendArtic
 	// insert trend_article table
 	err = CreateTrendArticle(ctx, tx, CreateTrendArticleArg{
 		ArticleID:  articleID.String(),
-		PlatformID: arg.Feed.PlatformID,
+		PlatformID: arg.PlatformID,
 		LikeCount:  arg.ArticleLikeCount,
 	})
 	if err != nil {
