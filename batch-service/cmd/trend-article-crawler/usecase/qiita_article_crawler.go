@@ -58,6 +58,7 @@ func (u *Usecase) qiitaArticleCrawler(ctx context.Context, feed *entity.Feed) er
 			ArticleAuthorName:  &r.AuthorName,
 			ArticleTags:        &r.Tags,
 			ArticleOGPImageURL: r.ImageURL,
+			IsEng:              feed.R.Platform.IsEng,
 		})
 		if err != nil && res.IsRollback {
 			log.Printf("【error rollback transaction】: %s", err)

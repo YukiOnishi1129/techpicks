@@ -52,6 +52,7 @@ func (u *Usecase) hashnodeArticleCrawler(ctx context.Context, feed *entity.Feed)
 			ArticleAuthorName:  &d.Node.Author.Name,
 			ArticleTags:        &articleTags,
 			ArticleOGPImageURL: d.Node.CoverImage.URL,
+			IsEng:              feed.R.Platform.IsEng,
 		})
 		if err != nil && res.IsRollback {
 			log.Printf("【error rollback transaction】: %s", err)
