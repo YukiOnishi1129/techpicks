@@ -3,14 +3,15 @@ package crawler
 import (
 	"context"
 	"database/sql"
+	"log"
+	"time"
+
 	"github.com/YukiOnishi1129/techpicks/batch-service/entity"
 	"github.com/YukiOnishi1129/techpicks/batch-service/infrastructure/rss/repository"
 	"github.com/google/uuid"
 	"github.com/volatiletech/null/v8"
 	"github.com/volatiletech/sqlboiler/v4/boil"
 	"github.com/volatiletech/sqlboiler/v4/queries/qm"
-	"log"
-	"time"
 )
 
 type ArticleContentsCrawlerResponse struct {
@@ -20,7 +21,7 @@ type ArticleContentsCrawlerResponse struct {
 	IsCommit                     bool
 }
 
-func ArticleContentsCrawler(ctx context.Context, tx *sql.Tx, f *entity.Feed, r repository.RSS) (ArticleContentsCrawlerResponse, error) {
+func ArticleContentsCrawler(ctx context.Context, tx *sql.Tx, f *entity.Feed, r repository.RSS, isEng bool) (ArticleContentsCrawlerResponse, error) {
 	isSkip := false
 	isCreatedFeedArticleRelation := false
 	// 1. check article table at article_url
@@ -71,7 +72,7 @@ func ArticleContentsCrawler(ctx context.Context, tx *sql.Tx, f *entity.Feed, r r
 		PublishedAt:  r.PublishedAt,
 		AuthorName:   &r.AuthorName,
 		Tags:         &r.Tags,
-		IsEng:        f.R.Platform.IsEng,
+		IsEng:        isEng,
 	})
 	if err != nil {
 		log.Printf("【error insert article】: %s, err: %v", r.Title, err)

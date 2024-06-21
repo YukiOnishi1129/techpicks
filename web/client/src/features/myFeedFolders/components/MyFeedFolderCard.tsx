@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { FC, useCallback } from "react";
 
-import { ShowMyFeedListDialog } from "@/features/myFeeds/components/Dialog/ShowMyFeedListDialog";
+import { ShowMyFeedListDialog } from "@/features/myFeeds/components/Dialog";
 import {
   CreateMyFeedDTO,
   bulkCreateMyFeed,
@@ -20,7 +20,7 @@ import { MyFeedFolderType } from "@/types/myFeedFolder";
 
 import { serverRevalidatePage } from "@/actions/serverAction";
 
-import { UpdateMyFeedFolderDialog } from "./Dialog/UpdateMyFeedFolderDialog";
+import { UpdateMyFeedFolderDialog } from "./Dialog";
 
 type MyFeedFolderCardProps = {
   user?: User;

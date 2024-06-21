@@ -2,7 +2,7 @@ import { User } from "@supabase/supabase-js";
 import { FC } from "react";
 
 import { fetchFavoriteArticlesByFavoriteArticleFolderIdAPI } from "@/features/favoriteArticles/actions/favoriteArticle";
-import { CreateFavoriteArticleDialog } from "@/features/favoriteArticles/components/Dialog/CreateFavoriteArticleDialog";
+import { CreateFavoriteArticleDialog } from "@/features/favoriteArticles/components/Dialog";
 import { FavoriteArticleList } from "@/features/favoriteArticles/components/FavoriteArticleList";
 import { FavoriteArticleFolderArticleKeywordSearchInput } from "@/features/search/components/favoriteArticleFolder/FavoriteArticleFolderArticleKeywordSearchInput";
 
