@@ -3,11 +3,12 @@ package usecase
 import (
 	"context"
 	"database/sql"
-	"github.com/YukiOnishi1129/techpicks/batch-service/domain"
-	"github.com/YukiOnishi1129/techpicks/batch-service/internal/crawler"
 	"log"
 	"strconv"
 	"time"
+
+	"github.com/YukiOnishi1129/techpicks/batch-service/domain"
+	"github.com/YukiOnishi1129/techpicks/batch-service/internal/crawler"
 
 	"github.com/YukiOnishi1129/techpicks/batch-service/entity"
 	"github.com/volatiletech/sqlboiler/v4/queries/qm"
@@ -53,7 +54,7 @@ func (u *Usecase) BatchCrawlSiteAndSummaryArticleContents(ctx context.Context) e
 				log.Printf("【error begin transaction】: %s", err)
 				continue
 			}
-			res, err := crawler.ArticleContentsCrawler(ctx, tx, f, r)
+			res, err := crawler.ArticleContentsCrawler(ctx, tx, f, r, f.R.Platform.IsEng)
 			if err != nil && res.IsRollback {
 				log.Printf("【error rollback transaction】: %s", err)
 				err = tx.Rollback()
