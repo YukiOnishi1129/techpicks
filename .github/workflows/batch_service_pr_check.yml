@@ -22,6 +22,16 @@ jobs:
     strategy:
       matrix:
         go: ['1.22']
+    
+    services:
+      postgres:
+        image: docker.io/postgres:16-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: root
+          POSTGRES_DB: password
+        ports:
+          - 5432:5432
 
     defaults:
       run:
@@ -45,6 +55,10 @@ jobs:
 
       - name: Go Test
         run: go test -v ./...
+        env:
+          POSTGRES_USER: root
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: postgres
     
       - name: Go Build
         run: go build -v ./...
