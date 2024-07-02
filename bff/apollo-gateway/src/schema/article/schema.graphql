@@ -1,0 +1,18 @@
+"""
+Article schema
+"""
+type Article {
+  id: ID!
+  platformId: String
+  title: String!
+  description: String!
+  articleUrl: String!
+  publishedAt: String!
+  authorName: String
+  tags: String
+  thumbnailUrl: String!
+  isEng: Boolean!
+  isPrivate: Boolean!
+  createdAt: String!
+  updatedAt: String!
+}
