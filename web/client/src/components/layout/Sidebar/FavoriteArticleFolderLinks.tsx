@@ -10,11 +10,11 @@ export const FavoriteArticleFolderLinks = async () => {
       {res.data.favoriteArticleFolders.map((folder, i) => (
         <div
           key={`sidebar-${folder.id}-${i}`}
-          className="mb-2 w-full cursor-pointer pl-2 pt-2"
+          className="w-full cursor-pointer "
         >
           <Link
             href={`/favorite-article-folder/${folder.id}`}
-            className="flex items-center"
+            className="flex items-center py-2 pl-2 hover:bg-secondary"
           >
             <FaHeart color="red" />
             <p className="ml-4 inline-block w-full truncate ">{folder.title}</p>

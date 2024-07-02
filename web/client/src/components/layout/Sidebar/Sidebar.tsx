@@ -23,25 +23,37 @@ export function Sidebar({ user }: SidebarProps) {
           <h2 className="mb-2 px-2 text-lg font-semibold tracking-tight">
             Main
           </h2>
-          <div className="space-y-2">
-            <div className="flex cursor-pointer items-center space-x-2 rounded-md px-2 hover:bg-secondary">
+          <div className="text-base">
+            <Link
+              href="/trend"
+              className="flex cursor-pointer items-center space-x-2 rounded-md p-2 hover:bg-secondary"
+            >
               <MdCalendarToday />
-              <Link href="/">Today</Link>
-            </div>
+              <span>Trend</span>
+            </Link>
             {user && (
-              <div className="flex cursor-pointer items-center space-x-2 rounded-md px-2 hover:bg-secondary">
+              <Link
+                href="/bookmark"
+                className="flex cursor-pointer items-center space-x-2 rounded-md p-2 hover:bg-secondary"
+              >
                 <FaRegBookmark />
-                <Link href="/bookmark">Bookmarks</Link>
-              </div>
+                <span>Bookmarks</span>
+              </Link>
             )}
-            <div className="flex cursor-pointer items-center space-x-2 rounded-md px-2 hover:bg-secondary">
+            <Link
+              href="/feed"
+              className="flex cursor-pointer items-center space-x-2 rounded-md p-2 hover:bg-secondary"
+            >
               <MdRssFeed />
-              <Link href="/feed">Feeds</Link>
-            </div>
-            <div className="flex cursor-pointer items-center space-x-2 rounded-md px-2 hover:bg-secondary">
+              <span>Feeds</span>
+            </Link>
+            <Link
+              href="/article/search"
+              className="flex cursor-pointer items-center space-x-2 rounded-md p-2 hover:bg-secondary"
+            >
               <BiSolidSearch />
-              <Link href="/article/search">Search</Link>
-            </div>
+              <span>Search</span>
+            </Link>
           </div>
         </div>
 
@@ -51,13 +63,14 @@ export function Sidebar({ user }: SidebarProps) {
               <h2 className="mb-2 px-2 text-lg font-semibold tracking-tight">
                 My Feeds
               </h2>
-              <div className="mt-2">
-                <div className="flex cursor-pointer items-center space-x-2 rounded-md px-2 hover:bg-secondary">
+              <div className="mt-2 text-base">
+                <Link
+                  href="/my-feed-folder"
+                  className="flex cursor-pointer items-center space-x-2 rounded-md p-2 hover:bg-secondary"
+                >
                   <MdFeed />
-                  <Link href="/my-feed-folder" className="pl-2">
-                    All
-                  </Link>
-                </div>
+                  <span className="pl-2">All</span>
+                </Link>
                 <MyFeedFolderLinks />
                 <div className="ml-4">
                   <CreateMyFeedFolderDialog buttonVariant="ghost" />
@@ -70,12 +83,13 @@ export function Sidebar({ user }: SidebarProps) {
                 Favorite Articles
               </h2>
               <div className="mt-2">
-                <div className="mb-2 flex cursor-pointer items-center space-x-2 rounded-md px-2 hover:bg-secondary">
+                <Link
+                  href="/favorite-article-folder"
+                  className="flex cursor-pointer items-center space-x-2 rounded-md p-2 hover:bg-secondary"
+                >
                   <MdFeed />
-                  <Link href="/favorite-article-folder" className="pl-2">
-                    All
-                  </Link>
-                </div>
+                  <span className="pl-2">All</span>
+                </Link>
                 <FavoriteArticleFolderLinks />
                 <div className="ml-4">
                   <CreateFavoriteArticleFolderDialog buttonVariant="ghost" />
