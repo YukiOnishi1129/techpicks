@@ -25,11 +25,32 @@ export function Sidebar({ user }: SidebarProps) {
           </h2>
           <div className="text-base">
             <Link
-              href="/trend"
+              href="/dashboard/trend"
               className="flex cursor-pointer items-center space-x-2 rounded-md p-2 hover:bg-secondary"
             >
               <MdCalendarToday />
               <span>Trend</span>
+            </Link>
+            <Link
+              href="/dashboard/site"
+              className="flex cursor-pointer items-center space-x-2 rounded-md p-2 hover:bg-secondary"
+            >
+              <MdCalendarToday />
+              <span>Site</span>
+            </Link>
+            <Link
+              href="/dashboard/company"
+              className="flex cursor-pointer items-center space-x-2 rounded-md p-2 hover:bg-secondary"
+            >
+              <MdCalendarToday />
+              <span>Company</span>
+            </Link>
+            <Link
+              href="/dashboard/summary"
+              className="flex cursor-pointer items-center space-x-2 rounded-md p-2 hover:bg-secondary"
+            >
+              <MdCalendarToday />
+              <span>Summary</span>
             </Link>
             {user && (
               <Link

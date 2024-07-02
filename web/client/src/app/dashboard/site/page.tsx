@@ -13,10 +13,12 @@ type PageProps = {
   searchParams: { [key: string]: string | string[] | undefined };
 };
 
-export default async function Home({ searchParams }: PageProps) {
+export default async function DashboardCompanyPage({
+  searchParams,
+}: PageProps) {
   const user = await getUser();
-  if (user) {
-    redirect("/dashboard/trend");
+  if (!user) {
+    redirect("/");
   }
   const languageStatus =
     typeof searchParams["languageStatus"] === "string"

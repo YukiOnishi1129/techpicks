@@ -13,7 +13,7 @@ type PageProps = {
   searchParams: { [key: string]: string | string[] | undefined };
 };
 
-export default async function Home({ searchParams }: PageProps) {
+export default async function CompanyPage({ searchParams }: PageProps) {
   const user = await getUser();
   if (user) {
     redirect("/dashboard/trend");
