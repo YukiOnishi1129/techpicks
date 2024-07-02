@@ -1,0 +1,11 @@
+"""
+Category schema
+"""
+type Category {
+  id: ID!
+  name: String!
+  type: Int!
+  createdAt: String!
+  updatedAt: String!
+  deletedAt: String
+}

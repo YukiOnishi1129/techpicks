@@ -1,0 +1,6 @@
+type Query {
+  """
+  Get articles
+  """
+  articles(isEng: Boolean, limit: Int, offset: Int): [Article!]!
+}

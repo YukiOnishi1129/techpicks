@@ -1,0 +1,14 @@
+"""
+Profile schema
+"""
+type Profile {
+  id: ID!
+  name: String!
+  email: String!
+  emailVerified: String
+  image: String!
+  isSuperAdmin: Boolean!
+  createdAt: String!
+  updatedAt: String!
+  deletedAt: String
+}
