@@ -5,8 +5,6 @@ import { getUser } from "@/features/users/actions/user";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import { LanguageBadge } from "@/components/ui/badge";
-
 type TrendDashboardTemplateProps = {
   keyword?: string;
   platformIdList: Array<string>;
@@ -26,15 +24,15 @@ export const TrendDashboardTemplate: FC<TrendDashboardTemplateProps> = async ({
   const user = await getUser();
   return (
     <div className="">
-      <div className="z-10 w-full items-end justify-end px-4 md:justify-between fixed hidden md:flex bg-card">
-        <h1 className="mb-4 mt-4  text-2xl font-bold">Trend</h1>
+      <div className="fixed z-10 hidden w-full items-end justify-end bg-card px-4 md:flex md:justify-between">
+        <h1 className="my-4 text-2xl  font-bold">Trend</h1>
       </div>
-      <div className="z-10 w-full h-16 items-end justify-end px-4 md:justify-between fixed flex md:hidden bg-card" />
-      <div className="h-16 hidden md:block" />
+      <div className="fixed z-10 flex h-16 w-full items-end justify-end bg-card px-4 md:hidden md:justify-between" />
+      <div className="hidden h-16 md:block" />
       {/* TODO: select box */}
 
       <Tabs defaultValue={convertTab(tab)}>
-        <TabsList className="mx-auto w-[90%] md:w-[70%] fixed mt-4 md:mt-0 z-10 ">
+        <TabsList className="fixed z-10 mx-auto mt-4 w-[90%] md:mt-0 md:w-[70%] ">
           <TabsTrigger className="w-1/2" value={TAB_LIST.ENGLISH}>
             Eng
           </TabsTrigger>
@@ -42,7 +40,7 @@ export const TrendDashboardTemplate: FC<TrendDashboardTemplateProps> = async ({
             Jap
           </TabsTrigger>
         </TabsList>
-        <div className="h-12 mb-2" />
+        <div className="mb-2 h-12" />
 
         <TabsContent value={TAB_LIST.ENGLISH} className="mt-2">
           <TrendArticleTemplateContent

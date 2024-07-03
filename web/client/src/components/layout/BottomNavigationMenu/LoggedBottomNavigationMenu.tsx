@@ -1,10 +1,8 @@
 import Link from "next/link";
 import { FC } from "react";
-import { BiSolidSearch } from "react-icons/bi";
-import { FaBookmark } from "react-icons/fa";
+import { FaBookmark, FaRegHeart } from "react-icons/fa";
 import { IoHomeSharp } from "react-icons/io5";
 import { SiFeedly } from "react-icons/si";
-import { FaRegHeart } from "react-icons/fa";
 
 type LoggedBottomNavigationMenuProps = {};
 

@@ -5,7 +5,6 @@ import { FC } from "react";
 
 import { LoggedMenu } from "./LoggedMenu";
 import { NotLoggedMenu } from "./NotLoggedMenu";
-import { ModeToggle } from "../DropdownMenu";
 
 type DesktopHeaderProps = {
   user?: User;
