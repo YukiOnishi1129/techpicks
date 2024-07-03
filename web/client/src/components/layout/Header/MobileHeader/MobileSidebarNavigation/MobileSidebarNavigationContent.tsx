@@ -2,12 +2,11 @@
 
 import { FC } from "react";
 
+import { MobileSidebar } from "@/components/layout/Sidebar/MobileSidebar";
 import { SheetContent } from "@/components/ui/sheet";
 
 import { FavoriteArticleFolderType } from "@/types/favoriteArticleFolder";
 import { MyFeedFolderType } from "@/types/myFeedFolder";
-
-import { MobileSidebar } from "../../Sidebar";
 
 type MobileSidebarNavigationContentProps = {
   handleCloseSheet: () => void;

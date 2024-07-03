@@ -1,12 +1,24 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { useMemo } from "react";
+import { FC, useMemo } from "react";
+
+import { FavoriteArticleFolderType } from "@/types/favoriteArticleFolder";
+import { MyFeedFolderType } from "@/types/myFeedFolder";
 
 import { NAVIGATION_LISTS } from "@/constant/navigation";
-import { match } from "assert";
 
-export function MobileHeader() {
+import { MobileSidebarNavigation } from "./MobileSidebarNavigation";
+
+type MobileHeaderProps = {
+  myFeedFolders: Array<MyFeedFolderType>;
+  favoriteArticleFolders: Array<FavoriteArticleFolderType>;
+};
+
+export const MobileHeader: FC<MobileHeaderProps> = ({
+  myFeedFolders,
+  favoriteArticleFolders,
+}) => {
   const pathname = usePathname();
 
   const pageName = useMemo(() => {
@@ -43,7 +55,14 @@ export function MobileHeader() {
   }, [pathname]);
 
   return (
-    <div className="fixed z-50 flex h-12 w-screen items-center justify-center border-b border-gray-300  px-8 shadow-md bg-card">
+    <div className="fixed z-50 flex h-12 w-screen items-center justify-center border-b border-gray-300  bg-card px-8 shadow-md">
+      <div className="absolute left-3">
+        <MobileSidebarNavigation
+          myFeedFolders={myFeedFolders}
+          favoriteArticleFolders={favoriteArticleFolders}
+        />
+      </div>
+
       <h1 className="text-2xl font-bold">{pageName}</h1>
       {/* <div className="flex items-center justify-end">
         <div>
@@ -52,4 +71,4 @@ export function MobileHeader() {
       </div> */}
     </div>
   );
-}
+};

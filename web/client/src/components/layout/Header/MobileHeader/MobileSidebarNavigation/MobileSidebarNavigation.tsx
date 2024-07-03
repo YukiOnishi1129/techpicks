@@ -28,7 +28,7 @@ export const MobileSidebarNavigation: FC<MobileSidebarNavigationProps> = ({
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
-        <HiOutlineMenuAlt2 className="mt-2" size={36} />
+        <HiOutlineMenuAlt2 size={36} />
       </SheetTrigger>
 
       {open && (
