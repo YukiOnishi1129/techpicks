@@ -18,7 +18,7 @@ export const LoggedBottomNavigationMenu: FC<
   const favoriteArticleFolderRes = await fetchFavoriteArticleFoldersAPI({});
 
   return (
-    <div className="fixed bottom-0 left-0 z-50 flex h-12 w-full grid-cols-5 bg-gray-800  text-white">
+    <div className="fixed bottom-0 left-0 z-50 flex h-12 w-full grid-cols-5 bg-card text-white">
       <div className="flex w-1/4  flex-col items-center justify-center border-r px-4 py-2">
         <MobileSidebarNavigation
           myFeedFolders={myFeedFolderRes.data.myFeedFolders}

@@ -1,6 +1,5 @@
 import { FC } from "react";
 
-import { ArticleTemplateContent } from "@/features/articles/components/ArticleTemplateContent";
 import { TrendArticleTemplateContent } from "@/features/trendArticles/components/TrendArticleTemplateContent";
 import { getUser } from "@/features/users/actions/user";
 
