@@ -1,27 +1,21 @@
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
-import { HomeTemplate } from "@/features/home/components/HomeTemplate";
+import { TrendDashboardTemplate } from "@/features/trendArticles/components/TrendDashboardTemplate";
 import { getUser } from "@/features/users/actions/user";
 
 import { ScreenLoader } from "@/components/layout/ScreenLoader";
-
-import { LanguageStatus } from "@/types/language";
 
 type PageProps = {
   params: { slug: string };
   searchParams: { [key: string]: string | string[] | undefined };
 };
 
-export default async function DashboardTrendPage({ searchParams }: PageProps) {
+export default async function TrendDashboardPage({ searchParams }: PageProps) {
   const user = await getUser();
   if (!user) {
     redirect("/");
   }
-  const languageStatus =
-    typeof searchParams["languageStatus"] === "string"
-      ? (parseInt(searchParams["languageStatus"]) as LanguageStatus)
-      : 1;
 
   const keyword =
     typeof searchParams["keyword"] === "string"
@@ -40,13 +34,12 @@ export default async function DashboardTrendPage({ searchParams }: PageProps) {
     platformIdList.push(searchParams["platformId"]);
 
   const tab =
-    typeof searchParams["tab"] === "string" ? searchParams["tab"] : "trend";
+    typeof searchParams["tab"] === "string" ? searchParams["tab"] : "english";
 
   return (
     <>
       <Suspense fallback={<ScreenLoader />}>
-        <HomeTemplate
-          languageStatus={languageStatus}
+        <TrendDashboardTemplate
           keyword={keyword}
           platformIdList={platformIdList}
           tab={tab}
