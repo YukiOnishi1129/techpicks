@@ -3,8 +3,15 @@
 import Link from "next/link";
 import { FC } from "react";
 import { BiSolidSearch } from "react-icons/bi";
+import { CgWebsite } from "react-icons/cg";
 import { FaRegBookmark } from "react-icons/fa";
-import { MdFeed, MdCalendarToday, MdRssFeed } from "react-icons/md";
+import {
+  MdFeed,
+  MdRssFeed,
+  MdOutlineStarOutline,
+  MdBusiness,
+  MdOutlineSummarize,
+} from "react-icons/md";
 
 import { CreateFavoriteArticleFolderDialog } from "@/features/favoriteArticleFolders/components/Dialog";
 import { CreateMyFeedFolderDialog } from "@/features/myFeedFolders/components/Dialog";
@@ -40,7 +47,7 @@ export const MobileSidebar: FC<SidebarProps> = ({
               className="flex cursor-pointer items-center space-x-2 rounded-md p-2 hover:bg-secondary"
               onClick={handleCloseSheet}
             >
-              <MdCalendarToday />
+              <MdOutlineStarOutline />
               <span>Trend</span>
             </Link>
             <Link
@@ -48,7 +55,7 @@ export const MobileSidebar: FC<SidebarProps> = ({
               className="flex cursor-pointer items-center space-x-2 rounded-md p-2 hover:bg-secondary"
               onClick={handleCloseSheet}
             >
-              <MdCalendarToday />
+              <CgWebsite />
               <span>Site</span>
             </Link>
             <Link
@@ -56,7 +63,7 @@ export const MobileSidebar: FC<SidebarProps> = ({
               className="flex cursor-pointer items-center space-x-2 rounded-md p-2 hover:bg-secondary"
               onClick={handleCloseSheet}
             >
-              <MdCalendarToday />
+              <MdBusiness />
               <span>Company</span>
             </Link>
             <Link
@@ -64,7 +71,7 @@ export const MobileSidebar: FC<SidebarProps> = ({
               className="flex cursor-pointer items-center space-x-2 rounded-md p-2 hover:bg-secondary"
               onClick={handleCloseSheet}
             >
-              <MdCalendarToday />
+              <MdOutlineSummarize />
               <span>Summary</span>
             </Link>
 

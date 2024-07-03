@@ -1,8 +1,15 @@
 import { User } from "@supabase/supabase-js";
 import Link from "next/link";
 import { BiSolidSearch } from "react-icons/bi";
+import { CgWebsite } from "react-icons/cg";
 import { FaRegBookmark } from "react-icons/fa";
-import { MdFeed, MdCalendarToday, MdRssFeed } from "react-icons/md";
+import {
+  MdFeed,
+  MdRssFeed,
+  MdBusiness,
+  MdOutlineStarOutline,
+  MdOutlineSummarize,
+} from "react-icons/md";
 
 import { CreateFavoriteArticleFolderDialog } from "@/features/favoriteArticleFolders/components/Dialog";
 import { CreateMyFeedFolderDialog } from "@/features/myFeedFolders/components/Dialog";
@@ -37,28 +44,28 @@ export function DesktopSidebar({
               href="/dashboard/trend"
               className="flex cursor-pointer items-center space-x-2 rounded-md p-2 hover:bg-secondary"
             >
-              <MdCalendarToday />
+              <MdOutlineStarOutline />
               <span>Trend</span>
             </Link>
             <Link
               href="/dashboard/site"
               className="flex cursor-pointer items-center space-x-2 rounded-md p-2 hover:bg-secondary"
             >
-              <MdCalendarToday />
+              <CgWebsite />
               <span>Site</span>
             </Link>
             <Link
               href="/dashboard/company"
               className="flex cursor-pointer items-center space-x-2 rounded-md p-2 hover:bg-secondary"
             >
-              <MdCalendarToday />
+              <MdBusiness />
               <span>Company</span>
             </Link>
             <Link
               href="/dashboard/summary"
               className="flex cursor-pointer items-center space-x-2 rounded-md p-2 hover:bg-secondary"
             >
-              <MdCalendarToday />
+              <MdOutlineSummarize />
               <span>Summary</span>
             </Link>
             {user && (
