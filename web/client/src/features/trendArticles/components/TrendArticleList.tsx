@@ -112,7 +112,7 @@ export function TrendArticleList({
   return (
     <>
       {flatTrendArticles.length === 0 ? (
-        <div className="flex h-[700px] flex-col items-center justify-center md:h-[600px]">
+        <div className="flex flex-col items-center justify-center ">
           <p className="text-center text-lg font-bold text-gray-500 md:text-xl">
             Sorry, no article.
           </p>
@@ -120,7 +120,7 @@ export function TrendArticleList({
           <img className="mt-8 h-1/2" src="/sorry.png" alt="" />
         </div>
       ) : (
-        <div className="m-auto h-[590px] overflow-y-scroll md:h-[540px]">
+        <div className="m-auto">
           {flatTrendArticles.map((trendArticle) => (
             <div key={trendArticle.id} className="mb-4">
               <ArticleCardWrapper

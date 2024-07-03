@@ -21,7 +21,7 @@ export const LoggedBaseLayout: FC<LoggedBaseLayoutProps> = async ({
   const myFeedFolderRes = await fetchMyFeedFoldersAPI();
   const favoriteArticleFolderRes = await fetchFavoriteArticleFoldersAPI({});
   return (
-    <div className="overflow-hidden">
+    <div>
       <header className="overflow-hidden">
         <Header user={user} />
       </header>

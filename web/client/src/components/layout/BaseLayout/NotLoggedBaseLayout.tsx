@@ -11,7 +11,7 @@ export const NotLoggedBaseLayout: FC<NotLoggedBaseLayoutProps> = async ({
   children,
 }) => {
   return (
-    <div className="overflow-hidden">
+    <div>
       <header className="overflow-hidden">
         <Header />
       </header>

@@ -43,7 +43,7 @@ export function MobileHeader() {
   }, [pathname]);
 
   return (
-    <div className="fixed z-50 flex h-12 w-screen items-center justify-center border-b border-gray-300  px-8 shadow-md">
+    <div className="fixed z-50 flex h-12 w-screen items-center justify-center border-b border-gray-300  px-8 shadow-md bg-card">
       <h1 className="text-2xl font-bold">{pageName}</h1>
       {/* <div className="flex items-center justify-end">
         <div>

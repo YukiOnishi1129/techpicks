@@ -27,14 +27,15 @@ export const TrendDashboardTemplate: FC<TrendDashboardTemplateProps> = async ({
   const user = await getUser();
   return (
     <div className="">
-      <div className="w-full items-end justify-end px-4 md:justify-between fixed hidden md:flex">
+      <div className="z-10 w-full items-end justify-end px-4 md:justify-between fixed hidden md:flex bg-card">
         <h1 className="mb-4 mt-4  text-2xl font-bold">Trend</h1>
       </div>
+      <div className="z-10 w-full h-16 items-end justify-end px-4 md:justify-between fixed flex md:hidden bg-card" />
       <div className="h-16 hidden md:block" />
       {/* TODO: select box */}
 
       <Tabs defaultValue={convertTab(tab)}>
-        <TabsList className="mx-auto w-[90%] md:w-[70%] fixed mt-4 md:mt-0">
+        <TabsList className="mx-auto w-[90%] md:w-[70%] fixed mt-4 md:mt-0 z-10 ">
           <TabsTrigger className="w-1/2" value={TAB_LIST.ENGLISH}>
             Eng
           </TabsTrigger>
@@ -42,9 +43,9 @@ export const TrendDashboardTemplate: FC<TrendDashboardTemplateProps> = async ({
             Jap
           </TabsTrigger>
         </TabsList>
-        <div className="h-10 mb-2" />
+        <div className="h-12 mb-2" />
 
-        <TabsContent value={TAB_LIST.ENGLISH}>
+        <TabsContent value={TAB_LIST.ENGLISH} className="mt-2">
           <TrendArticleTemplateContent
             languageStatus={2}
             keyword={keyword}
@@ -53,12 +54,11 @@ export const TrendDashboardTemplate: FC<TrendDashboardTemplateProps> = async ({
           />
         </TabsContent>
         <TabsContent value={TAB_LIST.JAPANESE}>
-          <ArticleTemplateContent
+          <TrendArticleTemplateContent
             languageStatus={1}
             keyword={keyword}
             platformIdList={platformIdList}
             user={user}
-            tab={"site"}
           />
         </TabsContent>
       </Tabs>

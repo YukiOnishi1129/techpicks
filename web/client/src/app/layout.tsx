@@ -23,7 +23,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={clsx(inter.className, "fixed w-full")}>
+      <body className={clsx(inter.className, "w-full")}>
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
