@@ -31,7 +31,7 @@ export const TrendDashboardTemplate: FC<TrendDashboardTemplateProps> = async ({
         <h1 className="mb-4 mt-4  text-2xl font-bold">Trend</h1>
       </div>
       <div className="h-16 hidden md:block" />
-      {/* select box */}
+      {/* TODO: select box */}
 
       <Tabs defaultValue={convertTab(tab)}>
         <TabsList className="mx-auto w-[90%] md:w-[70%] fixed mt-4 md:mt-0">

@@ -1,13 +1,20 @@
 import Link from "next/link";
+import { FC } from "react";
 import { FaHeart } from "react-icons/fa";
 
-import { fetchFavoriteArticleFoldersAPI } from "@/features/favoriteArticleFolders/actions/favoriteArticleFolders";
+import { FavoriteArticleFolderType } from "@/types/favoriteArticleFolder";
 
-export const FavoriteArticleFolderLinks = async () => {
-  const res = await fetchFavoriteArticleFoldersAPI({});
+type FavoriteArticleFolderLinksProps = {
+  favoriteArticleFolders: Array<FavoriteArticleFolderType>;
+  handleCloseSheet?: () => void;
+};
+
+export const FavoriteArticleFolderLinks: FC<
+  FavoriteArticleFolderLinksProps
+> = ({ favoriteArticleFolders, handleCloseSheet }) => {
   return (
     <>
-      {res.data.favoriteArticleFolders.map((folder, i) => (
+      {favoriteArticleFolders.map((folder, i) => (
         <div
           key={`sidebar-${folder.id}-${i}`}
           className="w-full cursor-pointer "
@@ -15,6 +22,7 @@ export const FavoriteArticleFolderLinks = async () => {
           <Link
             href={`/favorite-article-folder/${folder.id}`}
             className="flex items-center py-2 pl-2 hover:bg-secondary"
+            onClick={handleCloseSheet}
           >
             <FaHeart color="red" />
             <p className="ml-4 inline-block w-full truncate ">{folder.title}</p>

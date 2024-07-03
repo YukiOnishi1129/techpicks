@@ -7,15 +7,24 @@ import { MdFeed, MdCalendarToday, MdRssFeed } from "react-icons/md";
 import { CreateFavoriteArticleFolderDialog } from "@/features/favoriteArticleFolders/components/Dialog";
 import { CreateMyFeedFolderDialog } from "@/features/myFeedFolders/components/Dialog";
 
+import { FavoriteArticleFolderType } from "@/types/favoriteArticleFolder";
+import { MyFeedFolderType } from "@/types/myFeedFolder";
+
 import { FavoriteArticleFolderLinks } from "./FavoriteArticleFolderLinks";
 import { LogoutLink } from "./LogoutLink";
 import { MyFeedFolderLinks } from "./MyFeedFolderLinks";
 
-type SidebarProps = {
+type DesktopSidebarProps = {
   user?: User;
+  myFeedFolders: Array<MyFeedFolderType>;
+  favoriteArticleFolders: Array<FavoriteArticleFolderType>;
 };
 
-export function Sidebar({ user }: SidebarProps) {
+export function DesktopSidebar({
+  user,
+  myFeedFolders,
+  favoriteArticleFolders,
+}: DesktopSidebarProps) {
   return (
     <div className="h-lvh w-full overflow-y-auto border-r-2 pb-12">
       <div className="mb-16 space-y-4 py-4">
@@ -92,7 +101,7 @@ export function Sidebar({ user }: SidebarProps) {
                   <MdFeed />
                   <span className="pl-2">All</span>
                 </Link>
-                <MyFeedFolderLinks />
+                <MyFeedFolderLinks myFeedFolders={myFeedFolders} />
                 <div className="ml-4">
                   <CreateMyFeedFolderDialog buttonVariant="ghost" />
                 </div>
@@ -111,7 +120,9 @@ export function Sidebar({ user }: SidebarProps) {
                   <MdFeed />
                   <span className="pl-2">All</span>
                 </Link>
-                <FavoriteArticleFolderLinks />
+                <FavoriteArticleFolderLinks
+                  favoriteArticleFolders={favoriteArticleFolders}
+                />
                 <div className="ml-4">
                   <CreateFavoriteArticleFolderDialog buttonVariant="ghost" />
                 </div>

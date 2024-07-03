@@ -1,23 +1,31 @@
-import { User } from "@supabase/supabase-js";
 import Link from "next/link";
 import { FC } from "react";
 import { BiSolidSearch } from "react-icons/bi";
 import { FaBookmark } from "react-icons/fa";
 import { IoHomeSharp } from "react-icons/io5";
 
-import { MobileSidebarNavigation } from "./MobileSidebarNavigation";
+import { fetchFavoriteArticleFoldersAPI } from "@/features/favoriteArticleFolders/actions/favoriteArticleFolders";
+import { fetchMyFeedFoldersAPI } from "@/features/myFeedFolders/actions/myFeedFolder";
 
-type LoggedBottomNavigationMenuProps = {
-  user: User;
-};
+import { MobileSidebarNavigation } from "./MobileSidebarNavigation/";
+
+type LoggedBottomNavigationMenuProps = {};
 
 export const LoggedBottomNavigationMenu: FC<
   LoggedBottomNavigationMenuProps
-> = ({ user }: LoggedBottomNavigationMenuProps) => {
+> = async () => {
+  const myFeedFolderRes = await fetchMyFeedFoldersAPI();
+  const favoriteArticleFolderRes = await fetchFavoriteArticleFoldersAPI({});
+
   return (
     <div className="fixed bottom-0 left-0 z-50 flex h-12 w-full grid-cols-5 bg-gray-800  text-white">
       <div className="flex w-1/4  flex-col items-center justify-center border-r px-4 py-2">
-        <MobileSidebarNavigation user={user} />
+        <MobileSidebarNavigation
+          myFeedFolders={myFeedFolderRes.data.myFeedFolders}
+          favoriteArticleFolders={
+            favoriteArticleFolderRes.data.favoriteArticleFolders
+          }
+        />
       </div>
 
       <div className="w-1/4 border-r  px-4 py-2">
