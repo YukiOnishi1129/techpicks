@@ -1,8 +1,10 @@
+"use client";
+
 import { User } from "@supabase/supabase-js";
 
-import { fetchFavoriteArticleFoldersAPI } from "@/features/favoriteArticleFolders/actions/favoriteArticleFolders";
-
+import { FavoriteArticleFolderType } from "@/types/favoriteArticleFolder";
 import { LanguageStatus } from "@/types/language";
+import { TrendArticleType } from "@/types/trendArticle";
 
 import { TrendArticleList } from "./TrendArticleList";
 import { fetchTrendArticlesAPI } from "../actions/trendArticles";
@@ -11,35 +13,28 @@ type TrendArticleListContentProps = {
   languageStatus: LanguageStatus;
   keyword?: string;
   platformIdList: Array<string>;
+  trendArticles: Array<TrendArticleType>;
+  favoriteArticleFolders: Array<FavoriteArticleFolderType>;
   user: User | undefined;
 };
 
-export const TrendArticleTemplateContent = async ({
+export const TrendArticleTemplateContent = ({
   languageStatus,
   keyword,
   platformIdList,
   user,
+  trendArticles,
+  favoriteArticleFolders,
 }: TrendArticleListContentProps) => {
-  const tab = "trend";
-  const res = await fetchTrendArticlesAPI({
-    languageStatus: languageStatus.toString(),
-    keyword,
-    platformIdList,
-    tab,
-  });
-  const resFavoriteArticleFolders = await fetchFavoriteArticleFoldersAPI({});
-
   return (
     <TrendArticleList
       user={user}
-      initialTrendArticles={res.data.trendArticles}
-      favoriteArticleFolders={
-        resFavoriteArticleFolders.data.favoriteArticleFolders
-      }
+      initialTrendArticles={trendArticles}
+      favoriteArticleFolders={favoriteArticleFolders}
       languageStatus={languageStatus}
       keyword={keyword}
       platformIdList={platformIdList}
-      tab={tab}
+      tab={"trend"}
       fetchTrendArticles={fetchTrendArticlesAPI}
     />
   );

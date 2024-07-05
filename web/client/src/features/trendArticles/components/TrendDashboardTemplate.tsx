@@ -1,19 +1,15 @@
 import { FC } from "react";
 
-import { TrendArticleTemplateContent } from "@/features/trendArticles/components/TrendArticleTemplateContent";
 import { getUser } from "@/features/users/actions/user";
 
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { TrendArticleSwiper } from "./TrendArticleSwiper";
+import { fetchTrendArticlesAPI } from "../actions/trendArticles";
+import { fetchFavoriteArticleFoldersAPI } from "@/features/favoriteArticleFolders/actions/favoriteArticleFolders";
 
 type TrendDashboardTemplateProps = {
   keyword?: string;
   platformIdList: Array<string>;
   tab: string;
-};
-
-const TAB_LIST = {
-  ENGLISH: "english",
-  JAPANESE: "japanese",
 };
 
 export const TrendDashboardTemplate: FC<TrendDashboardTemplateProps> = async ({
@@ -22,6 +18,22 @@ export const TrendDashboardTemplate: FC<TrendDashboardTemplateProps> = async ({
   tab,
 }) => {
   const user = await getUser();
+
+  const enTrendArticleRes = await fetchTrendArticlesAPI({
+    languageStatus: "2",
+    keyword,
+    platformIdList,
+    tab: "trend",
+  });
+  const jpTrendArticleRes = await fetchTrendArticlesAPI({
+    languageStatus: "1",
+    keyword,
+    platformIdList,
+    tab: "trend",
+  });
+
+  const resFavoriteArticleFolders = await fetchFavoriteArticleFoldersAPI({});
+
   return (
     <div className="">
       <div className="fixed z-10 hidden w-full items-end justify-end bg-card px-4 md:flex md:justify-between">
@@ -31,41 +43,16 @@ export const TrendDashboardTemplate: FC<TrendDashboardTemplateProps> = async ({
       <div className="hidden h-16 md:block" />
       {/* TODO: select box */}
 
-      <Tabs defaultValue={convertTab(tab)}>
-        <TabsList className="fixed z-10 mx-auto mt-4 w-[90%] md:mt-0 md:w-[70%] ">
-          <TabsTrigger className="w-1/2" value={TAB_LIST.ENGLISH}>
-            Eng
-          </TabsTrigger>
-          <TabsTrigger className="w-1/2" value={TAB_LIST.JAPANESE}>
-            Jap
-          </TabsTrigger>
-        </TabsList>
-        <div className="mb-2 h-12" />
-
-        <TabsContent value={TAB_LIST.ENGLISH} className="mt-2">
-          <TrendArticleTemplateContent
-            languageStatus={2}
-            keyword={keyword}
-            platformIdList={platformIdList}
-            user={user}
-          />
-        </TabsContent>
-        <TabsContent value={TAB_LIST.JAPANESE}>
-          <TrendArticleTemplateContent
-            languageStatus={1}
-            keyword={keyword}
-            platformIdList={platformIdList}
-            user={user}
-          />
-        </TabsContent>
-      </Tabs>
+      <TrendArticleSwiper
+        keyword={keyword}
+        platformIdList={platformIdList}
+        enTrendArticles={enTrendArticleRes.data.trendArticles}
+        jpTrendArticles={jpTrendArticleRes.data.trendArticles}
+        favoriteArticleFolders={
+          resFavoriteArticleFolders.data.favoriteArticleFolders
+        }
+        user={user}
+      />
     </div>
   );
-};
-
-const convertTab = (tab: string) => {
-  if (tab !== TAB_LIST.ENGLISH && tab !== TAB_LIST.JAPANESE) {
-    return "trend";
-  }
-  return tab;
 };
