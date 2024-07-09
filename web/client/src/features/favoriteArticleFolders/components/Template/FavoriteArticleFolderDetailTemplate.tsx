@@ -7,6 +7,7 @@ import {
   CreateFavoriteArticleDialogFloatButton,
 } from "@/features/favoriteArticles/components/Dialog";
 import { FavoriteArticleList } from "@/features/favoriteArticles/components/FavoriteArticleList";
+import { FavoriteArticleKeyWordSearchDialog } from "@/features/search/components/favoriteArticleFolder/Dialog";
 import { FavoriteArticleFolderArticleKeywordSearchInput } from "@/features/search/components/favoriteArticleFolder/FavoriteArticleFolderArticleKeywordSearchInput";
 
 import { BreadCrumbType, PageBreadcrumb } from "@/components/ui/breadcrumb";
@@ -90,10 +91,19 @@ export const FavoriteArticleFolderDetailTemplate: FC<
       />
 
       <div className="fixed bottom-20 right-4 z-50 md:hidden">
-        <CreateFavoriteArticleDialogFloatButton
-          user={user}
-          favoriteArticleFolderId={id}
-        />
+        <div>
+          <FavoriteArticleKeyWordSearchDialog
+            keyword={keyword}
+            favoriteArticleFolderId={id}
+          />
+        </div>
+
+        <div className="mt-4">
+          <CreateFavoriteArticleDialogFloatButton
+            user={user}
+            favoriteArticleFolderId={id}
+          />
+        </div>
       </div>
     </div>
   );
