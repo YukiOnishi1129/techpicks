@@ -22,9 +22,9 @@ import { useStatusToast } from "@/hooks/useStatusToast";
 import { BookmarkType } from "@/types/bookmark";
 import { FavoriteArticleFolderType } from "@/types/favoriteArticleFolder";
 
-import { BookmarkCard } from "./BookmarkCard";
-import { BookmarkDetailSheet } from "./BookmarkDetailSheet";
-import { DeleteBookmarkAlertDialog } from "./Dialog";
+import { BookmarkCardItem } from "./BookmarkCardItem";
+import { DeleteBookmarkAlertDialog } from "../Dialog";
+import { BookmarkDetailSheet } from "../Sheet/BookmarkDetailSheet";
 
 type BookmarkCardWrapperProps = {
   bookmark: BookmarkType;
@@ -368,7 +368,7 @@ export const BookmarkCardWrapper: FC<BookmarkCardWrapperProps> = ({
           handleRemoveFavoriteArticle={handleRemoveFavoriteArticle}
           handleCreateFavoriteArticleFolder={handleCreateFavoriteArticleFolder}
         >
-          <BookmarkCard bookmark={bookmark} />
+          <BookmarkCardItem bookmark={bookmark} />
         </BookmarkDetailSheet>
       </div>
     </div>

@@ -10,8 +10,8 @@ import { BookmarkType } from "@/types/bookmark";
 import { FavoriteArticleFolderType } from "@/types/favoriteArticleFolder";
 import { LanguageStatus } from "@/types/language";
 
-import { BookmarkCardWrapper } from "./BookmarkCardWrapper";
-import { FetchBookmarkListAPIResponse } from "../actions/bookmark";
+import { FetchBookmarkListAPIResponse } from "../../actions/bookmark";
+import { BookmarkCardWrapper } from "../Wrapper";
 
 type Props = {
   user: User | undefined;

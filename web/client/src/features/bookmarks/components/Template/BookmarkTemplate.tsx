@@ -8,11 +8,11 @@ import { BookmarkSearchKeywordDialogFloatButton } from "@/features/search/compon
 
 import { LanguageStatus } from "@/types/language";
 
-import { BookmarkList } from "../BookmarkList";
 import {
   CreateBookmarkDialog,
   CreateBookmarkDialogFloatButton,
 } from "../Dialog";
+import { BookmarkList } from "../List";
 
 type BookmarkTemplateProps = {
   user: User;

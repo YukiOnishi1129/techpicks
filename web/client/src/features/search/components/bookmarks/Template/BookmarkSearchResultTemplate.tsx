@@ -2,7 +2,7 @@ import { User } from "@supabase/supabase-js";
 import { FC } from "react";
 
 import { fetchBookmarkListAPI } from "@/features/bookmarks/actions/bookmark";
-import { BookmarkList } from "@/features/bookmarks/components/BookmarkList";
+import { BookmarkList } from "@/features/bookmarks/components/List/BookmarkList";
 import { fetchFavoriteArticleFoldersAPI } from "@/features/favoriteArticleFolders/actions/favoriteArticleFolders";
 import { fetchPlatformAPI } from "@/features/platforms/actions/platform";
 

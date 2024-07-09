@@ -7,13 +7,11 @@ import { showDiffDateToCurrentDate } from "@/lib/date";
 
 import { BookmarkType } from "@/types/bookmark";
 
-type BookmarkCardProps = {
+type BookmarkCardItemProps = {
   bookmark: BookmarkType;
 };
 
-export const BookmarkCard: FC<BookmarkCardProps> = ({
-  bookmark,
-}: BookmarkCardProps) => {
+export const BookmarkCardItem: FC<BookmarkCardItemProps> = ({ bookmark }) => {
   const imageUrl = useCheckImageExist(bookmark.thumbnailUrl);
 
   return (

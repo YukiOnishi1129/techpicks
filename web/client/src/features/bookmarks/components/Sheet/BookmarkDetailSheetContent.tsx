@@ -2,21 +2,14 @@
 import { User } from "@supabase/supabase-js";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { FC, useState } from "react";
+import { FC } from "react";
 import { FcBookmark } from "react-icons/fc";
 import { TwitterShareButton, XIcon } from "react-share";
 
 import { FollowFavoriteArticleDropdownMenu } from "@/features/articles/components/DropdownMenu";
 
 import { Button } from "@/components/ui/button";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-  SheetClose,
-} from "@/components/ui/sheet";
+import { SheetHeader, SheetTitle, SheetClose } from "@/components/ui/sheet";
 
 import { useCheckImageExist } from "@/hooks/useImage";
 import { useParseHtml } from "@/hooks/useParseHtml";
@@ -26,76 +19,7 @@ import { showDiffDateToCurrentDate } from "@/lib/date";
 import { BookmarkType } from "@/types/bookmark";
 import { FavoriteArticleFolderType } from "@/types/favoriteArticleFolder";
 
-import { useBookmark } from "../hooks/useBookmark";
-
-type BookmarkDetailSheetProps = {
-  bookmark: BookmarkType;
-  user: User | undefined;
-  isFollowing: boolean;
-  articleId: string;
-  favoriteArticleFolders: Array<FavoriteArticleFolderType>;
-  handleCreateFavoriteArticle: (
-    favoriteArticleFolderId: string,
-    createdFavoriteArticleFolder?: FavoriteArticleFolderType
-  ) => Promise<string | undefined>;
-  handleRemoveFavoriteArticle: (
-    favoriteArticleId: string,
-    favoriteArticleFolderId: string
-  ) => Promise<string | undefined>;
-  handleCreateFavoriteArticleFolder: (
-    favoriteArticleFolderId: string
-  ) => Promise<void>;
-  children: React.ReactNode;
-};
-
-export const BookmarkDetailSheet: FC<BookmarkDetailSheetProps> = ({
-  bookmark,
-  user,
-  isFollowing,
-  articleId,
-  favoriteArticleFolders,
-  handleCreateFavoriteArticle,
-  handleRemoveFavoriteArticle,
-  handleCreateFavoriteArticleFolder,
-  children,
-}: BookmarkDetailSheetProps) => {
-  const [open, setOpen] = useState(false);
-
-  return (
-    <Sheet>
-      <SheetTrigger className="w-full">
-        <div
-          role="button"
-          tabIndex={1}
-          onClick={() => setOpen(true)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" || e.key === " ") {
-              setOpen(true);
-            }
-          }}
-        >
-          {children}
-        </div>
-      </SheetTrigger>
-      <SheetContent className="w-[360px] sm:w-[700px] sm:max-w-[700px]">
-        {open && (
-          <BookmarkDetailSheetContent
-            user={user}
-            bookmark={bookmark}
-            isFollowing={isFollowing}
-            articleId={articleId}
-            favoriteArticleFolders={favoriteArticleFolders}
-            handleCreateFavoriteArticle={handleCreateFavoriteArticle}
-            handleRemoveFavoriteArticle={handleRemoveFavoriteArticle}
-            handleCreateFavoriteArticleFolder={
-              handleCreateFavoriteArticleFolder
-            }
-          />
-        )}
-      </SheetContent>
-    </Sheet>
-  );
-};
+import { useBookmark } from "../../hooks/useBookmark";
 
 type BookmarkDetailSheetContentProps = {
   bookmark: BookmarkType;
@@ -116,7 +40,9 @@ type BookmarkDetailSheetContentProps = {
   ) => Promise<void>;
 };
 
-const BookmarkDetailSheetContent: FC<BookmarkDetailSheetContentProps> = ({
+export const BookmarkDetailSheetContent: FC<
+  BookmarkDetailSheetContentProps
+> = ({
   bookmark,
   user,
   isFollowing,
