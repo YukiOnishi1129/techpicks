@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
-import { HomeTemplate } from "@/features/home/components/HomeTemplate";
+import { ArticleTemplate } from "@/features/articles/components/ArticleTemplate";
 import { getUser } from "@/features/users/actions/user";
 
 import { ScreenLoader } from "@/components/layout/ScreenLoader";
@@ -21,7 +21,7 @@ export default async function CompanyPage({ searchParams }: PageProps) {
   const languageStatus =
     typeof searchParams["languageStatus"] === "string"
       ? (parseInt(searchParams["languageStatus"]) as LanguageStatus)
-      : 1;
+      : 2;
 
   const keyword =
     typeof searchParams["keyword"] === "string"
@@ -45,11 +45,11 @@ export default async function CompanyPage({ searchParams }: PageProps) {
   return (
     <>
       <Suspense fallback={<ScreenLoader />}>
-        <HomeTemplate
+        <ArticleTemplate
           languageStatus={languageStatus}
           keyword={keyword}
           platformIdList={platformIdList}
-          tab={tab}
+          tab={"company"}
         />
       </Suspense>
     </>

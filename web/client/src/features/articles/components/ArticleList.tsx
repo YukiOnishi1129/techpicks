@@ -14,7 +14,7 @@ import { ArticleCardWrapper } from "./ArticleCardWrapper";
 import { FetchArticlesAPIResponse } from "../actions/article";
 
 type Props = {
-  user: User | undefined;
+  user?: User;
   initialArticles: Array<ArticleType>;
   favoriteArticleFolders: Array<FavoriteArticleFolderType>;
   languageStatus: LanguageStatus;

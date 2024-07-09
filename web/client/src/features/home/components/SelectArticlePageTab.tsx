@@ -23,18 +23,30 @@ export const SelectArticlePageTab: FC<SelectArticlePageTabProps> = ({
   const router = useRouter();
   const pathname = usePathname();
 
+  console.log("🔥");
+  console.log(pathname);
+
   const defaultTabValue = useMemo(() => {
     switch (pathname) {
-      case NAVIGATION_LISTS.DASHBOARD_TREND || NAVIGATION_LISTS.HOME:
+      case NAVIGATION_LISTS.DASHBOARD_TREND:
         return "0";
-      case NAVIGATION_LISTS.DASHBOARD_SITE || NAVIGATION_LISTS.SITE:
+      case NAVIGATION_LISTS.HOME:
+        return "0";
+      case NAVIGATION_LISTS.DASHBOARD_SITE:
         return "1";
-      case NAVIGATION_LISTS.DASHBOARD_COMPANY || NAVIGATION_LISTS.COMPANY:
+      case NAVIGATION_LISTS.SITE:
+        return "1";
+      case NAVIGATION_LISTS.DASHBOARD_COMPANY:
         return "2";
-      case NAVIGATION_LISTS.DASHBOARD_SUMMARY || NAVIGATION_LISTS.SUMMARY:
+      case NAVIGATION_LISTS.COMPANY:
+        return "2";
+      case NAVIGATION_LISTS.DASHBOARD_SUMMARY:
+        return "3";
+      case NAVIGATION_LISTS.SUMMARY:
         return "3";
     }
   }, [pathname]);
+  console.log(defaultTabValue);
 
   const onMovePage = useCallback(
     (value: string) => {

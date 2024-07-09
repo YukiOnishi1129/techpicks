@@ -23,13 +23,21 @@ export const MobileHeader: FC<MobileHeaderProps> = ({
 
   const pageName = useMemo(() => {
     switch (pathname) {
-      case NAVIGATION_LISTS.DASHBOARD_TREND || NAVIGATION_LISTS.HOME:
+      case NAVIGATION_LISTS.DASHBOARD_TREND:
         return "Trend";
-      case NAVIGATION_LISTS.DASHBOARD_SITE || NAVIGATION_LISTS.SITE:
+      case NAVIGATION_LISTS.HOME:
+        return "Trend";
+      case NAVIGATION_LISTS.DASHBOARD_SITE:
         return "Site";
-      case NAVIGATION_LISTS.DASHBOARD_COMPANY || NAVIGATION_LISTS.COMPANY:
+      case NAVIGATION_LISTS.SITE:
+        return "Site";
+      case NAVIGATION_LISTS.DASHBOARD_COMPANY:
         return "Company";
-      case NAVIGATION_LISTS.DASHBOARD_SUMMARY || NAVIGATION_LISTS.SUMMARY:
+      case NAVIGATION_LISTS.COMPANY:
+        return "Company";
+      case NAVIGATION_LISTS.DASHBOARD_SUMMARY:
+        return "Summary";
+      case NAVIGATION_LISTS.SUMMARY:
         return "Summary";
       case NAVIGATION_LISTS.BOOKMARK:
         return "Bookmark";
