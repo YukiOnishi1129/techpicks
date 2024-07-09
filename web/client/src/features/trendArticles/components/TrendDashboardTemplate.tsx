@@ -3,6 +3,7 @@ import { FC } from "react";
 
 import { fetchFavoriteArticleFoldersAPI } from "@/features/favoriteArticleFolders/actions/favoriteArticleFolders";
 import { SelectArticlePageTab } from "@/features/home/components/SelectArticlePageTab";
+import { ArticleKeyWordSearchDialog } from "@/features/search/components/articles/Dialog/ArticleKeyWordSearchDialog";
 import { getUser } from "@/features/users/actions/user";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -48,7 +49,7 @@ export const TrendDashboardTemplate: FC<TrendDashboardTemplateProps> = async ({
   const resFavoriteArticleFolders = await fetchFavoriteArticleFoldersAPI({});
 
   return (
-    <div className="">
+    <div className="relative">
       <div className="fixed z-10  w-[90%] items-end justify-end bg-card md:flex md:w-[70%] md:justify-between md:px-4">
         <h1 className="my-4 hidden text-2xl font-bold md:block">Trend</h1>
         <div className="h-2 w-full md:hidden" />
@@ -112,6 +113,10 @@ export const TrendDashboardTemplate: FC<TrendDashboardTemplateProps> = async ({
           />
         </TabsContent>
       </Tabs>
+
+      <div className="fixed bottom-20 right-4 z-50 md:hidden">
+        <ArticleKeyWordSearchDialog />
+      </div>
     </div>
   );
 };
