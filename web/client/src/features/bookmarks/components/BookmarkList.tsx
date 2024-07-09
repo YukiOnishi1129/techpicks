@@ -105,7 +105,7 @@ export const BookmarkList: FC<Props> = ({
   }, [loadMore, offset, hashMore]);
 
   return (
-    <div className="m-auto h-[590px]  overflow-y-scroll md:h-[540px]">
+    <div className="m-auto">
       {flatBookmarks.length === 0 ? (
         <NotFoundList message="No bookmarks found" />
       ) : (
