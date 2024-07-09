@@ -3,7 +3,7 @@ import { FC } from "react";
 
 import { fetchFavoriteArticleFoldersAPI } from "@/features/favoriteArticleFolders/actions/favoriteArticleFolders";
 import { SelectArticlePageTab } from "@/features/home/components/SelectArticlePageTab";
-import { getUser } from "@/features/users/actions/user";
+import { ArticleKeyWordSearchDialog } from "@/features/search/components/articles/Dialog";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -108,6 +108,10 @@ export const TrendTemplate: FC<TrendTemplateProps> = async ({
           />
         </TabsContent>
       </Tabs>
+
+      <div className="fixed bottom-20 right-4 z-50 md:hidden">
+        <ArticleKeyWordSearchDialog />
+      </div>
     </div>
   );
 };

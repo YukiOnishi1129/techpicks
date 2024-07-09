@@ -45,8 +45,8 @@ export const ArticleKeyWordSearchDialog: FC<
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger className="cursor-pointer rounded-full bg-blue-700 p-4">
-        <CiSearch size="48" />
+      <DialogTrigger className="cursor-pointer rounded-full border-2 border-white bg-card p-4">
+        <CiSearch size="36" />
       </DialogTrigger>
       {open && <ArticleKeyWordSearchDialogContent handleClose={handleClose} />}
     </Dialog>
@@ -74,10 +74,9 @@ const ArticleKeyWordSearchDialogContent: FC<
   }, [form]);
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    let keywordPath = "";
-    if (!!values.keyword && values.keyword.trim() !== "") {
-      keywordPath = `keyword=${values.keyword}`;
-    }
+    if (values.keyword || (!!values.keyword && values.keyword.trim() === ""))
+      return;
+    const keywordPath = `keyword=${values.keyword}`;
     await serverRevalidatePage(pathname);
     router.replace(`/article/search/result?${keywordPath}`);
     resetDialog();
@@ -116,7 +115,9 @@ const ArticleKeyWordSearchDialogContent: FC<
               <DialogClose>
                 <Button onClick={resetDialog}>{"CLOSE"}</Button>
               </DialogClose>
-              <Button type="submit">{"SEARCH"}</Button>
+              <Button disabled={!form.formState.isValid} type="submit">
+                {"SEARCH"}
+              </Button>
             </div>
           </form>
         </Form>
