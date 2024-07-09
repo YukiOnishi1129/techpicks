@@ -57,6 +57,14 @@ type CreateBookmarkDialogProps = {
   user: User | undefined;
 };
 
+const FormSchema = z.object({
+  url: z
+    .string({
+      required_error: "Please enter the URL",
+    })
+    .url({ message: "Invalid URL" }),
+});
+
 export const CreateBookmarkDialog: FC<CreateBookmarkDialogProps> = ({
   user,
 }: CreateBookmarkDialogProps) => {
@@ -67,14 +75,9 @@ export const CreateBookmarkDialog: FC<CreateBookmarkDialogProps> = ({
   const [isPending, startTransition] = useTransition();
   const [isOgpPending, startOgpPending] = useTransition();
   const { successToast, failToast } = useStatusToast();
-  const FormSchema = z.object({
-    url: z
-      .string({
-        required_error: "Please enter the URL",
-      })
-      .url({ message: "Invalid URL" }),
-  });
+
   const form = useForm<z.infer<typeof FormSchema>>({
+    mode: "onChange",
     resolver: zodResolver(FormSchema),
     defaultValues: {
       url: "",
@@ -284,7 +287,10 @@ export const CreateBookmarkDialog: FC<CreateBookmarkDialogProps> = ({
                 name="url"
                 render={({ field }) => (
                   <FormItem className="w-full">
-                    <FormLabel className="font-bold">URL</FormLabel>
+                    <FormLabel className="font-bold">
+                      URL
+                      <span className="text-red-700"> *</span>
+                    </FormLabel>
                     <FormControl>
                       <Input
                         className="block w-full"
@@ -332,7 +338,13 @@ export const CreateBookmarkDialog: FC<CreateBookmarkDialogProps> = ({
           </div>
         )}
 
-        <div className="mt-4 flex w-full justify-start space-x-4">
+        <div className="mt-4 flex w-full justify-between space-x-4">
+          <DialogClose>
+            <Button variant={"outline"} onClick={resetDialog}>
+              {"CLOSE"}
+            </Button>
+          </DialogClose>
+
           {isOgpPending ? (
             <Button disabled>
               <ReloadIcon className="mr-2 size-4 animate-spin" />
@@ -340,12 +352,9 @@ export const CreateBookmarkDialog: FC<CreateBookmarkDialogProps> = ({
             </Button>
           ) : (
             <Button disabled={!ogpData} onClick={handleAddSubmit}>
-              {"ADD BOOKMARK"}
+              {"ADD"}
             </Button>
           )}
-          <DialogClose>
-            <Button onClick={resetDialog}>{"CLOSE"}</Button>
-          </DialogClose>
         </div>
       </DialogContent>
     </Dialog>
