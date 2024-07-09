@@ -6,6 +6,8 @@ import { getUser } from "@/features/users/actions/user";
 
 import { ScreenLoader } from "@/components/layout/ScreenLoader";
 
+import { LanguageStatus } from "@/types/language";
+
 type PageProps = {
   params: { slug: string };
   searchParams: { [key: string]: string | string[] | undefined };
@@ -16,6 +18,11 @@ export default async function TrendDashboardPage({ searchParams }: PageProps) {
   if (!user) {
     redirect("/");
   }
+
+  const languageStatus =
+    typeof searchParams["languageStatus"] === "string"
+      ? (parseInt(searchParams["languageStatus"]) as LanguageStatus)
+      : 2;
 
   const keyword =
     typeof searchParams["keyword"] === "string"
@@ -40,6 +47,7 @@ export default async function TrendDashboardPage({ searchParams }: PageProps) {
     <>
       <Suspense fallback={<ScreenLoader />}>
         <TrendDashboardTemplate
+          languageStatus={languageStatus}
           keyword={keyword}
           platformIdList={platformIdList}
           tab={tab}

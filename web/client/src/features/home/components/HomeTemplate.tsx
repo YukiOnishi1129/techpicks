@@ -4,7 +4,6 @@ import { ArticleTemplateContent } from "@/features/articles/components/ArticleTe
 import { ArticleLanguageSwitch } from "@/features/articles/components/Switch";
 import { fetchPlatformAPI } from "@/features/platforms/actions/platform";
 import { ArticleSearchDialog } from "@/features/search/components/articles/Dialog";
-import { TrendArticleTemplateContent } from "@/features/trendArticles/components/TrendArticleTemplateContent";
 import { getUser } from "@/features/users/actions/user";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -69,12 +68,12 @@ export const HomeTemplate: FC<HomeTemplateProps> = async ({
           </TabsTrigger>
         </TabsList>
         <TabsContent value={TAB_LIST.TREND}>
-          <TrendArticleTemplateContent
+          {/* <TrendArticleTemplateContent
             languageStatus={languageStatus}
             keyword={keyword}
             platformIdList={platformIdList}
             user={user}
-          />
+          /> */}
         </TabsContent>
         <TabsContent value={TAB_LIST.SITE}>
           <ArticleTemplateContent

@@ -1,6 +1,7 @@
 "use client";
 
 import { User } from "@supabase/supabase-js";
+import { useRouter } from "next/navigation";
 import React, { FC } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -12,11 +13,14 @@ import {
 } from "@/components/ui/carousel";
 
 import { FavoriteArticleFolderType } from "@/types/favoriteArticleFolder";
+import { LanguageStatus } from "@/types/language";
 import { TrendArticleType } from "@/types/trendArticle";
 
-import { TrendArticleTemplateContent } from "./TrendArticleTemplateContent";
+import { TrendArticleList } from "./TrendArticleList";
+import { fetchTrendArticlesAPI } from "../actions/trendArticles";
 
 type TrendArticleSwiperProps = {
+  languageStatus: LanguageStatus;
   keyword?: string;
   platformIdList: Array<string>;
   enTrendArticles: Array<TrendArticleType>;
@@ -26,6 +30,7 @@ type TrendArticleSwiperProps = {
 };
 
 export const TrendArticleSwiper: FC<TrendArticleSwiperProps> = ({
+  languageStatus,
   keyword,
   platformIdList,
   enTrendArticles,
@@ -36,28 +41,32 @@ export const TrendArticleSwiper: FC<TrendArticleSwiperProps> = ({
   return (
     <Carousel>
       <div className="fixed z-10 mt-2 w-[90%] md:mt-0 md:w-[70%]">
-        <SlideTabs />
+        <SlideTabs languageStatus={languageStatus} />
       </div>
       <div className="h-12" />
       <CarouselContent>
         <CarouselItem>
-          <TrendArticleTemplateContent
+          <TrendArticleList
             languageStatus={2}
             keyword={keyword}
             platformIdList={platformIdList}
-            trendArticles={enTrendArticles}
+            initialTrendArticles={enTrendArticles}
             favoriteArticleFolders={favoriteArticleFolders}
             user={user}
+            tab="trend"
+            fetchTrendArticles={fetchTrendArticlesAPI}
           />
         </CarouselItem>
         <CarouselItem>
-          <TrendArticleTemplateContent
+          <TrendArticleList
             languageStatus={1}
             keyword={keyword}
             platformIdList={platformIdList}
-            trendArticles={jpTrendArticles}
+            initialTrendArticles={jpTrendArticles}
             favoriteArticleFolders={favoriteArticleFolders}
             user={user}
+            tab="trend"
+            fetchTrendArticles={fetchTrendArticlesAPI}
           />
         </CarouselItem>
       </CarouselContent>
@@ -65,10 +74,21 @@ export const TrendArticleSwiper: FC<TrendArticleSwiperProps> = ({
   );
 };
 
-const SlideTabs: FC = () => {
-  const { api } = useCarousel();
+type SlideTabsProps = {
+  languageStatus: LanguageStatus;
+};
 
-  const currentSlide = api?.selectedScrollSnap() || 0;
+const SlideTabs: FC<SlideTabsProps> = ({ languageStatus }) => {
+  const { api } = useCarousel();
+  const router = useRouter();
+
+  const currentSlide = languageStatus === 1 ? 1 : 0;
+
+  //   useEffect(() => {
+  //     if (api && currentSlide === 1) {
+  //       api.scrollTo(1);
+  //     }
+  //   }, [currentSlide, api]);
 
   return (
     <div className="bg-card">
@@ -76,7 +96,11 @@ const SlideTabs: FC = () => {
         disabled={currentSlide === 0}
         variant={currentSlide === 0 ? "secondary" : "outline"}
         className="w-1/2"
-        onClick={() => api && api.scrollTo(0)}
+        onClick={async () => {
+          //   await serverRevalidatePage("/dashboard/trend?languageStatus=2");
+          //   router.replace(`/dashboard/trend?languageStatus=2`);
+          api && api.scrollTo(0);
+        }}
       >
         En
       </Button>
@@ -84,7 +108,11 @@ const SlideTabs: FC = () => {
         disabled={currentSlide === 1}
         variant={currentSlide === 1 ? "secondary" : "outline"}
         className="w-1/2"
-        onClick={() => api && api.scrollTo(1)}
+        onClick={async () => {
+          //   await serverRevalidatePage("/dashboard/trend?languageStatus=2");
+          //   router.replace(`/dashboard/trend?languageStatus=1`);
+          api && api.scrollTo(1);
+        }}
       >
         Jp
       </Button>
