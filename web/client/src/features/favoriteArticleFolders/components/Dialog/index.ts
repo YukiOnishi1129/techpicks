@@ -1,2 +1,2 @@
-export * from "./CreateFavoriteArticleFolderDialog";
+export * from "./Create/CreateFavoriteArticleFolderDialog";
 export * from "./UpdateFavoriteArticleFolderDialog";

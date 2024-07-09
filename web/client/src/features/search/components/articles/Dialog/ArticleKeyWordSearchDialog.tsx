@@ -46,7 +46,7 @@ export const ArticleKeyWordSearchDialog: FC<
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger className="cursor-pointer rounded-full border-2 border-white bg-primary p-4">
-        <FaSearch size="36" color="black" />
+        <FaSearch size="24" color="black" />
       </DialogTrigger>
       {open && <ArticleKeyWordSearchDialogContent handleClose={handleClose} />}
     </Dialog>

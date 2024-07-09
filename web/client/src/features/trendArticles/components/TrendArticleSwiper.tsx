@@ -16,7 +16,7 @@ import { FavoriteArticleFolderType } from "@/types/favoriteArticleFolder";
 import { LanguageStatus } from "@/types/language";
 import { TrendArticleType } from "@/types/trendArticle";
 
-import { TrendArticleList } from "./TrendArticleList";
+import { TrendArticleList } from "./List/TrendArticleList";
 import { fetchTrendArticlesAPI } from "../actions/trendArticles";
 
 type TrendArticleSwiperProps = {

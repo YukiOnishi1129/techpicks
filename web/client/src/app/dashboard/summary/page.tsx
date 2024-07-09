@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
-import { ArticleDashboardTemplate } from "@/features/articles/components/ArticleDashboardTemplate";
+import { ArticleDashboardTemplate } from "@/features/articles/components/Template/ArticleDashboardTemplate";
 import { getUser } from "@/features/users/actions/user";
 
 import { ScreenLoader } from "@/components/layout/ScreenLoader";
