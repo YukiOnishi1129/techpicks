@@ -1,11 +1,11 @@
 import Image from "next/image";
 import { FC } from "react";
 
-import { fetchArticlesAPI } from "@/features/articles/actions/article";
-import { ArticleList } from "@/features/articles/components/ArticleList";
+import { SelectArticlePageTab } from "@/features/articles/components/SelectArticlePageTab";
 import { fetchFavoriteArticleFoldersAPI } from "@/features/favoriteArticleFolders/actions/favoriteArticleFolders";
-import { SelectArticlePageTab } from "@/features/home/components/SelectArticlePageTab";
 import { ArticleKeyWordSearchDialog } from "@/features/search/components/articles/Dialog";
+import { fetchTrendArticlesAPI } from "@/features/trendArticles/actions/trendArticles";
+import { getUser } from "@/features/users/actions/user";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -13,11 +13,12 @@ import { LanguageStatus } from "@/types/language";
 
 import { ENGLISH_IMAGE, JAPANESE_IMAGE } from "@/constant/image";
 
-type ArticleTemplateProps = {
+import { TrendArticleList } from "../TrendArticleList";
+
+type TrendDashboardTemplateProps = {
   languageStatus: LanguageStatus;
   keyword?: string;
   platformIdList: Array<string>;
-  tab: "site" | "company" | "summary";
 };
 
 const TAB_LIST = {
@@ -25,23 +26,24 @@ const TAB_LIST = {
   JAPANESE: "japanese",
 };
 
-export const ArticleTemplate: FC<ArticleTemplateProps> = async ({
+export const TrendDashboardTemplate: FC<TrendDashboardTemplateProps> = async ({
   languageStatus,
   keyword,
   platformIdList,
-  tab,
 }) => {
-  const enArticleRes = await fetchArticlesAPI({
+  const user = await getUser();
+
+  const enTrendArticleRes = await fetchTrendArticlesAPI({
     languageStatus: "2",
     keyword,
     platformIdList,
-    tab,
+    tab: "trend",
   });
-  const jpArticleRes = await fetchArticlesAPI({
+  const jpTrendArticleRes = await fetchTrendArticlesAPI({
     languageStatus: "1",
     keyword,
     platformIdList,
-    tab,
+    tab: "trend",
   });
 
   const resFavoriteArticleFolders = await fetchFavoriteArticleFoldersAPI({});
@@ -52,7 +54,7 @@ export const ArticleTemplate: FC<ArticleTemplateProps> = async ({
         <h1 className="my-4 hidden text-2xl font-bold md:block">Trend</h1>
         <div className="h-2 w-full md:hidden" />
         <div className="h-16 w-full md:hidden">
-          <SelectArticlePageTab />
+          <SelectArticlePageTab userId={user?.id} />
         </div>
       </div>
       <div className=" h-16 " />
@@ -83,8 +85,9 @@ export const ArticleTemplate: FC<ArticleTemplateProps> = async ({
 
         <div className="h-[40px]" />
         <TabsContent value={TAB_LIST.ENGLISH}>
-          <ArticleList
-            initialArticles={enArticleRes.data.articles}
+          <TrendArticleList
+            user={user}
+            initialTrendArticles={enTrendArticleRes.data.trendArticles}
             favoriteArticleFolders={
               resFavoriteArticleFolders.data.favoriteArticleFolders
             }
@@ -92,12 +95,13 @@ export const ArticleTemplate: FC<ArticleTemplateProps> = async ({
             keyword={keyword}
             platformIdList={platformIdList}
             tab={"trend"}
-            fetchArticles={fetchArticlesAPI}
+            fetchTrendArticles={fetchTrendArticlesAPI}
           />
         </TabsContent>
         <TabsContent value={TAB_LIST.JAPANESE}>
-          <ArticleList
-            initialArticles={jpArticleRes.data.articles}
+          <TrendArticleList
+            user={user}
+            initialTrendArticles={jpTrendArticleRes.data.trendArticles}
             favoriteArticleFolders={
               resFavoriteArticleFolders.data.favoriteArticleFolders
             }
@@ -105,7 +109,7 @@ export const ArticleTemplate: FC<ArticleTemplateProps> = async ({
             keyword={keyword}
             platformIdList={platformIdList}
             tab={"trend"}
-            fetchArticles={fetchArticlesAPI}
+            fetchTrendArticles={fetchTrendArticlesAPI}
           />
         </TabsContent>
       </Tabs>

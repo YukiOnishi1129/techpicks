@@ -1,12 +1,10 @@
 import Image from "next/image";
 import { FC } from "react";
 
-import { fetchArticlesAPI } from "@/features/articles/actions/article";
-import { ArticleList } from "@/features/articles/components/ArticleList";
+import { SelectArticlePageTab } from "@/features/articles/components/SelectArticlePageTab";
 import { fetchFavoriteArticleFoldersAPI } from "@/features/favoriteArticleFolders/actions/favoriteArticleFolders";
-import { SelectArticlePageTab } from "@/features/home/components/SelectArticlePageTab";
 import { ArticleKeyWordSearchDialog } from "@/features/search/components/articles/Dialog";
-import { getUser } from "@/features/users/actions/user";
+import { fetchTrendArticlesAPI } from "@/features/trendArticles/actions/trendArticles";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -14,11 +12,12 @@ import { LanguageStatus } from "@/types/language";
 
 import { ENGLISH_IMAGE, JAPANESE_IMAGE } from "@/constant/image";
 
-type ArticleDashboardTemplateProps = {
+import { TrendArticleList } from "../TrendArticleList";
+
+type TrendTemplateProps = {
   languageStatus: LanguageStatus;
   keyword?: string;
   platformIdList: Array<string>;
-  tab: "site" | "company" | "summary";
 };
 
 const TAB_LIST = {
@@ -26,33 +25,33 @@ const TAB_LIST = {
   JAPANESE: "japanese",
 };
 
-export const ArticleDashboardTemplate: FC<
-  ArticleDashboardTemplateProps
-> = async ({ languageStatus, keyword, platformIdList, tab }) => {
-  const user = await getUser();
-
-  const enArticleRes = await fetchArticlesAPI({
+export const TrendTemplate: FC<TrendTemplateProps> = async ({
+  languageStatus,
+  keyword,
+  platformIdList,
+}) => {
+  const enTrendArticleRes = await fetchTrendArticlesAPI({
     languageStatus: "2",
     keyword,
     platformIdList,
-    tab,
+    tab: "trend",
   });
-  const jpArticleRes = await fetchArticlesAPI({
+  const jpTrendArticleRes = await fetchTrendArticlesAPI({
     languageStatus: "1",
     keyword,
     platformIdList,
-    tab,
+    tab: "trend",
   });
 
   const resFavoriteArticleFolders = await fetchFavoriteArticleFoldersAPI({});
 
   return (
-    <div>
+    <div className="">
       <div className="fixed z-10  w-[90%] items-end justify-end bg-card md:flex md:w-[70%] md:justify-between md:px-4">
         <h1 className="my-4 hidden text-2xl font-bold md:block">Trend</h1>
         <div className="h-2 w-full md:hidden" />
         <div className="h-16 w-full md:hidden">
-          <SelectArticlePageTab userId={user?.id} />
+          <SelectArticlePageTab />
         </div>
       </div>
       <div className=" h-16 " />
@@ -83,9 +82,8 @@ export const ArticleDashboardTemplate: FC<
 
         <div className="h-[40px]" />
         <TabsContent value={TAB_LIST.ENGLISH}>
-          <ArticleList
-            user={user}
-            initialArticles={enArticleRes.data.articles}
+          <TrendArticleList
+            initialTrendArticles={enTrendArticleRes.data.trendArticles}
             favoriteArticleFolders={
               resFavoriteArticleFolders.data.favoriteArticleFolders
             }
@@ -93,13 +91,12 @@ export const ArticleDashboardTemplate: FC<
             keyword={keyword}
             platformIdList={platformIdList}
             tab={"trend"}
-            fetchArticles={fetchArticlesAPI}
+            fetchTrendArticles={fetchTrendArticlesAPI}
           />
         </TabsContent>
         <TabsContent value={TAB_LIST.JAPANESE}>
-          <ArticleList
-            user={user}
-            initialArticles={jpArticleRes.data.articles}
+          <TrendArticleList
+            initialTrendArticles={jpTrendArticleRes.data.trendArticles}
             favoriteArticleFolders={
               resFavoriteArticleFolders.data.favoriteArticleFolders
             }
@@ -107,7 +104,7 @@ export const ArticleDashboardTemplate: FC<
             keyword={keyword}
             platformIdList={platformIdList}
             tab={"trend"}
-            fetchArticles={fetchArticlesAPI}
+            fetchTrendArticles={fetchTrendArticlesAPI}
           />
         </TabsContent>
       </Tabs>

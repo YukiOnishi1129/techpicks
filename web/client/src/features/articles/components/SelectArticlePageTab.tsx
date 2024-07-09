@@ -23,9 +23,6 @@ export const SelectArticlePageTab: FC<SelectArticlePageTabProps> = ({
   const router = useRouter();
   const pathname = usePathname();
 
-  console.log("🔥");
-  console.log(pathname);
-
   const defaultTabValue = useMemo(() => {
     switch (pathname) {
       case NAVIGATION_LISTS.DASHBOARD_TREND:
@@ -46,7 +43,6 @@ export const SelectArticlePageTab: FC<SelectArticlePageTabProps> = ({
         return "3";
     }
   }, [pathname]);
-  console.log(defaultTabValue);
 
   const onMovePage = useCallback(
     (value: string) => {

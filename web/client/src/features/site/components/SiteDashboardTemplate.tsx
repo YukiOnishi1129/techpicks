@@ -3,8 +3,8 @@ import { FC } from "react";
 
 import { fetchArticlesAPI } from "@/features/articles/actions/article";
 import { ArticleList } from "@/features/articles/components/ArticleList";
+import { SelectArticlePageTab } from "@/features/articles/components/SelectArticlePageTab";
 import { fetchFavoriteArticleFoldersAPI } from "@/features/favoriteArticleFolders/actions/favoriteArticleFolders";
-import { SelectArticlePageTab } from "@/features/home/components/SelectArticlePageTab";
 import { ArticleKeyWordSearchDialog } from "@/features/search/components/articles/Dialog";
 import { getUser } from "@/features/users/actions/user";
 

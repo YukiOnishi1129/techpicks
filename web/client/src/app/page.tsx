@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
-import { TrendTemplate } from "@/features/trendArticles/components/TrendTemplate";
+import { TrendTemplate } from "@/features/trendArticles/components/Template/TrendTemplate";
 import { getUser } from "@/features/users/actions/user";
 
 import { ScreenLoader } from "@/components/layout/ScreenLoader";
