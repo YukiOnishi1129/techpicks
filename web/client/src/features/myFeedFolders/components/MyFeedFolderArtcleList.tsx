@@ -3,7 +3,7 @@ import { User } from "@supabase/supabase-js";
 import { useCallback, useRef, useState, useEffect } from "react";
 
 import { FetchArticlesAPIResponse } from "@/features/articles/actions/article";
-import { ArticleCardWrapper } from "@/features/articles/components/ArticleCardWrapper";
+import { ArticleCardWrapper } from "@/features/articles/components/Wrapper";
 
 import { NotFoundList } from "@/components/layout/NotFoundList";
 import { Loader } from "@/components/ui/loader";

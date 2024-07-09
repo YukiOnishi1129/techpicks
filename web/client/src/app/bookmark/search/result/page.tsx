@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 
-import { BookmarkSearchResultTemplate } from "@/features/search/components/bookmarks/BookmarkSearchResultTemplate";
+import { BookmarkSearchResultTemplate } from "@/features/search/components/bookmarks/Template";
 import { getUser } from "@/features/users/actions/user";
 
 import { LanguageStatus } from "@/types/language";

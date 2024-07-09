@@ -1,4 +1,4 @@
-import { ArticleDetailTemplate } from "@/features/articles/components/ArticleDetailTemplate";
+import { ArticleDetailTemplate } from "@/features/articles/components/Template";
 
 type ArticleDetailPageProps = {
   params: {
