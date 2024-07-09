@@ -111,7 +111,7 @@ const ArticleKeyWordSearchDialogContent: FC<
               />
             </div>
 
-            <div className="mt-4 flex w-full justify-center space-x-4">
+            <div className="mt-4 flex w-full justify-between space-x-4">
               <DialogClose>
                 <Button onClick={resetDialog}>{"CLOSE"}</Button>
               </DialogClose>
