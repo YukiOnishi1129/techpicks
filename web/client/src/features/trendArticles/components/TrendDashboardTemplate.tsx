@@ -1,6 +1,7 @@
 import { FC } from "react";
 
 import { fetchFavoriteArticleFoldersAPI } from "@/features/favoriteArticleFolders/actions/favoriteArticleFolders";
+import { SelectArticlePageTab } from "@/features/home/components/SelectArticlePageTab";
 import { getUser } from "@/features/users/actions/user";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -45,12 +46,14 @@ export const TrendDashboardTemplate: FC<TrendDashboardTemplateProps> = async ({
 
   return (
     <div className="">
-      <div className="fixed z-10  w-full items-end justify-end bg-card px-4 md:flex md:justify-between">
+      <div className="fixed z-10  w-[90%] items-end justify-end bg-card md:flex md:w-[70%] md:justify-between md:px-4">
         <h1 className="my-4 hidden text-2xl font-bold md:block">Trend</h1>
-        <div className="h-6 w-full md:hidden" />
+        <div className="h-2 w-full md:hidden" />
+        <div className="h-16 w-full md:hidden">
+          <SelectArticlePageTab userId={user?.id} />
+        </div>
       </div>
-      <div className="hidden h-16 md:block" />
-      <div className="h-6 md:hidden" />
+      <div className=" h-16 " />
 
       <Tabs defaultValue={convertTab(languageStatus)}>
         <TabsList className="fixed  z-10  mt-[-4px] w-[90%] pt-[4px] md:mt-[-10px] md:w-[70%] md:py-[10px]">
@@ -61,6 +64,7 @@ export const TrendDashboardTemplate: FC<TrendDashboardTemplateProps> = async ({
             Jp
           </TabsTrigger>
         </TabsList>
+
         <div className="h-[40px]" />
         <TabsContent value={TAB_LIST.ENGLISH}>
           <TrendArticleList

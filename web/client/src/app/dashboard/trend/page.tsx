@@ -50,7 +50,6 @@ export default async function TrendDashboardPage({ searchParams }: PageProps) {
           languageStatus={languageStatus}
           keyword={keyword}
           platformIdList={platformIdList}
-          tab={tab}
         />
       </Suspense>
     </>
