@@ -2,7 +2,7 @@
 import { User } from "@supabase/supabase-js";
 import { useCallback, useRef, useState, useEffect } from "react";
 
-import { ArticleCardWrapper } from "@/features/articles/components/ArticleCardWrapper";
+import { ArticleCardWrapper } from "@/features/articles/components/Wrapper";
 
 import { NotFoundList } from "@/components/layout/NotFoundList";
 import { Loader } from "@/components/ui/loader";
@@ -12,7 +12,7 @@ import { FavoriteArticleFolderType } from "@/types/favoriteArticleFolder";
 import { LanguageStatus } from "@/types/language";
 import { TrendArticleType } from "@/types/trendArticle";
 
-import { FetchTrendArticlesAPIResponse } from "../actions/trendArticles";
+import { FetchTrendArticlesAPIResponse } from "../../actions/trendArticles";
 
 type Props = {
   user?: User;

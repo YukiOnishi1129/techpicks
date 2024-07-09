@@ -25,7 +25,7 @@ import { showDiffDateToCurrentDate } from "@/lib/date";
 import { ArticleType } from "@/types/article";
 import { FavoriteArticleFolderType } from "@/types/favoriteArticleFolder";
 
-import { FollowFavoriteArticleDropdownMenu } from "./DropdownMenu";
+import { FollowFavoriteArticleDropdownMenu } from "../DropdownMenu";
 
 type ArticleDetailSheetProps = {
   article: ArticleType;
@@ -61,7 +61,7 @@ export const ArticleDetailSheet: FC<ArticleDetailSheetProps> = ({
   handleRemoveFavoriteArticle,
   handleCreateFavoriteArticleFolder,
   children,
-}: ArticleDetailSheetProps) => {
+}) => {
   const [open, setOpen] = useState(false);
 
   return (

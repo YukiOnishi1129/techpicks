@@ -3,6 +3,7 @@ import { User } from "@supabase/supabase-js";
 import { clsx } from "clsx";
 import { FC, useCallback, useMemo, useState } from "react";
 
+import { useArticleBookmark } from "@/features/articles/hooks/useArticleBookmark";
 import { logoutToLoginPage } from "@/features/auth/actions/auth";
 import { fetchFavoriteArticleFolderByIdAPI } from "@/features/favoriteArticleFolders/actions/favoriteArticleFolders";
 import {
@@ -21,12 +22,11 @@ import { useStatusToast } from "@/hooks/useStatusToast";
 import { ArticleTabType, ArticleType } from "@/types/article";
 import { FavoriteArticleFolderType } from "@/types/favoriteArticleFolder";
 
-import { ArticleCard } from "./ArticleCard";
+import { ArticleCardItem } from "./ArticleCardItem";
 import style from "./ArticleCardWrapper.module.css";
-import { ArticleDetailSheet } from "./ArticleDetailSheet";
-import { FollowFavoriteArticleDropdownMenu } from "./DropdownMenu";
-import { AddBookmarkTooltip, DeleteBookmarkTooltip } from "./Tooltip";
-import { useArticleBookmark } from "../hooks/useArticleBookmark";
+import { FollowFavoriteArticleDropdownMenu } from "..//DropdownMenu";
+import { ArticleDetailSheet } from "../Detail/ArticleDetailSheet";
+import { AddBookmarkTooltip, DeleteBookmarkTooltip } from "../Tooltip";
 
 type ArticleCardWrapperProps = {
   article: ArticleType;
@@ -410,7 +410,7 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
           handleRemoveFavoriteArticle={handleRemoveFavoriteArticle}
           handleCreateFavoriteArticleFolder={handleCreateFavoriteArticleFolder}
         >
-          <ArticleCard article={showArticle} user={user} tab={tab} />
+          <ArticleCardItem article={showArticle} user={user} tab={tab} />
         </ArticleDetailSheet>
       </div>
     </div>

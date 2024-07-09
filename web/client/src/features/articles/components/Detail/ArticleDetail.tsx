@@ -2,6 +2,7 @@
 
 import { User } from "@supabase/supabase-js";
 import Link from "next/link";
+import { FC } from "react";
 import { FcBookmark } from "react-icons/fc";
 import { MdOutlineBookmarkAdd } from "react-icons/md";
 import { TwitterShareButton, XIcon } from "react-share";
@@ -17,14 +18,14 @@ import { showDiffDateToCurrentDate } from "@/lib/date";
 
 import { ArticleType } from "@/types/article";
 
-import { useArticleBookmark } from "../hooks/useArticleBookmark";
+import { useArticleBookmark } from "../../hooks/useArticleBookmark";
 
 type ArticleDetailProps = {
   article: ArticleType;
   user: User | undefined;
 };
 
-export const ArticleDetail = ({ article, user }: ArticleDetailProps) => {
+export const ArticleDetail: FC<ArticleDetailProps> = ({ article, user }) => {
   const imageUrl = useCheckImageExist(article.thumbnailUrl);
   const { convertParseHtml } = useParseHtml();
 

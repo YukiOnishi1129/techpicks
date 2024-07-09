@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { FC } from "react";
 
-import { SelectArticlePageTab } from "@/features/articles/components/SelectArticlePageTab";
+import { SelectArticlePageTab } from "@/features/articles/components/Tab";
 import { fetchFavoriteArticleFoldersAPI } from "@/features/favoriteArticleFolders/actions/favoriteArticleFolders";
 import { ArticleKeyWordSearchDialog } from "@/features/search/components/articles/Dialog";
 import { fetchTrendArticlesAPI } from "@/features/trendArticles/actions/trendArticles";
@@ -12,7 +12,7 @@ import { LanguageStatus } from "@/types/language";
 
 import { ENGLISH_IMAGE, JAPANESE_IMAGE } from "@/constant/image";
 
-import { TrendArticleList } from "../TrendArticleList";
+import { TrendArticleList } from "../List";
 
 type TrendTemplateProps = {
   languageStatus: LanguageStatus;

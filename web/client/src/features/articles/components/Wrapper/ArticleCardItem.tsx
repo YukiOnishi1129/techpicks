@@ -11,15 +11,13 @@ import { showDiffDateToCurrentDate } from "@/lib/date";
 
 import { ArticleTabType, ArticleType } from "@/types/article";
 
-type ArticleCardProps = {
+type ArticleCardItemProps = {
   article: ArticleType;
   user: User | undefined;
   tab: ArticleTabType;
 };
 
-export const ArticleCard: FC<ArticleCardProps> = ({
-  article,
-}: ArticleCardProps) => {
+export const ArticleCardItem: FC<ArticleCardItemProps> = ({ article }) => {
   const imageUrl = useCheckImageExist(article.thumbnailUrl);
 
   return (

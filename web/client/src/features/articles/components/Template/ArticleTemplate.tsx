@@ -2,8 +2,8 @@ import Image from "next/image";
 import { FC } from "react";
 
 import { fetchArticlesAPI } from "@/features/articles/actions/article";
-import { ArticleList } from "@/features/articles/components/ArticleList";
-import { SelectArticlePageTab } from "@/features/articles/components/SelectArticlePageTab";
+import { ArticleList } from "@/features/articles/components/List";
+import { SelectArticlePageTab } from "@/features/articles/components/Tab";
 import { fetchFavoriteArticleFoldersAPI } from "@/features/favoriteArticleFolders/actions/favoriteArticleFolders";
 import { ArticleKeyWordSearchDialog } from "@/features/search/components/articles/Dialog";
 

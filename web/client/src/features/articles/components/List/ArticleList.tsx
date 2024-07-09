@@ -3,6 +3,8 @@
 import { User } from "@supabase/supabase-js";
 import { useCallback, useRef, useState, useEffect } from "react";
 
+import { FetchArticlesAPIResponse } from "@/features/articles/actions/article";
+
 import { NotFoundList } from "@/components/layout/NotFoundList";
 import { Loader } from "@/components/ui/loader";
 
@@ -10,8 +12,7 @@ import { ArticleTabType, ArticleType } from "@/types/article";
 import { FavoriteArticleFolderType } from "@/types/favoriteArticleFolder";
 import { LanguageStatus } from "@/types/language";
 
-import { ArticleCardWrapper } from "./ArticleCardWrapper";
-import { FetchArticlesAPIResponse } from "../actions/article";
+import { ArticleCardWrapper } from "../Wrapper";
 
 type Props = {
   user?: User;

@@ -1,11 +1,11 @@
 import { FC } from "react";
 
+import { fetchArticleByIdAPI } from "@/features/articles/actions/article";
 import { getUser } from "@/features/users/actions/user";
 
 import { NotFoundList } from "@/components/layout/NotFoundList";
 
-import { ArticleDetail } from "./ArticleDetail";
-import { fetchArticleByIdAPI } from "../actions/article";
+import { ArticleDetail } from "../Detail";
 
 type ArticleDetailTemplateProps = {
   id: string;
