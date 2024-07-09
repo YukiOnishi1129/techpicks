@@ -2,6 +2,7 @@
 
 import { User } from "@supabase/supabase-js";
 import { useState, FC, useCallback } from "react";
+import { HiPlus } from "react-icons/hi";
 
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
@@ -24,7 +25,10 @@ export const CreateBookmarkDialog: FC<CreateBookmarkDialogProps> = ({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>{"Add article"}</Button>
+        <Button>
+          <HiPlus />
+          {"Add"}
+        </Button>
       </DialogTrigger>
       {open && (
         <CreateBookmarkDialogContent user={user} handleClose={handleClose} />

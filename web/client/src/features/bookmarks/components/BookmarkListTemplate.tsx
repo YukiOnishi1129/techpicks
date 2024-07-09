@@ -34,17 +34,17 @@ export const BookmarkListTemplate: FC<BookmarkListTemplateProps> = async ({
   });
   const resFavoriteArticleFolders = await fetchFavoriteArticleFoldersAPI({});
   return (
-    <div className="w-auto">
-      <div className="mb-4 mt-8 hidden w-full items-center justify-between px-4 md:flex">
-        <h1 className="mr-8 hidden text-2xl font-bold  md:mb-4 md:block">
+    <div>
+      <div className="fixed z-10  hidden  w-[90%]  items-center  justify-between bg-card md:flex md:w-[70%] md:px-4">
+        <h1 className="my-4 mr-8 hidden text-2xl font-bold  md:mb-4 md:block">
           Bookmark
         </h1>
         <div className="mr-2 w-3/4 md:mr-4">
           <BookmarkArticleKeywordSearchInput />
         </div>
-
         <CreateBookmarkDialog user={user} />
       </div>
+      <div className="h-4 md:h-16" />
 
       <BookmarkList
         user={user}

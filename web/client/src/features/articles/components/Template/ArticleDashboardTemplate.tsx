@@ -55,7 +55,7 @@ export const ArticleDashboardTemplate: FC<
           <SelectArticlePageTab userId={user?.id} />
         </div>
       </div>
-      <div className=" h-16 " />
+      <div className=" h-16" />
 
       <Tabs defaultValue={convertTab(languageStatus)}>
         <TabsList className="fixed  z-10  mt-[-4px] w-[90%] pt-[4px] md:mt-[-10px] md:w-[70%] md:py-[10px]">
