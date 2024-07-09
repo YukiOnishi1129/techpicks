@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
-import { HomeTemplate } from "@/features/home/components/HomeTemplate";
+import { ArticleDashboardTemplate } from "@/features/articles/components/ArticleDashboardTemplate";
 import { getUser } from "@/features/users/actions/user";
 
 import { ScreenLoader } from "@/components/layout/ScreenLoader";
@@ -23,7 +23,7 @@ export default async function DashboardSummaryPage({
   const languageStatus =
     typeof searchParams["languageStatus"] === "string"
       ? (parseInt(searchParams["languageStatus"]) as LanguageStatus)
-      : 1;
+      : 2;
 
   const keyword =
     typeof searchParams["keyword"] === "string"
@@ -41,17 +41,14 @@ export default async function DashboardSummaryPage({
   if (typeof searchParams["platformId"] === "string")
     platformIdList.push(searchParams["platformId"]);
 
-  const tab =
-    typeof searchParams["tab"] === "string" ? searchParams["tab"] : "trend";
-
   return (
     <>
       <Suspense fallback={<ScreenLoader />}>
-        <HomeTemplate
+        <ArticleDashboardTemplate
           languageStatus={languageStatus}
           keyword={keyword}
           platformIdList={platformIdList}
-          tab={tab}
+          tab="summary"
         />
       </Suspense>
     </>

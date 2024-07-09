@@ -4,6 +4,7 @@ import { useCallback, useRef, useState, useEffect } from "react";
 
 import { ArticleCardWrapper } from "@/features/articles/components/ArticleCardWrapper";
 
+import { NotFoundList } from "@/components/layout/NotFoundList";
 import { Loader } from "@/components/ui/loader";
 
 import { ArticleTabType, ArticleType } from "@/types/article";
@@ -113,11 +114,7 @@ export function TrendArticleList({
     <>
       {flatTrendArticles.length === 0 ? (
         <div className="flex flex-col items-center justify-center ">
-          <p className="text-center text-lg font-bold text-gray-500 md:text-xl">
-            Sorry, no article.
-          </p>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img className="mt-8 h-1/2" src="/sorry.png" alt="" />
+          <NotFoundList message="No articles found" />
         </div>
       ) : (
         <div className="m-auto">
