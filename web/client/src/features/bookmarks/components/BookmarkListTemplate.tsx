@@ -60,7 +60,7 @@ export const BookmarkListTemplate: FC<BookmarkListTemplateProps> = async ({
 
       <div className="fixed bottom-20 right-4 z-50  md:hidden">
         <div>
-          <BookmarkSearchKeywordDialogFloatButton />
+          <BookmarkSearchKeywordDialogFloatButton keyword={keyword} />
         </div>
         <div className="mt-8">
           <CreateBookmarkDialogFloatButton user={user} />

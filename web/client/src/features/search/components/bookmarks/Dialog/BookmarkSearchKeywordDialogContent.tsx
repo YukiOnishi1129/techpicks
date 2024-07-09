@@ -54,7 +54,7 @@ export const BookmarkSearchKeywordDialogContent: FC<
     if (!!values.keyword && values.keyword.trim() === "") return;
     const keywordPath = `keyword=${values.keyword}`;
     await serverRevalidatePage(pathname);
-    router.replace(`/bookmark/search/result?${keywordPath}`);
+    router.replace(`/bookmark?${keywordPath}`);
     resetDialog();
     handleClose();
   };
