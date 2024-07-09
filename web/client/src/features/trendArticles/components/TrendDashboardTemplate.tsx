@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { FC } from "react";
 
 import { fetchFavoriteArticleFoldersAPI } from "@/features/favoriteArticleFolders/actions/favoriteArticleFolders";
@@ -7,6 +8,8 @@ import { getUser } from "@/features/users/actions/user";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { LanguageStatus } from "@/types/language";
+
+import { ENGLISH_IMAGE, JAPANESE_IMAGE } from "@/constant/image";
 
 import { TrendArticleList } from "./TrendArticleList";
 import { fetchTrendArticlesAPI } from "../actions/trendArticles";
@@ -58,10 +61,24 @@ export const TrendDashboardTemplate: FC<TrendDashboardTemplateProps> = async ({
       <Tabs defaultValue={convertTab(languageStatus)}>
         <TabsList className="fixed  z-10  mt-[-4px] w-[90%] pt-[4px] md:mt-[-10px] md:w-[70%] md:py-[10px]">
           <TabsTrigger className="w-1/2" value={TAB_LIST.ENGLISH}>
-            En
+            <Image
+              className="inline-block"
+              src={ENGLISH_IMAGE}
+              alt={"EN"}
+              width={20}
+              height={20}
+            />
+            <span className="ml-2 inline-block">En</span>
           </TabsTrigger>
           <TabsTrigger className="w-1/2" value={TAB_LIST.JAPANESE}>
-            Jp
+            <Image
+              className="inline-block"
+              src={JAPANESE_IMAGE}
+              alt={"JP"}
+              width={20}
+              height={20}
+            />
+            <span className="ml-2 inline-block">Jp</span>
           </TabsTrigger>
         </TabsList>
 
