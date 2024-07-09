@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { usePathname, useRouter } from "next/navigation";
 import { FC, useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
-import { CiSearch } from "react-icons/ci";
+import { FaSearch } from "react-icons/fa";
 import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
@@ -45,8 +45,8 @@ export const ArticleKeyWordSearchDialog: FC<
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger className="cursor-pointer rounded-full border-2 border-white bg-card p-4">
-        <CiSearch size="36" />
+      <DialogTrigger className="cursor-pointer rounded-full border-2 border-white bg-primary p-4">
+        <FaSearch size="36" color="black" />
       </DialogTrigger>
       {open && <ArticleKeyWordSearchDialogContent handleClose={handleClose} />}
     </Dialog>
@@ -113,7 +113,9 @@ const ArticleKeyWordSearchDialogContent: FC<
 
             <div className="mt-4 flex w-full justify-between space-x-4">
               <DialogClose>
-                <Button onClick={resetDialog}>{"CLOSE"}</Button>
+                <Button variant={"outline"} onClick={resetDialog}>
+                  {"CLOSE"}
+                </Button>
               </DialogClose>
               <Button disabled={!form.formState.isValid} type="submit">
                 {"SEARCH"}
