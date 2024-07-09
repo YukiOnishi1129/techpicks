@@ -14,7 +14,7 @@ import { TrendArticleType } from "@/types/trendArticle";
 import { FetchTrendArticlesAPIResponse } from "../actions/trendArticles";
 
 type Props = {
-  user: User | undefined;
+  user?: User;
   initialTrendArticles: Array<TrendArticleType>;
   favoriteArticleFolders: Array<FavoriteArticleFolderType>;
   languageStatus: LanguageStatus;

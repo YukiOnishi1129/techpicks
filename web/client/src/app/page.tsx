@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
-import { HomeTemplate } from "@/features/home/components/HomeTemplate";
+import { TrendTemplate } from "@/features/trendArticles/components/TrendTemplate";
 import { getUser } from "@/features/users/actions/user";
 
 import { ScreenLoader } from "@/components/layout/ScreenLoader";
@@ -39,17 +39,13 @@ export default async function Home({ searchParams }: PageProps) {
   if (typeof searchParams["platformId"] === "string")
     platformIdList.push(searchParams["platformId"]);
 
-  const tab =
-    typeof searchParams["tab"] === "string" ? searchParams["tab"] : "trend";
-
   return (
     <>
       <Suspense fallback={<ScreenLoader />}>
-        <HomeTemplate
+        <TrendTemplate
           languageStatus={languageStatus}
           keyword={keyword}
           platformIdList={platformIdList}
-          tab={tab}
         />
       </Suspense>
     </>

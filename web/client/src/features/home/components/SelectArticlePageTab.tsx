@@ -34,40 +34,43 @@ export const SelectArticlePageTab: FC<SelectArticlePageTabProps> = ({
       case NAVIGATION_LISTS.DASHBOARD_SUMMARY || NAVIGATION_LISTS.SUMMARY:
         return "3";
     }
-  }, []);
+  }, [pathname]);
 
-  const onMovePage = useCallback((value: string) => {
-    switch (value) {
-      case "0":
-        if (userId) {
-          router.replace("/dashboard/trend");
+  const onMovePage = useCallback(
+    (value: string) => {
+      switch (value) {
+        case "0":
+          if (userId) {
+            router.replace("/dashboard/trend");
+            break;
+          }
+          router.replace("/");
           break;
-        }
-        router.replace("/");
-        break;
-      case "1":
-        if (userId) {
-          router.replace("/dashboard/site");
+        case "1":
+          if (userId) {
+            router.replace("/dashboard/site");
+            break;
+          }
+          router.replace("/site");
           break;
-        }
-        router.replace("/site");
-        break;
-      case "2":
-        if (userId) {
-          router.replace("/dashboard/company");
+        case "2":
+          if (userId) {
+            router.replace("/dashboard/company");
+            break;
+          }
+          router.replace("/company");
           break;
-        }
-        router.replace("/company");
-        break;
-      case "3":
-        if (userId) {
-          router.replace("/dashboard/summary");
+        case "3":
+          if (userId) {
+            router.replace("/dashboard/summary");
+            break;
+          }
+          router.replace("/summary");
           break;
-        }
-        router.replace("/summary");
-        break;
-    }
-  }, []);
+      }
+    },
+    [router, userId]
+  );
 
   return (
     <Select onValueChange={onMovePage} defaultValue={defaultTabValue}>
