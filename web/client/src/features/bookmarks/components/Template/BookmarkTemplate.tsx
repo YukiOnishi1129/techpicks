@@ -1,27 +1,27 @@
 import { User } from "@supabase/supabase-js";
 import { FC } from "react";
 
+import { fetchBookmarkListAPI } from "@/features/bookmarks/actions/bookmark";
 import { fetchFavoriteArticleFoldersAPI } from "@/features/favoriteArticleFolders/actions/favoriteArticleFolders";
 import { BookmarkArticleKeywordSearchInput } from "@/features/search/components/bookmarks/BookmarkArticleKeywordSearchInput";
 import { BookmarkSearchKeywordDialogFloatButton } from "@/features/search/components/bookmarks/Dialog";
 
 import { LanguageStatus } from "@/types/language";
 
-import { BookmarkList } from "./BookmarkList";
+import { BookmarkList } from "../BookmarkList";
 import {
   CreateBookmarkDialog,
   CreateBookmarkDialogFloatButton,
-} from "./Dialog";
-import { fetchBookmarkListAPI } from "../actions/bookmark";
+} from "../Dialog";
 
-type BookmarkListTemplateProps = {
+type BookmarkTemplateProps = {
   user: User;
   languageStatus?: LanguageStatus;
   keyword?: string;
   platformIdList: Array<string>;
 };
 
-export const BookmarkListTemplate: FC<BookmarkListTemplateProps> = async ({
+export const BookmarkTemplate: FC<BookmarkTemplateProps> = async ({
   user,
   languageStatus,
   keyword,

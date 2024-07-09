@@ -11,7 +11,7 @@ import { BreadCrumbType, PageBreadcrumb } from "@/components/ui/breadcrumb";
 import { LanguageStatus } from "@/types/language";
 import { PlatformSiteType } from "@/types/platform";
 
-import { BookmarkSearchDialog } from "./Dialog";
+import { BookmarkSearchDialog } from "../Dialog";
 
 export type BookmarkSearchResultTemplateProps = {
   user: User;
