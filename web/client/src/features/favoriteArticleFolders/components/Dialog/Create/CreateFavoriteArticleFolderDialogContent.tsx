@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import { usePathname } from "next/navigation";
-import { useState, useCallback, FC, useTransition } from "react";
+import { useCallback, FC, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -12,8 +12,6 @@ import { getUser } from "@/features/users/actions/user";
 
 import { Button } from "@/components/ui/button";
 import {
-  Dialog,
-  DialogTrigger,
   DialogHeader,
   DialogTitle,
   DialogContent,
@@ -33,7 +31,7 @@ import { useStatusToast } from "@/hooks/useStatusToast";
 
 import { serverRevalidatePage } from "@/actions/serverAction";
 
-import { createFavoriteArticleFolder } from "../../repository/favoriteArticleFolder";
+import { createFavoriteArticleFolder } from "../../../repository/favoriteArticleFolder";
 
 const FormSchema = z.object({
   title: z
@@ -45,42 +43,6 @@ const FormSchema = z.object({
   description: z.string().optional(),
 });
 
-type CreateMyFeedFolderDialogProps = {
-  buttonVariant?:
-    | "default"
-    | "destructive"
-    | "outline"
-    | "secondary"
-    | "ghost"
-    | "link";
-  handleCreateFavoriteArticleFolder?: (
-    favoriteArticleFolderId: string
-  ) => Promise<void>;
-};
-
-export const CreateFavoriteArticleFolderDialog: FC<
-  CreateMyFeedFolderDialogProps
-> = ({ buttonVariant, handleCreateFavoriteArticleFolder }) => {
-  const [open, setOpen] = useState(false);
-
-  const handleCloseDialog = useCallback(() => {
-    setOpen(false);
-  }, []);
-  return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button variant={buttonVariant}>{"Create folder"}</Button>
-      </DialogTrigger>
-      {open && (
-        <CreateFavoriteArticleFolderDialogContent
-          handleCloseDialog={handleCloseDialog}
-          handleCreateFavoriteArticleFolder={handleCreateFavoriteArticleFolder}
-        />
-      )}
-    </Dialog>
-  );
-};
-
 type CreateMyFeedFolderDialogContentProps = {
   handleCloseDialog: () => void;
   handleCreateFavoriteArticleFolder?: (
@@ -88,7 +50,7 @@ type CreateMyFeedFolderDialogContentProps = {
   ) => Promise<void>;
 };
 
-const CreateFavoriteArticleFolderDialogContent: FC<
+export const CreateFavoriteArticleFolderDialogContent: FC<
   CreateMyFeedFolderDialogContentProps
 > = ({ handleCloseDialog, handleCreateFavoriteArticleFolder }) => {
   const { successToast, failToast } = useStatusToast();

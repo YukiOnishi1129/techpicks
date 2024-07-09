@@ -14,7 +14,6 @@ import {
   FC,
 } from "react";
 import { useForm } from "react-hook-form";
-import { HiPlus } from "react-icons/hi";
 import { z } from "zod";
 
 import {
@@ -27,8 +26,6 @@ import { getOgpData } from "@/features/ogp/actions/ogp";
 
 import { Button } from "@/components/ui/button";
 import {
-  Dialog,
-  DialogTrigger,
   DialogHeader,
   DialogTitle,
   DialogContent,
@@ -51,12 +48,13 @@ import { checkJapaneseArticle } from "@/lib/check";
 
 import { OgpType } from "@/types/ogp";
 
-import { fetchFavoriteArticleCountByFolderIdAndArticleUrlAPI } from "../../actions/favoriteArticle";
-import { createFavoriteArticle } from "../../repository/favoriteArticle";
+import { fetchFavoriteArticleCountByFolderIdAndArticleUrlAPI } from "../../../actions/favoriteArticle";
+import { createFavoriteArticle } from "../../../repository/favoriteArticle";
 
-type CreateFavoriteArticleDialogProps = {
+type CreateFavoriteArticleDialogContentProps = {
   user: User | undefined;
   favoriteArticleFolderId: string;
+  handleClose: () => void;
 };
 
 const FormSchema = z.object({
@@ -67,13 +65,12 @@ const FormSchema = z.object({
     .url({ message: "Invalid URL" }),
 });
 
-export const CreateFavoriteArticleDialog: FC<
-  CreateFavoriteArticleDialogProps
-> = ({ user, favoriteArticleFolderId }) => {
+export const CreateFavoriteArticleDialogContent: FC<
+  CreateFavoriteArticleDialogContentProps
+> = ({ user, favoriteArticleFolderId, handleClose }) => {
   const router = useRouter();
   const { revalidatePage } = useServerRevalidatePage();
   const [ogpData, setOgpData] = useState<OgpType | null>(null);
-  const [open, setOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
   const [isOgpPending, startOgpPending] = useTransition();
   const { successToast, failToast } = useStatusToast();
@@ -173,7 +170,7 @@ export const CreateFavoriteArticleDialog: FC<
         await revalidatePage();
         router.replace(`/favorite-article-folder/${favoriteArticleFolderId}`);
         resetDialog();
-        setOpen(false);
+        handleClose();
         return;
       }
 
@@ -210,7 +207,7 @@ export const CreateFavoriteArticleDialog: FC<
         await revalidatePage();
         router.replace(`/favorite-article-folder/${favoriteArticleFolderId}`);
         resetDialog();
-        setOpen(false);
+        handleClose();
         return;
       }
 
@@ -262,7 +259,7 @@ export const CreateFavoriteArticleDialog: FC<
       await revalidatePage();
       router.replace(`/favorite-article-folder/${favoriteArticleFolderId}`);
       resetDialog();
-      setOpen(false);
+      handleClose();
     });
   }, [
     form,
@@ -274,101 +271,94 @@ export const CreateFavoriteArticleDialog: FC<
     ogpData,
     favoriteArticleFolderId,
     revalidatePage,
+    handleClose,
   ]);
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button>
-          <HiPlus />
-          {"Add"}
-        </Button>
-      </DialogTrigger>
-      <DialogContent onCloseAutoFocus={resetDialog}>
-        <DialogHeader>
-          <DialogTitle>{"Add New Favorite Article"}</DialogTitle>
-        </DialogHeader>
-        <div>
-          <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(onSubmit)}
-              className="w-full space-y-6"
-            >
-              <FormField
-                control={form.control}
-                name="url"
-                render={({ field }) => (
-                  <FormItem className="w-full">
-                    <FormLabel className="font-bold">
-                      URL
-                      <span className="text-red-700"> *</span>
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        className="block w-full border-primary bg-secondary text-primary"
-                        placeholder="https://example.com"
-                        type="url"
-                        pattern="https://.*|http://.*"
-                        onPaste={onPaste}
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </form>
-          </Form>
-        </div>
+    <DialogContent onCloseAutoFocus={resetDialog}>
+      <DialogHeader>
+        <DialogTitle>{"Add New Favorite Article"}</DialogTitle>
+      </DialogHeader>
+      <div>
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="w-full space-y-6"
+          >
+            <FormField
+              control={form.control}
+              name="url"
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  <FormLabel className="font-bold">
+                    URL
+                    <span className="text-red-700"> *</span>
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      className="block w-full border-primary bg-secondary text-primary"
+                      placeholder="https://example.com"
+                      type="url"
+                      pattern="https://.*|http://.*"
+                      onPaste={onPaste}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </form>
+        </Form>
+      </div>
 
-        {isPending && <Loader />}
-        {!isPending && ogpData && (
-          <div className="mt-4 w-full">
-            <h3 className="text-lg font-bold">PREVIEW</h3>
-            <div className="mt-4 flex  w-full justify-around overflow-y-scroll">
-              <div className="w-1/3">
+      {isPending && <Loader />}
+      {!isPending && ogpData && (
+        <div className="mt-4 w-full">
+          <h3 className="text-lg font-bold">PREVIEW</h3>
+          <div className="mt-4 flex  w-full justify-around overflow-y-scroll">
+            <div className="w-1/3">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={ogpData.image} alt="" />
+            </div>
+            <div className="w-3/5">
+              <h3 className="line-clamp-2 h-12 w-full text-base font-bold leading-6">
+                {ogpData.title}
+              </h3>
+
+              <div className="mt-4 flex cursor-pointer items-center space-x-2 hover:underline">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={ogpData.image} alt="" />
-              </div>
-              <div className="w-3/5">
-                <h3 className="line-clamp-2 h-12 w-full text-base font-bold leading-6">
-                  {ogpData.title}
-                </h3>
+                <img className="size-6" src={ogpData.faviconImage} alt="" />
 
-                <div className="mt-4 flex cursor-pointer items-center space-x-2 hover:underline">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img className="size-6" src={ogpData.faviconImage} alt="" />
-
-                  <span className="text-sm">
-                    <Link href={new URL(ogpData.siteUrl)} target="_blank">
-                      {ogpData.siteName}
-                    </Link>
-                  </span>
-                </div>
+                <span className="text-sm">
+                  <Link href={new URL(ogpData.siteUrl)} target="_blank">
+                    {ogpData.siteName}
+                  </Link>
+                </span>
               </div>
             </div>
           </div>
-        )}
-
-        <div className="mt-4 flex w-full justify-between space-x-4">
-          <DialogClose>
-            <Button variant={"outline"} onClick={resetDialog}>
-              {"CLOSE"}
-            </Button>
-          </DialogClose>
-
-          {isOgpPending ? (
-            <Button disabled>
-              <ReloadIcon className="mr-2 size-4 animate-spin" />
-              PLEASE WAIT
-            </Button>
-          ) : (
-            <Button disabled={!ogpData} onClick={handleAddSubmit}>
-              {"ADD"}
-            </Button>
-          )}
         </div>
-      </DialogContent>
-    </Dialog>
+      )}
+
+      <div className="mt-4 flex w-full justify-between space-x-4">
+        <DialogClose>
+          <Button variant={"outline"} onClick={resetDialog}>
+            {"CLOSE"}
+          </Button>
+        </DialogClose>
+
+        {isOgpPending ? (
+          <Button disabled>
+            <ReloadIcon className="mr-2 size-4 animate-spin" />
+            PLEASE WAIT
+          </Button>
+        ) : (
+          <Button disabled={!ogpData} onClick={handleAddSubmit}>
+            {"ADD"}
+          </Button>
+        )}
+      </div>
+    </DialogContent>
   );
 };
