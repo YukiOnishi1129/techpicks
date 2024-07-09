@@ -11,7 +11,7 @@ import { BreadCrumbType, PageBreadcrumb } from "@/components/ui/breadcrumb";
 import {
   fetchFavoriteArticleFolderByIdAPI,
   fetchFavoriteArticleFoldersAPI,
-} from "../actions/favoriteArticleFolders";
+} from "../../actions/favoriteArticleFolders";
 
 type FavoriteArticleFolderDetailTemplateProps = {
   user: User;
@@ -53,30 +53,38 @@ export const FavoriteArticleFolderDetailTemplate: FC<
     },
   ];
   return (
-    <div className="mb-2 mt-4">
-      <PageBreadcrumb breadcrumbs={breadcrumbs} />
-      <div className="flex w-full items-center justify-between">
-        <div className="w-3/5 pt-2">
-          <FavoriteArticleFolderArticleKeywordSearchInput
+    <div>
+      <div className="fixed z-10  w-[90%] bg-card md:block md:w-[70%] md:justify-between md:px-4">
+        <div className="mt-4">
+          <PageBreadcrumb breadcrumbs={breadcrumbs} />
+        </div>
+
+        <div className="hidden w-full items-center justify-between md:flex">
+          <div className="w-4/5 pt-2">
+            <FavoriteArticleFolderArticleKeywordSearchInput
+              favoriteArticleFolderId={id}
+              keyword={keyword}
+            />
+          </div>
+          <CreateFavoriteArticleDialog
+            user={user}
             favoriteArticleFolderId={id}
-            keyword={keyword}
           />
         </div>
-        <CreateFavoriteArticleDialog user={user} favoriteArticleFolderId={id} />
       </div>
 
-      <div className="mt-4">
-        <FavoriteArticleList
-          user={user}
-          favoriteArticleFolderId={id}
-          initialFavoriteArticles={resFavoriteArticles.data.favoriteArticles}
-          otherFavoriteArticleFolders={otherFavoriteArticleFolders}
-          keyword={keyword}
-          fetchFavoriteArticles={
-            fetchFavoriteArticlesByFavoriteArticleFolderIdAPI
-          }
-        />
-      </div>
+      <div className="h-12 md:h-24" />
+
+      <FavoriteArticleList
+        user={user}
+        favoriteArticleFolderId={id}
+        initialFavoriteArticles={resFavoriteArticles.data.favoriteArticles}
+        otherFavoriteArticleFolders={otherFavoriteArticleFolders}
+        keyword={keyword}
+        fetchFavoriteArticles={
+          fetchFavoriteArticlesByFavoriteArticleFolderIdAPI
+        }
+      />
     </div>
   );
 };

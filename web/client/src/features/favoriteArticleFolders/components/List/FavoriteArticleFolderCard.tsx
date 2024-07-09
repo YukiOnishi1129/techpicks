@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 
 import { FavoriteArticleFolderType } from "@/types/favoriteArticleFolder";
 
-import { UpdateFavoriteArticleFolderDialog } from "./Dialog";
+import { UpdateFavoriteArticleFolderDialog } from "../Dialog";
 
 type FavoriteArticleFolderCardProps = {
   favoriteArticleFolder: FavoriteArticleFolderType;

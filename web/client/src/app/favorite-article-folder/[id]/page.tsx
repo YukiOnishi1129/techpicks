@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 
-import { FavoriteArticleFolderDetailTemplate } from "@/features/favoriteArticleFolders/components/FavoriteArticleFolderDetailTemplate";
+import { FavoriteArticleFolderDetailTemplate } from "@/features/favoriteArticleFolders/components/Template";
 import { getUser } from "@/features/users/actions/user";
 
 type FavoriteArticleFolderDetailPageProps = {

@@ -1,3 +1,3 @@
 export * from "./ArticleDashboardTemplate";
-export * from "./ArticleTemplate";
+export * from "./ArticleListTemplate";
 export * from "./ArticleDetailTemplate";

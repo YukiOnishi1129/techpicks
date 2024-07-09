@@ -98,7 +98,7 @@ export const FavoriteArticleList: FC<FavoriteArticleListProps> = ({
   }, [loadMore, offset, hashMore]);
 
   return (
-    <div className="m-auto h-[590px]  overflow-y-scroll md:h-[540px]">
+    <div>
       {flatFavoriteArticles.length === 0 ? (
         <NotFoundList message="No favorite Article" />
       ) : (

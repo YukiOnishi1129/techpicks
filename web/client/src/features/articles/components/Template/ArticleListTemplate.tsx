@@ -25,7 +25,7 @@ const TAB_LIST = {
   JAPANESE: "japanese",
 };
 
-export const ArticleTemplate: FC<ArticleTemplateProps> = async ({
+export const ArticleListTemplate: FC<ArticleTemplateProps> = async ({
   languageStatus,
   keyword,
   platformIdList,

@@ -14,6 +14,7 @@ import {
   FC,
 } from "react";
 import { useForm } from "react-hook-form";
+import { HiPlus } from "react-icons/hi";
 import { z } from "zod";
 
 import {
@@ -278,7 +279,10 @@ export const CreateFavoriteArticleDialog: FC<
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>{"Add new article"}</Button>
+        <Button>
+          <HiPlus />
+          {"Add"}
+        </Button>
       </DialogTrigger>
       <DialogContent onCloseAutoFocus={resetDialog}>
         <DialogHeader>

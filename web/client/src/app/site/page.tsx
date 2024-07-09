@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
-import { ArticleTemplate } from "@/features/articles/components/Template/ArticleTemplate";
+import { ArticleListTemplate } from "@/features/articles/components/Template";
 import { getUser } from "@/features/users/actions/user";
 
 import { ScreenLoader } from "@/components/layout/ScreenLoader";
@@ -42,7 +42,7 @@ export default async function SitePage({ searchParams }: PageProps) {
   return (
     <>
       <Suspense fallback={<ScreenLoader />}>
-        <ArticleTemplate
+        <ArticleListTemplate
           languageStatus={languageStatus}
           keyword={keyword}
           platformIdList={platformIdList}

@@ -14,11 +14,11 @@ import { FavoriteArticleFolderType } from "@/types/favoriteArticleFolder";
 import { serverRevalidatePage } from "@/actions/serverAction";
 
 import { FavoriteArticleFolderCard } from "./FavoriteArticleFolderCard";
-import { fetchFavoriteArticleFolderByIdAPI } from "../actions/favoriteArticleFolders";
+import { fetchFavoriteArticleFolderByIdAPI } from "../../actions/favoriteArticleFolders";
 import {
   deleteFavoriteArticleFolder,
   updateFavoriteArticleFolder,
-} from "../repository/favoriteArticleFolder";
+} from "../../repository/favoriteArticleFolder";
 
 type FavoriteArticleFolderListProps = {
   initialFavoriteArticleFolders: FavoriteArticleFolderType[];
@@ -131,7 +131,7 @@ export const FavoriteArticleFolderList: FC<FavoriteArticleFolderListProps> = ({
           <NotFoundList message="No folder found" />
         </div>
       ) : (
-        <div className="m-auto h-[590px] overflow-y-scroll md:h-[540px]">
+        <div className="m-auto">
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
             {initialFavoriteArticleFolders.map((favoriteArticleFolder) => (
               <FavoriteArticleFolderCard
