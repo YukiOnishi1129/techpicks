@@ -1,10 +1,13 @@
 import { User } from "@supabase/supabase-js";
 import { FC, ReactNode } from "react";
 
+import { fetchFavoriteArticleFoldersAPI } from "@/features/favoriteArticleFolders/actions/favoriteArticleFolders";
+import { fetchMyFeedFoldersAPI } from "@/features/myFeedFolders/actions/myFeedFolder";
+
 import { Header } from "@/components/layout/Header";
 
 import { LoggedBottomNavigationMenu } from "../BottomNavigationMenu";
-import { Sidebar } from "../Sidebar";
+import { DesktopSidebar } from "../Sidebar";
 
 type LoggedBaseLayoutProps = {
   user: User;
@@ -15,8 +18,10 @@ export const LoggedBaseLayout: FC<LoggedBaseLayoutProps> = async ({
   user,
   children,
 }) => {
+  const myFeedFolderRes = await fetchMyFeedFoldersAPI();
+  const favoriteArticleFolderRes = await fetchFavoriteArticleFoldersAPI({});
   return (
-    <div className="overflow-hidden">
+    <div>
       <header className="overflow-hidden">
         <Header user={user} />
       </header>
@@ -24,7 +29,13 @@ export const LoggedBaseLayout: FC<LoggedBaseLayoutProps> = async ({
       <div className="h-12 md:h-16" />
       <main className="md:flex">
         <div className="invisible fixed h-lvh w-[200px] md:visible">
-          <Sidebar user={user} />
+          <DesktopSidebar
+            user={user}
+            myFeedFolders={myFeedFolderRes.data.myFeedFolders}
+            favoriteArticleFolders={
+              favoriteArticleFolderRes.data.favoriteArticleFolders
+            }
+          />
         </div>
         <div className="invisible mr-[10px] w-[200px] md:visible" />
 
@@ -32,7 +43,7 @@ export const LoggedBaseLayout: FC<LoggedBaseLayoutProps> = async ({
       </main>
 
       <footer className="fixed inset-x-0 bottom-0 z-50 block border-t border-gray-200  md:hidden">
-        <LoggedBottomNavigationMenu user={user} />
+        <LoggedBottomNavigationMenu />
       </footer>
     </div>
   );

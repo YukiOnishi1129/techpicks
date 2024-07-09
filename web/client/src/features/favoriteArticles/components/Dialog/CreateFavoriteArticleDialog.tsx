@@ -58,6 +58,14 @@ type CreateFavoriteArticleDialogProps = {
   favoriteArticleFolderId: string;
 };
 
+const FormSchema = z.object({
+  url: z
+    .string({
+      required_error: "Please enter the URL",
+    })
+    .url({ message: "Invalid URL" }),
+});
+
 export const CreateFavoriteArticleDialog: FC<
   CreateFavoriteArticleDialogProps
 > = ({ user, favoriteArticleFolderId }) => {
@@ -68,14 +76,9 @@ export const CreateFavoriteArticleDialog: FC<
   const [isPending, startTransition] = useTransition();
   const [isOgpPending, startOgpPending] = useTransition();
   const { successToast, failToast } = useStatusToast();
-  const FormSchema = z.object({
-    url: z
-      .string({
-        required_error: "Please enter the URL",
-      })
-      .url({ message: "Invalid URL" }),
-  });
+
   const form = useForm<z.infer<typeof FormSchema>>({
+    mode: "onChange",
     resolver: zodResolver(FormSchema),
     defaultValues: {
       url: "",
@@ -292,7 +295,10 @@ export const CreateFavoriteArticleDialog: FC<
                 name="url"
                 render={({ field }) => (
                   <FormItem className="w-full">
-                    <FormLabel className="font-bold">URL</FormLabel>
+                    <FormLabel className="font-bold">
+                      URL
+                      <span className="text-red-700"> *</span>
+                    </FormLabel>
                     <FormControl>
                       <Input
                         className="block w-full border-primary bg-secondary text-primary"
@@ -340,7 +346,13 @@ export const CreateFavoriteArticleDialog: FC<
           </div>
         )}
 
-        <div className="mt-4 flex w-full justify-start space-x-4">
+        <div className="mt-4 flex w-full justify-between space-x-4">
+          <DialogClose>
+            <Button variant={"outline"} onClick={resetDialog}>
+              {"CLOSE"}
+            </Button>
+          </DialogClose>
+
           {isOgpPending ? (
             <Button disabled>
               <ReloadIcon className="mr-2 size-4 animate-spin" />
@@ -348,12 +360,9 @@ export const CreateFavoriteArticleDialog: FC<
             </Button>
           ) : (
             <Button disabled={!ogpData} onClick={handleAddSubmit}>
-              {"ADD FAVORITE"}
+              {"ADD"}
             </Button>
           )}
-          <DialogClose>
-            <Button onClick={resetDialog}>{"CLOSE"}</Button>
-          </DialogClose>
         </div>
       </DialogContent>
     </Dialog>

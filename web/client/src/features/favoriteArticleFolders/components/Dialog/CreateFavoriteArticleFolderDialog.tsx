@@ -96,6 +96,7 @@ const CreateFavoriteArticleFolderDialogContent: FC<
   const pathname = usePathname();
 
   const form = useForm<z.infer<typeof FormSchema>>({
+    mode: "onChange",
     resolver: zodResolver(FormSchema),
     defaultValues: {
       title: "",
@@ -174,7 +175,10 @@ const CreateFavoriteArticleFolderDialogContent: FC<
               name="title"
               render={({ field }) => (
                 <FormItem className="w-full">
-                  <FormLabel className="font-bold">TITLE</FormLabel>
+                  <FormLabel className="font-bold">
+                    TITLE
+                    <span className="text-red-700"> *</span>
+                  </FormLabel>
                   <FormControl>
                     <Input
                       className="block w-full border-primary bg-secondary text-primary"
@@ -205,27 +209,29 @@ const CreateFavoriteArticleFolderDialogContent: FC<
                 </FormItem>
               )}
             />
-            {isPending ? (
-              <Button disabled>
-                <ReloadIcon className="mr-2 size-4 animate-spin" />
-                PLEASE WAIT
-              </Button>
-            ) : (
-              <Button
-                disabled={!form.formState.isValid || isPending}
-                type="submit"
-              >
-                {"CREATE FAVORITE ARTICLE FOLDER"}
-              </Button>
-            )}
+
+            <div className="mt-4 flex w-full justify-between space-x-4">
+              <DialogClose asChild>
+                <Button variant={"outline"} onClick={resetDialog}>
+                  {"CLOSE"}
+                </Button>
+              </DialogClose>
+              {isPending ? (
+                <Button disabled>
+                  <ReloadIcon className="mr-2 size-4 animate-spin" />
+                  PLEASE WAIT
+                </Button>
+              ) : (
+                <Button
+                  disabled={!form.formState.isValid || isPending}
+                  type="submit"
+                >
+                  {"CREATE"}
+                </Button>
+              )}
+            </div>
           </form>
         </Form>
-      </div>
-
-      <div className="mt-4 flex w-full justify-start space-x-4">
-        <DialogClose asChild>
-          <Button onClick={resetDialog}>{"CLOSE"}</Button>
-        </DialogClose>
       </div>
     </DialogContent>
   );

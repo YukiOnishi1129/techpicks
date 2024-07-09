@@ -14,7 +14,7 @@ import { ArticleCardWrapper } from "./ArticleCardWrapper";
 import { FetchArticlesAPIResponse } from "../actions/article";
 
 type Props = {
-  user: User | undefined;
+  user?: User;
   initialArticles: Array<ArticleType>;
   favoriteArticleFolders: Array<FavoriteArticleFolderType>;
   languageStatus: LanguageStatus;
@@ -109,11 +109,11 @@ export function ArticleList({
   return (
     <>
       {flatArticles.length === 0 ? (
-        <div className="h-[590px] md:h-[540px]">
+        <div className="flex flex-col items-center justify-center ">
           <NotFoundList message="No articles found" />
         </div>
       ) : (
-        <div className="m-auto h-[590px] overflow-y-scroll md:h-[540px]">
+        <div className="m-auto">
           {flatArticles.map((article) => (
             <div key={article.id} className="mb-4">
               <ArticleCardWrapper
