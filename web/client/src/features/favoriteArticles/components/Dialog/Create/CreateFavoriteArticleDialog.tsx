@@ -10,13 +10,20 @@ import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { CreateFavoriteArticleDialogContent } from "./CreateFavoriteArticleDialogContent";
 
 type CreateFavoriteArticleDialogProps = {
+  buttonVariant?:
+    | "default"
+    | "destructive"
+    | "outline"
+    | "secondary"
+    | "ghost"
+    | "link";
   user: User | undefined;
   favoriteArticleFolderId: string;
 };
 
 export const CreateFavoriteArticleDialog: FC<
   CreateFavoriteArticleDialogProps
-> = ({ user, favoriteArticleFolderId }) => {
+> = ({ buttonVariant, user, favoriteArticleFolderId }) => {
   const [open, setOpen] = useState(false);
 
   const handleClose = useCallback(() => setOpen(false), []);
@@ -24,9 +31,9 @@ export const CreateFavoriteArticleDialog: FC<
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>
-          <HiPlus />
-          {"Add"}
+        <Button variant={buttonVariant}>
+          <HiPlus size={24} />
+          <span className="hidden pl-2 md:block">{"Add"}</span>
         </Button>
       </DialogTrigger>
       {open && (

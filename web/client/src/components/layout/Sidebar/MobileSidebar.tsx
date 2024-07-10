@@ -146,7 +146,10 @@ export const MobileSidebar: FC<SidebarProps> = ({
                 handleCloseSheet={handleCloseSheet}
               />
               <div className="ml-4">
-                <CreateFavoriteArticleFolderDialog buttonVariant="ghost" />
+                <CreateFavoriteArticleFolderDialog
+                  buttonVariant="ghost"
+                  buttonSize={18}
+                />
               </div>
             </div>
           </div>

@@ -24,8 +24,8 @@ export const CreateFavoriteArticleDialogFloatButton: FC<
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="w-full">
-          <HiPlus />
+        <Button variant={"ghost"} className="w-full">
+          <HiPlus size={24} />
         </Button>
       </DialogTrigger>
       {open && (

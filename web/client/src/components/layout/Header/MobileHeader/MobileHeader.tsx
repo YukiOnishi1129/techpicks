@@ -76,7 +76,7 @@ export const MobileHeader: FC<MobileHeaderProps> = ({
       </div>
 
       <h1 className="text-2xl font-bold">{pageName}</h1>
-      <div className="absolute right-6 w-16">
+      <div className="absolute right-1 w-14">
         <MobileHeaderButton user={user} pathname={pathname} />
       </div>
     </div>
