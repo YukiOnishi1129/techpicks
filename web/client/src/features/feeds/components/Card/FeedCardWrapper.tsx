@@ -276,7 +276,10 @@ export const FeedCardWrapper: FC<FeedCardWrapperProps> = ({
   );
 
   return (
-    <div key={showFeed.id} className="mb-4 rounded-2xl border-2 md:py-2">
+    <div
+      key={showFeed.id}
+      className="mb-4 rounded-2xl border-2 bg-primary-foreground md:py-2"
+    >
       <div className="relative w-full rounded">
         {user && (
           <div className="absolute right-4  top-2 z-10">

@@ -16,23 +16,23 @@ export const FeedTemplate: FC<FeedTemplateProps> = async ({ keyword }) => {
   const resMyFeedList = await fetchMyFeedFoldersAPI({});
   const user = await getUser();
   return (
-    <div className="w-auto">
-      <h1 className="hidden text-2xl font-bold md:mb-4 md:mt-8 md:block">
-        Feed List
-      </h1>
-      <div className="mt-4 md:mt-0">
-        <FeedKeywordSearchInput />
+    <div>
+      <div className="fixed z-50 hidden w-[90%] bg-card md:block md:w-[70%] md:px-4">
+        <h1 className="mt-4 text-2xl font-bold">Feed List</h1>
+        <div className="mt-2 ">
+          <FeedKeywordSearchInput keyword={keyword} />
+        </div>
       </div>
 
-      <div className="mt-4 md:mt-0">
-        <FeedList
-          user={user}
-          keyword={keyword}
-          initialFeeds={res.data.feeds}
-          myFeedFolders={resMyFeedList.data.myFeedFolders}
-          fetchFeedsAPI={fetchFeedsAPI}
-        />
-      </div>
+      <div className="h-4 md:h-[120px]" />
+
+      <FeedList
+        user={user}
+        keyword={keyword}
+        initialFeeds={res.data.feeds}
+        myFeedFolders={resMyFeedList.data.myFeedFolders}
+        fetchFeedsAPI={fetchFeedsAPI}
+      />
     </div>
   );
 };
