@@ -46,10 +46,13 @@ export const ArticleListTemplate: FC<ArticleTemplateProps> = async ({
 
   const resFavoriteArticleFolders = await fetchFavoriteArticleFoldersAPI({});
 
+  const title =
+    tab === "site" ? "Site" : tab === "company" ? "Company" : "Summary";
+
   return (
     <div>
       <div className="fixed z-10  w-[90%] items-end justify-end bg-card md:flex md:w-[70%] md:justify-between md:px-4">
-        <h1 className="my-4 hidden text-2xl font-bold md:block">Trend</h1>
+        <h1 className="my-4 hidden text-2xl font-bold md:block">{title}</h1>
         <div className="h-2 w-full md:hidden" />
         <div className="h-16 w-full md:hidden">
           <SelectArticlePageTab />

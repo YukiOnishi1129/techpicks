@@ -2,10 +2,7 @@ import { User } from "@supabase/supabase-js";
 import { FC } from "react";
 
 import { fetchFavoriteArticlesByFavoriteArticleFolderIdAPI } from "@/features/favoriteArticles/actions/favoriteArticle";
-import {
-  CreateFavoriteArticleDialog,
-  CreateFavoriteArticleDialogFloatButton,
-} from "@/features/favoriteArticles/components/Dialog";
+import { CreateFavoriteArticleDialog } from "@/features/favoriteArticles/components/Dialog";
 import { FavoriteArticleList } from "@/features/favoriteArticles/components/FavoriteArticleList";
 import { FavoriteArticleKeyWordSearchDialog } from "@/features/search/components/favoriteArticleFolder/Dialog";
 import { FavoriteArticleFolderArticleKeywordSearchInput } from "@/features/search/components/favoriteArticleFolder/FavoriteArticleFolderArticleKeywordSearchInput";
@@ -91,19 +88,10 @@ export const FavoriteArticleFolderDetailTemplate: FC<
       />
 
       <div className="fixed bottom-20 right-4 z-50 md:hidden">
-        <div>
-          <FavoriteArticleKeyWordSearchDialog
-            keyword={keyword}
-            favoriteArticleFolderId={id}
-          />
-        </div>
-
-        <div className="mt-4">
-          <CreateFavoriteArticleDialogFloatButton
-            user={user}
-            favoriteArticleFolderId={id}
-          />
-        </div>
+        <FavoriteArticleKeyWordSearchDialog
+          keyword={keyword}
+          favoriteArticleFolderId={id}
+        />
       </div>
     </div>
   );

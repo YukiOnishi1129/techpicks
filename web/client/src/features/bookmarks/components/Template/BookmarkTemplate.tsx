@@ -8,10 +8,7 @@ import { BookmarkSearchKeywordDialogFloatButton } from "@/features/search/compon
 
 import { LanguageStatus } from "@/types/language";
 
-import {
-  CreateBookmarkDialog,
-  CreateBookmarkDialogFloatButton,
-} from "../Dialog";
+import { CreateBookmarkDialog } from "../Dialog";
 import { BookmarkList } from "../List";
 
 type BookmarkTemplateProps = {
@@ -59,12 +56,7 @@ export const BookmarkTemplate: FC<BookmarkTemplateProps> = async ({
       />
 
       <div className="fixed bottom-20 right-4 z-50  md:hidden">
-        <div>
-          <BookmarkSearchKeywordDialogFloatButton keyword={keyword} />
-        </div>
-        <div className="mt-8">
-          <CreateBookmarkDialogFloatButton user={user} />
-        </div>
+        <BookmarkSearchKeywordDialogFloatButton keyword={keyword} />
       </div>
     </div>
   );
