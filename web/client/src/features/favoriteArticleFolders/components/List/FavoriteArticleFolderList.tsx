@@ -127,7 +127,7 @@ export const FavoriteArticleFolderList: FC<FavoriteArticleFolderListProps> = ({
   return (
     <>
       {initialFavoriteArticleFolders.length === 0 ? (
-        <div className="">
+        <div>
           <NotFoundList message="No folder found" />
         </div>
       ) : (

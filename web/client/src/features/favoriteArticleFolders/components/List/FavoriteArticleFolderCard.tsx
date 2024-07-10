@@ -34,7 +34,7 @@ export const FavoriteArticleFolderCard: FC<FavoriteArticleFolderCardProps> = ({
       : undefined;
   return (
     <div className="mb-4 bg-primary-foreground">
-      <div className="max-h-[440px] w-full rounded border-2 px-4 py-2 md:h-[380px]">
+      <div className="w-full rounded border-2 px-4 py-2">
         <div className="mb-2 flex h-[48px] w-full items-center justify-between border-b-2 pb-2">
           <h3 className="truncate px-2 text-left text-base font-bold tracking-wide md:text-xl">
             <Link href={`/favorite-article-folder/${favoriteArticleFolder.id}`}>
