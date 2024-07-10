@@ -1,6 +1,7 @@
 import { User } from "@supabase/supabase-js";
 import { FC } from "react";
 
+import { MyFeedFolderKeywordSearchDialog } from "@/features/search/components/myFeedFolders/Dialog";
 import { MyFeedFolderKeywordSearchInput } from "@/features/search/components/myFeedFolders/MyFeedFolderKeywordSearchInput";
 
 import { fetchMyFeedFoldersAPI } from "../../actions/myFeedFolder";
@@ -32,6 +33,10 @@ export const MyFeedFolderListTemplate: FC<
       <div className="h-4 md:h-[120px]" />
 
       <MyFeedFolderList initialMyFeedFolders={myFeedFolders} user={user} />
+
+      <div className="fixed bottom-20 right-4 z-50 md:hidden">
+        <MyFeedFolderKeywordSearchDialog keyword={keyword} />
+      </div>
     </div>
   );
 };
