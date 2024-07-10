@@ -7,14 +7,12 @@ import { useForm } from "react-hook-form";
 import { FaSearch } from "react-icons/fa";
 import { z } from "zod";
 
-import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-  DialogClose,
 } from "@/components/ui/dialog";
 import {
   Form,
@@ -32,11 +30,13 @@ const formSchema = z.object({
   keyword: z.string().optional(),
 });
 
-type ArticleKeyWordSearchDialogProps = {};
+type FeedKeywordSearchDialogProps = {
+  keyword?: string;
+};
 
-export const ArticleKeyWordSearchDialog: FC<
-  ArticleKeyWordSearchDialogProps
-> = () => {
+export const FeedKeywordSearchDialog: FC<FeedKeywordSearchDialogProps> = ({
+  keyword,
+}) => {
   const [open, setOpen] = useState(false);
 
   const handleClose = useCallback(() => {
@@ -48,24 +48,30 @@ export const ArticleKeyWordSearchDialog: FC<
       <DialogTrigger className="cursor-pointer rounded-full border-2 border-white bg-primary p-4">
         <FaSearch size="24" color="black" />
       </DialogTrigger>
-      {open && <ArticleKeyWordSearchDialogContent handleClose={handleClose} />}
+      {open && (
+        <FeedKeywordSearchDialogContent
+          keyword={keyword}
+          handleClose={handleClose}
+        />
+      )}
     </Dialog>
   );
 };
 
-type ArticleKeyWordSearchDialogContentProps = {
+type FeedKeywordSearchDialogContentProps = {
+  keyword?: string;
   handleClose: () => void;
 };
 
-const ArticleKeyWordSearchDialogContent: FC<
-  ArticleKeyWordSearchDialogContentProps
-> = ({ handleClose }) => {
+const FeedKeywordSearchDialogContent: FC<
+  FeedKeywordSearchDialogContentProps
+> = ({ keyword, handleClose }) => {
   const pathname = usePathname();
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      keyword: "",
+      keyword: keyword ?? "",
     },
   });
 
@@ -75,12 +81,11 @@ const ArticleKeyWordSearchDialogContent: FC<
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     let keywordPath = "";
-    if (!!values.keyword && values.keyword.trim() === "") {
+    if (!!values.keyword && values.keyword.trim() !== "") {
       keywordPath = `keyword=${values.keyword}`;
     }
-
     await serverRevalidatePage(pathname);
-    router.replace(`/article/search/result?${keywordPath}`);
+    router.replace(`/feed?${keywordPath}`);
     resetDialog();
     handleClose();
   };
@@ -111,17 +116,6 @@ const ArticleKeyWordSearchDialogContent: FC<
                   </FormItem>
                 )}
               />
-            </div>
-
-            <div className="mt-4 flex w-full justify-between space-x-4">
-              <DialogClose>
-                <Button variant={"outline"} onClick={resetDialog}>
-                  {"CLOSE"}
-                </Button>
-              </DialogClose>
-              <Button disabled={!form.formState.isValid} type="submit">
-                {"SEARCH"}
-              </Button>
             </div>
           </form>
         </Form>

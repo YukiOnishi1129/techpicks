@@ -1,6 +1,7 @@
 import { FC } from "react";
 
 import { fetchMyFeedFoldersAPI } from "@/features/myFeedFolders/actions/myFeedFolder";
+import { FeedKeywordSearchDialog } from "@/features/search/components/feeds/Dialog";
 import { FeedKeywordSearchInput } from "@/features/search/components/feeds/FeedKeywordSearchInput";
 import { getUser } from "@/features/users/actions/user";
 
@@ -33,6 +34,10 @@ export const FeedTemplate: FC<FeedTemplateProps> = async ({ keyword }) => {
         myFeedFolders={resMyFeedList.data.myFeedFolders}
         fetchFeedsAPI={fetchFeedsAPI}
       />
+
+      <div className="fixed bottom-20 right-4 z-50 md:hidden">
+        <FeedKeywordSearchDialog keyword={keyword} />
+      </div>
     </div>
   );
 };
