@@ -271,7 +271,13 @@ export const UpdateMyFeedFolderDialogContent: FC<
                 />
               </div>
 
-              <div className="mt-4 flex w-full justify-center space-x-4">
+              <div className="mt-4 flex w-full justify-between space-x-4">
+                <DialogClose>
+                  <Button variant={"outline"} onClick={resetDialog}>
+                    {"CLOSE"}
+                  </Button>
+                </DialogClose>
+
                 {isPending ? (
                   <Button disabled>
                     <ReloadIcon className="mr-2 size-4 animate-spin" />
@@ -285,16 +291,12 @@ export const UpdateMyFeedFolderDialogContent: FC<
                     {"EDIT"}
                   </Button>
                 )}
-
-                <DialogClose>
-                  <Button onClick={resetDialog}>{"CLOSE"}</Button>
-                </DialogClose>
               </div>
             </form>
           </Form>
         </div>
       </div>
-      <div>
+      <div className="mt-8">
         <DeleteMyFeedFolderAlertDialog
           myFeedFolderTitle={title}
           onDelete={onDelete}
