@@ -8,8 +8,8 @@ import { Loader } from "@/components/ui/loader";
 import { FeedType } from "@/types/feed";
 import { MyFeedFolderType } from "@/types/myFeedFolder";
 
-import { FeedCardWrapper } from "./FeedCardWrapper";
-import { FetchFeedsAPIResponse } from "../actions/feed";
+import { FetchFeedsAPIResponse } from "../../actions/feed";
+import { FeedCardWrapper } from "../Card";
 
 type FeedListProps = {
   user?: User;

@@ -4,8 +4,8 @@ import { fetchMyFeedFoldersAPI } from "@/features/myFeedFolders/actions/myFeedFo
 import { FeedKeywordSearchInput } from "@/features/search/components/feeds/FeedKeywordSearchInput";
 import { getUser } from "@/features/users/actions/user";
 
-import { FeedList } from "./FeedList";
-import { fetchFeedsAPI } from "../actions/feed";
+import { fetchFeedsAPI } from "../../actions/feed";
+import { FeedList } from "../List/FeedList";
 
 type FeedTemplateProps = {
   keyword?: string;

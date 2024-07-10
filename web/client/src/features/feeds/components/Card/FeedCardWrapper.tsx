@@ -19,8 +19,8 @@ import { useStatusToast } from "@/hooks/useStatusToast";
 import { FeedType } from "@/types/feed";
 import { MyFeedFolderType } from "@/types/myFeedFolder";
 
-import { FollowDropdownMenu } from "./DropdownMenu";
-import { FeedCard } from "./FeedCard";
+import { FeedCardItem } from "./FeedCardItem";
+import { FollowDropdownMenu } from "../DropdownMenu";
 
 type FeedCardWrapperProps = {
   user?: User;
@@ -291,7 +291,7 @@ export const FeedCardWrapper: FC<FeedCardWrapperProps> = ({
           </div>
         )}
 
-        <FeedCard feed={showFeed} />
+        <FeedCardItem feed={showFeed} />
       </div>
     </div>
   );

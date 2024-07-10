@@ -1,4 +1,4 @@
-import { FeedTemplate } from "@/features/feeds/components/FeedTemplate";
+import { FeedTemplate } from "@/features/feeds/components/Template";
 
 type PageProps = {
   params: { slug: string };

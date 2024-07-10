@@ -9,7 +9,7 @@ import { getUser } from "@/features/users/actions/user";
 import { BreadCrumbType, PageBreadcrumb } from "@/components/ui/breadcrumb";
 
 import { FeedDetailHeader } from "./FeedDetailHeader";
-import { fetchFeedByIdAPI } from "../actions/feed";
+import { fetchFeedByIdAPI } from "../../actions/feed";
 
 type FeedDetailPageProps = {
   id: string;

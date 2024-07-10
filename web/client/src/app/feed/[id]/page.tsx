@@ -1,4 +1,4 @@
-import { FeedDetailTemplate } from "@/features/feeds/components/FeedDetailTemplate";
+import { FeedDetailTemplate } from "@/features/feeds/components/Template";
 
 type FeedDetailPageProps = {
   params: {

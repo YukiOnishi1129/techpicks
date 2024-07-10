@@ -20,7 +20,7 @@ import { useStatusToast } from "@/hooks/useStatusToast";
 import { FeedType } from "@/types/feed";
 import { MyFeedFolderType } from "@/types/myFeedFolder";
 
-import { FollowDropdownMenu } from "./DropdownMenu";
+import { FollowDropdownMenu } from "../DropdownMenu";
 
 type FeedDetailHeaderProps = {
   user?: User;
