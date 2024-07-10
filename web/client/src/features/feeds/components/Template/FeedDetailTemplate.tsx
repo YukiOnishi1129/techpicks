@@ -4,6 +4,7 @@ import { fetchArticlesByFeedIdsAPI } from "@/features/articles/actions/article";
 import { fetchFavoriteArticleFoldersAPI } from "@/features/favoriteArticleFolders/actions/favoriteArticleFolders";
 import { fetchMyFeedFoldersAPI } from "@/features/myFeedFolders/actions/myFeedFolder";
 import { MyFeedFolderArticleList } from "@/features/myFeedFolders/components/List";
+import { FeedArticleKeywordSearchDialog } from "@/features/search/components/feeds/Dialog";
 import { getUser } from "@/features/users/actions/user";
 
 import { BreadCrumbType, PageBreadcrumb } from "@/components/ui/breadcrumb";
@@ -77,6 +78,10 @@ export const FeedDetailTemplate: FC<FeedDetailPageProps> = async ({
         }
         fetchArticles={fetchArticlesByFeedIdsAPI}
       />
+
+      <div className="fixed bottom-20 right-4 z-50 md:hidden">
+        <FeedArticleKeywordSearchDialog feedId={id} keyword={keyword} />
+      </div>
     </>
   );
 };
