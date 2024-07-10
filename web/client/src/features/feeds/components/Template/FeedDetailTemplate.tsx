@@ -48,29 +48,35 @@ export const FeedDetailTemplate: FC<FeedDetailPageProps> = async ({
   ];
 
   return (
-    <div className="mb-2 mt-4">
-      <PageBreadcrumb breadcrumbs={breadcrumbs} />
-      <div className="my-2">
-        {resFeed.data.feed && (
-          <FeedDetailHeader
-            user={user}
-            feed={resFeed.data.feed}
-            myFeedFolders={resMyFeedList.data.myFeedFolders}
-          />
-        )}
+    <>
+      <div className="fixed z-10 w-[90%] bg-card md:block md:w-[70%] md:justify-between md:px-4">
+        <div className="mt-4">
+          <PageBreadcrumb breadcrumbs={breadcrumbs} />
+        </div>
+        <div className="mt-2">
+          {resFeed.data.feed && (
+            <FeedDetailHeader
+              user={user}
+              keyword={keyword}
+              feed={resFeed.data.feed}
+              myFeedFolders={resMyFeedList.data.myFeedFolders}
+            />
+          )}
+        </div>
       </div>
-      <div className="mt-4">
-        <MyFeedFolderArticleList
-          user={user}
-          initialArticles={res.data.articles}
-          keyword={keyword}
-          feedIdList={feedIdList}
-          favoriteArticleFolders={
-            resFavoriteArticleFolders.data.favoriteArticleFolders
-          }
-          fetchArticles={fetchArticlesByFeedIdsAPI}
-        />
-      </div>
-    </div>
+
+      <div className="h-24" />
+
+      <MyFeedFolderArticleList
+        user={user}
+        initialArticles={res.data.articles}
+        keyword={keyword}
+        feedIdList={feedIdList}
+        favoriteArticleFolders={
+          resFavoriteArticleFolders.data.favoriteArticleFolders
+        }
+        fetchArticles={fetchArticlesByFeedIdsAPI}
+      />
+    </>
   );
 };

@@ -12,6 +12,7 @@ import {
   createMyFeed,
   deleteMyFeed,
 } from "@/features/myFeeds/repository/myFeed";
+import { FeedArticleKeywordSearchInput } from "@/features/search/components/feeds/FeedArticleKeywordSearchInput";
 import { getUser } from "@/features/users/actions/user";
 
 import { useCheckImageExist } from "@/hooks/useImage";
@@ -26,12 +27,14 @@ type FeedDetailHeaderProps = {
   user?: User;
   feed: FeedType;
   myFeedFolders: Array<MyFeedFolderType>;
+  keyword?: string;
 };
 
 export const FeedDetailHeader: FC<FeedDetailHeaderProps> = ({
   user,
   feed,
   myFeedFolders,
+  keyword,
 }) => {
   const { successToast, failToast } = useStatusToast();
   const faviconImage = useCheckImageExist(feed.platform.faviconUrl);
@@ -276,7 +279,10 @@ export const FeedDetailHeader: FC<FeedDetailHeaderProps> = ({
 
   return (
     <div className="flex justify-between">
-      <div className="mt-4 flex w-auto items-center space-x-4 space-y-4 md:static md:mt-0">
+      <div className="hidden w-4/5 md:block">
+        <FeedArticleKeywordSearchInput feedId={feed.id} keyword={keyword} />
+      </div>
+      <div className="flex w-auto items-center space-x-4 space-y-4 md:static md:hidden">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img className="ml-2 w-12" src={faviconImage} alt="" />
         <div className="w-3/4">
@@ -286,7 +292,7 @@ export const FeedDetailHeader: FC<FeedDetailHeaderProps> = ({
         </div>
       </div>
       {user && (
-        <div className="mt-8 flex justify-end md:mt-4">
+        <div className="flex justify-end pt-2">
           <FollowDropdownMenu
             isFollowing={isFollowing}
             feedId={showFeed.id}
