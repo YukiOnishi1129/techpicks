@@ -1,9 +1,9 @@
 import { User } from "@supabase/supabase-js";
 import { FC } from "react";
 
-import { CreateMyFeedFolderDialog } from "./Dialog";
-import { MyFeedFolderList } from "./MyFeedFolderList";
-import { fetchMyFeedFoldersAPI } from "../actions/myFeedFolder";
+import { fetchMyFeedFoldersAPI } from "../../actions/myFeedFolder";
+import { CreateMyFeedFolderDialog } from "../Dialog";
+import { MyFeedFolderList } from "../List/MyFeedFolderList";
 
 type MyFeedFolderListTemplateProps = {
   user: User;

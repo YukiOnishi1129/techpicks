@@ -15,11 +15,11 @@ import { MyFeedFolderType } from "@/types/myFeedFolder";
 import { serverRevalidatePage } from "@/actions/serverAction";
 
 import { MyFeedFolderCard } from "./MyFeedFolderCard";
-import { fetchMyFeedFolderByIdAPI } from "../actions/myFeedFolder";
+import { fetchMyFeedFolderByIdAPI } from "../../actions/myFeedFolder";
 import {
   deleteMyFeedFolder,
   updateMyFeedFolder,
-} from "../repository/myFeedFolder";
+} from "../../repository/myFeedFolder";
 
 type MyFeedFolderListProps = {
   initialMyFeedFolders: MyFeedFolderType[];

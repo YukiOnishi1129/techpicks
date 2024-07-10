@@ -9,7 +9,7 @@ import { MyFeedFolderArticleKeywordSearchInput } from "@/features/search/compone
 
 import { BreadCrumbType, PageBreadcrumb } from "@/components/ui/breadcrumb";
 
-import { MyFeedFolderArticleList } from "./MyFeedFolderArtcleList";
+import { MyFeedFolderArticleList } from "../List";
 
 type MyFeedFolderDetailTemplateProps = {
   user: User;

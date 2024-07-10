@@ -3,7 +3,7 @@ import { FC } from "react";
 import { fetchArticlesByFeedIdsAPI } from "@/features/articles/actions/article";
 import { fetchFavoriteArticleFoldersAPI } from "@/features/favoriteArticleFolders/actions/favoriteArticleFolders";
 import { fetchMyFeedFoldersAPI } from "@/features/myFeedFolders/actions/myFeedFolder";
-import { MyFeedFolderArticleList } from "@/features/myFeedFolders/components/MyFeedFolderArtcleList";
+import { MyFeedFolderArticleList } from "@/features/myFeedFolders/components/List";
 import { getUser } from "@/features/users/actions/user";
 
 import { BreadCrumbType, PageBreadcrumb } from "@/components/ui/breadcrumb";

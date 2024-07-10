@@ -20,7 +20,7 @@ import { MyFeedFolderType } from "@/types/myFeedFolder";
 
 import { serverRevalidatePage } from "@/actions/serverAction";
 
-import { UpdateMyFeedFolderDialog } from "./Dialog";
+import { UpdateMyFeedFolderDialog } from "../Dialog";
 
 type MyFeedFolderCardProps = {
   user?: User;

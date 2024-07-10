@@ -131,7 +131,7 @@ export const FavoriteArticleFolderList: FC<FavoriteArticleFolderListProps> = ({
           <NotFoundList message="No folder found" />
         </div>
       ) : (
-        <div className="m-auto">
+        <div className="m-auto mb-8">
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
             {initialFavoriteArticleFolders.map((favoriteArticleFolder) => (
               <FavoriteArticleFolderCard
