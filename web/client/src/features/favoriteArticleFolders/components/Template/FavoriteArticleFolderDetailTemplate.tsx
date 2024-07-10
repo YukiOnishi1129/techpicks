@@ -3,7 +3,7 @@ import { FC } from "react";
 
 import { fetchFavoriteArticlesByFavoriteArticleFolderIdAPI } from "@/features/favoriteArticles/actions/favoriteArticle";
 import { CreateFavoriteArticleDialog } from "@/features/favoriteArticles/components/Dialog";
-import { FavoriteArticleList } from "@/features/favoriteArticles/components/FavoriteArticleList";
+import { FavoriteArticleList } from "@/features/favoriteArticles/components/List";
 import { FavoriteArticleKeyWordSearchDialog } from "@/features/search/components/favoriteArticleFolder/Dialog";
 import { FavoriteArticleFolderArticleKeywordSearchInput } from "@/features/search/components/favoriteArticleFolder/FavoriteArticleFolderArticleKeywordSearchInput";
 

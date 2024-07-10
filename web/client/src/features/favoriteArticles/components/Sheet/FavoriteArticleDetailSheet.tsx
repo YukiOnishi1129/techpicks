@@ -21,8 +21,8 @@ import { formatShowDateTime } from "@/lib/date";
 import { FavoriteArticleType } from "@/types/favoriteArticle";
 import { FavoriteArticleFolderType } from "@/types/favoriteArticleFolder";
 
-import { RemoveFavoriteArticleAlertDialog } from "./Dialog";
-import { CopyFavoriteArticleDropdownMenu } from "./DropdownMenu";
+import { RemoveFavoriteArticleAlertDialog } from "../Dialog";
+import { CopyFavoriteArticleDropdownMenu } from "../DropdownMenu";
 
 type FavoriteArticleDetailSheetProps = {
   favoriteArticle: FavoriteArticleType;

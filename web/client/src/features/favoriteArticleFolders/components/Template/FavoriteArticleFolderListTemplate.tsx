@@ -36,12 +36,10 @@ export const FavoriteArticleFolderListTemplate: FC<
       </div>
       <div className="h-4 md:h-[120px]" />
 
-      {/* <div className="w-full border-b-2  py-4"> */}
       <FavoriteArticleFolderList
         initialFavoriteArticleFolders={res.data.favoriteArticleFolders}
         user={user}
       />
-      {/* </div> */}
 
       <div className="fixed bottom-20 right-4 z-50 md:hidden">
         <FavoriteArticleFolderKeyWordSearchDialog keyword={keyword} />

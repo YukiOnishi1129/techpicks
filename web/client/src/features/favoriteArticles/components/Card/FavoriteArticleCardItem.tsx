@@ -7,11 +7,11 @@ import { showDiffDateToCurrentDate } from "@/lib/date";
 
 import { FavoriteArticleType } from "@/types/favoriteArticle";
 
-type FavoriteArticleCardProps = {
+type FavoriteArticleCardItemProps = {
   favoriteArticle: FavoriteArticleType;
 };
 
-export const FavoriteArticleCard: FC<FavoriteArticleCardProps> = ({
+export const FavoriteArticleCardItem: FC<FavoriteArticleCardItemProps> = ({
   favoriteArticle,
 }) => {
   const imageUrl = useCheckImageExist(
