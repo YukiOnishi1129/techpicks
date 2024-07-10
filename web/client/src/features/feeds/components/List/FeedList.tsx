@@ -8,8 +8,8 @@ import { Loader } from "@/components/ui/loader";
 import { FeedType } from "@/types/feed";
 import { MyFeedFolderType } from "@/types/myFeedFolder";
 
-import { FeedCardWrapper } from "./FeedCardWrapper";
-import { FetchFeedsAPIResponse } from "../actions/feed";
+import { FetchFeedsAPIResponse } from "../../actions/feed";
+import { FeedCardWrapper } from "../Card";
 
 type FeedListProps = {
   user?: User;
@@ -91,7 +91,7 @@ export function FeedList({
   }, [loadMore, offset, hashMore]);
 
   return (
-    <div className="m-auto h-[590px] overflow-y-scroll md:h-[550px]">
+    <div>
       {flatFeeds.length === 0 ? (
         <NotFoundList message="No feeds found." />
       ) : (

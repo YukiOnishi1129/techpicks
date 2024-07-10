@@ -11,7 +11,7 @@ import { FavoriteArticleFolderType } from "@/types/favoriteArticleFolder";
 import { LanguageStatus } from "@/types/language";
 
 import { FetchBookmarkListAPIResponse } from "../../actions/bookmark";
-import { BookmarkCardWrapper } from "../Wrapper";
+import { BookmarkCardWrapper } from "../Card";
 
 type Props = {
   user: User | undefined;

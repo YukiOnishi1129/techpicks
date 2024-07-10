@@ -52,7 +52,7 @@ import { fetchBookmarkCountByArticleUrlAPI } from "../../../actions/bookmark";
 import { createBookmark } from "../../../repository/bookmark";
 
 type CreateBookmarkDialogContentProps = {
-  user: User | undefined;
+  user?: User;
   handleClose: () => void;
 };
 

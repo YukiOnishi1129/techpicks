@@ -19,8 +19,8 @@ import { useStatusToast } from "@/hooks/useStatusToast";
 import { FeedType } from "@/types/feed";
 import { MyFeedFolderType } from "@/types/myFeedFolder";
 
-import { FollowDropdownMenu } from "./DropdownMenu";
-import { FeedCard } from "./FeedCard";
+import { FeedCardItem } from "./FeedCardItem";
+import { FollowDropdownMenu } from "../DropdownMenu";
 
 type FeedCardWrapperProps = {
   user?: User;
@@ -276,7 +276,10 @@ export const FeedCardWrapper: FC<FeedCardWrapperProps> = ({
   );
 
   return (
-    <div key={showFeed.id} className="mb-4 rounded-2xl border-2 md:py-2">
+    <div
+      key={showFeed.id}
+      className="mb-4 rounded-2xl border-2 bg-primary-foreground md:py-2"
+    >
       <div className="relative w-full rounded">
         {user && (
           <div className="absolute right-4  top-2 z-10">
@@ -291,7 +294,7 @@ export const FeedCardWrapper: FC<FeedCardWrapperProps> = ({
           </div>
         )}
 
-        <FeedCard feed={showFeed} />
+        <FeedCardItem feed={showFeed} />
       </div>
     </div>
   );

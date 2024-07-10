@@ -170,10 +170,12 @@ export const getArticlesByFeedIds = async ({
       query.in("feed_id", feedIds);
     }
 
+    // TODO: Fix this
     if (keyword) {
-      query.or(
-        `articles.title.ilike.%${keyword}%,articles.description.ilike.%${keyword}%,articles.tags.ilike.%${keyword}%`
-      );
+      // query.or(
+      //   `articles.title.ilike.%${keyword}%,articles.description.ilike.%${keyword}%,articles.tags.ilike.%${keyword}%`
+      // );
+      query.ilike("articles.title", `%${keyword}%`);
     }
 
     const { data, error } = await query

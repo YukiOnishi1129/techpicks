@@ -1,2 +1,2 @@
-export * from "./CreateMyFeedFolderDialog";
+export * from "./Create/CreateMyFeedFolderDialog";
 export * from "./UpdateMyFeedFolderDialog";

@@ -1,5 +1,6 @@
 "use client";
 
+import { User } from "@supabase/supabase-js";
 import { usePathname } from "next/navigation";
 import { FC, useMemo } from "react";
 
@@ -8,14 +9,17 @@ import { MyFeedFolderType } from "@/types/myFeedFolder";
 
 import { NAVIGATION_LISTS } from "@/constant/navigation";
 
+import { MobileHeaderButton } from "./MobileHeaderButton";
 import { MobileSidebarNavigation } from "./MobileSidebarNavigation";
 
 type MobileHeaderProps = {
+  user?: User;
   myFeedFolders: Array<MyFeedFolderType>;
   favoriteArticleFolders: Array<FavoriteArticleFolderType>;
 };
 
 export const MobileHeader: FC<MobileHeaderProps> = ({
+  user,
   myFeedFolders,
   favoriteArticleFolders,
 }) => {
@@ -72,11 +76,9 @@ export const MobileHeader: FC<MobileHeaderProps> = ({
       </div>
 
       <h1 className="text-2xl font-bold">{pageName}</h1>
-      {/* <div className="flex items-center justify-end">
-        <div>
-          <ModeToggle />
-        </div>
-      </div> */}
+      <div className="absolute right-1 w-14">
+        <MobileHeaderButton user={user} pathname={pathname} />
+      </div>
     </div>
   );
 };

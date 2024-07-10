@@ -110,7 +110,10 @@ export function DesktopSidebar({
                 </Link>
                 <MyFeedFolderLinks myFeedFolders={myFeedFolders} />
                 <div className="ml-4">
-                  <CreateMyFeedFolderDialog buttonVariant="ghost" />
+                  <CreateMyFeedFolderDialog
+                    buttonVariant="ghost"
+                    buttonSize={18}
+                  />
                 </div>
               </div>
             </div>
@@ -131,7 +134,10 @@ export function DesktopSidebar({
                   favoriteArticleFolders={favoriteArticleFolders}
                 />
                 <div className="ml-4">
-                  <CreateFavoriteArticleFolderDialog buttonVariant="ghost" />
+                  <CreateFavoriteArticleFolderDialog
+                    buttonVariant="ghost"
+                    buttonSize={18}
+                  />
                 </div>
               </div>
             </div>

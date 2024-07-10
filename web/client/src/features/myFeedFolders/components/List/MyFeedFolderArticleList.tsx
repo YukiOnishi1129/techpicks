@@ -3,7 +3,7 @@ import { User } from "@supabase/supabase-js";
 import { useCallback, useRef, useState, useEffect } from "react";
 
 import { FetchArticlesAPIResponse } from "@/features/articles/actions/article";
-import { ArticleCardWrapper } from "@/features/articles/components/Wrapper";
+import { ArticleCardWrapper } from "@/features/articles/components/Card";
 
 import { NotFoundList } from "@/components/layout/NotFoundList";
 import { Loader } from "@/components/ui/loader";
@@ -98,11 +98,11 @@ export function MyFeedFolderArticleList({
   return (
     <>
       {flatArticles.length === 0 ? (
-        <div className="h-[590px] md:h-[540px]">
+        <div>
           <NotFoundList message="No articles found" />
         </div>
       ) : (
-        <div className="m-auto h-[590px] overflow-y-scroll md:h-[540px]">
+        <div>
           {flatArticles.map((article) => (
             <div key={article.id} className="mb-4">
               <ArticleCardWrapper

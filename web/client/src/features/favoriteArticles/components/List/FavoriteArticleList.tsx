@@ -13,7 +13,7 @@ import {
   FavoriteArticleFolderType,
 } from "@/types/favoriteArticleFolder";
 
-import { FavoriteArticleCardWrapper } from "./FavoriteArticleCardWrapper";
+import { FavoriteArticleCardWrapper } from "../Card";
 
 type FavoriteArticleListProps = {
   user?: User;

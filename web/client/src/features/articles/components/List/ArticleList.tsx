@@ -12,7 +12,7 @@ import { ArticleTabType, ArticleType } from "@/types/article";
 import { FavoriteArticleFolderType } from "@/types/favoriteArticleFolder";
 import { LanguageStatus } from "@/types/language";
 
-import { ArticleCardWrapper } from "../Wrapper";
+import { ArticleCardWrapper } from "../Card";
 
 type Props = {
   user?: User;

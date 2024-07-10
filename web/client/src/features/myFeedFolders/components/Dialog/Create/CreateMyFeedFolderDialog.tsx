@@ -5,6 +5,7 @@ import { ReloadIcon } from "@radix-ui/react-icons";
 import { usePathname } from "next/navigation";
 import { FC, useCallback, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
+import { HiPlus } from "react-icons/hi";
 import { z } from "zod";
 
 import { logoutToLoginPage } from "@/features/auth/actions/auth";
@@ -52,11 +53,13 @@ type CreateMyFeedFolderDialogProps = {
     | "secondary"
     | "ghost"
     | "link";
+  buttonSize?: number;
   handleCreatedMyFeedFolder?: (myFeedId: string) => Promise<void>;
 };
 
 export const CreateMyFeedFolderDialog: FC<CreateMyFeedFolderDialogProps> = ({
   buttonVariant,
+  buttonSize = 24,
   handleCreatedMyFeedFolder,
 }) => {
   const [open, setOpen] = useState(false);
@@ -68,7 +71,10 @@ export const CreateMyFeedFolderDialog: FC<CreateMyFeedFolderDialogProps> = ({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant={buttonVariant}>{"Create folder"}</Button>
+        <Button variant={buttonVariant}>
+          <HiPlus size={buttonSize} />
+          <span className="hidden pl-2 md:block">{"Create"}</span>
+        </Button>
       </DialogTrigger>
       {open && (
         <CreateMyFeedFolderDialogContent

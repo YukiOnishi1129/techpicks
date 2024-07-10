@@ -15,11 +15,11 @@ import { MyFeedFolderType } from "@/types/myFeedFolder";
 import { serverRevalidatePage } from "@/actions/serverAction";
 
 import { MyFeedFolderCard } from "./MyFeedFolderCard";
-import { fetchMyFeedFolderByIdAPI } from "../actions/myFeedFolder";
+import { fetchMyFeedFolderByIdAPI } from "../../actions/myFeedFolder";
 import {
   deleteMyFeedFolder,
   updateMyFeedFolder,
-} from "../repository/myFeedFolder";
+} from "../../repository/myFeedFolder";
 
 type MyFeedFolderListProps = {
   initialMyFeedFolders: MyFeedFolderType[];
@@ -120,11 +120,11 @@ export const MyFeedFolderList: FC<MyFeedFolderListProps> = ({
   return (
     <>
       {initialMyFeedFolders.length === 0 ? (
-        <div className="h-[590px] md:h-[540px]">
+        <div>
           <NotFoundList message="No articles found" />
         </div>
       ) : (
-        <div className="m-auto h-[590px] overflow-y-scroll md:h-[540px]">
+        <div className="mb-8">
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
             {initialMyFeedFolders.map((myFeedFolder) => (
               <MyFeedFolderCard

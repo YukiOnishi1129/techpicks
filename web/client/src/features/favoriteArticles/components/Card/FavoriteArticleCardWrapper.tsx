@@ -14,18 +14,18 @@ import { useStatusToast } from "@/hooks/useStatusToast";
 import { FavoriteArticleType } from "@/types/favoriteArticle";
 import { FavoriteArticleFolderType } from "@/types/favoriteArticleFolder";
 
-import { RemoveFavoriteArticleAlertDialog } from "./Dialog";
-import { CopyFavoriteArticleDropdownMenu } from "./DropdownMenu";
-import { FavoriteArticleCard } from "./FavoriteArticleCard";
-import { FavoriteArticleDetailSheet } from "./FavoriteArticleDetailSheet";
+import { FavoriteArticleCardItem } from "./FavoriteArticleCardItem";
 import {
   fetchFavoriteArticleAPI,
   fetchFavoriteArticleCountByFavoriteArticleFolderIdAndArticleIdAndArticleUrlAPI,
-} from "../actions/favoriteArticle";
+} from "../../actions/favoriteArticle";
 import {
   createFavoriteArticle,
   deleteFavoriteArticle,
-} from "../repository/favoriteArticle";
+} from "../../repository/favoriteArticle";
+import { RemoveFavoriteArticleAlertDialog } from "../Dialog";
+import { CopyFavoriteArticleDropdownMenu } from "../DropdownMenu";
+import { FavoriteArticleDetailSheet } from "../Sheet";
 
 type FavoriteArticleCardWrapperProps = {
   user?: User;
@@ -335,7 +335,7 @@ export const FavoriteArticleCardWrapper: FC<
           handleRemoveFavoriteArticle={handleRemoveFavoriteArticleCard}
           handleCreateFavoriteArticleFolder={handleCreateFavoriteArticleFolder}
         >
-          <FavoriteArticleCard favoriteArticle={favoriteArticle} />
+          <FavoriteArticleCardItem favoriteArticle={favoriteArticle} />
         </FavoriteArticleDetailSheet>
       </div>
     </div>

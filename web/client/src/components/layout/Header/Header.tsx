@@ -12,7 +12,7 @@ type HeaderProps = {
 };
 
 export const Header: FC<HeaderProps> = async ({ user }) => {
-  const myFeedFolderRes = await fetchMyFeedFoldersAPI();
+  const myFeedFolderRes = await fetchMyFeedFoldersAPI({});
   const favoriteArticleFolderRes = await fetchFavoriteArticleFoldersAPI({});
   return (
     <>
@@ -21,6 +21,7 @@ export const Header: FC<HeaderProps> = async ({ user }) => {
       </div>
       <div className="block md:hidden">
         <MobileHeader
+          user={user}
           myFeedFolders={myFeedFolderRes.data.myFeedFolders}
           favoriteArticleFolders={
             favoriteArticleFolderRes.data.favoriteArticleFolders

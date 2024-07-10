@@ -9,11 +9,11 @@ import { showDiffDateToCurrentDate } from "@/lib/date";
 
 import { FeedType } from "@/types/feed";
 
-type FeedCardProps = {
+type FeedCardItemProps = {
   feed: FeedType;
 };
 
-export const FeedCard: FC<FeedCardProps> = ({ feed }: FeedCardProps) => {
+export const FeedCardItem: FC<FeedCardItemProps> = ({ feed }) => {
   const imageUrl = useCheckImageExist(feed.thumbnailUrl);
   const faviconUrl = useCheckImageExist(feed.platform.faviconUrl);
   const latestPublishedAt = feed.articles?.[0]?.publishedAt;

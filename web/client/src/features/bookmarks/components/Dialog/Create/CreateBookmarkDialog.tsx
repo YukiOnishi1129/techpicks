@@ -10,11 +10,21 @@ import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { CreateBookmarkDialogContent } from "./CreateBookmarkDialogContent";
 
 type CreateBookmarkDialogProps = {
-  user: User | undefined;
+  user?: User;
+  buttonVariant?:
+    | "default"
+    | "destructive"
+    | "outline"
+    | "secondary"
+    | "ghost"
+    | "link";
+  buttonSize?: number;
 };
 
 export const CreateBookmarkDialog: FC<CreateBookmarkDialogProps> = ({
   user,
+  buttonVariant,
+  buttonSize = 24,
 }) => {
   const [open, setOpen] = useState(false);
 
@@ -25,9 +35,9 @@ export const CreateBookmarkDialog: FC<CreateBookmarkDialogProps> = ({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>
-          <HiPlus />
-          {"Add"}
+        <Button variant={buttonVariant}>
+          <HiPlus size={buttonSize} />
+          <span className="hidden pl-2 md:block">{"Add"}</span>
         </Button>
       </DialogTrigger>
       {open && (

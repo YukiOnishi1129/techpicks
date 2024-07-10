@@ -1,12 +1,20 @@
-import { FeedDetailTemplate } from "@/features/feeds/components/FeedDetailTemplate";
+import { FeedDetailTemplate } from "@/features/feeds/components/Template";
 
 type FeedDetailPageProps = {
   params: {
     id: string;
   };
+  searchParams: { [key: string]: string | string[] | undefined };
 };
 
-export default function FeedDetailPage({ params }: FeedDetailPageProps) {
+export default function FeedDetailPage({
+  params,
+  searchParams,
+}: FeedDetailPageProps) {
   const { id } = params;
-  return <FeedDetailTemplate id={id} />;
+  const keyword =
+    typeof searchParams["keyword"] === "string"
+      ? searchParams["keyword"]
+      : undefined;
+  return <FeedDetailTemplate id={id} keyword={keyword} />;
 }

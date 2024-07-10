@@ -74,9 +74,11 @@ const ArticleKeyWordSearchDialogContent: FC<
   }, [form]);
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    if (values.keyword || (!!values.keyword && values.keyword.trim() === ""))
-      return;
-    const keywordPath = `keyword=${values.keyword}`;
+    let keywordPath = "";
+    if (!!values.keyword && values.keyword.trim() === "") {
+      keywordPath = `keyword=${values.keyword}`;
+    }
+
     await serverRevalidatePage(pathname);
     router.replace(`/article/search/result?${keywordPath}`);
     resetDialog();
@@ -86,7 +88,7 @@ const ArticleKeyWordSearchDialogContent: FC<
   return (
     <DialogContent onCloseAutoFocus={resetDialog}>
       <DialogHeader>
-        <DialogTitle>{"Article Search"}</DialogTitle>
+        <DialogTitle>{"Search"}</DialogTitle>
       </DialogHeader>
       <div>
         <Form {...form}>
