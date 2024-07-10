@@ -12,7 +12,7 @@ type HeaderProps = {
 };
 
 export const Header: FC<HeaderProps> = async ({ user }) => {
-  const myFeedFolderRes = await fetchMyFeedFoldersAPI();
+  const myFeedFolderRes = await fetchMyFeedFoldersAPI({});
   const favoriteArticleFolderRes = await fetchFavoriteArticleFoldersAPI({});
   return (
     <>

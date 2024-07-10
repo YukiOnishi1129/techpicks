@@ -9,9 +9,13 @@ import { MyFeedFolderType } from "@/types/myFeedFolder";
 
 type GetMyFeedFolders = {
   userId: string;
+  keyword?: string;
 };
 
-export const getMyFeedFolders = async ({ userId }: GetMyFeedFolders) => {
+export const getMyFeedFolders = async ({
+  userId,
+  keyword,
+}: GetMyFeedFolders) => {
   try {
     const supabase = await createGetOnlyServerSideClient();
     const query = supabase
@@ -28,6 +32,10 @@ export const getMyFeedFolders = async ({ userId }: GetMyFeedFolders) => {
       .order("created_at", {
         ascending: true,
       });
+
+    if (keyword) {
+      query.or(`title.ilike.%${keyword}%,description.ilike.%${keyword}%`);
+    }
 
     const { data, error } = await query;
 

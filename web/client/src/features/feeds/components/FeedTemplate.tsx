@@ -13,7 +13,7 @@ type FeedTemplateProps = {
 
 export const FeedTemplate: FC<FeedTemplateProps> = async ({ keyword }) => {
   const res = await fetchFeedsAPI({ keyword: keyword });
-  const resMyFeedList = await fetchMyFeedFoldersAPI();
+  const resMyFeedList = await fetchMyFeedFoldersAPI({});
   const user = await getUser();
   return (
     <div className="w-auto">

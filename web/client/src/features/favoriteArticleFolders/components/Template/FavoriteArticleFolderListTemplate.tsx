@@ -25,8 +25,8 @@ export const FavoriteArticleFolderListTemplate: FC<
           <FaHeart className="mr-4" color="red" />
           <span>Favorite Article Folders</span>
         </h1>
-        <div className="flex w-full items-center justify-between">
-          <div className="mt-2 w-4/5 pr-4">
+        <div className="mt-2 flex w-full items-center justify-between">
+          <div className="w-4/5 pr-4">
             <FavoriteArticleFolderKeywordSearchInput keyword={keyword} />
           </div>
           <div>
