@@ -7,6 +7,7 @@ import { FC, useMemo } from "react";
 import { CreateBookmarkDialog } from "@/features/bookmarks/components/Dialog";
 import { CreateFavoriteArticleFolderDialog } from "@/features/favoriteArticleFolders/components/Dialog";
 import { CreateFavoriteArticleDialogFloatButton } from "@/features/favoriteArticles/components/Dialog";
+import { CreateMyFeedFolderDialog } from "@/features/myFeedFolders/components/Dialog";
 
 import { NAVIGATION_LISTS } from "@/constant/navigation";
 
@@ -27,7 +28,7 @@ export const MobileHeaderButton: FC<MobileHeaderButtonProps> = ({
       case NAVIGATION_LISTS.BOOKMARK:
         return <CreateBookmarkDialog buttonVariant="ghost" user={user} />;
       case NAVIGATION_LISTS.MY_FEED_FOLDER:
-        return <></>;
+        return <CreateMyFeedFolderDialog buttonVariant="ghost" />;
       case NAVIGATION_LISTS.FAVORITE_ARTICLE_FOLDER:
         return <CreateFavoriteArticleFolderDialog buttonVariant="ghost" />;
       default:

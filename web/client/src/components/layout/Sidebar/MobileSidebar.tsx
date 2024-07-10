@@ -123,7 +123,10 @@ export const MobileSidebar: FC<SidebarProps> = ({
                 handleCloseSheet={handleCloseSheet}
               />
               <div className="ml-4">
-                <CreateMyFeedFolderDialog buttonVariant="ghost" />
+                <CreateMyFeedFolderDialog
+                  buttonVariant="ghost"
+                  buttonSize={18}
+                />
               </div>
             </div>
           </div>

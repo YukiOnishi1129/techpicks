@@ -16,15 +16,16 @@ export const MyFeedFolderListTemplate: FC<
   const myFeedFolders = res.data.myFeedFolders;
   return (
     <div className="w-auto">
-      <h1 className="mb-4 mt-8 text-2xl font-bold">My Feed Folders</h1>
-      <div>
-        <CreateMyFeedFolderDialog />
+      <div className="fixed z-10 hidden w-[90%] bg-card md:block md:w-[70%] md:px-4">
+        <h1 className="mt-4 text-2xl font-bold">My Feed Folders</h1>
+        <div className="mt-2">
+          <CreateMyFeedFolderDialog />
+        </div>
       </div>
 
-      {/* Create New Feed Folder */}
-      <div className="w-full border-b-2  py-4">
-        <MyFeedFolderList initialMyFeedFolders={myFeedFolders} user={user} />
-      </div>
+      <div className="h-4 md:h-[120px]" />
+
+      <MyFeedFolderList initialMyFeedFolders={myFeedFolders} user={user} />
     </div>
   );
 };
