@@ -18,17 +18,18 @@ const formSchema = z.object({
 
 type MyFeedFolderArticleKeywordSearchInputProps = {
   myFeedFolderId: string;
+  keyword?: string;
 };
 
 export const MyFeedFolderArticleKeywordSearchInput: FC<
   MyFeedFolderArticleKeywordSearchInputProps
-> = ({ myFeedFolderId }) => {
+> = ({ myFeedFolderId, keyword }) => {
   const router = useRouter();
   const pathname = usePathname();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      keyword: "",
+      keyword: keyword ?? "",
     },
   });
 

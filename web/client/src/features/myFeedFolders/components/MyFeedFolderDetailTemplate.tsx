@@ -4,6 +4,7 @@ import { FC } from "react";
 import { fetchArticlesByFeedIdsAPI } from "@/features/articles/actions/article";
 import { fetchFavoriteArticleFoldersAPI } from "@/features/favoriteArticleFolders/actions/favoriteArticleFolders";
 import { fetchMyFeedsByMyFeedFolderIdAPI } from "@/features/myFeeds/actions/myFeed";
+import { MyFeedFolderArticleKeyWordSearchDialog } from "@/features/search/components/myFeedFolders/Dialog/MyFeedFolderArticleKeywordSearchDialog";
 import { MyFeedFolderArticleKeywordSearchInput } from "@/features/search/components/myFeedFolders/MyFeedFolderArticleKeywordSearchInput";
 
 import { BreadCrumbType, PageBreadcrumb } from "@/components/ui/breadcrumb";
@@ -52,24 +53,37 @@ export const MyFeedFolderDetailTemplate: FC<
   ];
   return (
     <>
-      <div className="mb-2 mt-4">
-        <PageBreadcrumb breadcrumbs={breadcrumbs} />
-        <div className="mt-2">
-          <MyFeedFolderArticleKeywordSearchInput myFeedFolderId={id} />
+      <div className="fixed z-10  w-[90%] bg-card md:block md:w-[70%] md:justify-between md:px-4">
+        <div className="mt-4 pb-4">
+          <PageBreadcrumb breadcrumbs={breadcrumbs} />
         </div>
 
-        <div className="mt-4">
-          <MyFeedFolderArticleList
-            user={user}
-            initialArticles={res.data.articles}
+        <div className="hidden md:block">
+          <MyFeedFolderArticleKeywordSearchInput
+            myFeedFolderId={id}
             keyword={keyword}
-            feedIdList={feedIdList}
-            favoriteArticleFolders={
-              resFavoriteArticleFolders.data.favoriteArticleFolders
-            }
-            fetchArticles={fetchArticlesByFeedIdsAPI}
           />
         </div>
+      </div>
+
+      <div className="h-12 md:h-24" />
+
+      <MyFeedFolderArticleList
+        user={user}
+        initialArticles={res.data.articles}
+        keyword={keyword}
+        feedIdList={feedIdList}
+        favoriteArticleFolders={
+          resFavoriteArticleFolders.data.favoriteArticleFolders
+        }
+        fetchArticles={fetchArticlesByFeedIdsAPI}
+      />
+
+      <div className="fixed bottom-20 right-4 z-50 md:hidden">
+        <MyFeedFolderArticleKeyWordSearchDialog
+          myFeedFolderId={id}
+          keyword={keyword}
+        />
       </div>
     </>
   );

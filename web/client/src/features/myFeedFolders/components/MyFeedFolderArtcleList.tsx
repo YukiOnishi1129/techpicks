@@ -98,11 +98,11 @@ export function MyFeedFolderArticleList({
   return (
     <>
       {flatArticles.length === 0 ? (
-        <div className="h-[590px] md:h-[540px]">
+        <div>
           <NotFoundList message="No articles found" />
         </div>
       ) : (
-        <div className="m-auto h-[590px] overflow-y-scroll md:h-[540px]">
+        <div>
           {flatArticles.map((article) => (
             <div key={article.id} className="mb-4">
               <ArticleCardWrapper
