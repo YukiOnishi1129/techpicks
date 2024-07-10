@@ -19,9 +19,6 @@ export const DesktopHeader: FC<DesktopHeaderProps> = async ({
         <h1 className="text-2xl font-bold">Check Picks</h1>
       </Link>
       <div className="flex items-center justify-end">
-        {/* <div className="mr-4">
-          <ModeToggle />
-        </div> */}
         {user ? <LoggedMenu user={user} /> : <NotLoggedMenu />}
       </div>
     </div>

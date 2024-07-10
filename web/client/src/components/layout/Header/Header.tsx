@@ -21,6 +21,7 @@ export const Header: FC<HeaderProps> = async ({ user }) => {
       </div>
       <div className="block md:hidden">
         <MobileHeader
+          user={user}
           myFeedFolders={myFeedFolderRes.data.myFeedFolders}
           favoriteArticleFolders={
             favoriteArticleFolderRes.data.favoriteArticleFolders
