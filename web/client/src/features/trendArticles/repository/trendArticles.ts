@@ -71,10 +71,12 @@ export const getTrendArticles = async ({
       query.is("articles.favorite_articles.user_id", null);
     }
 
+    // TODO: Fix this
     if (keyword) {
-      query.or(
-        `articles.title.ilike.%${keyword}%,articles.description.ilike.%${keyword}%,articles.tags.ilike.%${keyword}%`
-      );
+      // query.or(
+      //   `articles.title.ilike.%${keyword}%,articles.description.ilike.%${keyword}%,articles.tags.ilike.%${keyword}%`
+      // );
+      query.ilike("articles.title", `%${keyword}%`);
     }
 
     if (platformIdList.length) {
