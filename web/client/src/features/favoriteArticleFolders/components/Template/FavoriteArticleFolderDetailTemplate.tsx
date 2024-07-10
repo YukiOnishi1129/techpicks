@@ -53,6 +53,7 @@ export const FavoriteArticleFolderDetailTemplate: FC<
       href: `/favorite-article-folder/${id}`,
     },
   ];
+
   return (
     <div>
       <div className="fixed z-10  w-[90%] bg-card md:block md:w-[70%] md:justify-between md:px-4">

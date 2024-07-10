@@ -33,7 +33,7 @@ export const FavoriteArticleFolderCard: FC<FavoriteArticleFolderCardProps> = ({
       ? favoriteArticleFolder.favoriteArticles[0]
       : undefined;
   return (
-    <div className="mb-4">
+    <div className="mb-4 bg-primary-foreground">
       <div className="max-h-[440px] w-full rounded border-2 px-4 py-2 md:h-[380px]">
         <div className="mb-2 flex h-[48px] w-full items-center justify-between border-b-2 pb-2">
           <h3 className="truncate px-2 text-left text-base font-bold tracking-wide md:text-xl">
@@ -54,7 +54,7 @@ export const FavoriteArticleFolderCard: FC<FavoriteArticleFolderCardProps> = ({
           />
         </div>
 
-        <p className="line-clamp-3 h-[62px] w-full text-sm">
+        {/* <p className="line-clamp-3 h-[62px] w-full text-sm">
           <Link href={`/favorite-article-folder/${favoriteArticleFolder.id}`}>
             {favoriteArticleFolder?.description ? (
               favoriteArticleFolder.description
@@ -62,7 +62,7 @@ export const FavoriteArticleFolderCard: FC<FavoriteArticleFolderCardProps> = ({
               <span className="text-gray-500">{"No description"}</span>
             )}
           </Link>
-        </p>
+        </p> */}
         <div className="border-t-2 py-2">
           {latestFavoriteArticle ? (
             <div>
@@ -82,14 +82,14 @@ export const FavoriteArticleFolderCard: FC<FavoriteArticleFolderCardProps> = ({
                 <Link
                   href={`/favorite-article-folder/${favoriteArticleFolder.id}`}
                 >
-                  <Button variant="secondary">{"SHOW MORE"}</Button>
+                  <Button>{"SHOW MORE"}</Button>
                 </Link>
               </div>
             </div>
           ) : (
             <div className="mt-4 flex size-full items-center justify-center ">
               <Link href={`/`}>
-                <Button variant="secondary">{"ADD ARTICLE"}</Button>
+                <Button>{"ADD ARTICLE"}</Button>
               </Link>
             </div>
           )}
