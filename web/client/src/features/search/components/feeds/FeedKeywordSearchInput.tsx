@@ -16,15 +16,19 @@ const formSchema = z.object({
   keyword: z.string().optional(),
 });
 
-type FeedKeywordSearchInputProps = {};
+type FeedKeywordSearchInputProps = {
+  keyword?: string;
+};
 
-export const FeedKeywordSearchInput: FC<FeedKeywordSearchInputProps> = () => {
+export const FeedKeywordSearchInput: FC<FeedKeywordSearchInputProps> = ({
+  keyword,
+}) => {
   const router = useRouter();
   const pathname = usePathname();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      keyword: "",
+      keyword: keyword ?? "",
     },
   });
 

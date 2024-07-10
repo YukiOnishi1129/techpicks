@@ -1,7 +1,7 @@
 import { FC } from "react";
 
 import { fetchArticlesAPI } from "@/features/articles/actions/article";
-import { ArticleList } from "@/features/articles/components/ArticleList";
+import { ArticleList } from "@/features/articles/components/List";
 import { fetchFavoriteArticleFoldersAPI } from "@/features/favoriteArticleFolders/actions/favoriteArticleFolders";
 import { fetchPlatformAPI } from "@/features/platforms/actions/platform";
 import { getUser } from "@/features/users/actions/user";

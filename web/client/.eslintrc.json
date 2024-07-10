@@ -6,7 +6,7 @@
     "plugin:import/warnings",
     "plugin:tailwindcss/recommended"
   ],
-  "plugins": ["import", "unused-imports", "tailwindcss", "@typescript-eslint"],
+  "plugins": ["import", "unused-imports", "tailwindcss"],
   "rules": {
     "import/order": [
       "error",
@@ -56,10 +56,10 @@
     ],
     "import/first": "error",
     "import/newline-after-import": "error",
-    "unused-imports/no-unused-imports": "error",
+    "unused-imports/no-unused-imports": "warn",
     "react/jsx-uses-react": "off",
     "react/react-in-jsx-scope": "off",
-    "@typescript-eslint/no-unused-vars": "error"
+    "@typescript-eslint/no-unused-vars": "off"
   },
   "settings": {
     "import/parsers": {

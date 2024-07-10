@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
-import { BookmarkListTemplate } from "@/features/bookmarks/components/BookmarkListTemplate";
+import { BookmarkTemplate } from "@/features/bookmarks/components/Template";
 import { getUser } from "@/features/users/actions/user";
 
 import { ScreenLoader } from "@/components/layout/ScreenLoader/ScreenLoader";
@@ -43,7 +43,7 @@ export default async function Bookmark({ searchParams }: PageProps) {
 
   return (
     <Suspense fallback={<ScreenLoader />}>
-      <BookmarkListTemplate
+      <BookmarkTemplate
         user={user}
         languageStatus={languageStatus}
         keyword={keyword}

@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 
-import { MyFeedFolderDetailTemplate } from "@/features/myFeedFolders/components/MyFeedFolderDetailTemplate";
+import { MyFeedFolderDetailTemplate } from "@/features/myFeedFolders/components/Template";
 import { getUser } from "@/features/users/actions/user";
 
 type MyFeedFolderDetailPageProps = {

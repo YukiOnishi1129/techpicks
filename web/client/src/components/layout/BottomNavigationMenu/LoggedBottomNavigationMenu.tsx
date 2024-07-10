@@ -1,23 +1,20 @@
-import { User } from "@supabase/supabase-js";
 import Link from "next/link";
 import { FC } from "react";
-import { BiSolidSearch } from "react-icons/bi";
-import { FaBookmark } from "react-icons/fa";
+import { FaBookmark, FaRegHeart } from "react-icons/fa";
 import { IoHomeSharp } from "react-icons/io5";
+import { SiFeedly } from "react-icons/si";
 
-import { MobileSidebarNavigation } from "./MobileSidebarNavigation";
-
-type LoggedBottomNavigationMenuProps = {
-  user: User;
-};
+type LoggedBottomNavigationMenuProps = {};
 
 export const LoggedBottomNavigationMenu: FC<
   LoggedBottomNavigationMenuProps
-> = ({ user }: LoggedBottomNavigationMenuProps) => {
+> = async () => {
   return (
-    <div className="fixed bottom-0 left-0 z-50 flex h-12 w-full grid-cols-5 bg-gray-800  text-white">
-      <div className="flex w-1/4  flex-col items-center justify-center border-r px-4 py-2">
-        <MobileSidebarNavigation user={user} />
+    <div className="fixed bottom-0 left-0 z-50 flex h-12 w-full grid-cols-4 bg-card text-white">
+      <div className="w-1/4 border-r  px-4 py-2">
+        <Link href="/" className="flex flex-col items-center justify-center">
+          <IoHomeSharp className="mt-2" size={24} />
+        </Link>
       </div>
 
       <div className="w-1/4 border-r  px-4 py-2">
@@ -29,26 +26,23 @@ export const LoggedBottomNavigationMenu: FC<
         </Link>
       </div>
 
-      <div className="w-1/4 border-r  px-4 py-2">
-        <Link href="/" className="flex flex-col items-center justify-center">
-          <IoHomeSharp className="mt-2" size={24} />
+      <div className="w-1/4 border-r px-4 py-2">
+        <Link
+          href="/my-feed-folder"
+          className="flex flex-col items-center justify-center"
+        >
+          <SiFeedly className="mt-2" size={24} />
         </Link>
       </div>
 
       <div className="w-1/4 border-r px-4 py-2">
         <Link
-          href="/article/search"
+          href="/favorite-article-folder"
           className="flex flex-col items-center justify-center"
         >
-          <BiSolidSearch className="mt-2" size={24} />
+          <FaRegHeart className="mt-2" size={24} />
         </Link>
       </div>
-
-      {/* <div className="w-1/5 border-r  px-4 py-2">
-        <div className="flex flex-col items-center justify-center">
-          <UserAvatar user={user} />
-        </div>
-      </div> */}
     </div>
   );
 };

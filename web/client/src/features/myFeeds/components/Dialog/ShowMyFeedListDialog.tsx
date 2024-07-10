@@ -72,7 +72,7 @@ const ShowMyFeedCard: FC<ShowMyFeedListDialogContentProps> = ({
   const faviconUrl = useCheckImageExist(platformFaviconUrl);
 
   return (
-    <div className="relative h-[450px] w-full cursor-pointer rounded border-2 px-4 py-2 md:h-[210px]">
+    <div className="relative h-[450px] w-full cursor-pointer rounded border-2 bg-primary-foreground px-4 py-2 md:h-[210px]">
       <div className="mt-2 flex h-10 md:mt-0">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
