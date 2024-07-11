@@ -150,7 +150,7 @@ export const UpdateFavoriteArticleFolderDialogContent: FC<
         <div>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-              <div className="h-[300px] overflow-y-scroll border-2 p-4">
+              <div className=" p-4">
                 <FormField
                   control={form.control}
                   name="title"
@@ -187,17 +187,19 @@ export const UpdateFavoriteArticleFolderDialogContent: FC<
                 />
               </div>
 
-              <div className="mt-4 flex w-full justify-center space-x-4">
-                <Button type="submit">{"EDIT"}</Button>
+              <div className="mt-4 flex w-full justify-between space-x-4">
                 <DialogClose>
-                  <Button onClick={resetDialog}>{"CLOSE"}</Button>
+                  <Button variant={"outline"} onClick={resetDialog}>
+                    {"CLOSE"}
+                  </Button>
                 </DialogClose>
+                <Button type="submit">{"EDIT"}</Button>
               </div>
             </form>
           </Form>
         </div>
       </div>
-      <div>
+      <div className="mt-8">
         <DeleteFavoriteArticleFolderAlertDialog
           favoriteArticleFolderTitle={title}
           onDelete={onDelete}
