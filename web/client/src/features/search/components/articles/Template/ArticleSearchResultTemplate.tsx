@@ -12,7 +12,7 @@ import { ArticleTabType } from "@/types/article";
 import { LanguageStatus } from "@/types/language";
 import { PlatformSiteType } from "@/types/platform";
 
-import { ArticleSearchDialog } from "../Dialog";
+import { ArticleSearchDialog, ArticleSearchDialogFloatButton } from "../Dialog";
 
 export type ArticleSearchResultTemplateProps = {
   languageStatus: LanguageStatus;
@@ -98,6 +98,14 @@ export const ArticleSearchResultTemplate: FC<
           }
           tab={tab}
           fetchArticles={fetchArticlesAPI}
+        />
+      </div>
+
+      <div className="fixed bottom-20 right-4 z-50 md:hidden">
+        <ArticleSearchDialogFloatButton
+          keyword={keyword}
+          selectedFeedList={resSelectedFeedList.data.feeds}
+          initialFeedList={resInitialFeedList.data.feeds}
         />
       </div>
     </div>

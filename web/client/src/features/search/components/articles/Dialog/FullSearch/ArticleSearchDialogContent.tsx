@@ -1,21 +1,18 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { usePathname, useRouter } from "next/navigation";
-import { FC, useCallback, useState } from "react";
+import { useRouter } from "next/navigation";
+import { FC, useCallback } from "react";
 import { useForm } from "react-hook-form";
-import { CiSearch } from "react-icons/ci";
 import { z } from "zod";
 
 import { SelectMultiFeedDialog } from "@/features/feeds/components/Dialog";
 
 import { Button } from "@/components/ui/button";
 import {
-  Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
   DialogClose,
 } from "@/components/ui/dialog";
 import {
@@ -43,40 +40,6 @@ const formSchema = z.object({
     .array(),
 });
 
-type ArticleSearchDialogProps = {
-  keyword?: string;
-  selectedFeedList?: Array<FeedType>;
-  initialFeedList: Array<FeedType>;
-};
-
-export const ArticleSearchDialog: FC<ArticleSearchDialogProps> = ({
-  keyword,
-  selectedFeedList = [],
-  initialFeedList,
-}) => {
-  const [open, setOpen] = useState(false);
-
-  const handleClose = useCallback(() => {
-    setOpen(false);
-  }, []);
-
-  return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger>
-        <CiSearch size="36" />
-      </DialogTrigger>
-      {open && (
-        <ArticleSearchDialogContent
-          keyword={keyword}
-          selectedFeedList={selectedFeedList}
-          initialFeedList={initialFeedList}
-          handleClose={handleClose}
-        />
-      )}
-    </Dialog>
-  );
-};
-
 type ArticleSearchDialogContentProps = {
   keyword?: string;
   selectedFeedList?: Array<FeedType>;
@@ -84,13 +47,14 @@ type ArticleSearchDialogContentProps = {
   handleClose: () => void;
 };
 
-const ArticleSearchDialogContent: FC<ArticleSearchDialogContentProps> = ({
+export const ArticleSearchDialogContent: FC<
+  ArticleSearchDialogContentProps
+> = ({
   keyword,
   selectedFeedList = [],
   initialFeedList,
   handleClose,
 }: ArticleSearchDialogContentProps) => {
-  const pathname = usePathname();
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
