@@ -7,14 +7,12 @@ import { useForm } from "react-hook-form";
 import { FaSearch } from "react-icons/fa";
 import { z } from "zod";
 
-import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-  DialogClose,
 } from "@/components/ui/dialog";
 import {
   Form,
@@ -111,17 +109,6 @@ const ArticleKeyWordSearchDialogContent: FC<
                   </FormItem>
                 )}
               />
-            </div>
-
-            <div className="mt-4 flex w-full justify-between space-x-4">
-              <DialogClose>
-                <Button variant={"outline"} onClick={resetDialog}>
-                  {"CLOSE"}
-                </Button>
-              </DialogClose>
-              <Button disabled={!form.formState.isValid} type="submit">
-                {"SEARCH"}
-              </Button>
             </div>
           </form>
         </Form>

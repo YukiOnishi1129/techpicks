@@ -17,7 +17,7 @@ import { TrendArticleList } from "../List";
 type TrendTemplateProps = {
   languageStatus: LanguageStatus;
   keyword?: string;
-  platformIdList: Array<string>;
+  feedIdList: Array<string>;
 };
 
 const TAB_LIST = {
@@ -28,18 +28,18 @@ const TAB_LIST = {
 export const TrendTemplate: FC<TrendTemplateProps> = async ({
   languageStatus,
   keyword,
-  platformIdList,
+  feedIdList,
 }) => {
   const enTrendArticleRes = await fetchTrendArticlesAPI({
     languageStatus: "2",
     keyword,
-    platformIdList,
+    feedIdList,
     tab: "trend",
   });
   const jpTrendArticleRes = await fetchTrendArticlesAPI({
     languageStatus: "1",
     keyword,
-    platformIdList,
+    feedIdList,
     tab: "trend",
   });
 
@@ -89,7 +89,7 @@ export const TrendTemplate: FC<TrendTemplateProps> = async ({
             }
             languageStatus={2}
             keyword={keyword}
-            platformIdList={platformIdList}
+            feedIdList={feedIdList}
             tab={"trend"}
             fetchTrendArticles={fetchTrendArticlesAPI}
           />
@@ -102,7 +102,7 @@ export const TrendTemplate: FC<TrendTemplateProps> = async ({
             }
             languageStatus={1}
             keyword={keyword}
-            platformIdList={platformIdList}
+            feedIdList={feedIdList}
             tab={"trend"}
             fetchTrendArticles={fetchTrendArticlesAPI}
           />

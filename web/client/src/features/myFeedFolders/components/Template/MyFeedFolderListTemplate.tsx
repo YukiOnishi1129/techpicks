@@ -1,6 +1,7 @@
 import { User } from "@supabase/supabase-js";
 import { FC } from "react";
 
+import { fetchFeedsAPI } from "@/features/feeds/actions/feed";
 import { MyFeedFolderKeywordSearchDialog } from "@/features/search/components/myFeedFolders/Dialog";
 import { MyFeedFolderKeywordSearchInput } from "@/features/search/components/myFeedFolders/MyFeedFolderKeywordSearchInput";
 
@@ -17,6 +18,7 @@ export const MyFeedFolderListTemplate: FC<
   MyFeedFolderListTemplateProps
 > = async ({ user, keyword }) => {
   const res = await fetchMyFeedFoldersAPI({ keyword });
+  const resInitialFeedList = await fetchFeedsAPI({});
   const myFeedFolders = res.data.myFeedFolders;
   return (
     <div className="w-auto">
@@ -32,7 +34,11 @@ export const MyFeedFolderListTemplate: FC<
 
       <div className="h-4 md:h-[120px]" />
 
-      <MyFeedFolderList initialMyFeedFolders={myFeedFolders} user={user} />
+      <MyFeedFolderList
+        initialMyFeedFolders={myFeedFolders}
+        user={user}
+        initialFeedList={resInitialFeedList.data.feeds}
+      />
 
       <div className="fixed bottom-20 right-4 z-50 md:hidden">
         <MyFeedFolderKeywordSearchDialog keyword={keyword} />

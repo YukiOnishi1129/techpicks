@@ -30,16 +30,13 @@ export default async function DashboardSummaryPage({
       ? searchParams["keyword"]
       : undefined;
 
-  let platformIdList: Array<string> = [];
+  let feedIdList: Array<string> = [];
 
-  if (
-    typeof searchParams["platformId"] !== "string" &&
-    searchParams["platformId"]
-  )
-    platformIdList = searchParams["platformId"];
+  if (typeof searchParams["feedId"] !== "string" && searchParams["feedId"])
+    feedIdList = searchParams["feedId"];
 
-  if (typeof searchParams["platformId"] === "string")
-    platformIdList.push(searchParams["platformId"]);
+  if (typeof searchParams["feedId"] === "string")
+    feedIdList.push(searchParams["feedId"]);
 
   return (
     <>
@@ -47,7 +44,7 @@ export default async function DashboardSummaryPage({
         <ArticleDashboardTemplate
           languageStatus={languageStatus}
           keyword={keyword}
-          platformIdList={platformIdList}
+          feedIdList={feedIdList}
           tab="summary"
         />
       </Suspense>

@@ -1,4 +1,4 @@
-import { ArticleSearchResultTemplate } from "@/features/search/components/articles/ArticleSearchResultTemplate";
+import { ArticleSearchResultTemplate } from "@/features/search/components/articles/Template";
 
 import { ArticleTabType } from "@/types/article";
 import { LanguageStatus } from "@/types/language";
@@ -27,15 +27,12 @@ export default async function ArticleSearchResultPage({
       ? (parseInt(searchParams["platformSiteType"]) as PlatformSiteType)
       : undefined;
 
-  let platformIdList: Array<string> = [];
-  if (
-    typeof searchParams["platformId"] !== "string" &&
-    searchParams["platformId"]
-  )
-    platformIdList = searchParams["platformId"];
+  let feedIdList: Array<string> = [];
+  if (typeof searchParams["feedId"] !== "string" && searchParams["feedId"])
+    feedIdList = searchParams["feedId"];
 
-  if (typeof searchParams["platformId"] === "string")
-    platformIdList.push(searchParams["platformId"]);
+  if (typeof searchParams["feedId"] === "string")
+    feedIdList.push(searchParams["feedId"]);
 
   const tab =
     typeof searchParams["tab"] === "string"
@@ -47,7 +44,7 @@ export default async function ArticleSearchResultPage({
       languageStatus={languageStatus}
       keyword={keyword}
       platformSiteType={platformSiteType}
-      platformIdList={platformIdList}
+      feedIdList={feedIdList}
       tab={tab}
     />
   );

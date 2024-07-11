@@ -11,12 +11,14 @@ export type GetFeedParams = {
   userId?: string;
   offset?: number;
   keyword?: string;
+  platformSiteType?: string;
 };
 
 export const getFeed = async ({
   userId,
   offset = 1,
   keyword,
+  platformSiteType,
 }: GetFeedParams) => {
   try {
     const supabase = await createGetOnlyServerSideClient();
@@ -37,6 +39,10 @@ export const getFeed = async ({
 
     if (keyword) {
       query.or(`name.ilike.%${keyword}%,description.ilike.%${keyword}%`);
+    }
+
+    if (platformSiteType && platformSiteType !== "0") {
+      query.eq("platforms.platform_site_type", Number(platformSiteType));
     }
 
     const { data, error } = await query
@@ -70,10 +76,12 @@ export const getFeed = async ({
 
 export type GetAllFeedType = {
   userId?: string;
+  feedIdList?: Array<string>;
 };
 
-export const getAllFeed = async ({ userId }: GetAllFeedType) => {
+export const getAllFeed = async ({ userId, feedIdList }: GetAllFeedType) => {
   try {
+    if (!feedIdList || feedIdList.length === 0) return [];
     const supabase = await createGetOnlyServerSideClient();
 
     const query = supabase
@@ -111,6 +119,10 @@ export const getAllFeed = async ({ userId }: GetAllFeedType) => {
       query.eq("my_feeds.user_id", userId);
     } else {
       query.is("my_feeds.user_id", null);
+    }
+
+    if (feedIdList && feedIdList.length > 0) {
+      query.in("id", feedIdList);
     }
 
     const { data, error } = await query;

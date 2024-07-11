@@ -15,6 +15,7 @@ import { useStatusToast } from "@/hooks/useStatusToast";
 
 import { diffStringArray } from "@/lib/convert";
 
+import { FeedType } from "@/types/feed";
 import { MyFeedType } from "@/types/myFeed";
 import { MyFeedFolderType } from "@/types/myFeedFolder";
 
@@ -25,6 +26,7 @@ import { UpdateMyFeedFolderDialog } from "../Dialog";
 type MyFeedFolderCardProps = {
   user?: User;
   myFeedFolder: MyFeedFolderType;
+  initialFeedList: Array<FeedType>;
   handleUpdateMyFeedFolder: ({
     id,
     title,
@@ -40,12 +42,18 @@ type MyFeedFolderCardProps = {
 export const MyFeedFolderCard: FC<MyFeedFolderCardProps> = ({
   user,
   myFeedFolder,
+  initialFeedList,
   handleUpdateMyFeedFolder,
   handleDeleteMyFeedFolder,
 }) => {
   const { successToast, failToast } = useStatusToast();
   const pathname = usePathname();
-  const myFeedIdList = myFeedFolder.feeds.map((feed) => feed.id);
+  const selectedFeedList = myFeedFolder.feeds.map((feed) => {
+    return {
+      ...feed,
+      myFeeds: [],
+    };
+  });
   const myFeeds: Array<Pick<MyFeedType, "id" | "feedId">> =
     myFeedFolder.feeds.map((feed) => {
       return {
@@ -170,7 +178,8 @@ export const MyFeedFolderCard: FC<MyFeedFolderCardProps> = ({
             myFeedFolderId={myFeedFolder.id}
             title={myFeedFolder.title}
             description={myFeedFolder?.description || ""}
-            feedIdList={myFeedIdList}
+            selectedFeedList={selectedFeedList}
+            initialFeedList={initialFeedList}
             handleUpdateMyFeedFolder={
               handleUpdateMyFeedFolderAndInsertOrDeleteMyFeed
             }

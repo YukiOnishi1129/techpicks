@@ -18,7 +18,7 @@ import { TrendArticleList } from "../List/TrendArticleList";
 type TrendDashboardTemplateProps = {
   languageStatus: LanguageStatus;
   keyword?: string;
-  platformIdList: Array<string>;
+  feedIdList: Array<string>;
 };
 
 const TAB_LIST = {
@@ -29,20 +29,20 @@ const TAB_LIST = {
 export const TrendDashboardTemplate: FC<TrendDashboardTemplateProps> = async ({
   languageStatus,
   keyword,
-  platformIdList,
+  feedIdList,
 }) => {
   const user = await getUser();
 
   const enTrendArticleRes = await fetchTrendArticlesAPI({
     languageStatus: "2",
     keyword,
-    platformIdList,
+    feedIdList,
     tab: "trend",
   });
   const jpTrendArticleRes = await fetchTrendArticlesAPI({
     languageStatus: "1",
     keyword,
-    platformIdList,
+    feedIdList,
     tab: "trend",
   });
 
@@ -93,7 +93,7 @@ export const TrendDashboardTemplate: FC<TrendDashboardTemplateProps> = async ({
             }
             languageStatus={2}
             keyword={keyword}
-            platformIdList={platformIdList}
+            feedIdList={feedIdList}
             tab={"trend"}
             fetchTrendArticles={fetchTrendArticlesAPI}
           />
@@ -107,7 +107,7 @@ export const TrendDashboardTemplate: FC<TrendDashboardTemplateProps> = async ({
             }
             languageStatus={1}
             keyword={keyword}
-            platformIdList={platformIdList}
+            feedIdList={feedIdList}
             tab={"trend"}
             fetchTrendArticles={fetchTrendArticlesAPI}
           />

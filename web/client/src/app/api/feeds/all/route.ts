@@ -6,8 +6,11 @@ import { getUser } from "@/features/users/actions/user";
 
 export async function GET(req: NextRequest) {
   const user = await getUser();
+  const searchParams = req.nextUrl.searchParams;
+  const feedIdList = searchParams.getAll("feedId");
   const feeds = await getAllFeed({
     userId: user?.id,
+    feedIdList: feedIdList,
   });
 
   if (!feeds) {
