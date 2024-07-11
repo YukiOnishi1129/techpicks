@@ -1,14 +1,13 @@
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ReloadIcon } from "@radix-ui/react-icons";
-import { FC, useCallback, useEffect, useState, useTransition } from "react";
+import { FC, useCallback, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { fetchAllFeedAPI } from "@/features/feeds/actions/feed";
+import { SelectMultiFeedDialog } from "@/features/feeds/components/Dialog";
 
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   Dialog,
   DialogClose,
@@ -26,11 +25,11 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Loader } from "@/components/ui/loader";
 
 import { FeedType } from "@/types/feed";
+import { SelectOptionType } from "@/types/util";
 
-import { DeleteMyFeedFolderAlertDialog } from "./DeleteMyFeedFolderAlertDialog";
+import { DeleteMyFeedFolderAlertDialog } from "../Delete/DeleteMyFeedFolderAlertDialog";
 
 const formSchema = z.object({
   title: z
@@ -40,14 +39,20 @@ const formSchema = z.object({
     .min(1, "Title is required")
     .max(255, "Title must be less than 25 characters"),
   description: z.string().optional(),
-  feedIdList: z.array(z.string()).optional(),
+  targetFeedList: z
+    .object({
+      id: z.string(),
+      label: z.string(),
+    })
+    .array(),
 });
 
 type UpdateMyFeedFolderDialogProps = {
   myFeedFolderId: string;
   title: string;
   description: string;
-  feedIdList: Array<string>;
+  selectedFeedList: Array<FeedType>;
+  initialFeedList: Array<FeedType>;
   handleUpdateMyFeedFolder: ({
     myFeedFolderId,
     myFeedFolderTitle,
@@ -66,7 +71,8 @@ export const UpdateMyFeedFolderDialog: FC<UpdateMyFeedFolderDialogProps> = ({
   myFeedFolderId,
   title,
   description,
-  feedIdList,
+  selectedFeedList,
+  initialFeedList,
   handleUpdateMyFeedFolder,
   handleDeleteMyFeedFolder,
 }) => {
@@ -91,7 +97,8 @@ export const UpdateMyFeedFolderDialog: FC<UpdateMyFeedFolderDialogProps> = ({
           myFeedFolderId={myFeedFolderId}
           title={title}
           description={description}
-          feedIdList={feedIdList}
+          selectedFeedList={selectedFeedList}
+          initialFeedList={initialFeedList}
           handleUpdateMyFeedFolder={handleUpdateMyFeedFolder}
           handleDeleteMyFeedFolder={handleDeleteMyFeedFolder}
           handleClose={handleClose}
@@ -105,7 +112,8 @@ type UpdateMyFeedFolderDialogContentProps = {
   myFeedFolderId: string;
   title: string;
   description: string;
-  feedIdList: Array<string>;
+  selectedFeedList: Array<FeedType>;
+  initialFeedList: Array<FeedType>;
   handleUpdateMyFeedFolder: ({
     myFeedFolderId,
     myFeedFolderTitle,
@@ -127,7 +135,8 @@ export const UpdateMyFeedFolderDialogContent: FC<
   myFeedFolderId,
   title,
   description,
-  feedIdList,
+  selectedFeedList,
+  initialFeedList,
   handleUpdateMyFeedFolder,
   handleDeleteMyFeedFolder,
   handleClose,
@@ -137,26 +146,34 @@ export const UpdateMyFeedFolderDialogContent: FC<
     defaultValues: {
       title: title,
       description: description,
-      feedIdList: feedIdList,
+      targetFeedList: selectedFeedList.map((feed) => ({
+        id: feed.id,
+        label: feed.name,
+      })),
     },
   });
 
-  const [feeds, setFeeds] = useState<FeedType[]>([]);
   const [isPending, startTransition] = useTransition();
-  const [isFetchFeedPending, startFetchFeedTransition] = useTransition();
   const resetDialog = useCallback(() => {
     form.reset();
   }, [form]);
 
+  const handleSelectFeedList = useCallback(
+    (selectedFeedList: Array<SelectOptionType>) => {
+      form.setValue("targetFeedList", selectedFeedList);
+    },
+    [form]
+  );
+
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     startTransition(async () => {
       const inputDescription = values.description ?? "";
-      const inputFeedIdList = values.feedIdList ?? [];
+      const inputFeedIdList = values.targetFeedList ?? [];
       await handleUpdateMyFeedFolder({
         myFeedFolderId,
         myFeedFolderTitle: values.title,
         myFeedDescription: inputDescription,
-        selectedFeedIds: inputFeedIdList,
+        selectedFeedIds: inputFeedIdList.map((feed) => feed.id),
       });
       handleClose();
     });
@@ -166,17 +183,6 @@ export const UpdateMyFeedFolderDialogContent: FC<
     await handleDeleteMyFeedFolder(myFeedFolderId);
     handleClose();
   }, [myFeedFolderId, handleDeleteMyFeedFolder, handleClose]);
-
-  const fetchFeedList = useCallback(async () => {
-    startFetchFeedTransition(async () => {
-      const resFeeds = await fetchAllFeedAPI({});
-      setFeeds(resFeeds.data.feeds);
-    });
-  }, []);
-
-  useEffect(() => {
-    fetchFeedList();
-  }, [fetchFeedList]);
 
   return (
     <DialogContent onCloseAutoFocus={resetDialog}>
@@ -217,54 +223,35 @@ export const UpdateMyFeedFolderDialogContent: FC<
                 {/* feeds */}
                 <FormField
                   control={form.control}
-                  name="feedIdList"
-                  render={() => (
+                  name="targetFeedList"
+                  render={({ field }) => (
                     <FormItem>
                       <div className="mb-4">
                         <FormLabel className="text-base">Feeds</FormLabel>
-                      </div>
-                      {isFetchFeedPending && (
-                        <div className="flex h-20 w-full items-center justify-center">
-                          <Loader />
+                        <div>
+                          <SelectMultiFeedDialog
+                            feedList={initialFeedList}
+                            selectedFeedList={field.value}
+                            handleSelectFeedList={handleSelectFeedList}
+                          />
                         </div>
-                      )}
-                      <div className="grid grid-cols-2 gap-2">
-                        {!isFetchFeedPending &&
-                          feeds.map((feed) => (
-                            <FormField
-                              key={feed.id}
-                              control={form.control}
-                              name="feedIdList"
-                              render={({ field }) => (
-                                <FormItem key={feed.id} className="mb-2">
-                                  <FormControl>
-                                    <Checkbox
-                                      checked={field.value?.includes(feed.id)}
-                                      onCheckedChange={(checked) => {
-                                        const array = field.value ?? [];
-                                        return checked
-                                          ? field.onChange([...array, feed.id])
-                                          : field.onChange(
-                                              field.value?.filter(
-                                                (value) => value !== feed.id
-                                              )
-                                            );
-                                      }}
-                                    />
-                                  </FormControl>
-                                  <FormLabel className="ml-2 w-full text-sm font-normal">
-                                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                                    <img
-                                      className="mr-2 inline-block size-6 bg-white"
-                                      src={feed.platform?.faviconUrl}
-                                      alt=""
-                                    />
-                                    {feed.name}
-                                  </FormLabel>
-                                </FormItem>
-                              )}
-                            />
-                          ))}
+                        <FormControl>
+                          {field.value.length > 0 && (
+                            <div className="mt-4 flex max-h-40 w-full flex-wrap overflow-y-scroll rounded-md border-primary bg-secondary p-2 text-primary">
+                              {field.value.map((feed) => {
+                                return (
+                                  <span
+                                    className="mb-2 mr-2 block max-w-64 truncate rounded-full bg-primary-foreground px-2 py-1 text-xs font-normal text-amber-600 "
+                                    key={feed.id}
+                                  >
+                                    # {feed.label}
+                                  </span>
+                                );
+                              })}
+                            </div>
+                          )}
+                        </FormControl>
+                        <FormMessage />
                       </div>
                     </FormItem>
                   )}

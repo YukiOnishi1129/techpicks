@@ -10,6 +10,7 @@ import { NotFoundList } from "@/components/layout/NotFoundList";
 
 import { useStatusToast } from "@/hooks/useStatusToast";
 
+import { FeedType } from "@/types/feed";
 import { MyFeedFolderType } from "@/types/myFeedFolder";
 
 import { serverRevalidatePage } from "@/actions/serverAction";
@@ -23,11 +24,13 @@ import {
 
 type MyFeedFolderListProps = {
   initialMyFeedFolders: MyFeedFolderType[];
+  initialFeedList: FeedType[];
   user?: User;
 };
 
 export const MyFeedFolderList: FC<MyFeedFolderListProps> = ({
   initialMyFeedFolders,
+  initialFeedList,
   user,
 }) => {
   const { successToast, failToast } = useStatusToast();
@@ -130,6 +133,7 @@ export const MyFeedFolderList: FC<MyFeedFolderListProps> = ({
               <MyFeedFolderCard
                 key={myFeedFolder.id}
                 user={user}
+                initialFeedList={initialFeedList}
                 myFeedFolder={myFeedFolder}
                 handleUpdateMyFeedFolder={handleUpdateMyFeedFolder}
                 handleDeleteMyFeedFolder={handleDeleteMyFeedFolder}
