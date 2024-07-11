@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { FC, useCallback } from "react";
 import { useForm } from "react-hook-form";
+import { RxCross2 } from "react-icons/rx";
 import { z } from "zod";
 
 import { SelectMultiFeedDialog } from "@/features/feeds/components/Dialog";
@@ -70,6 +71,16 @@ export const ArticleSearchDialogContent: FC<
   const handleSelectFeedList = useCallback(
     (selectedFeedList: Array<SelectOptionType>) => {
       form.setValue("targetFeedList", selectedFeedList);
+    },
+    [form]
+  );
+
+  const handleRemoveSelectedFeed = useCallback(
+    (targetFeedId: string) => {
+      form.setValue(
+        "targetFeedList",
+        form.getValues("targetFeedList").filter((f) => f.id !== targetFeedId)
+      );
     },
     [form]
   );
@@ -141,7 +152,7 @@ export const ArticleSearchDialogContent: FC<
 
                     <FormControl>
                       {field.value.length > 0 && (
-                        <div className="mt-4 flex max-h-40 w-full flex-wrap overflow-y-scroll rounded-md border-primary bg-secondary p-2 text-primary">
+                        <div className="mt-4 flex  w-full flex-wrap  rounded-md border-primary bg-secondary p-2 text-primary">
                           {field.value.map((feed) => {
                             return (
                               <span
@@ -149,6 +160,15 @@ export const ArticleSearchDialogContent: FC<
                                 key={feed.id}
                               >
                                 # {feed.label}
+                                <Button
+                                  variant={"ghost"}
+                                  size="sm"
+                                  onClick={() =>
+                                    handleRemoveSelectedFeed(feed.id)
+                                  }
+                                >
+                                  <RxCross2 />
+                                </Button>
                               </span>
                             );
                           })}

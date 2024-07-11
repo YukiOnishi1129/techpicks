@@ -118,7 +118,7 @@ export const ArticleSearchForm: FC<ArticleSearchFormProps> = ({ feedList }) => {
 
                   <FormControl>
                     {field.value.length > 0 && (
-                      <div className="mt-4 flex max-h-40 w-full flex-wrap overflow-y-scroll rounded-md border-primary bg-secondary p-2 text-primary">
+                      <div className="mt-4 flex  w-full flex-wrap  rounded-md border-primary bg-secondary p-2 text-primary">
                         {field.value.map((feed) => {
                           return (
                             <span

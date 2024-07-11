@@ -3,6 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FC, useCallback, useRef, useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { RxCross2 } from "react-icons/rx";
 import { z } from "zod";
 
 import { fetchFeedsAPI } from "@/features/feeds/actions/feed";
@@ -116,6 +117,16 @@ export const SelectMultiFeedList: FC<SelectMultiFeedListProps> = ({
     [setFeedList, setOffset, setHashMore, keywordForm]
   );
 
+  const handleRemoveChecked = useCallback(
+    (targetFeedId: string) => {
+      form.setValue(
+        "targetFeedList",
+        form.getValues("targetFeedList").filter((f) => f.id !== targetFeedId)
+      );
+    },
+    [form]
+  );
+
   const loadMore = useCallback(
     async (offset: number) => {
       const res = await fetchFeedsAPI({
@@ -170,12 +181,19 @@ export const SelectMultiFeedList: FC<SelectMultiFeedListProps> = ({
       <div className="mb-4 ml-2 flex max-h-12 w-full flex-wrap overflow-y-scroll text-sm font-normal">
         {selectedTargetFeedList.length > 0 &&
           selectedTargetFeedList.map((selectedFeed) => (
-            <span
+            <p
               className="mb-2 mr-2 block max-w-64 truncate rounded-full bg-primary-foreground px-2 py-1 text-xs font-normal text-amber-600 "
               key={`selected-${selectedFeed.id}`}
             >
               # {selectedFeed.label}
-            </span>
+              <Button
+                variant={"ghost"}
+                size="sm"
+                onClick={() => handleRemoveChecked(selectedFeed.id)}
+              >
+                <RxCross2 />
+              </Button>
+            </p>
           ))}
       </div>
 
