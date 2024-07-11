@@ -13,8 +13,6 @@ import { SelectOptionType } from "@/types/util";
 
 import { SelectMultiFeedList } from "./SelectMultiFeedList";
 
-// import { SelectPlatformList } from "./SelectPlatformList";
-
 type SelectMultiFeedDialogContentProps = {
   feedList: Array<FeedType>;
   selectedFeedList?: Array<SelectOptionType>;

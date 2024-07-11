@@ -167,7 +167,7 @@ export const SelectMultiFeedList: FC<SelectMultiFeedListProps> = ({
 
   return (
     <div className="w-full">
-      <div className="mb-4 ml-2 flex w-full flex-wrap text-sm font-normal">
+      <div className="mb-4 ml-2 flex max-h-12 w-full flex-wrap overflow-y-scroll text-sm font-normal">
         {selectedTargetFeedList.length > 0 &&
           selectedTargetFeedList.map((selectedFeed) => (
             <span

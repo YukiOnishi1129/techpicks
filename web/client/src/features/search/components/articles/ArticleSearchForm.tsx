@@ -1,7 +1,6 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Label } from "@radix-ui/react-label";
 import { usePathname, useRouter } from "next/navigation";
 import { FC, useCallback } from "react";
 import { useForm } from "react-hook-form";
@@ -19,7 +18,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 import { FeedType } from "@/types/feed";
 import { SelectOptionType } from "@/types/util";
@@ -34,8 +32,6 @@ const formSchema = z.object({
       label: z.string(),
     })
     .array(),
-  language: z.string().optional(),
-  platformSiteType: z.string(),
 });
 
 type ArticleSearchFormProps = {
@@ -49,8 +45,6 @@ export const ArticleSearchForm: FC<ArticleSearchFormProps> = ({ feedList }) => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       keyword: "",
-      language: "0",
-      platformSiteType: "0",
       targetFeedList: [],
     },
   });
@@ -68,13 +62,8 @@ export const ArticleSearchForm: FC<ArticleSearchFormProps> = ({ feedList }) => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     let keywordPath = "";
-
     if (values.keyword !== "") {
       keywordPath = `&keyword=${values.keyword}`;
-    }
-    let platformTypePath = "";
-    if (values.platformSiteType) {
-      platformTypePath = `&platformSiteType=${values.platformSiteType}`;
     }
     let feedIdPath = "";
     if (values.targetFeedList) {
@@ -84,7 +73,7 @@ export const ArticleSearchForm: FC<ArticleSearchFormProps> = ({ feedList }) => {
     }
     await serverRevalidatePage(pathname);
     router.replace(
-      `/article/search/result?languageStatus=${values.language}${keywordPath}${platformTypePath}${feedIdPath}`
+      `/article/search/result?dummy=dummy${keywordPath}${feedIdPath}`
     );
     resetDialog();
   };
@@ -111,99 +100,45 @@ export const ArticleSearchForm: FC<ArticleSearchFormProps> = ({ feedList }) => {
                 </FormItem>
               )}
             />
-            {/* language */}
-            <FormField
-              control={form.control}
-              name="language"
-              render={({ field }) => (
-                <FormItem className="mb-8">
-                  <FormLabel>Language</FormLabel>
-                  <FormControl>
-                    <RadioGroup
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                      className="grid-cols-2 md:grid-cols-4"
-                    >
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem value={"0"} id={"language-0"} />
-                        <Label htmlFor="language-0">All</Label>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem value={"1"} id={"language-1"} />
-                        <Label htmlFor="language-1">Japanese</Label>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem value={"2"} id={"language-2"} />
-                        <Label htmlFor="language-2">English</Label>
-                      </div>
-                    </RadioGroup>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            {/* platform type*/}
-            {/* <FormField
-              control={form.control}
-              name="platformSiteType"
-              render={({ field }) => (
-                <FormItem className="mb-8">
-                  <FormLabel>PlatformType</FormLabel>
-                  <FormControl>
-                    <RadioGroup
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                      className="grid-cols-2 md:grid-cols-4"
-                    >
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem value={"0"} id={"platform-type-0"} />
-                        <Label htmlFor="platform-type-0">All</Label>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem value={"1"} id={"platform-type-1"} />
-                        <Label htmlFor="platform-type-1">Site</Label>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem value={"2"} id={"platform-type-2"} />
-                        <Label htmlFor="platform-type-2">Company</Label>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem value={"3"} id={"platform-type-3"} />
-                        <Label htmlFor="platform-type-3">Summary</Label>
-                      </div>
-                    </RadioGroup>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            /> */}
 
             {/* feed */}
-
             <FormField
               control={form.control}
               name="targetFeedList"
               render={({ field }) => (
                 <FormItem className="mb-8">
                   <FormLabel>Feeds</FormLabel>
-                  <SelectMultiFeedDialog
-                    feedList={feedList}
-                    selectedFeedList={field.value}
-                    handleSelectFeedList={handleSelectFeedList}
-                  />
+                  <div>
+                    <SelectMultiFeedDialog
+                      feedList={feedList}
+                      selectedFeedList={field.value}
+                      handleSelectFeedList={handleSelectFeedList}
+                    />
+                  </div>
+
                   <FormControl>
-                    <div className="flex w-full flex-wrap rounded-md border-primary bg-secondary p-2 text-primary">
-                      {field.value.map((feed) => {
-                        return <span key={feed.id}># {feed.label}</span>;
-                      })}
-                    </div>
+                    {field.value.length > 0 && (
+                      <div className="mt-4 flex max-h-40 w-full flex-wrap overflow-y-scroll rounded-md border-primary bg-secondary p-2 text-primary">
+                        {field.value.map((feed) => {
+                          return (
+                            <span
+                              className="mb-2 mr-2 block max-w-64 truncate rounded-full bg-primary-foreground px-2 py-1 text-xs font-normal text-amber-600 "
+                              key={feed.id}
+                            >
+                              # {feed.label}
+                            </span>
+                          );
+                        })}
+                      </div>
+                    )}
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
           </div>
-          <div className="mt-8 flex w-full justify-center space-x-4">
+
+          <div className="mt-4 flex w-full justify-center space-x-4">
             <Button type="submit">{"SEARCH"}</Button>
           </div>
         </form>
