@@ -2,7 +2,7 @@ import { fetchFeedsAPI } from "@/features/feeds/actions/feed";
 
 import { BreadCrumbType, PageBreadcrumb } from "@/components/ui/breadcrumb";
 
-import { ArticleSearchForm } from "../ArticleSearchForm";
+import { ArticleSearchForm } from "../Form";
 
 export const ArticleSearchTemplate = async () => {
   const res = await fetchFeedsAPI({});
