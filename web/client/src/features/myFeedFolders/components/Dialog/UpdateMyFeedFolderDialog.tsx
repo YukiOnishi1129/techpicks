@@ -169,7 +169,7 @@ export const UpdateMyFeedFolderDialogContent: FC<
 
   const fetchFeedList = useCallback(async () => {
     startFetchFeedTransition(async () => {
-      const resFeeds = await fetchAllFeedAPI();
+      const resFeeds = await fetchAllFeedAPI({});
       setFeeds(resFeeds.data.feeds);
     });
   }, []);

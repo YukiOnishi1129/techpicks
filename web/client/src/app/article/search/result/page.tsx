@@ -1,4 +1,4 @@
-import { ArticleSearchResultTemplate } from "@/features/search/components/articles/ArticleSearchResultTemplate";
+import { ArticleSearchResultTemplate } from "@/features/search/components/articles/Template";
 
 import { ArticleTabType } from "@/types/article";
 import { LanguageStatus } from "@/types/language";

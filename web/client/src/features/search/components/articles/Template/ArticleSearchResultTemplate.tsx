@@ -3,6 +3,7 @@ import { FC } from "react";
 import { fetchArticlesAPI } from "@/features/articles/actions/article";
 import { ArticleList } from "@/features/articles/components/List";
 import { fetchFavoriteArticleFoldersAPI } from "@/features/favoriteArticleFolders/actions/favoriteArticleFolders";
+import { fetchAllFeedAPI, fetchFeedsAPI } from "@/features/feeds/actions/feed";
 import { getUser } from "@/features/users/actions/user";
 
 import { BreadCrumbType, PageBreadcrumb } from "@/components/ui/breadcrumb";
@@ -11,7 +12,7 @@ import { ArticleTabType } from "@/types/article";
 import { LanguageStatus } from "@/types/language";
 import { PlatformSiteType } from "@/types/platform";
 
-import { ArticleSearchDialog } from "./Dialog";
+import { ArticleSearchDialog } from "../Dialog";
 
 export type ArticleSearchResultTemplateProps = {
   languageStatus: LanguageStatus;
@@ -39,6 +40,8 @@ export const ArticleSearchResultTemplate: FC<
   });
   const user = await getUser();
   const resFavoriteArticleFolders = await fetchFavoriteArticleFoldersAPI({});
+  const resSelectedFeedList = await fetchAllFeedAPI({ feedIdList });
+  const resInitialFeedList = await fetchFeedsAPI({});
 
   let keywordPath = "";
   if (!!keyword && keyword.trim() !== "") {
@@ -65,20 +68,23 @@ export const ArticleSearchResultTemplate: FC<
   ];
   return (
     <div>
-      <div className="mb-2 mt-4">
-        <PageBreadcrumb breadcrumbs={breadcrumbs} />
-      </div>
-      <div className="my-8 hidden w-full items-center justify-between md:flex ">
-        <h1 className="text-2xl font-bold ">Article Search Result</h1>
-        <div className="mr-8 flex w-48 items-center justify-end">
-          <ArticleSearchDialog
-            languageStatus={languageStatus}
-            keyword={keyword}
-            platformSiteType={platformSiteType}
-            feedIdList={feedIdList}
-          />
+      <div className="fixed z-10  w-[90%] bg-card md:block md:w-[70%] md:justify-between md:px-4">
+        <div className="mb-2 mt-4">
+          <PageBreadcrumb breadcrumbs={breadcrumbs} />
+        </div>
+        <div className="hidden w-full items-center justify-between md:flex ">
+          <h1 className="text-2xl font-bold ">Article Search Result</h1>
+          <div className="mr-8 flex w-48 items-center justify-end">
+            <ArticleSearchDialog
+              keyword={keyword}
+              selectedFeedList={resSelectedFeedList.data.feeds}
+              initialFeedList={resInitialFeedList.data.feeds}
+            />
+          </div>
         </div>
       </div>
+
+      <div className="h-12 md:h-24" />
 
       <div className="mt-8 md:mt-0">
         <ArticleList

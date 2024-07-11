@@ -76,10 +76,12 @@ export const getFeed = async ({
 
 export type GetAllFeedType = {
   userId?: string;
+  feedIdList?: Array<string>;
 };
 
-export const getAllFeed = async ({ userId }: GetAllFeedType) => {
+export const getAllFeed = async ({ userId, feedIdList }: GetAllFeedType) => {
   try {
+    if (!feedIdList || feedIdList.length === 0) return [];
     const supabase = await createGetOnlyServerSideClient();
 
     const query = supabase
@@ -117,6 +119,10 @@ export const getAllFeed = async ({ userId }: GetAllFeedType) => {
       query.eq("my_feeds.user_id", userId);
     } else {
       query.is("my_feeds.user_id", null);
+    }
+
+    if (feedIdList && feedIdList.length > 0) {
+      query.in("id", feedIdList);
     }
 
     const { data, error } = await query;

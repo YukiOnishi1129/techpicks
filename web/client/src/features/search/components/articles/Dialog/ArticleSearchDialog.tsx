@@ -7,6 +7,8 @@ import { useForm } from "react-hook-form";
 import { CiSearch } from "react-icons/ci";
 import { z } from "zod";
 
+import { SelectMultiFeedDialog } from "@/features/feeds/components/Dialog";
+
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -25,34 +27,33 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
-import { LanguageStatus } from "@/types/language";
-import { PlatformSiteType } from "@/types/platform";
+import { FeedType } from "@/types/feed";
+import { SelectOptionType } from "@/types/util";
 
 import { serverRevalidatePage } from "@/actions/serverAction";
 
 const formSchema = z.object({
   keyword: z.string().optional(),
-  feedIdList: z.array(z.string()).optional(),
-  language: z.string().optional(),
-  platformSiteType: z.string(),
+  targetFeedList: z
+    .object({
+      id: z.string(),
+      label: z.string(),
+    })
+    .array(),
 });
 
 type ArticleSearchDialogProps = {
-  languageStatus?: LanguageStatus;
   keyword?: string;
-  feedIdList?: Array<string>;
-  platformSiteType?: PlatformSiteType;
+  selectedFeedList?: Array<FeedType>;
+  initialFeedList: Array<FeedType>;
 };
 
 export const ArticleSearchDialog: FC<ArticleSearchDialogProps> = ({
-  languageStatus,
   keyword,
-  feedIdList = [],
-  platformSiteType,
-}: ArticleSearchDialogProps) => {
+  selectedFeedList = [],
+  initialFeedList,
+}) => {
   const [open, setOpen] = useState(false);
 
   const handleClose = useCallback(() => {
@@ -66,10 +67,9 @@ export const ArticleSearchDialog: FC<ArticleSearchDialogProps> = ({
       </DialogTrigger>
       {open && (
         <ArticleSearchDialogContent
-          languageStatus={languageStatus}
           keyword={keyword}
-          feedIdList={feedIdList}
-          platformSiteType={platformSiteType}
+          selectedFeedList={selectedFeedList}
+          initialFeedList={initialFeedList}
           handleClose={handleClose}
         />
       )}
@@ -78,35 +78,37 @@ export const ArticleSearchDialog: FC<ArticleSearchDialogProps> = ({
 };
 
 type ArticleSearchDialogContentProps = {
-  languageStatus?: LanguageStatus;
   keyword?: string;
-  feedIdList?: Array<string>;
-  platformSiteType?: PlatformSiteType;
+  selectedFeedList?: Array<FeedType>;
+  initialFeedList: Array<FeedType>;
   handleClose: () => void;
 };
 
 const ArticleSearchDialogContent: FC<ArticleSearchDialogContentProps> = ({
-  languageStatus,
   keyword,
-  feedIdList = [],
-  platformSiteType,
+  selectedFeedList = [],
+  initialFeedList,
   handleClose,
 }: ArticleSearchDialogContentProps) => {
   const pathname = usePathname();
-  const [loading, setLoading] = useState(false);
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       keyword: keyword ?? "",
-      language: languageStatus?.toString() ?? "0",
-      platformSiteType: platformSiteType?.toString() ?? "0",
-      feedIdList: feedIdList,
+      targetFeedList: selectedFeedList.map((feed) => ({
+        id: feed.id,
+        label: feed.name,
+      })),
     },
   });
 
-  const watchLanguage = form.watch("language");
-  const watchPlatformType = form.watch("platformSiteType");
+  const handleSelectFeedList = useCallback(
+    (selectedFeedList: Array<SelectOptionType>) => {
+      form.setValue("targetFeedList", selectedFeedList);
+    },
+    [form]
+  );
 
   const resetDialog = useCallback(() => {
     form.reset();
@@ -117,39 +119,19 @@ const ArticleSearchDialogContent: FC<ArticleSearchDialogContentProps> = ({
     if (!!values.keyword && values.keyword.trim() !== "") {
       keywordPath = `&keyword=${values.keyword}`;
     }
-    let platformTypePath = "";
-    if (values.platformSiteType) {
-      platformTypePath = `&platformSiteType=${values.platformSiteType}`;
-    }
     let feedIdPath = "";
-    if (values.feedIdList) {
-      feedIdPath = values.feedIdList
-        .map((feedId) => `&feedId=${feedId}`)
+    if (values.targetFeedList) {
+      feedIdPath = values.targetFeedList
+        .map((feed) => `&feedId=${feed.id}`)
         .join("");
     }
-    await serverRevalidatePage(pathname);
-    router.replace(
-      `/article/search/result?languageStatus=${values.language}${keywordPath}${platformTypePath}${feedIdPath}`
+    await serverRevalidatePage(
+      `/article/search/result?dummy=1${keywordPath}${feedIdPath}`
     );
+    router.replace(`/article/search/result?dummy=1${keywordPath}${feedIdPath}`);
     resetDialog();
     handleClose();
   };
-
-  // const fetchPlatform = useCallback(async () => {
-  //   setLoading(true);
-  //   const response = await fetchPlatformAPI({
-  //     languageStatus: watchLanguage,
-  //     platformSiteType:
-  //       watchPlatformType !== "0" ? watchPlatformType : undefined,
-  //   });
-  //   setShowPlatforms(response);
-  //   form.setValue("platformIdList", []);
-  //   setLoading(false);
-  // }, [watchLanguage, watchPlatformType, form]);
-
-  // useEffect(() => {
-  //   fetchPlatform();
-  // }, [fetchPlatform]);
 
   return (
     <DialogContent onCloseAutoFocus={resetDialog}>
@@ -173,92 +155,55 @@ const ArticleSearchDialogContent: FC<ArticleSearchDialogContentProps> = ({
                         {...field}
                       />
                     </FormControl>
-                    {/* <FormDescription>
-                      Let&apos;s enter the keyword you want to search.
-                    </FormDescription> */}
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              {/* language */}
+
+              {/* feed */}
               <FormField
                 control={form.control}
-                name="language"
+                name="targetFeedList"
                 render={({ field }) => (
-                  <FormItem className="mb-4">
-                    <FormLabel>Language</FormLabel>
+                  <FormItem className="mb-8">
+                    <FormLabel>Feeds</FormLabel>
+                    <div>
+                      <SelectMultiFeedDialog
+                        feedList={initialFeedList}
+                        selectedFeedList={field.value}
+                        handleSelectFeedList={handleSelectFeedList}
+                      />
+                    </div>
+
                     <FormControl>
-                      <RadioGroup
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                        className="grid-cols-2 md:grid-cols-4"
-                      >
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value={"0"} id={"language-0"} />
-                          <Label htmlFor="language-0">All</Label>
+                      {field.value.length > 0 && (
+                        <div className="mt-4 flex max-h-40 w-full flex-wrap overflow-y-scroll rounded-md border-primary bg-secondary p-2 text-primary">
+                          {field.value.map((feed) => {
+                            return (
+                              <span
+                                className="mb-2 mr-2 block max-w-64 truncate rounded-full bg-primary-foreground px-2 py-1 text-xs font-normal text-amber-600 "
+                                key={feed.id}
+                              >
+                                # {feed.label}
+                              </span>
+                            );
+                          })}
                         </div>
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value={"1"} id={"language-1"} />
-                          <Label htmlFor="language-1">Japanese</Label>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value={"2"} id={"language-2"} />
-                          <Label htmlFor="language-2">English</Label>
-                        </div>
-                      </RadioGroup>
+                      )}
                     </FormControl>
-                    {/* <FormDescription>
-                      Let&apos;s select the language you want to search.
-                    </FormDescription> */}
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              {/* platform type*/}
-              <FormField
-                control={form.control}
-                name="platformSiteType"
-                render={({ field }) => (
-                  <FormItem className="mb-4">
-                    <FormLabel>PlatformType</FormLabel>
-                    <FormControl>
-                      <RadioGroup
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                        className="grid-cols-2 md:grid-cols-4"
-                      >
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value={"0"} id={"platform-type-0"} />
-                          <Label htmlFor="platform-type-0">All</Label>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value={"1"} id={"platform-type-1"} />
-                          <Label htmlFor="platform-type-1">Site</Label>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value={"2"} id={"platform-type-2"} />
-                          <Label htmlFor="platform-type-2">Company</Label>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value={"3"} id={"platform-type-3"} />
-                          <Label htmlFor="platform-type-3">Summary</Label>
-                        </div>
-                      </RadioGroup>
-                    </FormControl>
-                    {/* <FormDescription>
-                      Let&apos;s select the platform type you want to search.
-                    </FormDescription> */}
                     <FormMessage />
                   </FormItem>
                 )}
               />
             </div>
 
-            <div className="mt-4 flex w-full justify-center space-x-4">
-              <Button type="submit">{"SEARCH"}</Button>
+            <div className="mt-4 flex w-full justify-between space-x-4">
               <DialogClose>
-                <Button onClick={resetDialog}>{"CLOSE"}</Button>
+                <Button variant={"outline"} onClick={resetDialog}>
+                  {"CLOSE"}
+                </Button>
               </DialogClose>
+              <Button type="submit">{"SEARCH"}</Button>
             </div>
           </form>
         </Form>

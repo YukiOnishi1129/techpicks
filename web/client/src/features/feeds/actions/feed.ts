@@ -45,8 +45,19 @@ export const fetchFeedsAPI = async ({
   };
 };
 
-export const fetchAllFeedAPI = async (): Promise<FetchFeedsAPIResponse> => {
-  const url = `${process.env.WEB_DOMAIN}/api/feeds/all`;
+type FetchAllFeedAPIRequest = {
+  feedIdList?: Array<string>;
+};
+
+export const fetchAllFeedAPI = async ({
+  feedIdList,
+}: FetchAllFeedAPIRequest): Promise<FetchFeedsAPIResponse> => {
+  let url = `${process.env.WEB_DOMAIN}/api/feeds/all?dummy=1`;
+
+  if (feedIdList) {
+    const feedIdPath = feedIdList.map((feedId) => `&feedId=${feedId}`).join("");
+    url += feedIdPath;
+  }
   const response = await getFetch({
     url,
     tagName: "feeds/all",
