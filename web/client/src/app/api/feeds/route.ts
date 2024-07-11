@@ -9,10 +9,12 @@ export async function GET(req: NextRequest) {
   const searchParams = req.nextUrl.searchParams;
   const offset = searchParams.get("offset");
   const keyword = searchParams.get("keyword") || undefined;
+  const platformSiteType = searchParams.get("platformSiteType") || undefined;
   const user = await getUser();
   const feeds = await getFeed({
     offset: parseInt(offset || "1"),
     keyword: keyword,
+    platformSiteType: platformSiteType,
     userId: user?.id,
   });
 

@@ -11,12 +11,14 @@ export type GetFeedParams = {
   userId?: string;
   offset?: number;
   keyword?: string;
+  platformSiteType?: string;
 };
 
 export const getFeed = async ({
   userId,
   offset = 1,
   keyword,
+  platformSiteType,
 }: GetFeedParams) => {
   try {
     const supabase = await createGetOnlyServerSideClient();
@@ -37,6 +39,10 @@ export const getFeed = async ({
 
     if (keyword) {
       query.or(`name.ilike.%${keyword}%,description.ilike.%${keyword}%`);
+    }
+
+    if (platformSiteType && platformSiteType !== "0") {
+      query.eq("platforms.platform_site_type", Number(platformSiteType));
     }
 
     const { data, error } = await query

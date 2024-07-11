@@ -3,14 +3,13 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Label } from "@radix-ui/react-label";
 import { usePathname, useRouter } from "next/navigation";
-import { FC, useCallback, useEffect, useState } from "react";
+import { FC, useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { fetchPlatformAPI } from "@/features/platforms/actions/platform";
+import { SelectMultiFeedDialog } from "@/features/feeds/components/Dialog";
 
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   Form,
   FormControl,
@@ -20,31 +19,31 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Loader } from "@/components/ui/loader";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
-import { PlatformType } from "@/types/platform";
+import { FeedType } from "@/types/feed";
+import { SelectOptionType } from "@/types/util";
 
 import { serverRevalidatePage } from "@/actions/serverAction";
 
 const formSchema = z.object({
   keyword: z.string().optional(),
-  platformIdList: z.array(z.string()).optional(),
+  targetFeedList: z
+    .object({
+      id: z.string(),
+      label: z.string(),
+    })
+    .array(),
   language: z.string().optional(),
   platformSiteType: z.string(),
 });
 
 type ArticleSearchFormProps = {
-  platforms: Array<PlatformType>;
+  feedList: Array<FeedType>;
 };
 
-export const ArticleSearchForm: FC<ArticleSearchFormProps> = ({
-  platforms,
-}: ArticleSearchFormProps) => {
+export const ArticleSearchForm: FC<ArticleSearchFormProps> = ({ feedList }) => {
   const pathname = usePathname();
-  const [loading, setLoading] = useState(false);
-  const [showPlatforms, setShowPlatforms] =
-    useState<Array<PlatformType>>(platforms);
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -52,12 +51,16 @@ export const ArticleSearchForm: FC<ArticleSearchFormProps> = ({
       keyword: "",
       language: "0",
       platformSiteType: "0",
-      platformIdList: [],
+      targetFeedList: [],
     },
   });
 
-  const watchLanguage = form.watch("language");
-  const watchPlatformType = form.watch("platformSiteType");
+  const handleSelectFeedList = useCallback(
+    (selectedFeedList: Array<SelectOptionType>) => {
+      form.setValue("targetFeedList", selectedFeedList);
+    },
+    [form]
+  );
 
   const resetDialog = useCallback(() => {
     form.reset();
@@ -73,39 +76,24 @@ export const ArticleSearchForm: FC<ArticleSearchFormProps> = ({
     if (values.platformSiteType) {
       platformTypePath = `&platformSiteType=${values.platformSiteType}`;
     }
-    let platformIdPath = "";
-    if (values.platformIdList) {
-      platformIdPath = values.platformIdList
-        .map((platformId) => `&platformId=${platformId}`)
+    let feedIdPath = "";
+    if (values.targetFeedList) {
+      feedIdPath = values.targetFeedList
+        .map((target) => `&feedId=${target.id}`)
         .join("");
     }
     await serverRevalidatePage(pathname);
     router.replace(
-      `/article/search/result?languageStatus=${values.language}${keywordPath}${platformTypePath}${platformIdPath}`
+      `/article/search/result?languageStatus=${values.language}${keywordPath}${platformTypePath}${feedIdPath}`
     );
     resetDialog();
   };
 
-  const fetchPlatform = useCallback(async () => {
-    setLoading(true);
-    const response = await fetchPlatformAPI({
-      languageStatus: watchLanguage,
-      platformSiteType:
-        watchPlatformType !== "0" ? watchPlatformType : undefined,
-    });
-    setShowPlatforms(response);
-    setLoading(false);
-  }, [watchLanguage, watchPlatformType]);
-
-  useEffect(() => {
-    fetchPlatform();
-  }, [fetchPlatform]);
-
   return (
-    <div className="w-auto">
+    <div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-          <div className="h-[400px] overflow-y-scroll border-2  p-4 md:h-[450px]">
+          <div className=" border-2  p-4">
             <FormField
               control={form.control}
               name="keyword"
@@ -155,7 +143,7 @@ export const ArticleSearchForm: FC<ArticleSearchFormProps> = ({
               )}
             />
             {/* platform type*/}
-            <FormField
+            {/* <FormField
               control={form.control}
               name="platformSiteType"
               render={({ field }) => (
@@ -188,65 +176,32 @@ export const ArticleSearchForm: FC<ArticleSearchFormProps> = ({
                   <FormMessage />
                 </FormItem>
               )}
-            />
-            {/* platform */}
+            /> */}
+
+            {/* feed */}
+
             <FormField
               control={form.control}
-              name="platformIdList"
-              render={() => (
-                <FormItem className="m-auto ">
-                  <div className="mb-4">
-                    <FormLabel className="text-base">Platform</FormLabel>
-                  </div>
-                  <div className="grid grid-cols-2 gap-2">
-                    {loading ? (
-                      <Loader />
-                    ) : (
-                      showPlatforms &&
-                      showPlatforms.map((platform) => (
-                        <FormField
-                          key={platform.id}
-                          control={form.control}
-                          name="platformIdList"
-                          render={({ field }) => (
-                            <FormItem key={platform.id} className="mb-2">
-                              <FormControl>
-                                <Checkbox
-                                  checked={field.value?.includes(platform.id)}
-                                  onCheckedChange={(checked) => {
-                                    const array = field.value ?? [];
-                                    return checked
-                                      ? field.onChange([...array, platform.id])
-                                      : field.onChange(
-                                          field.value?.filter(
-                                            (value) => value !== platform.id
-                                          )
-                                        );
-                                  }}
-                                />
-                              </FormControl>
-                              <FormLabel className="ml-2 w-full text-sm font-normal">
-                                {/* eslint-disable-next-line @next/next/no-img-element */}
-                                <img
-                                  className="mr-2 inline-block size-6 bg-white"
-                                  src={platform.faviconUrl}
-                                  alt=""
-                                />
-                                {platform.name}
-                              </FormLabel>
-                            </FormItem>
-                          )}
-                        />
-                      ))
-                    )}
-                  </div>
+              name="targetFeedList"
+              render={({ field }) => (
+                <FormItem className="mb-8">
+                  <FormLabel>Feeds</FormLabel>
+                  <SelectMultiFeedDialog
+                    feedList={feedList}
+                    selectedFeedList={field.value}
+                    handleSelectFeedList={handleSelectFeedList}
+                  />
+                  <FormControl>
+                    <div className="flex w-full flex-wrap rounded-md border-primary bg-secondary p-2 text-primary">
+                      {field.value.map((feed) => {
+                        return <span key={feed.id}># {feed.label}</span>;
+                      })}
+                    </div>
+                  </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
-            {/* category */}
-            {/*  */}
-
-            {/* <h3>sort condition</h3> */}
           </div>
           <div className="mt-8 flex w-full justify-center space-x-4">
             <Button type="submit">{"SEARCH"}</Button>

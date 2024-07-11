@@ -22,7 +22,7 @@ import { fetchTrendArticlesAPI } from "../actions/trendArticles";
 type TrendArticleSwiperProps = {
   languageStatus: LanguageStatus;
   keyword?: string;
-  platformIdList: Array<string>;
+  feedIdList: Array<string>;
   enTrendArticles: Array<TrendArticleType>;
   jpTrendArticles: Array<TrendArticleType>;
   favoriteArticleFolders: Array<FavoriteArticleFolderType>;
@@ -32,7 +32,7 @@ type TrendArticleSwiperProps = {
 export const TrendArticleSwiper: FC<TrendArticleSwiperProps> = ({
   languageStatus,
   keyword,
-  platformIdList,
+  feedIdList,
   enTrendArticles,
   jpTrendArticles,
   favoriteArticleFolders,
@@ -49,7 +49,7 @@ export const TrendArticleSwiper: FC<TrendArticleSwiperProps> = ({
           <TrendArticleList
             languageStatus={2}
             keyword={keyword}
-            platformIdList={platformIdList}
+            feedIdList={feedIdList}
             initialTrendArticles={enTrendArticles}
             favoriteArticleFolders={favoriteArticleFolders}
             user={user}
@@ -61,7 +61,7 @@ export const TrendArticleSwiper: FC<TrendArticleSwiperProps> = ({
           <TrendArticleList
             languageStatus={1}
             keyword={keyword}
-            platformIdList={platformIdList}
+            feedIdList={feedIdList}
             initialTrendArticles={jpTrendArticles}
             favoriteArticleFolders={favoriteArticleFolders}
             user={user}

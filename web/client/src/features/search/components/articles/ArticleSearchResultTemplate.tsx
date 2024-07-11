@@ -3,7 +3,6 @@ import { FC } from "react";
 import { fetchArticlesAPI } from "@/features/articles/actions/article";
 import { ArticleList } from "@/features/articles/components/List";
 import { fetchFavoriteArticleFoldersAPI } from "@/features/favoriteArticleFolders/actions/favoriteArticleFolders";
-import { fetchPlatformAPI } from "@/features/platforms/actions/platform";
 import { getUser } from "@/features/users/actions/user";
 
 import { BreadCrumbType, PageBreadcrumb } from "@/components/ui/breadcrumb";
@@ -18,7 +17,7 @@ export type ArticleSearchResultTemplateProps = {
   languageStatus: LanguageStatus;
   keyword?: string;
   platformSiteType?: PlatformSiteType;
-  platformIdList: Array<string>;
+  feedIdList: Array<string>;
   tab: ArticleTabType;
 };
 
@@ -28,19 +27,15 @@ export const ArticleSearchResultTemplate: FC<
   languageStatus,
   keyword,
   platformSiteType,
-  platformIdList,
+  feedIdList,
   tab,
 }: ArticleSearchResultTemplateProps) => {
   const res = await fetchArticlesAPI({
     languageStatus: languageStatus.toString(),
     keyword,
     platformSiteType: String(platformSiteType),
-    platformIdList,
+    feedIdList,
     tab,
-  });
-  const platforms = await fetchPlatformAPI({
-    languageStatus: languageStatus.toString(),
-    platformSiteType: String(platformSiteType),
   });
   const user = await getUser();
   const resFavoriteArticleFolders = await fetchFavoriteArticleFoldersAPI({});
@@ -53,11 +48,9 @@ export const ArticleSearchResultTemplate: FC<
   if (String(platformSiteType)) {
     platformTypePath = `&platformSiteType=${String(platformSiteType)}`;
   }
-  let platformIdPath = "";
-  if (platformIdList.length) {
-    platformIdPath = platformIdList
-      .map((platformId) => `&platformId=${platformId}`)
-      .join("");
+  let feedIdPath = "";
+  if (feedIdList.length) {
+    feedIdPath = feedIdList.map((feedId) => `&feedId=${feedId}`).join("");
   }
 
   const breadcrumbs: BreadCrumbType[] = [
@@ -67,7 +60,7 @@ export const ArticleSearchResultTemplate: FC<
     },
     {
       title: "Article Search Result",
-      href: `/article/search/result/?languageStatus=${languageStatus.toString()}${keywordPath}${platformTypePath}${platformIdPath}`,
+      href: `/article/search/result/?languageStatus=${languageStatus.toString()}${keywordPath}${platformTypePath}${feedIdPath}`,
     },
   ];
   return (
@@ -79,11 +72,10 @@ export const ArticleSearchResultTemplate: FC<
         <h1 className="text-2xl font-bold ">Article Search Result</h1>
         <div className="mr-8 flex w-48 items-center justify-end">
           <ArticleSearchDialog
-            platforms={platforms}
             languageStatus={languageStatus}
             keyword={keyword}
             platformSiteType={platformSiteType}
-            platformIdList={platformIdList}
+            feedIdList={feedIdList}
           />
         </div>
       </div>
@@ -94,7 +86,7 @@ export const ArticleSearchResultTemplate: FC<
           initialArticles={res.data.articles}
           languageStatus={languageStatus}
           keyword={keyword}
-          platformIdList={platformIdList}
+          feedIdList={feedIdList}
           favoriteArticleFolders={
             resFavoriteArticleFolders.data.favoriteArticleFolders
           }

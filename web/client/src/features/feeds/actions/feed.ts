@@ -15,13 +15,18 @@ export type FetchFeedsAPIResponse = {
 export const fetchFeedsAPI = async ({
   offset = "1",
   keyword,
+  platformSiteType,
 }: {
   offset?: string;
   keyword?: string;
+  platformSiteType?: string;
 }): Promise<FetchFeedsAPIResponse> => {
   let url = `${process.env.WEB_DOMAIN}/api/feeds?offset=${offset}`;
   if (keyword) {
     url += `&keyword=${keyword}`;
+  }
+  if (platformSiteType) {
+    url += `&platformSiteType=${platformSiteType}`;
   }
   const response = await getFetch({
     url,

@@ -1,12 +1,11 @@
-import { fetchPlatformAPI } from "@/features/platforms/actions/platform";
+import { fetchFeedsAPI } from "@/features/feeds/actions/feed";
 
 import { BreadCrumbType, PageBreadcrumb } from "@/components/ui/breadcrumb";
 
 import { ArticleSearchForm } from "./ArticleSearchForm";
 
 export const ArticleSearchTemplate = async () => {
-  const platforms = await fetchPlatformAPI({});
-
+  const res = await fetchFeedsAPI({});
   const breadcrumbs: BreadCrumbType[] = [
     {
       title: "Home",
@@ -28,7 +27,7 @@ export const ArticleSearchTemplate = async () => {
         <h1 className="text-2xl font-bold">Article Search</h1>
       </div>
       <div className="mt-8 md:mt-2">
-        <ArticleSearchForm platforms={platforms} />
+        <ArticleSearchForm feedList={res.data.feeds} />
       </div>
     </div>
   );

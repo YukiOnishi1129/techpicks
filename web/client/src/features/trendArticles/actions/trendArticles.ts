@@ -17,7 +17,7 @@ export const fetchTrendArticlesAPI = async ({
   languageStatus,
   keyword,
   offset = "1",
-  platformIdList,
+  feedIdList,
   tab,
   startTime,
   endTime,
@@ -25,7 +25,7 @@ export const fetchTrendArticlesAPI = async ({
   languageStatus: string;
   keyword?: string;
   offset?: string;
-  platformIdList: Array<string>;
+  feedIdList: Array<string>;
   tab: ArticleTabType;
   startTime?: string;
   endTime?: string;
@@ -37,11 +37,9 @@ export const fetchTrendArticlesAPI = async ({
   if (keyword) {
     url += `&keyword=${keyword}`;
   }
-  if (platformIdList.length) {
-    const platformIdPath = platformIdList
-      .map((platformId) => `&platformId=${platformId}`)
-      .join("");
-    url += platformIdPath;
+  if (feedIdList.length) {
+    const feedIdPath = feedIdList.map((feedId) => `&feedId=${feedId}`).join("");
+    url += feedIdPath;
   }
   if (!!startTime && !!endTime) {
     url += `&startTime=${startTime}&endTime=${endTime}`;

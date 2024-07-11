@@ -29,16 +29,13 @@ export default async function TrendDashboardPage({ searchParams }: PageProps) {
       ? searchParams["keyword"]
       : undefined;
 
-  let platformIdList: Array<string> = [];
+  let feedIdList: Array<string> = [];
 
-  if (
-    typeof searchParams["platformId"] !== "string" &&
-    searchParams["platformId"]
-  )
-    platformIdList = searchParams["platformId"];
+  if (typeof searchParams["feedId"] !== "string" && searchParams["feedId"])
+    feedIdList = searchParams["feedId"];
 
-  if (typeof searchParams["platformId"] === "string")
-    platformIdList.push(searchParams["platformId"]);
+  if (typeof searchParams["feedId"] === "string")
+    feedIdList.push(searchParams["feedId"]);
 
   const tab =
     typeof searchParams["tab"] === "string" ? searchParams["tab"] : "english";
@@ -49,7 +46,7 @@ export default async function TrendDashboardPage({ searchParams }: PageProps) {
         <TrendDashboardTemplate
           languageStatus={languageStatus}
           keyword={keyword}
-          platformIdList={platformIdList}
+          feedIdList={feedIdList}
         />
       </Suspense>
     </>
