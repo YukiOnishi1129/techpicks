@@ -17,7 +17,7 @@ import { ENGLISH_IMAGE, JAPANESE_IMAGE } from "@/constant/image";
 type ArticleDashboardTemplateProps = {
   languageStatus: LanguageStatus;
   keyword?: string;
-  platformIdList: Array<string>;
+  feedIdList: Array<string>;
   tab: "site" | "company" | "summary";
 };
 
@@ -28,19 +28,19 @@ const TAB_LIST = {
 
 export const ArticleDashboardTemplate: FC<
   ArticleDashboardTemplateProps
-> = async ({ languageStatus, keyword, platformIdList, tab }) => {
+> = async ({ languageStatus, keyword, feedIdList, tab }) => {
   const user = await getUser();
 
   const enArticleRes = await fetchArticlesAPI({
     languageStatus: "2",
     keyword,
-    platformIdList,
+    feedIdList,
     tab,
   });
   const jpArticleRes = await fetchArticlesAPI({
     languageStatus: "1",
     keyword,
-    platformIdList,
+    feedIdList,
     tab,
   });
 
@@ -94,7 +94,7 @@ export const ArticleDashboardTemplate: FC<
             }
             languageStatus={2}
             keyword={keyword}
-            platformIdList={platformIdList}
+            feedIdList={feedIdList}
             tab={"trend"}
             fetchArticles={fetchArticlesAPI}
           />
@@ -108,7 +108,7 @@ export const ArticleDashboardTemplate: FC<
             }
             languageStatus={1}
             keyword={keyword}
-            platformIdList={platformIdList}
+            feedIdList={feedIdList}
             tab={"trend"}
             fetchArticles={fetchArticlesAPI}
           />

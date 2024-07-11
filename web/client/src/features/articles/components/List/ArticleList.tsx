@@ -20,18 +20,18 @@ type Props = {
   favoriteArticleFolders: Array<FavoriteArticleFolderType>;
   languageStatus: LanguageStatus;
   keyword?: string;
-  platformIdList: Array<string>;
+  feedIdList: Array<string>;
   tab: ArticleTabType;
   fetchArticles: ({
     languageStatus,
     keyword,
     offset,
-    platformIdList,
+    feedIdList,
   }: {
     languageStatus: string;
     keyword?: string;
     offset: string;
-    platformIdList: Array<string>;
+    feedIdList: Array<string>;
     tab: ArticleTabType;
   }) => Promise<FetchArticlesAPIResponse>;
 };
@@ -42,7 +42,7 @@ export function ArticleList({
   favoriteArticleFolders,
   languageStatus,
   keyword,
-  platformIdList,
+  feedIdList,
   tab,
   fetchArticles,
 }: Props) {
@@ -60,7 +60,7 @@ export function ArticleList({
         offset: offset.toString(),
         keyword: keyword,
         languageStatus: languageStatus.toString(),
-        platformIdList: platformIdList,
+        feedIdList: feedIdList,
         tab: tab,
       });
       setArticles((prev) => [...prev, ...res.data.articles]);
@@ -68,7 +68,7 @@ export function ArticleList({
       const count = res.data.articles.length;
       setHashMore(count > 0);
     },
-    [fetchArticles, languageStatus, keyword, platformIdList, tab]
+    [fetchArticles, languageStatus, keyword, feedIdList, tab]
   );
 
   useEffect(() => {

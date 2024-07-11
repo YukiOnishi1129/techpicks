@@ -20,18 +20,18 @@ type Props = {
   favoriteArticleFolders: Array<FavoriteArticleFolderType>;
   languageStatus: LanguageStatus;
   keyword?: string;
-  platformIdList: Array<string>;
+  feedIdList: Array<string>;
   tab: ArticleTabType;
   fetchTrendArticles: ({
     languageStatus,
     keyword,
     offset,
-    platformIdList,
+    feedIdList,
   }: {
     languageStatus: string;
     keyword?: string;
     offset: string;
-    platformIdList: Array<string>;
+    feedIdList: Array<string>;
     tab: ArticleTabType;
   }) => Promise<FetchTrendArticlesAPIResponse>;
 };
@@ -42,7 +42,7 @@ export function TrendArticleList({
   favoriteArticleFolders,
   languageStatus,
   keyword,
-  platformIdList,
+  feedIdList,
   tab,
   fetchTrendArticles,
 }: Props) {
@@ -63,7 +63,7 @@ export function TrendArticleList({
         offset: offset.toString(),
         keyword: keyword,
         languageStatus: languageStatus.toString(),
-        platformIdList: platformIdList,
+        feedIdList: feedIdList,
         tab: tab,
       });
       setTrendArticles((prev) => [...prev, ...res.data.trendArticles]);
@@ -71,7 +71,7 @@ export function TrendArticleList({
       const count = res.data.trendArticles.length;
       setHashMore(count > 0);
     },
-    [fetchTrendArticles, languageStatus, keyword, platformIdList, tab]
+    [fetchTrendArticles, languageStatus, keyword, feedIdList, tab]
   );
 
   useEffect(() => {

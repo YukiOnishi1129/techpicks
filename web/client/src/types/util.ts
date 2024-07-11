@@ -1,3 +1,8 @@
+export type SelectOptionType = {
+  id: string;
+  label: string;
+};
+
 type PickNullable<T> = {
   [P in keyof T as null extends T[P] ? P : never]: T[P];
 };

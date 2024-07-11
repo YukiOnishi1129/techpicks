@@ -6,12 +6,10 @@ import { FC, useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { Button } from "@/components/ui/button";
 import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogClose,
 } from "@/components/ui/dialog";
 import {
   Form,
@@ -85,15 +83,6 @@ export const BookmarkSearchKeywordDialogContent: FC<
                   </FormItem>
                 )}
               />
-            </div>
-
-            <div className="mt-8 flex w-full justify-between space-x-4">
-              <DialogClose>
-                <Button variant={"outline"} onClick={resetDialog}>
-                  {"CLOSE"}
-                </Button>
-              </DialogClose>
-              <Button type="submit">{"SEARCH"}</Button>
             </div>
           </form>
         </Form>
