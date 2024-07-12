@@ -1,4 +1,8 @@
+import { Suspense } from "react";
+
 import { FeedTemplate } from "@/features/feeds/components/Template";
+
+import { ScreenLoader } from "@/components/layout/ScreenLoader";
 
 type PageProps = {
   params: { slug: string };
@@ -10,5 +14,9 @@ export default function FeedListPage({ searchParams }: PageProps) {
     typeof searchParams["keyword"] === "string"
       ? searchParams["keyword"]
       : undefined;
-  return <FeedTemplate keyword={keyword} />;
+  return (
+    <Suspense fallback={<ScreenLoader />}>
+      <FeedTemplate keyword={keyword} />
+    </Suspense>
+  );
 }

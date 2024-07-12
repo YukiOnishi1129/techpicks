@@ -1,4 +1,8 @@
+import { Suspense } from "react";
+
 import { ArticleSearchResultTemplate } from "@/features/search/components/articles/Template";
+
+import { ScreenLoader } from "@/components/layout/ScreenLoader";
 
 import { ArticleTabType } from "@/types/article";
 import { LanguageStatus } from "@/types/language";
@@ -40,12 +44,14 @@ export default async function ArticleSearchResultPage({
       : "unknown";
 
   return (
-    <ArticleSearchResultTemplate
-      languageStatus={languageStatus}
-      keyword={keyword}
-      platformSiteType={platformSiteType}
-      feedIdList={feedIdList}
-      tab={tab}
-    />
+    <Suspense fallback={<ScreenLoader />}>
+      <ArticleSearchResultTemplate
+        languageStatus={languageStatus}
+        keyword={keyword}
+        platformSiteType={platformSiteType}
+        feedIdList={feedIdList}
+        tab={tab}
+      />
+    </Suspense>
   );
 }

@@ -1,7 +1,10 @@
 import { redirect } from "next/navigation";
+import { Suspense } from "react";
 
 import { FavoriteArticleFolderDetailTemplate } from "@/features/favoriteArticleFolders/components/Template";
 import { getUser } from "@/features/users/actions/user";
+
+import { ScreenLoader } from "@/components/layout/ScreenLoader";
 
 type FavoriteArticleFolderDetailPageProps = {
   params: {
@@ -24,10 +27,12 @@ export default async function FavoriteArticleFolderDetailPage({
       ? searchParams["keyword"]
       : undefined;
   return (
-    <FavoriteArticleFolderDetailTemplate
-      user={user}
-      id={id}
-      keyword={keyword}
-    />
+    <Suspense fallback={<ScreenLoader />}>
+      <FavoriteArticleFolderDetailTemplate
+        user={user}
+        id={id}
+        keyword={keyword}
+      />
+    </Suspense>
   );
 }

@@ -1,7 +1,10 @@
 import { redirect } from "next/navigation";
+import { Suspense } from "react";
 
 import { MyFeedFolderDetailTemplate } from "@/features/myFeedFolders/components/Template";
 import { getUser } from "@/features/users/actions/user";
+
+import { ScreenLoader } from "@/components/layout/ScreenLoader";
 
 type MyFeedFolderDetailPageProps = {
   params: {
@@ -23,5 +26,9 @@ export default async function MyFeedFolderDetailPage({
     typeof searchParams["keyword"] === "string"
       ? searchParams["keyword"]
       : undefined;
-  return <MyFeedFolderDetailTemplate user={user} id={id} keyword={keyword} />;
+  return (
+    <Suspense fallback={<ScreenLoader />}>
+      <MyFeedFolderDetailTemplate user={user} id={id} keyword={keyword} />
+    </Suspense>
+  );
 }
