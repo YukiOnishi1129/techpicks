@@ -37,15 +37,13 @@ export default async function DashboardSitePage({ searchParams }: PageProps) {
     feedIdList.push(searchParams["feedId"]);
 
   return (
-    <>
-      <Suspense fallback={<ScreenLoader />}>
-        <ArticleDashboardTemplate
-          languageStatus={languageStatus}
-          keyword={keyword}
-          feedIdList={feedIdList}
-          tab="company"
-        />
-      </Suspense>
-    </>
+    <Suspense fallback={<ScreenLoader />}>
+      <ArticleDashboardTemplate
+        languageStatus={languageStatus}
+        keyword={keyword}
+        feedIdList={feedIdList}
+        tab="company"
+      />
+    </Suspense>
   );
 }

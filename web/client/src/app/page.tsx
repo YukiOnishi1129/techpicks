@@ -37,14 +37,12 @@ export default async function Home({ searchParams }: PageProps) {
     feedIdList.push(searchParams["feedId"]);
 
   return (
-    <>
-      <Suspense fallback={<ScreenLoader />}>
-        <TrendTemplate
-          languageStatus={languageStatus}
-          keyword={keyword}
-          feedIdList={feedIdList}
-        />
-      </Suspense>
-    </>
+    <Suspense fallback={<ScreenLoader />}>
+      <TrendTemplate
+        languageStatus={languageStatus}
+        keyword={keyword}
+        feedIdList={feedIdList}
+      />
+    </Suspense>
   );
 }

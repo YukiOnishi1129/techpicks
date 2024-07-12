@@ -41,14 +41,12 @@ export default async function TrendDashboardPage({ searchParams }: PageProps) {
     typeof searchParams["tab"] === "string" ? searchParams["tab"] : "english";
 
   return (
-    <>
-      <Suspense fallback={<ScreenLoader />}>
-        <TrendDashboardTemplate
-          languageStatus={languageStatus}
-          keyword={keyword}
-          feedIdList={feedIdList}
-        />
-      </Suspense>
-    </>
+    <Suspense fallback={<ScreenLoader />}>
+      <TrendDashboardTemplate
+        languageStatus={languageStatus}
+        keyword={keyword}
+        feedIdList={feedIdList}
+      />
+    </Suspense>
   );
 }

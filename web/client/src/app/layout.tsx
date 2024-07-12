@@ -13,7 +13,8 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Check Picks",
-  description: "Check Picks is a collection of tech articles.",
+  description:
+    "Check Picks is a collection of the latest IT news. In particular, it has a good selection of news for software engineers. For example, React, Golang and AWS.",
 };
 
 export default function RootLayout({
