@@ -47,6 +47,11 @@ module.exports = {
             position: "before",
           },
           {
+            pattern: "@/constants/**",
+            group: "internal",
+            position: "before",
+          },
+          {
             pattern: "@/types/**",
             group: "internal",
             position: "before",
@@ -76,7 +81,7 @@ module.exports = {
       typescript: { project: "./" },
       alias: {
         extensions: [".ts", ".tsx"],
-        map: [["@/", "./"]],
+        map: [["@/", "./src"]],
       },
     },
   },
