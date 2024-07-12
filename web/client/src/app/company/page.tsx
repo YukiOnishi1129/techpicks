@@ -37,15 +37,13 @@ export default async function CompanyPage({ searchParams }: PageProps) {
     feedIdList.push(searchParams["feedId"]);
 
   return (
-    <>
-      <Suspense fallback={<ScreenLoader />}>
-        <ArticleListTemplate
-          languageStatus={languageStatus}
-          keyword={keyword}
-          feedIdList={feedIdList}
-          tab={"company"}
-        />
-      </Suspense>
-    </>
+    <Suspense fallback={<ScreenLoader />}>
+      <ArticleListTemplate
+        languageStatus={languageStatus}
+        keyword={keyword}
+        feedIdList={feedIdList}
+        tab={"company"}
+      />
+    </Suspense>
   );
 }

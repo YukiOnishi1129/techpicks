@@ -1,7 +1,10 @@
 import { redirect } from "next/navigation";
+import { Suspense } from "react";
 
 import { MyFeedFolderListTemplate } from "@/features/myFeedFolders/components/Template";
 import { getUser } from "@/features/users/actions/user";
+
+import { ScreenLoader } from "@/components/layout/ScreenLoader";
 
 type PageProps = {
   params: { slug: string };
@@ -20,5 +23,9 @@ export default async function MyFeedFolderFolderListPage({
       ? searchParams["keyword"]
       : undefined;
 
-  return <MyFeedFolderListTemplate user={user} keyword={keyword} />;
+  return (
+    <Suspense fallback={<ScreenLoader />}>
+      <MyFeedFolderListTemplate user={user} keyword={keyword} />
+    </Suspense>
+  );
 }
