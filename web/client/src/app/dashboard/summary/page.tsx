@@ -18,7 +18,7 @@ export default async function DashboardSummaryPage({
 }: PageProps) {
   const user = await getUser();
   if (!user) {
-    redirect("/");
+    redirect("/login");
   }
   const languageStatus =
     typeof searchParams["languageStatus"] === "string"

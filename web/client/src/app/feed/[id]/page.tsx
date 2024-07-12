@@ -1,6 +1,8 @@
+import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
 import { FeedDetailTemplate } from "@/features/feeds/components/Template";
+import { getUser } from "@/features/users/actions/user";
 
 import { ScreenLoader } from "@/components/layout/ScreenLoader";
 
@@ -11,10 +13,15 @@ type FeedDetailPageProps = {
   searchParams: { [key: string]: string | string[] | undefined };
 };
 
-export default function FeedDetailPage({
+export default async function FeedDetailPage({
   params,
   searchParams,
 }: FeedDetailPageProps) {
+  const user = await getUser();
+  if (!user) {
+    redirect("/login");
+  }
+
   const { id } = params;
   const keyword =
     typeof searchParams["keyword"] === "string"
