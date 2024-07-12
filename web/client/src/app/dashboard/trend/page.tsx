@@ -16,7 +16,7 @@ type PageProps = {
 export default async function TrendDashboardPage({ searchParams }: PageProps) {
   const user = await getUser();
   if (!user) {
-    redirect("/");
+    redirect("/login");
   }
 
   const languageStatus =
@@ -36,9 +36,6 @@ export default async function TrendDashboardPage({ searchParams }: PageProps) {
 
   if (typeof searchParams["feedId"] === "string")
     feedIdList.push(searchParams["feedId"]);
-
-  const tab =
-    typeof searchParams["tab"] === "string" ? searchParams["tab"] : "english";
 
   return (
     <Suspense fallback={<ScreenLoader />}>
