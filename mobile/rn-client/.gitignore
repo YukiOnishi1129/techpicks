@@ -40,4 +40,4 @@ yarn-error.*
 expo-env.d.ts
 # @end expo-cli
 
-__snapshots__
+# __snapshots__
