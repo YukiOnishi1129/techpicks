@@ -16,7 +16,7 @@ type PageProps = {
 export default async function DashboardSitePage({ searchParams }: PageProps) {
   const user = await getUser();
   if (!user) {
-    redirect("/");
+    redirect("/login");
   }
   const languageStatus =
     typeof searchParams["languageStatus"] === "string"
