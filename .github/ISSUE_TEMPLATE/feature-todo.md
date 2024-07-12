@@ -1,9 +1,10 @@
 ---
 name: feature todo
 about: feature todo
-title: ''
+title: "[Feature]: "
 labels: enhancement
 assignees: YukiOnishi1129
+projects: ["YukiOnishi1129/3"]
 
 ---
 
