@@ -13,7 +13,7 @@ function TabBarIcon(props: {
   name: React.ComponentProps<typeof FontAwesome>["name"];
   color: string;
 }) {
-  return <FontAwesome size={28} style={{ marginBottom: -3 }} {...props} />;
+  return <FontAwesome size={28} className="mb-[-3px]" {...props} />;
 }
 
 export default function TabLayout() {
@@ -40,7 +40,7 @@ export default function TabLayout() {
                     name="info-circle"
                     size={25}
                     color={Colors[colorScheme ?? "light"].text}
-                    style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
+                    className={pressed ? "opacity-50 mr-[15px]" : "mr-[15px]"}
                   />
                 )}
               </Pressable>
