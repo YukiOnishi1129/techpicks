@@ -1,5 +1,7 @@
 import EditScreenInfo from "@/components/EditScreenInfo";
 import { Text, View } from "@/components/Themed";
+import { Input } from "@/components/ui/input";
+import React from "react";
 
 export default function TabOneScreen() {
   return (
@@ -10,6 +12,12 @@ export default function TabOneScreen() {
         lightColor="#eee"
         darkColor="rgba(255,255,255,0.1)"
       />
+      <Input
+        placeholder="Write some stuff"
+        aria-labelledby="inputLabel"
+        aria-errormessage="This is an error message"
+      />
+      <Text>{"text"}</Text>
       <EditScreenInfo path="app/(tabs)/index.tsx" />
     </View>
   );
