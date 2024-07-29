@@ -94,7 +94,7 @@ export const ArticleListTemplate: FC<ArticleTemplateProps> = async ({
             languageStatus={2}
             keyword={keyword}
             feedIdList={feedIdList}
-            tab={"trend"}
+            tab={tab}
             fetchArticles={fetchArticlesAPI}
           />
         </TabsContent>
@@ -107,7 +107,7 @@ export const ArticleListTemplate: FC<ArticleTemplateProps> = async ({
             languageStatus={1}
             keyword={keyword}
             feedIdList={feedIdList}
-            tab={"trend"}
+            tab={tab}
             fetchArticles={fetchArticlesAPI}
           />
         </TabsContent>

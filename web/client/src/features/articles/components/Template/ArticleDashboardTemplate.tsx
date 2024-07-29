@@ -95,7 +95,7 @@ export const ArticleDashboardTemplate: FC<
             languageStatus={2}
             keyword={keyword}
             feedIdList={feedIdList}
-            tab={"trend"}
+            tab={tab}
             fetchArticles={fetchArticlesAPI}
           />
         </TabsContent>
@@ -109,7 +109,7 @@ export const ArticleDashboardTemplate: FC<
             languageStatus={1}
             keyword={keyword}
             feedIdList={feedIdList}
-            tab={"trend"}
+            tab={tab}
             fetchArticles={fetchArticlesAPI}
           />
         </TabsContent>
