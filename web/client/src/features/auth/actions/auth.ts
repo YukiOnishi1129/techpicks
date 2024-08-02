@@ -26,7 +26,7 @@ export async function logout() {
   if (error) {
     redirect("/error");
   }
-  if (!error) redirect("/");
+  if (!error) redirect("/dashboard/trend");
 }
 
 export async function logoutToLoginPage() {

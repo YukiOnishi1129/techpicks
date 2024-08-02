@@ -12,7 +12,7 @@ export type GetTrendArticlesParams = {
   platformId?: string;
   keyword?: string;
   languageStatus?: LanguageStatus;
-  platformIdList: Array<string>;
+  feedIdList: Array<string>;
   tab: ArticleTabType;
   offset?: number;
   sort?: "asc" | "desc";
@@ -25,7 +25,7 @@ export const getTrendArticles = async ({
   userId,
   keyword,
   languageStatus = 1,
-  platformIdList,
+  feedIdList,
   offset = 1,
   startTime,
   endTime,
@@ -71,14 +71,16 @@ export const getTrendArticles = async ({
       query.is("articles.favorite_articles.user_id", null);
     }
 
+    // TODO: Fix this
     if (keyword) {
-      query.or(
-        `articles.title.ilike.%${keyword}%,articles.description.ilike.%${keyword}%,articles.tags.ilike.%${keyword}%`
-      );
+      // query.or(
+      //   `articles.title.ilike.%${keyword}%,articles.description.ilike.%${keyword}%,articles.tags.ilike.%${keyword}%`
+      // );
+      query.ilike("articles.title", `%${keyword}%`);
     }
 
-    if (platformIdList.length) {
-      query.in("platforms.id", platformIdList);
+    if (feedIdList.length) {
+      query.in("feed_article_relations.feed_id", feedIdList);
     }
 
     const { data, error } = await query

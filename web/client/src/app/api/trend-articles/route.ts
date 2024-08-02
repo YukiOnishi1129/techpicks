@@ -14,7 +14,7 @@ export async function GET(req: NextRequest) {
   const languageStatus = searchParams.get("languageStatus");
   const keyword = searchParams.get("keyword") || undefined;
   const offset = searchParams.get("offset");
-  const platformIdList = searchParams.getAll("platformId");
+  const feedIdList = searchParams.getAll("feedId");
 
   const status =
     typeof languageStatus === "string"
@@ -31,7 +31,7 @@ export async function GET(req: NextRequest) {
     userId: user?.id,
     languageStatus: status,
     keyword: keyword,
-    platformIdList: platformIdList,
+    feedIdList: feedIdList,
     offset: parseInt(offset || "1"),
     tab: tab,
     startTime: startTime,

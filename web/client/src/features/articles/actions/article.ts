@@ -17,14 +17,14 @@ export const fetchArticlesAPI = async ({
   keyword,
   offset = "1",
   platformSiteType,
-  platformIdList,
+  feedIdList,
   tab,
 }: {
   languageStatus: string;
   keyword?: string;
   offset?: string;
   platformSiteType?: string;
-  platformIdList: Array<string>;
+  feedIdList: Array<string>;
   tab: ArticleTabType;
 }): Promise<FetchArticlesAPIResponse> => {
   let url = `${process.env.WEB_DOMAIN}/api/articles/?offset=${offset}&tab=${tab}`;
@@ -37,11 +37,9 @@ export const fetchArticlesAPI = async ({
   if (platformSiteType) {
     url += `&platformSiteType=${platformSiteType}`;
   }
-  if (platformIdList.length) {
-    const platformIdPath = platformIdList
-      .map((platformId) => `&platformId=${platformId}`)
-      .join("");
-    url += platformIdPath;
+  if (feedIdList.length) {
+    const feedIdPath = feedIdList.map((feedId) => `&feedId=${feedId}`).join("");
+    url += feedIdPath;
   }
   const response = await getFetch({
     url,

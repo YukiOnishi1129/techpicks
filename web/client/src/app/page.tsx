@@ -1,6 +1,8 @@
+import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
-import { HomeTemplate } from "@/features/home/components/HomeTemplate";
+import { TrendTemplate } from "@/features/trendArticles/components/Template/TrendTemplate";
+import { getUser } from "@/features/users/actions/user";
 
 import { ScreenLoader } from "@/components/layout/ScreenLoader";
 
@@ -12,6 +14,10 @@ type PageProps = {
 };
 
 export default async function Home({ searchParams }: PageProps) {
+  const user = await getUser();
+  if (user) {
+    redirect("/dashboard/trend");
+  }
   const languageStatus =
     typeof searchParams["languageStatus"] === "string"
       ? (parseInt(searchParams["languageStatus"]) as LanguageStatus)
@@ -22,30 +28,21 @@ export default async function Home({ searchParams }: PageProps) {
       ? searchParams["keyword"]
       : undefined;
 
-  let platformIdList: Array<string> = [];
+  let feedIdList: Array<string> = [];
 
-  if (
-    typeof searchParams["platformId"] !== "string" &&
-    searchParams["platformId"]
-  )
-    platformIdList = searchParams["platformId"];
+  if (typeof searchParams["feedId"] !== "string" && searchParams["feedId"])
+    feedIdList = searchParams["feedId"];
 
-  if (typeof searchParams["platformId"] === "string")
-    platformIdList.push(searchParams["platformId"]);
-
-  const tab =
-    typeof searchParams["tab"] === "string" ? searchParams["tab"] : "trend";
+  if (typeof searchParams["feedId"] === "string")
+    feedIdList.push(searchParams["feedId"]);
 
   return (
-    <>
-      <Suspense fallback={<ScreenLoader />}>
-        <HomeTemplate
-          languageStatus={languageStatus}
-          keyword={keyword}
-          platformIdList={platformIdList}
-          tab={tab}
-        />
-      </Suspense>
-    </>
+    <Suspense fallback={<ScreenLoader />}>
+      <TrendTemplate
+        languageStatus={languageStatus}
+        keyword={keyword}
+        feedIdList={feedIdList}
+      />
+    </Suspense>
   );
 }

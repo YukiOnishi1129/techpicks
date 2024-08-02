@@ -10,7 +10,7 @@
     },
     {
       "name": "📱 Mobile",
-      "path": "./mobile/customer"
+      "path": "./mobile/rn-client"
     },
     {
       "name": "⛩️ Gateway",

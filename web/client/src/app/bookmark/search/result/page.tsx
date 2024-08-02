@@ -1,7 +1,10 @@
 import { redirect } from "next/navigation";
+import { Suspense } from "react";
 
-import { BookmarkSearchResultTemplate } from "@/features/search/components/bookmarks/BookmarkSearchResultTemplate";
+import { BookmarkSearchResultTemplate } from "@/features/search/components/bookmarks/Template";
 import { getUser } from "@/features/users/actions/user";
+
+import { ScreenLoader } from "@/components/layout/ScreenLoader";
 
 import { LanguageStatus } from "@/types/language";
 import { PlatformSiteType } from "@/types/platform";
@@ -44,12 +47,14 @@ export default async function BookmarkSearchResultPage({
     platformIdList.push(searchParams["platformId"]);
 
   return (
-    <BookmarkSearchResultTemplate
-      user={user}
-      languageStatus={languageStatus}
-      keyword={keyword}
-      platformSiteType={platformSiteType}
-      platformIdList={platformIdList}
-    />
+    <Suspense fallback={<ScreenLoader />}>
+      <BookmarkSearchResultTemplate
+        user={user}
+        languageStatus={languageStatus}
+        keyword={keyword}
+        platformSiteType={platformSiteType}
+        platformIdList={platformIdList}
+      />
+    </Suspense>
   );
 }

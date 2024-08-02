@@ -15,7 +15,7 @@ export type GetArticleParams = {
   platformId?: string;
   keyword?: string;
   languageStatus?: LanguageStatus;
-  platformIdList: Array<string>;
+  feedIdList: Array<string>;
   tab: ArticleTabType;
   offset?: number;
   sort?: "asc" | "desc";
@@ -26,7 +26,7 @@ export const getArticles = async ({
   userId,
   keyword,
   languageStatus = 1,
-  platformIdList,
+  feedIdList,
   tab,
   offset = 1,
 }: GetArticleParams): Promise<Array<ArticleType>> => {
@@ -93,8 +93,8 @@ export const getArticles = async ({
       );
     }
 
-    if (platformIdList.length) {
-      query.in("platform_id", platformIdList);
+    if (feedIdList.length) {
+      query.in("feed_article_relations.feed_id", feedIdList);
     }
 
     const { data, error } = await query
@@ -170,10 +170,12 @@ export const getArticlesByFeedIds = async ({
       query.in("feed_id", feedIds);
     }
 
+    // TODO: Fix this
     if (keyword) {
-      query.or(
-        `articles.title.ilike.%${keyword}%,articles.description.ilike.%${keyword}%,articles.tags.ilike.%${keyword}%`
-      );
+      // query.or(
+      //   `articles.title.ilike.%${keyword}%,articles.description.ilike.%${keyword}%,articles.tags.ilike.%${keyword}%`
+      // );
+      query.ilike("articles.title", `%${keyword}%`);
     }
 
     const { data, error } = await query

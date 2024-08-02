@@ -15,13 +15,18 @@ export type FetchFeedsAPIResponse = {
 export const fetchFeedsAPI = async ({
   offset = "1",
   keyword,
+  platformSiteType,
 }: {
   offset?: string;
   keyword?: string;
+  platformSiteType?: string;
 }): Promise<FetchFeedsAPIResponse> => {
   let url = `${process.env.WEB_DOMAIN}/api/feeds?offset=${offset}`;
   if (keyword) {
     url += `&keyword=${keyword}`;
+  }
+  if (platformSiteType) {
+    url += `&platformSiteType=${platformSiteType}`;
   }
   const response = await getFetch({
     url,
@@ -40,8 +45,19 @@ export const fetchFeedsAPI = async ({
   };
 };
 
-export const fetchAllFeedAPI = async (): Promise<FetchFeedsAPIResponse> => {
-  const url = `${process.env.WEB_DOMAIN}/api/feeds/all`;
+type FetchAllFeedAPIRequest = {
+  feedIdList?: Array<string>;
+};
+
+export const fetchAllFeedAPI = async ({
+  feedIdList,
+}: FetchAllFeedAPIRequest): Promise<FetchFeedsAPIResponse> => {
+  let url = `${process.env.WEB_DOMAIN}/api/feeds/all?dummy=1`;
+
+  if (feedIdList) {
+    const feedIdPath = feedIdList.map((feedId) => `&feedId=${feedId}`).join("");
+    url += feedIdPath;
+  }
   const response = await getFetch({
     url,
     tagName: "feeds/all",

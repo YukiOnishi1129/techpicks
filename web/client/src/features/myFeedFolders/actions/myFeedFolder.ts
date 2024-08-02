@@ -8,34 +8,43 @@ import {
   MyFeedFolderType,
 } from "@/types/myFeedFolder";
 
-export const fetchMyFeedFoldersAPI =
-  async (): Promise<FetchMyFeedFolderAPIResponse> => {
-    const url = `${process.env.WEB_DOMAIN}/api/my-feed-folders`;
-    const response = await getFetch({
-      url,
-      tagName: "my-feed-folders",
-      cacheType: "no-store",
-    });
-    const data = await response.json();
-    const status = response.status;
-    if (status === 401) {
-      return {
-        data: {
-          myFeedFolders: [],
-          message: data.message as string,
-        },
-        status: status,
-      };
-    }
+type FetchMyFeedFolderListAPIRequest = {
+  keyword?: string;
+};
 
+export const fetchMyFeedFoldersAPI = async ({
+  keyword,
+}: FetchMyFeedFolderListAPIRequest): Promise<FetchMyFeedFolderAPIResponse> => {
+  let url = `${process.env.WEB_DOMAIN}/api/my-feed-folders`;
+  if (keyword) {
+    url += `?keyword=${keyword}`;
+  }
+
+  const response = await getFetch({
+    url,
+    tagName: "my-feed-folders",
+    cacheType: "no-store",
+  });
+  const data = await response.json();
+  const status = response.status;
+  if (status === 401) {
     return {
       data: {
-        myFeedFolders: data.myFeedFolders as MyFeedFolderType[],
+        myFeedFolders: [],
         message: data.message as string,
       },
       status: status,
     };
+  }
+
+  return {
+    data: {
+      myFeedFolders: data.myFeedFolders as MyFeedFolderType[],
+      message: data.message as string,
+    },
+    status: status,
   };
+};
 
 export const fetchMyFeedFolderByIdAPI = async (
   id: string

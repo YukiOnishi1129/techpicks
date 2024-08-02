@@ -38,7 +38,7 @@ export function DeleteFavoriteArticleFolderAlertDialog({
         <Tooltip>
           <AlertDialogTrigger asChild>
             <TooltipTrigger asChild>
-              <Button variant="outline">{"DELETE"}</Button>
+              <Button variant={"destructive"}>{"DELETE"}</Button>
             </TooltipTrigger>
           </AlertDialogTrigger>
           <TooltipContent className="px-4 py-3 font-semibold">
