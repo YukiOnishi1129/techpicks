@@ -1,0 +1,18 @@
+"""
+Feed schema
+"""
+type Feed {
+  id: ID!
+  platformId: String!
+  categoryId: String!
+  name: String!
+  description: String!
+  rssUrl: String!
+  siteUrl: String!
+  thumbnailUrl: String!
+  trendPlatformType: Int!
+  apiQueryParam: String
+  createdAt: String!
+  updatedAt: String!
+  deletedAt: String
+}
