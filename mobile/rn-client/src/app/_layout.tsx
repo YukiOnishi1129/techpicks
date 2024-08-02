@@ -10,10 +10,10 @@ import { useColorScheme } from "@/lib/useColorScheme";
 
 import "../../global.css";
 
-const LIGHT_THEME: Theme = {
-  dark: false,
-  colors: NAV_THEME.light,
-};
+// const LIGHT_THEME: Theme = {
+//   dark: false,
+//   colors: NAV_THEME.light,
+// };
 const DARK_THEME: Theme = {
   dark: true,
   colors: NAV_THEME.dark,
@@ -61,9 +61,9 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
-      <StatusBar style={isDarkColorScheme ? "light" : "dark"} />
+    <ThemeProvider value={DARK_THEME}>
       <Stack />
+      <StatusBar style={"dark"} />
     </ThemeProvider>
   );
 }
