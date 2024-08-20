@@ -1,0 +1,21 @@
+"""
+Bookmark schema
+"""
+type Bookmark implements Node {
+  id: ID!
+  feed: Feed!
+  title: String!
+  description: String!
+  articleUrl: String!
+  thumbnailUrl: String!
+  publishedAt: String
+  articleId: String!
+  platformId: String
+  platformName: String!
+  platformUrl: String!
+  platformFaviconUrl: String!
+  isEng: Boolean!
+  isRead: Boolean!
+  createdAt: String!
+  updatedAt: String!
+}

@@ -1,0 +1,14 @@
+"""
+Platform schema
+"""
+type Platform implements Node {
+  id: ID!
+  name: String!
+  siteUrl: String!
+  platformSiteType: Int!
+  faviconUrl: String!
+  isEng: Boolean!
+  createdAt: String!
+  updatedAt: String!
+  deletedAt: String
+}

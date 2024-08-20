@@ -1,0 +1,34 @@
+"""
+Article schema
+"""
+type Article implements Node {
+  id: ID!
+  platform: Platform!
+  feeds: [Feed!]!
+  favoriteArticles: [FavoriteArticle!]
+  title: String!
+  description: String!
+  articleUrl: String!
+  publishedAt: String!
+  authorName: String
+  tags: String
+  thumbnailUrl: String!
+  isEng: Boolean!
+  isPrivate: Boolean!
+  bookmarkId: String
+  isBookmarked: Boolean!
+  isFollowing: Boolean!
+  likeCount: Int
+  createdAt: String!
+  updatedAt: String!
+}
+
+type ArticleConnection {
+  edges: [ArticleEdge!]!
+  pageInfo: PageInfo!
+}
+
+type ArticleEdge {
+  cursor: String!
+  node: Article!
+}
