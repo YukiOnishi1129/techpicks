@@ -1,10 +1,10 @@
 """
 Feed schema
 """
-type Feed {
+type Feed implements Node {
   id: ID!
-  platformId: String!
-  categoryId: String!
+  platform: Platform!
+  category: Category!
   name: String!
   description: String!
   rssUrl: String!

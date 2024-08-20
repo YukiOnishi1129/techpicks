@@ -1,9 +1,11 @@
 """
 Article schema
 """
-type Article {
+type Article implements Node {
   id: ID!
-  platformId: String
+  platform: Platform!
+  feeds: [Feed!]!
+  favoriteArticles: [FavoriteArticle!]
   title: String!
   description: String!
   articleUrl: String!
@@ -13,6 +15,20 @@ type Article {
   thumbnailUrl: String!
   isEng: Boolean!
   isPrivate: Boolean!
+  bookmarkId: String
+  isBookmarked: Boolean!
+  isFollowing: Boolean!
+  likeCount: Int
   createdAt: String!
   updatedAt: String!
+}
+
+type ArticleConnection {
+  edges: [ArticleEdge!]!
+  pageInfo: PageInfo!
+}
+
+type ArticleEdge {
+  cursor: String!
+  node: Article!
 }

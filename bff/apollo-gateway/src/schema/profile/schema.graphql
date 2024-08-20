@@ -1,7 +1,7 @@
 """
 Profile schema
 """
-type Profile {
+type Profile implements Node {
   id: ID!
   name: String!
   email: String!

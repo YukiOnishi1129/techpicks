@@ -1,7 +1,10 @@
-type Query {
-  _empty: String
+interface Node {
+  id: ID!
 }
 
-type Mutation {
-  _empty: String
+type PageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+  endCursor: String
 }

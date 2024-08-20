@@ -1,7 +1,7 @@
 """
 Category schema
 """
-type Category {
+type Category implements Node {
   id: ID!
   name: String!
   type: Int!

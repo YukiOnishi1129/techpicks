@@ -1,4 +1,7 @@
-type Platform {
+"""
+Platform schema
+"""
+type Platform implements Node {
   id: ID!
   name: String!
   siteUrl: String!
