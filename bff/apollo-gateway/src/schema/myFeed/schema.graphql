@@ -1,0 +1,12 @@
+"""
+MyFeedFolder is a folder that contains a list of feeds.
+"""
+type MyFeedFolder implements Node {
+  id: ID!
+  userId: String!
+  title: String!
+  description: String
+  feeds: [Feed!]
+  createdAt: String!
+  updatedAt: String!
+}

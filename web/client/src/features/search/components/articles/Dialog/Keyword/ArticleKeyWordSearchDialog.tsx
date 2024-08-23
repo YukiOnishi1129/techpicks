@@ -77,7 +77,7 @@ const ArticleKeyWordSearchDialogContent: FC<
       keywordPath = `keyword=${values.keyword}`;
     }
 
-    await serverRevalidatePage(pathname);
+    await serverRevalidatePage(`/article/search/result?${keywordPath}`);
     router.replace(`/article/search/result?${keywordPath}`);
     resetDialog();
     handleClose();

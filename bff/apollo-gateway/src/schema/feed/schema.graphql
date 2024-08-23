@@ -1,0 +1,18 @@
+"""
+Feed schema
+"""
+type Feed implements Node {
+  id: ID!
+  platform: Platform!
+  category: Category!
+  name: String!
+  description: String!
+  rssUrl: String!
+  siteUrl: String!
+  thumbnailUrl: String!
+  trendPlatformType: Int!
+  apiQueryParam: String
+  createdAt: String!
+  updatedAt: String!
+  deletedAt: String
+}

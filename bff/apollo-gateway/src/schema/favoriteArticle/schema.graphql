@@ -1,0 +1,36 @@
+"""
+Favorite Article schema
+"""
+type FavoriteArticle implements Node {
+  id: ID!
+  articleId: String
+  platformId: String
+  userId: String!
+  title: String!
+  thumbnailUrl: String!
+  articleUrl: String!
+  platformFaviconUrl: String!
+  publishedAt: String
+  authorName: String
+  tags: String
+  platformName: String
+  platformUrl: String
+  isEng: Boolean!
+  isPrivate: Boolean!
+  isRead: Boolean!
+  createdAt: String!
+  updatedAt: String!
+}
+
+"""
+Favorite Article Folder schema
+"""
+type FavoriteArticleFolder implements Node {
+  id: ID!
+  userId: String!
+  title: String!
+  description: String
+  favoriteArticles: [FavoriteArticle!]
+  createdAt: String!
+  updatedAt: String!
+}
