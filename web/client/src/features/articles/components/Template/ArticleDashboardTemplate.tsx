@@ -116,7 +116,7 @@ export const ArticleDashboardTemplate: FC<
       </Tabs>
 
       <div className="fixed bottom-20 right-4 z-50 md:hidden">
-        <ArticleKeyWordSearchDialog />
+        <ArticleKeyWordSearchDialog keyword={keyword} />
       </div>
     </div>
   );

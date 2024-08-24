@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { FC, useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
 import { FaSearch } from "react-icons/fa";
@@ -30,11 +30,13 @@ const formSchema = z.object({
   keyword: z.string().optional(),
 });
 
-type ArticleKeyWordSearchDialogProps = {};
+type ArticleKeyWordSearchDialogProps = {
+  keyword?: string;
+};
 
 export const ArticleKeyWordSearchDialog: FC<
   ArticleKeyWordSearchDialogProps
-> = () => {
+> = ({ keyword }) => {
   const [open, setOpen] = useState(false);
 
   const handleClose = useCallback(() => {
@@ -46,24 +48,29 @@ export const ArticleKeyWordSearchDialog: FC<
       <DialogTrigger className="cursor-pointer rounded-full border-2 border-white bg-primary p-4">
         <FaSearch size="24" color="black" />
       </DialogTrigger>
-      {open && <ArticleKeyWordSearchDialogContent handleClose={handleClose} />}
+      {open && (
+        <ArticleKeyWordSearchDialogContent
+          keyword={keyword}
+          handleClose={handleClose}
+        />
+      )}
     </Dialog>
   );
 };
 
 type ArticleKeyWordSearchDialogContentProps = {
+  keyword?: string;
   handleClose: () => void;
 };
 
 const ArticleKeyWordSearchDialogContent: FC<
   ArticleKeyWordSearchDialogContentProps
-> = ({ handleClose }) => {
-  const pathname = usePathname();
+> = ({ keyword, handleClose }) => {
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      keyword: "",
+      keyword,
     },
   });
 
