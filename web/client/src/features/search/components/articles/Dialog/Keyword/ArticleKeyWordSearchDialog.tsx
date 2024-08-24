@@ -81,11 +81,13 @@ const ArticleKeyWordSearchDialogContent: FC<
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     let keywordPath = "";
     if (!!values.keyword && values.keyword.trim() === "") {
-      keywordPath = `keyword=${values.keyword}`;
+      keywordPath = `&keyword=${values.keyword}`;
     }
 
-    await serverRevalidatePage(`/article/search/result?${keywordPath}`);
-    router.replace(`/article/search/result?${keywordPath}`);
+    await serverRevalidatePage(
+      `/article/search/result?dummy=dummy${keywordPath}`
+    );
+    router.replace(`/article/search/result?dummy=dummy${keywordPath}`);
     resetDialog();
     handleClose();
   };
