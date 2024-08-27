@@ -1,0 +1,45 @@
+syntax = "proto3";
+
+option go_package = "pkg/grpc";
+
+package checkpicks.feed.v1;
+
+import "google/protobuf/timestamp.proto";
+
+
+message Platform {
+    string id = 1;
+    string name = 2;
+    string siteUrl = 3;
+    int64 platformSiteType = 4;
+    string faviconUrl = 5;
+    bool isEng = 6;
+    string createdAt = 7;
+    string updatedAt = 8;
+    google.protobuf.StringValue deletedAt = 9;
+}
+
+message Category {
+    string id = 1;
+    string name = 2;
+    int64 type = 3;
+    string createdAt = 4;
+    string updatedAt = 5;
+    google.protobuf.StringValue deletedAt = 6;
+}
+
+message feed {
+    string id = 1;
+    Platform platform = 2;
+    Category category = 3;
+    string name = 4;
+    string description = 5;
+    string rssUrl = 6;
+    string siteUrl = 7;
+    string thumbnailUrl = 8;
+    int64 trendPlatformType = 9;
+    google.protobuf.StringValue apiQueryParam = 10;
+    string createdAt = 11;
+    string updatedAt = 12;
+    google.protobuf.StringValue deletedAt = 13;
+}
