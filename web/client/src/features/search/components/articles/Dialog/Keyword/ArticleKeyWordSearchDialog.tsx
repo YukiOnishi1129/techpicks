@@ -80,7 +80,7 @@ const ArticleKeyWordSearchDialogContent: FC<
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     let keywordPath = "";
-    if (!!values.keyword && values.keyword.trim() === "") {
+    if (!!values.keyword && values.keyword.trim() !== "") {
       keywordPath = `&keyword=${values.keyword}`;
     }
 
