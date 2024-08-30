@@ -1,0 +1,64 @@
+name: content_service_pr_check
+
+on:
+  push:
+    branches: 
+      - "main"
+      - "develop"
+      - "feature/*"
+      - "feat/*"
+      - "YL-*"
+    paths:
+      - "micro-service/content-service/**"
+      - ".github/workflows/content_service_pr_check.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        go: ['1.22']
+    
+    # services:
+    #   postgres:
+    #     image: docker.io/postgres:16-alpine
+    #     env:
+    #       POSTGRES_USER: postgres
+    #       POSTGRES_PASSWORD: root
+    #       POSTGRES_DB: password
+    #     ports:
+    #       - 5432:5432
+
+    defaults:
+      run:
+        working-directory: ./micro-service/content-service
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      
+      - name: Setup Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: ${{ matrix.go }}
+          cache: false
+
+      - name: Install dependencies
+        run: go mod download
+
+      - name: Go Lint
+        run: go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest && make lint
+
+    #   - name: Go Test
+    #     run: go test -v ./...
+    #     env:
+    #       POSTGRES_USER: root
+    #       POSTGRES_PASSWORD: password
+    #       POSTGRES_DB: postgres
+    
+      - name: Go Build
+        run: go build -v ./...
