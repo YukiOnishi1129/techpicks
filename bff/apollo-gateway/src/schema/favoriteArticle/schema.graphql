@@ -13,8 +13,8 @@ type FavoriteArticle implements Node {
   publishedAt: String
   authorName: String
   tags: String
-  platformName: String
-  platformUrl: String
+  platformName: String!
+  platformUrl: String!
   isEng: Boolean!
   isPrivate: Boolean!
   isRead: Boolean!

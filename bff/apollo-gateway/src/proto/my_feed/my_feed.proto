@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+option go_package = "github.com/YukiOnishi1129/techpicks/my_feed";
+
+package checkpicks.my_feed.v1;
+
+// import "google/protobuf/empty.proto";
+// import "google/protobuf/timestamp.proto";
+// import "google/protobuf/wrappers.proto";

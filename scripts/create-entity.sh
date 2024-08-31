@@ -7,10 +7,10 @@ sqlboiler psql \
     -p entity \
     --no-tests --wipe
 
-# article-service
+# content-service
 sqlboiler psql \
-    -c micro-service/article-service/database/sqlboiler.toml \
-    -o micro-service/article-service/entity \
+    -c micro-service/content-service/database/sqlboiler.toml \
+    -o micro-service/content-service/entity \
     -p entity \
     --no-tests --wipe
 
@@ -21,17 +21,17 @@ sqlboiler psql \
     -p entity \
     --no-tests --wipe
 
-# feed-service
+# my-feed-service
 sqlboiler psql \
-    -c micro-service/feed-service/database/sqlboiler.toml \
-    -o micro-service/feed-service/entity \
+    -c micro-service/my-feed-service/database/sqlboiler.toml \
+    -o micro-service/my-feed-service/entity \
     -p entity \
     --no-tests --wipe
 
-# platform-service
+# favorite-service
 sqlboiler psql \
-    -c micro-service/platform-service/database/sqlboiler.toml \
-    -o micro-service/platform-service/entity \
+    -c micro-service/favorite-service/database/sqlboiler.toml \
+    -o micro-service/favorite-service/entity \
     -p entity \
     --no-tests --wipe
 

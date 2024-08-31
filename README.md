@@ -30,10 +30,10 @@ Check Picks's monorepo
 
 | Project name | overview | skill |
 | ---- | ---- | ---- |
-| [article-service](https://github.com/YukiOnishi1129/techpicks/tree/main/micro-service/article-service) | Article service | go |
+| [content-service](https://github.com/YukiOnishi1129/techpicks/tree/main/micro-service/content-service) | Content service | go |
 | [bookmark-service](https://github.com/YukiOnishi1129/techpicks/tree/main/micro-service/bookmark-service) | Bookmark service | go |
-| [feed-service](https://github.com/YukiOnishi1129/techpicks/tree/main/micro-service/feed-service) | Feed service | go |
-| [platform-service](https://github.com/YukiOnishi1129/techpicks/tree/main/micro-service/platform-service) | Platform service | go |
+| [my-feed-service](https://github.com/YukiOnishi1129/techpicks/tree/main/micro-service/my-feed-service) | My feed service | go |
+| [favorite-service](https://github.com/YukiOnishi1129/techpicks/tree/main/micro-service/favorite-service) | Favorite service | go |
 | [user-service](https://github.com/YukiOnishi1129/techpicks/tree/main/micro-service/user-service) | User service | go |
 | [batch-service](https://github.com/YukiOnishi1129/techpicks/tree/main/batch-service) | Service related to batch processing | go |
 
@@ -81,4 +81,14 @@ go install github.com/volatiletech/sqlboiler/v4/drivers/sqlboiler-psql@latest
 
 ```
 brew install golangci-lint
+```
+
+### [protoc-gen-go](https://grpc.io/docs/languages/go/)
+
+1. install protoc-gen-go into mac
+
+```
+go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
+go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
+
 ```
