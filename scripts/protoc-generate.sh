@@ -6,6 +6,20 @@ ROOT_DIR=$(git rev-parse --show-toplevel)
 PROTO_FILE_DIR=./bff/apollo-gateway/src/proto
 API_PROTO_FILES=$(find ${PROTO_FILE_DIR} -type f -name '*.proto')
 
+# Content Service Generate
+OUT_DIR_CONTENT_SEVICE="${ROOT_DIR}/micro-service/content-service/grpc"
+PROTO_OUT_DIR_CONTENT_SEVICE="./micro-service/content-service/grpc"
+
+## Clean all existing generated files
+rm -r "${OUT_DIR_CONTENT_SEVICE}"
+mkdir "${OUT_DIR_CONTENT_SEVICE}"
+
+## Generate code at Content Service
+protoc \
+  -I=${PROTO_FILE_DIR} \
+  --go_out=paths=source_relative:${PROTO_OUT_DIR_CONTENT_SEVICE} \
+  --go-grpc_out=paths=source_relative,require_unimplemented_servers=false:${PROTO_OUT_DIR_CONTENT_SEVICE} \
+  ${API_PROTO_FILES};
 
 
 

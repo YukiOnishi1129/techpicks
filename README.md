@@ -82,3 +82,13 @@ go install github.com/volatiletech/sqlboiler/v4/drivers/sqlboiler-psql@latest
 ```
 brew install golangci-lint
 ```
+
+### [protoc-gen-go](https://grpc.io/docs/languages/go/)
+
+1. install protoc-gen-go into mac
+
+```
+go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
+go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
+
+```

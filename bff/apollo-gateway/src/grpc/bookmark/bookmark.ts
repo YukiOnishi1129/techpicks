@@ -5,10 +5,10 @@
 // source: bookmark/bookmark.proto
 
 /* eslint-disable */
-import { GrpcMethod, GrpcStreamMethod } from '@nestjs/microservices';
-import { Observable } from 'rxjs';
+import { GrpcMethod, GrpcStreamMethod } from "@nestjs/microservices";
+import { Observable } from "rxjs";
 
-export const protobufPackage = 'checkpicks.bookmark.v1';
+export const protobufPackage = "checkpicks.bookmark.v1";
 
 export interface GetBookmarkResponse {
   bookmark: Bookmark[];
@@ -37,50 +37,31 @@ export interface Bookmark {
   updatedAt: string;
 }
 
-export const CHECKPICKS_BOOKMARK_V1_PACKAGE_NAME = 'checkpicks.bookmark.v1';
+export const CHECKPICKS_BOOKMARK_V1_PACKAGE_NAME = "checkpicks.bookmark.v1";
 
 export interface BookmarkServiceClient {
-  getBookmarkByArticleId(
-    request: GetBookmarkByArticleIdRequest,
-  ): Observable<GetBookmarkResponse>;
+  getBookmarkByArticleId(request: GetBookmarkByArticleIdRequest): Observable<GetBookmarkResponse>;
 }
 
 export interface BookmarkServiceController {
   getBookmarkByArticleId(
     request: GetBookmarkByArticleIdRequest,
-  ):
-    | Promise<GetBookmarkResponse>
-    | Observable<GetBookmarkResponse>
-    | GetBookmarkResponse;
+  ): Promise<GetBookmarkResponse> | Observable<GetBookmarkResponse> | GetBookmarkResponse;
 }
 
 export function BookmarkServiceControllerMethods() {
   return function (constructor: Function) {
-    const grpcMethods: string[] = ['getBookmarkByArticleId'];
+    const grpcMethods: string[] = ["getBookmarkByArticleId"];
     for (const method of grpcMethods) {
-      const descriptor: any = Reflect.getOwnPropertyDescriptor(
-        constructor.prototype,
-        method,
-      );
-      GrpcMethod('BookmarkService', method)(
-        constructor.prototype[method],
-        method,
-        descriptor,
-      );
+      const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);
+      GrpcMethod("BookmarkService", method)(constructor.prototype[method], method, descriptor);
     }
     const grpcStreamMethods: string[] = [];
     for (const method of grpcStreamMethods) {
-      const descriptor: any = Reflect.getOwnPropertyDescriptor(
-        constructor.prototype,
-        method,
-      );
-      GrpcStreamMethod('BookmarkService', method)(
-        constructor.prototype[method],
-        method,
-        descriptor,
-      );
+      const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);
+      GrpcStreamMethod("BookmarkService", method)(constructor.prototype[method], method, descriptor);
     }
   };
 }
 
-export const BOOKMARK_SERVICE_NAME = 'BookmarkService';
+export const BOOKMARK_SERVICE_NAME = "BookmarkService";
