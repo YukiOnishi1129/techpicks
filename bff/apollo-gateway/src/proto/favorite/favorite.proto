@@ -1,0 +1,50 @@
+syntax = "proto3";
+
+option go_package = "github.com/YukiOnishi1129/techpicks/favorite";
+
+package checkpicks.favorite.v1;
+
+import "google/protobuf/wrappers.proto";
+
+service FavariteService {
+    rpc GetFavoriteArticleFolderByArticleId(GetFavoriteArticleFolderByArticleIdRequest) returns (GetFavoriteArticleFolderResponse);
+}
+
+message GetFavoriteArticleFolderResponse {
+    FavoriteArticleFolder favoriteArticleFolder = 1;
+}
+
+message GetFavoriteArticleFolderByArticleIdRequest {
+    string articleId = 1;
+}
+
+message FavoriteArticle {
+    string id = 1;
+    string articleId = 2;
+    google.protobuf.StringValue platformId = 3;
+    string favoriteArticleFolderId = 4;
+    string userId = 5;
+    string title = 6;
+    string thumbnailUrl = 7;
+    string articleUrl = 8;
+    string platformFaviconUrl = 9;
+    google.protobuf.StringValue publishedAt = 10;
+    google.protobuf.StringValue authorName = 11;
+    google.protobuf.StringValue tags = 12;
+    string platformName = 13;
+    string platformUrl = 14;
+    bool isEng = 15;
+    bool isPrivate = 16;
+    bool isRead = 17;
+    string createdAt = 18;
+    string updatedAt = 19;
+}
+
+message FavoriteArticleFolder {
+    string id = 1;
+    string userId = 2;
+    string title = 3;
+    string description = 4;
+    string createdAt = 5;
+    string updatedAt = 6;
+}

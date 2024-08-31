@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+option go_package = "github.com/YukiOnishi1129/techpicks/bookmark";
+
+package checkpicks.bookmark.v1;
+
+import "google/protobuf/wrappers.proto";
+
+
+service BookmarkService {
+    rpc GetBookmarkByArticleId(GetBookmarkByArticleIdRequest) returns (GetBookmarkResponse) {}
+}
+
+message GetBookmarkResponse {
+    repeated Bookmark bookmark = 1;
+}
+
+message GetBookmarkByArticleIdRequest {
+    string articleId = 1;
+}
+
+message Bookmark {
+    string id = 1;
+    string articleId = 2;
+    string userId = 3;
+    google.protobuf.StringValue platformId = 4;
+    string title = 5;
+    string description = 6;
+    string articleUrl = 7;
+    string thumbnailUrl = 8;
+    google.protobuf.StringValue publishedAt = 9;
+    string platformName = 10;
+    string platformUrl = 11;
+    string platformFaviconUrl = 12;
+    bool isEng = 13;
+    bool isRead = 14;
+    string createdAt = 15;
+    string updatedAt = 16;
+}
