@@ -2,13 +2,11 @@
 // versions:
 //   protoc-gen-ts_proto  v2.0.3
 //   protoc               v3.20.3
-// source: content/article.proto
+// source: content/content.proto
 
 /* eslint-disable */
 import { GrpcMethod, GrpcStreamMethod } from "@nestjs/microservices";
 import { Observable } from "rxjs";
-import { Feed } from "./feed";
-import { Platform } from "./platform";
 
 export const protobufPackage = "checkpicks.content.v1";
 
@@ -22,6 +20,43 @@ export interface GetArticleRequest {
 
 export interface GetArticleResponse {
   articles: Article[];
+}
+
+export interface Feed {
+  id: string;
+  platform: Platform | undefined;
+  category: Category | undefined;
+  name: string;
+  description: string;
+  rssUrl: string;
+  siteUrl: string;
+  thumbnailUrl: string;
+  trendPlatformType: number;
+  apiQueryParam: string | undefined;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string | undefined;
+}
+
+export interface Category {
+  id: string;
+  name: string;
+  type: number;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string | undefined;
+}
+
+export interface Platform {
+  id: string;
+  name: string;
+  siteUrl: string;
+  platformSiteType: number;
+  faviconUrl: string;
+  isEng: boolean;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string | undefined;
 }
 
 export interface Article {
