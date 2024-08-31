@@ -1,7 +1,16 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
 
 func main() {
-	fmt.Println("Article service is running...")
+	//	database
+	// db, dbErr := database.Init()
+	// if dbErr != nil {
+	// 	fmt.Printf("Error connecting to DB\n")
+	// 	return
+	// }
+
+	fmt.Println("Content service is running...")
 }
