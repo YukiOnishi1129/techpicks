@@ -17,20 +17,20 @@
       "path": "./bff/apollo-gateway"
     },
     {
-      "name": "📔 Article-service",
-      "path": "./micro-service/article-service/"
+      "name": "📔 Content-service",
+      "path": "./micro-service/content-service/"
     },
     {
       "name": "🔖 Bookmark-service",
       "path": "./micro-service/bookmark-service/"
     },
     {
-      "name": "📶 Feed-service",
-      "path": "./micro-service/feed-service/"
+      "name": "📶 My-feed-service",
+      "path": "./micro-service/my-feed-service/"
     },
     {
-      "name": "💎 Platform-service",
-      "path": "./micro-service/platform-service/"
+      "name": "💎 Favorite-service",
+      "path": "./micro-service/favorite-service/"
     },
     {
       "name": "😀 User-service",

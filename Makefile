@@ -16,6 +16,10 @@ migrate:
 reset-migrate:
 	supabase db reset
 
+# generate
+## generate proto
+gen-proto:
+	$(shell ./scripts/protoc-generate.sh)
 
 # create entity
 create-entity:

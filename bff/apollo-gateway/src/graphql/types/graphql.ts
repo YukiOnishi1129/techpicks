@@ -10,7 +10,7 @@
 
 export class ArticlesInput {
     userId?: Nullable<string>;
-    isEng?: Nullable<boolean>;
+    languageStatus?: Nullable<number>;
     tag?: Nullable<string>;
     first?: Nullable<number>;
     after?: Nullable<string>;

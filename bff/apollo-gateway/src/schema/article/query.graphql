@@ -7,7 +7,7 @@ type Query {
 
 input ArticlesInput {
   userId: String
-  isEng: Boolean
+  languageStatus: Int
   tag: String
   first: Int
   after: String
