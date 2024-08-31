@@ -26,7 +26,7 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ArticleServiceClient interface {
-	GetArticles(ctx context.Context, in *GetArticleRequest, opts ...grpc.CallOption) (*GetArticleResponse, error)
+	GetArticles(ctx context.Context, in *GetArticlesRequest, opts ...grpc.CallOption) (*GetArticlesResponse, error)
 }
 
 type articleServiceClient struct {
@@ -37,9 +37,9 @@ func NewArticleServiceClient(cc grpc.ClientConnInterface) ArticleServiceClient {
 	return &articleServiceClient{cc}
 }
 
-func (c *articleServiceClient) GetArticles(ctx context.Context, in *GetArticleRequest, opts ...grpc.CallOption) (*GetArticleResponse, error) {
+func (c *articleServiceClient) GetArticles(ctx context.Context, in *GetArticlesRequest, opts ...grpc.CallOption) (*GetArticlesResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(GetArticleResponse)
+	out := new(GetArticlesResponse)
 	err := c.cc.Invoke(ctx, ArticleService_GetArticles_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -51,7 +51,7 @@ func (c *articleServiceClient) GetArticles(ctx context.Context, in *GetArticleRe
 // All implementations should embed UnimplementedArticleServiceServer
 // for forward compatibility.
 type ArticleServiceServer interface {
-	GetArticles(context.Context, *GetArticleRequest) (*GetArticleResponse, error)
+	GetArticles(context.Context, *GetArticlesRequest) (*GetArticlesResponse, error)
 }
 
 // UnimplementedArticleServiceServer should be embedded to have
@@ -61,7 +61,7 @@ type ArticleServiceServer interface {
 // pointer dereference when methods are called.
 type UnimplementedArticleServiceServer struct{}
 
-func (UnimplementedArticleServiceServer) GetArticles(context.Context, *GetArticleRequest) (*GetArticleResponse, error) {
+func (UnimplementedArticleServiceServer) GetArticles(context.Context, *GetArticlesRequest) (*GetArticlesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetArticles not implemented")
 }
 func (UnimplementedArticleServiceServer) testEmbeddedByValue() {}
@@ -85,7 +85,7 @@ func RegisterArticleServiceServer(s grpc.ServiceRegistrar, srv ArticleServiceSer
 }
 
 func _ArticleService_GetArticles_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetArticleRequest)
+	in := new(GetArticlesRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -97,7 +97,7 @@ func _ArticleService_GetArticles_Handler(srv interface{}, ctx context.Context, d
 		FullMethod: ArticleService_GetArticles_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ArticleServiceServer).GetArticles(ctx, req.(*GetArticleRequest))
+		return srv.(ArticleServiceServer).GetArticles(ctx, req.(*GetArticlesRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }

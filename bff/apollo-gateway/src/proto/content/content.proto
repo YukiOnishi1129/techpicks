@@ -8,11 +8,11 @@ import "google/protobuf/wrappers.proto";
 
 
 service ArticleService {
-  rpc GetArticles(GetArticleRequest) returns (GetArticleResponse);
+  rpc GetArticles(GetArticlesRequest) returns (GetArticlesResponse);
 }
 
 
-message GetArticleRequest {
+message GetArticlesRequest {
   google.protobuf.StringValue userId = 1;
   google.protobuf.StringValue languageStatus = 2;
   google.protobuf.StringValue tag = 3;
@@ -20,7 +20,7 @@ message GetArticleRequest {
   int64 limit = 5;
 }
 
-message GetArticleResponse {
+message GetArticlesResponse {
   repeated Article articles = 1;
 }
 

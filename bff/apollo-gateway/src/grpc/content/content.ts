@@ -10,7 +10,7 @@ import { Observable } from "rxjs";
 
 export const protobufPackage = "checkpicks.content.v1";
 
-export interface GetArticleRequest {
+export interface GetArticlesRequest {
   userId: string | undefined;
   languageStatus: string | undefined;
   tag: string | undefined;
@@ -18,7 +18,7 @@ export interface GetArticleRequest {
   limit: number;
 }
 
-export interface GetArticleResponse {
+export interface GetArticlesResponse {
   articles: Article[];
 }
 
@@ -85,13 +85,13 @@ export interface Article {
 export const CHECKPICKS_CONTENT_V1_PACKAGE_NAME = "checkpicks.content.v1";
 
 export interface ArticleServiceClient {
-  getArticles(request: GetArticleRequest): Observable<GetArticleResponse>;
+  getArticles(request: GetArticlesRequest): Observable<GetArticlesResponse>;
 }
 
 export interface ArticleServiceController {
   getArticles(
-    request: GetArticleRequest,
-  ): Promise<GetArticleResponse> | Observable<GetArticleResponse> | GetArticleResponse;
+    request: GetArticlesRequest,
+  ): Promise<GetArticlesResponse> | Observable<GetArticlesResponse> | GetArticlesResponse;
 }
 
 export function ArticleServiceControllerMethods() {
