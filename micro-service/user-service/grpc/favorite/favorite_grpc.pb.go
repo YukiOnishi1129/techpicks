@@ -19,99 +19,99 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	FavariteService_GetFavoriteArticleFolderByArticleId_FullMethodName = "/checkpicks.favorite.v1.FavariteService/GetFavoriteArticleFolderByArticleId"
+	FavoriteService_GetFavoriteArticleFolderByArticleId_FullMethodName = "/checkpicks.favorite.v1.FavoriteService/GetFavoriteArticleFolderByArticleId"
 )
 
-// FavariteServiceClient is the client API for FavariteService service.
+// FavoriteServiceClient is the client API for FavoriteService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type FavariteServiceClient interface {
+type FavoriteServiceClient interface {
 	GetFavoriteArticleFolderByArticleId(ctx context.Context, in *GetFavoriteArticleFolderByArticleIdRequest, opts ...grpc.CallOption) (*GetFavoriteArticleFolderResponse, error)
 }
 
-type favariteServiceClient struct {
+type favoriteServiceClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewFavariteServiceClient(cc grpc.ClientConnInterface) FavariteServiceClient {
-	return &favariteServiceClient{cc}
+func NewFavoriteServiceClient(cc grpc.ClientConnInterface) FavoriteServiceClient {
+	return &favoriteServiceClient{cc}
 }
 
-func (c *favariteServiceClient) GetFavoriteArticleFolderByArticleId(ctx context.Context, in *GetFavoriteArticleFolderByArticleIdRequest, opts ...grpc.CallOption) (*GetFavoriteArticleFolderResponse, error) {
+func (c *favoriteServiceClient) GetFavoriteArticleFolderByArticleId(ctx context.Context, in *GetFavoriteArticleFolderByArticleIdRequest, opts ...grpc.CallOption) (*GetFavoriteArticleFolderResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(GetFavoriteArticleFolderResponse)
-	err := c.cc.Invoke(ctx, FavariteService_GetFavoriteArticleFolderByArticleId_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, FavoriteService_GetFavoriteArticleFolderByArticleId_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// FavariteServiceServer is the server API for FavariteService service.
-// All implementations should embed UnimplementedFavariteServiceServer
+// FavoriteServiceServer is the server API for FavoriteService service.
+// All implementations should embed UnimplementedFavoriteServiceServer
 // for forward compatibility.
-type FavariteServiceServer interface {
+type FavoriteServiceServer interface {
 	GetFavoriteArticleFolderByArticleId(context.Context, *GetFavoriteArticleFolderByArticleIdRequest) (*GetFavoriteArticleFolderResponse, error)
 }
 
-// UnimplementedFavariteServiceServer should be embedded to have
+// UnimplementedFavoriteServiceServer should be embedded to have
 // forward compatible implementations.
 //
 // NOTE: this should be embedded by value instead of pointer to avoid a nil
 // pointer dereference when methods are called.
-type UnimplementedFavariteServiceServer struct{}
+type UnimplementedFavoriteServiceServer struct{}
 
-func (UnimplementedFavariteServiceServer) GetFavoriteArticleFolderByArticleId(context.Context, *GetFavoriteArticleFolderByArticleIdRequest) (*GetFavoriteArticleFolderResponse, error) {
+func (UnimplementedFavoriteServiceServer) GetFavoriteArticleFolderByArticleId(context.Context, *GetFavoriteArticleFolderByArticleIdRequest) (*GetFavoriteArticleFolderResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetFavoriteArticleFolderByArticleId not implemented")
 }
-func (UnimplementedFavariteServiceServer) testEmbeddedByValue() {}
+func (UnimplementedFavoriteServiceServer) testEmbeddedByValue() {}
 
-// UnsafeFavariteServiceServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to FavariteServiceServer will
+// UnsafeFavoriteServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to FavoriteServiceServer will
 // result in compilation errors.
-type UnsafeFavariteServiceServer interface {
-	mustEmbedUnimplementedFavariteServiceServer()
+type UnsafeFavoriteServiceServer interface {
+	mustEmbedUnimplementedFavoriteServiceServer()
 }
 
-func RegisterFavariteServiceServer(s grpc.ServiceRegistrar, srv FavariteServiceServer) {
-	// If the following call pancis, it indicates UnimplementedFavariteServiceServer was
+func RegisterFavoriteServiceServer(s grpc.ServiceRegistrar, srv FavoriteServiceServer) {
+	// If the following call pancis, it indicates UnimplementedFavoriteServiceServer was
 	// embedded by pointer and is nil.  This will cause panics if an
 	// unimplemented method is ever invoked, so we test this at initialization
 	// time to prevent it from happening at runtime later due to I/O.
 	if t, ok := srv.(interface{ testEmbeddedByValue() }); ok {
 		t.testEmbeddedByValue()
 	}
-	s.RegisterService(&FavariteService_ServiceDesc, srv)
+	s.RegisterService(&FavoriteService_ServiceDesc, srv)
 }
 
-func _FavariteService_GetFavoriteArticleFolderByArticleId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _FavoriteService_GetFavoriteArticleFolderByArticleId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetFavoriteArticleFolderByArticleIdRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(FavariteServiceServer).GetFavoriteArticleFolderByArticleId(ctx, in)
+		return srv.(FavoriteServiceServer).GetFavoriteArticleFolderByArticleId(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: FavariteService_GetFavoriteArticleFolderByArticleId_FullMethodName,
+		FullMethod: FavoriteService_GetFavoriteArticleFolderByArticleId_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(FavariteServiceServer).GetFavoriteArticleFolderByArticleId(ctx, req.(*GetFavoriteArticleFolderByArticleIdRequest))
+		return srv.(FavoriteServiceServer).GetFavoriteArticleFolderByArticleId(ctx, req.(*GetFavoriteArticleFolderByArticleIdRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// FavariteService_ServiceDesc is the grpc.ServiceDesc for FavariteService service.
+// FavoriteService_ServiceDesc is the grpc.ServiceDesc for FavoriteService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var FavariteService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "checkpicks.favorite.v1.FavariteService",
-	HandlerType: (*FavariteServiceServer)(nil),
+var FavoriteService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "checkpicks.favorite.v1.FavoriteService",
+	HandlerType: (*FavoriteServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "GetFavoriteArticleFolderByArticleId",
-			Handler:    _FavariteService_GetFavoriteArticleFolderByArticleId_Handler,
+			Handler:    _FavoriteService_GetFavoriteArticleFolderByArticleId_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

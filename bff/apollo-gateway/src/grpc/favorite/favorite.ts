@@ -51,13 +51,13 @@ export interface FavoriteArticleFolder {
 
 export const CHECKPICKS_FAVORITE_V1_PACKAGE_NAME = "checkpicks.favorite.v1";
 
-export interface FavariteServiceClient {
+export interface FavoriteServiceClient {
   getFavoriteArticleFolderByArticleId(
     request: GetFavoriteArticleFolderByArticleIdRequest,
   ): Observable<GetFavoriteArticleFolderResponse>;
 }
 
-export interface FavariteServiceController {
+export interface FavoriteServiceController {
   getFavoriteArticleFolderByArticleId(
     request: GetFavoriteArticleFolderByArticleIdRequest,
   ):
@@ -66,19 +66,19 @@ export interface FavariteServiceController {
     | GetFavoriteArticleFolderResponse;
 }
 
-export function FavariteServiceControllerMethods() {
+export function FavoriteServiceControllerMethods() {
   return function (constructor: Function) {
     const grpcMethods: string[] = ["getFavoriteArticleFolderByArticleId"];
     for (const method of grpcMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);
-      GrpcMethod("FavariteService", method)(constructor.prototype[method], method, descriptor);
+      GrpcMethod("FavoriteService", method)(constructor.prototype[method], method, descriptor);
     }
     const grpcStreamMethods: string[] = [];
     for (const method of grpcStreamMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);
-      GrpcStreamMethod("FavariteService", method)(constructor.prototype[method], method, descriptor);
+      GrpcStreamMethod("FavoriteService", method)(constructor.prototype[method], method, descriptor);
     }
   };
 }
 
-export const FAVARITE_SERVICE_NAME = "FavariteService";
+export const FAVORITE_SERVICE_NAME = "FavoriteService";

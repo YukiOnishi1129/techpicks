@@ -6,7 +6,7 @@ package checkpicks.favorite.v1;
 
 import "google/protobuf/wrappers.proto";
 
-service FavariteService {
+service FavoriteService {
     rpc GetFavoriteArticleFolderByArticleId(GetFavoriteArticleFolderByArticleIdRequest) returns (GetFavoriteArticleFolderResponse);
 }
 
