@@ -4,24 +4,31 @@ option go_package = "github.com/YukiOnishi1129/techpicks/content";
 
 package checkpicks.content.v1;
 
+import "google/protobuf/timestamp.proto";
 import "google/protobuf/wrappers.proto";
 
 
 service ArticleService {
-  rpc GetArticles(GetArticleRequest) returns (GetArticleResponse);
+  rpc GetArticles(GetArticlesRequest) returns (GetArticlesResponse);
 }
 
 
-message GetArticleRequest {
-  google.protobuf.StringValue userId = 1;
-  google.protobuf.StringValue languageStatus = 2;
+message GetArticlesRequest {
+  google.protobuf.StringValue user_id = 1;
+  google.protobuf.Int64Value language_status = 2;
   google.protobuf.StringValue tag = 3;
   string cursor = 4;
   int64 limit = 5;
 }
 
-message GetArticleResponse {
-  repeated Article articles = 1;
+message GetArticlesResponse {
+  repeated ArticleEdge articlesEdge = 1;
+  PageInfo page_info = 2;
+}
+
+message PageInfo {
+  string end_cursor = 1;
+  bool has_next_page = 2;
 }
 
 message Feed {
@@ -32,12 +39,12 @@ message Feed {
   string description = 5;
   string rssUrl = 6;
   string siteUrl = 7;
-  string thumbnailUrl = 8;
-  int64 trendPlatformType = 9;
-  google.protobuf.StringValue apiQueryParam = 10;
-  string createdAt = 11;
-  string updatedAt = 12;
-  google.protobuf.StringValue deletedAt = 13;
+  string thumbnail_url = 8;
+  int64 trend_platform_type = 9;
+  google.protobuf.StringValue api_query_param = 10;
+  google.protobuf.Timestamp created_at = 11;
+  google.protobuf.Timestamp updated_at = 12;
+  google.protobuf.Timestamp deleted_at = 13;
 }
 
 
@@ -45,22 +52,22 @@ message Category {
   string id = 1;
   string name = 2;
   int64  type = 3;
-  string createdAt = 4;
-  string updatedAt = 5;
-  google.protobuf.StringValue deletedAt = 6;
+  google.protobuf.Timestamp created_at = 4;
+  google.protobuf.Timestamp updated_at = 5;
+  google.protobuf.Timestamp deleted_at = 6;
 }
 
 
 message Platform {
   string id = 1;
   string name = 2;
-  string siteUrl = 3;
-  int64 platformSiteType = 4;
-  string faviconUrl = 5;
-  bool isEng = 6;
-  string createdAt = 7;
-  string updatedAt = 8;
-  google.protobuf.StringValue deletedAt = 9;
+  string site_url = 3;
+  int64 platform_site_type = 4;
+  string favicon_url = 5;
+  bool is_eng = 6;
+  google.protobuf.Timestamp created_at = 7;
+  google.protobuf.Timestamp updated_at = 8;
+  google.protobuf.Timestamp deleted_at = 9;
 }
 
 message Article {
@@ -69,20 +76,25 @@ message Article {
     repeated Feed feeds = 3;
     string title = 4;
     string description = 5;
-    string articleUrl = 6;
-    string publishedAt = 7;
-    google.protobuf.StringValue authorName = 8;
+    string article_url = 6;
+    google.protobuf.Timestamp published_at = 7;
+    google.protobuf.StringValue author_name = 8;
     google.protobuf.StringValue tags = 9;
-    string thumbnailUrl = 10;
-    bool isEng = 11;
-    bool isPrivate = 12;
-    google.protobuf.StringValue bookmarkId = 13;
-    bool isBookmarked = 14;
-    bool isFollowing = 15;
-    repeated string favoriteArticleFolderIds = 16;
-    int64 likeCount = 17;
-    bool isTrend = 18;
-    string createdAt = 19;
-    string updatedAt = 20;
+    string thumbnail_url = 10;
+    bool is_eng = 11;
+    bool is_private = 12;
+    google.protobuf.StringValue bookmark_id = 13;
+    bool is_bookmarked = 14;
+    bool is_following = 15;
+    repeated string favorite_article_folder_ids = 16;
+    int64 like_count = 17;
+    bool is_trend = 18;
+    google.protobuf.Timestamp created_at = 19;
+    google.protobuf.Timestamp updated_at = 20;
+}
+
+message ArticleEdge {
+  Article article = 1;
+  string cursor = 2;
 }
 
