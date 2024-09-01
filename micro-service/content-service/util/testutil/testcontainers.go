@@ -44,8 +44,7 @@ func SetupDB(t *testing.T, schemaPath string) (*PostgresContainer, error) {
 		scripts = append(scripts, schemaPath+e.Name())
 	}
 
-	pgContainer, err := postgres.RunContainer(ctx,
-		testcontainers.WithImage("docker.io/postgres:16-alpine"),
+	pgContainer, err := postgres.Run(ctx, "docker.io/postgres:16-alpine",
 		postgres.WithInitScripts(scripts...),
 		postgres.WithDatabase(dbName),
 		postgres.WithUsername(dbUser),
