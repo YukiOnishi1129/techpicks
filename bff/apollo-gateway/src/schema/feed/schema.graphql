@@ -12,7 +12,7 @@ type Feed implements Node {
   thumbnailUrl: String!
   trendPlatformType: Int!
   apiQueryParam: String
-  createdAt: String!
-  updatedAt: String!
-  deletedAt: String
+  createdAt: Int!
+  updatedAt: Int!
+  deletedAt: Int
 }

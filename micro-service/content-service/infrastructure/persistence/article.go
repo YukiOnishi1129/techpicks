@@ -3,6 +3,7 @@ package persistence
 import (
 	"context"
 	"database/sql"
+	"fmt"
 
 	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/domain/entity"
 	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/domain/repository"
@@ -21,9 +22,12 @@ func NewArticlePersistence(db *sql.DB) repository.ArticleRepository {
 }
 
 func (ap *articlePersistence) GetArticles(ctx context.Context, q []qm.QueryMod) (entity.ArticleSlice, error) {
+	// boil.DebugMode = true
 	articles, err := entity.Articles(q...).All(ctx, ap.db)
 	if err != nil {
+		fmt.Printf("Error executing query: %v\n", err)
 		return nil, err
 	}
+	// boil.DebugMode = false
 	return articles, nil
 }

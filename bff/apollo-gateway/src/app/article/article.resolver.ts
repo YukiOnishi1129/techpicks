@@ -1,8 +1,7 @@
 import { Resolver, Args, Query } from '@nestjs/graphql';
 
-import { ArticleConnection, ArticlesInput } from '../../graphql/types/graphql';
-
 import { ArticleService } from './article.service';
+import { ArticleConnection, ArticlesInput } from '../../graphql/types/graphql';
 
 @Resolver()
 export class ArticleResolver {
@@ -14,10 +13,10 @@ export class ArticleResolver {
   // }
 
   @Query(() => ArticleConnection)
-  articles(
+  async articles(
     @Args('articlesInput') articlesInput: ArticlesInput,
-  ): ArticleConnection {
-    return this.articleService.getArticles(articlesInput);
+  ): Promise<ArticleConnection> {
+    return await this.articleService.getArticles(articlesInput);
   }
 
   // @Query('article')

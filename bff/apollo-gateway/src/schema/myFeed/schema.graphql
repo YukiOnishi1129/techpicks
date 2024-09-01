@@ -7,6 +7,6 @@ type MyFeedFolder implements Node {
   title: String!
   description: String
   feeds: [Feed!]
-  createdAt: String!
-  updatedAt: String!
+  createdAt: Int!
+  updatedAt: Int!
 }

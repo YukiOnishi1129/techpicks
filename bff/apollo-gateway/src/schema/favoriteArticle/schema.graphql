@@ -10,7 +10,7 @@ type FavoriteArticle implements Node {
   thumbnailUrl: String!
   articleUrl: String!
   platformFaviconUrl: String!
-  publishedAt: String
+  publishedAt: Int
   authorName: String
   tags: String
   platformName: String!
@@ -18,8 +18,8 @@ type FavoriteArticle implements Node {
   isEng: Boolean!
   isPrivate: Boolean!
   isRead: Boolean!
-  createdAt: String!
-  updatedAt: String!
+  createdAt: Int!
+  updatedAt: Int!
 }
 
 """
@@ -31,6 +31,6 @@ type FavoriteArticleFolder implements Node {
   title: String!
   description: String
   favoriteArticles: [FavoriteArticle!]
-  createdAt: String!
-  updatedAt: String!
+  createdAt: Int!
+  updatedAt: Int!
 }
