@@ -32,11 +32,38 @@ func (au *articleUseCase) GetArticles(ctx context.Context, req *cpb.GetArticlesR
 	if err != nil {
 		return nil, err
 	}
-	pbResponse, err := au.convertPBArticles(articles, &req.UserId.Value)
-	if err != nil {
-		return nil, err
+
+	edges := make([]*cpb.ArticleEdge, len(articles))
+	for i, article := range articles {
+		res := au.convertPBArticle(*article)
+
+		for j, far := range article.R.FeedArticleRelations {
+			res.Feeds[j] = au.convertPBFeed(*far.R.Feed)
+		}
+		if article.R.TrendArticles != nil && article.R.TrendArticles[0] != nil {
+			res.LikeCount = int64(article.R.TrendArticles[0].LikeCount)
+			res.IsTrend = true
+		}
+
+		if req.UserId != nil {
+			// TODO: bookmark
+			// TODO: favorite
+			println(req.UserId.GetValue())
+		}
+
+		edges[i] = &cpb.ArticleEdge{
+			Cursor:  res.CreatedAt.AsTime().Format(time.RFC3339),
+			Article: res,
+		}
 	}
-	return pbResponse, nil
+
+	return &cpb.GetArticlesResponse{
+		ArticlesEdge: edges,
+		PageInfo: &cpb.PageInfo{
+			HasNextPage: len(edges) == 20,
+			EndCursor:   edges[len(edges)-1].Cursor,
+		},
+	}, nil
 }
 
 func (au *articleUseCase) findAllArticles(ctx context.Context, req *cpb.GetArticlesRequest) (entity.ArticleSlice, error) {
@@ -84,58 +111,29 @@ func (au *articleUseCase) findAllArticles(ctx context.Context, req *cpb.GetArtic
 	return articles, nil
 }
 
-func (au *articleUseCase) convertPBArticles(articles entity.ArticleSlice, userID *string) (*cpb.GetArticlesResponse, error) {
-	edges := make([]*cpb.ArticleEdge, len(articles))
-	for i, article := range articles {
-		res := &cpb.Article{
-			Id:           article.ID,
-			Title:        article.Title,
-			Description:  article.Description,
-			ArticleUrl:   article.ArticleURL,
-			ThumbnailUrl: article.ThumbnailURL,
-			IsEng:        article.IsEng,
-			IsPrivate:    article.IsPrivate,
-			CreatedAt:    timestamppb.New(article.CreatedAt),
-			UpdatedAt:    timestamppb.New(article.UpdatedAt),
-		}
-		if article.PublishedAt.Valid {
-			res.PublishedAt = timestamppb.New(article.PublishedAt.Time)
-		}
-		if article.AuthorName.Valid {
-			res.AuthorName = wrapperspb.String(article.AuthorName.String)
-		}
-		if article.Tags.Valid {
-			res.Tags = wrapperspb.String(article.Tags.String)
-		}
-		if article.R.Platform != nil {
-			res.Platform = au.convertPBPlatform(*article.R.Platform)
-		}
-
-		for j, far := range article.R.FeedArticleRelations {
-			res.Feeds[j] = au.convertPBFeed(*far.R.Feed)
-		}
-		if article.R.TrendArticles != nil && article.R.TrendArticles[0] != nil {
-			res.LikeCount = int64(article.R.TrendArticles[0].LikeCount)
-			res.IsTrend = true
-		}
-
-		if userID != nil {
-			// TODO: bookmark
-			// TODO: favorite
-			println(*userID)
-		}
-
-		edges[i] = &cpb.ArticleEdge{
-			Cursor:  res.CreatedAt.AsTime().Format(time.RFC3339),
-			Article: res,
-		}
+func (au *articleUseCase) convertPBArticle(a entity.Article) *cpb.Article {
+	article := &cpb.Article{
+		Id:           a.ID,
+		Title:        a.Title,
+		Description:  a.Description,
+		ArticleUrl:   a.ArticleURL,
+		ThumbnailUrl: a.ThumbnailURL,
+		IsEng:        a.IsEng,
+		IsPrivate:    a.IsPrivate,
+		CreatedAt:    timestamppb.New(a.CreatedAt),
+		UpdatedAt:    timestamppb.New(a.UpdatedAt),
 	}
-
-	return &cpb.GetArticlesResponse{
-		ArticlesEdge: edges,
-		PageInfo: &cpb.PageInfo{
-			HasNextPage: len(edges) == 20,
-			EndCursor:   edges[len(edges)-1].Cursor,
-		},
-	}, nil
+	if a.PublishedAt.Valid {
+		article.PublishedAt = timestamppb.New(a.PublishedAt.Time)
+	}
+	if a.AuthorName.Valid {
+		article.AuthorName = wrapperspb.String(a.AuthorName.String)
+	}
+	if a.Tags.Valid {
+		article.Tags = wrapperspb.String(a.Tags.String)
+	}
+	if a.R.Platform != nil {
+		article.Platform = au.convertPBPlatform(*a.R.Platform)
+	}
+	return article
 }
