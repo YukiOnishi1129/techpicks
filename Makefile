@@ -1,5 +1,23 @@
+include .env
+
 empty:
 	echo "empty"
+
+# docker compose
+dcb:
+	docker compose build
+dcu:
+	docker compose up -d bff
+dcd:
+	docker compose down
+
+# enter the container
+## bff container
+bff-ssh:
+	docker exec -it $(BFF_CONTAINER_NAME) sh
+## content service container
+content-ssh:
+	docker exec -it $(CONTENT_SERVICE_CONTAINER_NAME) sh
 
 # supabase
 supabase-start:

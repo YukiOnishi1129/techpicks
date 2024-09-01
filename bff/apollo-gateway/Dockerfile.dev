@@ -1,0 +1,12 @@
+FROM --platform=linux/amd64 node:20-alpine
+RUN npm i -g @nestjs/cli
+
+WORKDIR /app
+
+COPY /bff/apollo-gateway /app
+
+RUN npm install --frozen-lockfile
+
+EXPOSE 3000
+
+CMD ["npm", "run", "start:dev"]

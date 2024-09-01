@@ -1,0 +1,33 @@
+version: "3.9"
+
+services:
+  bff:
+    container_name: ${BFF_CONTAINER_NAME}
+    build:
+      context: .
+      dockerfile: ./bff/apollo-gateway/Dockerfile.dev
+    environment:
+      - TZ=Asia/Tokyo
+    volumes:
+      - ./bff/apollo-gateway:/app
+    ports:
+      - ${BFF_PORT}:${BFF_CONTAINER_PORT}
+    depends_on:
+      - content-service
+      # - bookmark-service
+      # - my-feed-service
+      # - favorite-service
+      # - user-service
+
+  content-service:
+    container_name: ${CONTENT_SERVICE_CONTAINER_NAME}
+    build:
+      context: .
+      dockerfile: ./micro-service/content-service/Dockerfile.dev
+    environment:
+      - CONTENT_SERVICE_CONTAINER_PORT=${CONTENT_SERVICE_CONTAINER_PORT}
+      - TZ=Asia/Tokyo
+    volumes:
+      - ./micro-service/content-service:/app
+    ports:
+      - ${CONTENT_SERVICE_PORT}:${CONTENT_SERVICE_CONTAINER_PORT}

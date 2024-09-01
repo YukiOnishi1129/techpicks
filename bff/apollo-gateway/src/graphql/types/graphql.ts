@@ -105,8 +105,8 @@ export class FavoriteArticle implements Node {
     publishedAt?: Nullable<string>;
     authorName?: Nullable<string>;
     tags?: Nullable<string>;
-    platformName?: Nullable<string>;
-    platformUrl?: Nullable<string>;
+    platformName: string;
+    platformUrl: string;
     isEng: boolean;
     isPrivate: boolean;
     isRead: boolean;
