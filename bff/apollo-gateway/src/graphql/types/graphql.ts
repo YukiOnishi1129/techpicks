@@ -34,7 +34,7 @@ export class Article implements Node {
     title: string;
     description: string;
     articleUrl: string;
-    publishedAt: string;
+    publishedAt?: Nullable<number>;
     authorName?: Nullable<string>;
     tags?: Nullable<string>;
     thumbnailUrl: string;
@@ -44,8 +44,8 @@ export class Article implements Node {
     isBookmarked: boolean;
     isFollowing: boolean;
     likeCount?: Nullable<number>;
-    createdAt: string;
-    updatedAt: string;
+    createdAt: number;
+    updatedAt: number;
 }
 
 export class ArticleConnection {
@@ -72,7 +72,7 @@ export class Bookmark implements Node {
     description: string;
     articleUrl: string;
     thumbnailUrl: string;
-    publishedAt?: Nullable<string>;
+    publishedAt?: Nullable<number>;
     articleId: string;
     platformId?: Nullable<string>;
     platformName: string;
@@ -80,17 +80,17 @@ export class Bookmark implements Node {
     platformFaviconUrl: string;
     isEng: boolean;
     isRead: boolean;
-    createdAt: string;
-    updatedAt: string;
+    createdAt: number;
+    updatedAt: number;
 }
 
 export class Category implements Node {
     id: string;
     name: string;
     type: number;
-    createdAt: string;
-    updatedAt: string;
-    deletedAt?: Nullable<string>;
+    createdAt: number;
+    updatedAt: number;
+    deletedAt?: Nullable<number>;
 }
 
 export class FavoriteArticle implements Node {
@@ -102,7 +102,7 @@ export class FavoriteArticle implements Node {
     thumbnailUrl: string;
     articleUrl: string;
     platformFaviconUrl: string;
-    publishedAt?: Nullable<string>;
+    publishedAt?: Nullable<number>;
     authorName?: Nullable<string>;
     tags?: Nullable<string>;
     platformName: string;
@@ -110,8 +110,8 @@ export class FavoriteArticle implements Node {
     isEng: boolean;
     isPrivate: boolean;
     isRead: boolean;
-    createdAt: string;
-    updatedAt: string;
+    createdAt: number;
+    updatedAt: number;
 }
 
 export class FavoriteArticleFolder implements Node {
@@ -120,8 +120,8 @@ export class FavoriteArticleFolder implements Node {
     title: string;
     description?: Nullable<string>;
     favoriteArticles?: Nullable<FavoriteArticle[]>;
-    createdAt: string;
-    updatedAt: string;
+    createdAt: number;
+    updatedAt: number;
 }
 
 export class Feed implements Node {
@@ -135,9 +135,9 @@ export class Feed implements Node {
     thumbnailUrl: string;
     trendPlatformType: number;
     apiQueryParam?: Nullable<string>;
-    createdAt: string;
-    updatedAt: string;
-    deletedAt?: Nullable<string>;
+    createdAt: number;
+    updatedAt: number;
+    deletedAt?: Nullable<number>;
 }
 
 export class MyFeedFolder implements Node {
@@ -146,8 +146,8 @@ export class MyFeedFolder implements Node {
     title: string;
     description?: Nullable<string>;
     feeds?: Nullable<Feed[]>;
-    createdAt: string;
-    updatedAt: string;
+    createdAt: number;
+    updatedAt: number;
 }
 
 export class Platform implements Node {
@@ -157,9 +157,9 @@ export class Platform implements Node {
     platformSiteType: number;
     faviconUrl: string;
     isEng: boolean;
-    createdAt: string;
-    updatedAt: string;
-    deletedAt?: Nullable<string>;
+    createdAt: number;
+    updatedAt: number;
+    deletedAt?: Nullable<number>;
 }
 
 export class Profile implements Node {
@@ -169,9 +169,9 @@ export class Profile implements Node {
     emailVerified?: Nullable<string>;
     image: string;
     isSuperAdmin: boolean;
-    createdAt: string;
-    updatedAt: string;
-    deletedAt?: Nullable<string>;
+    createdAt: number;
+    updatedAt: number;
+    deletedAt?: Nullable<number>;
 }
 
 type Nullable<T> = T | null;

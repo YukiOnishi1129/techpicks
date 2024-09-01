@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/domain"
@@ -37,10 +38,13 @@ func (au *articleUseCase) GetArticles(ctx context.Context, req *cpb.GetArticlesR
 	for i, article := range articles {
 		res := au.convertPBArticle(*article)
 
+		farFeeds := make([]*cpb.Feed, len(article.R.FeedArticleRelations))
+
 		for j, far := range article.R.FeedArticleRelations {
-			res.Feeds[j] = au.convertPBFeed(*far.R.Feed)
+			farFeeds[j] = au.convertPBFeed(*far.R.Feed)
 		}
-		if article.R.TrendArticles != nil && article.R.TrendArticles[0] != nil {
+		res.Feeds = farFeeds
+		if len(article.R.TrendArticles) > 0 {
 			res.LikeCount = int64(article.R.TrendArticles[0].LikeCount)
 			res.IsTrend = true
 		}
@@ -57,6 +61,16 @@ func (au *articleUseCase) GetArticles(ctx context.Context, req *cpb.GetArticlesR
 		}
 	}
 
+	if len(edges) == 0 {
+		return &cpb.GetArticlesResponse{
+			ArticlesEdge: edges,
+			PageInfo: &cpb.PageInfo{
+				HasNextPage: false,
+				EndCursor:   "",
+			},
+		}, nil
+	}
+
 	return &cpb.GetArticlesResponse{
 		ArticlesEdge: edges,
 		PageInfo: &cpb.PageInfo{
@@ -67,35 +81,48 @@ func (au *articleUseCase) GetArticles(ctx context.Context, req *cpb.GetArticlesR
 }
 
 func (au *articleUseCase) findAllArticles(ctx context.Context, req *cpb.GetArticlesRequest) (entity.ArticleSlice, error) {
-	q := make([]qm.QueryMod, 0)
+	q := []qm.QueryMod{
+		qm.InnerJoin("platforms ON articles.platform_id = platforms.id"),
+		qm.InnerJoin("feed_article_relations ON articles.id = feed_article_relations.article_id"),
+		qm.InnerJoin("feeds ON feed_article_relations.feed_id = feeds.id"),
+		qm.Where("feeds.deleted_at IS NULL"),
+		qm.InnerJoin("platforms as feed_platforms ON feeds.platform_id = feed_platforms.id"),
+		qm.InnerJoin("categories as feed_categories ON feeds.category_id = feed_categories.id"),
+		qm.Load(qm.Rels(entity.ArticleRels.Platform)),
+		qm.Load(qm.Rels(entity.ArticleRels.FeedArticleRelations)),
+		qm.Load(qm.Rels(
+			entity.ArticleRels.FeedArticleRelations,
+			entity.FeedArticleRelationRels.Feed,
+		)),
+		qm.Load("FeedArticleRelations.Feed.Category"),
+		qm.Load("FeedArticleRelations.Feed.Platform"),
+		qm.Limit(int(req.Limit)),
+	}
 
-	q = append(q, qm.LeftOuterJoin("platforms ON articles.platform_id = platforms.id"))
-	q = append(q, qm.InnerJoin("feed_article_relations ON articles.id = feed_article_relations.article_id"))
-	q = append(q, qm.InnerJoin("feeds ON feed_article_relations.feed_id = feeds.id"))
-	q = append(q, qm.Where("feeds.deleted_at IS NULL"))
-	q = append(q, qm.InnerJoin("platforms as feed_platforms ON feeds.platform_id = feed_platforms.id"))
-	q = append(q, qm.InnerJoin("categories as feed_categories ON feed_categories.category_id = categories.id"))
-
-	q = append(q, qm.OrderBy("published_at desc"))
-	q = append(q, qm.Limit(int(req.Limit)))
+	if req.Limit == 0 {
+		q = append(q, qm.Limit(20))
+	}
 
 	if req.Cursor != "" {
 		parsedCursor, err := time.Parse(time.RFC3339, req.Cursor)
 		if err != nil {
 			return nil, err
 		}
-		q = append(q, qm.Where("published_at < ?", parsedCursor))
+		q = append(q, qm.Where("articles.published_at < ?", parsedCursor))
 	}
-	if req.LanguageStatus != nil {
+
+	if req.LanguageStatus.GetValue() != 0 {
 		isEng := req.LanguageStatus.GetValue() == int64(domain.LanguageStatusJapanese)
-		q = append(q, qm.Where("is_eng = ?", isEng))
+		q = append(q, qm.Where("articles.is_eng = ?", isEng))
 	}
-	if req.Tag != nil {
+	if req.Tag.GetValue() != "" {
 		tag := req.Tag.GetValue()
 		switch {
 		case tag == "trend":
 			q = append(q, qm.Where("feeds.trend_platform_type != ?", 0))
-			q = append(q, qm.LeftOuterJoin("trend_articles ON articles.id = trend_articles.article_id"))
+			q = append(q, qm.InnerJoin("trend_articles ON articles.id = trend_articles.article_id"))
+			q = append(q, qm.Load(entity.ArticleRels.TrendArticles))
+			q = append(q, qm.OrderBy("trend_articles.like_count desc"))
 		case tag == "site":
 			q = append(q, qm.Where("platforms.platform_site_type = ?", 1))
 		case tag == "company":
@@ -104,10 +131,17 @@ func (au *articleUseCase) findAllArticles(ctx context.Context, req *cpb.GetArtic
 			q = append(q, qm.Where("platforms.platform_site_type = ?", 3))
 		}
 	}
+
+	if req.Tag.GetValue() == "" || req.Tag.GetValue() != "trend" {
+		q = append(q, qm.OrderBy("published_at desc"))
+	}
+
 	articles, err := au.articleRepository.GetArticles(ctx, q)
 	if err != nil {
+		fmt.Printf("Error executing query: %v\n", err)
 		return nil, err
 	}
+
 	return articles, nil
 }
 
@@ -132,8 +166,6 @@ func (au *articleUseCase) convertPBArticle(a entity.Article) *cpb.Article {
 	if a.Tags.Valid {
 		article.Tags = wrapperspb.String(a.Tags.String)
 	}
-	if a.R.Platform != nil {
-		article.Platform = au.convertPBPlatform(*a.R.Platform)
-	}
+	article.Platform = au.convertPBPlatform(*a.R.Platform)
 	return article
 }
