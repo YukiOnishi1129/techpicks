@@ -81,14 +81,13 @@ func (au *articleUseCase) findAllArticles(ctx context.Context, req *cpb.GetArtic
 	if err != nil {
 		return nil, err
 	}
-
 	return articles, nil
 }
 
 func (au *articleUseCase) convertPBArticles(articles entity.ArticleSlice, userID *string) (*cpb.GetArticlesResponse, error) {
-	resArticles := make([]*cpb.Article, len(articles))
+	edges := make([]*cpb.ArticleEdge, len(articles))
 	for i, article := range articles {
-		resArticle := &cpb.Article{
+		res := &cpb.Article{
 			Id:           article.ID,
 			Title:        article.Title,
 			Description:  article.Description,
@@ -100,69 +99,24 @@ func (au *articleUseCase) convertPBArticles(articles entity.ArticleSlice, userID
 			UpdatedAt:    timestamppb.New(article.UpdatedAt),
 		}
 		if article.PublishedAt.Valid {
-			resArticle.PublishedAt = timestamppb.New(article.PublishedAt.Time)
+			res.PublishedAt = timestamppb.New(article.PublishedAt.Time)
 		}
 		if article.AuthorName.Valid {
-			resArticle.AuthorName = wrapperspb.String(article.AuthorName.String)
+			res.AuthorName = wrapperspb.String(article.AuthorName.String)
 		}
 		if article.Tags.Valid {
-			resArticle.Tags = wrapperspb.String(article.Tags.String)
+			res.Tags = wrapperspb.String(article.Tags.String)
 		}
 		if article.R.Platform != nil {
-			resArticle.Platform = &cpb.Platform{
-				Id:               article.R.Platform.ID,
-				Name:             article.R.Platform.Name,
-				SiteUrl:          article.R.Platform.SiteURL,
-				PlatformSiteType: int64(article.R.Platform.PlatformSiteType),
-				FaviconUrl:       article.R.Platform.FaviconURL,
-				IsEng:            article.R.Platform.IsEng,
-				CreatedAt:        timestamppb.New(article.R.Platform.CreatedAt),
-				UpdatedAt:        timestamppb.New(article.R.Platform.UpdatedAt),
-			}
-			if article.R.Platform.DeletedAt.Valid {
-				resArticle.Platform.DeletedAt = timestamppb.New(article.R.Platform.DeletedAt.Time)
-			}
+			res.Platform = au.convertPBPlatform(*article.R.Platform)
 		}
 
 		for j, far := range article.R.FeedArticleRelations {
-			resArticle.Feeds[j] = &cpb.Feed{
-				Id:                far.R.Feed.ID,
-				Name:              far.R.Feed.Name,
-				Description:       far.R.Feed.Description,
-				RssUrl:            far.R.Feed.RSSURL,
-				SiteUrl:           far.R.Feed.SiteURL,
-				ThumbnailUrl:      far.R.Feed.ThumbnailURL,
-				TrendPlatformType: int64(far.R.Feed.TrendPlatformType),
-				CreatedAt:         timestamppb.New(far.R.Feed.CreatedAt),
-				UpdatedAt:         timestamppb.New(far.R.Feed.UpdatedAt),
-			}
-			if far.R.Feed.APIQueryParam.Valid {
-				resArticle.Feeds[j].ApiQueryParam = wrapperspb.String(far.R.Feed.APIQueryParam.String)
-			}
-			if far.R.Feed.DeletedAt.Valid {
-				resArticle.Feeds[j].DeletedAt = timestamppb.New(far.R.Feed.DeletedAt.Time)
-			}
-			resArticle.Feeds[j].Platform = &cpb.Platform{
-				Id:               far.R.Feed.R.Platform.ID,
-				Name:             far.R.Feed.R.Platform.Name,
-				SiteUrl:          far.R.Feed.R.Platform.SiteURL,
-				PlatformSiteType: int64(far.R.Feed.R.Platform.PlatformSiteType),
-				FaviconUrl:       far.R.Feed.R.Platform.FaviconURL,
-				IsEng:            far.R.Feed.R.Platform.IsEng,
-				CreatedAt:        timestamppb.New(far.R.Feed.R.Platform.CreatedAt),
-				UpdatedAt:        timestamppb.New(far.R.Feed.R.Platform.UpdatedAt),
-			}
-			resArticle.Feeds[j].Category = &cpb.Category{
-				Id:        far.R.Feed.R.Category.ID,
-				Name:      far.R.Feed.R.Category.Name,
-				Type:      int64(far.R.Feed.R.Category.Type),
-				CreatedAt: timestamppb.New(far.R.Feed.R.Category.CreatedAt),
-				UpdatedAt: timestamppb.New(far.R.Feed.R.Category.UpdatedAt),
-			}
+			res.Feeds[j] = au.convertPBFeed(*far.R.Feed)
 		}
 		if article.R.TrendArticles != nil && article.R.TrendArticles[0] != nil {
-			resArticle.LikeCount = int64(article.R.TrendArticles[0].LikeCount)
-			resArticle.IsTrend = true
+			res.LikeCount = int64(article.R.TrendArticles[0].LikeCount)
+			res.IsTrend = true
 		}
 
 		if userID != nil {
@@ -171,10 +125,17 @@ func (au *articleUseCase) convertPBArticles(articles entity.ArticleSlice, userID
 			println(*userID)
 		}
 
-		resArticles[i] = resArticle
+		edges[i] = &cpb.ArticleEdge{
+			Cursor:  res.CreatedAt.AsTime().Format(time.RFC3339),
+			Article: res,
+		}
 	}
 
 	return &cpb.GetArticlesResponse{
-		Articles: resArticles,
+		ArticlesEdge: edges,
+		PageInfo: &cpb.PageInfo{
+			HasNextPage: len(edges) == 20,
+			EndCursor:   edges[len(edges)-1].Cursor,
+		},
 	}, nil
 }

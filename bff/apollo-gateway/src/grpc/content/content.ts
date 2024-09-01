@@ -20,7 +20,13 @@ export interface GetArticlesRequest {
 }
 
 export interface GetArticlesResponse {
-  articles: Article[];
+  articlesEdge: ArticleEdge[];
+  pageInfo: PageInfo | undefined;
+}
+
+export interface PageInfo {
+  endCursor: string;
+  hasNextPage: boolean;
 }
 
 export interface Feed {
@@ -81,6 +87,11 @@ export interface Article {
   isTrend: boolean;
   createdAt: Timestamp | undefined;
   updatedAt: Timestamp | undefined;
+}
+
+export interface ArticleEdge {
+  article: Article | undefined;
+  cursor: string;
 }
 
 export const CHECKPICKS_CONTENT_V1_PACKAGE_NAME = "checkpicks.content.v1";

@@ -22,7 +22,13 @@ message GetArticlesRequest {
 }
 
 message GetArticlesResponse {
-  repeated Article articles = 1;
+  repeated ArticleEdge articlesEdge = 1;
+  PageInfo page_info = 2;
+}
+
+message PageInfo {
+  string end_cursor = 1;
+  bool has_next_page = 2;
 }
 
 message Feed {
@@ -85,5 +91,10 @@ message Article {
     bool is_trend = 18;
     google.protobuf.Timestamp created_at = 19;
     google.protobuf.Timestamp updated_at = 20;
+}
+
+message ArticleEdge {
+  Article article = 1;
+  string cursor = 2;
 }
 
