@@ -7,6 +7,7 @@
 /* eslint-disable */
 import { GrpcMethod, GrpcStreamMethod } from "@nestjs/microservices";
 import { Observable } from "rxjs";
+import { Timestamp } from "../google/protobuf/timestamp";
 
 export const protobufPackage = "checkpicks.bookmark.v1";
 
@@ -27,14 +28,14 @@ export interface Bookmark {
   description: string;
   articleUrl: string;
   thumbnailUrl: string;
-  publishedAt: string | undefined;
+  publishedAt: Timestamp | undefined;
   platformName: string;
   platformUrl: string;
   platformFaviconUrl: string;
   isEng: boolean;
   isRead: boolean;
-  createdAt: string;
-  updatedAt: string;
+  createdAt: Timestamp | undefined;
+  updatedAt: Timestamp | undefined;
 }
 
 export const CHECKPICKS_BOOKMARK_V1_PACKAGE_NAME = "checkpicks.bookmark.v1";

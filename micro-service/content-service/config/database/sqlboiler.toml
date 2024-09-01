@@ -1,0 +1,9 @@
+[psql]
+dbname = "postgres"
+host   = "localhost"
+port   = 54322
+user   = "postgres"
+pass   = "postgres"
+sslmode = "disable"
+schema = "public"
+blacklist = ["migrations", "other", "bookmarks", "profiles", "my_feed_folders", "my_feeds", "favorite_articles", "favorite_article_folders", "profiles", "my_feed_folders"]

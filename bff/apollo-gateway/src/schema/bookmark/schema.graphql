@@ -8,7 +8,7 @@ type Bookmark implements Node {
   description: String!
   articleUrl: String!
   thumbnailUrl: String!
-  publishedAt: String
+  publishedAt: Int
   articleId: String!
   platformId: String
   platformName: String!
@@ -16,6 +16,6 @@ type Bookmark implements Node {
   platformFaviconUrl: String!
   isEng: Boolean!
   isRead: Boolean!
-  createdAt: String!
-  updatedAt: String!
+  createdAt: Int!
+  updatedAt: Int!
 }

@@ -28,15 +28,15 @@
           "builtin",
           "external",
           "internal",
-          "parent",
-          "sibling",
-          "index",
+          ["parent", "sibling"],
           "object",
-          "type"
+          "type",
+          "index"
         ],
         "newlines-between": "always",
         "alphabetize": {
-          "order": "asc"
+          "order": "asc",
+          "caseInsensitive": true
         }
       }
     ],

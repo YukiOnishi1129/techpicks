@@ -7,6 +7,7 @@
 /* eslint-disable */
 import { GrpcMethod, GrpcStreamMethod } from "@nestjs/microservices";
 import { Observable } from "rxjs";
+import { Timestamp } from "../google/protobuf/timestamp";
 
 export const protobufPackage = "checkpicks.favorite.v1";
 
@@ -28,7 +29,7 @@ export interface FavoriteArticle {
   thumbnailUrl: string;
   articleUrl: string;
   platformFaviconUrl: string;
-  publishedAt: string | undefined;
+  publishedAt: Timestamp | undefined;
   authorName: string | undefined;
   tags: string | undefined;
   platformName: string;
@@ -36,8 +37,8 @@ export interface FavoriteArticle {
   isEng: boolean;
   isPrivate: boolean;
   isRead: boolean;
-  createdAt: string;
-  updatedAt: string;
+  createdAt: Timestamp | undefined;
+  updatedAt: Timestamp | undefined;
 }
 
 export interface FavoriteArticleFolder {
@@ -45,8 +46,8 @@ export interface FavoriteArticleFolder {
   userId: string;
   title: string;
   description: string;
-  createdAt: string;
-  updatedAt: string;
+  createdAt: Timestamp | undefined;
+  updatedAt: Timestamp | undefined;
 }
 
 export const CHECKPICKS_FAVORITE_V1_PACKAGE_NAME = "checkpicks.favorite.v1";
