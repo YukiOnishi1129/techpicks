@@ -44,7 +44,7 @@ func (au *articleUseCase) GetArticles(ctx context.Context, req *cpb.GetArticlesR
 			farFeeds[j] = au.convertPBFeed(*far.R.Feed)
 		}
 		res.Feeds = farFeeds
-		if article.R.TrendArticles != nil && len(article.R.TrendArticles) > 0 {
+		if len(article.R.TrendArticles) > 0 {
 			res.LikeCount = int64(article.R.TrendArticles[0].LikeCount)
 			res.IsTrend = true
 		}
