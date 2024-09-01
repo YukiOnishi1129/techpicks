@@ -7,12 +7,13 @@
 /* eslint-disable */
 import { GrpcMethod, GrpcStreamMethod } from "@nestjs/microservices";
 import { Observable } from "rxjs";
+import { Timestamp } from "../google/protobuf/timestamp";
 
 export const protobufPackage = "checkpicks.content.v1";
 
 export interface GetArticlesRequest {
   userId: string | undefined;
-  languageStatus: string | undefined;
+  languageStatus: number | undefined;
   tag: string | undefined;
   cursor: string;
   limit: number;
@@ -33,18 +34,18 @@ export interface Feed {
   thumbnailUrl: string;
   trendPlatformType: number;
   apiQueryParam: string | undefined;
-  createdAt: string;
-  updatedAt: string;
-  deletedAt: string | undefined;
+  createdAt: Timestamp | undefined;
+  updatedAt: Timestamp | undefined;
+  deletedAt: Timestamp | undefined;
 }
 
 export interface Category {
   id: string;
   name: string;
   type: number;
-  createdAt: string;
-  updatedAt: string;
-  deletedAt: string | undefined;
+  createdAt: Timestamp | undefined;
+  updatedAt: Timestamp | undefined;
+  deletedAt: Timestamp | undefined;
 }
 
 export interface Platform {
@@ -54,9 +55,9 @@ export interface Platform {
   platformSiteType: number;
   faviconUrl: string;
   isEng: boolean;
-  createdAt: string;
-  updatedAt: string;
-  deletedAt: string | undefined;
+  createdAt: Timestamp | undefined;
+  updatedAt: Timestamp | undefined;
+  deletedAt: Timestamp | undefined;
 }
 
 export interface Article {
@@ -66,7 +67,7 @@ export interface Article {
   title: string;
   description: string;
   articleUrl: string;
-  publishedAt: string;
+  publishedAt: Timestamp | undefined;
   authorName: string | undefined;
   tags: string | undefined;
   thumbnailUrl: string;
@@ -78,8 +79,8 @@ export interface Article {
   favoriteArticleFolderIds: string[];
   likeCount: number;
   isTrend: boolean;
-  createdAt: string;
-  updatedAt: string;
+  createdAt: Timestamp | undefined;
+  updatedAt: Timestamp | undefined;
 }
 
 export const CHECKPICKS_CONTENT_V1_PACKAGE_NAME = "checkpicks.content.v1";

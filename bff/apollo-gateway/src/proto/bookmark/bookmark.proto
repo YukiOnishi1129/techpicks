@@ -4,6 +4,7 @@ option go_package = "github.com/YukiOnishi1129/techpicks/bookmark";
 
 package checkpicks.bookmark.v1;
 
+import "google/protobuf/timestamp.proto";
 import "google/protobuf/wrappers.proto";
 
 
@@ -16,24 +17,24 @@ message GetBookmarkResponse {
 }
 
 message GetBookmarkByArticleIdRequest {
-    string articleId = 1;
+    string article_id = 1;
 }
 
 message Bookmark {
     string id = 1;
-    string articleId = 2;
-    string userId = 3;
-    google.protobuf.StringValue platformId = 4;
+    string article_id = 2;
+    string user_id = 3;
+    google.protobuf.StringValue platform_id = 4;
     string title = 5;
     string description = 6;
-    string articleUrl = 7;
-    string thumbnailUrl = 8;
-    google.protobuf.StringValue publishedAt = 9;
-    string platformName = 10;
-    string platformUrl = 11;
-    string platformFaviconUrl = 12;
-    bool isEng = 13;
-    bool isRead = 14;
-    string createdAt = 15;
-    string updatedAt = 16;
+    string article_url = 7;
+    string thumbnail_url = 8;
+    google.protobuf.Timestamp published_at = 9;
+    string platform_name = 10;
+    string platform_url = 11;
+    string platform_favicon_url = 12;
+    bool is_eng = 13;
+    bool is_read = 14;
+    google.protobuf.Timestamp created_at = 15;
+    google.protobuf.Timestamp updated_at = 16;
 }
