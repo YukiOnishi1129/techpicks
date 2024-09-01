@@ -6,8 +6,8 @@ import (
 	"time"
 
 	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/domain"
+	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/domain/entity"
 	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/domain/repository"
-	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/entity"
 	_ "github.com/lib/pq"
 	"github.com/volatiletech/sqlboiler/v4/queries/qm"
 )

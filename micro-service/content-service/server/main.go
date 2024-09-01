@@ -7,10 +7,10 @@ import (
 	"os"
 	"os/signal"
 
-	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/database"
+	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/config/database"
 	pb "github.com/YukiOnishi1129/techpicks/micro-service/content-service/grpc/content"
 	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/infrastructure/persistence"
-	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/interface/presenter"
+	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/interfacess/handler"
 	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/usecase"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
@@ -24,11 +24,14 @@ func main() {
 		return
 	}
 
+	// infrastructure layer
 	aps := persistence.NewArticlePersistence(db)
 
+	// usecase layer
 	auc := usecase.NewArticleUseCase(aps)
 
-	apt := presenter.NewArticlePresenter(auc)
+	// interface layer
+	ahd := handler.NewArticleHandler(auc)
 
 	// crate a listener on TCP port 3001
 	port := 3001
@@ -42,7 +45,7 @@ func main() {
 	s := grpc.NewServer()
 
 	// register the greeting service with the gRPC server
-	pb.RegisterArticleServiceServer(s, apt)
+	pb.RegisterArticleServiceServer(s, ahd)
 
 	// register reflection service on gRPC server
 	reflection.Register(s)
