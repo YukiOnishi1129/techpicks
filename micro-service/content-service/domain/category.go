@@ -1,9 +1,5 @@
 package domain
 
-import (
-	"time"
-)
-
 type CategoryType int
 
 const (
@@ -29,12 +25,3 @@ const (
 	CategoryTypeCareer
 	CategoryTypeOthers
 )
-
-type Category struct {
-	ID        string
-	Name      string
-	Type      CategoryType
-	CreatedAt time.Time
-	UpdatedAt time.Time
-	DeletedAt *time.Time
-}
