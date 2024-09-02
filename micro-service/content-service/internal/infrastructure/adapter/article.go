@@ -27,7 +27,7 @@ func NewArticleAdapter(ar repository.ArticleRepository) ArticleAdapter {
 
 func (aa *articleAdapter) GetArticles(ctx context.Context, req *cpb.GetArticlesRequest) (entity.ArticleSlice, error) {
 	limit := 20
-	if req.GetLimit() == 0 {
+	if req.GetLimit() != 0 {
 		limit = int(req.GetLimit())
 	}
 
@@ -64,8 +64,9 @@ func (aa *articleAdapter) GetArticles(ctx context.Context, req *cpb.GetArticlesR
 		switch {
 		case tag == "trend":
 			q = append(q, qm.Where("feeds.trend_platform_type != ?", 0))
-			q = append(q, qm.InnerJoin("trend_articles ON articles.id = trend_articles.article_id"))
+			q = append(q, qm.LeftOuterJoin("trend_articles ON articles.id = trend_articles.article_id"))
 			q = append(q, qm.Load(entity.ArticleRels.TrendArticles))
+			q = append(q, qm.GroupBy("trend_articles.id, trend_articles.like_count"))
 			q = append(q, qm.OrderBy("trend_articles.like_count desc"))
 		case tag == "site":
 			q = append(q, qm.Where("platforms.platform_site_type = ?", 1))

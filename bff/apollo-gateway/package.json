@@ -19,7 +19,8 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "gen:gql": "ts-node ./src/scripts/generate-typings.ts"
+    "gen:gql": "ts-node ./src/scripts/generate-typings.ts",
+    "generate": "grpc_tools_node_protoc --js_out=import_style=commonjs,binary:./src/generate --grpc_out=grpc_js:./src/generate --ts_out=grpc_js:./src/generate -I ./src/proto ./src/proto/**/*.proto"
   },
   "dependencies": {
     "@apollo/server": "^4.11.0",
@@ -61,6 +62,8 @@
     "eslint-plugin-sort-keys-fix": "^1.1.2",
     "eslint-plugin-typescript-sort-keys": "^3.2.0",
     "eslint-plugin-unused-imports": "^3.2.0",
+    "grpc_tools_node_protoc_ts": "^5.3.3",
+    "grpc-tools": "^1.12.4",
     "jest": "^29.5.0",
     "prettier": "^3.0.0",
     "protoc-gen-ts": "^0.8.7",
