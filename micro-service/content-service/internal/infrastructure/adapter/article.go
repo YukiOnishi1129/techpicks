@@ -83,8 +83,8 @@ func (aa *articleAdapter) GetArticles(ctx context.Context, req *cpb.GetArticlesR
 
 	if req.FeedIds != nil {
 		qmWhere := make([]interface{}, len(req.FeedIds))
-		for i, feedId := range req.FeedIds {
-			qmWhere[i] = feedId.GetValue()
+		for i, feedID := range req.FeedIds {
+			qmWhere[i] = feedID.GetValue()
 		}
 		q = append(q, qm.WhereIn("feed_article_relations.feed_id IN ?", qmWhere...))
 	}
