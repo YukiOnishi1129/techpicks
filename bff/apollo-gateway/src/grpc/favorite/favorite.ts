@@ -12,7 +12,7 @@ import { Timestamp } from "../google/protobuf/timestamp";
 export const protobufPackage = "checkpicks.favorite.v1";
 
 export interface GetFavoriteArticleFolderResponse {
-  favoriteArticleFolder: FavoriteArticleFolder | undefined;
+  favoriteArticleFolder?: FavoriteArticleFolder | undefined;
 }
 
 export interface GetFavoriteArticleFolderByArticleIdRequest {
@@ -22,23 +22,23 @@ export interface GetFavoriteArticleFolderByArticleIdRequest {
 export interface FavoriteArticle {
   id: string;
   articleId: string;
-  platformId: string | undefined;
+  platformId?: string | undefined;
   favoriteArticleFolderId: string;
   userId: string;
   title: string;
   thumbnailUrl: string;
   articleUrl: string;
   platformFaviconUrl: string;
-  publishedAt: Timestamp | undefined;
-  authorName: string | undefined;
-  tags: string | undefined;
+  publishedAt?: Timestamp | undefined;
+  authorName?: string | undefined;
+  tags?: string | undefined;
   platformName: string;
   platformUrl: string;
   isEng: boolean;
   isPrivate: boolean;
   isRead: boolean;
-  createdAt: Timestamp | undefined;
-  updatedAt: Timestamp | undefined;
+  createdAt?: Timestamp | undefined;
+  updatedAt?: Timestamp | undefined;
 }
 
 export interface FavoriteArticleFolder {
@@ -46,8 +46,8 @@ export interface FavoriteArticleFolder {
   userId: string;
   title: string;
   description: string;
-  createdAt: Timestamp | undefined;
-  updatedAt: Timestamp | undefined;
+  createdAt?: Timestamp | undefined;
+  updatedAt?: Timestamp | undefined;
 }
 
 export const CHECKPICKS_FAVORITE_V1_PACKAGE_NAME = "checkpicks.favorite.v1";

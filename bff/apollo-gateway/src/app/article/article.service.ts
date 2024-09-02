@@ -30,11 +30,22 @@ export class ArticleService implements OnModuleInit {
 
   async getArticles(input: ArticlesInput): Promise<ArticleConnection> {
     const req: GetArticlesRequest = {
-      cursor: input.after,
-      languageStatus: new Int64Value({ value: input.userId }),
-      limit: input.first,
-      tag: new StringValue({ value: input.tag }),
-      userId: new StringValue({ value: input.userId }),
+      cursor: input?.after,
+      feedIds: input?.feedIds
+        ? input.feedIds.map((feedId) => {
+            const stringValue = new StringValue();
+            stringValue.setValue(feedId);
+            return stringValue.getValue();
+          })
+        : [],
+      languageStatus: input?.languageStatus
+        ? new Int64Value().setValue(input.languageStatus).getValue()
+        : undefined,
+      limit: input?.first,
+      tag: new StringValue().setValue(input.tag).getValue(),
+      userId: input?.userId
+        ? new StringValue().setValue(input.userId).getValue()
+        : undefined,
     };
 
     const rpcRes = this.articleService.getArticles(req);
@@ -42,7 +53,7 @@ export class ArticleService implements OnModuleInit {
 
     const articles: ArticleConnection = {
       edges:
-        res.articlesEdge.length > 0
+        res?.articlesEdge && res.articlesEdge.length > 0
           ? res.articlesEdge.map((edge) => {
               return {
                 cursor: edge.article.id,

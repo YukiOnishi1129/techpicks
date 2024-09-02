@@ -23,19 +23,19 @@ export interface Bookmark {
   id: string;
   articleId: string;
   userId: string;
-  platformId: string | undefined;
+  platformId?: string | undefined;
   title: string;
   description: string;
   articleUrl: string;
   thumbnailUrl: string;
-  publishedAt: Timestamp | undefined;
+  publishedAt?: Timestamp | undefined;
   platformName: string;
   platformUrl: string;
   platformFaviconUrl: string;
   isEng: boolean;
   isRead: boolean;
-  createdAt: Timestamp | undefined;
-  updatedAt: Timestamp | undefined;
+  createdAt?: Timestamp | undefined;
+  updatedAt?: Timestamp | undefined;
 }
 
 export const CHECKPICKS_BOOKMARK_V1_PACKAGE_NAME = "checkpicks.bookmark.v1";

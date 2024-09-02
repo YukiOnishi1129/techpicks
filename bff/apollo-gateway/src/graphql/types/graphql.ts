@@ -12,6 +12,7 @@ export class ArticlesInput {
     userId?: Nullable<string>;
     languageStatus?: Nullable<number>;
     tag?: Nullable<string>;
+    feedIds?: Nullable<string[]>;
     first?: Nullable<number>;
     after?: Nullable<string>;
     last?: Nullable<number>;

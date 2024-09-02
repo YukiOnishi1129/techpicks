@@ -26,6 +26,11 @@ func NewArticleAdapter(ar repository.ArticleRepository) ArticleAdapter {
 }
 
 func (aa *articleAdapter) GetArticles(ctx context.Context, req *cpb.GetArticlesRequest) (entity.ArticleSlice, error) {
+	limit := 20
+	if req.GetLimit() == 0 {
+		limit = int(req.GetLimit())
+	}
+
 	q := []qm.QueryMod{
 		qm.InnerJoin("platforms ON articles.platform_id = platforms.id"),
 		qm.LeftOuterJoin("feed_article_relations ON articles.id = feed_article_relations.article_id"),
@@ -43,22 +48,18 @@ func (aa *articleAdapter) GetArticles(ctx context.Context, req *cpb.GetArticlesR
 		qm.Load("FeedArticleRelations.Feed.Platform"),
 		qm.Where("articles.is_private = ?", false),
 		qm.GroupBy("articles.id"),
-		qm.Limit(int(req.Limit)),
+		qm.Limit(limit),
 	}
 
-	if req.Limit == 0 {
-		q = append(q, qm.Limit(20))
-	}
-
-	if req.Cursor != "" {
-		q = append(q, qm.Where("articles.published_at < (SELECT published_at FROM articles WHERE id = ?)", req.Cursor))
+	if req.GetCursor() != "" {
+		q = append(q, qm.Where("articles.published_at < (SELECT published_at FROM articles WHERE id = ?)", req.GetCursor()))
 	}
 
 	if req.LanguageStatus.GetValue() != 0 {
 		isEng := req.LanguageStatus.GetValue() == int64(domain.LanguageStatusJapanese)
 		q = append(q, qm.Where("articles.is_eng = ?", isEng))
 	}
-	if req.Tag.GetValue() != "" {
+	if req.Tag != nil {
 		tag := req.Tag.GetValue()
 		switch {
 		case tag == "trend":
@@ -77,6 +78,14 @@ func (aa *articleAdapter) GetArticles(ctx context.Context, req *cpb.GetArticlesR
 
 	if req.Tag.GetValue() == "" || req.Tag.GetValue() != "trend" {
 		q = append(q, qm.OrderBy("published_at desc"))
+	}
+
+	if req.FeedIds != nil {
+		qmWhere := make([]interface{}, len(req.FeedIds))
+		for i, feedId := range req.FeedIds {
+			qmWhere[i] = feedId.GetValue()
+		}
+		q = append(q, qm.WhereIn("feed_article_relations.feed_id IN ?", qmWhere...))
 	}
 
 	articles, err := aa.articleRepository.GetArticles(ctx, q)

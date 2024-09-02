@@ -12,16 +12,17 @@ import { Timestamp } from "../google/protobuf/timestamp";
 export const protobufPackage = "checkpicks.content.v1";
 
 export interface GetArticlesRequest {
-  userId: string | undefined;
-  languageStatus: number | undefined;
-  tag: string | undefined;
+  userId?: string | undefined;
+  languageStatus?: number | undefined;
+  tag?: string | undefined;
+  feedIds: string[];
   cursor: string;
   limit: number;
 }
 
 export interface GetArticlesResponse {
   articlesEdge: ArticleEdge[];
-  pageInfo: PageInfo | undefined;
+  pageInfo?: PageInfo | undefined;
 }
 
 export interface PageInfo {
@@ -31,27 +32,27 @@ export interface PageInfo {
 
 export interface Feed {
   id: string;
-  platform: Platform | undefined;
-  category: Category | undefined;
+  platform?: Platform | undefined;
+  category?: Category | undefined;
   name: string;
   description: string;
   rssUrl: string;
   siteUrl: string;
   thumbnailUrl: string;
   trendPlatformType: number;
-  apiQueryParam: string | undefined;
-  createdAt: Timestamp | undefined;
-  updatedAt: Timestamp | undefined;
-  deletedAt: Timestamp | undefined;
+  apiQueryParam?: string | undefined;
+  createdAt?: Timestamp | undefined;
+  updatedAt?: Timestamp | undefined;
+  deletedAt?: Timestamp | undefined;
 }
 
 export interface Category {
   id: string;
   name: string;
   type: number;
-  createdAt: Timestamp | undefined;
-  updatedAt: Timestamp | undefined;
-  deletedAt: Timestamp | undefined;
+  createdAt?: Timestamp | undefined;
+  updatedAt?: Timestamp | undefined;
+  deletedAt?: Timestamp | undefined;
 }
 
 export interface Platform {
@@ -61,36 +62,36 @@ export interface Platform {
   platformSiteType: number;
   faviconUrl: string;
   isEng: boolean;
-  createdAt: Timestamp | undefined;
-  updatedAt: Timestamp | undefined;
-  deletedAt: Timestamp | undefined;
+  createdAt?: Timestamp | undefined;
+  updatedAt?: Timestamp | undefined;
+  deletedAt?: Timestamp | undefined;
 }
 
 export interface Article {
   id: string;
-  platform: Platform | undefined;
+  platform?: Platform | undefined;
   feeds: Feed[];
   title: string;
   description: string;
   articleUrl: string;
-  publishedAt: Timestamp | undefined;
-  authorName: string | undefined;
-  tags: string | undefined;
+  publishedAt?: Timestamp | undefined;
+  authorName?: string | undefined;
+  tags?: string | undefined;
   thumbnailUrl: string;
   isEng: boolean;
   isPrivate: boolean;
-  bookmarkId: string | undefined;
+  bookmarkId?: string | undefined;
   isBookmarked: boolean;
   isFollowing: boolean;
   favoriteArticleFolderIds: string[];
   likeCount: number;
   isTrend: boolean;
-  createdAt: Timestamp | undefined;
-  updatedAt: Timestamp | undefined;
+  createdAt?: Timestamp | undefined;
+  updatedAt?: Timestamp | undefined;
 }
 
 export interface ArticleEdge {
-  article: Article | undefined;
+  article?: Article | undefined;
   cursor: string;
 }
 
