@@ -4,9 +4,9 @@ import (
 	"context"
 	"time"
 
-	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/domain/entity"
 	cpb "github.com/YukiOnishi1129/techpicks/micro-service/content-service/grpc/content"
-	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/infrastructure/adapter"
+	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/domain/entity"
+	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/infrastructure/adapter"
 	"google.golang.org/protobuf/types/known/timestamppb"
 	"google.golang.org/protobuf/types/known/wrapperspb"
 )

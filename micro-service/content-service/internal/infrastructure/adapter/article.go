@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/domain"
-	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/domain/entity"
-	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/domain/repository"
 	cpb "github.com/YukiOnishi1129/techpicks/micro-service/content-service/grpc/content"
+	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/domain"
+	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/domain/entity"
+	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/domain/repository"
 	"github.com/volatiletech/sqlboiler/v4/queries/qm"
 )
 

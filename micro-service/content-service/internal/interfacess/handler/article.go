@@ -3,8 +3,8 @@ package handler
 import (
 	"context"
 
-	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/application/usecase"
 	cpb "github.com/YukiOnishi1129/techpicks/micro-service/content-service/grpc/content"
+	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/application/usecase"
 )
 
 type articleHandler struct {
