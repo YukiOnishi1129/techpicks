@@ -3,8 +3,8 @@ Article schema
 """
 type Article implements Node {
   id: ID!
-  platform: Platform!
-  feeds: [Feed!]!
+  platform: Platform
+  feeds: [Feed!]
   favoriteArticles: [FavoriteArticle!]
   title: String!
   description: String!

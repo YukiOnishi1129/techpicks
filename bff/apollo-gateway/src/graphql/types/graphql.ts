@@ -12,6 +12,7 @@ export class ArticlesInput {
     userId?: Nullable<string>;
     languageStatus?: Nullable<number>;
     tag?: Nullable<string>;
+    feedIds?: Nullable<string[]>;
     first?: Nullable<number>;
     after?: Nullable<string>;
     last?: Nullable<number>;
@@ -28,8 +29,8 @@ export abstract class IQuery {
 
 export class Article implements Node {
     id: string;
-    platform: Platform;
-    feeds: Feed[];
+    platform?: Nullable<Platform>;
+    feeds?: Nullable<Feed[]>;
     favoriteArticles?: Nullable<FavoriteArticle[]>;
     title: string;
     description: string;

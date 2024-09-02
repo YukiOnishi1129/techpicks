@@ -1,8 +1,8 @@
 package usecase
 
 import (
-	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/domain/entity"
 	cpb "github.com/YukiOnishi1129/techpicks/micro-service/content-service/grpc/content"
+	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/domain/entity"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 

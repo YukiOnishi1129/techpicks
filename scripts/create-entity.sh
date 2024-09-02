@@ -9,8 +9,8 @@ sqlboiler psql \
 
 # content-service
 sqlboiler psql \
-    -c micro-service/content-service/config/database/sqlboiler.toml \
-    -o micro-service/content-service/domain/entity \
+    -c micro-service/content-service/internal/config/database/sqlboiler.toml \
+    -o micro-service/content-service/internal/domain/entity \
     -p entity \
     --no-tests --wipe
 

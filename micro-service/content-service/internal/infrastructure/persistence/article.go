@@ -5,8 +5,8 @@ import (
 	"database/sql"
 	"fmt"
 
-	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/domain/entity"
-	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/domain/repository"
+	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/domain/entity"
+	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/domain/repository"
 	_ "github.com/lib/pq"
 	"github.com/volatiletech/sqlboiler/v4/queries/qm"
 )

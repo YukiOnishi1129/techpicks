@@ -17,8 +17,9 @@ message GetArticlesRequest {
   google.protobuf.StringValue user_id = 1;
   google.protobuf.Int64Value language_status = 2;
   google.protobuf.StringValue tag = 3;
-  string cursor = 4;
-  int64 limit = 5;
+  repeated google.protobuf.StringValue feed_ids = 4;
+  string cursor = 5;
+  int64 limit = 6;
 }
 
 message GetArticlesResponse {

@@ -105,9 +105,12 @@ rm -r "${OUT_DIR_BFF}"
 mkdir "${OUT_DIR_BFF}"
 
 ## Generate code at BFF
-protoc \
-    --ts_proto_opt=nestJs=true \
-    --plugin="${PROTOC_GEN_TS_PATH}" \
-    --ts_proto_out="${OUT_DIR_BFF}" \
-    --proto_path="${SRC_DIR}" \
-     $(find "${SRC_DIR}" -iname "*.proto")
+# protoc \
+#     --ts_proto_opt=nestJs=true \
+#     --plugin="${PROTOC_GEN_TS_PATH}" \
+#     --ts_proto_out="${OUT_DIR_BFF}" \
+#     --proto_path="${SRC_DIR}" \
+#      $(find "${SRC_DIR}" -iname "*.proto")
+
+cd "${ROOT_DIR}/bff/apollo-gateway"
+npm run gen:proto
