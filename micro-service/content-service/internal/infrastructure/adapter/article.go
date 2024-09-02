@@ -3,7 +3,6 @@ package adapter
 import (
 	"context"
 	"fmt"
-	"time"
 
 	cpb "github.com/YukiOnishi1129/techpicks/micro-service/content-service/grpc/content"
 	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/domain"
@@ -29,7 +28,7 @@ func NewArticleAdapter(ar repository.ArticleRepository) ArticleAdapter {
 func (aa *articleAdapter) GetArticles(ctx context.Context, req *cpb.GetArticlesRequest) (entity.ArticleSlice, error) {
 	q := []qm.QueryMod{
 		qm.InnerJoin("platforms ON articles.platform_id = platforms.id"),
-		qm.InnerJoin("feed_article_relations ON articles.id = feed_article_relations.article_id"),
+		qm.LeftOuterJoin("feed_article_relations ON articles.id = feed_article_relations.article_id"),
 		qm.InnerJoin("feeds ON feed_article_relations.feed_id = feeds.id"),
 		qm.Where("feeds.deleted_at IS NULL"),
 		qm.InnerJoin("platforms as feed_platforms ON feeds.platform_id = feed_platforms.id"),
@@ -42,6 +41,8 @@ func (aa *articleAdapter) GetArticles(ctx context.Context, req *cpb.GetArticlesR
 		)),
 		qm.Load("FeedArticleRelations.Feed.Category"),
 		qm.Load("FeedArticleRelations.Feed.Platform"),
+		qm.Where("articles.is_private = ?", false),
+		qm.GroupBy("articles.id"),
 		qm.Limit(int(req.Limit)),
 	}
 
@@ -50,11 +51,7 @@ func (aa *articleAdapter) GetArticles(ctx context.Context, req *cpb.GetArticlesR
 	}
 
 	if req.Cursor != "" {
-		parsedCursor, err := time.Parse(time.RFC3339, req.Cursor)
-		if err != nil {
-			return nil, err
-		}
-		q = append(q, qm.Where("articles.published_at < ?", parsedCursor))
+		q = append(q, qm.Where("articles.published_at < (SELECT published_at FROM articles WHERE id = ?)", req.Cursor))
 	}
 
 	if req.LanguageStatus.GetValue() != 0 {

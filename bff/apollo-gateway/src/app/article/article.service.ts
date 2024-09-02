@@ -11,6 +11,7 @@ import {
   ArticleServiceClient,
   GetArticlesRequest,
 } from '../../grpc/content/content';
+import { convertTimestampToInt } from '../../utils/timestamp';
 
 @Injectable()
 export class ArticleService implements OnModuleInit {
@@ -40,66 +41,83 @@ export class ArticleService implements OnModuleInit {
     const res = await lastValueFrom(rpcRes);
 
     const articles: ArticleConnection = {
-      edges: res.articlesEdge.map((edge) => {
-        return {
-          cursor: edge.article.createdAt.seconds.toString(),
-          node: {
-            articleUrl: edge.article.articleUrl,
-            createdAt: edge.article.createdAt.seconds,
-            description: edge.article.description,
-            feeds: edge.article.feeds.map((feed) => {
+      edges:
+        res.articlesEdge.length > 0
+          ? res.articlesEdge.map((edge) => {
               return {
-                apiQueryParam: feed.apiQueryParam,
-                category: {
-                  createdAt: feed.category.createdAt.seconds,
-                  id: feed.category.id,
-                  name: feed.category.name,
-                  type: feed.category.type,
-                  updatedAt: feed.category.updatedAt.seconds,
+                cursor: edge.article.id,
+                node: {
+                  articleUrl: edge.article.articleUrl,
+                  createdAt: convertTimestampToInt(edge.article.createdAt),
+                  description: edge.article.description,
+                  feeds: edge.article?.feeds
+                    ? edge.article.feeds.map((feed) => {
+                        return {
+                          apiQueryParam: feed.apiQueryParam,
+                          category: {
+                            createdAt: convertTimestampToInt(
+                              feed.category.createdAt,
+                            ),
+                            id: feed.category.id,
+                            name: feed.category.name,
+                            type: feed.category.type,
+                            updatedAt: convertTimestampToInt(
+                              feed.category.updatedAt,
+                            ),
+                          },
+                          createdAt: convertTimestampToInt(feed.createdAt),
+                          description: feed.description,
+                          id: feed.id,
+                          name: feed.name,
+                          platform: {
+                            createdAt: convertTimestampToInt(
+                              feed.platform.createdAt,
+                            ),
+                            faviconUrl: feed.platform.faviconUrl,
+                            id: feed.platform.id,
+                            isEng: feed.platform.isEng,
+                            name: feed.platform.name,
+                            platformSiteType: feed.platform.platformSiteType,
+                            siteUrl: feed.platform.siteUrl,
+                            updatedAt: convertTimestampToInt(
+                              feed.platform.updatedAt,
+                            ),
+                          },
+                          rssUrl: feed.rssUrl,
+                          siteUrl: feed.siteUrl,
+                          thumbnailUrl: feed.thumbnailUrl,
+                          trendPlatformType: feed.trendPlatformType,
+                          updatedAt: convertTimestampToInt(feed.updatedAt),
+                        };
+                      })
+                    : [],
+                  id: edge.article.id,
+                  isBookmarked: false,
+                  isEng: edge.article.isEng,
+                  isFollowing: false,
+                  isPrivate: edge.article?.isPrivate || false,
+                  platform: {
+                    createdAt: convertTimestampToInt(
+                      edge.article.platform.createdAt,
+                    ),
+                    faviconUrl: edge.article.platform.faviconUrl,
+                    id: edge.article.platform.id,
+                    isEng: edge.article.platform.isEng,
+                    name: edge.article.platform.name,
+                    platformSiteType: edge.article.platform.platformSiteType,
+                    siteUrl: edge.article.platform.siteUrl,
+                    updatedAt: convertTimestampToInt(
+                      edge.article.platform.updatedAt,
+                    ),
+                  },
+                  publishedAt: convertTimestampToInt(edge.article.publishedAt),
+                  thumbnailUrl: edge.article.thumbnailUrl,
+                  title: edge.article.title,
+                  updatedAt: convertTimestampToInt(edge.article.updatedAt),
                 },
-                createdAt: feed.createdAt.seconds,
-                description: feed.description,
-                id: feed.id,
-                name: feed.name,
-                platform: {
-                  createdAt: feed.platform.createdAt.seconds,
-                  faviconUrl: feed.platform.faviconUrl,
-                  id: feed.platform.id,
-                  isEng: feed.platform.isEng,
-                  name: feed.platform.name,
-                  platformSiteType: feed.platform.platformSiteType,
-                  siteUrl: feed.platform.siteUrl,
-                  updatedAt: feed.platform.updatedAt.seconds,
-                },
-                rssUrl: feed.rssUrl,
-                siteUrl: feed.siteUrl,
-                thumbnailUrl: feed.thumbnailUrl,
-                trendPlatformType: feed.trendPlatformType,
-                updatedAt: feed.updatedAt.seconds,
               };
-            }),
-            id: edge.article.id,
-            isBookmarked: false,
-            isEng: edge.article.isEng,
-            isFollowing: false,
-            isPrivate: edge.article.isPrivate,
-            platform: {
-              createdAt: edge.article.platform.createdAt.seconds,
-              faviconUrl: edge.article.platform.faviconUrl,
-              id: edge.article.platform.id,
-              isEng: edge.article.platform.isEng,
-              name: edge.article.platform.name,
-              platformSiteType: edge.article.platform.platformSiteType,
-              siteUrl: edge.article.platform.siteUrl,
-              updatedAt: edge.article.platform.updatedAt.seconds,
-            },
-            publishedAt: edge.article.publishedAt.seconds,
-            thumbnailUrl: edge.article.thumbnailUrl,
-            title: edge.article.title,
-            updatedAt: edge.article.updatedAt.seconds,
-          },
-        };
-      }),
+            })
+          : [],
       pageInfo: {
         endCursor: res.pageInfo.endCursor,
         hasNextPage: res.pageInfo.hasNextPage,

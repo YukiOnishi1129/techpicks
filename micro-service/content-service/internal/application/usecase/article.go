@@ -2,7 +2,6 @@ package usecase
 
 import (
 	"context"
-	"time"
 
 	cpb "github.com/YukiOnishi1129/techpicks/micro-service/content-service/grpc/content"
 	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/domain/entity"
@@ -53,7 +52,7 @@ func (au *articleUseCase) GetArticles(ctx context.Context, req *cpb.GetArticlesR
 		}
 
 		edges[i] = &cpb.ArticleEdge{
-			Cursor:  res.CreatedAt.AsTime().Format(time.RFC3339),
+			Cursor:  res.Id,
 			Article: res,
 		}
 	}

@@ -28,8 +28,8 @@ export abstract class IQuery {
 
 export class Article implements Node {
     id: string;
-    platform: Platform;
-    feeds: Feed[];
+    platform?: Nullable<Platform>;
+    feeds?: Nullable<Feed[]>;
     favoriteArticles?: Nullable<FavoriteArticle[]>;
     title: string;
     description: string;
