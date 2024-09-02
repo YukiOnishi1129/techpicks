@@ -111,3 +111,6 @@ mkdir "${OUT_DIR_BFF}"
 #     --ts_proto_out="${OUT_DIR_BFF}" \
 #     --proto_path="${SRC_DIR}" \
 #      $(find "${SRC_DIR}" -iname "*.proto")
+
+cd "${ROOT_DIR}/bff/apollo-gateway"
+npm run gen:proto
