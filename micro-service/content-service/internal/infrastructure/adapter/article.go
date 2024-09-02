@@ -55,8 +55,8 @@ func (aa *articleAdapter) GetArticles(ctx context.Context, req *cpb.GetArticlesR
 		q = append(q, qm.Where("articles.published_at < (SELECT published_at FROM articles WHERE id = ?)", req.GetCursor()))
 	}
 
-	if req.LanguageStatus.GetValue() != 0 {
-		isEng := req.LanguageStatus.GetValue() == int64(domain.LanguageStatusJapanese)
+	if req.LanguageStatus != nil {
+		isEng := req.LanguageStatus.GetValue() == int64(domain.LanguageStatusEnglish)
 		q = append(q, qm.Where("articles.is_eng = ?", isEng))
 	}
 	if req.Tag != nil {

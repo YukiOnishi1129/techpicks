@@ -20,7 +20,7 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "gen:gql": "ts-node ./src/scripts/generate-typings.ts",
-    "generate": "grpc_tools_node_protoc --js_out=import_style=commonjs,binary:./src/generate --grpc_out=grpc_js:./src/generate --ts_out=grpc_js:./src/generate -I ./src/proto ./src/proto/**/*.proto"
+    "gen:proto": "grpc_tools_node_protoc --js_out=import_style=commonjs,binary:./src/grpc --grpc_out=grpc_js:./src/grpc --ts_out=grpc_js:./src/grpc -I ./src/proto ./src/proto/**/*.proto"
   },
   "dependencies": {
     "@apollo/server": "^4.11.0",

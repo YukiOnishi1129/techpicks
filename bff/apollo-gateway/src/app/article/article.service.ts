@@ -5,9 +5,9 @@ import {
   Int64Value,
 } from 'google-protobuf/google/protobuf/wrappers_pb';
 
-import { ArticleServiceClient } from '../../generate/content/content_grpc_pb';
-import { GetArticlesRequest } from '../../generate/content/content_pb';
 import { ArticleConnection, ArticlesInput } from '../../graphql/types/graphql';
+import { ArticleServiceClient } from '../../grpc/content/content_grpc_pb';
+import { GetArticlesRequest } from '../../grpc/content/content_pb';
 import { convertTimestampToInt } from '../../utils/timestamp';
 
 @Injectable()
