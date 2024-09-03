@@ -1,7 +1,7 @@
 import { clsx } from "clsx";
 import { Inter } from "next/font/google";
 
-import { ThemeProvider } from "@/components/provider";
+import { ApolloProvider, ThemeProvider } from "@/components/provider";
 
 import type { Metadata } from "next";
 
@@ -29,7 +29,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {children}
+          <ApolloProvider>{children}</ApolloProvider>
         </ThemeProvider>
       </body>
     </html>
