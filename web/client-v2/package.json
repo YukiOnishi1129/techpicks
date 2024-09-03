@@ -3,24 +3,19 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 80",
+    "dev": "next dev",
     "build": "next build",
-    "start": "next start -p 80",
+    "start": "next start",
     "serve": "npm run build && npm run start",
     "test": "vitest",
     "lint": "next lint",
     "lint:fix": "eslint --ext .js,.jsx,.ts,.tsx --fix .",
     "format": "npx prettier --write .",
-    "prepare": "cd ../.. && husky web/client/.husky",
-    "gen:supabase-types": "supabase gen types typescript --linked > src/types/database.types.ts"
-  },
-  "lint-staged": {
-    "*.{ts,tsx}": [
-      "prettier --write",
-      "eslint --fix"
-    ]
+    "gen:gql": "graphql-codegen --config codegen.ts"
   },
   "dependencies": {
+    "@apollo/client": "^3.11.5",
+    "@apollo/experimental-nextjs-app-support": "^0.11.3",
     "@hookform/resolvers": "^3.4.2",
     "@radix-ui/react-accordion": "^1.1.2",
     "@radix-ui/react-alert-dialog": "^1.0.5",
@@ -34,7 +29,7 @@
     "@radix-ui/react-popover": "^1.0.7",
     "@radix-ui/react-radio-group": "^1.1.3",
     "@radix-ui/react-select": "^2.1.1",
-    "@radix-ui/react-slot": "^1.0.2",
+    "@radix-ui/react-slot": "^1.1.0",
     "@radix-ui/react-switch": "^1.0.3",
     "@radix-ui/react-tabs": "^1.0.4",
     "@radix-ui/react-toast": "^1.1.5",
@@ -51,7 +46,7 @@
     "highlight.js": "^11.9.0",
     "html-react-parser": "^5.1.10",
     "lucide-react": "^0.363.0",
-    "next": "^14.2.3",
+    "next": "^14.2.7",
     "next-themes": "^0.3.0",
     "node-html-parser": "^6.1.13",
     "react": "^18.3.1",
@@ -62,7 +57,7 @@
     "react-share": "^5.1.0",
     "react-spinners": "^0.13.8",
     "sonner": "^1.4.41",
-    "tailwind-merge": "^2.2.2",
+    "tailwind-merge": "^2.5.2",
     "tailwindcss-animate": "^1.0.7",
     "uuid": "^9.0.1",
     "uuidv4": "^6.2.13",
@@ -70,6 +65,10 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "^5.0.2",
+    "@graphql-codegen/typescript": "^4.0.9",
+    "@graphql-codegen/typescript-graphql-request": "^6.2.0",
+    "@graphql-codegen/typescript-react-apollo": "^4.3.0",
     "@testing-library/react": "^15.0.5",
     "@types/node": "^20",
     "@types/react": "^18.3.3",
