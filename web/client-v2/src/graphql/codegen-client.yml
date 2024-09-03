@@ -1,0 +1,8 @@
+schema: ../../bff/apollo-gateway/src/schema/**/*.graphql
+documents: ["./**/*.tsx", "./**/*.ts", "!node_modules/", "./**/*.graphql"]
+generates:
+  ./src/graphql/type.ts:
+    plugins:
+      - typescript
+      - typescript-operations
+      - typescript-graphql-request
