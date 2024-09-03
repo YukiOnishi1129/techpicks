@@ -32,6 +32,13 @@ export const ArticleDashboardTemplate: FC<
 > = async () => {
   const { data, error } = await getClient().query<GetArticlesQuery>({
     query: GET_ARTICLES_QUERY,
+    // Set cache option when executing query, otherwise it will cause an error in the build.
+    // TODO: Make it common
+    context: {
+      fetchOptions: {
+        cache: "no-cache",
+      },
+    },
     variables: {
       input: {
         first: 20,

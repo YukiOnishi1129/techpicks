@@ -8,8 +8,9 @@ import {
 } from "@apollo/experimental-nextjs-app-support";
 
 function makeClient() {
+  const graphqlUrl = process.env.BFF_API_URL || "http://localhost:3000";
   const httpLink = new HttpLink({
-    uri: `${process.env.BFF_API_URL}/graphql`,
+    uri: `${graphqlUrl}/graphql`,
     fetchOptions: { cache: "no-store" },
   });
 
