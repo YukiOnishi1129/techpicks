@@ -1,12 +1,12 @@
 import { clsx } from "clsx";
 import { Inter } from "next/font/google";
 
+import { BaseLayout } from "@/components/layout/BaseLayout";
 import { ApolloProvider, ThemeProvider } from "@/components/provider";
 
 import type { Metadata } from "next";
 
 import "./globals.css";
-import { BaseLayout } from "@/components/layout/BaseLayout/BaseLayout";
 
 const inter = Inter({ subsets: ["latin"] });
 
