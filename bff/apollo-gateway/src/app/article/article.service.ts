@@ -1,26 +1,28 @@
-import { Injectable, OnModuleInit, Inject } from '@nestjs/common';
-import { ClientGrpc } from '@nestjs/microservices';
+import * as grpc from '@grpc/grpc-js';
+import { Injectable, OnModuleInit } from '@nestjs/common';
 import {
   StringValue,
   Int64Value,
 } from 'google-protobuf/google/protobuf/wrappers_pb';
-import { lastValueFrom } from 'rxjs';
 
 import { ArticleConnection, ArticlesInput } from '../../graphql/types/graphql';
-import {
-  ArticleServiceClient,
-  GetArticlesRequest,
-} from '../../grpc/content/content';
+import { ArticleServiceClient } from '../../grpc/content/content_grpc_pb';
+import { GetArticlesRequest } from '../../grpc/content/content_pb';
+import { convertTimestampToInt } from '../../utils/timestamp';
 
 @Injectable()
 export class ArticleService implements OnModuleInit {
   private articleService: ArticleServiceClient;
 
-  constructor(@Inject('ARTICLE_PACKAGE') private client: ClientGrpc) {}
+  constructor() {}
 
   onModuleInit() {
-    this.articleService =
-      this.client.getService<ArticleServiceClient>('ArticleService');
+    this.articleService = new ArticleServiceClient(
+      'checkpicks_content_service:3001',
+      grpc.credentials.createInsecure(),
+    );
+    // this.articleService =
+    //   this.client.getService<ArticleServiceClient>('ArticleService');
   }
 
   // create(createArticleInput: CreateArticleInput) {
@@ -28,86 +30,123 @@ export class ArticleService implements OnModuleInit {
   // }
 
   async getArticles(input: ArticlesInput): Promise<ArticleConnection> {
-    const req: GetArticlesRequest = {
-      cursor: input.after,
-      languageStatus: new Int64Value({ value: input.userId }),
-      limit: input.first,
-      tag: new StringValue({ value: input.tag }),
-      userId: new StringValue({ value: input.userId }),
-    };
+    const req = new GetArticlesRequest();
+    if (input?.first) req.setLimit(input.first);
+    if (input?.after) req.setCursor(input.after);
+    if (input?.feedIds)
+      req.setFeedIdsList(
+        input.feedIds.map((feedId) => {
+          const stringValue = new StringValue();
+          stringValue.setValue(feedId);
+          return stringValue;
+        }),
+      );
+    if (input?.languageStatus)
+      req.setLanguageStatus(new Int64Value().setValue(input.languageStatus));
+    if (input?.tag) req.setTag(new StringValue().setValue(input.tag));
+    if (input?.userId) req.setUserId(new StringValue().setValue(input.userId));
 
-    const rpcRes = this.articleService.getArticles(req);
-    const res = await lastValueFrom(rpcRes);
+    return new Promise((resolve, reject) => {
+      this.articleService.getArticles(req, (err, res) => {
+        if (err) {
+          reject({
+            code: err?.code || 500,
+            message: err?.message || 'something went wrong',
+          });
+          return;
+        }
+        const resArticles = res.toObject();
 
-    const articles: ArticleConnection = {
-      edges: res.articlesEdge.map((edge) => {
-        return {
-          cursor: edge.article.createdAt.seconds.toString(),
-          node: {
-            articleUrl: edge.article.articleUrl,
-            createdAt: edge.article.createdAt.seconds,
-            description: edge.article.description,
-            feeds: edge.article.feeds.map((feed) => {
-              return {
-                apiQueryParam: feed.apiQueryParam,
-                category: {
-                  createdAt: feed.category.createdAt.seconds,
-                  id: feed.category.id,
-                  name: feed.category.name,
-                  type: feed.category.type,
-                  updatedAt: feed.category.updatedAt.seconds,
-                },
-                createdAt: feed.createdAt.seconds,
-                description: feed.description,
-                id: feed.id,
-                name: feed.name,
-                platform: {
-                  createdAt: feed.platform.createdAt.seconds,
-                  faviconUrl: feed.platform.faviconUrl,
-                  id: feed.platform.id,
-                  isEng: feed.platform.isEng,
-                  name: feed.platform.name,
-                  platformSiteType: feed.platform.platformSiteType,
-                  siteUrl: feed.platform.siteUrl,
-                  updatedAt: feed.platform.updatedAt.seconds,
-                },
-                rssUrl: feed.rssUrl,
-                siteUrl: feed.siteUrl,
-                thumbnailUrl: feed.thumbnailUrl,
-                trendPlatformType: feed.trendPlatformType,
-                updatedAt: feed.updatedAt.seconds,
-              };
-            }),
-            id: edge.article.id,
-            isBookmarked: false,
-            isEng: edge.article.isEng,
-            isFollowing: false,
-            isPrivate: edge.article.isPrivate,
-            platform: {
-              createdAt: edge.article.platform.createdAt.seconds,
-              faviconUrl: edge.article.platform.faviconUrl,
-              id: edge.article.platform.id,
-              isEng: edge.article.platform.isEng,
-              name: edge.article.platform.name,
-              platformSiteType: edge.article.platform.platformSiteType,
-              siteUrl: edge.article.platform.siteUrl,
-              updatedAt: edge.article.platform.updatedAt.seconds,
-            },
-            publishedAt: edge.article.publishedAt.seconds,
-            thumbnailUrl: edge.article.thumbnailUrl,
-            title: edge.article.title,
-            updatedAt: edge.article.updatedAt.seconds,
+        const articles: ArticleConnection = {
+          edges: resArticles?.articlesedgeList
+            ? resArticles.articlesedgeList.map((edge) => {
+                return {
+                  cursor: edge.article.id,
+                  node: {
+                    articleUrl: edge.article.articleUrl,
+                    createdAt: convertTimestampToInt(edge.article.createdAt),
+                    description: edge.article.description,
+                    feeds: edge.article?.feedsList
+                      ? edge.article.feedsList.map((feed) => {
+                          return {
+                            apiQueryParam: feed?.apiQueryParam?.value,
+                            category: {
+                              createdAt: convertTimestampToInt(
+                                feed.category.createdAt,
+                              ),
+                              id: feed.category.id,
+                              name: feed.category.name,
+                              type: feed.category.type,
+                              updatedAt: convertTimestampToInt(
+                                feed.category.updatedAt,
+                              ),
+                            },
+                            createdAt: convertTimestampToInt(feed.createdAt),
+                            description: feed.description,
+                            id: feed.id,
+                            name: feed.name,
+                            platform: {
+                              createdAt: convertTimestampToInt(
+                                feed.platform.createdAt,
+                              ),
+                              faviconUrl: feed.platform.faviconUrl,
+                              id: feed.platform.id,
+                              isEng: feed.platform.isEng,
+                              name: feed.platform.name,
+                              platformSiteType: feed.platform.platformSiteType,
+                              siteUrl: feed.platform.siteUrl,
+                              updatedAt: convertTimestampToInt(
+                                feed.platform.updatedAt,
+                              ),
+                            },
+                            rssUrl: feed.rssurl,
+                            siteUrl: feed.siteurl,
+                            thumbnailUrl: feed.thumbnailUrl,
+                            trendPlatformType: feed.trendPlatformType,
+                            updatedAt: convertTimestampToInt(feed.updatedAt),
+                          };
+                        })
+                      : [],
+                    id: edge.article.id,
+                    isBookmarked: false,
+                    isEng: edge.article.isEng,
+                    isFollowing: false,
+                    isPrivate: edge.article?.isPrivate || false,
+                    likeCount: edge.article.likeCount,
+                    platform: {
+                      createdAt: convertTimestampToInt(
+                        edge.article.platform.createdAt,
+                      ),
+                      faviconUrl: edge.article.platform.faviconUrl,
+                      id: edge.article.platform.id,
+                      isEng: edge.article.platform.isEng,
+                      name: edge.article.platform.name,
+                      platformSiteType: edge.article.platform.platformSiteType,
+                      siteUrl: edge.article.platform.siteUrl,
+                      updatedAt: convertTimestampToInt(
+                        edge.article.platform.updatedAt,
+                      ),
+                    },
+                    publishedAt: convertTimestampToInt(
+                      edge.article.publishedAt,
+                    ),
+                    thumbnailUrl: edge.article.thumbnailUrl,
+                    title: edge.article.title,
+                    updatedAt: convertTimestampToInt(edge.article.updatedAt),
+                  },
+                };
+              })
+            : [],
+          pageInfo: {
+            endCursor: resArticles.pageInfo?.endCursor,
+            hasNextPage: resArticles.pageInfo?.hasNextPage,
+            hasPreviousPage: false,
           },
         };
-      }),
-      pageInfo: {
-        endCursor: res.pageInfo.endCursor,
-        hasNextPage: res.pageInfo.hasNextPage,
-        hasPreviousPage: false,
-      },
-    };
 
-    return articles;
+        resolve(articles);
+      });
+    });
   }
 
   // findOne(id: number) {

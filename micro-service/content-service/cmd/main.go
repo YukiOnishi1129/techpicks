@@ -7,11 +7,12 @@ import (
 	"os"
 	"os/signal"
 
-	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/config/database"
 	pb "github.com/YukiOnishi1129/techpicks/micro-service/content-service/grpc/content"
-	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/infrastructure/persistence"
-	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/interfacess/handler"
-	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/usecase"
+	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/application/usecase"
+	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/config/database"
+	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/infrastructure/adapter"
+	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/infrastructure/persistence"
+	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/interfacess/handler"
 	"github.com/joho/godotenv"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
@@ -35,10 +36,15 @@ func main() {
 	}
 
 	// infrastructure layer
+	// repository layer
 	aps := persistence.NewArticlePersistence(db)
 
+	// adapter layer
+	aad := adapter.NewArticleAdapter(aps)
+
+	// application layer
 	// usecase layer
-	auc := usecase.NewArticleUseCase(aps)
+	auc := usecase.NewArticleUseCase(aad)
 
 	// interface layer
 	ahd := handler.NewArticleHandler(auc)
