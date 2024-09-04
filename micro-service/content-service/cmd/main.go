@@ -7,14 +7,17 @@ import (
 	"os"
 	"os/signal"
 
-	pb "github.com/YukiOnishi1129/techpicks/micro-service/content-service/grpc/content"
+	bpb "github.com/YukiOnishi1129/techpicks/micro-service/content-service/grpc/bookmark"
+	cpb "github.com/YukiOnishi1129/techpicks/micro-service/content-service/grpc/content"
 	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/application/usecase"
 	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/config/database"
 	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/infrastructure/adapter"
+	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/infrastructure/external"
 	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/infrastructure/persistence"
 	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/interfacess/handler"
 	"github.com/joho/godotenv"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/reflection"
 )
 
@@ -35,16 +38,28 @@ func main() {
 		return
 	}
 
+	// create grpc client
+	// bookmark client
+	bConn, err := grpc.NewClient(fmt.Sprintf("%s:%s", os.Getenv("BOOKMARK_SERVICE_CONTAINER_NAME"), os.Getenv("BOOKMARK_SERVICE_CONTAINER_PORT")), grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		log.Fatal("Error connecting to bookmark service")
+		return
+	}
+	defer bConn.Close()
+	bClient := bpb.NewBookmarkServiceClient(bConn)
+
 	// infrastructure layer
 	// repository layer
 	aps := persistence.NewArticlePersistence(db)
+	// external layer
+	bex := external.NewBookmarkExternal(bClient)
 
 	// adapter layer
 	aad := adapter.NewArticleAdapter(aps)
 
 	// application layer
 	// usecase layer
-	auc := usecase.NewArticleUseCase(aad)
+	auc := usecase.NewArticleUseCase(aad, bex)
 
 	// interface layer
 	ahd := handler.NewArticleHandler(auc)
@@ -65,7 +80,7 @@ func main() {
 	s := grpc.NewServer()
 
 	// register the greeting service with the gRPC server
-	pb.RegisterArticleServiceServer(s, ahd)
+	cpb.RegisterArticleServiceServer(s, ahd)
 
 	// register reflection service on gRPC server
 	reflection.Register(s)

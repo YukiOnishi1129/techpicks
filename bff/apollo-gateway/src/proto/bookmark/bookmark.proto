@@ -18,6 +18,7 @@ message GetBookmarkResponse {
 
 message GetBookmarkByArticleIDRequest {
     string article_id = 1;
+    string user_id = 2;
 }
 
 message Bookmark {

@@ -1,4 +1,4 @@
-version: "3.9"
+version: '3.9'
 
 services:
   bff:
@@ -31,6 +31,8 @@ services:
       dockerfile: ./micro-service/content-service/Dockerfile.dev
     environment:
       - CONTENT_SERVICE_CONTAINER_PORT=${CONTENT_SERVICE_CONTAINER_PORT}
+      - ${BOOKMARK_SERVICE_CONTAINER_NAME}:${BOOKMARK_SERVICE_CONTAINER_NAME}
+      - ${BOOKMARK_SERVICE_CONTAINER_PORT}:${BOOKMARK_SERVICE_CONTAINER_PORT}
       - TZ=Asia/Tokyo
     volumes:
       - ./micro-service/content-service:/app

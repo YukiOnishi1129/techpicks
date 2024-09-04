@@ -6,6 +6,7 @@ import (
 	cpb "github.com/YukiOnishi1129/techpicks/micro-service/content-service/grpc/content"
 	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/domain/entity"
 	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/infrastructure/adapter"
+	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/infrastructure/external"
 	"google.golang.org/protobuf/types/known/timestamppb"
 	"google.golang.org/protobuf/types/known/wrapperspb"
 )
@@ -15,12 +16,14 @@ type ArticleUseCase interface {
 }
 
 type articleUseCase struct {
-	articleAdapter adapter.ArticleAdapter
+	articleAdapter   adapter.ArticleAdapter
+	bookmarkExternal external.BookmarkExternal
 }
 
-func NewArticleUseCase(aa adapter.ArticleAdapter) ArticleUseCase {
+func NewArticleUseCase(aa adapter.ArticleAdapter, be external.BookmarkExternal) ArticleUseCase {
 	return &articleUseCase{
-		articleAdapter: aa,
+		articleAdapter:   aa,
+		bookmarkExternal: be,
 	}
 }
 
@@ -46,7 +49,18 @@ func (au *articleUseCase) GetArticles(ctx context.Context, req *cpb.GetArticlesR
 		}
 
 		if req.UserId != nil {
-			// TODO: bookmark
+			// resBookmark, err := au.bookmarkExternal.GetBookmarkByArticleID(ctx, &bpb.GetBookmarkByArticleIDRequest{
+			// 	ArticleId: article.ID,
+			// 	UserId:    req.UserId.GetValue(),
+			// })
+			// if err != nil {
+			// 	return nil, err
+			// }
+			// if resBookmark.Bookmark.GetId() != "" {
+			// 	println("🔥🔥🔥🔥🔥🔥🔥🔥")
+			// 	res.BookmarkId = wrapperspb.String(resBookmark.Bookmark.GetId())
+			// 	res.IsBookmarked = true
+			// }
 			// TODO: favorite
 			println(req.UserId.GetValue())
 		}

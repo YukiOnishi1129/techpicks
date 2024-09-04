@@ -9,7 +9,7 @@ import (
 )
 
 type BookmarkAdapter interface {
-	GetBookmarkByArticleID(ctx context.Context, articleID string) (entity.Bookmark, error)
+	GetBookmarkByArticleID(ctx context.Context, articleID, userID string) (entity.Bookmark, error)
 }
 
 type bookmarkAdapter struct {
@@ -22,9 +22,10 @@ func NewBookmarkAdapter(br repository.BookmarkRepository) BookmarkAdapter {
 	}
 }
 
-func (ba *bookmarkAdapter) GetBookmarkByArticleID(ctx context.Context, articleID string) (entity.Bookmark, error) {
+func (ba *bookmarkAdapter) GetBookmarkByArticleID(ctx context.Context, articleID, userID string) (entity.Bookmark, error) {
 	q := []qm.QueryMod{
 		qm.Where("article_id = ?", articleID),
+		qm.Where("user_id = ?", userID),
 	}
 	return ba.BookmarkRepository.GetBookmark(ctx, q)
 }

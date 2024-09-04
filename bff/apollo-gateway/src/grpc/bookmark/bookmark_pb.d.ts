@@ -34,6 +34,8 @@ export namespace GetBookmarkResponse {
 export class GetBookmarkByArticleIDRequest extends jspb.Message { 
     getArticleId(): string;
     setArticleId(value: string): GetBookmarkByArticleIDRequest;
+    getUserId(): string;
+    setUserId(value: string): GetBookmarkByArticleIDRequest;
 
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): GetBookmarkByArticleIDRequest.AsObject;
@@ -48,6 +50,7 @@ export class GetBookmarkByArticleIDRequest extends jspb.Message {
 export namespace GetBookmarkByArticleIDRequest {
     export type AsObject = {
         articleId: string,
+        userId: string,
     }
 }
 
