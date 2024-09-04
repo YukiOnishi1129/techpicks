@@ -19,6 +19,8 @@ const GET_ARTICLES_QUERY = gql`
         node {
           id
           title
+          isBookmarked
+          bookmarkId
         }
       }
     }
@@ -50,7 +52,14 @@ export const ArticleDashboardTemplate: FC<
   if (error) {
     return <div>{error.message}</div>;
   }
+
   console.log(data);
+
+  // for (const article of data.articles.edges) {
+  //   console.log("🔥");
+  //   console.log(article.node.title);
+  //   console.log(article.node.isBookmarked);
+  // }
 
   return <div>Article Dashboard</div>;
 };
