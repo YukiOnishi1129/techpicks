@@ -3,6 +3,7 @@ package usecase
 import (
 	"context"
 
+	bpb "github.com/YukiOnishi1129/techpicks/micro-service/content-service/grpc/bookmark"
 	cpb "github.com/YukiOnishi1129/techpicks/micro-service/content-service/grpc/content"
 	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/domain/entity"
 	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/infrastructure/adapter"
@@ -49,18 +50,17 @@ func (au *articleUseCase) GetArticles(ctx context.Context, req *cpb.GetArticlesR
 		}
 
 		if req.UserId != nil {
-			// resBookmark, err := au.bookmarkExternal.GetBookmarkByArticleID(ctx, &bpb.GetBookmarkByArticleIDRequest{
-			// 	ArticleId: article.ID,
-			// 	UserId:    req.UserId.GetValue(),
-			// })
-			// if err != nil {
-			// 	return nil, err
-			// }
-			// if resBookmark.Bookmark.GetId() != "" {
-			// 	println("🔥🔥🔥🔥🔥🔥🔥🔥")
-			// 	res.BookmarkId = wrapperspb.String(resBookmark.Bookmark.GetId())
-			// 	res.IsBookmarked = true
-			// }
+			resBookmark, err := au.bookmarkExternal.GetBookmarkByArticleID(ctx, &bpb.GetBookmarkByArticleIDRequest{
+				ArticleId: article.ID,
+				UserId:    req.UserId.GetValue(),
+			})
+			if err != nil {
+				return nil, err
+			}
+			if resBookmark.Bookmark.GetId() != "" {
+				res.BookmarkId = wrapperspb.String(resBookmark.Bookmark.GetId())
+				res.IsBookmarked = true
+			}
 			// TODO: favorite
 			println(req.UserId.GetValue())
 		}
