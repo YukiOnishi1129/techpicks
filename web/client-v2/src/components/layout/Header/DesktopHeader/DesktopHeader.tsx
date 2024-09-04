@@ -10,7 +10,7 @@ type DesktopHeaderProps = {
   user?: User;
 };
 
-export const DesktopHeader: FC<DesktopHeaderProps> = async ({
+export const DesktopHeader: FC<DesktopHeaderProps> = ({
   user,
 }: DesktopHeaderProps) => {
   return (

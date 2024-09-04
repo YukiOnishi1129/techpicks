@@ -14,7 +14,7 @@ type LoggedBaseLayoutProps = {
   children: ReactNode;
 };
 
-export const LoggedBaseLayout: FC<LoggedBaseLayoutProps> = async ({
+export const LoggedBaseLayout: FC<LoggedBaseLayoutProps> = ({
   user,
   children,
 }) => {

@@ -50,5 +50,7 @@ export const ArticleDashboardTemplate: FC<
   if (error) {
     return <div>{error.message}</div>;
   }
+  console.log(data);
+
   return <div>Article Dashboard</div>;
 };
