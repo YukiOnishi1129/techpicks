@@ -31,21 +31,21 @@ export namespace GetBookmarkResponse {
     }
 }
 
-export class GetBookmarkByArticleIdRequest extends jspb.Message { 
+export class GetBookmarkByArticleIDRequest extends jspb.Message { 
     getArticleId(): string;
-    setArticleId(value: string): GetBookmarkByArticleIdRequest;
+    setArticleId(value: string): GetBookmarkByArticleIDRequest;
 
     serializeBinary(): Uint8Array;
-    toObject(includeInstance?: boolean): GetBookmarkByArticleIdRequest.AsObject;
-    static toObject(includeInstance: boolean, msg: GetBookmarkByArticleIdRequest): GetBookmarkByArticleIdRequest.AsObject;
+    toObject(includeInstance?: boolean): GetBookmarkByArticleIDRequest.AsObject;
+    static toObject(includeInstance: boolean, msg: GetBookmarkByArticleIDRequest): GetBookmarkByArticleIDRequest.AsObject;
     static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
     static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
-    static serializeBinaryToWriter(message: GetBookmarkByArticleIdRequest, writer: jspb.BinaryWriter): void;
-    static deserializeBinary(bytes: Uint8Array): GetBookmarkByArticleIdRequest;
-    static deserializeBinaryFromReader(message: GetBookmarkByArticleIdRequest, reader: jspb.BinaryReader): GetBookmarkByArticleIdRequest;
+    static serializeBinaryToWriter(message: GetBookmarkByArticleIDRequest, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): GetBookmarkByArticleIDRequest;
+    static deserializeBinaryFromReader(message: GetBookmarkByArticleIDRequest, reader: jspb.BinaryReader): GetBookmarkByArticleIDRequest;
 }
 
-export namespace GetBookmarkByArticleIdRequest {
+export namespace GetBookmarkByArticleIDRequest {
     export type AsObject = {
         articleId: string,
     }
