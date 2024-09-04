@@ -16,8 +16,8 @@ sqlboiler psql \
 
 # bookmark-service
 sqlboiler psql \
-    -c micro-service/bookmark-service/database/sqlboiler.toml \
-    -o micro-service/bookmark-service/entity \
+    -c micro-service/bookmark-service/internal/config/database/sqlboiler.toml \
+    -o micro-service/bookmark-service/internal/domain/entity \
     -p entity \
     --no-tests --wipe
 
