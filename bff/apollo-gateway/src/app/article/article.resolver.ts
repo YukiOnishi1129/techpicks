@@ -1,7 +1,10 @@
-import { Resolver, Args, Query } from '@nestjs/graphql';
+import { UseGuards } from '@nestjs/common';
+import { Resolver, Args, Query, Context } from '@nestjs/graphql';
 
 import { ArticleService } from './article.service';
+import { GraphQLContext } from '../../graphql/context.interface';
 import { ArticleConnection, ArticlesInput } from '../../graphql/types/graphql';
+import { SupabaseAuthGuard } from '../auth/auth.guard';
 
 @Resolver()
 export class ArticleResolver {
@@ -13,10 +16,13 @@ export class ArticleResolver {
   // }
 
   @Query(() => ArticleConnection)
+  @UseGuards(SupabaseAuthGuard)
   async articles(
     @Args('articlesInput') articlesInput: ArticlesInput,
+    @Context() context: GraphQLContext,
   ): Promise<ArticleConnection> {
-    return await this.articleService.getArticles(articlesInput);
+    const user = context.req.user;
+    return await this.articleService.getArticles(user.id, articlesInput);
   }
 
   // @Query('article')
