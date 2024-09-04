@@ -9,14 +9,14 @@ import "google/protobuf/wrappers.proto";
 
 
 service BookmarkService {
-    rpc GetBookmarkByArticleId(GetBookmarkByArticleIdRequest) returns (GetBookmarkResponse) {}
+    rpc GetBookmarkByArticleID(GetBookmarkByArticleIDRequest) returns (GetBookmarkResponse) {}
 }
 
 message GetBookmarkResponse {
-    repeated Bookmark bookmark = 1;
+    Bookmark bookmark = 1;
 }
 
-message GetBookmarkByArticleIdRequest {
+message GetBookmarkByArticleIDRequest {
     string article_id = 1;
 }
 
