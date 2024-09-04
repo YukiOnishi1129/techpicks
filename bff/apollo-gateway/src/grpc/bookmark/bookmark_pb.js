@@ -274,7 +274,8 @@ proto.checkpicks.bookmark.v1.GetBookmarkByArticleIDRequest.prototype.toObject = 
  */
 proto.checkpicks.bookmark.v1.GetBookmarkByArticleIDRequest.toObject = function(includeInstance, msg) {
   var f, obj = {
-    articleId: jspb.Message.getFieldWithDefault(msg, 1, "")
+    articleId: jspb.Message.getFieldWithDefault(msg, 1, ""),
+    userId: jspb.Message.getFieldWithDefault(msg, 2, "")
   };
 
   if (includeInstance) {
@@ -315,6 +316,10 @@ proto.checkpicks.bookmark.v1.GetBookmarkByArticleIDRequest.deserializeBinaryFrom
       var value = /** @type {string} */ (reader.readString());
       msg.setArticleId(value);
       break;
+    case 2:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setUserId(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -351,6 +356,13 @@ proto.checkpicks.bookmark.v1.GetBookmarkByArticleIDRequest.serializeBinaryToWrit
       f
     );
   }
+  f = message.getUserId();
+  if (f.length > 0) {
+    writer.writeString(
+      2,
+      f
+    );
+  }
 };
 
 
@@ -369,6 +381,24 @@ proto.checkpicks.bookmark.v1.GetBookmarkByArticleIDRequest.prototype.getArticleI
  */
 proto.checkpicks.bookmark.v1.GetBookmarkByArticleIDRequest.prototype.setArticleId = function(value) {
   return jspb.Message.setProto3StringField(this, 1, value);
+};
+
+
+/**
+ * optional string user_id = 2;
+ * @return {string}
+ */
+proto.checkpicks.bookmark.v1.GetBookmarkByArticleIDRequest.prototype.getUserId = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.checkpicks.bookmark.v1.GetBookmarkByArticleIDRequest} returns this
+ */
+proto.checkpicks.bookmark.v1.GetBookmarkByArticleIDRequest.prototype.setUserId = function(value) {
+  return jspb.Message.setProto3StringField(this, 2, value);
 };
 
 

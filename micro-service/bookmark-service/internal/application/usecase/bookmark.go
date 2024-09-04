@@ -25,7 +25,7 @@ func NewBookmarkUseCase(ba adapter.BookmarkAdapter) BookmarkUseCase {
 }
 
 func (bu *bookmarkUseCase) GetBookmarkByArticleID(ctx context.Context, req *bpb.GetBookmarkByArticleIDRequest) (*bpb.GetBookmarkResponse, error) {
-	bookmark, err := bu.bookmarkAdapter.GetBookmarkByArticleID(ctx, req.ArticleId)
+	bookmark, err := bu.bookmarkAdapter.GetBookmarkByArticleID(ctx, req.GetUserId(), req.GetUserId())
 	if err != nil {
 		return nil, err
 	}

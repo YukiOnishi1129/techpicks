@@ -18,6 +18,9 @@ bff-ssh:
 ## content service container
 content-ssh:
 	docker exec -it $(CONTENT_SERVICE_CONTAINER_NAME) sh
+## bookmark service container
+bookmark-ssh:
+	docker exec -it $(BOOKMARK_SERVICE_CONTAINER_NAME) sh
 
 # supabase
 supabase-start:

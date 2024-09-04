@@ -18,11 +18,9 @@ export class ArticleService implements OnModuleInit {
 
   onModuleInit() {
     this.articleService = new ArticleServiceClient(
-      'checkpicks_content_service:3001',
+      `${process.env.CONTENT_SERVICE_CONTAINER_NAME}:${process.env.CONTENT_SERVICE_CONTAINER_PORT}`,
       grpc.credentials.createInsecure(),
     );
-    // this.articleService =
-    //   this.client.getService<ArticleServiceClient>('ArticleService');
   }
 
   // create(createArticleInput: CreateArticleInput) {
