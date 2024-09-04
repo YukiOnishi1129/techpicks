@@ -7,6 +7,9 @@ services:
       context: .
       dockerfile: ./bff/apollo-gateway/Dockerfile.dev
     environment:
+      - BFF_CONTAINER_PORT=${BFF_CONTAINER_PORT}
+      - SUPABASE_URL=${BFF_SUPABASE_URL}
+      - SUPABASE_ANON_KEY=${SUPABASE_ANON_KEY}
       - TZ=Asia/Tokyo
     volumes:
       - ./bff/apollo-gateway:/app

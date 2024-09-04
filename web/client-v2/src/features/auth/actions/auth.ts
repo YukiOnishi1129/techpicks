@@ -2,7 +2,10 @@
 
 import { redirect } from "next/navigation";
 
-import { createServerSideClient } from "@/lib/supabase/client/serverClient";
+import {
+  createGetOnlyServerSideClient,
+  createServerSideClient,
+} from "@/lib/supabase/client/serverClient";
 
 export async function loginWithGoogle() {
   const supabase = await createServerSideClient();
@@ -37,4 +40,11 @@ export async function logoutToLoginPage() {
     redirect("/error");
   }
   if (!error) redirect("/login");
+}
+
+export async function getSession() {
+  const supabase = await createGetOnlyServerSideClient();
+  const session = supabase.auth.getSession();
+
+  return session;
 }

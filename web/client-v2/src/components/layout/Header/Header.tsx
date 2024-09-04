@@ -7,7 +7,7 @@ type HeaderProps = {
   user?: User;
 };
 
-export const Header: FC<HeaderProps> = async ({ user }) => {
+export const Header: FC<HeaderProps> = ({ user }) => {
   //   const myFeedFolderRes = await fetchMyFeedFoldersAPI({});
   //   const favoriteArticleFolderRes = await fetchFavoriteArticleFoldersAPI({});
   return (

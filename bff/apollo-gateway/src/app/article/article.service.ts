@@ -29,7 +29,10 @@ export class ArticleService implements OnModuleInit {
   //   return `This action adds a new article ${createArticleInput}`;
   // }
 
-  async getArticles(input: ArticlesInput): Promise<ArticleConnection> {
+  async getArticles(
+    userId: string,
+    input: ArticlesInput,
+  ): Promise<ArticleConnection> {
     const req = new GetArticlesRequest();
     if (input?.first) req.setLimit(input.first);
     if (input?.after) req.setCursor(input.after);
@@ -44,7 +47,8 @@ export class ArticleService implements OnModuleInit {
     if (input?.languageStatus)
       req.setLanguageStatus(new Int64Value().setValue(input.languageStatus));
     if (input?.tag) req.setTag(new StringValue().setValue(input.tag));
-    if (input?.userId) req.setUserId(new StringValue().setValue(input.userId));
+
+    req.setUserId(new StringValue().setValue(userId));
 
     return new Promise((resolve, reject) => {
       this.articleService.getArticles(req, (err, res) => {
