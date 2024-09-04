@@ -9,10 +9,11 @@ import * as google_protobuf_timestamp_pb from "google-protobuf/google/protobuf/t
 import * as google_protobuf_wrappers_pb from "google-protobuf/google/protobuf/wrappers_pb";
 
 export class GetBookmarkResponse extends jspb.Message { 
-    clearBookmarkList(): void;
-    getBookmarkList(): Array<Bookmark>;
-    setBookmarkList(value: Array<Bookmark>): GetBookmarkResponse;
-    addBookmark(value?: Bookmark, index?: number): Bookmark;
+
+    hasBookmark(): boolean;
+    clearBookmark(): void;
+    getBookmark(): Bookmark | undefined;
+    setBookmark(value?: Bookmark): GetBookmarkResponse;
 
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): GetBookmarkResponse.AsObject;
@@ -26,7 +27,7 @@ export class GetBookmarkResponse extends jspb.Message {
 
 export namespace GetBookmarkResponse {
     export type AsObject = {
-        bookmarkList: Array<Bookmark.AsObject>,
+        bookmark?: Bookmark.AsObject,
     }
 }
 

@@ -39,7 +39,7 @@ goog.exportSymbol('proto.checkpicks.bookmark.v1.GetBookmarkResponse', null, glob
  * @constructor
  */
 proto.checkpicks.bookmark.v1.GetBookmarkResponse = function(opt_data) {
-  jspb.Message.initialize(this, opt_data, 0, -1, proto.checkpicks.bookmark.v1.GetBookmarkResponse.repeatedFields_, null);
+  jspb.Message.initialize(this, opt_data, 0, -1, null, null);
 };
 goog.inherits(proto.checkpicks.bookmark.v1.GetBookmarkResponse, jspb.Message);
 if (goog.DEBUG && !COMPILED) {
@@ -92,13 +92,6 @@ if (goog.DEBUG && !COMPILED) {
   proto.checkpicks.bookmark.v1.Bookmark.displayName = 'proto.checkpicks.bookmark.v1.Bookmark';
 }
 
-/**
- * List of repeated fields within this message type.
- * @private {!Array<number>}
- * @const
- */
-proto.checkpicks.bookmark.v1.GetBookmarkResponse.repeatedFields_ = [1];
-
 
 
 if (jspb.Message.GENERATE_TO_OBJECT) {
@@ -130,8 +123,7 @@ proto.checkpicks.bookmark.v1.GetBookmarkResponse.prototype.toObject = function(o
  */
 proto.checkpicks.bookmark.v1.GetBookmarkResponse.toObject = function(includeInstance, msg) {
   var f, obj = {
-    bookmarkList: jspb.Message.toObjectList(msg.getBookmarkList(),
-    proto.checkpicks.bookmark.v1.Bookmark.toObject, includeInstance)
+    bookmark: (f = msg.getBookmark()) && proto.checkpicks.bookmark.v1.Bookmark.toObject(includeInstance, f)
   };
 
   if (includeInstance) {
@@ -171,7 +163,7 @@ proto.checkpicks.bookmark.v1.GetBookmarkResponse.deserializeBinaryFromReader = f
     case 1:
       var value = new proto.checkpicks.bookmark.v1.Bookmark;
       reader.readMessage(value,proto.checkpicks.bookmark.v1.Bookmark.deserializeBinaryFromReader);
-      msg.addBookmark(value);
+      msg.setBookmark(value);
       break;
     default:
       reader.skipField();
@@ -202,9 +194,9 @@ proto.checkpicks.bookmark.v1.GetBookmarkResponse.prototype.serializeBinary = fun
  */
 proto.checkpicks.bookmark.v1.GetBookmarkResponse.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getBookmarkList();
-  if (f.length > 0) {
-    writer.writeRepeatedMessage(
+  f = message.getBookmark();
+  if (f != null) {
+    writer.writeMessage(
       1,
       f,
       proto.checkpicks.bookmark.v1.Bookmark.serializeBinaryToWriter
@@ -214,40 +206,39 @@ proto.checkpicks.bookmark.v1.GetBookmarkResponse.serializeBinaryToWriter = funct
 
 
 /**
- * repeated Bookmark bookmark = 1;
- * @return {!Array<!proto.checkpicks.bookmark.v1.Bookmark>}
+ * optional Bookmark bookmark = 1;
+ * @return {?proto.checkpicks.bookmark.v1.Bookmark}
  */
-proto.checkpicks.bookmark.v1.GetBookmarkResponse.prototype.getBookmarkList = function() {
-  return /** @type{!Array<!proto.checkpicks.bookmark.v1.Bookmark>} */ (
-    jspb.Message.getRepeatedWrapperField(this, proto.checkpicks.bookmark.v1.Bookmark, 1));
+proto.checkpicks.bookmark.v1.GetBookmarkResponse.prototype.getBookmark = function() {
+  return /** @type{?proto.checkpicks.bookmark.v1.Bookmark} */ (
+    jspb.Message.getWrapperField(this, proto.checkpicks.bookmark.v1.Bookmark, 1));
 };
 
 
 /**
- * @param {!Array<!proto.checkpicks.bookmark.v1.Bookmark>} value
+ * @param {?proto.checkpicks.bookmark.v1.Bookmark|undefined} value
  * @return {!proto.checkpicks.bookmark.v1.GetBookmarkResponse} returns this
 */
-proto.checkpicks.bookmark.v1.GetBookmarkResponse.prototype.setBookmarkList = function(value) {
-  return jspb.Message.setRepeatedWrapperField(this, 1, value);
+proto.checkpicks.bookmark.v1.GetBookmarkResponse.prototype.setBookmark = function(value) {
+  return jspb.Message.setWrapperField(this, 1, value);
 };
 
 
 /**
- * @param {!proto.checkpicks.bookmark.v1.Bookmark=} opt_value
- * @param {number=} opt_index
- * @return {!proto.checkpicks.bookmark.v1.Bookmark}
- */
-proto.checkpicks.bookmark.v1.GetBookmarkResponse.prototype.addBookmark = function(opt_value, opt_index) {
-  return jspb.Message.addToRepeatedWrapperField(this, 1, opt_value, proto.checkpicks.bookmark.v1.Bookmark, opt_index);
-};
-
-
-/**
- * Clears the list making it empty but non-null.
+ * Clears the message field making it undefined.
  * @return {!proto.checkpicks.bookmark.v1.GetBookmarkResponse} returns this
  */
-proto.checkpicks.bookmark.v1.GetBookmarkResponse.prototype.clearBookmarkList = function() {
-  return this.setBookmarkList([]);
+proto.checkpicks.bookmark.v1.GetBookmarkResponse.prototype.clearBookmark = function() {
+  return this.setBookmark(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.checkpicks.bookmark.v1.GetBookmarkResponse.prototype.hasBookmark = function() {
+  return jspb.Message.getField(this, 1) != null;
 };
 
 

@@ -13,7 +13,7 @@ service BookmarkService {
 }
 
 message GetBookmarkResponse {
-    repeated Bookmark bookmark = 1;
+    Bookmark bookmark = 1;
 }
 
 message GetBookmarkByArticleIdRequest {
