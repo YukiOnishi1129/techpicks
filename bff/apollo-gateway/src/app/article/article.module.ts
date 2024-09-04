@@ -14,7 +14,7 @@ import { ArticleService } from './article.service';
         options: {
           package: 'checkpicks.content.v1',
           protoPath: join(__dirname, '../../proto/content/content.proto'),
-          url: 'checkpicks_content_service:3001',
+          url: `${process.env.CONTENT_SERVICE_CONTAINER_NAME}:${process.env.CONTENT_SERVICE_CONTAINER_PORT}`,
         },
         transport: Transport.GRPC,
       },

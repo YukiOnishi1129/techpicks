@@ -19,14 +19,14 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	BookmarkService_GetBookmarkByArticleId_FullMethodName = "/checkpicks.bookmark.v1.BookmarkService/GetBookmarkByArticleId"
+	BookmarkService_GetBookmarkByArticleID_FullMethodName = "/checkpicks.bookmark.v1.BookmarkService/GetBookmarkByArticleID"
 )
 
 // BookmarkServiceClient is the client API for BookmarkService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type BookmarkServiceClient interface {
-	GetBookmarkByArticleId(ctx context.Context, in *GetBookmarkByArticleIdRequest, opts ...grpc.CallOption) (*GetBookmarkResponse, error)
+	GetBookmarkByArticleID(ctx context.Context, in *GetBookmarkByArticleIDRequest, opts ...grpc.CallOption) (*GetBookmarkResponse, error)
 }
 
 type bookmarkServiceClient struct {
@@ -37,10 +37,10 @@ func NewBookmarkServiceClient(cc grpc.ClientConnInterface) BookmarkServiceClient
 	return &bookmarkServiceClient{cc}
 }
 
-func (c *bookmarkServiceClient) GetBookmarkByArticleId(ctx context.Context, in *GetBookmarkByArticleIdRequest, opts ...grpc.CallOption) (*GetBookmarkResponse, error) {
+func (c *bookmarkServiceClient) GetBookmarkByArticleID(ctx context.Context, in *GetBookmarkByArticleIDRequest, opts ...grpc.CallOption) (*GetBookmarkResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(GetBookmarkResponse)
-	err := c.cc.Invoke(ctx, BookmarkService_GetBookmarkByArticleId_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, BookmarkService_GetBookmarkByArticleID_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -51,7 +51,7 @@ func (c *bookmarkServiceClient) GetBookmarkByArticleId(ctx context.Context, in *
 // All implementations should embed UnimplementedBookmarkServiceServer
 // for forward compatibility.
 type BookmarkServiceServer interface {
-	GetBookmarkByArticleId(context.Context, *GetBookmarkByArticleIdRequest) (*GetBookmarkResponse, error)
+	GetBookmarkByArticleID(context.Context, *GetBookmarkByArticleIDRequest) (*GetBookmarkResponse, error)
 }
 
 // UnimplementedBookmarkServiceServer should be embedded to have
@@ -61,8 +61,8 @@ type BookmarkServiceServer interface {
 // pointer dereference when methods are called.
 type UnimplementedBookmarkServiceServer struct{}
 
-func (UnimplementedBookmarkServiceServer) GetBookmarkByArticleId(context.Context, *GetBookmarkByArticleIdRequest) (*GetBookmarkResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetBookmarkByArticleId not implemented")
+func (UnimplementedBookmarkServiceServer) GetBookmarkByArticleID(context.Context, *GetBookmarkByArticleIDRequest) (*GetBookmarkResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetBookmarkByArticleID not implemented")
 }
 func (UnimplementedBookmarkServiceServer) testEmbeddedByValue() {}
 
@@ -84,20 +84,20 @@ func RegisterBookmarkServiceServer(s grpc.ServiceRegistrar, srv BookmarkServiceS
 	s.RegisterService(&BookmarkService_ServiceDesc, srv)
 }
 
-func _BookmarkService_GetBookmarkByArticleId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetBookmarkByArticleIdRequest)
+func _BookmarkService_GetBookmarkByArticleID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetBookmarkByArticleIDRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(BookmarkServiceServer).GetBookmarkByArticleId(ctx, in)
+		return srv.(BookmarkServiceServer).GetBookmarkByArticleID(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: BookmarkService_GetBookmarkByArticleId_FullMethodName,
+		FullMethod: BookmarkService_GetBookmarkByArticleID_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(BookmarkServiceServer).GetBookmarkByArticleId(ctx, req.(*GetBookmarkByArticleIdRequest))
+		return srv.(BookmarkServiceServer).GetBookmarkByArticleID(ctx, req.(*GetBookmarkByArticleIDRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -110,8 +110,8 @@ var BookmarkService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*BookmarkServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "GetBookmarkByArticleId",
-			Handler:    _BookmarkService_GetBookmarkByArticleId_Handler,
+			MethodName: "GetBookmarkByArticleID",
+			Handler:    _BookmarkService_GetBookmarkByArticleID_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

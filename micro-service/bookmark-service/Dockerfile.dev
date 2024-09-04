@@ -1,0 +1,16 @@
+FROM golang:1.22.2-alpine3.18
+
+RUN apk update && apk add git
+
+WORKDIR /app
+
+COPY /micro-service/bookmark-service /app
+
+RUN go mod tidy && \
+    go install github.com/air-verse/air@latest &&  \
+    go install github.com/volatiletech/sqlboiler/v4@latest && \
+    go install github.com/volatiletech/sqlboiler/v4/drivers/sqlboiler-mysql@latest
+
+EXPOSE 3002
+
+CMD ["air", "-c", ".air.toml"]

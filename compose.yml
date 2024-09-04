@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   bff:
     container_name: ${BFF_CONTAINER_NAME}
@@ -10,6 +8,8 @@ services:
       - BFF_CONTAINER_PORT=${BFF_CONTAINER_PORT}
       - SUPABASE_URL=${BFF_SUPABASE_URL}
       - SUPABASE_ANON_KEY=${SUPABASE_ANON_KEY}
+      - CONTENT_SERVICE_CONTAINER_NAME=${CONTENT_SERVICE_CONTAINER_NAME}
+      - CONTENT_SERVICE_CONTAINER_PORT=${CONTENT_SERVICE_CONTAINER_PORT}
       - TZ=Asia/Tokyo
     volumes:
       - ./bff/apollo-gateway:/app
@@ -17,7 +17,7 @@ services:
       - ${BFF_PORT}:${BFF_CONTAINER_PORT}
     depends_on:
       - content-service
-      # - bookmark-service
+      - bookmark-service
       # - my-feed-service
       # - favorite-service
       # - user-service
@@ -31,11 +31,38 @@ services:
       dockerfile: ./micro-service/content-service/Dockerfile.dev
     environment:
       - CONTENT_SERVICE_CONTAINER_PORT=${CONTENT_SERVICE_CONTAINER_PORT}
+      - POSTGRES_HOST=${POSTGRES_HOST}
+      - POSTGRES_DATABASE=${POSTGRES_DATABASE}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_PORT=${POSTGRES_PORT}
+      - BOOKMARK_SERVICE_CONTAINER_NAME=${BOOKMARK_SERVICE_CONTAINER_NAME}
+      - BOOKMARK_SERVICE_CONTAINER_PORT=${BOOKMARK_SERVICE_CONTAINER_PORT}
       - TZ=Asia/Tokyo
     volumes:
       - ./micro-service/content-service:/app
     ports:
       - ${CONTENT_SERVICE_PORT}:${CONTENT_SERVICE_CONTAINER_PORT}
+    networks:
+      - supabase_network_techpicks
+
+  bookmark-service:
+    container_name: ${BOOKMARK_SERVICE_CONTAINER_NAME}
+    build:
+      context: .
+      dockerfile: ./micro-service/bookmark-service/Dockerfile.dev
+    environment:
+      - BOOKMARK_SERVICE_CONTAINER_PORT=${BOOKMARK_SERVICE_CONTAINER_PORT}
+      - POSTGRES_HOST=${POSTGRES_HOST}
+      - POSTGRES_DATABASE=${POSTGRES_DATABASE}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_PORT=${POSTGRES_PORT}
+      - TZ=Asia/Tokyo
+    volumes:
+      - ./micro-service/bookmark-service:/app
+    ports:
+      - ${BOOKMARK_SERVICE_PORT}:${BOOKMARK_SERVICE_CONTAINER_PORT}
     networks:
       - supabase_network_techpicks
 
