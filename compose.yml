@@ -1,5 +1,3 @@
-version: '3.9'
-
 services:
   bff:
     container_name: ${BFF_CONTAINER_NAME}
@@ -31,6 +29,11 @@ services:
       dockerfile: ./micro-service/content-service/Dockerfile.dev
     environment:
       - CONTENT_SERVICE_CONTAINER_PORT=${CONTENT_SERVICE_CONTAINER_PORT}
+      - POSTGRES_HOST=${POSTGRES_HOST}
+      - POSTGRES_DATABASE=${POSTGRES_DATABASE}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_PORT=${POSTGRES_PORT}
       - BOOKMARK_SERVICE_CONTAINER_NAME=${BOOKMARK_SERVICE_CONTAINER_NAME}
       - BOOKMARK_SERVICE_CONTAINER_PORT=${BOOKMARK_SERVICE_CONTAINER_PORT}
       - TZ=Asia/Tokyo
@@ -48,6 +51,11 @@ services:
       dockerfile: ./micro-service/bookmark-service/Dockerfile.dev
     environment:
       - BOOKMARK_SERVICE_CONTAINER_PORT=${BOOKMARK_SERVICE_CONTAINER_PORT}
+      - POSTGRES_HOST=${POSTGRES_HOST}
+      - POSTGRES_DATABASE=${POSTGRES_DATABASE}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_PORT=${POSTGRES_PORT}
       - TZ=Asia/Tokyo
     volumes:
       - ./micro-service/bookmark-service:/app
