@@ -9,7 +9,7 @@ import { ScreenLoader } from "@/components/layout/ScreenLoader";
 export default async function Login() {
   const user = await getUser();
   if (user) {
-    redirect("/dashboard");
+    redirect("/dashboard/trend");
   }
 
   return (

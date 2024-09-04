@@ -3,10 +3,10 @@ import { FC } from "react";
 
 import { getClient } from "@/lib/apollo/client";
 
-import { ArticleDashboardTemplateQueryQuery } from "@/graphql/type";
+import { TrendArticleDashboardTemplateQueryQuery } from "@/graphql/type";
 
-const ArticleDashboardTemplateQuery = gql`
-  query ArticleDashboardTemplateQuery($input: ArticlesInput!) {
+const TrendArticleDashboardTemplateQuery = gql`
+  query TrendArticleDashboardTemplateQuery($input: ArticlesInput!) {
     articles(articlesInput: $input) {
       pageInfo {
         hasNextPage
@@ -27,16 +27,14 @@ const ArticleDashboardTemplateQuery = gql`
   }
 `;
 
-type ArticleDashboardTemplateProps = {
-  tab: "site" | "company" | "summary";
-};
+type TrendArticleDashboardTemplateProps = {};
 
-export const ArticleDashboardTemplate: FC<
-  ArticleDashboardTemplateProps
-> = async ({ tab }) => {
+export const TrendArticleDashboardTemplate: FC<
+  TrendArticleDashboardTemplateProps
+> = async () => {
   const { data, error } =
-    await getClient().query<ArticleDashboardTemplateQueryQuery>({
-      query: ArticleDashboardTemplateQuery,
+    await getClient().query<TrendArticleDashboardTemplateQueryQuery>({
+      query: TrendArticleDashboardTemplateQuery,
       // Set cache option when executing query, otherwise it will cause an error in the build.
       // TODO: Make it common
       context: {
@@ -48,7 +46,7 @@ export const ArticleDashboardTemplate: FC<
         input: {
           first: 20,
           after: null,
-          tab,
+          tab: "trend",
         },
       },
     });
@@ -65,5 +63,5 @@ export const ArticleDashboardTemplate: FC<
   //   console.log(article.node.isBookmarked);
   // }
 
-  return <div>Article Dashboard</div>;
+  return <div>Trend Article Dashboard</div>;
 };

@@ -60,7 +60,7 @@ export type ArticlesInput = {
   first?: InputMaybe<Scalars['Int']['input']>;
   languageStatus?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
-  tag?: InputMaybe<Scalars['String']['input']>;
+  tab?: InputMaybe<Scalars['String']['input']>;
   userId?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -212,16 +212,23 @@ export type QueryArticlesArgs = {
   articlesInput: ArticlesInput;
 };
 
-export type GetArticlesQueryVariables = Exact<{
+export type ArticleDashboardTemplateQueryQueryVariables = Exact<{
   input: ArticlesInput;
 }>;
 
 
-export type GetArticlesQuery = { __typename?: 'Query', articles: { __typename?: 'ArticleConnection', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null }, edges: Array<{ __typename?: 'ArticleEdge', cursor: string, node: { __typename?: 'Article', id: string, title: string, isBookmarked: boolean, bookmarkId?: string | null } }> } };
+export type ArticleDashboardTemplateQueryQuery = { __typename?: 'Query', articles: { __typename?: 'ArticleConnection', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null }, edges: Array<{ __typename?: 'ArticleEdge', cursor: string, node: { __typename?: 'Article', id: string, title: string, isBookmarked: boolean, bookmarkId?: string | null } }> } };
+
+export type TrendArticleDashboardTemplateQueryQueryVariables = Exact<{
+  input: ArticlesInput;
+}>;
 
 
-export const GetArticlesDocument = gql`
-    query GetArticles($input: ArticlesInput!) {
+export type TrendArticleDashboardTemplateQueryQuery = { __typename?: 'Query', articles: { __typename?: 'ArticleConnection', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null }, edges: Array<{ __typename?: 'ArticleEdge', cursor: string, node: { __typename?: 'Article', id: string, title: string, isBookmarked: boolean, bookmarkId?: string | null } }> } };
+
+
+export const ArticleDashboardTemplateQueryDocument = gql`
+    query ArticleDashboardTemplateQuery($input: ArticlesInput!) {
   articles(articlesInput: $input) {
     pageInfo {
       hasNextPage
@@ -243,34 +250,88 @@ export const GetArticlesDocument = gql`
     `;
 
 /**
- * __useGetArticlesQuery__
+ * __useArticleDashboardTemplateQueryQuery__
  *
- * To run a query within a React component, call `useGetArticlesQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetArticlesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useArticleDashboardTemplateQueryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useArticleDashboardTemplateQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetArticlesQuery({
+ * const { data, loading, error } = useArticleDashboardTemplateQueryQuery({
  *   variables: {
  *      input: // value for 'input'
  *   },
  * });
  */
-export function useGetArticlesQuery(baseOptions: Apollo.QueryHookOptions<GetArticlesQuery, GetArticlesQueryVariables> & ({ variables: GetArticlesQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+export function useArticleDashboardTemplateQueryQuery(baseOptions: Apollo.QueryHookOptions<ArticleDashboardTemplateQueryQuery, ArticleDashboardTemplateQueryQueryVariables> & ({ variables: ArticleDashboardTemplateQueryQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetArticlesQuery, GetArticlesQueryVariables>(GetArticlesDocument, options);
+        return Apollo.useQuery<ArticleDashboardTemplateQueryQuery, ArticleDashboardTemplateQueryQueryVariables>(ArticleDashboardTemplateQueryDocument, options);
       }
-export function useGetArticlesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetArticlesQuery, GetArticlesQueryVariables>) {
+export function useArticleDashboardTemplateQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ArticleDashboardTemplateQueryQuery, ArticleDashboardTemplateQueryQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetArticlesQuery, GetArticlesQueryVariables>(GetArticlesDocument, options);
+          return Apollo.useLazyQuery<ArticleDashboardTemplateQueryQuery, ArticleDashboardTemplateQueryQueryVariables>(ArticleDashboardTemplateQueryDocument, options);
         }
-export function useGetArticlesSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetArticlesQuery, GetArticlesQueryVariables>) {
+export function useArticleDashboardTemplateQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<ArticleDashboardTemplateQueryQuery, ArticleDashboardTemplateQueryQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<GetArticlesQuery, GetArticlesQueryVariables>(GetArticlesDocument, options);
+          return Apollo.useSuspenseQuery<ArticleDashboardTemplateQueryQuery, ArticleDashboardTemplateQueryQueryVariables>(ArticleDashboardTemplateQueryDocument, options);
         }
-export type GetArticlesQueryHookResult = ReturnType<typeof useGetArticlesQuery>;
-export type GetArticlesLazyQueryHookResult = ReturnType<typeof useGetArticlesLazyQuery>;
-export type GetArticlesSuspenseQueryHookResult = ReturnType<typeof useGetArticlesSuspenseQuery>;
-export type GetArticlesQueryResult = Apollo.QueryResult<GetArticlesQuery, GetArticlesQueryVariables>;
+export type ArticleDashboardTemplateQueryQueryHookResult = ReturnType<typeof useArticleDashboardTemplateQueryQuery>;
+export type ArticleDashboardTemplateQueryLazyQueryHookResult = ReturnType<typeof useArticleDashboardTemplateQueryLazyQuery>;
+export type ArticleDashboardTemplateQuerySuspenseQueryHookResult = ReturnType<typeof useArticleDashboardTemplateQuerySuspenseQuery>;
+export type ArticleDashboardTemplateQueryQueryResult = Apollo.QueryResult<ArticleDashboardTemplateQueryQuery, ArticleDashboardTemplateQueryQueryVariables>;
+export const TrendArticleDashboardTemplateQueryDocument = gql`
+    query TrendArticleDashboardTemplateQuery($input: ArticlesInput!) {
+  articles(articlesInput: $input) {
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      startCursor
+      endCursor
+    }
+    edges {
+      cursor
+      node {
+        id
+        title
+        isBookmarked
+        bookmarkId
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useTrendArticleDashboardTemplateQueryQuery__
+ *
+ * To run a query within a React component, call `useTrendArticleDashboardTemplateQueryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useTrendArticleDashboardTemplateQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useTrendArticleDashboardTemplateQueryQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useTrendArticleDashboardTemplateQueryQuery(baseOptions: Apollo.QueryHookOptions<TrendArticleDashboardTemplateQueryQuery, TrendArticleDashboardTemplateQueryQueryVariables> & ({ variables: TrendArticleDashboardTemplateQueryQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<TrendArticleDashboardTemplateQueryQuery, TrendArticleDashboardTemplateQueryQueryVariables>(TrendArticleDashboardTemplateQueryDocument, options);
+      }
+export function useTrendArticleDashboardTemplateQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TrendArticleDashboardTemplateQueryQuery, TrendArticleDashboardTemplateQueryQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<TrendArticleDashboardTemplateQueryQuery, TrendArticleDashboardTemplateQueryQueryVariables>(TrendArticleDashboardTemplateQueryDocument, options);
+        }
+export function useTrendArticleDashboardTemplateQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<TrendArticleDashboardTemplateQueryQuery, TrendArticleDashboardTemplateQueryQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<TrendArticleDashboardTemplateQueryQuery, TrendArticleDashboardTemplateQueryQueryVariables>(TrendArticleDashboardTemplateQueryDocument, options);
+        }
+export type TrendArticleDashboardTemplateQueryQueryHookResult = ReturnType<typeof useTrendArticleDashboardTemplateQueryQuery>;
+export type TrendArticleDashboardTemplateQueryLazyQueryHookResult = ReturnType<typeof useTrendArticleDashboardTemplateQueryLazyQuery>;
+export type TrendArticleDashboardTemplateQuerySuspenseQueryHookResult = ReturnType<typeof useTrendArticleDashboardTemplateQuerySuspenseQuery>;
+export type TrendArticleDashboardTemplateQueryQueryResult = Apollo.QueryResult<TrendArticleDashboardTemplateQueryQuery, TrendArticleDashboardTemplateQueryQueryVariables>;

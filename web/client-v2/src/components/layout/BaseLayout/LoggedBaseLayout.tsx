@@ -6,6 +6,8 @@ import { FC, ReactNode } from "react";
 
 import { Header } from "@/components/layout/Header";
 
+import { DesktopSidebar } from "../Sidebar";
+
 // import { LoggedBottomNavigationMenu } from "../BottomNavigationMenu";
 // import { DesktopSidebar } from "../Sidebar";
 
@@ -29,13 +31,7 @@ export const LoggedBaseLayout: FC<LoggedBaseLayoutProps> = ({
       <div className="h-12 md:h-16" />
       <main className="md:flex">
         <div className="invisible fixed h-lvh w-[200px] md:visible">
-          {/* <DesktopSidebar
-            user={user}
-            myFeedFolders={myFeedFolderRes.data.myFeedFolders}
-            favoriteArticleFolders={
-              favoriteArticleFolderRes.data.favoriteArticleFolders
-            }
-          /> */}
+          <DesktopSidebar user={user} />
         </div>
         <div className="invisible mr-[10px] w-[200px] md:visible" />
 
