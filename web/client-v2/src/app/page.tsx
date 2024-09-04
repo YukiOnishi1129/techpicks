@@ -1,5 +1,5 @@
-import { ArticleDashboardTemplate } from "@/features/articles/components/Template";
+import { HomeTemplate } from "@/features/home/components/Template/HomeTemplate";
 
 export default function Home() {
-  return <ArticleDashboardTemplate />;
+  return <HomeTemplate />;
 }
