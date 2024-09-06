@@ -95,15 +95,15 @@ export function ArticleList({
     };
   }, [hashMore]);
 
-  // useEffect(() => {
-  //   // setArticles();
-  // }, []);
+  useEffect(() => {
+    setEdges(fragment.edges);
+  }, [fragment.edges]);
 
   useEffect(() => {
     if (offset > 1) {
       loadMore();
     }
-  }, [loadMore, offset, hashMore]);
+  }, [offset, hashMore]); // eslint-disable-line
 
   return (
     <>

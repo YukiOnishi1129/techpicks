@@ -84,7 +84,6 @@ export const ArticleDashboardTemplate: FC<
         </TabsList>
 
         <div className="h-[40px]" />
-
         <TabsContent value={TAB_LIST.ENGLISH}>
           <ArticleList
             data={enData.articles}
