@@ -17,5 +17,9 @@ export const ArticleCardItemFragment = graphql(`
     isBookmarked
     bookmarkId
     likeCount
+    feeds {
+      id
+      name
+    }
   }
 `);

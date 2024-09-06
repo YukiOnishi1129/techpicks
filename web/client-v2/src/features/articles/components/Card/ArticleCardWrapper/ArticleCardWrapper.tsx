@@ -8,7 +8,7 @@ import { ArticleTabType } from "@/types/article";
 
 import style from "./ArticleCardWrapper.module.css";
 import { ArticleCardWrapperFragment } from "./fragment";
-import { ArticleCardItem } from "../ArticleCardItem/ArticleCardItem";
+import { ArticleCardItem } from "../ArticleCardItem";
 
 type ArticleCardWrapperProps = {
   data: FragmentOf<typeof ArticleCardWrapperFragment>;
@@ -49,7 +49,7 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
         <div className="mb-4 flex h-16 justify-between border-b-2 py-4 md:ml-6">
           <>
             <div className="flex">
-              {isShowLikeCount && (
+              {tab === "trend" && (
                 <div
                   className={clsx(style["like-count"], "mr-4 text-rose-600")}
                 >
@@ -58,7 +58,7 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
                 </div>
               )}
 
-              {showArticle?.likeCount === undefined ? (
+              {tab !== "trend" ? (
                 <div>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img

@@ -4,6 +4,8 @@ import { User } from "@supabase/supabase-js";
 import { FragmentOf, readFragment } from "gql.tada";
 import { FC } from "react";
 
+import { FeedNameBadge } from "@/components/ui/badge";
+
 import { useCheckImageExist } from "@/hooks/useCheckImageExist";
 
 import { ArticleTabType } from "@/types/article";
@@ -19,6 +21,8 @@ type ArticleCardItemProps = {
 export const ArticleCardItem: FC<ArticleCardItemProps> = ({ data }) => {
   const fragment = readFragment(ArticleCardItemFragment, data);
   const imageUrl = useCheckImageExist(fragment.thumbnailUrl);
+
+  fragment.feeds;
 
   return (
     <div className="relative w-full cursor-pointer rounded">
@@ -49,14 +53,15 @@ export const ArticleCardItem: FC<ArticleCardItemProps> = ({ data }) => {
           )} */}
 
           <div className="flex w-full flex-wrap items-center justify-start pt-2 md:w-4/5">
-            {/* {article.feeds.length > 0 &&
-              article.feeds.map((feed) => (
-                <div key={`${article.id}-${feed.id}`} className="my-2 mr-2">
+            {fragment?.feeds &&
+              fragment.feeds.length > 0 &&
+              fragment.feeds.map((feed) => (
+                <div key={`${fragment.id}-${feed.id}`} className="my-2 mr-2">
                   <div className="">
                     <FeedNameBadge name={feed.name} />
                   </div>
                 </div>
-              ))}*/}
+              ))}
           </div>
         </div>
       </div>
