@@ -40,7 +40,11 @@ func main() {
 
 	// create grpc client
 	// bookmark client
-	bConn, err := grpc.NewClient(fmt.Sprintf("%s:%s", os.Getenv("BOOKMARK_SERVICE_CONTAINER_NAME"), os.Getenv("BOOKMARK_SERVICE_CONTAINER_PORT")), grpc.WithTransportCredentials(insecure.NewCredentials()))
+	brpcUrl := os.Getenv("BOOKMARK_SERVICE_CONTAINER_NAME")
+	if os.Getenv("GO_ENV") != "production" && os.Getenv("GO_ENV") != "staging" {
+		brpcUrl = fmt.Sprintf("%s:%s", os.Getenv("BOOKMARK_SERVICE_CONTAINER_NAME"), os.Getenv("BOOKMARK_SERVICE_CONTAINER_PORT"))
+	}
+	bConn, err := grpc.NewClient(brpcUrl, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatal("Error connecting to bookmark service")
 		return
