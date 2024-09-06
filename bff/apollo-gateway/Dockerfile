@@ -1,5 +1,4 @@
-# FROM --platform=linux/amd64 node:20-alpine AS base
-FROM node:20-alpine AS base
+FROM node:20-alpine3.18 AS base
 
 FROM base AS deps
 

@@ -16,7 +16,7 @@ import { GraphQLModule } from '@nestjs/graphql';
       playground:
         process.env.NODE_ENV !== 'production' &&
         process.env.NODE_ENV !== 'staging',
-      typePaths: [join(process.cwd(), 'src/**/*.graphql')],
+      typePaths: ['./**/*.graphql'],
     }),
   ],
 })
