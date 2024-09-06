@@ -1,0 +1,22 @@
+# staging environment
+substitutions:
+  _IMAGE: 'content-service/latest'
+  _SERVICE_NAME: 'content-service-application'
+steps:
+  # Build the container image
+  - name: "gcr.io/cloud-builders/docker"
+    args:
+      [
+        "build",
+        "-t",
+        "$_REGION-docker.pkg.dev/$PROJECT_ID/$_IMAGE",
+        "-f",
+        "micro-service/content-service/Dockerfile",
+        ".",
+      ]
+  # Push the container image to Artifact Registry
+  - name: "gcr.io/cloud-builders/docker"
+    args: ["push", "$_REGION-docker.pkg.dev/$PROJECT_ID/$_IMAGE"]
+  # Deploy container image to Cloud Run
+images:
+  - $_REGION-docker.pkg.dev/$PROJECT_ID/$_IMAGE
