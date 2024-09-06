@@ -15,6 +15,7 @@ import { LanguageStatus } from "@/types/language";
 
 import { ArticleListFragment } from "./ArticleListFragment";
 import { getArticleListQuery } from "../../actions/getArticleListQuery";
+import { ArticleCardWrapper } from "../Card/ArticleCardWrapper/ArticleCardWrapper";
 
 type Props = {
   user?: User;
@@ -43,9 +44,8 @@ export function ArticleList({
   const [edges, setEdges] = useState(fragment.edges);
   const [hashMore, setHashMore] = useState(true);
   const [offset, setOffset] = useState(1);
-  const [endCursor, setEndCursor] = useState(after);
+  const [endCursor, setEndCursor] = useState(fragment.pageInfo.endCursor);
 
-  const flg = true;
   const flatArticles = edges ? edges.flatMap((edge) => edge.node) : [];
 
   const loadMore = useCallback(async () => {
@@ -56,39 +56,16 @@ export function ArticleList({
       tab,
     });
     if (error) return;
-    if (res.articles.pageInfo.hasNextPage) {
-      const endCursor = res.articles.pageInfo.endCursor;
+
+    const newArticles = readFragment(ArticleListFragment, res.articles);
+    if (newArticles.pageInfo.hasNextPage) {
+      const endCursor = newArticles.pageInfo?.endCursor || null;
       setEndCursor(endCursor);
     }
 
-    if (res.articles.edges.length > 0) {
-      const newEdges = res.articles.edges.map((edge) => {
-        const newEdge = {
-          node: {
-            id: edge.node.id,
-            platform: edge.node?.platform
-              ? {
-                  id: edge.node.platform.id,
-                  name: edge.node.platform.name,
-                  faviconUrl: edge.node.platform.faviconUrl,
-                }
-              : null,
-            title: edge.node.title,
-            articleUrl: edge.node.articleUrl,
-            publishedAt: edge.node?.publishedAt || null,
-            thumbnailUrl: edge.node.thumbnailUrl,
-            isEng: edge.node.isEng,
-            isPrivate: edge.node.isPrivate,
-            isBookmarked: edge.node.isBookmarked,
-            bookmarkId: edge.node?.bookmarkId || null,
-            likeCount: edge.node?.likeCount || null,
-          },
-        };
-        return newEdge;
-      });
-
-      setEdges((prev) => [...prev, ...newEdges]);
-      setHashMore(res.articles.edges.length > 0);
+    if (newArticles.edges.length > 0) {
+      setEdges((prev) => [...prev, ...newArticles.edges]);
+      setHashMore(newArticles.edges.length > 0);
     }
   }, [languageStatus, tab, endCursor]);
 
@@ -137,16 +114,11 @@ export function ArticleList({
         </div>
       ) : (
         <div className="m-auto">
-          {/* {flatArticles.map((article) => (
+          {flatArticles.map((article) => (
             <div key={article.id} className="mb-4">
-              <ArticleCardWrapper
-                article={article}
-                favoriteArticleFolders={favoriteArticleFolders}
-                user={user}
-                tab={tab}
-              />
+              <ArticleCardWrapper data={article} user={user} tab={tab} />
             </div>
-          ))} */}
+          ))}
           <div ref={observerTarget}>
             {hashMore && (
               <div className="flex justify-center py-4">

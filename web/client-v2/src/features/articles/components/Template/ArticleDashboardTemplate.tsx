@@ -8,6 +8,7 @@ import { ENGLISH_IMAGE, JAPANESE_IMAGE } from "@/constant/image";
 import { ArticlesInput } from "@/graphql/type";
 
 import { getArticleListQuery } from "../../actions/getArticleListQuery";
+import { ArticleList } from "../List";
 
 type ArticleDashboardTemplateProps = {
   languageStatus?: LanguageStatus;
@@ -44,16 +45,6 @@ export const ArticleDashboardTemplate: FC<
   if (error) {
     return <div>{error.message}</div>;
   }
-
-  enData.articles.edges;
-
-  console.log(enData);
-
-  // for (const article of data.articles.edges) {
-  //   console.log("🔥");
-  //   console.log(article.node.title);
-  //   console.log(article.node.isBookmarked);
-  // }
 
   const title =
     tab === "site" ? "Site" : tab === "company" ? "Company" : "Summary";
@@ -95,7 +86,12 @@ export const ArticleDashboardTemplate: FC<
         <div className="h-[40px]" />
 
         <TabsContent value={TAB_LIST.ENGLISH}>
-          {/* <ArticleList data={enData.articles.edges} /> */}
+          <ArticleList
+            data={enData.articles}
+            languageStatus={2}
+            feedIdList={[]}
+            tab={tab}
+          />
           {/* <ArticleList
             user={user}
             initialArticles={enArticleRes.data.articles}

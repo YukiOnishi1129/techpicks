@@ -1,10 +1,10 @@
 "use server";
 
-import { graphql } from "gql.tada";
+import { graphql, readFragment } from "gql.tada";
 
 import { getClient } from "@/lib/apollo/client";
 
-import { ArticleListQueryQuery, ArticlesInput } from "@/graphql/type";
+import { ArticlesInput } from "@/graphql/type";
 
 import { ArticleListFragment } from "../components/List/ArticleListFragment";
 // import { ArticleDashboardTemplateFragment } from "../components/Template";
@@ -13,12 +13,6 @@ const ArticleDashboardTemplateFragment = graphql(
   `
     fragment ArticleDashboardTemplateFragment on Query {
       articles(articlesInput: $input) {
-        pageInfo {
-          hasNextPage
-          hasPreviousPage
-          startCursor
-          endCursor
-        }
         ...ArticleListFragment
       }
     }
@@ -36,18 +30,19 @@ const ArticleListQuery = graphql(
 );
 
 export const getArticleListQuery = async (input: ArticlesInput) => {
-  const { data, error, loading } =
-    await getClient().query<ArticleListQueryQuery>({
-      query: ArticleListQuery,
-      context: {
-        fetchOptions: {
-          cache: "no-cache",
-        },
+  const { data, error, loading } = await getClient().query({
+    query: ArticleListQuery,
+    context: {
+      fetchOptions: {
+        cache: "no-cache",
       },
-      variables: {
-        input,
-      },
-    });
+    },
+    variables: {
+      input,
+    },
+  });
 
-  return { data, error, loading };
+  const newData = readFragment(ArticleDashboardTemplateFragment, data);
+
+  return { data: newData, error, loading };
 };

@@ -221,7 +221,11 @@ export type ArticleListQueryQueryVariables = Exact<{
 
 export type ArticleListQueryQuery = { __typename?: 'Query', articles: { __typename?: 'ArticleConnection', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null }, edges: Array<{ __typename?: 'ArticleEdge', node: { __typename?: 'Article', id: string, title: string, articleUrl: string, publishedAt?: number | null, thumbnailUrl: string, isEng: boolean, isPrivate: boolean, isBookmarked: boolean, bookmarkId?: string | null, likeCount?: number | null, platform?: { __typename?: 'Platform', id: string, name: string, faviconUrl: string } | null } }> } };
 
-export type ArticleListFragmentFragment = { __typename?: 'ArticleConnection', edges: Array<{ __typename?: 'ArticleEdge', node: { __typename?: 'Article', id: string, title: string, articleUrl: string, publishedAt?: number | null, thumbnailUrl: string, isEng: boolean, isPrivate: boolean, isBookmarked: boolean, bookmarkId?: string | null, likeCount?: number | null, platform?: { __typename?: 'Platform', id: string, name: string, faviconUrl: string } | null } }> };
+export type ArticleCardItemFragmentFragment = { __typename?: 'Article', id: string, title: string, articleUrl: string, publishedAt?: number | null, thumbnailUrl: string, isEng: boolean, isPrivate: boolean, isBookmarked: boolean, bookmarkId?: string | null, likeCount?: number | null, platform?: { __typename?: 'Platform', id: string, name: string, faviconUrl: string } | null };
+
+export type ArticleCardWrapperFragmentFragment = { __typename?: 'Article', id: string, title: string, articleUrl: string, publishedAt?: number | null, thumbnailUrl: string, isEng: boolean, isPrivate: boolean, isBookmarked: boolean, bookmarkId?: string | null, likeCount?: number | null, platform?: { __typename?: 'Platform', id: string, name: string, faviconUrl: string } | null };
+
+export type ArticleListFragmentFragment = { __typename?: 'ArticleConnection', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null }, edges: Array<{ __typename?: 'ArticleEdge', node: { __typename?: 'Article', id: string, title: string, articleUrl: string, publishedAt?: number | null, thumbnailUrl: string, isEng: boolean, isPrivate: boolean, isBookmarked: boolean, bookmarkId?: string | null, likeCount?: number | null, platform?: { __typename?: 'Platform', id: string, name: string, faviconUrl: string } | null } }> };
 
 export type TrendArticleDashboardTemplateQueryQueryVariables = Exact<{
   input: ArticlesInput;
@@ -230,8 +234,53 @@ export type TrendArticleDashboardTemplateQueryQueryVariables = Exact<{
 
 export type TrendArticleDashboardTemplateQueryQuery = { __typename?: 'Query', articles: { __typename?: 'ArticleConnection', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null }, edges: Array<{ __typename?: 'ArticleEdge', cursor: string, node: { __typename?: 'Article', id: string, title: string, isBookmarked: boolean, bookmarkId?: string | null } }> } };
 
+export const ArticleCardItemFragmentFragmentDoc = gql`
+    fragment ArticleCardItemFragment on Article {
+  id
+  platform {
+    id
+    name
+    faviconUrl
+  }
+  title
+  articleUrl
+  publishedAt
+  thumbnailUrl
+  isEng
+  isPrivate
+  isBookmarked
+  bookmarkId
+  likeCount
+}
+    `;
+export const ArticleCardWrapperFragmentFragmentDoc = gql`
+    fragment ArticleCardWrapperFragment on Article {
+  id
+  platform {
+    id
+    name
+    faviconUrl
+  }
+  title
+  articleUrl
+  publishedAt
+  thumbnailUrl
+  isEng
+  isPrivate
+  isBookmarked
+  bookmarkId
+  likeCount
+  ...ArticleCardItemFragment
+}
+    ${ArticleCardItemFragmentFragmentDoc}`;
 export const ArticleListFragmentFragmentDoc = gql`
     fragment ArticleListFragment on ArticleConnection {
+  pageInfo {
+    hasNextPage
+    hasPreviousPage
+    startCursor
+    endCursor
+  }
   edges {
     node {
       id
@@ -249,19 +298,14 @@ export const ArticleListFragmentFragmentDoc = gql`
       isBookmarked
       bookmarkId
       likeCount
+      ...ArticleCardWrapperFragment
     }
   }
 }
-    `;
+    ${ArticleCardWrapperFragmentFragmentDoc}`;
 export const ArticleDashboardTemplateFragmentFragmentDoc = gql`
     fragment ArticleDashboardTemplateFragment on Query {
   articles(articlesInput: $input) {
-    pageInfo {
-      hasNextPage
-      hasPreviousPage
-      startCursor
-      endCursor
-    }
     ...ArticleListFragment
   }
 }

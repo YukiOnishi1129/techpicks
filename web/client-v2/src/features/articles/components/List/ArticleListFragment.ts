@@ -1,26 +1,38 @@
 import { graphql } from "gql.tada";
 
-export const ArticleListFragment = graphql(`
-  fragment ArticleListFragment on ArticleConnection {
-    edges {
-      # cursor
-      node {
-        id
-        platform {
+import { ArticleCardWrapperFragment } from "../Card";
+
+export const ArticleListFragment = graphql(
+  `
+    fragment ArticleListFragment on ArticleConnection {
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        # cursor
+        node {
           id
-          name
-          faviconUrl
+          platform {
+            id
+            name
+            faviconUrl
+          }
+          title
+          articleUrl
+          publishedAt
+          thumbnailUrl
+          isEng
+          isPrivate
+          isBookmarked
+          bookmarkId
+          likeCount
+          ...ArticleCardWrapperFragment
         }
-        title
-        articleUrl
-        publishedAt
-        thumbnailUrl
-        isEng
-        isPrivate
-        isBookmarked
-        bookmarkId
-        likeCount
       }
     }
-  }
-`);
+  `,
+  [ArticleCardWrapperFragment]
+);
