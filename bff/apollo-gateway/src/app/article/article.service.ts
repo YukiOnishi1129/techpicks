@@ -18,7 +18,10 @@ export class ArticleService implements OnModuleInit {
 
   onModuleInit() {
     this.articleService = new ArticleServiceClient(
-      `${process.env.CONTENT_SERVICE_CONTAINER_NAME}:${process.env.CONTENT_SERVICE_CONTAINER_PORT}`,
+      process.env.NODE_ENV !== 'production' &&
+      process.env.NODE_ENV !== 'staging'
+        ? `${process.env.CONTENT_SERVICE_CONTAINER_NAME}:${process.env.CONTENT_SERVICE_CONTAINER_PORT}`
+        : process.env.CONTENT_SERVICE_CONTAINER_NAME,
       process.env.NODE_ENV !== 'production' &&
       process.env.NODE_ENV !== 'staging'
         ? grpc.credentials.createInsecure()
