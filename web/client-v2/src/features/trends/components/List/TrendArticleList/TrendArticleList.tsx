@@ -5,7 +5,6 @@ import { FragmentOf, readFragment } from "gql.tada";
 import { useCallback, useRef, useState, useEffect } from "react";
 
 import { ArticleCardWrapper } from "@/features/articles/components/Card";
-import { ArticleListFragment } from "@/features/articles/components/List";
 import { getTrendArticleListQuery } from "@/features/trends/actions/getTrendArticleListQuery";
 
 import { Loader } from "@/components/ui/loader";
@@ -54,7 +53,7 @@ export function TrendArticleList({
     });
     if (error) return;
 
-    const newArticles = readFragment(ArticleListFragment, res.articles);
+    const newArticles = readFragment(TrendArticleListFragment, res.articles);
     if (newArticles.pageInfo.hasNextPage) {
       const endCursor = newArticles.pageInfo?.endCursor || null;
       setEndCursor(endCursor);
