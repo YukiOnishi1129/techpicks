@@ -22,7 +22,7 @@ export class ArticleService implements OnModuleInit {
       process.env.NODE_ENV !== 'production' &&
       process.env.NODE_ENV !== 'staging'
         ? grpc.credentials.createInsecure()
-        : grpc.credentials.createSsl(),
+        : grpc.credentials.createInsecure(),
     );
   }
 
