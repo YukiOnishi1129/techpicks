@@ -13,6 +13,6 @@ FROM alpine:3.18
 WORKDIR /app
 COPY --from=go-builder /app/main .
 
-EXPOSE 8080
+EXPOSE 3001
 
 CMD ["/app/main"]
