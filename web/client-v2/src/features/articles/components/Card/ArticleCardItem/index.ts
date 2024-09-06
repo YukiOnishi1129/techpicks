@@ -1,2 +1,2 @@
 export * from "./ArticleCardItem";
-export * from "./fragment";
+export * from "./ArticleCardItemFragment";

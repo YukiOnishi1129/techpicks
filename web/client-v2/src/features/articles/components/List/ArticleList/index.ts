@@ -1,2 +1,2 @@
 export * from "./ArticleList";
-export * from "./fragment";
+export * from "./ArticleListFragment";

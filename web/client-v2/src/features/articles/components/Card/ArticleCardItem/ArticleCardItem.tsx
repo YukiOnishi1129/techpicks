@@ -10,7 +10,7 @@ import { useCheckImageExist } from "@/hooks/useCheckImageExist";
 
 import { ArticleTabType } from "@/types/article";
 
-import { ArticleCardItemFragment } from "./fragment";
+import { ArticleCardItemFragment } from "./ArticleCardItemFragment";
 
 type ArticleCardItemProps = {
   data: FragmentOf<typeof ArticleCardItemFragment>;

@@ -7,7 +7,7 @@ import { FC, useMemo, useState } from "react";
 import { ArticleTabType } from "@/types/article";
 
 import style from "./ArticleCardWrapper.module.css";
-import { ArticleCardWrapperFragment } from "./fragment";
+import { ArticleCardWrapperFragment } from "./ArticleCardWrapperFragment";
 import { ArticleCardItem } from "../ArticleCardItem";
 
 type ArticleCardWrapperProps = {

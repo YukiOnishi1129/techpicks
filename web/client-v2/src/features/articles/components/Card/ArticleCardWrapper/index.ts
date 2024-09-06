@@ -1,2 +1,2 @@
 export * from "./ArticleCardWrapper";
-export * from "./fragment";
+export * from "./ArticleCardWrapperFragment";

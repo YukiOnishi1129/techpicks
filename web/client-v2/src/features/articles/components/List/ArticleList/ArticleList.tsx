@@ -13,11 +13,11 @@ import { ArticleTabType } from "@/types/article";
 // import { FavoriteArticleFolderType } from "@/types/favoriteArticleFolder";
 import { LanguageStatus } from "@/types/language";
 
-import { ArticleListFragment } from "./fragment";
+import { ArticleListFragment } from "./ArticleListFragment";
 import { getArticleListQuery } from "../../../actions/getArticleListQuery";
 import { ArticleCardWrapper } from "../../Card/ArticleCardWrapper/ArticleCardWrapper";
 
-type Props = {
+type ArticleListProps = {
   user?: User;
   data: FragmentOf<typeof ArticleListFragment>;
   // favoriteArticleFolders: Array<FavoriteArticleFolderType>;
@@ -36,7 +36,7 @@ export function ArticleList({
   feedIdList,
   tab,
   after,
-}: Props) {
+}: ArticleListProps) {
   const observerTarget = useRef(null);
 
   const fragment = readFragment(ArticleListFragment, data);
