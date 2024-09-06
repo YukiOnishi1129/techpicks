@@ -17,6 +17,9 @@ export class ArticleService implements OnModuleInit {
   constructor() {}
 
   onModuleInit() {
+    const options: Partial<grpc.CallOptions> = {
+      deadline: 10000,
+    };
     this.articleService = new ArticleServiceClient(
       process.env.NODE_ENV !== 'production' &&
       process.env.NODE_ENV !== 'staging'
@@ -26,6 +29,7 @@ export class ArticleService implements OnModuleInit {
       process.env.NODE_ENV !== 'staging'
         ? grpc.credentials.createInsecure()
         : grpc.credentials.createInsecure(),
+      options,
     );
   }
 
