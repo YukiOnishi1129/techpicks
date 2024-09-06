@@ -1,8 +1,9 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@radix-ui/react-tabs";
 import Image from "next/image";
 import { FC } from "react";
 
 import { getTrendArticleListQuery } from "@/features/trends/actions/getTrendArticleListQuery";
+
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { LanguageStatus } from "@/types/language";
 
