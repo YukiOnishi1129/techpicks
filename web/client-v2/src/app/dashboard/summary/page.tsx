@@ -1,13 +1,20 @@
 import { redirect } from "next/navigation";
+import { Suspense } from "react";
 
 import { ArticleDashboardTemplate } from "@/features/articles/components/Template";
 import { getUser } from "@/features/auth/actions/user";
 
-export default async function SummaryDashboard() {
+import { ScreenLoader } from "@/components/layout/ScreenLoader";
+
+export default async function DashboardSummaryPage() {
   const user = await getUser();
   if (!user) {
     redirect("/login");
   }
 
-  return <ArticleDashboardTemplate tab={"summary"} />;
+  return (
+    <Suspense fallback={<ScreenLoader />}>
+      <ArticleDashboardTemplate tab={"summary"} />
+    </Suspense>
+  );
 }
