@@ -7,8 +7,8 @@ import { LanguageStatus } from "@/types/language";
 import { ENGLISH_IMAGE, JAPANESE_IMAGE } from "@/constant/image";
 import { ArticlesInput } from "@/graphql/type";
 
-import { getArticleListQuery } from "../../actions/getArticleListQuery";
-import { ArticleList } from "../List";
+import { getArticleListQuery } from "../../../actions/getArticleListQuery";
+import { ArticleList } from "../../List";
 
 type ArticleDashboardTemplateProps = {
   languageStatus?: LanguageStatus;
