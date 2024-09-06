@@ -13,17 +13,10 @@ import { GraphQLModule } from '@nestjs/graphql';
         path: join(process.cwd(), 'src/graphql/types/graphql.ts'),
       },
       driver: ApolloDriver,
-      playground: true,
-      typePaths: ['./src/**/*.graphql'],
-      //   useFactory: async () => ({
-      //     typePaths: ['./src/**/*.graphql'],
-      //     playground: false,
-      //     definitions: {
-      //       path: join(process.cwd(), 'src/graphql/types/graphql.ts'),
-      //       outputAs: 'class',
-      //     },
-      //     plugins: [ApolloServerPluginLandingPageLocalDefault()],
-      //   }),
+      playground:
+        process.env.NODE_ENV !== 'production' &&
+        process.env.NODE_ENV !== 'staging',
+      typePaths: [join(process.cwd(), 'src/**/*.graphql')],
     }),
   ],
 })

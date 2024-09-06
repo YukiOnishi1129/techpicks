@@ -1,10 +1,12 @@
-FROM --platform=linux/amd64 node:20-alpine AS base
+# FROM --platform=linux/amd64 node:20-alpine AS base
+FROM node:20-alpine AS base
 
 FROM base AS deps
 
 WORKDIR /app
 
 COPY ./bff/apollo-gateway/package.json ./bff/apollo-gateway/package-lock.json   ./
+# COPY ./package.json ./package-lock.json   ./
 
 RUN npm install --frozen-lockfile
 
@@ -15,6 +17,7 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 
 COPY ./bff/apollo-gateway .
+# COPY . .
 
 RUN npm run build
 
@@ -27,6 +30,8 @@ COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/node_modules ./node_modules
 # COPY --from=builder /app/package.json ./
 # COPY --from=builder /app/package-lock.json ./
+
+# COPY .env .env
 
 EXPOSE 8080
 
