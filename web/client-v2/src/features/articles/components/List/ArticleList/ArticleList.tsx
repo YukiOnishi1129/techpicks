@@ -13,9 +13,9 @@ import { ArticleTabType } from "@/types/article";
 // import { FavoriteArticleFolderType } from "@/types/favoriteArticleFolder";
 import { LanguageStatus } from "@/types/language";
 
-import { ArticleListFragment } from "./ArticleListFragment";
-import { getArticleListQuery } from "../../actions/getArticleListQuery";
-import { ArticleCardWrapper } from "../Card/ArticleCardWrapper/ArticleCardWrapper";
+import { ArticleListFragment } from "./fragment";
+import { getArticleListQuery } from "../../../actions/getArticleListQuery";
+import { ArticleCardWrapper } from "../../Card/ArticleCardWrapper/ArticleCardWrapper";
 
 type Props = {
   user?: User;

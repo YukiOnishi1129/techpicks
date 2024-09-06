@@ -1,6 +1,6 @@
 import { graphql } from "gql.tada";
 
-import { ArticleCardWrapperFragment } from "../Card";
+import { ArticleCardWrapperFragment } from "../../Card";
 
 export const ArticleListFragment = graphql(
   `
