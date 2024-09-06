@@ -18,6 +18,7 @@ func NewArticleHandler(au usecase.ArticleUseCase) cpb.ArticleServiceServer {
 }
 
 func (ah *articleHandler) GetArticles(ctx context.Context, req *cpb.GetArticlesRequest) (*cpb.GetArticlesResponse, error) {
+	println("🔥🔥🔥🔥🔥🔥🔥")
 	res, err := ah.articleUseCase.GetArticles(ctx, req)
 	if err != nil {
 		return nil, err
