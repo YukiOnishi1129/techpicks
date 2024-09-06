@@ -67,7 +67,7 @@ func main() {
 	// crate a listener on TCP port 3001
 	port := os.Getenv("CONTENT_SERVICE_CONTAINER_PORT")
 	if port == "" {
-		port = "3001"
+		port = "8080"
 	}
 
 	listener, err := net.Listen("tcp", fmt.Sprintf(":%s", port))
