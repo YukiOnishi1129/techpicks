@@ -46,7 +46,7 @@ jobs:
 
     # stagingにbff, grpcをデプロイした後にコメントアウトを外す
     # ビルド時にAPIにアクセスしようとするため、APIがデプロイされていないとエラーになる
-    #   - name: Build
-    #     run: npm run build
+      - name: Build
+        run: npm run build
         # env:
           # GOOGLE_CREDENTIALS_JSON: ${{ secrets.GOOGLE_CREDENTIALS_JSON }}
