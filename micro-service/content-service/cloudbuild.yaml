@@ -1,6 +1,6 @@
 # staging environment
 substitutions:
-  _IMAGE: 'content-service/latest'
+  _IMAGE: 'content-service-application/latest'
   _SERVICE_NAME: 'content-service-application'
 steps:
   # Build the container image

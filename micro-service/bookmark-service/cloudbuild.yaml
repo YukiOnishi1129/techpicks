@@ -1,6 +1,6 @@
 # staging environment
 substitutions:
-  _IMAGE: 'bookmark-service/latest'
+  _IMAGE: 'bookmark-service-application/latest'
   _SERVICE_NAME: 'bookmark-service-application'
 steps:
   # Build the container image
