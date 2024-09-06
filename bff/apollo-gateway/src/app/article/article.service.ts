@@ -44,7 +44,7 @@ export class ArticleService implements OnModuleInit {
       );
     if (input?.languageStatus)
       req.setLanguageStatus(new Int64Value().setValue(input.languageStatus));
-    if (input?.tag) req.setTag(new StringValue().setValue(input.tag));
+    if (input?.tab) req.setTag(new StringValue().setValue(input.tab));
 
     req.setUserId(new StringValue().setValue(userId));
 

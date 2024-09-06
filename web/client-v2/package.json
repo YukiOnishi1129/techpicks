@@ -11,7 +11,7 @@
     "lint": "next lint",
     "lint:fix": "eslint --ext .js,.jsx,.ts,.tsx --fix .",
     "format": "npx prettier --write .",
-    "gen:gql": "graphql-codegen --config codegen.ts"
+    "gen:gql": "graphql-codegen --config codegen.ts && npx gql.tada generate-output"
   },
   "dependencies": {
     "@apollo/client": "^3.11.5",
@@ -31,7 +31,7 @@
     "@radix-ui/react-select": "^2.1.1",
     "@radix-ui/react-slot": "^1.1.0",
     "@radix-ui/react-switch": "^1.0.3",
-    "@radix-ui/react-tabs": "^1.0.4",
+    "@radix-ui/react-tabs": "^1.1.0",
     "@radix-ui/react-toast": "^1.1.5",
     "@radix-ui/react-tooltip": "^1.0.7",
     "@supabase/auth-helpers-nextjs": "^0.10.0",
@@ -43,6 +43,7 @@
     "cmdk": "^1.0.0",
     "dayjs": "^1.11.10",
     "embla-carousel-react": "^8.1.6",
+    "gql.tada": "^1.8.6",
     "highlight.js": "^11.9.0",
     "html-react-parser": "^5.1.10",
     "lucide-react": "^0.363.0",
