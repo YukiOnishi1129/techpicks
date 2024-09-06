@@ -92,32 +92,14 @@ export const ArticleDashboardTemplate: FC<
             feedIdList={[]}
             tab={tab}
           />
-          {/* <ArticleList
-            user={user}
-            initialArticles={enArticleRes.data.articles}
-            favoriteArticleFolders={
-              resFavoriteArticleFolders.data.favoriteArticleFolders
-            }
-            languageStatus={2}
-            keyword={keyword}
-            feedIdList={feedIdList}
-            tab={tab}
-            fetchArticles={fetchArticlesAPI}
-          /> */}
         </TabsContent>
         <TabsContent value={TAB_LIST.JAPANESE}>
-          {/* <ArticleList
-            user={user}
-            initialArticles={jpArticleRes.data.articles}
-            favoriteArticleFolders={
-              resFavoriteArticleFolders.data.favoriteArticleFolders
-            }
+          <ArticleList
+            data={jpData.articles}
             languageStatus={1}
-            keyword={keyword}
-            feedIdList={feedIdList}
+            feedIdList={[]}
             tab={tab}
-            fetchArticles={fetchArticlesAPI}
-          /> */}
+          />
         </TabsContent>
       </Tabs>
     </div>

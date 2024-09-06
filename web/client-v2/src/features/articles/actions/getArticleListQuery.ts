@@ -6,9 +6,8 @@ import { getClient } from "@/lib/apollo/client";
 
 import { ArticlesInput } from "@/graphql/type";
 
-import { ArticleListFragment } from "../components/List/ArticleList/fragment";
-import { ArticleDashboardTemplateFragment } from "../components/Template/ArticleDashboardTemplate/fragment";
-// import { ArticleDashboardTemplateFragment } from "../components/Template";
+import { ArticleListFragment } from "../components/List";
+import { ArticleDashboardTemplateFragment } from "../components/Template";
 
 const ArticleListQuery = graphql(
   `
