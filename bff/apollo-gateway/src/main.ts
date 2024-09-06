@@ -12,7 +12,7 @@ if (
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  const port = Number(process.env.BFF_CONTAINER_PORT) || 3000;
+  const port = Number(process.env.BFF_CONTAINER_PORT) || 8080;
   await app.listen(port);
 }
 bootstrap();
