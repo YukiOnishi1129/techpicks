@@ -7,7 +7,6 @@ import { getClient } from "@/lib/apollo/client";
 import { ArticlesInput } from "@/graphql/type";
 
 import { ArticleListFragment } from "../components/List";
-// import { ArticleDashboardTemplateFragment } from "../components/Template";
 
 const ArticleDashboardTemplateFragment = graphql(
   `
@@ -26,7 +25,7 @@ const ArticleListQuery = graphql(
       ...ArticleDashboardTemplateFragment
     }
   `,
-  [ArticleDashboardTemplateFragment, ArticleListFragment]
+  [ArticleDashboardTemplateFragment]
 );
 
 export const getArticleListQuery = async (input: ArticlesInput) => {

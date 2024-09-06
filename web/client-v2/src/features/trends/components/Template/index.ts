@@ -1,1 +1,1 @@
-export * from "./TrendArticleDashboardTemplate";
+export * from "./TrendArticleDashboardTemplate/";
