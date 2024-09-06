@@ -3,7 +3,12 @@ import * as dotenv from 'dotenv';
 
 import { AppModule } from './app/app.module';
 
-dotenv.config();
+if (
+  process.env.NODE_ENV !== 'production' &&
+  process.env.NODE_ENV !== 'staging'
+) {
+  dotenv.config();
+}
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
