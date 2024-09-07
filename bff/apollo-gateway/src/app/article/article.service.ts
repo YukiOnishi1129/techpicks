@@ -10,25 +10,27 @@ import { ArticleServiceClient } from '../../grpc/content/content_grpc_pb';
 import { GetArticlesRequest } from '../../grpc/content/content_pb';
 import { convertTimestampToInt } from '../../utils/timestamp';
 
+const grpcUrl =
+  process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'staging'
+    ? `${process.env.CONTENT_SERVICE_CONTAINER_NAME}:${process.env.CONTENT_SERVICE_CONTAINER_PORT}`
+    : process.env.CONTENT_SERVICE_CONTAINER_NAME;
+
+const grpcCredentials =
+  process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'staging'
+    ? grpc.credentials.createInsecure()
+    : grpc.credentials.createSsl();
+
 @Injectable()
 export class ArticleService implements OnModuleInit {
   private articleService: ArticleServiceClient;
-
-  constructor() {}
 
   onModuleInit() {
     const options: Partial<grpc.CallOptions> = {
       deadline: 10000,
     };
     this.articleService = new ArticleServiceClient(
-      process.env.NODE_ENV !== 'production' &&
-      process.env.NODE_ENV !== 'staging'
-        ? `${process.env.CONTENT_SERVICE_CONTAINER_NAME}:${process.env.CONTENT_SERVICE_CONTAINER_PORT}`
-        : process.env.CONTENT_SERVICE_CONTAINER_NAME,
-      process.env.NODE_ENV !== 'production' &&
-      process.env.NODE_ENV !== 'staging'
-        ? grpc.credentials.createInsecure()
-        : grpc.credentials.createInsecure(),
+      grpcUrl,
+      grpcCredentials,
       options,
     );
   }
