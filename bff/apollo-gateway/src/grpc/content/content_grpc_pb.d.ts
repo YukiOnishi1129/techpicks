@@ -9,12 +9,12 @@ import * as content_content_pb from "../content/content_pb";
 import * as google_protobuf_timestamp_pb from "google-protobuf/google/protobuf/timestamp_pb";
 import * as google_protobuf_wrappers_pb from "google-protobuf/google/protobuf/wrappers_pb";
 
-interface IArticleServiceService extends grpc.ServiceDefinition<grpc.UntypedServiceImplementation> {
-    getArticles: IArticleServiceService_IGetArticles;
+interface IContentServiceService extends grpc.ServiceDefinition<grpc.UntypedServiceImplementation> {
+    getArticles: IContentServiceService_IGetArticles;
 }
 
-interface IArticleServiceService_IGetArticles extends grpc.MethodDefinition<content_content_pb.GetArticlesRequest, content_content_pb.GetArticlesResponse> {
-    path: "/checkpicks.content.v1.ArticleService/GetArticles";
+interface IContentServiceService_IGetArticles extends grpc.MethodDefinition<content_content_pb.GetArticlesRequest, content_content_pb.GetArticlesResponse> {
+    path: "/checkpicks.content.v1.ContentService/GetArticles";
     requestStream: false;
     responseStream: false;
     requestSerialize: grpc.serialize<content_content_pb.GetArticlesRequest>;
@@ -23,19 +23,19 @@ interface IArticleServiceService_IGetArticles extends grpc.MethodDefinition<cont
     responseDeserialize: grpc.deserialize<content_content_pb.GetArticlesResponse>;
 }
 
-export const ArticleServiceService: IArticleServiceService;
+export const ContentServiceService: IContentServiceService;
 
-export interface IArticleServiceServer extends grpc.UntypedServiceImplementation {
+export interface IContentServiceServer extends grpc.UntypedServiceImplementation {
     getArticles: grpc.handleUnaryCall<content_content_pb.GetArticlesRequest, content_content_pb.GetArticlesResponse>;
 }
 
-export interface IArticleServiceClient {
+export interface IContentServiceClient {
     getArticles(request: content_content_pb.GetArticlesRequest, callback: (error: grpc.ServiceError | null, response: content_content_pb.GetArticlesResponse) => void): grpc.ClientUnaryCall;
     getArticles(request: content_content_pb.GetArticlesRequest, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: content_content_pb.GetArticlesResponse) => void): grpc.ClientUnaryCall;
     getArticles(request: content_content_pb.GetArticlesRequest, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: content_content_pb.GetArticlesResponse) => void): grpc.ClientUnaryCall;
 }
 
-export class ArticleServiceClient extends grpc.Client implements IArticleServiceClient {
+export class ContentServiceClient extends grpc.Client implements IContentServiceClient {
     constructor(address: string, credentials: grpc.ChannelCredentials, options?: Partial<grpc.ClientOptions>);
     public getArticles(request: content_content_pb.GetArticlesRequest, callback: (error: grpc.ServiceError | null, response: content_content_pb.GetArticlesResponse) => void): grpc.ClientUnaryCall;
     public getArticles(request: content_content_pb.GetArticlesRequest, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: content_content_pb.GetArticlesResponse) => void): grpc.ClientUnaryCall;

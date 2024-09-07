@@ -6,7 +6,7 @@ import {
 } from 'google-protobuf/google/protobuf/wrappers_pb';
 
 import { ArticleConnection, ArticlesInput } from '../../graphql/types/graphql';
-import { ArticleServiceClient } from '../../grpc/content/content_grpc_pb';
+import { ContentServiceClient } from '../../grpc/content/content_grpc_pb';
 import { GetArticlesRequest } from '../../grpc/content/content_pb';
 import { convertTimestampToInt } from '../../utils/timestamp';
 
@@ -22,13 +22,13 @@ const grpcCredentials =
 
 @Injectable()
 export class ArticleService implements OnModuleInit {
-  private articleService: ArticleServiceClient;
+  private contentService: ContentServiceClient;
 
   onModuleInit() {
     const options: Partial<grpc.CallOptions> = {
       deadline: 10000,
     };
-    this.articleService = new ArticleServiceClient(
+    this.contentService = new ContentServiceClient(
       grpcUrl,
       grpcCredentials,
       options,
@@ -61,7 +61,7 @@ export class ArticleService implements OnModuleInit {
     req.setUserId(new StringValue().setValue(userId));
 
     return new Promise((resolve, reject) => {
-      this.articleService.getArticles(req, (err, res) => {
+      this.contentService.getArticles(req, (err, res) => {
         if (err) {
           reject({
             code: err?.code || 500,
