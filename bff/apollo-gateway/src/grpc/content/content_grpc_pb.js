@@ -29,9 +29,9 @@ function deserialize_checkpicks_content_v1_GetArticlesResponse(buffer_arg) {
 }
 
 
-var ArticleServiceService = exports.ArticleServiceService = {
+var ContentServiceService = exports.ContentServiceService = {
   getArticles: {
-    path: '/checkpicks.content.v1.ArticleService/GetArticles',
+    path: '/checkpicks.content.v1.ContentService/GetArticles',
     requestStream: false,
     responseStream: false,
     requestType: content_content_pb.GetArticlesRequest,
@@ -43,4 +43,4 @@ var ArticleServiceService = exports.ArticleServiceService = {
   },
 };
 
-exports.ArticleServiceClient = grpc.makeGenericClientConstructor(ArticleServiceService);
+exports.ContentServiceClient = grpc.makeGenericClientConstructor(ContentServiceService);

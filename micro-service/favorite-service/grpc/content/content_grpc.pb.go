@@ -19,99 +19,99 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	ArticleService_GetArticles_FullMethodName = "/checkpicks.content.v1.ArticleService/GetArticles"
+	ContentService_GetArticles_FullMethodName = "/checkpicks.content.v1.ContentService/GetArticles"
 )
 
-// ArticleServiceClient is the client API for ArticleService service.
+// ContentServiceClient is the client API for ContentService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type ArticleServiceClient interface {
+type ContentServiceClient interface {
 	GetArticles(ctx context.Context, in *GetArticlesRequest, opts ...grpc.CallOption) (*GetArticlesResponse, error)
 }
 
-type articleServiceClient struct {
+type contentServiceClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewArticleServiceClient(cc grpc.ClientConnInterface) ArticleServiceClient {
-	return &articleServiceClient{cc}
+func NewContentServiceClient(cc grpc.ClientConnInterface) ContentServiceClient {
+	return &contentServiceClient{cc}
 }
 
-func (c *articleServiceClient) GetArticles(ctx context.Context, in *GetArticlesRequest, opts ...grpc.CallOption) (*GetArticlesResponse, error) {
+func (c *contentServiceClient) GetArticles(ctx context.Context, in *GetArticlesRequest, opts ...grpc.CallOption) (*GetArticlesResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(GetArticlesResponse)
-	err := c.cc.Invoke(ctx, ArticleService_GetArticles_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, ContentService_GetArticles_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// ArticleServiceServer is the server API for ArticleService service.
-// All implementations should embed UnimplementedArticleServiceServer
+// ContentServiceServer is the server API for ContentService service.
+// All implementations should embed UnimplementedContentServiceServer
 // for forward compatibility.
-type ArticleServiceServer interface {
+type ContentServiceServer interface {
 	GetArticles(context.Context, *GetArticlesRequest) (*GetArticlesResponse, error)
 }
 
-// UnimplementedArticleServiceServer should be embedded to have
+// UnimplementedContentServiceServer should be embedded to have
 // forward compatible implementations.
 //
 // NOTE: this should be embedded by value instead of pointer to avoid a nil
 // pointer dereference when methods are called.
-type UnimplementedArticleServiceServer struct{}
+type UnimplementedContentServiceServer struct{}
 
-func (UnimplementedArticleServiceServer) GetArticles(context.Context, *GetArticlesRequest) (*GetArticlesResponse, error) {
+func (UnimplementedContentServiceServer) GetArticles(context.Context, *GetArticlesRequest) (*GetArticlesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetArticles not implemented")
 }
-func (UnimplementedArticleServiceServer) testEmbeddedByValue() {}
+func (UnimplementedContentServiceServer) testEmbeddedByValue() {}
 
-// UnsafeArticleServiceServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to ArticleServiceServer will
+// UnsafeContentServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to ContentServiceServer will
 // result in compilation errors.
-type UnsafeArticleServiceServer interface {
-	mustEmbedUnimplementedArticleServiceServer()
+type UnsafeContentServiceServer interface {
+	mustEmbedUnimplementedContentServiceServer()
 }
 
-func RegisterArticleServiceServer(s grpc.ServiceRegistrar, srv ArticleServiceServer) {
-	// If the following call pancis, it indicates UnimplementedArticleServiceServer was
+func RegisterContentServiceServer(s grpc.ServiceRegistrar, srv ContentServiceServer) {
+	// If the following call pancis, it indicates UnimplementedContentServiceServer was
 	// embedded by pointer and is nil.  This will cause panics if an
 	// unimplemented method is ever invoked, so we test this at initialization
 	// time to prevent it from happening at runtime later due to I/O.
 	if t, ok := srv.(interface{ testEmbeddedByValue() }); ok {
 		t.testEmbeddedByValue()
 	}
-	s.RegisterService(&ArticleService_ServiceDesc, srv)
+	s.RegisterService(&ContentService_ServiceDesc, srv)
 }
 
-func _ArticleService_GetArticles_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _ContentService_GetArticles_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetArticlesRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ArticleServiceServer).GetArticles(ctx, in)
+		return srv.(ContentServiceServer).GetArticles(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: ArticleService_GetArticles_FullMethodName,
+		FullMethod: ContentService_GetArticles_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ArticleServiceServer).GetArticles(ctx, req.(*GetArticlesRequest))
+		return srv.(ContentServiceServer).GetArticles(ctx, req.(*GetArticlesRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// ArticleService_ServiceDesc is the grpc.ServiceDesc for ArticleService service.
+// ContentService_ServiceDesc is the grpc.ServiceDesc for ContentService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var ArticleService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "checkpicks.content.v1.ArticleService",
-	HandlerType: (*ArticleServiceServer)(nil),
+var ContentService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "checkpicks.content.v1.ContentService",
+	HandlerType: (*ContentServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "GetArticles",
-			Handler:    _ArticleService_GetArticles_Handler,
+			Handler:    _ContentService_GetArticles_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

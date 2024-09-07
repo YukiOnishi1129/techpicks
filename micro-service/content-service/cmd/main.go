@@ -83,7 +83,7 @@ func main() {
 	auc := usecase.NewArticleUseCase(aad, bex)
 
 	// interface layer
-	ahd := handler.NewArticleHandler(auc)
+	chd := handler.NewContentHandler(auc)
 
 	// crate a listener on TCP port 3001
 	port := os.Getenv("CONTENT_SERVICE_CONTAINER_PORT")
@@ -101,7 +101,7 @@ func main() {
 	s := grpc.NewServer()
 
 	// register the greeting service with the gRPC server
-	cpb.RegisterArticleServiceServer(s, ahd)
+	cpb.RegisterContentServiceServer(s, chd)
 
 	// register reflection service on gRPC server
 	reflection.Register(s)

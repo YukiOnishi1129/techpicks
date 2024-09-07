@@ -1,44 +1,22 @@
-import * as grpc from '@grpc/grpc-js';
-import { Injectable, OnModuleInit } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import {
   StringValue,
   Int64Value,
 } from 'google-protobuf/google/protobuf/wrappers_pb';
 
-import { ArticleConnection, ArticlesInput } from '../../graphql/types/graphql';
-import { ArticleServiceClient } from '../../grpc/content/content_grpc_pb';
-import { GetArticlesRequest } from '../../grpc/content/content_pb';
-import { convertTimestampToInt } from '../../utils/timestamp';
-
-const grpcUrl =
-  process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'staging'
-    ? `${process.env.CONTENT_SERVICE_CONTAINER_NAME}:${process.env.CONTENT_SERVICE_CONTAINER_PORT}`
-    : process.env.CONTENT_SERVICE_CONTAINER_NAME;
-
-const grpcCredentials =
-  process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'staging'
-    ? grpc.credentials.createInsecure()
-    : grpc.credentials.createSsl();
+import {
+  ArticleConnection,
+  ArticlesInput,
+} from '../../../graphql/types/graphql';
+import { GetArticlesRequest } from '../../../grpc/content/content_pb';
+import { convertTimestampToInt } from '../../../utils/timestamp';
+import { GrpcContentClientService } from '../../grpc/grpc-content-client.service';
 
 @Injectable()
-export class ArticleService implements OnModuleInit {
-  private articleService: ArticleServiceClient;
-
-  onModuleInit() {
-    const options: Partial<grpc.CallOptions> = {
-      deadline: 10000,
-    };
-    this.articleService = new ArticleServiceClient(
-      grpcUrl,
-      grpcCredentials,
-      options,
-    );
-  }
-
-  // create(createArticleInput: CreateArticleInput) {
-  //   return `This action adds a new article ${createArticleInput}`;
-  // }
-
+export class ArticleService {
+  constructor(
+    private readonly grpcContentClientService: GrpcContentClientService,
+  ) {}
   async getArticles(
     userId: string,
     input: ArticlesInput,
@@ -61,7 +39,8 @@ export class ArticleService implements OnModuleInit {
     req.setUserId(new StringValue().setValue(userId));
 
     return new Promise((resolve, reject) => {
-      this.articleService.getArticles(req, (err, res) => {
+      const client = this.grpcContentClientService.getGrpcContentService();
+      client.getArticles(req, (err, res) => {
         if (err) {
           reject({
             code: err?.code || 500,
@@ -162,16 +141,4 @@ export class ArticleService implements OnModuleInit {
       });
     });
   }
-
-  // findOne(id: number) {
-  //   return `This action returns a #${id} article`;
-  // }
-
-  // update(id: number, updateArticleInput: UpdateArticleInput) {
-  //   return `This action updates a #${id} article`;
-  // }
-
-  // remove(id: number) {
-  //   return `This action removes a #${id} article`;
-  // }
 }
