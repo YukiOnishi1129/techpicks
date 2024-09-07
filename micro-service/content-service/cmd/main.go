@@ -1,6 +1,8 @@
 package main
 
 import (
+	"crypto/tls"
+	"crypto/x509"
 	"fmt"
 	"log"
 	"net"
@@ -17,13 +19,16 @@ import (
 	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/interfacess/handler"
 	"github.com/joho/godotenv"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/reflection"
 )
 
 func main() {
 	log.Printf("Start content service")
-	if os.Getenv("GO_ENV") != "production" && os.Getenv("GO_ENV") != "staging" {
+
+	isDev := os.Getenv("GO_ENV") != "production" && os.Getenv("GO_ENV") != "staging"
+	if isDev {
 		err := godotenv.Load()
 		if err != nil {
 			log.Fatalf("Error loading .env file")
@@ -38,14 +43,25 @@ func main() {
 		return
 	}
 
+	systemRoots, err := x509.SystemCertPool()
+	if err != nil {
+		fmt.Println("failed to read system root certificate pool")
+	}
+	grpcCredential := credentials.NewTLS(&tls.Config{
+		RootCAs: systemRoots,
+	})
+	if isDev {
+		grpcCredential = insecure.NewCredentials()
+	}
+
 	// create grpc client
 	// bookmark client
 	brpcURL := os.Getenv("BOOKMARK_SERVICE_CONTAINER_NAME")
-	if os.Getenv("GO_ENV") != "production" && os.Getenv("GO_ENV") != "staging" {
+	if isDev {
 		brpcURL = fmt.Sprintf("%s:%s", os.Getenv("BOOKMARK_SERVICE_CONTAINER_NAME"), os.Getenv("BOOKMARK_SERVICE_CONTAINER_PORT"))
 	}
 	// brpcURL := fmt.Sprintf("%s:%s", os.Getenv("BOOKMARK_SERVICE_CONTAINER_NAME"), os.Getenv("BOOKMARK_SERVICE_CONTAINER_PORT"))
-	bConn, err := grpc.NewClient(brpcURL, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	bConn, err := grpc.NewClient(brpcURL, grpc.WithTransportCredentials(grpcCredential))
 	if err != nil {
 		log.Fatal("Error connecting to bookmark service")
 		return
