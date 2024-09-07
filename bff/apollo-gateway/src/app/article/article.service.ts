@@ -1,5 +1,4 @@
-import * as grpc from '@grpc/grpc-js';
-import { Injectable, OnModuleInit } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import {
   StringValue,
   Int64Value,
@@ -10,36 +9,37 @@ import { ContentServiceClient } from '../../grpc/content/content_grpc_pb';
 import { GetArticlesRequest } from '../../grpc/content/content_pb';
 import { convertTimestampToInt } from '../../utils/timestamp';
 
-const grpcUrl =
-  process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'staging'
-    ? `${process.env.CONTENT_SERVICE_CONTAINER_NAME}:${process.env.CONTENT_SERVICE_CONTAINER_PORT}`
-    : process.env.CONTENT_SERVICE_CONTAINER_NAME;
+// const grpcUrl =
+//   process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'staging'
+//     ? `${process.env.CONTENT_SERVICE_CONTAINER_NAME}:${process.env.CONTENT_SERVICE_CONTAINER_PORT}`
+//     : process.env.CONTENT_SERVICE_CONTAINER_NAME;
 
-const grpcCredentials =
-  process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'staging'
-    ? grpc.credentials.createInsecure()
-    : grpc.credentials.createSsl();
+// const grpcCredentials =
+//   process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'staging'
+//     ? grpc.credentials.createInsecure()
+//     : grpc.credentials.createSsl();
 
 @Injectable()
-export class ArticleService implements OnModuleInit {
-  private contentService: ContentServiceClient;
+export class ArticleService {
+  // private contentService: ContentServiceClient;
 
-  onModuleInit() {
-    const options: Partial<grpc.CallOptions> = {
-      deadline: 10000,
-    };
-    this.contentService = new ContentServiceClient(
-      grpcUrl,
-      grpcCredentials,
-      options,
-    );
-  }
+  // onModuleInit() {
+  //   const options: Partial<grpc.CallOptions> = {
+  //     deadline: 10000,
+  //   };
+  //   this.contentService = new ContentServiceClient(
+  //     grpcUrl,
+  //     grpcCredentials,
+  //     options,
+  //   );
+  // }
 
   // create(createArticleInput: CreateArticleInput) {
   //   return `This action adds a new article ${createArticleInput}`;
   // }
 
   async getArticles(
+    contentService: ContentServiceClient,
     userId: string,
     input: ArticlesInput,
   ): Promise<ArticleConnection> {
@@ -61,7 +61,7 @@ export class ArticleService implements OnModuleInit {
     req.setUserId(new StringValue().setValue(userId));
 
     return new Promise((resolve, reject) => {
-      this.contentService.getArticles(req, (err, res) => {
+      contentService.getArticles(req, (err, res) => {
         if (err) {
           reject({
             code: err?.code || 500,
