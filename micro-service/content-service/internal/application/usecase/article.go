@@ -29,13 +29,10 @@ func NewArticleUseCase(aa adapter.ArticleAdapter, be external.BookmarkExternal) 
 }
 
 func (au *articleUseCase) GetArticles(ctx context.Context, req *cpb.GetArticlesRequest) (*cpb.GetArticlesResponse, error) {
-	println("💧💧💧💧💧💧💧💧💧")
 	articles, err := au.articleAdapter.GetArticles(ctx, req)
 	if err != nil {
 		return nil, err
 	}
-
-	println("⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️")
 
 	edges := make([]*cpb.ArticleEdge, len(articles))
 	for i, article := range articles {

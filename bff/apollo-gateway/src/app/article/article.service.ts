@@ -62,10 +62,7 @@ export class ArticleService implements OnModuleInit {
 
     return new Promise((resolve, reject) => {
       this.articleService.getArticles(req, (err, res) => {
-        console.log('❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥');
         if (err) {
-          console.log('❤️‍🔥エラー');
-          console.log(err);
           reject({
             code: err?.code || 500,
             message: err?.message || 'something went wrong',
