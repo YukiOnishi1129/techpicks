@@ -22,6 +22,6 @@ input CreateBookmarkInput {
 }
 
 input DeleteBookmarkInput {
-  id: ID!
+  bookmarkId: ID!
   userId: ID!
 }
