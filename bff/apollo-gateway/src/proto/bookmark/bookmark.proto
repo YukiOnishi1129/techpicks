@@ -4,6 +4,7 @@ option go_package = "github.com/YukiOnishi1129/techpicks/bookmark";
 
 package checkpicks.bookmark.v1;
 
+import "google/protobuf/empty.proto";
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/wrappers.proto";
 
@@ -11,6 +12,7 @@ import "google/protobuf/wrappers.proto";
 service BookmarkService {
     rpc GetBookmarkByArticleID(GetBookmarkByArticleIDRequest) returns (GetBookmarkResponse) {}
     rpc CreateBookmark(CreateBookmarkRequest) returns (CreateBookmarkResponse) {}
+    rpc DeleteBookmark(DeleteBookmarkRequest) returns (google.protobuf.Empty) {}
 }
 
 message GetBookmarkResponse {
@@ -40,6 +42,11 @@ message CreateBookmarkRequest {
     string platform_favicon_url = 11;
     bool is_eng = 12;
     bool is_read = 13;
+}
+
+message DeleteBookmarkRequest {
+    string id = 1;
+    string user_id = 2;
 }
 
 message Bookmark {

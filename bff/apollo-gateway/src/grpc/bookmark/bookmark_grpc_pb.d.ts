@@ -6,12 +6,14 @@
 
 import * as grpc from "@grpc/grpc-js";
 import * as bookmark_bookmark_pb from "../bookmark/bookmark_pb";
+import * as google_protobuf_empty_pb from "google-protobuf/google/protobuf/empty_pb";
 import * as google_protobuf_timestamp_pb from "google-protobuf/google/protobuf/timestamp_pb";
 import * as google_protobuf_wrappers_pb from "google-protobuf/google/protobuf/wrappers_pb";
 
 interface IBookmarkServiceService extends grpc.ServiceDefinition<grpc.UntypedServiceImplementation> {
     getBookmarkByArticleID: IBookmarkServiceService_IGetBookmarkByArticleID;
     createBookmark: IBookmarkServiceService_ICreateBookmark;
+    deleteBookmark: IBookmarkServiceService_IDeleteBookmark;
 }
 
 interface IBookmarkServiceService_IGetBookmarkByArticleID extends grpc.MethodDefinition<bookmark_bookmark_pb.GetBookmarkByArticleIDRequest, bookmark_bookmark_pb.GetBookmarkResponse> {
@@ -32,12 +34,22 @@ interface IBookmarkServiceService_ICreateBookmark extends grpc.MethodDefinition<
     responseSerialize: grpc.serialize<bookmark_bookmark_pb.CreateBookmarkResponse>;
     responseDeserialize: grpc.deserialize<bookmark_bookmark_pb.CreateBookmarkResponse>;
 }
+interface IBookmarkServiceService_IDeleteBookmark extends grpc.MethodDefinition<bookmark_bookmark_pb.DeleteBookmarkRequest, google_protobuf_empty_pb.Empty> {
+    path: "/checkpicks.bookmark.v1.BookmarkService/DeleteBookmark";
+    requestStream: false;
+    responseStream: false;
+    requestSerialize: grpc.serialize<bookmark_bookmark_pb.DeleteBookmarkRequest>;
+    requestDeserialize: grpc.deserialize<bookmark_bookmark_pb.DeleteBookmarkRequest>;
+    responseSerialize: grpc.serialize<google_protobuf_empty_pb.Empty>;
+    responseDeserialize: grpc.deserialize<google_protobuf_empty_pb.Empty>;
+}
 
 export const BookmarkServiceService: IBookmarkServiceService;
 
 export interface IBookmarkServiceServer extends grpc.UntypedServiceImplementation {
     getBookmarkByArticleID: grpc.handleUnaryCall<bookmark_bookmark_pb.GetBookmarkByArticleIDRequest, bookmark_bookmark_pb.GetBookmarkResponse>;
     createBookmark: grpc.handleUnaryCall<bookmark_bookmark_pb.CreateBookmarkRequest, bookmark_bookmark_pb.CreateBookmarkResponse>;
+    deleteBookmark: grpc.handleUnaryCall<bookmark_bookmark_pb.DeleteBookmarkRequest, google_protobuf_empty_pb.Empty>;
 }
 
 export interface IBookmarkServiceClient {
@@ -47,6 +59,9 @@ export interface IBookmarkServiceClient {
     createBookmark(request: bookmark_bookmark_pb.CreateBookmarkRequest, callback: (error: grpc.ServiceError | null, response: bookmark_bookmark_pb.CreateBookmarkResponse) => void): grpc.ClientUnaryCall;
     createBookmark(request: bookmark_bookmark_pb.CreateBookmarkRequest, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: bookmark_bookmark_pb.CreateBookmarkResponse) => void): grpc.ClientUnaryCall;
     createBookmark(request: bookmark_bookmark_pb.CreateBookmarkRequest, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: bookmark_bookmark_pb.CreateBookmarkResponse) => void): grpc.ClientUnaryCall;
+    deleteBookmark(request: bookmark_bookmark_pb.DeleteBookmarkRequest, callback: (error: grpc.ServiceError | null, response: google_protobuf_empty_pb.Empty) => void): grpc.ClientUnaryCall;
+    deleteBookmark(request: bookmark_bookmark_pb.DeleteBookmarkRequest, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: google_protobuf_empty_pb.Empty) => void): grpc.ClientUnaryCall;
+    deleteBookmark(request: bookmark_bookmark_pb.DeleteBookmarkRequest, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: google_protobuf_empty_pb.Empty) => void): grpc.ClientUnaryCall;
 }
 
 export class BookmarkServiceClient extends grpc.Client implements IBookmarkServiceClient {
@@ -57,4 +72,7 @@ export class BookmarkServiceClient extends grpc.Client implements IBookmarkServi
     public createBookmark(request: bookmark_bookmark_pb.CreateBookmarkRequest, callback: (error: grpc.ServiceError | null, response: bookmark_bookmark_pb.CreateBookmarkResponse) => void): grpc.ClientUnaryCall;
     public createBookmark(request: bookmark_bookmark_pb.CreateBookmarkRequest, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: bookmark_bookmark_pb.CreateBookmarkResponse) => void): grpc.ClientUnaryCall;
     public createBookmark(request: bookmark_bookmark_pb.CreateBookmarkRequest, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: bookmark_bookmark_pb.CreateBookmarkResponse) => void): grpc.ClientUnaryCall;
+    public deleteBookmark(request: bookmark_bookmark_pb.DeleteBookmarkRequest, callback: (error: grpc.ServiceError | null, response: google_protobuf_empty_pb.Empty) => void): grpc.ClientUnaryCall;
+    public deleteBookmark(request: bookmark_bookmark_pb.DeleteBookmarkRequest, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: google_protobuf_empty_pb.Empty) => void): grpc.ClientUnaryCall;
+    public deleteBookmark(request: bookmark_bookmark_pb.DeleteBookmarkRequest, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: google_protobuf_empty_pb.Empty) => void): grpc.ClientUnaryCall;
 }
