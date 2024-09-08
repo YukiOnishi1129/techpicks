@@ -1185,7 +1185,7 @@ proto.checkpicks.bookmark.v1.DeleteBookmarkRequest.prototype.toObject = function
  */
 proto.checkpicks.bookmark.v1.DeleteBookmarkRequest.toObject = function(includeInstance, msg) {
   var f, obj = {
-    id: jspb.Message.getFieldWithDefault(msg, 1, ""),
+    bookmarkId: jspb.Message.getFieldWithDefault(msg, 1, ""),
     userId: jspb.Message.getFieldWithDefault(msg, 2, "")
   };
 
@@ -1225,7 +1225,7 @@ proto.checkpicks.bookmark.v1.DeleteBookmarkRequest.deserializeBinaryFromReader =
     switch (field) {
     case 1:
       var value = /** @type {string} */ (reader.readString());
-      msg.setId(value);
+      msg.setBookmarkId(value);
       break;
     case 2:
       var value = /** @type {string} */ (reader.readString());
@@ -1260,7 +1260,7 @@ proto.checkpicks.bookmark.v1.DeleteBookmarkRequest.prototype.serializeBinary = f
  */
 proto.checkpicks.bookmark.v1.DeleteBookmarkRequest.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getId();
+  f = message.getBookmarkId();
   if (f.length > 0) {
     writer.writeString(
       1,
@@ -1278,10 +1278,10 @@ proto.checkpicks.bookmark.v1.DeleteBookmarkRequest.serializeBinaryToWriter = fun
 
 
 /**
- * optional string id = 1;
+ * optional string bookmark_id = 1;
  * @return {string}
  */
-proto.checkpicks.bookmark.v1.DeleteBookmarkRequest.prototype.getId = function() {
+proto.checkpicks.bookmark.v1.DeleteBookmarkRequest.prototype.getBookmarkId = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
 };
 
@@ -1290,7 +1290,7 @@ proto.checkpicks.bookmark.v1.DeleteBookmarkRequest.prototype.getId = function() 
  * @param {string} value
  * @return {!proto.checkpicks.bookmark.v1.DeleteBookmarkRequest} returns this
  */
-proto.checkpicks.bookmark.v1.DeleteBookmarkRequest.prototype.setId = function(value) {
+proto.checkpicks.bookmark.v1.DeleteBookmarkRequest.prototype.setBookmarkId = function(value) {
   return jspb.Message.setProto3StringField(this, 1, value);
 };
 

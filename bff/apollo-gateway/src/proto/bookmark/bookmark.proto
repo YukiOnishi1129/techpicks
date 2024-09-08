@@ -45,7 +45,7 @@ message CreateBookmarkRequest {
 }
 
 message DeleteBookmarkRequest {
-    string id = 1;
+    string bookmark_id = 1;
     string user_id = 2;
 }
 

@@ -405,8 +405,8 @@ func Test_UseCase_DeleteBookmark(t *testing.T) {
 				},
 			},
 			arg: &bpb.DeleteBookmarkRequest{
-				Id:     bookmarkID.String(),
-				UserId: userID1,
+				BookmarkId: bookmarkID.String(),
+				UserId:     userID1,
 			},
 			want: &emptypb.Empty{},
 		},
@@ -433,8 +433,8 @@ func Test_UseCase_DeleteBookmark(t *testing.T) {
 				},
 			},
 			arg: &bpb.DeleteBookmarkRequest{
-				Id:     differentBookmarkID.String(),
-				UserId: userID1,
+				BookmarkId: differentBookmarkID.String(),
+				UserId:     userID1,
 			},
 			want:    &emptypb.Empty{},
 			wantErr: "entity: failed to synchronize data after insert",
@@ -462,8 +462,8 @@ func Test_UseCase_DeleteBookmark(t *testing.T) {
 				},
 			},
 			arg: &bpb.DeleteBookmarkRequest{
-				Id:     bookmarkID.String(),
-				UserId: differentUserID.String(),
+				BookmarkId: bookmarkID.String(),
+				UserId:     differentUserID.String(),
 			},
 			want:    &emptypb.Empty{},
 			wantErr: "entity: failed to synchronize data after insert",
