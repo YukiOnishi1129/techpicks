@@ -1,6 +1,10 @@
 import { UseGuards } from '@nestjs/common';
-import { Resolver, Args, Query } from '@nestjs/graphql';
-import { Bookmark, CreateBookmarkInput } from 'src/graphql/types/graphql';
+import { Resolver, Args, Mutation } from '@nestjs/graphql';
+import {
+  Bookmark,
+  CreateBookmarkInput,
+  DeleteBookmarkInput,
+} from 'src/graphql/types/graphql';
 
 import { BookmarkService } from './bookmark.service';
 import { SupabaseAuthGuard } from '../auth/auth.guard';
@@ -9,12 +13,21 @@ import { SupabaseAuthGuard } from '../auth/auth.guard';
 export class BookmarkResolver {
   constructor(private readonly bookmarkService: BookmarkService) {}
 
-  @Query(() => Bookmark)
+  @Mutation(() => Bookmark)
   @UseGuards(SupabaseAuthGuard)
-  async articles(
+  async createBookmark(
     @Args('createBookmarkInput') input: CreateBookmarkInput,
     // @Context() context: GraphQLContext,
   ): Promise<Bookmark> {
     return await this.bookmarkService.createBookmark(input);
+  }
+
+  @Mutation(() => Boolean)
+  @UseGuards(SupabaseAuthGuard)
+  async deleteBookmark(
+    @Args('deleteBookmarkInput') input: DeleteBookmarkInput,
+    // @Context() context: GraphQLContext,
+  ): Promise<boolean> {
+    return await this.bookmarkService.deleteBookmark(input);
   }
 }

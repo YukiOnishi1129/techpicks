@@ -1,6 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { CreateBookmarkInput, Bookmark } from 'src/graphql/types/graphql';
-import { CreateBookmarkRequest } from 'src/grpc/bookmark/bookmark_pb';
+import {
+  CreateBookmarkInput,
+  Bookmark,
+  DeleteBookmarkInput,
+} from 'src/graphql/types/graphql';
+import {
+  CreateBookmarkRequest,
+  DeleteBookmarkRequest,
+} from 'src/grpc/bookmark/bookmark_pb';
 import { convertTimestampToInt } from 'src/utils/timestamp';
 
 import { GrpcBookmarkClientService } from '../grpc/grpc-bookmark-client.service';
@@ -49,6 +56,28 @@ export class BookmarkService {
         };
 
         resolve(bookmark);
+      });
+    });
+  }
+
+  async deleteBookmark(input: DeleteBookmarkInput): Promise<boolean> {
+    const req = new DeleteBookmarkRequest();
+    req.setId(input.bookmarkId);
+    req.setUserId(input.userId);
+
+    return new Promise((resolve, reject) => {
+      const client = this.grpcBookmarkClientService.getGrpcBookmarkService();
+
+      client.deleteBookmark(req, (err) => {
+        if (err) {
+          reject({
+            code: err?.code || 500,
+            message: err?.message || 'something went wrong',
+          });
+          return;
+        }
+
+        resolve(true);
       });
     });
   }

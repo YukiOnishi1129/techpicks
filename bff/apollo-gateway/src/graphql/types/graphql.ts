@@ -38,7 +38,7 @@ export class CreateBookmarkInput {
 }
 
 export class DeleteBookmarkInput {
-    id: string;
+    bookmarkId: string;
     userId: string;
 }
 
