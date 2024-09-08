@@ -6,12 +6,14 @@ import (
 	bpb "github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/grpc/bookmark"
 	"github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/internal/domain/entity"
 	"github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/internal/infrastructure/adapter"
+	"github.com/google/uuid"
 	"google.golang.org/protobuf/types/known/timestamppb"
 	"google.golang.org/protobuf/types/known/wrapperspb"
 )
 
 type BookmarkUseCase interface {
 	GetBookmarkByArticleID(ctx context.Context, req *bpb.GetBookmarkByArticleIDRequest) (*bpb.GetBookmarkResponse, error)
+	CreateBookmark(ctx context.Context, req *bpb.CreateBookmarkRequest) (*bpb.CreateBookmarkResponse, error)
 }
 
 type bookmarkUseCase struct {
@@ -57,4 +59,34 @@ func (bu *bookmarkUseCase) convertPBBookmark(b entity.Bookmark) *bpb.Bookmark {
 		resBookmark.PublishedAt = timestamppb.New(b.PublishedAt.Time)
 	}
 	return resBookmark
+}
+
+func (bu *bookmarkUseCase) CreateBookmark(ctx context.Context, req *bpb.CreateBookmarkRequest) (*bpb.CreateBookmarkResponse, error) {
+	bookmarkID, _ := uuid.NewUUID()
+	bookmark := entity.Bookmark{
+		ID:                 bookmarkID.String(),
+		ArticleID:          req.GetArticleId(),
+		UserID:             req.GetUserId(),
+		Title:              req.GetTitle(),
+		Description:        req.GetDescription(),
+		ArticleURL:         req.GetArticleUrl(),
+		PlatformName:       req.GetPlatformName(),
+		PlatformURL:        req.GetPlatformUrl(),
+		PlatformFaviconURL: req.GetPlatformFaviconUrl(),
+		IsEng:              req.GetIsEng(),
+		IsRead:             req.GetIsRead(),
+	}
+
+	if req.GetPlatformId() != nil {
+		bookmark.PlatformID.String = req.GetPlatformId().GetValue()
+		bookmark.PlatformID.Valid = true
+	}
+	if req.GetPublishedAt() != nil {
+		bookmark.PublishedAt.Time = req.GetPublishedAt().AsTime()
+		bookmark.PublishedAt.Valid = true
+	}
+	if err := bu.bookmarkAdapter.CreateBookmark(ctx, bookmark); err != nil {
+		return nil, err
+	}
+	return &bpb.CreateBookmarkResponse{}, nil
 }

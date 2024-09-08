@@ -9,4 +9,5 @@ import (
 
 type BookmarkRepository interface {
 	GetBookmark(ctx context.Context, q []qm.QueryMod) (entity.Bookmark, error)
+	CreateBookmark(ctx context.Context, b entity.Bookmark) error
 }

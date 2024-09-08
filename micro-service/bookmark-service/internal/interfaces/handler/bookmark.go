@@ -24,3 +24,11 @@ func (bh *bookmarkHandler) GetBookmarkByArticleID(ctx context.Context, req *bpb.
 	}
 	return res, nil
 }
+
+func (bh *bookmarkHandler) CreateBookmark(ctx context.Context, req *bpb.CreateBookmarkRequest) (*bpb.CreateBookmarkResponse, error) {
+	res, err := bh.bookmarkUseCase.CreateBookmark(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}

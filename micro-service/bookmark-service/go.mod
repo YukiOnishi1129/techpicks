@@ -4,6 +4,8 @@ go 1.22.2
 
 require (
 	github.com/friendsofgo/errors v0.9.2
+	github.com/google/uuid v1.6.0
+	github.com/joho/godotenv v1.5.1
 	github.com/lib/pq v1.10.9
 	github.com/volatiletech/null/v8 v8.1.2
 	github.com/volatiletech/sqlboiler/v4 v4.16.2
@@ -14,7 +16,6 @@ require (
 
 require (
 	github.com/gofrs/uuid v4.4.0+incompatible // indirect
-	github.com/joho/godotenv v1.5.1 // indirect
 	github.com/rogpeppe/go-internal v1.12.0 // indirect
 	github.com/spf13/cast v1.6.0 // indirect
 	github.com/volatiletech/inflect v0.0.1 // indirect
