@@ -89,7 +89,7 @@ export class PageInfo {
     endCursor?: Nullable<string>;
 }
 
-export class IMutation {
+export abstract class IMutation {
     abstract createBookmark(createBookmarkInput: CreateBookmarkInput): Bookmark | Promise<Bookmark>;
 
     abstract deleteBookmark(deleteBookmarkInput: DeleteBookmarkInput): boolean | Promise<boolean>;

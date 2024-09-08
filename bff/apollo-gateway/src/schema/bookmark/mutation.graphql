@@ -1,12 +1,5 @@
-type mutation {
-  """
-  Create a bookmark
-  """
+type Mutation {
   createBookmark(createBookmarkInput: CreateBookmarkInput!): Bookmark!
-
-  """
-  Delete a bookmark
-  """
   deleteBookmark(deleteBookmarkInput: DeleteBookmarkInput!): Boolean!
 }
 
