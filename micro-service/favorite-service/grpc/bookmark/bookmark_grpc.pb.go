@@ -11,6 +11,7 @@ import (
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
+	emptypb "google.golang.org/protobuf/types/known/emptypb"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -21,6 +22,7 @@ const _ = grpc.SupportPackageIsVersion9
 const (
 	BookmarkService_GetBookmarkByArticleID_FullMethodName = "/checkpicks.bookmark.v1.BookmarkService/GetBookmarkByArticleID"
 	BookmarkService_CreateBookmark_FullMethodName         = "/checkpicks.bookmark.v1.BookmarkService/CreateBookmark"
+	BookmarkService_DeleteBookmark_FullMethodName         = "/checkpicks.bookmark.v1.BookmarkService/DeleteBookmark"
 )
 
 // BookmarkServiceClient is the client API for BookmarkService service.
@@ -29,6 +31,7 @@ const (
 type BookmarkServiceClient interface {
 	GetBookmarkByArticleID(ctx context.Context, in *GetBookmarkByArticleIDRequest, opts ...grpc.CallOption) (*GetBookmarkResponse, error)
 	CreateBookmark(ctx context.Context, in *CreateBookmarkRequest, opts ...grpc.CallOption) (*CreateBookmarkResponse, error)
+	DeleteBookmark(ctx context.Context, in *DeleteBookmarkRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
 type bookmarkServiceClient struct {
@@ -59,12 +62,23 @@ func (c *bookmarkServiceClient) CreateBookmark(ctx context.Context, in *CreateBo
 	return out, nil
 }
 
+func (c *bookmarkServiceClient) DeleteBookmark(ctx context.Context, in *DeleteBookmarkRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, BookmarkService_DeleteBookmark_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // BookmarkServiceServer is the server API for BookmarkService service.
 // All implementations should embed UnimplementedBookmarkServiceServer
 // for forward compatibility.
 type BookmarkServiceServer interface {
 	GetBookmarkByArticleID(context.Context, *GetBookmarkByArticleIDRequest) (*GetBookmarkResponse, error)
 	CreateBookmark(context.Context, *CreateBookmarkRequest) (*CreateBookmarkResponse, error)
+	DeleteBookmark(context.Context, *DeleteBookmarkRequest) (*emptypb.Empty, error)
 }
 
 // UnimplementedBookmarkServiceServer should be embedded to have
@@ -79,6 +93,9 @@ func (UnimplementedBookmarkServiceServer) GetBookmarkByArticleID(context.Context
 }
 func (UnimplementedBookmarkServiceServer) CreateBookmark(context.Context, *CreateBookmarkRequest) (*CreateBookmarkResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateBookmark not implemented")
+}
+func (UnimplementedBookmarkServiceServer) DeleteBookmark(context.Context, *DeleteBookmarkRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteBookmark not implemented")
 }
 func (UnimplementedBookmarkServiceServer) testEmbeddedByValue() {}
 
@@ -136,6 +153,24 @@ func _BookmarkService_CreateBookmark_Handler(srv interface{}, ctx context.Contex
 	return interceptor(ctx, in, info, handler)
 }
 
+func _BookmarkService_DeleteBookmark_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteBookmarkRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BookmarkServiceServer).DeleteBookmark(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: BookmarkService_DeleteBookmark_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BookmarkServiceServer).DeleteBookmark(ctx, req.(*DeleteBookmarkRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // BookmarkService_ServiceDesc is the grpc.ServiceDesc for BookmarkService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -150,6 +185,10 @@ var BookmarkService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreateBookmark",
 			Handler:    _BookmarkService_CreateBookmark_Handler,
+		},
+		{
+			MethodName: "DeleteBookmark",
+			Handler:    _BookmarkService_DeleteBookmark_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

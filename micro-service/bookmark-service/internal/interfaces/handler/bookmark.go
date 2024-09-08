@@ -5,6 +5,7 @@ import (
 
 	bpb "github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/grpc/bookmark"
 	"github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/internal/application/usecase"
+	"google.golang.org/protobuf/types/known/emptypb"
 )
 
 type bookmarkHandler struct {
@@ -27,6 +28,14 @@ func (bh *bookmarkHandler) GetBookmarkByArticleID(ctx context.Context, req *bpb.
 
 func (bh *bookmarkHandler) CreateBookmark(ctx context.Context, req *bpb.CreateBookmarkRequest) (*bpb.CreateBookmarkResponse, error) {
 	res, err := bh.bookmarkUseCase.CreateBookmark(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}
+
+func (bh *bookmarkHandler) DeleteBookmark(ctx context.Context, req *bpb.DeleteBookmarkRequest) (*emptypb.Empty, error) {
+	res, err := bh.bookmarkUseCase.DeleteBookmark(ctx, req)
 	if err != nil {
 		return nil, err
 	}

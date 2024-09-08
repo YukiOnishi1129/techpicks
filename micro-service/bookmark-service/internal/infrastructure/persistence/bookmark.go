@@ -48,3 +48,10 @@ func (bp *bookmarkPersistence) CreateBookmark(ctx context.Context, b entity.Book
 	}
 	return nil
 }
+
+func (bp *bookmarkPersistence) DeleteBookmark(ctx context.Context, b entity.Bookmark) error {
+	if _, err := b.Delete(ctx, bp.db); err != nil {
+		return err
+	}
+	return nil
+}

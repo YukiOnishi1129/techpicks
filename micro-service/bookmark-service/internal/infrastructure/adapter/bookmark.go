@@ -11,6 +11,7 @@ import (
 type BookmarkAdapter interface {
 	GetBookmarkByArticleID(ctx context.Context, articleID, userID string) (entity.Bookmark, error)
 	CreateBookmark(ctx context.Context, b entity.Bookmark) (entity.Bookmark, error)
+	DeleteBookmark(ctx context.Context, id, userID string) error
 }
 
 type bookmarkAdapter struct {
@@ -36,4 +37,15 @@ func (ba *bookmarkAdapter) CreateBookmark(ctx context.Context, b entity.Bookmark
 		return entity.Bookmark{}, err
 	}
 	return ba.BookmarkRepository.GetBookmarkByID(ctx, b.ID)
+}
+
+func (ba *bookmarkAdapter) DeleteBookmark(ctx context.Context, id, userID string) error {
+	b, err := ba.BookmarkRepository.GetBookmarkByID(ctx, id)
+	if err != nil {
+		return err
+	}
+	if b.UserID != userID {
+		return entity.ErrSyncFail
+	}
+	return ba.BookmarkRepository.DeleteBookmark(ctx, b)
 }

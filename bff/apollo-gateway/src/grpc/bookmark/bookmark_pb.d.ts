@@ -5,6 +5,7 @@
 /* eslint-disable */
 
 import * as jspb from "google-protobuf";
+import * as google_protobuf_empty_pb from "google-protobuf/google/protobuf/empty_pb";
 import * as google_protobuf_timestamp_pb from "google-protobuf/google/protobuf/timestamp_pb";
 import * as google_protobuf_wrappers_pb from "google-protobuf/google/protobuf/wrappers_pb";
 
@@ -136,6 +137,29 @@ export namespace CreateBookmarkRequest {
         platformFaviconUrl: string,
         isEng: boolean,
         isRead: boolean,
+    }
+}
+
+export class DeleteBookmarkRequest extends jspb.Message { 
+    getId(): string;
+    setId(value: string): DeleteBookmarkRequest;
+    getUserId(): string;
+    setUserId(value: string): DeleteBookmarkRequest;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): DeleteBookmarkRequest.AsObject;
+    static toObject(includeInstance: boolean, msg: DeleteBookmarkRequest): DeleteBookmarkRequest.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: DeleteBookmarkRequest, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): DeleteBookmarkRequest;
+    static deserializeBinaryFromReader(message: DeleteBookmarkRequest, reader: jspb.BinaryReader): DeleteBookmarkRequest;
+}
+
+export namespace DeleteBookmarkRequest {
+    export type AsObject = {
+        id: string,
+        userId: string,
     }
 }
 
