@@ -54,6 +54,91 @@ export namespace GetBookmarkByArticleIDRequest {
     }
 }
 
+export class CreateBookmarkResponse extends jspb.Message { 
+
+    hasBookmark(): boolean;
+    clearBookmark(): void;
+    getBookmark(): Bookmark | undefined;
+    setBookmark(value?: Bookmark): CreateBookmarkResponse;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): CreateBookmarkResponse.AsObject;
+    static toObject(includeInstance: boolean, msg: CreateBookmarkResponse): CreateBookmarkResponse.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: CreateBookmarkResponse, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): CreateBookmarkResponse;
+    static deserializeBinaryFromReader(message: CreateBookmarkResponse, reader: jspb.BinaryReader): CreateBookmarkResponse;
+}
+
+export namespace CreateBookmarkResponse {
+    export type AsObject = {
+        bookmark?: Bookmark.AsObject,
+    }
+}
+
+export class CreateBookmarkRequest extends jspb.Message { 
+    getArticleId(): string;
+    setArticleId(value: string): CreateBookmarkRequest;
+    getUserId(): string;
+    setUserId(value: string): CreateBookmarkRequest;
+
+    hasPlatformId(): boolean;
+    clearPlatformId(): void;
+    getPlatformId(): google_protobuf_wrappers_pb.StringValue | undefined;
+    setPlatformId(value?: google_protobuf_wrappers_pb.StringValue): CreateBookmarkRequest;
+    getTitle(): string;
+    setTitle(value: string): CreateBookmarkRequest;
+    getDescription(): string;
+    setDescription(value: string): CreateBookmarkRequest;
+    getArticleUrl(): string;
+    setArticleUrl(value: string): CreateBookmarkRequest;
+    getThumbnailUrl(): string;
+    setThumbnailUrl(value: string): CreateBookmarkRequest;
+
+    hasPublishedAt(): boolean;
+    clearPublishedAt(): void;
+    getPublishedAt(): google_protobuf_timestamp_pb.Timestamp | undefined;
+    setPublishedAt(value?: google_protobuf_timestamp_pb.Timestamp): CreateBookmarkRequest;
+    getPlatformName(): string;
+    setPlatformName(value: string): CreateBookmarkRequest;
+    getPlatformUrl(): string;
+    setPlatformUrl(value: string): CreateBookmarkRequest;
+    getPlatformFaviconUrl(): string;
+    setPlatformFaviconUrl(value: string): CreateBookmarkRequest;
+    getIsEng(): boolean;
+    setIsEng(value: boolean): CreateBookmarkRequest;
+    getIsRead(): boolean;
+    setIsRead(value: boolean): CreateBookmarkRequest;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): CreateBookmarkRequest.AsObject;
+    static toObject(includeInstance: boolean, msg: CreateBookmarkRequest): CreateBookmarkRequest.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: CreateBookmarkRequest, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): CreateBookmarkRequest;
+    static deserializeBinaryFromReader(message: CreateBookmarkRequest, reader: jspb.BinaryReader): CreateBookmarkRequest;
+}
+
+export namespace CreateBookmarkRequest {
+    export type AsObject = {
+        articleId: string,
+        userId: string,
+        platformId?: google_protobuf_wrappers_pb.StringValue.AsObject,
+        title: string,
+        description: string,
+        articleUrl: string,
+        thumbnailUrl: string,
+        publishedAt?: google_protobuf_timestamp_pb.Timestamp.AsObject,
+        platformName: string,
+        platformUrl: string,
+        platformFaviconUrl: string,
+        isEng: boolean,
+        isRead: boolean,
+    }
+}
+
 export class Bookmark extends jspb.Message { 
     getId(): string;
     setId(value: string): Bookmark;

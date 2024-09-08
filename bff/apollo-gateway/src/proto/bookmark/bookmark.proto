@@ -10,6 +10,7 @@ import "google/protobuf/wrappers.proto";
 
 service BookmarkService {
     rpc GetBookmarkByArticleID(GetBookmarkByArticleIDRequest) returns (GetBookmarkResponse) {}
+    rpc CreateBookmark(CreateBookmarkRequest) returns (CreateBookmarkResponse) {}
 }
 
 message GetBookmarkResponse {
@@ -19,6 +20,26 @@ message GetBookmarkResponse {
 message GetBookmarkByArticleIDRequest {
     string article_id = 1;
     string user_id = 2;
+}
+
+message CreateBookmarkResponse {
+    Bookmark bookmark = 1;
+}
+
+message CreateBookmarkRequest {
+    string article_id = 1;
+    string user_id = 2;
+    google.protobuf.StringValue platform_id = 3;
+    string title = 4;
+    string description = 5;
+    string article_url = 6;
+    string thumbnail_url = 7;
+    google.protobuf.Timestamp published_at = 8;
+    string platform_name = 9;
+    string platform_url = 10;
+    string platform_favicon_url = 11;
+    bool is_eng = 12;
+    bool is_read = 13;
 }
 
 message Bookmark {
