@@ -19,6 +19,29 @@ export class ArticlesInput {
     before?: Nullable<string>;
 }
 
+export class CreateBookmarkInput {
+    articleId: string;
+    userId: string;
+    platformId?: Nullable<string>;
+    title: string;
+    description: string;
+    articleUrl: string;
+    thumbnailUrl: string;
+    publishedAt?: Nullable<number>;
+    platformName: string;
+    platformUrl: string;
+    platformFaviconUrl: string;
+    isEng: boolean;
+    isRead: boolean;
+    createdAt: number;
+    updatedAt: number;
+}
+
+export class DeleteBookmarkInput {
+    id: string;
+    userId: string;
+}
+
 export interface Node {
     id: string;
 }
@@ -66,9 +89,14 @@ export class PageInfo {
     endCursor?: Nullable<string>;
 }
 
+export abstract class IMutation {
+    abstract createBookmark(createBookmarkInput: CreateBookmarkInput): Bookmark | Promise<Bookmark>;
+
+    abstract deleteBookmark(deleteBookmarkInput: DeleteBookmarkInput): boolean | Promise<boolean>;
+}
+
 export class Bookmark implements Node {
     id: string;
-    feed: Feed;
     title: string;
     description: string;
     articleUrl: string;

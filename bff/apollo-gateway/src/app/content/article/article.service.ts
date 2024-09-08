@@ -17,6 +17,7 @@ export class ArticleService {
   constructor(
     private readonly grpcContentClientService: GrpcContentClientService,
   ) {}
+
   async getArticles(
     userId: string,
     input: ArticlesInput,

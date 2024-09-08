@@ -3,7 +3,6 @@ Bookmark schema
 """
 type Bookmark implements Node {
   id: ID!
-  feed: Feed!
   title: String!
   description: String!
   articleUrl: String!
