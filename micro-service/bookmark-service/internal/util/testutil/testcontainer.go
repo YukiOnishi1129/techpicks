@@ -3,12 +3,15 @@ package testutil
 import (
 	"context"
 	"database/sql"
+	"fmt"
 	"log"
 	"os"
 	"testing"
 	"time"
 
+	"github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/internal/util/testutil/mock"
 	_ "github.com/lib/pq"
+	"github.com/volatiletech/sqlboiler/v4/boil"
 
 	"github.com/testcontainers/testcontainers-go"
 	"github.com/testcontainers/testcontainers-go/modules/postgres"
@@ -85,6 +88,43 @@ func SetupTest(ctx context.Context, t *testing.T, schemaPath string) (*PostgresC
 	if err != nil {
 		t.Fatal(err)
 		return nil, err
+	}
+
+	platforms := mock.GetPlatformMock()
+	if len(platforms) == 0 {
+		return nil, fmt.Errorf("platforms is empty %d", len(platforms))
+	}
+	profiles := mock.GetProfileMock()
+	if len(platforms) == 0 {
+		return nil, fmt.Errorf("profiles is empty %d", len(profiles))
+	}
+	articles := mock.GetArticleMock()
+	if len(articles) == 0 {
+		return nil, fmt.Errorf("articles is empty %d", len(articles))
+	}
+
+	for _, v := range platforms {
+		err = v.Insert(ctx, c.DB, boil.Infer())
+		if err != nil {
+			t.Fatal(err)
+			return nil, err
+		}
+	}
+
+	for _, v := range profiles {
+		err = v.Insert(ctx, c.DB, boil.Infer())
+		if err != nil {
+			t.Fatal(err)
+			return nil, err
+		}
+	}
+
+	for _, v := range articles {
+		err = v.Insert(ctx, c.DB, boil.Infer())
+		if err != nil {
+			t.Fatal(err)
+			return nil, err
+		}
 	}
 
 	return c, nil

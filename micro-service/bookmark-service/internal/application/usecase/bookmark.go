@@ -44,6 +44,7 @@ func (bu *bookmarkUseCase) convertPBBookmark(b entity.Bookmark) *bpb.Bookmark {
 		Title:              b.Title,
 		Description:        b.Description,
 		ArticleUrl:         b.ArticleURL,
+		ThumbnailUrl:       b.ThumbnailURL,
 		PlatformName:       b.PlatformName,
 		PlatformUrl:        b.PlatformURL,
 		PlatformFaviconUrl: b.PlatformFaviconURL,
@@ -70,6 +71,7 @@ func (bu *bookmarkUseCase) CreateBookmark(ctx context.Context, req *bpb.CreateBo
 		Title:              req.GetTitle(),
 		Description:        req.GetDescription(),
 		ArticleURL:         req.GetArticleUrl(),
+		ThumbnailURL:       req.GetThumbnailUrl(),
 		PlatformName:       req.GetPlatformName(),
 		PlatformURL:        req.GetPlatformUrl(),
 		PlatformFaviconURL: req.GetPlatformFaviconUrl(),
@@ -85,8 +87,12 @@ func (bu *bookmarkUseCase) CreateBookmark(ctx context.Context, req *bpb.CreateBo
 		bookmark.PublishedAt.Time = req.GetPublishedAt().AsTime()
 		bookmark.PublishedAt.Valid = true
 	}
-	if err := bu.bookmarkAdapter.CreateBookmark(ctx, bookmark); err != nil {
-		return nil, err
+	b, err := bu.bookmarkAdapter.CreateBookmark(ctx, bookmark)
+	if err != nil {
+		return &bpb.CreateBookmarkResponse{}, err
 	}
-	return &bpb.CreateBookmarkResponse{}, nil
+
+	return &bpb.CreateBookmarkResponse{
+		Bookmark: bu.convertPBBookmark(b),
+	}, nil
 }

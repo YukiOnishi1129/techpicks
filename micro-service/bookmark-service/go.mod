@@ -4,9 +4,12 @@ go 1.22.2
 
 require (
 	github.com/friendsofgo/errors v0.9.2
+	github.com/google/go-cmp v0.6.0
 	github.com/google/uuid v1.6.0
 	github.com/joho/godotenv v1.5.1
 	github.com/lib/pq v1.10.9
+	github.com/testcontainers/testcontainers-go v0.33.0
+	github.com/testcontainers/testcontainers-go/modules/postgres v0.33.0
 	github.com/volatiletech/null/v8 v8.1.2
 	github.com/volatiletech/sqlboiler/v4 v4.16.2
 	github.com/volatiletech/strmangle v0.0.6
@@ -51,8 +54,6 @@ require (
 	github.com/shoenig/go-m1cpu v0.1.6 // indirect
 	github.com/sirupsen/logrus v1.9.3 // indirect
 	github.com/spf13/cast v1.6.0 // indirect
-	github.com/testcontainers/testcontainers-go v0.33.0 // indirect
-	github.com/testcontainers/testcontainers-go/modules/postgres v0.33.0 // indirect
 	github.com/tklauser/go-sysconf v0.3.12 // indirect
 	github.com/tklauser/numcpus v0.6.1 // indirect
 	github.com/volatiletech/inflect v0.0.1 // indirect
