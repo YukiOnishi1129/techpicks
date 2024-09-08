@@ -2,7 +2,9 @@
 import { User } from "@supabase/supabase-js";
 import { clsx } from "clsx";
 import { FragmentOf, readFragment } from "gql.tada";
-import { FC, useMemo, useState } from "react";
+import { FC, useState } from "react";
+
+import { ShareLinks } from "@/components/ui/share";
 
 import { ArticleTabType } from "@/types/article";
 
@@ -16,6 +18,8 @@ type ArticleCardWrapperProps = {
   user: User | undefined;
   tab: ArticleTabType;
 };
+
+const TREND_TAB = "trend";
 
 export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
   data,
@@ -35,11 +39,6 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
   //   const { bookmarkId, handleAddBookmark, handleRemoveBookmark } =
   //     useArticleBookmark({ article });
 
-  const isShowLikeCount = useMemo(
-    () => fragment?.likeCount !== undefined,
-    [fragment?.likeCount]
-  );
-
   return (
     <div
       key={showArticle.id}
@@ -49,7 +48,7 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
         <div className="mb-4 flex h-16 justify-between border-b-2 py-4 md:ml-6">
           <>
             <div className="flex">
-              {tab === "trend" && (
+              {tab === TREND_TAB && (
                 <div
                   className={clsx(style["like-count"], "mr-4 text-rose-600")}
                 >
@@ -58,7 +57,7 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
                 </div>
               )}
 
-              {tab !== "trend" ? (
+              {tab !== TREND_TAB ? (
                 <div>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
@@ -84,10 +83,10 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
 
             <div className="flex items-center justify-center">
               <div className="mr-4">
-                {/* <ShareLinks
+                <ShareLinks
                   shareTitle={showArticle.title}
                   shareUrl={showArticle.articleUrl}
-                /> */}
+                />
               </div>
             </div>
           </>

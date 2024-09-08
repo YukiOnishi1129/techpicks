@@ -3,6 +3,7 @@ package adapter
 import (
 	"context"
 	"fmt"
+	"time"
 
 	cpb "github.com/YukiOnishi1129/techpicks/micro-service/content-service/grpc/content"
 	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/domain"
@@ -63,9 +64,11 @@ func (aa *articleAdapter) GetArticles(ctx context.Context, req *cpb.GetArticlesR
 		tag := req.Tag.GetValue()
 		switch {
 		case tag == "trend":
+			sixHoursAgo := time.Now().Add(-6 * time.Hour)
 			q = append(q, qm.Where("feeds.trend_platform_type != ?", 0))
 			q = append(q, qm.LeftOuterJoin("trend_articles ON articles.id = trend_articles.article_id"))
 			q = append(q, qm.Load(entity.ArticleRels.TrendArticles))
+			q = append(q, qm.Where("trend_articles.updated_at > ?", sixHoursAgo))
 			q = append(q, qm.GroupBy("trend_articles.id, trend_articles.like_count"))
 			q = append(q, qm.OrderBy("trend_articles.like_count desc"))
 		case tag == "site":
