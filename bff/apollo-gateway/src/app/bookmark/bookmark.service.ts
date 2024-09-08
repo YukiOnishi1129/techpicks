@@ -62,7 +62,7 @@ export class BookmarkService {
 
   async deleteBookmark(input: DeleteBookmarkInput): Promise<boolean> {
     const req = new DeleteBookmarkRequest();
-    req.setId(input.bookmarkId);
+    req.setBookmarkId(input.bookmarkId);
     req.setUserId(input.userId);
 
     return new Promise((resolve, reject) => {

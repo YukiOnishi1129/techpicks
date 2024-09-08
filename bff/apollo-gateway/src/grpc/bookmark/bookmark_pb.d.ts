@@ -141,8 +141,8 @@ export namespace CreateBookmarkRequest {
 }
 
 export class DeleteBookmarkRequest extends jspb.Message { 
-    getId(): string;
-    setId(value: string): DeleteBookmarkRequest;
+    getBookmarkId(): string;
+    setBookmarkId(value: string): DeleteBookmarkRequest;
     getUserId(): string;
     setUserId(value: string): DeleteBookmarkRequest;
 
@@ -158,7 +158,7 @@ export class DeleteBookmarkRequest extends jspb.Message {
 
 export namespace DeleteBookmarkRequest {
     export type AsObject = {
-        id: string,
+        bookmarkId: string,
         userId: string,
     }
 }
