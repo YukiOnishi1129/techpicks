@@ -374,7 +374,7 @@ func Test_UseCase_DeleteBookmark(t *testing.T) {
 	userID1 := mockProfiles[0].ID
 
 	differentBookmarkID, _ := uuid.NewRandom()
-	differentUserId, _ := uuid.NewRandom()
+	differentUserID, _ := uuid.NewRandom()
 
 	test := map[string]struct {
 		recordBookmarks []entity.Bookmark
@@ -463,7 +463,7 @@ func Test_UseCase_DeleteBookmark(t *testing.T) {
 			},
 			arg: &bpb.DeleteBookmarkRequest{
 				Id:     bookmarkID.String(),
-				UserId: differentUserId.String(),
+				UserId: differentUserID.String(),
 			},
 			want:    &emptypb.Empty{},
 			wantErr: "entity: failed to synchronize data after insert",
