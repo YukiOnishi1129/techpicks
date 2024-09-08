@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 
 import { BaseLayout } from "@/components/layout/BaseLayout";
 import { ApolloProvider, ThemeProvider } from "@/components/provider";
+import { Toaster } from "@/components/ui/sonner";
 
 import type { Metadata } from "next";
 
@@ -32,6 +33,7 @@ export default function RootLayout({
         >
           <ApolloProvider>
             <BaseLayout>{children}</BaseLayout>
+            <Toaster />
           </ApolloProvider>
         </ThemeProvider>
       </body>
