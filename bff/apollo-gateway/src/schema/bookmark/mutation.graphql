@@ -1,0 +1,34 @@
+type mutation {
+  """
+  Create a bookmark
+  """
+  createBookmark(createBookmarkInput: CreateBookmarkInput!): Bookmark!
+
+  """
+  Delete a bookmark
+  """
+  deleteBookmark(deleteBookmarkInput: DeleteBookmarkInput!): Boolean!
+}
+
+input CreateBookmarkInput {
+  articleId: ID!
+  userId: ID!
+  platformId: ID
+  title: String!
+  description: String!
+  articleUrl: String!
+  thumbnailUrl: String!
+  publishedAt: Int
+  platformName: String!
+  platformUrl: String!
+  platformFaviconUrl: String!
+  isEng: Boolean!
+  isRead: Boolean!
+  createdAt: Int!
+  updatedAt: Int!
+}
+
+input DeleteBookmarkInput {
+  id: ID!
+  userId: ID!
+}
