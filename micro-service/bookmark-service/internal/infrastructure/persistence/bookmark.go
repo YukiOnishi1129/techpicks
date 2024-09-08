@@ -6,6 +6,7 @@ import (
 
 	"github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/internal/domain/entity"
 	"github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/internal/domain/repository"
+	"github.com/volatiletech/sqlboiler/v4/boil"
 	"github.com/volatiletech/sqlboiler/v4/queries/qm"
 )
 
@@ -19,6 +20,17 @@ func NewBookmarkPersistence(db *sql.DB) repository.BookmarkRepository {
 	}
 }
 
+func (bp *bookmarkPersistence) GetBookmarkByID(ctx context.Context, id string) (entity.Bookmark, error) {
+	bookmark, err := entity.FindBookmark(ctx, bp.db, id)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return entity.Bookmark{}, nil
+		}
+		return entity.Bookmark{}, err
+	}
+	return *bookmark, nil
+}
+
 func (bp *bookmarkPersistence) GetBookmark(ctx context.Context, q []qm.QueryMod) (entity.Bookmark, error) {
 	bookmark, err := entity.Bookmarks(q...).One(ctx, bp.db)
 	if err != nil {
@@ -28,4 +40,11 @@ func (bp *bookmarkPersistence) GetBookmark(ctx context.Context, q []qm.QueryMod)
 		return entity.Bookmark{}, err
 	}
 	return *bookmark, nil
+}
+
+func (bp *bookmarkPersistence) CreateBookmark(ctx context.Context, b entity.Bookmark) error {
+	if err := b.Insert(ctx, bp.db, boil.Infer()); err != nil {
+		return err
+	}
+	return nil
 }

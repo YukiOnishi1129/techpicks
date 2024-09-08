@@ -53,12 +53,12 @@ jobs:
       - name: Go Lint
         run: go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest && make lint
 
-    #   - name: Go Test
-    #     run: go test -v ./...
-    #     env:
-    #       POSTGRES_USER: root
-    #       POSTGRES_PASSWORD: password
-    #       POSTGRES_DB: postgres
+      - name: Go Test
+        run: go test -v ./...
+        env:
+          POSTGRES_USER: root
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: postgres
     
       - name: Go Build
         run: go build -v ./...

@@ -11,6 +11,7 @@ import * as google_protobuf_wrappers_pb from "google-protobuf/google/protobuf/wr
 
 interface IBookmarkServiceService extends grpc.ServiceDefinition<grpc.UntypedServiceImplementation> {
     getBookmarkByArticleID: IBookmarkServiceService_IGetBookmarkByArticleID;
+    createBookmark: IBookmarkServiceService_ICreateBookmark;
 }
 
 interface IBookmarkServiceService_IGetBookmarkByArticleID extends grpc.MethodDefinition<bookmark_bookmark_pb.GetBookmarkByArticleIDRequest, bookmark_bookmark_pb.GetBookmarkResponse> {
@@ -22,17 +23,30 @@ interface IBookmarkServiceService_IGetBookmarkByArticleID extends grpc.MethodDef
     responseSerialize: grpc.serialize<bookmark_bookmark_pb.GetBookmarkResponse>;
     responseDeserialize: grpc.deserialize<bookmark_bookmark_pb.GetBookmarkResponse>;
 }
+interface IBookmarkServiceService_ICreateBookmark extends grpc.MethodDefinition<bookmark_bookmark_pb.CreateBookmarkRequest, bookmark_bookmark_pb.CreateBookmarkResponse> {
+    path: "/checkpicks.bookmark.v1.BookmarkService/CreateBookmark";
+    requestStream: false;
+    responseStream: false;
+    requestSerialize: grpc.serialize<bookmark_bookmark_pb.CreateBookmarkRequest>;
+    requestDeserialize: grpc.deserialize<bookmark_bookmark_pb.CreateBookmarkRequest>;
+    responseSerialize: grpc.serialize<bookmark_bookmark_pb.CreateBookmarkResponse>;
+    responseDeserialize: grpc.deserialize<bookmark_bookmark_pb.CreateBookmarkResponse>;
+}
 
 export const BookmarkServiceService: IBookmarkServiceService;
 
 export interface IBookmarkServiceServer extends grpc.UntypedServiceImplementation {
     getBookmarkByArticleID: grpc.handleUnaryCall<bookmark_bookmark_pb.GetBookmarkByArticleIDRequest, bookmark_bookmark_pb.GetBookmarkResponse>;
+    createBookmark: grpc.handleUnaryCall<bookmark_bookmark_pb.CreateBookmarkRequest, bookmark_bookmark_pb.CreateBookmarkResponse>;
 }
 
 export interface IBookmarkServiceClient {
     getBookmarkByArticleID(request: bookmark_bookmark_pb.GetBookmarkByArticleIDRequest, callback: (error: grpc.ServiceError | null, response: bookmark_bookmark_pb.GetBookmarkResponse) => void): grpc.ClientUnaryCall;
     getBookmarkByArticleID(request: bookmark_bookmark_pb.GetBookmarkByArticleIDRequest, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: bookmark_bookmark_pb.GetBookmarkResponse) => void): grpc.ClientUnaryCall;
     getBookmarkByArticleID(request: bookmark_bookmark_pb.GetBookmarkByArticleIDRequest, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: bookmark_bookmark_pb.GetBookmarkResponse) => void): grpc.ClientUnaryCall;
+    createBookmark(request: bookmark_bookmark_pb.CreateBookmarkRequest, callback: (error: grpc.ServiceError | null, response: bookmark_bookmark_pb.CreateBookmarkResponse) => void): grpc.ClientUnaryCall;
+    createBookmark(request: bookmark_bookmark_pb.CreateBookmarkRequest, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: bookmark_bookmark_pb.CreateBookmarkResponse) => void): grpc.ClientUnaryCall;
+    createBookmark(request: bookmark_bookmark_pb.CreateBookmarkRequest, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: bookmark_bookmark_pb.CreateBookmarkResponse) => void): grpc.ClientUnaryCall;
 }
 
 export class BookmarkServiceClient extends grpc.Client implements IBookmarkServiceClient {
@@ -40,4 +54,7 @@ export class BookmarkServiceClient extends grpc.Client implements IBookmarkServi
     public getBookmarkByArticleID(request: bookmark_bookmark_pb.GetBookmarkByArticleIDRequest, callback: (error: grpc.ServiceError | null, response: bookmark_bookmark_pb.GetBookmarkResponse) => void): grpc.ClientUnaryCall;
     public getBookmarkByArticleID(request: bookmark_bookmark_pb.GetBookmarkByArticleIDRequest, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: bookmark_bookmark_pb.GetBookmarkResponse) => void): grpc.ClientUnaryCall;
     public getBookmarkByArticleID(request: bookmark_bookmark_pb.GetBookmarkByArticleIDRequest, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: bookmark_bookmark_pb.GetBookmarkResponse) => void): grpc.ClientUnaryCall;
+    public createBookmark(request: bookmark_bookmark_pb.CreateBookmarkRequest, callback: (error: grpc.ServiceError | null, response: bookmark_bookmark_pb.CreateBookmarkResponse) => void): grpc.ClientUnaryCall;
+    public createBookmark(request: bookmark_bookmark_pb.CreateBookmarkRequest, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: bookmark_bookmark_pb.CreateBookmarkResponse) => void): grpc.ClientUnaryCall;
+    public createBookmark(request: bookmark_bookmark_pb.CreateBookmarkRequest, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: bookmark_bookmark_pb.CreateBookmarkResponse) => void): grpc.ClientUnaryCall;
 }

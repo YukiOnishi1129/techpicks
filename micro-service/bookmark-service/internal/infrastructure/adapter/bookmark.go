@@ -10,6 +10,7 @@ import (
 
 type BookmarkAdapter interface {
 	GetBookmarkByArticleID(ctx context.Context, articleID, userID string) (entity.Bookmark, error)
+	CreateBookmark(ctx context.Context, b entity.Bookmark) (entity.Bookmark, error)
 }
 
 type bookmarkAdapter struct {
@@ -28,4 +29,11 @@ func (ba *bookmarkAdapter) GetBookmarkByArticleID(ctx context.Context, articleID
 		qm.Where("user_id = ?", userID),
 	}
 	return ba.BookmarkRepository.GetBookmark(ctx, q)
+}
+
+func (ba *bookmarkAdapter) CreateBookmark(ctx context.Context, b entity.Bookmark) (entity.Bookmark, error) {
+	if err := ba.BookmarkRepository.CreateBookmark(ctx, b); err != nil {
+		return entity.Bookmark{}, err
+	}
+	return ba.BookmarkRepository.GetBookmarkByID(ctx, b.ID)
 }

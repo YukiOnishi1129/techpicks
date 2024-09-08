@@ -119,137 +119,6 @@ var BookmarkTableColumns = struct {
 
 // Generated where
 
-type whereHelperstring struct{ field string }
-
-func (w whereHelperstring) EQ(x string) qm.QueryMod     { return qmhelper.Where(w.field, qmhelper.EQ, x) }
-func (w whereHelperstring) NEQ(x string) qm.QueryMod    { return qmhelper.Where(w.field, qmhelper.NEQ, x) }
-func (w whereHelperstring) LT(x string) qm.QueryMod     { return qmhelper.Where(w.field, qmhelper.LT, x) }
-func (w whereHelperstring) LTE(x string) qm.QueryMod    { return qmhelper.Where(w.field, qmhelper.LTE, x) }
-func (w whereHelperstring) GT(x string) qm.QueryMod     { return qmhelper.Where(w.field, qmhelper.GT, x) }
-func (w whereHelperstring) GTE(x string) qm.QueryMod    { return qmhelper.Where(w.field, qmhelper.GTE, x) }
-func (w whereHelperstring) LIKE(x string) qm.QueryMod   { return qm.Where(w.field+" LIKE ?", x) }
-func (w whereHelperstring) NLIKE(x string) qm.QueryMod  { return qm.Where(w.field+" NOT LIKE ?", x) }
-func (w whereHelperstring) ILIKE(x string) qm.QueryMod  { return qm.Where(w.field+" ILIKE ?", x) }
-func (w whereHelperstring) NILIKE(x string) qm.QueryMod { return qm.Where(w.field+" NOT ILIKE ?", x) }
-func (w whereHelperstring) IN(slice []string) qm.QueryMod {
-	values := make([]interface{}, 0, len(slice))
-	for _, value := range slice {
-		values = append(values, value)
-	}
-	return qm.WhereIn(fmt.Sprintf("%s IN ?", w.field), values...)
-}
-func (w whereHelperstring) NIN(slice []string) qm.QueryMod {
-	values := make([]interface{}, 0, len(slice))
-	for _, value := range slice {
-		values = append(values, value)
-	}
-	return qm.WhereNotIn(fmt.Sprintf("%s NOT IN ?", w.field), values...)
-}
-
-type whereHelpernull_String struct{ field string }
-
-func (w whereHelpernull_String) EQ(x null.String) qm.QueryMod {
-	return qmhelper.WhereNullEQ(w.field, false, x)
-}
-func (w whereHelpernull_String) NEQ(x null.String) qm.QueryMod {
-	return qmhelper.WhereNullEQ(w.field, true, x)
-}
-func (w whereHelpernull_String) LT(x null.String) qm.QueryMod {
-	return qmhelper.Where(w.field, qmhelper.LT, x)
-}
-func (w whereHelpernull_String) LTE(x null.String) qm.QueryMod {
-	return qmhelper.Where(w.field, qmhelper.LTE, x)
-}
-func (w whereHelpernull_String) GT(x null.String) qm.QueryMod {
-	return qmhelper.Where(w.field, qmhelper.GT, x)
-}
-func (w whereHelpernull_String) GTE(x null.String) qm.QueryMod {
-	return qmhelper.Where(w.field, qmhelper.GTE, x)
-}
-func (w whereHelpernull_String) LIKE(x null.String) qm.QueryMod {
-	return qm.Where(w.field+" LIKE ?", x)
-}
-func (w whereHelpernull_String) NLIKE(x null.String) qm.QueryMod {
-	return qm.Where(w.field+" NOT LIKE ?", x)
-}
-func (w whereHelpernull_String) ILIKE(x null.String) qm.QueryMod {
-	return qm.Where(w.field+" ILIKE ?", x)
-}
-func (w whereHelpernull_String) NILIKE(x null.String) qm.QueryMod {
-	return qm.Where(w.field+" NOT ILIKE ?", x)
-}
-func (w whereHelpernull_String) IN(slice []string) qm.QueryMod {
-	values := make([]interface{}, 0, len(slice))
-	for _, value := range slice {
-		values = append(values, value)
-	}
-	return qm.WhereIn(fmt.Sprintf("%s IN ?", w.field), values...)
-}
-func (w whereHelpernull_String) NIN(slice []string) qm.QueryMod {
-	values := make([]interface{}, 0, len(slice))
-	for _, value := range slice {
-		values = append(values, value)
-	}
-	return qm.WhereNotIn(fmt.Sprintf("%s NOT IN ?", w.field), values...)
-}
-
-func (w whereHelpernull_String) IsNull() qm.QueryMod    { return qmhelper.WhereIsNull(w.field) }
-func (w whereHelpernull_String) IsNotNull() qm.QueryMod { return qmhelper.WhereIsNotNull(w.field) }
-
-type whereHelpernull_Time struct{ field string }
-
-func (w whereHelpernull_Time) EQ(x null.Time) qm.QueryMod {
-	return qmhelper.WhereNullEQ(w.field, false, x)
-}
-func (w whereHelpernull_Time) NEQ(x null.Time) qm.QueryMod {
-	return qmhelper.WhereNullEQ(w.field, true, x)
-}
-func (w whereHelpernull_Time) LT(x null.Time) qm.QueryMod {
-	return qmhelper.Where(w.field, qmhelper.LT, x)
-}
-func (w whereHelpernull_Time) LTE(x null.Time) qm.QueryMod {
-	return qmhelper.Where(w.field, qmhelper.LTE, x)
-}
-func (w whereHelpernull_Time) GT(x null.Time) qm.QueryMod {
-	return qmhelper.Where(w.field, qmhelper.GT, x)
-}
-func (w whereHelpernull_Time) GTE(x null.Time) qm.QueryMod {
-	return qmhelper.Where(w.field, qmhelper.GTE, x)
-}
-
-func (w whereHelpernull_Time) IsNull() qm.QueryMod    { return qmhelper.WhereIsNull(w.field) }
-func (w whereHelpernull_Time) IsNotNull() qm.QueryMod { return qmhelper.WhereIsNotNull(w.field) }
-
-type whereHelperbool struct{ field string }
-
-func (w whereHelperbool) EQ(x bool) qm.QueryMod  { return qmhelper.Where(w.field, qmhelper.EQ, x) }
-func (w whereHelperbool) NEQ(x bool) qm.QueryMod { return qmhelper.Where(w.field, qmhelper.NEQ, x) }
-func (w whereHelperbool) LT(x bool) qm.QueryMod  { return qmhelper.Where(w.field, qmhelper.LT, x) }
-func (w whereHelperbool) LTE(x bool) qm.QueryMod { return qmhelper.Where(w.field, qmhelper.LTE, x) }
-func (w whereHelperbool) GT(x bool) qm.QueryMod  { return qmhelper.Where(w.field, qmhelper.GT, x) }
-func (w whereHelperbool) GTE(x bool) qm.QueryMod { return qmhelper.Where(w.field, qmhelper.GTE, x) }
-
-type whereHelpertime_Time struct{ field string }
-
-func (w whereHelpertime_Time) EQ(x time.Time) qm.QueryMod {
-	return qmhelper.Where(w.field, qmhelper.EQ, x)
-}
-func (w whereHelpertime_Time) NEQ(x time.Time) qm.QueryMod {
-	return qmhelper.Where(w.field, qmhelper.NEQ, x)
-}
-func (w whereHelpertime_Time) LT(x time.Time) qm.QueryMod {
-	return qmhelper.Where(w.field, qmhelper.LT, x)
-}
-func (w whereHelpertime_Time) LTE(x time.Time) qm.QueryMod {
-	return qmhelper.Where(w.field, qmhelper.LTE, x)
-}
-func (w whereHelpertime_Time) GT(x time.Time) qm.QueryMod {
-	return qmhelper.Where(w.field, qmhelper.GT, x)
-}
-func (w whereHelpertime_Time) GTE(x time.Time) qm.QueryMod {
-	return qmhelper.Where(w.field, qmhelper.GTE, x)
-}
-
 var BookmarkWhere = struct {
 	ID                 whereHelperstring
 	UserID             whereHelperstring
@@ -288,15 +157,46 @@ var BookmarkWhere = struct {
 
 // BookmarkRels is where relationship names are stored.
 var BookmarkRels = struct {
-}{}
+	Article  string
+	Platform string
+	User     string
+}{
+	Article:  "Article",
+	Platform: "Platform",
+	User:     "User",
+}
 
 // bookmarkR is where relationships are stored.
 type bookmarkR struct {
+	Article  *Article  `boil:"Article" json:"Article" toml:"Article" yaml:"Article"`
+	Platform *Platform `boil:"Platform" json:"Platform" toml:"Platform" yaml:"Platform"`
+	User     *Profile  `boil:"User" json:"User" toml:"User" yaml:"User"`
 }
 
 // NewStruct creates a new relationship struct
 func (*bookmarkR) NewStruct() *bookmarkR {
 	return &bookmarkR{}
+}
+
+func (r *bookmarkR) GetArticle() *Article {
+	if r == nil {
+		return nil
+	}
+	return r.Article
+}
+
+func (r *bookmarkR) GetPlatform() *Platform {
+	if r == nil {
+		return nil
+	}
+	return r.Platform
+}
+
+func (r *bookmarkR) GetUser() *Profile {
+	if r == nil {
+		return nil
+	}
+	return r.User
 }
 
 // bookmarkL is where Load methods for each relationship are stored.
@@ -613,6 +513,577 @@ func (q bookmarkQuery) Exists(ctx context.Context, exec boil.ContextExecutor) (b
 	}
 
 	return count > 0, nil
+}
+
+// Article pointed to by the foreign key.
+func (o *Bookmark) Article(mods ...qm.QueryMod) articleQuery {
+	queryMods := []qm.QueryMod{
+		qm.Where("\"id\" = ?", o.ArticleID),
+	}
+
+	queryMods = append(queryMods, mods...)
+
+	return Articles(queryMods...)
+}
+
+// Platform pointed to by the foreign key.
+func (o *Bookmark) Platform(mods ...qm.QueryMod) platformQuery {
+	queryMods := []qm.QueryMod{
+		qm.Where("\"id\" = ?", o.PlatformID),
+	}
+
+	queryMods = append(queryMods, mods...)
+
+	return Platforms(queryMods...)
+}
+
+// User pointed to by the foreign key.
+func (o *Bookmark) User(mods ...qm.QueryMod) profileQuery {
+	queryMods := []qm.QueryMod{
+		qm.Where("\"id\" = ?", o.UserID),
+	}
+
+	queryMods = append(queryMods, mods...)
+
+	return Profiles(queryMods...)
+}
+
+// LoadArticle allows an eager lookup of values, cached into the
+// loaded structs of the objects. This is for an N-1 relationship.
+func (bookmarkL) LoadArticle(ctx context.Context, e boil.ContextExecutor, singular bool, maybeBookmark interface{}, mods queries.Applicator) error {
+	var slice []*Bookmark
+	var object *Bookmark
+
+	if singular {
+		var ok bool
+		object, ok = maybeBookmark.(*Bookmark)
+		if !ok {
+			object = new(Bookmark)
+			ok = queries.SetFromEmbeddedStruct(&object, &maybeBookmark)
+			if !ok {
+				return errors.New(fmt.Sprintf("failed to set %T from embedded struct %T", object, maybeBookmark))
+			}
+		}
+	} else {
+		s, ok := maybeBookmark.(*[]*Bookmark)
+		if ok {
+			slice = *s
+		} else {
+			ok = queries.SetFromEmbeddedStruct(&slice, maybeBookmark)
+			if !ok {
+				return errors.New(fmt.Sprintf("failed to set %T from embedded struct %T", slice, maybeBookmark))
+			}
+		}
+	}
+
+	args := make(map[interface{}]struct{})
+	if singular {
+		if object.R == nil {
+			object.R = &bookmarkR{}
+		}
+		args[object.ArticleID] = struct{}{}
+
+	} else {
+		for _, obj := range slice {
+			if obj.R == nil {
+				obj.R = &bookmarkR{}
+			}
+
+			args[obj.ArticleID] = struct{}{}
+
+		}
+	}
+
+	if len(args) == 0 {
+		return nil
+	}
+
+	argsSlice := make([]interface{}, len(args))
+	i := 0
+	for arg := range args {
+		argsSlice[i] = arg
+		i++
+	}
+
+	query := NewQuery(
+		qm.From(`articles`),
+		qm.WhereIn(`articles.id in ?`, argsSlice...),
+	)
+	if mods != nil {
+		mods.Apply(query)
+	}
+
+	results, err := query.QueryContext(ctx, e)
+	if err != nil {
+		return errors.Wrap(err, "failed to eager load Article")
+	}
+
+	var resultSlice []*Article
+	if err = queries.Bind(results, &resultSlice); err != nil {
+		return errors.Wrap(err, "failed to bind eager loaded slice Article")
+	}
+
+	if err = results.Close(); err != nil {
+		return errors.Wrap(err, "failed to close results of eager load for articles")
+	}
+	if err = results.Err(); err != nil {
+		return errors.Wrap(err, "error occurred during iteration of eager loaded relations for articles")
+	}
+
+	if len(articleAfterSelectHooks) != 0 {
+		for _, obj := range resultSlice {
+			if err := obj.doAfterSelectHooks(ctx, e); err != nil {
+				return err
+			}
+		}
+	}
+
+	if len(resultSlice) == 0 {
+		return nil
+	}
+
+	if singular {
+		foreign := resultSlice[0]
+		object.R.Article = foreign
+		if foreign.R == nil {
+			foreign.R = &articleR{}
+		}
+		foreign.R.Bookmarks = append(foreign.R.Bookmarks, object)
+		return nil
+	}
+
+	for _, local := range slice {
+		for _, foreign := range resultSlice {
+			if local.ArticleID == foreign.ID {
+				local.R.Article = foreign
+				if foreign.R == nil {
+					foreign.R = &articleR{}
+				}
+				foreign.R.Bookmarks = append(foreign.R.Bookmarks, local)
+				break
+			}
+		}
+	}
+
+	return nil
+}
+
+// LoadPlatform allows an eager lookup of values, cached into the
+// loaded structs of the objects. This is for an N-1 relationship.
+func (bookmarkL) LoadPlatform(ctx context.Context, e boil.ContextExecutor, singular bool, maybeBookmark interface{}, mods queries.Applicator) error {
+	var slice []*Bookmark
+	var object *Bookmark
+
+	if singular {
+		var ok bool
+		object, ok = maybeBookmark.(*Bookmark)
+		if !ok {
+			object = new(Bookmark)
+			ok = queries.SetFromEmbeddedStruct(&object, &maybeBookmark)
+			if !ok {
+				return errors.New(fmt.Sprintf("failed to set %T from embedded struct %T", object, maybeBookmark))
+			}
+		}
+	} else {
+		s, ok := maybeBookmark.(*[]*Bookmark)
+		if ok {
+			slice = *s
+		} else {
+			ok = queries.SetFromEmbeddedStruct(&slice, maybeBookmark)
+			if !ok {
+				return errors.New(fmt.Sprintf("failed to set %T from embedded struct %T", slice, maybeBookmark))
+			}
+		}
+	}
+
+	args := make(map[interface{}]struct{})
+	if singular {
+		if object.R == nil {
+			object.R = &bookmarkR{}
+		}
+		if !queries.IsNil(object.PlatformID) {
+			args[object.PlatformID] = struct{}{}
+		}
+
+	} else {
+		for _, obj := range slice {
+			if obj.R == nil {
+				obj.R = &bookmarkR{}
+			}
+
+			if !queries.IsNil(obj.PlatformID) {
+				args[obj.PlatformID] = struct{}{}
+			}
+
+		}
+	}
+
+	if len(args) == 0 {
+		return nil
+	}
+
+	argsSlice := make([]interface{}, len(args))
+	i := 0
+	for arg := range args {
+		argsSlice[i] = arg
+		i++
+	}
+
+	query := NewQuery(
+		qm.From(`platforms`),
+		qm.WhereIn(`platforms.id in ?`, argsSlice...),
+	)
+	if mods != nil {
+		mods.Apply(query)
+	}
+
+	results, err := query.QueryContext(ctx, e)
+	if err != nil {
+		return errors.Wrap(err, "failed to eager load Platform")
+	}
+
+	var resultSlice []*Platform
+	if err = queries.Bind(results, &resultSlice); err != nil {
+		return errors.Wrap(err, "failed to bind eager loaded slice Platform")
+	}
+
+	if err = results.Close(); err != nil {
+		return errors.Wrap(err, "failed to close results of eager load for platforms")
+	}
+	if err = results.Err(); err != nil {
+		return errors.Wrap(err, "error occurred during iteration of eager loaded relations for platforms")
+	}
+
+	if len(platformAfterSelectHooks) != 0 {
+		for _, obj := range resultSlice {
+			if err := obj.doAfterSelectHooks(ctx, e); err != nil {
+				return err
+			}
+		}
+	}
+
+	if len(resultSlice) == 0 {
+		return nil
+	}
+
+	if singular {
+		foreign := resultSlice[0]
+		object.R.Platform = foreign
+		if foreign.R == nil {
+			foreign.R = &platformR{}
+		}
+		foreign.R.Bookmarks = append(foreign.R.Bookmarks, object)
+		return nil
+	}
+
+	for _, local := range slice {
+		for _, foreign := range resultSlice {
+			if queries.Equal(local.PlatformID, foreign.ID) {
+				local.R.Platform = foreign
+				if foreign.R == nil {
+					foreign.R = &platformR{}
+				}
+				foreign.R.Bookmarks = append(foreign.R.Bookmarks, local)
+				break
+			}
+		}
+	}
+
+	return nil
+}
+
+// LoadUser allows an eager lookup of values, cached into the
+// loaded structs of the objects. This is for an N-1 relationship.
+func (bookmarkL) LoadUser(ctx context.Context, e boil.ContextExecutor, singular bool, maybeBookmark interface{}, mods queries.Applicator) error {
+	var slice []*Bookmark
+	var object *Bookmark
+
+	if singular {
+		var ok bool
+		object, ok = maybeBookmark.(*Bookmark)
+		if !ok {
+			object = new(Bookmark)
+			ok = queries.SetFromEmbeddedStruct(&object, &maybeBookmark)
+			if !ok {
+				return errors.New(fmt.Sprintf("failed to set %T from embedded struct %T", object, maybeBookmark))
+			}
+		}
+	} else {
+		s, ok := maybeBookmark.(*[]*Bookmark)
+		if ok {
+			slice = *s
+		} else {
+			ok = queries.SetFromEmbeddedStruct(&slice, maybeBookmark)
+			if !ok {
+				return errors.New(fmt.Sprintf("failed to set %T from embedded struct %T", slice, maybeBookmark))
+			}
+		}
+	}
+
+	args := make(map[interface{}]struct{})
+	if singular {
+		if object.R == nil {
+			object.R = &bookmarkR{}
+		}
+		args[object.UserID] = struct{}{}
+
+	} else {
+		for _, obj := range slice {
+			if obj.R == nil {
+				obj.R = &bookmarkR{}
+			}
+
+			args[obj.UserID] = struct{}{}
+
+		}
+	}
+
+	if len(args) == 0 {
+		return nil
+	}
+
+	argsSlice := make([]interface{}, len(args))
+	i := 0
+	for arg := range args {
+		argsSlice[i] = arg
+		i++
+	}
+
+	query := NewQuery(
+		qm.From(`profiles`),
+		qm.WhereIn(`profiles.id in ?`, argsSlice...),
+	)
+	if mods != nil {
+		mods.Apply(query)
+	}
+
+	results, err := query.QueryContext(ctx, e)
+	if err != nil {
+		return errors.Wrap(err, "failed to eager load Profile")
+	}
+
+	var resultSlice []*Profile
+	if err = queries.Bind(results, &resultSlice); err != nil {
+		return errors.Wrap(err, "failed to bind eager loaded slice Profile")
+	}
+
+	if err = results.Close(); err != nil {
+		return errors.Wrap(err, "failed to close results of eager load for profiles")
+	}
+	if err = results.Err(); err != nil {
+		return errors.Wrap(err, "error occurred during iteration of eager loaded relations for profiles")
+	}
+
+	if len(profileAfterSelectHooks) != 0 {
+		for _, obj := range resultSlice {
+			if err := obj.doAfterSelectHooks(ctx, e); err != nil {
+				return err
+			}
+		}
+	}
+
+	if len(resultSlice) == 0 {
+		return nil
+	}
+
+	if singular {
+		foreign := resultSlice[0]
+		object.R.User = foreign
+		if foreign.R == nil {
+			foreign.R = &profileR{}
+		}
+		foreign.R.UserBookmarks = append(foreign.R.UserBookmarks, object)
+		return nil
+	}
+
+	for _, local := range slice {
+		for _, foreign := range resultSlice {
+			if local.UserID == foreign.ID {
+				local.R.User = foreign
+				if foreign.R == nil {
+					foreign.R = &profileR{}
+				}
+				foreign.R.UserBookmarks = append(foreign.R.UserBookmarks, local)
+				break
+			}
+		}
+	}
+
+	return nil
+}
+
+// SetArticle of the bookmark to the related item.
+// Sets o.R.Article to related.
+// Adds o to related.R.Bookmarks.
+func (o *Bookmark) SetArticle(ctx context.Context, exec boil.ContextExecutor, insert bool, related *Article) error {
+	var err error
+	if insert {
+		if err = related.Insert(ctx, exec, boil.Infer()); err != nil {
+			return errors.Wrap(err, "failed to insert into foreign table")
+		}
+	}
+
+	updateQuery := fmt.Sprintf(
+		"UPDATE \"bookmarks\" SET %s WHERE %s",
+		strmangle.SetParamNames("\"", "\"", 1, []string{"article_id"}),
+		strmangle.WhereClause("\"", "\"", 2, bookmarkPrimaryKeyColumns),
+	)
+	values := []interface{}{related.ID, o.ID}
+
+	if boil.IsDebug(ctx) {
+		writer := boil.DebugWriterFrom(ctx)
+		fmt.Fprintln(writer, updateQuery)
+		fmt.Fprintln(writer, values)
+	}
+	if _, err = exec.ExecContext(ctx, updateQuery, values...); err != nil {
+		return errors.Wrap(err, "failed to update local table")
+	}
+
+	o.ArticleID = related.ID
+	if o.R == nil {
+		o.R = &bookmarkR{
+			Article: related,
+		}
+	} else {
+		o.R.Article = related
+	}
+
+	if related.R == nil {
+		related.R = &articleR{
+			Bookmarks: BookmarkSlice{o},
+		}
+	} else {
+		related.R.Bookmarks = append(related.R.Bookmarks, o)
+	}
+
+	return nil
+}
+
+// SetPlatform of the bookmark to the related item.
+// Sets o.R.Platform to related.
+// Adds o to related.R.Bookmarks.
+func (o *Bookmark) SetPlatform(ctx context.Context, exec boil.ContextExecutor, insert bool, related *Platform) error {
+	var err error
+	if insert {
+		if err = related.Insert(ctx, exec, boil.Infer()); err != nil {
+			return errors.Wrap(err, "failed to insert into foreign table")
+		}
+	}
+
+	updateQuery := fmt.Sprintf(
+		"UPDATE \"bookmarks\" SET %s WHERE %s",
+		strmangle.SetParamNames("\"", "\"", 1, []string{"platform_id"}),
+		strmangle.WhereClause("\"", "\"", 2, bookmarkPrimaryKeyColumns),
+	)
+	values := []interface{}{related.ID, o.ID}
+
+	if boil.IsDebug(ctx) {
+		writer := boil.DebugWriterFrom(ctx)
+		fmt.Fprintln(writer, updateQuery)
+		fmt.Fprintln(writer, values)
+	}
+	if _, err = exec.ExecContext(ctx, updateQuery, values...); err != nil {
+		return errors.Wrap(err, "failed to update local table")
+	}
+
+	queries.Assign(&o.PlatformID, related.ID)
+	if o.R == nil {
+		o.R = &bookmarkR{
+			Platform: related,
+		}
+	} else {
+		o.R.Platform = related
+	}
+
+	if related.R == nil {
+		related.R = &platformR{
+			Bookmarks: BookmarkSlice{o},
+		}
+	} else {
+		related.R.Bookmarks = append(related.R.Bookmarks, o)
+	}
+
+	return nil
+}
+
+// RemovePlatform relationship.
+// Sets o.R.Platform to nil.
+// Removes o from all passed in related items' relationships struct.
+func (o *Bookmark) RemovePlatform(ctx context.Context, exec boil.ContextExecutor, related *Platform) error {
+	var err error
+
+	queries.SetScanner(&o.PlatformID, nil)
+	if _, err = o.Update(ctx, exec, boil.Whitelist("platform_id")); err != nil {
+		return errors.Wrap(err, "failed to update local table")
+	}
+
+	if o.R != nil {
+		o.R.Platform = nil
+	}
+	if related == nil || related.R == nil {
+		return nil
+	}
+
+	for i, ri := range related.R.Bookmarks {
+		if queries.Equal(o.PlatformID, ri.PlatformID) {
+			continue
+		}
+
+		ln := len(related.R.Bookmarks)
+		if ln > 1 && i < ln-1 {
+			related.R.Bookmarks[i] = related.R.Bookmarks[ln-1]
+		}
+		related.R.Bookmarks = related.R.Bookmarks[:ln-1]
+		break
+	}
+	return nil
+}
+
+// SetUser of the bookmark to the related item.
+// Sets o.R.User to related.
+// Adds o to related.R.UserBookmarks.
+func (o *Bookmark) SetUser(ctx context.Context, exec boil.ContextExecutor, insert bool, related *Profile) error {
+	var err error
+	if insert {
+		if err = related.Insert(ctx, exec, boil.Infer()); err != nil {
+			return errors.Wrap(err, "failed to insert into foreign table")
+		}
+	}
+
+	updateQuery := fmt.Sprintf(
+		"UPDATE \"bookmarks\" SET %s WHERE %s",
+		strmangle.SetParamNames("\"", "\"", 1, []string{"user_id"}),
+		strmangle.WhereClause("\"", "\"", 2, bookmarkPrimaryKeyColumns),
+	)
+	values := []interface{}{related.ID, o.ID}
+
+	if boil.IsDebug(ctx) {
+		writer := boil.DebugWriterFrom(ctx)
+		fmt.Fprintln(writer, updateQuery)
+		fmt.Fprintln(writer, values)
+	}
+	if _, err = exec.ExecContext(ctx, updateQuery, values...); err != nil {
+		return errors.Wrap(err, "failed to update local table")
+	}
+
+	o.UserID = related.ID
+	if o.R == nil {
+		o.R = &bookmarkR{
+			User: related,
+		}
+	} else {
+		o.R.User = related
+	}
+
+	if related.R == nil {
+		related.R = &profileR{
+			UserBookmarks: BookmarkSlice{o},
+		}
+	} else {
+		related.R.UserBookmarks = append(related.R.UserBookmarks, o)
+	}
+
+	return nil
 }
 
 // Bookmarks retrieves all the records using an executor.
