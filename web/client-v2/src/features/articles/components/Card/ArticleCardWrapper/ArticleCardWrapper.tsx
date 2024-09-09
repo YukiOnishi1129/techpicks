@@ -88,6 +88,8 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
                   shareUrl={showArticle.articleUrl}
                 />
               </div>
+
+              {user && <></>}
             </div>
           </>
         </div>
