@@ -19,7 +19,7 @@ export default async function DashboardTrendPage({ searchParams }: PageProps) {
 
   return (
     <Suspense fallback={<ScreenLoader />}>
-      <TrendArticleDashboardTemplate />
+      <TrendArticleDashboardTemplate user={user} />
     </Suspense>
   );
 }

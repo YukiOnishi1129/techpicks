@@ -1,3 +1,4 @@
+import { User } from "@supabase/supabase-js";
 import Image from "next/image";
 import { FC } from "react";
 
@@ -13,6 +14,7 @@ import { ArticlesInput } from "@/graphql/type";
 import { TrendArticleList } from "../../List";
 
 type TrendArticleDashboardTemplateProps = {
+  user?: User;
   languageStatus?: LanguageStatus;
 };
 
@@ -23,7 +25,7 @@ const TAB_LIST = {
 
 export const TrendArticleDashboardTemplate: FC<
   TrendArticleDashboardTemplateProps
-> = async ({ languageStatus = 2 }) => {
+> = async ({ user, languageStatus = 2 }) => {
   const title = "Trend";
   const tab = "trend";
   const enInput: ArticlesInput = {
@@ -89,6 +91,7 @@ export const TrendArticleDashboardTemplate: FC<
         <TabsContent value={TAB_LIST.ENGLISH}>
           <TrendArticleList
             data={enData.articles}
+            user={user}
             languageStatus={2}
             feedIdList={[]}
             tab={tab}
@@ -97,6 +100,7 @@ export const TrendArticleDashboardTemplate: FC<
         <TabsContent value={TAB_LIST.JAPANESE}>
           <TrendArticleList
             data={jpData.articles}
+            user={user}
             languageStatus={1}
             feedIdList={[]}
             tab={tab}
