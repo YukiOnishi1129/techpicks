@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"context"
+	"fmt"
 
 	bpb "github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/grpc/bookmark"
 	"github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/internal/domain/entity"
@@ -69,6 +70,14 @@ func (bu *bookmarkUseCase) convertPBBookmark(b entity.Bookmark) *bpb.Bookmark {
 }
 
 func (bu *bookmarkUseCase) CreateBookmark(ctx context.Context, req *bpb.CreateBookmarkRequest) (*bpb.CreateBookmarkResponse, error) {
+	data, err := bu.bookmarkAdapter.GetBookmarkByArticleID(ctx, req.GetArticleId(), req.GetUserId())
+	if err != nil {
+		return &bpb.CreateBookmarkResponse{}, err
+	}
+	if data.ID != "" {
+		return &bpb.CreateBookmarkResponse{}, fmt.Errorf("bookmark already exists")
+	}
+
 	bookmarkID, _ := uuid.NewUUID()
 	bookmark := entity.Bookmark{
 		ID:                 bookmarkID.String(),
