@@ -1,4 +1,6 @@
 import { Injectable } from '@nestjs/common';
+import { Timestamp } from 'google-protobuf/google/protobuf/timestamp_pb';
+import { StringValue } from 'google-protobuf/google/protobuf/wrappers_pb';
 import {
   CreateBookmarkInput,
   Bookmark,
@@ -21,7 +23,18 @@ export class BookmarkService {
   async createBookmark(input: CreateBookmarkInput): Promise<Bookmark> {
     const req = new CreateBookmarkRequest();
     req.setArticleId(input.articleId);
+    req.setPlatformId(new StringValue().setValue(input.platformId));
     req.setUserId(input.userId);
+    req.setTitle(input.title);
+    req.setDescription(input.description);
+    req.setArticleUrl(input.articleUrl);
+    req.setThumbnailUrl(input.thumbnailUrl);
+    req.setPublishedAt(new Timestamp().setSeconds(input.publishedAt));
+    req.setPlatformName(input.platformName);
+    req.setPlatformUrl(input.platformUrl);
+    req.setPlatformFaviconUrl(input.platformFaviconUrl);
+    req.setIsEng(input.isEng);
+    req.setIsRead(input.isRead);
 
     return new Promise((resolve, reject) => {
       const client = this.grpcBookmarkClientService.getGrpcBookmarkService();
@@ -49,7 +62,9 @@ export class BookmarkService {
           platformId: resBookmark?.platformId?.value,
           platformName: resBookmark.platformName,
           platformUrl: resBookmark.platformUrl,
-          publishedAt: convertTimestampToInt(resBookmark?.publishedAt),
+          publishedAt: resBookmark?.publishedAt
+            ? convertTimestampToInt(resBookmark.publishedAt)
+            : undefined,
           thumbnailUrl: resBookmark.thumbnailUrl,
           title: resBookmark.title,
           updatedAt: convertTimestampToInt(resBookmark.updatedAt),

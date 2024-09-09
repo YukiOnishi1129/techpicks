@@ -10,6 +10,8 @@ import { ArticleTabType } from "@/types/article";
 
 import style from "./ArticleCardWrapper.module.css";
 import { ArticleCardWrapperFragment } from "./ArticleCardWrapperFragment";
+import { useArticleBookmark } from "./useArticleBookmark";
+import { AddBookmarkTooltip, DeleteBookmarkTooltip } from "../../ToolTip";
 import { ArticleCardItem } from "../ArticleCardItem";
 
 type ArticleCardWrapperProps = {
@@ -36,8 +38,8 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
   //     Array<FavoriteArticleFolderType>
   //   >(favoriteArticleFolders);
 
-  //   const { bookmarkId, handleAddBookmark, handleRemoveBookmark } =
-  //     useArticleBookmark({ article });
+  const { bookmarkId, handleAddBookmark, handleRemoveBookmark } =
+    useArticleBookmark(showArticle);
 
   return (
     <div
@@ -88,6 +90,22 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
                   shareUrl={showArticle.articleUrl}
                 />
               </div>
+
+              {user && (
+                <>
+                  {bookmarkId ? (
+                    <DeleteBookmarkTooltip
+                      bookmarkId={bookmarkId}
+                      handleRemoveBookmark={handleRemoveBookmark}
+                    />
+                  ) : (
+                    <AddBookmarkTooltip
+                      articleId={showArticle.id}
+                      handleAddBookmark={handleAddBookmark}
+                    />
+                  )}
+                </>
+              )}
             </div>
           </>
         </div>

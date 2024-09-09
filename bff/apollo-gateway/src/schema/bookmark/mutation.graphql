@@ -17,8 +17,6 @@ input CreateBookmarkInput {
   platformFaviconUrl: String!
   isEng: Boolean!
   isRead: Boolean!
-  createdAt: Int!
-  updatedAt: Int!
 }
 
 input DeleteBookmarkInput {

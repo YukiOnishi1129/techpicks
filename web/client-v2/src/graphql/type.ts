@@ -85,7 +85,6 @@ export type Bookmark = Node & {
   articleUrl: Scalars["String"]["output"];
   createdAt: Scalars["Int"]["output"];
   description: Scalars["String"]["output"];
-  feed: Feed;
   id: Scalars["ID"]["output"];
   isEng: Scalars["Boolean"]["output"];
   isRead: Scalars["Boolean"]["output"];
@@ -108,6 +107,27 @@ export type Category = Node & {
   name: Scalars["String"]["output"];
   type: Scalars["Int"]["output"];
   updatedAt: Scalars["Int"]["output"];
+};
+
+export type CreateBookmarkInput = {
+  articleId: Scalars["ID"]["input"];
+  articleUrl: Scalars["String"]["input"];
+  description: Scalars["String"]["input"];
+  isEng: Scalars["Boolean"]["input"];
+  isRead: Scalars["Boolean"]["input"];
+  platformFaviconUrl: Scalars["String"]["input"];
+  platformId?: InputMaybe<Scalars["ID"]["input"]>;
+  platformName: Scalars["String"]["input"];
+  platformUrl: Scalars["String"]["input"];
+  publishedAt?: InputMaybe<Scalars["Int"]["input"]>;
+  thumbnailUrl: Scalars["String"]["input"];
+  title: Scalars["String"]["input"];
+  userId: Scalars["ID"]["input"];
+};
+
+export type DeleteBookmarkInput = {
+  bookmarkId: Scalars["ID"]["input"];
+  userId: Scalars["ID"]["input"];
 };
 
 /** Favorite Article schema */
@@ -161,6 +181,20 @@ export type Feed = Node & {
   thumbnailUrl: Scalars["String"]["output"];
   trendPlatformType: Scalars["Int"]["output"];
   updatedAt: Scalars["Int"]["output"];
+};
+
+export type Mutation = {
+  __typename?: "Mutation";
+  createBookmark: Bookmark;
+  deleteBookmark: Scalars["Boolean"]["output"];
+};
+
+export type MutationCreateBookmarkArgs = {
+  createBookmarkInput: CreateBookmarkInput;
+};
+
+export type MutationDeleteBookmarkArgs = {
+  deleteBookmarkInput: DeleteBookmarkInput;
 };
 
 /** MyFeedFolder is a folder that contains a list of feeds. */
@@ -225,6 +259,24 @@ export type QueryArticlesArgs = {
   articlesInput: ArticlesInput;
 };
 
+export type CreateBookmarkMutationMutationVariables = Exact<{
+  input: CreateBookmarkInput;
+}>;
+
+export type CreateBookmarkMutationMutation = {
+  __typename?: "Mutation";
+  createBookmark: { __typename?: "Bookmark"; id: string };
+};
+
+export type DeleteBookmarkMutationMutationVariables = Exact<{
+  input: DeleteBookmarkInput;
+}>;
+
+export type DeleteBookmarkMutationMutation = {
+  __typename?: "Mutation";
+  deleteBookmark: boolean;
+};
+
 export type ArticleDashboardTemplateFragmentFragment = {
   __typename?: "Query";
   articles: {
@@ -250,11 +302,13 @@ export type ArticleDashboardTemplateFragmentFragment = {
         isBookmarked: boolean;
         bookmarkId?: string | null;
         likeCount?: number | null;
+        description: string;
         platform?: {
           __typename?: "Platform";
           id: string;
           name: string;
           faviconUrl: string;
+          siteUrl: string;
         } | null;
         feeds?: Array<{ __typename?: "Feed"; id: string; name: string }> | null;
       };
@@ -291,11 +345,13 @@ export type ArticleListQueryQuery = {
         isBookmarked: boolean;
         bookmarkId?: string | null;
         likeCount?: number | null;
+        description: string;
         platform?: {
           __typename?: "Platform";
           id: string;
           name: string;
           faviconUrl: string;
+          siteUrl: string;
         } | null;
         feeds?: Array<{ __typename?: "Feed"; id: string; name: string }> | null;
       };
@@ -307,6 +363,7 @@ export type ArticleCardItemFragmentFragment = {
   __typename?: "Article";
   id: string;
   title: string;
+  description: string;
   articleUrl: string;
   publishedAt?: number | null;
   thumbnailUrl: string;
@@ -319,6 +376,7 @@ export type ArticleCardItemFragmentFragment = {
     __typename?: "Platform";
     id: string;
     name: string;
+    siteUrl: string;
     faviconUrl: string;
   } | null;
   feeds?: Array<{ __typename?: "Feed"; id: string; name: string }> | null;
@@ -336,11 +394,13 @@ export type ArticleCardWrapperFragmentFragment = {
   isBookmarked: boolean;
   bookmarkId?: string | null;
   likeCount?: number | null;
+  description: string;
   platform?: {
     __typename?: "Platform";
     id: string;
     name: string;
     faviconUrl: string;
+    siteUrl: string;
   } | null;
   feeds?: Array<{ __typename?: "Feed"; id: string; name: string }> | null;
 };
@@ -368,11 +428,13 @@ export type ArticleListFragmentFragment = {
       isBookmarked: boolean;
       bookmarkId?: string | null;
       likeCount?: number | null;
+      description: string;
       platform?: {
         __typename?: "Platform";
         id: string;
         name: string;
         faviconUrl: string;
+        siteUrl: string;
       } | null;
       feeds?: Array<{ __typename?: "Feed"; id: string; name: string }> | null;
     };
@@ -404,11 +466,13 @@ export type TrendArticleDashboardTemplateFragmentFragment = {
         isBookmarked: boolean;
         bookmarkId?: string | null;
         likeCount?: number | null;
+        description: string;
         platform?: {
           __typename?: "Platform";
           id: string;
           name: string;
           faviconUrl: string;
+          siteUrl: string;
         } | null;
         feeds?: Array<{ __typename?: "Feed"; id: string; name: string }> | null;
       };
@@ -445,11 +509,13 @@ export type TrendArticleListQueryQuery = {
         isBookmarked: boolean;
         bookmarkId?: string | null;
         likeCount?: number | null;
+        description: string;
         platform?: {
           __typename?: "Platform";
           id: string;
           name: string;
           faviconUrl: string;
+          siteUrl: string;
         } | null;
         feeds?: Array<{ __typename?: "Feed"; id: string; name: string }> | null;
       };
@@ -480,11 +546,13 @@ export type TrendArticleListFragmentFragment = {
       isBookmarked: boolean;
       bookmarkId?: string | null;
       likeCount?: number | null;
+      description: string;
       platform?: {
         __typename?: "Platform";
         id: string;
         name: string;
         faviconUrl: string;
+        siteUrl: string;
       } | null;
       feeds?: Array<{ __typename?: "Feed"; id: string; name: string }> | null;
     };
@@ -497,9 +565,11 @@ export const ArticleCardItemFragmentFragmentDoc = gql`
     platform {
       id
       name
+      siteUrl
       faviconUrl
     }
     title
+    description
     articleUrl
     publishedAt
     thumbnailUrl
@@ -613,6 +683,104 @@ export const TrendArticleDashboardTemplateFragmentFragmentDoc = gql`
   }
   ${TrendArticleListFragmentFragmentDoc}
 `;
+export const CreateBookmarkMutationDocument = gql`
+  mutation CreateBookmarkMutation($input: CreateBookmarkInput!) {
+    createBookmark(createBookmarkInput: $input) {
+      id
+    }
+  }
+`;
+export type CreateBookmarkMutationMutationFn = Apollo.MutationFunction<
+  CreateBookmarkMutationMutation,
+  CreateBookmarkMutationMutationVariables
+>;
+
+/**
+ * __useCreateBookmarkMutationMutation__
+ *
+ * To run a mutation, you first call `useCreateBookmarkMutationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateBookmarkMutationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createBookmarkMutationMutation, { data, loading, error }] = useCreateBookmarkMutationMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateBookmarkMutationMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateBookmarkMutationMutation,
+    CreateBookmarkMutationMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    CreateBookmarkMutationMutation,
+    CreateBookmarkMutationMutationVariables
+  >(CreateBookmarkMutationDocument, options);
+}
+export type CreateBookmarkMutationMutationHookResult = ReturnType<
+  typeof useCreateBookmarkMutationMutation
+>;
+export type CreateBookmarkMutationMutationResult =
+  Apollo.MutationResult<CreateBookmarkMutationMutation>;
+export type CreateBookmarkMutationMutationOptions = Apollo.BaseMutationOptions<
+  CreateBookmarkMutationMutation,
+  CreateBookmarkMutationMutationVariables
+>;
+export const DeleteBookmarkMutationDocument = gql`
+  mutation DeleteBookmarkMutation($input: DeleteBookmarkInput!) {
+    deleteBookmark(deleteBookmarkInput: $input)
+  }
+`;
+export type DeleteBookmarkMutationMutationFn = Apollo.MutationFunction<
+  DeleteBookmarkMutationMutation,
+  DeleteBookmarkMutationMutationVariables
+>;
+
+/**
+ * __useDeleteBookmarkMutationMutation__
+ *
+ * To run a mutation, you first call `useDeleteBookmarkMutationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteBookmarkMutationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteBookmarkMutationMutation, { data, loading, error }] = useDeleteBookmarkMutationMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useDeleteBookmarkMutationMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeleteBookmarkMutationMutation,
+    DeleteBookmarkMutationMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    DeleteBookmarkMutationMutation,
+    DeleteBookmarkMutationMutationVariables
+  >(DeleteBookmarkMutationDocument, options);
+}
+export type DeleteBookmarkMutationMutationHookResult = ReturnType<
+  typeof useDeleteBookmarkMutationMutation
+>;
+export type DeleteBookmarkMutationMutationResult =
+  Apollo.MutationResult<DeleteBookmarkMutationMutation>;
+export type DeleteBookmarkMutationMutationOptions = Apollo.BaseMutationOptions<
+  DeleteBookmarkMutationMutation,
+  DeleteBookmarkMutationMutationVariables
+>;
 export const ArticleListQueryDocument = gql`
   query ArticleListQuery($input: ArticlesInput!) {
     ...ArticleDashboardTemplateFragment

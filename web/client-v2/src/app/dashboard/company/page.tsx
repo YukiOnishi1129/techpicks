@@ -14,7 +14,7 @@ export default async function DashboardCompanyPage() {
 
   return (
     <Suspense fallback={<ScreenLoader />}>
-      <ArticleDashboardTemplate tab={"company"} />
+      <ArticleDashboardTemplate user={user} tab={"company"} />
     </Suspense>
   );
 }

@@ -1,3 +1,4 @@
+import { User } from "@supabase/supabase-js";
 import Image from "next/image";
 import { FC } from "react";
 
@@ -12,6 +13,7 @@ import { getArticleListQuery } from "../../../actions/getArticleListQuery";
 import { ArticleList } from "../../List";
 
 type ArticleDashboardTemplateProps = {
+  user?: User;
   languageStatus?: LanguageStatus;
   tab: "site" | "company" | "summary";
 };
@@ -23,7 +25,7 @@ const TAB_LIST = {
 
 export const ArticleDashboardTemplate: FC<
   ArticleDashboardTemplateProps
-> = async ({ languageStatus = 2, tab }) => {
+> = async ({ user, languageStatus = 2, tab }) => {
   const enInput: ArticlesInput = {
     first: 20,
     after: null,
@@ -88,6 +90,7 @@ export const ArticleDashboardTemplate: FC<
         <TabsContent value={TAB_LIST.ENGLISH}>
           <ArticleList
             data={enData.articles}
+            user={user}
             languageStatus={2}
             feedIdList={[]}
             tab={tab}
@@ -96,6 +99,7 @@ export const ArticleDashboardTemplate: FC<
         <TabsContent value={TAB_LIST.JAPANESE}>
           <ArticleList
             data={jpData.articles}
+            user={user}
             languageStatus={1}
             feedIdList={[]}
             tab={tab}
