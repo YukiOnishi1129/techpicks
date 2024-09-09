@@ -10,9 +10,21 @@ import "google/protobuf/wrappers.proto";
 
 
 service BookmarkService {
+    rpc GetBookmarks(GetBookmarksRequest) returns (GetBookmarksResponse) {}
     rpc GetBookmarkByArticleID(GetBookmarkByArticleIDRequest) returns (GetBookmarkResponse) {}
     rpc CreateBookmark(CreateBookmarkRequest) returns (CreateBookmarkResponse) {}
     rpc DeleteBookmark(DeleteBookmarkRequest) returns (google.protobuf.Empty) {}
+}
+
+message GetBookmarksResponse {
+    repeated Bookmark bookmarks = 1;
+}
+
+message GetBookmarksRequest {
+    string user_id = 1;
+    google.protobuf.StringValue keyword = 2;
+    string cursor = 3;
+    int64 limit = 4;
 }
 
 message GetBookmarkResponse {

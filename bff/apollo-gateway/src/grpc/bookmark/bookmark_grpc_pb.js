@@ -62,6 +62,28 @@ function deserialize_checkpicks_bookmark_v1_GetBookmarkResponse(buffer_arg) {
   return bookmark_bookmark_pb.GetBookmarkResponse.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
+function serialize_checkpicks_bookmark_v1_GetBookmarksRequest(arg) {
+  if (!(arg instanceof bookmark_bookmark_pb.GetBookmarksRequest)) {
+    throw new Error('Expected argument of type checkpicks.bookmark.v1.GetBookmarksRequest');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_checkpicks_bookmark_v1_GetBookmarksRequest(buffer_arg) {
+  return bookmark_bookmark_pb.GetBookmarksRequest.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
+function serialize_checkpicks_bookmark_v1_GetBookmarksResponse(arg) {
+  if (!(arg instanceof bookmark_bookmark_pb.GetBookmarksResponse)) {
+    throw new Error('Expected argument of type checkpicks.bookmark.v1.GetBookmarksResponse');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_checkpicks_bookmark_v1_GetBookmarksResponse(buffer_arg) {
+  return bookmark_bookmark_pb.GetBookmarksResponse.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
 function serialize_google_protobuf_Empty(arg) {
   if (!(arg instanceof google_protobuf_empty_pb.Empty)) {
     throw new Error('Expected argument of type google.protobuf.Empty');
@@ -75,6 +97,17 @@ function deserialize_google_protobuf_Empty(buffer_arg) {
 
 
 var BookmarkServiceService = exports.BookmarkServiceService = {
+  getBookmarks: {
+    path: '/checkpicks.bookmark.v1.BookmarkService/GetBookmarks',
+    requestStream: false,
+    responseStream: false,
+    requestType: bookmark_bookmark_pb.GetBookmarksRequest,
+    responseType: bookmark_bookmark_pb.GetBookmarksResponse,
+    requestSerialize: serialize_checkpicks_bookmark_v1_GetBookmarksRequest,
+    requestDeserialize: deserialize_checkpicks_bookmark_v1_GetBookmarksRequest,
+    responseSerialize: serialize_checkpicks_bookmark_v1_GetBookmarksResponse,
+    responseDeserialize: deserialize_checkpicks_bookmark_v1_GetBookmarksResponse,
+  },
   getBookmarkByArticleID: {
     path: '/checkpicks.bookmark.v1.BookmarkService/GetBookmarkByArticleID',
     requestStream: false,

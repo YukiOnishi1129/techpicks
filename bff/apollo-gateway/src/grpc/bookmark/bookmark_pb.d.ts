@@ -9,6 +9,60 @@ import * as google_protobuf_empty_pb from "google-protobuf/google/protobuf/empty
 import * as google_protobuf_timestamp_pb from "google-protobuf/google/protobuf/timestamp_pb";
 import * as google_protobuf_wrappers_pb from "google-protobuf/google/protobuf/wrappers_pb";
 
+export class GetBookmarksResponse extends jspb.Message { 
+    clearBookmarksList(): void;
+    getBookmarksList(): Array<Bookmark>;
+    setBookmarksList(value: Array<Bookmark>): GetBookmarksResponse;
+    addBookmarks(value?: Bookmark, index?: number): Bookmark;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): GetBookmarksResponse.AsObject;
+    static toObject(includeInstance: boolean, msg: GetBookmarksResponse): GetBookmarksResponse.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: GetBookmarksResponse, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): GetBookmarksResponse;
+    static deserializeBinaryFromReader(message: GetBookmarksResponse, reader: jspb.BinaryReader): GetBookmarksResponse;
+}
+
+export namespace GetBookmarksResponse {
+    export type AsObject = {
+        bookmarksList: Array<Bookmark.AsObject>,
+    }
+}
+
+export class GetBookmarksRequest extends jspb.Message { 
+    getUserId(): string;
+    setUserId(value: string): GetBookmarksRequest;
+
+    hasKeyword(): boolean;
+    clearKeyword(): void;
+    getKeyword(): google_protobuf_wrappers_pb.StringValue | undefined;
+    setKeyword(value?: google_protobuf_wrappers_pb.StringValue): GetBookmarksRequest;
+    getCursor(): string;
+    setCursor(value: string): GetBookmarksRequest;
+    getLimit(): number;
+    setLimit(value: number): GetBookmarksRequest;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): GetBookmarksRequest.AsObject;
+    static toObject(includeInstance: boolean, msg: GetBookmarksRequest): GetBookmarksRequest.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: GetBookmarksRequest, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): GetBookmarksRequest;
+    static deserializeBinaryFromReader(message: GetBookmarksRequest, reader: jspb.BinaryReader): GetBookmarksRequest;
+}
+
+export namespace GetBookmarksRequest {
+    export type AsObject = {
+        userId: string,
+        keyword?: google_protobuf_wrappers_pb.StringValue.AsObject,
+        cursor: string,
+        limit: number,
+    }
+}
+
 export class GetBookmarkResponse extends jspb.Message { 
 
     hasBookmark(): boolean;
