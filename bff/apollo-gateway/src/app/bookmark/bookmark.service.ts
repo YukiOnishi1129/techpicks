@@ -49,7 +49,9 @@ export class BookmarkService {
           platformId: resBookmark?.platformId?.value,
           platformName: resBookmark.platformName,
           platformUrl: resBookmark.platformUrl,
-          publishedAt: convertTimestampToInt(resBookmark?.publishedAt),
+          publishedAt: resBookmark?.publishedAt
+            ? convertTimestampToInt(resBookmark.publishedAt)
+            : undefined,
           thumbnailUrl: resBookmark.thumbnailUrl,
           title: resBookmark.title,
           updatedAt: convertTimestampToInt(resBookmark.updatedAt),

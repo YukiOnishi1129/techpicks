@@ -6,9 +6,11 @@ export const ArticleCardItemFragment = graphql(`
     platform {
       id
       name
+      siteUrl
       faviconUrl
     }
     title
+    description
     articleUrl
     publishedAt
     thumbnailUrl

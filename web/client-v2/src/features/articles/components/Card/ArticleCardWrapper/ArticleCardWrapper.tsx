@@ -38,7 +38,8 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
   //     Array<FavoriteArticleFolderType>
   //   >(favoriteArticleFolders);
 
-  const { bookmarkId } = useArticleBookmark(showArticle);
+  const { bookmarkId, handleAddBookmark, handleRemoveBookmark } =
+    useArticleBookmark(showArticle);
 
   return (
     <div
@@ -95,12 +96,12 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
                   {bookmarkId ? (
                     <DeleteBookmarkTooltip
                       bookmarkId={bookmarkId}
-                      // handleRemoveBookmark={handleRemoveBookmark}
+                      handleRemoveBookmark={handleRemoveBookmark}
                     />
                   ) : (
                     <AddBookmarkTooltip
                       articleId={showArticle.id}
-                      // handleAddBookmark={handleAddBookmark}
+                      handleAddBookmark={handleAddBookmark}
                     />
                   )}
                 </>

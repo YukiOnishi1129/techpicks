@@ -33,8 +33,6 @@ export class CreateBookmarkInput {
     platformFaviconUrl: string;
     isEng: boolean;
     isRead: boolean;
-    createdAt: number;
-    updatedAt: number;
 }
 
 export class DeleteBookmarkInput {

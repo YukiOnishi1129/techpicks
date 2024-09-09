@@ -11,20 +11,17 @@ import {
 
 type DeleteBookmarkTooltipProps = {
   bookmarkId: string;
-  //   handleRemoveBookmark: (bookmarkId: string) => Promise<void>;
+  handleRemoveBookmark: (bookmarkId: string) => Promise<void>;
 };
 
 export const DeleteBookmarkTooltip: FC<DeleteBookmarkTooltipProps> = ({
   bookmarkId,
-  //   handleRemoveBookmark,
+  handleRemoveBookmark,
 }: DeleteBookmarkTooltipProps) => {
   return (
     <TooltipProvider>
       <Tooltip>
-        <TooltipTrigger
-
-        // onClick={() => handleRemoveBookmark(bookmarkId)}
-        >
+        <TooltipTrigger onClick={() => handleRemoveBookmark(bookmarkId)}>
           <IconContext.Provider value={{ className: "hover:text-rose-900" }}>
             <FcBookmark className="inline-block" size={36} />
           </IconContext.Provider>
