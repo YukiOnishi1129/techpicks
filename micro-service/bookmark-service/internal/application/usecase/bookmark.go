@@ -113,6 +113,17 @@ func (bu *bookmarkUseCase) CreateBookmark(ctx context.Context, req *bpb.CreateBo
 }
 
 func (bu *bookmarkUseCase) DeleteBookmark(ctx context.Context, req *bpb.DeleteBookmarkRequest) (*emptypb.Empty, error) {
+	data, err := bu.bookmarkAdapter.GetBookmarkByID(ctx, req.GetBookmarkId())
+	if err != nil {
+		return &emptypb.Empty{}, err
+	}
+	if data.ID == "" {
+		return &emptypb.Empty{}, fmt.Errorf("bookmark does not exist")
+	}
+	if data.UserID != req.GetUserId() {
+		return &emptypb.Empty{}, fmt.Errorf("bookmark does not belong to the user")
+	}
+
 	if err := bu.bookmarkAdapter.DeleteBookmark(ctx, req.GetBookmarkId(), req.GetUserId()); err != nil {
 		return &emptypb.Empty{}, err
 	}

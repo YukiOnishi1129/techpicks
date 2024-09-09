@@ -518,7 +518,7 @@ func Test_UseCase_DeleteBookmark(t *testing.T) {
 				UserId:     userID1,
 			},
 			want:    &emptypb.Empty{},
-			wantErr: "entity: failed to synchronize data after insert",
+			wantErr: "bookmark does not exist",
 		},
 		"Fail: not delete bookmark different userId": {
 			recordBookmarks: []entity.Bookmark{
@@ -547,7 +547,7 @@ func Test_UseCase_DeleteBookmark(t *testing.T) {
 				UserId:     differentUserID.String(),
 			},
 			want:    &emptypb.Empty{},
-			wantErr: "entity: failed to synchronize data after insert",
+			wantErr: "bookmark does not belong to the user",
 		},
 	}
 

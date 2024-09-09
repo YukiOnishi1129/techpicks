@@ -9,6 +9,7 @@ import (
 )
 
 type BookmarkAdapter interface {
+	GetBookmarkByID(ctx context.Context, id string) (entity.Bookmark, error)
 	GetBookmarkByArticleID(ctx context.Context, articleID, userID string) (entity.Bookmark, error)
 	CreateBookmark(ctx context.Context, b entity.Bookmark) (entity.Bookmark, error)
 	DeleteBookmark(ctx context.Context, id, userID string) error
@@ -22,6 +23,10 @@ func NewBookmarkAdapter(br repository.BookmarkRepository) BookmarkAdapter {
 	return &bookmarkAdapter{
 		BookmarkRepository: br,
 	}
+}
+
+func (ba *bookmarkAdapter) GetBookmarkByID(ctx context.Context, id string) (entity.Bookmark, error) {
+	return ba.BookmarkRepository.GetBookmarkByID(ctx, id)
 }
 
 func (ba *bookmarkAdapter) GetBookmarkByArticleID(ctx context.Context, articleID, userID string) (entity.Bookmark, error) {
