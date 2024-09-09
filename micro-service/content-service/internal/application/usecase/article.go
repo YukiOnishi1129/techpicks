@@ -62,7 +62,7 @@ func (au *articleUseCase) GetArticles(ctx context.Context, req *cpb.GetArticlesR
 				res.IsBookmarked = true
 			}
 			// TODO: favorite
-			println(req.UserId.GetValue())
+			// println(req.UserId.GetValue())
 		}
 
 		edges[i] = &cpb.ArticleEdge{

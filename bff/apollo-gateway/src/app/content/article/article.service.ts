@@ -58,6 +58,7 @@ export class ArticleService {
                   cursor: edge.article.id,
                   node: {
                     articleUrl: edge.article.articleUrl,
+                    bookmarkId: edge.article?.bookmarkId?.value,
                     createdAt: convertTimestampToInt(edge.article.createdAt),
                     description: edge.article.description,
                     feeds: edge.article?.feedsList
