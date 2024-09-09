@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"context"
+	"fmt"
 
 	bpb "github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/grpc/bookmark"
 	"github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/internal/domain/entity"
@@ -69,6 +70,14 @@ func (bu *bookmarkUseCase) convertPBBookmark(b entity.Bookmark) *bpb.Bookmark {
 }
 
 func (bu *bookmarkUseCase) CreateBookmark(ctx context.Context, req *bpb.CreateBookmarkRequest) (*bpb.CreateBookmarkResponse, error) {
+	data, err := bu.bookmarkAdapter.GetBookmarkByArticleID(ctx, req.GetArticleId(), req.GetUserId())
+	if err != nil {
+		return &bpb.CreateBookmarkResponse{}, err
+	}
+	if data.ID != "" {
+		return &bpb.CreateBookmarkResponse{}, fmt.Errorf("bookmark already exists")
+	}
+
 	bookmarkID, _ := uuid.NewUUID()
 	bookmark := entity.Bookmark{
 		ID:                 bookmarkID.String(),
@@ -104,6 +113,17 @@ func (bu *bookmarkUseCase) CreateBookmark(ctx context.Context, req *bpb.CreateBo
 }
 
 func (bu *bookmarkUseCase) DeleteBookmark(ctx context.Context, req *bpb.DeleteBookmarkRequest) (*emptypb.Empty, error) {
+	data, err := bu.bookmarkAdapter.GetBookmarkByID(ctx, req.GetBookmarkId())
+	if err != nil {
+		return &emptypb.Empty{}, err
+	}
+	if data.ID == "" {
+		return &emptypb.Empty{}, fmt.Errorf("bookmark does not exist")
+	}
+	if data.UserID != req.GetUserId() {
+		return &emptypb.Empty{}, fmt.Errorf("bookmark does not belong to the user")
+	}
+
 	if err := bu.bookmarkAdapter.DeleteBookmark(ctx, req.GetBookmarkId(), req.GetUserId()); err != nil {
 		return &emptypb.Empty{}, err
 	}

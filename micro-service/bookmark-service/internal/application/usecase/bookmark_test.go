@@ -199,6 +199,8 @@ func Test_UseCase_GetBookmarkByArticleID(t *testing.T) {
 func Test_UseCase_CreateBookmark(t *testing.T) {
 	t.Parallel()
 
+	bookmarkID, _ := uuid.NewRandom()
+
 	publishedAt := time.Now().Add(-time.Hour * 24 * 7).Unix()
 
 	mockPlatforms := mock.GetPlatformMock()
@@ -210,10 +212,11 @@ func Test_UseCase_CreateBookmark(t *testing.T) {
 	userID1 := mockProfiles[0].ID
 
 	test := map[string]struct {
-		// recordBookmarks []entity.Bookmark
+		recordBookmarks    []entity.Bookmark
 		arg                *bpb.CreateBookmarkRequest
 		want               *bpb.Bookmark
 		wantBookmarkRecord entity.Bookmark
+		wantErrMsg         string
 	}{
 		"Success: create bookmark": {
 			// recordBookmarks: []entity.Bookmark{},
@@ -314,6 +317,68 @@ func Test_UseCase_CreateBookmark(t *testing.T) {
 				IsRead:             false,
 			},
 		},
+		"Fail: same bookmark": {
+			recordBookmarks: []entity.Bookmark{
+				{
+					ID:     bookmarkID.String(),
+					UserID: userID1,
+					PlatformID: null.String{
+						Valid:  true,
+						String: platformID1,
+					},
+					ArticleID:          articleID1,
+					Title:              "title_1",
+					Description:        "description_1",
+					ArticleURL:         "article_url_1",
+					PublishedAt:        null.TimeFrom(time.Unix(publishedAt, 0)),
+					ThumbnailURL:       "thumbnail_url_1",
+					PlatformName:       "platform_name_1",
+					PlatformURL:        "platform_url_1",
+					PlatformFaviconURL: "platform_favicon_url_1",
+					IsEng:              true,
+					IsRead:             false,
+				},
+			},
+			arg: &bpb.CreateBookmarkRequest{
+				ArticleId: articleID1,
+				UserId:    userID1,
+				PlatformId: &wrapperspb.StringValue{
+					Value: platformID1,
+				},
+				Title:        "title",
+				Description:  "description",
+				ArticleUrl:   "article_url",
+				ThumbnailUrl: "thumbnail_url",
+				PublishedAt: &timestamppb.Timestamp{
+					Seconds: publishedAt,
+				},
+				PlatformName:       "platform_name_1",
+				PlatformUrl:        "platform_url_1",
+				PlatformFaviconUrl: "platform_favicon_url_1",
+				IsEng:              true,
+				IsRead:             false,
+			},
+			want: &bpb.Bookmark{},
+			wantBookmarkRecord: entity.Bookmark{
+				ArticleID: articleID1,
+				UserID:    userID1,
+				PlatformID: null.String{
+					Valid:  true,
+					String: platformID1,
+				},
+				Title:              "title",
+				Description:        "description",
+				ArticleURL:         "article_url",
+				ThumbnailURL:       "thumbnail_url",
+				PublishedAt:        null.TimeFrom(time.Unix(publishedAt, 0)),
+				PlatformName:       "platform_name_1",
+				PlatformURL:        "platform_url_1",
+				PlatformFaviconURL: "platform_favicon_url_1",
+				IsEng:              true,
+				IsRead:             false,
+			},
+			wantErrMsg: "bookmark already exists",
+		},
 	}
 
 	for name, tt := range test {
@@ -334,9 +399,25 @@ func Test_UseCase_CreateBookmark(t *testing.T) {
 			testBookmarkAdapter := adapter.NewBookmarkAdapter(testBookmarkRepository)
 			testBookmarkUseCase := NewBookmarkUseCase(testBookmarkAdapter)
 
+			if tt.recordBookmarks != nil {
+				for _, v := range tt.recordBookmarks {
+					err = v.Insert(ctx, db, boil.Infer())
+					if err != nil {
+						t.Fatalf("Failed to insert record: %s", err)
+					}
+				}
+			}
+
 			got, err := testBookmarkUseCase.CreateBookmark(ctx, tt.arg)
 			if err != nil {
-				t.Fatalf("Failed to create bookmark: %s", err)
+				if tt.wantErrMsg == "" {
+					t.Error(err)
+					return
+				}
+				if diff := cmp.Diff(err.Error(), tt.wantErrMsg); diff != "" {
+					t.Errorf("failed DeleteBookmark (-got +want):\n%s", diff)
+				}
+				return
 			}
 			optsPbBookmark := []cmp.Option{
 				cmp.AllowUnexported(bpb.Bookmark{}),
@@ -437,7 +518,7 @@ func Test_UseCase_DeleteBookmark(t *testing.T) {
 				UserId:     userID1,
 			},
 			want:    &emptypb.Empty{},
-			wantErr: "entity: failed to synchronize data after insert",
+			wantErr: "bookmark does not exist",
 		},
 		"Fail: not delete bookmark different userId": {
 			recordBookmarks: []entity.Bookmark{
@@ -466,7 +547,7 @@ func Test_UseCase_DeleteBookmark(t *testing.T) {
 				UserId:     differentUserID.String(),
 			},
 			want:    &emptypb.Empty{},
-			wantErr: "entity: failed to synchronize data after insert",
+			wantErr: "bookmark does not belong to the user",
 		},
 	}
 
