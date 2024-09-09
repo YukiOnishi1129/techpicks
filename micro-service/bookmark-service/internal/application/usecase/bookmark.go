@@ -14,6 +14,7 @@ import (
 )
 
 type BookmarkUseCase interface {
+	GetBookmarks(ctx context.Context, req *bpb.GetBookmarksRequest) (*bpb.GetBookmarksResponse, error)
 	GetBookmarkByArticleID(ctx context.Context, req *bpb.GetBookmarkByArticleIDRequest) (*bpb.GetBookmarkResponse, error)
 	CreateBookmark(ctx context.Context, req *bpb.CreateBookmarkRequest) (*bpb.CreateBookmarkResponse, error)
 	DeleteBookmark(ctx context.Context, req *bpb.DeleteBookmarkRequest) (*emptypb.Empty, error)
@@ -27,6 +28,22 @@ func NewBookmarkUseCase(ba adapter.BookmarkAdapter) BookmarkUseCase {
 	return &bookmarkUseCase{
 		bookmarkAdapter: ba,
 	}
+}
+
+func (bu *bookmarkUseCase) GetBookmarks(ctx context.Context, req *bpb.GetBookmarksRequest) (*bpb.GetBookmarksResponse, error) {
+	bookmarks, err := bu.bookmarkAdapter.GetBookmarks(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+
+	var resBookmarks []*bpb.Bookmark
+	for _, b := range bookmarks {
+		resBookmarks = append(resBookmarks, bu.convertPBBookmark(*b))
+	}
+
+	return &bpb.GetBookmarksResponse{
+		Bookmarks: resBookmarks,
+	}, nil
 }
 
 func (bu *bookmarkUseCase) GetBookmarkByArticleID(ctx context.Context, req *bpb.GetBookmarkByArticleIDRequest) (*bpb.GetBookmarkResponse, error) {

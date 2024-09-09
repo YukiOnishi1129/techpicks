@@ -20,6 +20,17 @@ func NewBookmarkPersistence(db *sql.DB) repository.BookmarkRepository {
 	}
 }
 
+func (bp *bookmarkPersistence) GetBookmarks(ctx context.Context, q []qm.QueryMod) (entity.BookmarkSlice, error) {
+	bookmarks, err := entity.Bookmarks(q...).All(ctx, bp.db)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, nil
+		}
+		return nil, err
+	}
+	return bookmarks, nil
+}
+
 func (bp *bookmarkPersistence) GetBookmarkByID(ctx context.Context, id string) (entity.Bookmark, error) {
 	bookmark, err := entity.FindBookmark(ctx, bp.db, id)
 	if err != nil {
