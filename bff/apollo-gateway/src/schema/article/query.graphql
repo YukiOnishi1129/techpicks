@@ -3,6 +3,7 @@ type Query {
   Get articles
   """
   articles(articlesInput: ArticlesInput!): ArticleConnection!
+  articleOpg(articleUrl: String!): ArticleOGP!
 }
 
 input ArticlesInput {

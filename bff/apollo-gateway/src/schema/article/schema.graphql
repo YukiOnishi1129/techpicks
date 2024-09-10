@@ -32,3 +32,12 @@ type ArticleEdge {
   cursor: String!
   node: Article!
 }
+
+type ArticleOGP {
+  title: String!
+  description: String
+  thumbnailUrl: String!
+  articleUrl: String!
+  siteName: String!
+  faviconUrl: String!
+}

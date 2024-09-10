@@ -7,8 +7,12 @@ import {
 import {
   ArticleConnection,
   ArticlesInput,
+  ArticleOGP,
 } from '../../../graphql/types/graphql';
-import { GetArticlesRequest } from '../../../grpc/content/content_pb';
+import {
+  GetArticlesRequest,
+  GetArticleOGPRequest,
+} from '../../../grpc/content/content_pb';
 import { convertTimestampToInt } from '../../../utils/timestamp';
 import { GrpcContentClientService } from '../../grpc/grpc-content-client.service';
 
@@ -140,6 +144,36 @@ export class ArticleService {
         };
 
         resolve(articles);
+      });
+    });
+  }
+
+  async getArticleOgp(articleUrl: string): Promise<ArticleOGP> {
+    const req = new GetArticleOGPRequest();
+    req.setArticleUrl(articleUrl);
+
+    return new Promise((resolve, reject) => {
+      const client = this.grpcContentClientService.getGrpcContentService();
+      client.getArticleOGP(req, (err, res) => {
+        if (err) {
+          reject({
+            code: err?.code || 500,
+            message: err?.message || 'something went wrong',
+          });
+          return;
+        }
+
+        const resArticleOgp = res.toObject();
+        const articleOgp: ArticleOGP = {
+          articleUrl: resArticleOgp.ogp.siteUrl,
+          description: resArticleOgp.ogp?.description?.value,
+          faviconUrl: resArticleOgp.ogp?.faviconUrl,
+          siteName: resArticleOgp.ogp.siteName,
+          thumbnailUrl: resArticleOgp.ogp.thumbnailUrl,
+          title: resArticleOgp.ogp.title,
+        };
+
+        resolve(articleOgp);
       });
     });
   }

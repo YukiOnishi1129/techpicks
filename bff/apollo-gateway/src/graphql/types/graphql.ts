@@ -56,6 +56,8 @@ export interface Node {
 export abstract class IQuery {
     abstract articles(articlesInput: ArticlesInput): ArticleConnection | Promise<ArticleConnection>;
 
+    abstract articleOpg(articleUrl: string): ArticleOGP | Promise<ArticleOGP>;
+
     abstract bookmarks(input: BookmarksInput): BookmarkConnection | Promise<BookmarkConnection>;
 }
 
@@ -89,6 +91,15 @@ export class ArticleConnection {
 export class ArticleEdge {
     cursor: string;
     node: Article;
+}
+
+export class ArticleOGP {
+    title: string;
+    description?: Nullable<string>;
+    thumbnailUrl: string;
+    articleUrl: string;
+    siteName: string;
+    faviconUrl: string;
 }
 
 export class PageInfo {
