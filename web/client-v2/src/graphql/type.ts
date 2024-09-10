@@ -98,6 +98,27 @@ export type Bookmark = Node & {
   updatedAt: Scalars["Int"]["output"];
 };
 
+export type BookmarkConnection = {
+  __typename?: "BookmarkConnection";
+  edges: Array<BookmarkEdge>;
+  pageInfo: PageInfo;
+};
+
+export type BookmarkEdge = {
+  __typename?: "BookmarkEdge";
+  cursor: Scalars["String"]["output"];
+  node: Bookmark;
+};
+
+export type BookmarksInput = {
+  after?: InputMaybe<Scalars["String"]["input"]>;
+  before?: InputMaybe<Scalars["String"]["input"]>;
+  first?: InputMaybe<Scalars["Int"]["input"]>;
+  keyword?: InputMaybe<Scalars["String"]["input"]>;
+  last?: InputMaybe<Scalars["Int"]["input"]>;
+  userId: Scalars["String"]["input"];
+};
+
 /** Category schema */
 export type Category = Node & {
   __typename?: "Category";
@@ -253,10 +274,16 @@ export type Query = {
   __typename?: "Query";
   /** Get articles */
   articles: ArticleConnection;
+  /** Get bookmarks */
+  bookmarks: BookmarkConnection;
 };
 
 export type QueryArticlesArgs = {
   articlesInput: ArticlesInput;
+};
+
+export type QueryBookmarksArgs = {
+  input: BookmarksInput;
 };
 
 export type CreateBookmarkMutationMutationVariables = Exact<{
@@ -437,6 +464,139 @@ export type ArticleListFragmentFragment = {
         siteUrl: string;
       } | null;
       feeds?: Array<{ __typename?: "Feed"; id: string; name: string }> | null;
+    };
+  }>;
+};
+
+export type BookmarkTemplateFragmentFragment = {
+  __typename?: "Query";
+  bookmarks: {
+    __typename?: "BookmarkConnection";
+    pageInfo: {
+      __typename?: "PageInfo";
+      hasNextPage: boolean;
+      hasPreviousPage: boolean;
+      startCursor?: string | null;
+      endCursor?: string | null;
+    };
+    edges: Array<{
+      __typename?: "BookmarkEdge";
+      node: {
+        __typename?: "Bookmark";
+        id: string;
+        title: string;
+        description: string;
+        articleUrl: string;
+        thumbnailUrl: string;
+        publishedAt?: number | null;
+        articleId: string;
+        platformId?: string | null;
+        platformName: string;
+        platformUrl: string;
+        platformFaviconUrl: string;
+        isEng: boolean;
+        isRead: boolean;
+        createdAt: number;
+        updatedAt: number;
+      };
+    }>;
+  };
+};
+
+export type BookmarkListQueryQueryVariables = Exact<{
+  input: BookmarksInput;
+}>;
+
+export type BookmarkListQueryQuery = {
+  __typename?: "Query";
+  bookmarks: {
+    __typename?: "BookmarkConnection";
+    pageInfo: {
+      __typename?: "PageInfo";
+      hasNextPage: boolean;
+      hasPreviousPage: boolean;
+      startCursor?: string | null;
+      endCursor?: string | null;
+    };
+    edges: Array<{
+      __typename?: "BookmarkEdge";
+      node: {
+        __typename?: "Bookmark";
+        id: string;
+        title: string;
+        description: string;
+        articleUrl: string;
+        thumbnailUrl: string;
+        publishedAt?: number | null;
+        articleId: string;
+        platformId?: string | null;
+        platformName: string;
+        platformUrl: string;
+        platformFaviconUrl: string;
+        isEng: boolean;
+        isRead: boolean;
+        createdAt: number;
+        updatedAt: number;
+      };
+    }>;
+  };
+};
+
+export type BookmarkCardItemFragmentFragment = {
+  __typename?: "Bookmark";
+  id: string;
+  title: string;
+  thumbnailUrl: string;
+  createdAt: number;
+};
+
+export type BookmarkCardWrapperFragmentFragment = {
+  __typename?: "Bookmark";
+  id: string;
+  title: string;
+  description: string;
+  articleUrl: string;
+  thumbnailUrl: string;
+  publishedAt?: number | null;
+  articleId: string;
+  platformId?: string | null;
+  platformName: string;
+  platformUrl: string;
+  platformFaviconUrl: string;
+  isEng: boolean;
+  isRead: boolean;
+  createdAt: number;
+  updatedAt: number;
+};
+
+export type BookmarkListFragmentFragment = {
+  __typename?: "BookmarkConnection";
+  pageInfo: {
+    __typename?: "PageInfo";
+    hasNextPage: boolean;
+    hasPreviousPage: boolean;
+    startCursor?: string | null;
+    endCursor?: string | null;
+  };
+  edges: Array<{
+    __typename?: "BookmarkEdge";
+    node: {
+      __typename?: "Bookmark";
+      id: string;
+      title: string;
+      description: string;
+      articleUrl: string;
+      thumbnailUrl: string;
+      publishedAt?: number | null;
+      articleId: string;
+      platformId?: string | null;
+      platformName: string;
+      platformUrl: string;
+      platformFaviconUrl: string;
+      isEng: boolean;
+      isRead: boolean;
+      createdAt: number;
+      updatedAt: number;
     };
   }>;
 };
@@ -643,6 +803,74 @@ export const ArticleDashboardTemplateFragmentFragmentDoc = gql`
     }
   }
   ${ArticleListFragmentFragmentDoc}
+`;
+export const BookmarkCardItemFragmentFragmentDoc = gql`
+  fragment BookmarkCardItemFragment on Bookmark {
+    id
+    title
+    thumbnailUrl
+    createdAt
+  }
+`;
+export const BookmarkCardWrapperFragmentFragmentDoc = gql`
+  fragment BookmarkCardWrapperFragment on Bookmark {
+    id
+    title
+    description
+    articleUrl
+    thumbnailUrl
+    publishedAt
+    articleId
+    platformId
+    platformName
+    platformUrl
+    platformFaviconUrl
+    isEng
+    isRead
+    createdAt
+    updatedAt
+    ...BookmarkCardItemFragment
+  }
+  ${BookmarkCardItemFragmentFragmentDoc}
+`;
+export const BookmarkListFragmentFragmentDoc = gql`
+  fragment BookmarkListFragment on BookmarkConnection {
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      startCursor
+      endCursor
+    }
+    edges {
+      node {
+        id
+        title
+        description
+        articleUrl
+        thumbnailUrl
+        publishedAt
+        articleId
+        platformId
+        platformName
+        platformUrl
+        platformFaviconUrl
+        isEng
+        isRead
+        createdAt
+        updatedAt
+        ...BookmarkCardWrapperFragment
+      }
+    }
+  }
+  ${BookmarkCardWrapperFragmentFragmentDoc}
+`;
+export const BookmarkTemplateFragmentFragmentDoc = gql`
+  fragment BookmarkTemplateFragment on Query {
+    bookmarks(input: $input) {
+      ...BookmarkListFragment
+    }
+  }
+  ${BookmarkListFragmentFragmentDoc}
 `;
 export const TrendArticleListFragmentFragmentDoc = gql`
   fragment TrendArticleListFragment on ArticleConnection {
@@ -856,6 +1084,82 @@ export type ArticleListQuerySuspenseQueryHookResult = ReturnType<
 export type ArticleListQueryQueryResult = Apollo.QueryResult<
   ArticleListQueryQuery,
   ArticleListQueryQueryVariables
+>;
+export const BookmarkListQueryDocument = gql`
+  query BookmarkListQuery($input: BookmarksInput!) {
+    ...BookmarkTemplateFragment
+  }
+  ${BookmarkTemplateFragmentFragmentDoc}
+`;
+
+/**
+ * __useBookmarkListQueryQuery__
+ *
+ * To run a query within a React component, call `useBookmarkListQueryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useBookmarkListQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useBookmarkListQueryQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useBookmarkListQueryQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    BookmarkListQueryQuery,
+    BookmarkListQueryQueryVariables
+  > &
+    (
+      | { variables: BookmarkListQueryQueryVariables; skip?: boolean }
+      | { skip: boolean }
+    )
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    BookmarkListQueryQuery,
+    BookmarkListQueryQueryVariables
+  >(BookmarkListQueryDocument, options);
+}
+export function useBookmarkListQueryLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    BookmarkListQueryQuery,
+    BookmarkListQueryQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    BookmarkListQueryQuery,
+    BookmarkListQueryQueryVariables
+  >(BookmarkListQueryDocument, options);
+}
+export function useBookmarkListQuerySuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    BookmarkListQueryQuery,
+    BookmarkListQueryQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    BookmarkListQueryQuery,
+    BookmarkListQueryQueryVariables
+  >(BookmarkListQueryDocument, options);
+}
+export type BookmarkListQueryQueryHookResult = ReturnType<
+  typeof useBookmarkListQueryQuery
+>;
+export type BookmarkListQueryLazyQueryHookResult = ReturnType<
+  typeof useBookmarkListQueryLazyQuery
+>;
+export type BookmarkListQuerySuspenseQueryHookResult = ReturnType<
+  typeof useBookmarkListQuerySuspenseQuery
+>;
+export type BookmarkListQueryQueryResult = Apollo.QueryResult<
+  BookmarkListQueryQuery,
+  BookmarkListQueryQueryVariables
 >;
 export const TrendArticleListQueryDocument = gql`
   query TrendArticleListQuery($input: ArticlesInput!) {

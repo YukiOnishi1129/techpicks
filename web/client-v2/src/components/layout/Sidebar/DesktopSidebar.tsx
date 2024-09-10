@@ -1,6 +1,7 @@
 import { User } from "@supabase/supabase-js";
 import Link from "next/link";
 import { CgWebsite } from "react-icons/cg";
+import { FaRegBookmark } from "react-icons/fa";
 import {
   MdBusiness,
   MdOutlineStarOutline,
@@ -58,7 +59,7 @@ export function DesktopSidebar({ user }: DesktopSidebarProps) {
               <MdOutlineSummarize />
               <span>Summary</span>
             </Link>
-            {/* {user && (
+            {user && (
               <Link
                 href="/bookmark"
                 className="flex cursor-pointer items-center space-x-2 rounded-md p-2 hover:bg-secondary"
@@ -66,7 +67,7 @@ export function DesktopSidebar({ user }: DesktopSidebarProps) {
                 <FaRegBookmark />
                 <span>Bookmarks</span>
               </Link>
-            )} */}
+            )}
             {/* <Link
               href="/feed"
               className="flex cursor-pointer items-center space-x-2 rounded-md p-2 hover:bg-secondary"
