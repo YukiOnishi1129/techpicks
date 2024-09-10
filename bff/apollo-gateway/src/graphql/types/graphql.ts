@@ -40,12 +40,23 @@ export class DeleteBookmarkInput {
     userId: string;
 }
 
+export class BookmarksInput {
+    userId: string;
+    keyword?: Nullable<string>;
+    first?: Nullable<number>;
+    after?: Nullable<string>;
+    last?: Nullable<number>;
+    before?: Nullable<string>;
+}
+
 export interface Node {
     id: string;
 }
 
 export abstract class IQuery {
     abstract articles(articlesInput: ArticlesInput): ArticleConnection | Promise<ArticleConnection>;
+
+    abstract bookmarks(input: BookmarksInput): BookmarkConnection | Promise<BookmarkConnection>;
 }
 
 export class Article implements Node {
@@ -109,6 +120,16 @@ export class Bookmark implements Node {
     isRead: boolean;
     createdAt: number;
     updatedAt: number;
+}
+
+export class BookmarkConnection {
+    edges: BookmarkEdge[];
+    pageInfo: PageInfo;
+}
+
+export class BookmarkEdge {
+    cursor: string;
+    node: Bookmark;
 }
 
 export class Category implements Node {
