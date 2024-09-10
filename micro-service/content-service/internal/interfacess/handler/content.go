@@ -24,3 +24,11 @@ func (ch *contentHandler) GetArticles(ctx context.Context, req *cpb.GetArticlesR
 	}
 	return res, nil
 }
+
+func (ch *contentHandler) GetArticleOGP(ctx context.Context, req *cpb.GetArticleOGPRequest) (*cpb.GetArticleOGPResponse, error) {
+	res, err := ch.articleUseCase.GetArticleOGP(ctx, req.ArticleUrl)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}

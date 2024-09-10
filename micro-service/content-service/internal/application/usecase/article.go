@@ -2,18 +2,21 @@ package usecase
 
 import (
 	"context"
+	"time"
 
 	bpb "github.com/YukiOnishi1129/techpicks/micro-service/content-service/grpc/bookmark"
 	cpb "github.com/YukiOnishi1129/techpicks/micro-service/content-service/grpc/content"
 	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/domain/entity"
 	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/infrastructure/adapter"
 	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/infrastructure/external"
+	"github.com/otiai10/opengraph"
 	"google.golang.org/protobuf/types/known/timestamppb"
 	"google.golang.org/protobuf/types/known/wrapperspb"
 )
 
 type ArticleUseCase interface {
 	GetArticles(ctx context.Context, req *cpb.GetArticlesRequest) (*cpb.GetArticlesResponse, error)
+	GetArticleOGP(ctx context.Context, url string) (*cpb.GetArticleOGPResponse, error)
 }
 
 type articleUseCase struct {
@@ -113,4 +116,30 @@ func (au *articleUseCase) convertPBArticle(a entity.Article) *cpb.Article {
 	}
 	article.Platform = au.convertPBPlatform(*a.R.Platform)
 	return article
+}
+
+func (au *articleUseCase) GetArticleOGP(ctx context.Context, url string) (*cpb.GetArticleOGPResponse, error) {
+	ctx, cancel := context.WithTimeout(ctx, 10*time.Second)
+	defer cancel()
+
+	ogp, err := opengraph.FetchWithContext(ctx, url)
+	if err != nil {
+		return nil, err
+	}
+
+	thumbnailURL := ""
+	if len(ogp.Image) > 0 {
+		thumbnailURL = ogp.Image[0].URL
+	}
+
+	return &cpb.GetArticleOGPResponse{
+		Ogp: &cpb.OGP{
+			Title:        ogp.Title,
+			Description:  wrapperspb.String(ogp.Description),
+			SiteUrl:      url,
+			SiteName:     ogp.SiteName,
+			ThumbnailUrl: thumbnailURL,
+			FaviconUrl:   ogp.Favicon,
+		},
+	}, nil
 }

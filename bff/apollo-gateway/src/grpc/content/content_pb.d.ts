@@ -82,6 +82,49 @@ export namespace GetArticlesResponse {
     }
 }
 
+export class GetArticleOGPResponse extends jspb.Message { 
+
+    hasOgp(): boolean;
+    clearOgp(): void;
+    getOgp(): OGP | undefined;
+    setOgp(value?: OGP): GetArticleOGPResponse;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): GetArticleOGPResponse.AsObject;
+    static toObject(includeInstance: boolean, msg: GetArticleOGPResponse): GetArticleOGPResponse.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: GetArticleOGPResponse, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): GetArticleOGPResponse;
+    static deserializeBinaryFromReader(message: GetArticleOGPResponse, reader: jspb.BinaryReader): GetArticleOGPResponse;
+}
+
+export namespace GetArticleOGPResponse {
+    export type AsObject = {
+        ogp?: OGP.AsObject,
+    }
+}
+
+export class GetArticleOGPRequest extends jspb.Message { 
+    getArticleUrl(): string;
+    setArticleUrl(value: string): GetArticleOGPRequest;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): GetArticleOGPRequest.AsObject;
+    static toObject(includeInstance: boolean, msg: GetArticleOGPRequest): GetArticleOGPRequest.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: GetArticleOGPRequest, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): GetArticleOGPRequest;
+    static deserializeBinaryFromReader(message: GetArticleOGPRequest, reader: jspb.BinaryReader): GetArticleOGPRequest;
+}
+
+export namespace GetArticleOGPRequest {
+    export type AsObject = {
+        articleUrl: string,
+    }
+}
+
 export class PageInfo extends jspb.Message { 
     getEndCursor(): string;
     setEndCursor(value: string): PageInfo;
@@ -401,5 +444,43 @@ export namespace ArticleEdge {
     export type AsObject = {
         article?: Article.AsObject,
         cursor: string,
+    }
+}
+
+export class OGP extends jspb.Message { 
+    getTitle(): string;
+    setTitle(value: string): OGP;
+
+    hasDescription(): boolean;
+    clearDescription(): void;
+    getDescription(): google_protobuf_wrappers_pb.StringValue | undefined;
+    setDescription(value?: google_protobuf_wrappers_pb.StringValue): OGP;
+    getSiteUrl(): string;
+    setSiteUrl(value: string): OGP;
+    getSiteName(): string;
+    setSiteName(value: string): OGP;
+    getThumbnailUrl(): string;
+    setThumbnailUrl(value: string): OGP;
+    getFaviconUrl(): string;
+    setFaviconUrl(value: string): OGP;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): OGP.AsObject;
+    static toObject(includeInstance: boolean, msg: OGP): OGP.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: OGP, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): OGP;
+    static deserializeBinaryFromReader(message: OGP, reader: jspb.BinaryReader): OGP;
+}
+
+export namespace OGP {
+    export type AsObject = {
+        title: string,
+        description?: google_protobuf_wrappers_pb.StringValue.AsObject,
+        siteUrl: string,
+        siteName: string,
+        thumbnailUrl: string,
+        faviconUrl: string,
     }
 }
