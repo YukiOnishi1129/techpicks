@@ -6,7 +6,7 @@ import { getClient } from "@/lib/apollo/client";
 
 import { BookmarksInput } from "@/graphql/type";
 
-import { BookmarkListFragment } from "../components/List/BookmarkList/BookmarkListFragment";
+import { BookmarkListFragment } from "../components/List/BookmarkList";
 
 const BookmarkTemplateFragment = graphql(
   `
@@ -19,11 +19,14 @@ const BookmarkTemplateFragment = graphql(
   [BookmarkListFragment]
 );
 
-const BookmarkListQuery = graphql(`
-  query BookmarkListQuery($input: BookmarksInput!) {
-    ...BookmarkTemplateFragment
-  }
-`);
+const BookmarkListQuery = graphql(
+  `
+    query BookmarkListQuery($input: BookmarksInput!) {
+      ...BookmarkTemplateFragment
+    }
+  `,
+  [BookmarkTemplateFragment]
+);
 
 export const getBookmarkListQuery = async (input: BookmarksInput) => {
   const { data, error, loading } = await getClient().query({
