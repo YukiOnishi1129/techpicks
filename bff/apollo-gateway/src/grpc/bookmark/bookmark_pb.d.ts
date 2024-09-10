@@ -10,10 +10,15 @@ import * as google_protobuf_timestamp_pb from "google-protobuf/google/protobuf/t
 import * as google_protobuf_wrappers_pb from "google-protobuf/google/protobuf/wrappers_pb";
 
 export class GetBookmarksResponse extends jspb.Message { 
-    clearBookmarksList(): void;
-    getBookmarksList(): Array<Bookmark>;
-    setBookmarksList(value: Array<Bookmark>): GetBookmarksResponse;
-    addBookmarks(value?: Bookmark, index?: number): Bookmark;
+    clearBookmarkedgeList(): void;
+    getBookmarkedgeList(): Array<BookmarkEdge>;
+    setBookmarkedgeList(value: Array<BookmarkEdge>): GetBookmarksResponse;
+    addBookmarkedge(value?: BookmarkEdge, index?: number): BookmarkEdge;
+
+    hasPageInfo(): boolean;
+    clearPageInfo(): void;
+    getPageInfo(): PageInfo | undefined;
+    setPageInfo(value?: PageInfo): GetBookmarksResponse;
 
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): GetBookmarksResponse.AsObject;
@@ -27,7 +32,31 @@ export class GetBookmarksResponse extends jspb.Message {
 
 export namespace GetBookmarksResponse {
     export type AsObject = {
-        bookmarksList: Array<Bookmark.AsObject>,
+        bookmarkedgeList: Array<BookmarkEdge.AsObject>,
+        pageInfo?: PageInfo.AsObject,
+    }
+}
+
+export class PageInfo extends jspb.Message { 
+    getEndCursor(): string;
+    setEndCursor(value: string): PageInfo;
+    getHasNextPage(): boolean;
+    setHasNextPage(value: boolean): PageInfo;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): PageInfo.AsObject;
+    static toObject(includeInstance: boolean, msg: PageInfo): PageInfo.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: PageInfo, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): PageInfo;
+    static deserializeBinaryFromReader(message: PageInfo, reader: jspb.BinaryReader): PageInfo;
+}
+
+export namespace PageInfo {
+    export type AsObject = {
+        endCursor: string,
+        hasNextPage: boolean,
     }
 }
 
@@ -291,5 +320,31 @@ export namespace Bookmark {
         isRead: boolean,
         createdAt?: google_protobuf_timestamp_pb.Timestamp.AsObject,
         updatedAt?: google_protobuf_timestamp_pb.Timestamp.AsObject,
+    }
+}
+
+export class BookmarkEdge extends jspb.Message { 
+
+    hasBookmark(): boolean;
+    clearBookmark(): void;
+    getBookmark(): Bookmark | undefined;
+    setBookmark(value?: Bookmark): BookmarkEdge;
+    getCursor(): string;
+    setCursor(value: string): BookmarkEdge;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): BookmarkEdge.AsObject;
+    static toObject(includeInstance: boolean, msg: BookmarkEdge): BookmarkEdge.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: BookmarkEdge, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): BookmarkEdge;
+    static deserializeBinaryFromReader(message: BookmarkEdge, reader: jspb.BinaryReader): BookmarkEdge;
+}
+
+export namespace BookmarkEdge {
+    export type AsObject = {
+        bookmark?: Bookmark.AsObject,
+        cursor: string,
     }
 }
