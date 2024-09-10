@@ -36,13 +36,30 @@ func (bu *bookmarkUseCase) GetBookmarks(ctx context.Context, req *bpb.GetBookmar
 		return nil, err
 	}
 
-	var resBookmarks []*bpb.Bookmark
-	for _, b := range bookmarks {
-		resBookmarks = append(resBookmarks, bu.convertPBBookmark(*b))
+	edges := make([]*bpb.BookmarkEdge, len(bookmarks))
+	for i, b := range bookmarks {
+		edges[i] = &bpb.BookmarkEdge{
+			Cursor:   b.ID,
+			Bookmark: bu.convertPBBookmark(*b),
+		}
+	}
+
+	if len(edges) == 0 {
+		return &bpb.GetBookmarksResponse{
+			BookmarkEdge: edges,
+			PageInfo: &bpb.PageInfo{
+				HasNextPage: false,
+				EndCursor:   "",
+			},
+		}, nil
 	}
 
 	return &bpb.GetBookmarksResponse{
-		Bookmarks: resBookmarks,
+		BookmarkEdge: edges,
+		PageInfo: &bpb.PageInfo{
+			HasNextPage: len(edges) == int(req.GetLimit()),
+			EndCursor:   edges[len(edges)-1].Cursor,
+		},
 	}, nil
 }
 

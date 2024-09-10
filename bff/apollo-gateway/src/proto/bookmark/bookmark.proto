@@ -17,8 +17,14 @@ service BookmarkService {
 }
 
 message GetBookmarksResponse {
-    repeated Bookmark bookmarks = 1;
+    repeated BookmarkEdge bookmarkEdge = 1;
+    PageInfo page_info = 2;
 }
+
+message PageInfo {
+    string end_cursor = 1;
+    bool has_next_page = 2;
+  }
 
 message GetBookmarksRequest {
     string user_id = 1;
@@ -78,4 +84,9 @@ message Bookmark {
     bool is_read = 14;
     google.protobuf.Timestamp created_at = 15;
     google.protobuf.Timestamp updated_at = 16;
+}
+
+message BookmarkEdge {
+    Bookmark bookmark = 1;
+    string cursor = 2;
 }

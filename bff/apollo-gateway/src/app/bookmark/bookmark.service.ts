@@ -5,8 +5,11 @@ import {
   CreateBookmarkInput,
   Bookmark,
   DeleteBookmarkInput,
+  BookmarksInput,
+  BookmarkConnection,
 } from 'src/graphql/types/graphql';
 import {
+  GetBookmarksRequest,
   CreateBookmarkRequest,
   DeleteBookmarkRequest,
 } from 'src/grpc/bookmark/bookmark_pb';
@@ -19,6 +22,69 @@ export class BookmarkService {
   constructor(
     private readonly grpcBookmarkClientService: GrpcBookmarkClientService,
   ) {}
+
+  async getBookmarks(
+    userId: string,
+    input: BookmarksInput,
+  ): Promise<BookmarkConnection> {
+    const req = new GetBookmarksRequest();
+    req.setUserId(userId);
+    if (input?.first) req.setLimit(input.first);
+    if (input?.after) req.setCursor(input.after);
+    if (input?.keyword)
+      req.setKeyword(new StringValue().setValue(input.keyword));
+
+    return new Promise((resolve, reject) => {
+      const client = this.grpcBookmarkClientService.getGrpcBookmarkService();
+      client.getBookmarks(req, (err, res) => {
+        if (err) {
+          reject({
+            code: err?.code || 500,
+            message: err?.message || 'something went wrong',
+          });
+          return;
+        }
+
+        const resBookmarks = res.toObject();
+
+        const bookmarks: BookmarkConnection = {
+          edges: resBookmarks?.bookmarkedgeList
+            ? resBookmarks.bookmarkedgeList.map((edge) => {
+                return {
+                  cursor: edge.bookmark.id,
+                  node: {
+                    articleId: edge.bookmark.articleId,
+                    articleUrl: edge.bookmark.articleUrl,
+                    createdAt: convertTimestampToInt(edge.bookmark.createdAt),
+                    description: edge.bookmark.description,
+                    id: edge.bookmark.id,
+                    isEng: edge.bookmark.isEng,
+                    isRead: edge.bookmark.isRead,
+                    platformFaviconUrl: edge.bookmark.platformFaviconUrl,
+                    platformId: edge.bookmark?.platformId?.value,
+                    platformName: edge.bookmark.platformName,
+                    platformUrl: edge.bookmark.platformUrl,
+                    publishedAt: edge.bookmark?.publishedAt
+                      ? convertTimestampToInt(edge.bookmark.publishedAt)
+                      : undefined,
+                    thumbnailUrl: edge.bookmark.thumbnailUrl,
+                    title: edge.bookmark.title,
+                    updatedAt: convertTimestampToInt(edge.bookmark.updatedAt),
+                  },
+                };
+              })
+            : [],
+          pageInfo: {
+            endCursor: resBookmarks.pageInfo.endCursor,
+            hasNextPage: resBookmarks.pageInfo.hasNextPage,
+            hasPreviousPage: false,
+          },
+        };
+
+        resolve(bookmarks);
+      });
+    });
+  }
 
   async createBookmark(input: CreateBookmarkInput): Promise<Bookmark> {
     const req = new CreateBookmarkRequest();

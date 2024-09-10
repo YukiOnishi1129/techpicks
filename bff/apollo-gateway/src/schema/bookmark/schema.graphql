@@ -18,3 +18,13 @@ type Bookmark implements Node {
   createdAt: Int!
   updatedAt: Int!
 }
+
+type BookmarkConnection {
+  edges: [BookmarkEdge!]!
+  pageInfo: PageInfo!
+}
+
+type BookmarkEdge {
+  cursor: String!
+  node: Bookmark!
+}
