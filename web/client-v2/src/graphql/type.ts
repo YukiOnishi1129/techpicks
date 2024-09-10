@@ -314,7 +314,7 @@ export type BookmarkListQueryQueryVariables = Exact<{
 
 export type BookmarkListQueryQuery = { __typename?: 'Query', bookmarks: { __typename?: 'BookmarkConnection', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null }, edges: Array<{ __typename?: 'BookmarkEdge', node: { __typename?: 'Bookmark', id: string, title: string, description: string, articleUrl: string, thumbnailUrl: string, publishedAt?: number | null, articleId: string, platformId?: string | null, platformName: string, platformUrl: string, platformFaviconUrl: string, isEng: boolean, isRead: boolean, createdAt: number, updatedAt: number } }> } };
 
-export type BookmarkCardItemFragmentFragment = { __typename?: 'Bookmark', id: string, title: string, description: string, articleUrl: string, thumbnailUrl: string, publishedAt?: number | null, articleId: string, platformId?: string | null, platformName: string, platformUrl: string, platformFaviconUrl: string, isEng: boolean, isRead: boolean, createdAt: number, updatedAt: number };
+export type BookmarkCardItemFragmentFragment = { __typename?: 'Bookmark', id: string, title: string, thumbnailUrl: string, createdAt: number };
 
 export type BookmarkCardWrapperFragmentFragment = { __typename?: 'Bookmark', id: string, title: string, description: string, articleUrl: string, thumbnailUrl: string, publishedAt?: number | null, articleId: string, platformId?: string | null, platformName: string, platformUrl: string, platformFaviconUrl: string, isEng: boolean, isRead: boolean, createdAt: number, updatedAt: number };
 
@@ -417,19 +417,8 @@ export const BookmarkCardItemFragmentFragmentDoc = gql`
     fragment BookmarkCardItemFragment on Bookmark {
   id
   title
-  description
-  articleUrl
   thumbnailUrl
-  publishedAt
-  articleId
-  platformId
-  platformName
-  platformUrl
-  platformFaviconUrl
-  isEng
-  isRead
   createdAt
-  updatedAt
 }
     `;
 export const BookmarkCardWrapperFragmentFragmentDoc = gql`

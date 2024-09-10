@@ -8,6 +8,7 @@ import { FC, useCallback, useEffect, useRef, useState } from "react";
 import { getBookmarkListQuery } from "@/features/bookmarks/actions/getBookmarkList";
 
 import { BookmarkListFragment } from "./BookmarkListFragment";
+import { BookmarkCardWrapper } from "../../Card";
 
 type BookmarkListProps = {
   data: FragmentOf<typeof BookmarkListFragment>;
@@ -93,7 +94,7 @@ export const BookmarkList: FC<BookmarkListProps> = ({
         <div className="m-auto">
           {flatBookmarks.map((bookmark) => (
             <div key={bookmark.id} className="mb-4">
-              {/* <ArticleCardWrapper data={article} user={user} tab={tab} /> */}
+              <BookmarkCardWrapper data={bookmark} user={user} />
             </div>
           ))}
           <div ref={observerTarget}>
