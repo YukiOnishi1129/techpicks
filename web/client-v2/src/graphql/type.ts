@@ -314,6 +314,10 @@ export type BookmarkListQueryQueryVariables = Exact<{
 
 export type BookmarkListQueryQuery = { __typename?: 'Query', bookmarks: { __typename?: 'BookmarkConnection', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null }, edges: Array<{ __typename?: 'BookmarkEdge', node: { __typename?: 'Bookmark', id: string, title: string, description: string, articleUrl: string, thumbnailUrl: string, publishedAt?: number | null, articleId: string, platformId?: string | null, platformName: string, platformUrl: string, platformFaviconUrl: string, isEng: boolean, isRead: boolean, createdAt: number, updatedAt: number } }> } };
 
+export type BookmarkCardItemFragmentFragment = { __typename?: 'Bookmark', id: string, title: string, description: string, articleUrl: string, thumbnailUrl: string, publishedAt?: number | null, articleId: string, platformId?: string | null, platformName: string, platformUrl: string, platformFaviconUrl: string, isEng: boolean, isRead: boolean, createdAt: number, updatedAt: number };
+
+export type BookmarkCardWrapperFragmentFragment = { __typename?: 'Bookmark', id: string, title: string, description: string, articleUrl: string, thumbnailUrl: string, publishedAt?: number | null, articleId: string, platformId?: string | null, platformName: string, platformUrl: string, platformFaviconUrl: string, isEng: boolean, isRead: boolean, createdAt: number, updatedAt: number };
+
 export type BookmarkListFragmentFragment = { __typename?: 'BookmarkConnection', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null }, edges: Array<{ __typename?: 'BookmarkEdge', node: { __typename?: 'Bookmark', id: string, title: string, description: string, articleUrl: string, thumbnailUrl: string, publishedAt?: number | null, articleId: string, platformId?: string | null, platformName: string, platformUrl: string, platformFaviconUrl: string, isEng: boolean, isRead: boolean, createdAt: number, updatedAt: number } }> };
 
 export type TrendArticleDashboardTemplateFragmentFragment = { __typename?: 'Query', articles: { __typename?: 'ArticleConnection', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null }, edges: Array<{ __typename?: 'ArticleEdge', node: { __typename?: 'Article', id: string, title: string, articleUrl: string, publishedAt?: number | null, thumbnailUrl: string, isEng: boolean, isPrivate: boolean, isBookmarked: boolean, bookmarkId?: string | null, likeCount?: number | null, description: string, platform?: { __typename?: 'Platform', id: string, name: string, faviconUrl: string, siteUrl: string } | null, feeds?: Array<{ __typename?: 'Feed', id: string, name: string }> | null } }> } };
@@ -409,6 +413,45 @@ export const ArticleDashboardTemplateFragmentFragmentDoc = gql`
   }
 }
     ${ArticleListFragmentFragmentDoc}`;
+export const BookmarkCardItemFragmentFragmentDoc = gql`
+    fragment BookmarkCardItemFragment on Bookmark {
+  id
+  title
+  description
+  articleUrl
+  thumbnailUrl
+  publishedAt
+  articleId
+  platformId
+  platformName
+  platformUrl
+  platformFaviconUrl
+  isEng
+  isRead
+  createdAt
+  updatedAt
+}
+    `;
+export const BookmarkCardWrapperFragmentFragmentDoc = gql`
+    fragment BookmarkCardWrapperFragment on Bookmark {
+  id
+  title
+  description
+  articleUrl
+  thumbnailUrl
+  publishedAt
+  articleId
+  platformId
+  platformName
+  platformUrl
+  platformFaviconUrl
+  isEng
+  isRead
+  createdAt
+  updatedAt
+  ...BookmarkCardItemFragment
+}
+    ${BookmarkCardItemFragmentFragmentDoc}`;
 export const BookmarkListFragmentFragmentDoc = gql`
     fragment BookmarkListFragment on BookmarkConnection {
   pageInfo {
@@ -434,10 +477,11 @@ export const BookmarkListFragmentFragmentDoc = gql`
       isRead
       createdAt
       updatedAt
+      ...BookmarkCardWrapperFragment
     }
   }
 }
-    `;
+    ${BookmarkCardWrapperFragmentFragmentDoc}`;
 export const BookmarkTemplateFragmentFragmentDoc = gql`
     fragment BookmarkTemplateFragment on Query {
   bookmarks(input: $input) {
