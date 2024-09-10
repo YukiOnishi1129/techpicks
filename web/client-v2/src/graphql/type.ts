@@ -67,6 +67,16 @@ export type ArticleEdge = {
   node: Article;
 };
 
+export type ArticleOgp = {
+  __typename?: "ArticleOGP";
+  articleUrl: Scalars["String"]["output"];
+  description?: Maybe<Scalars["String"]["output"]>;
+  faviconUrl: Scalars["String"]["output"];
+  siteName: Scalars["String"]["output"];
+  thumbnailUrl: Scalars["String"]["output"];
+  title: Scalars["String"]["output"];
+};
+
 export type ArticlesInput = {
   after?: InputMaybe<Scalars["String"]["input"]>;
   before?: InputMaybe<Scalars["String"]["input"]>;
@@ -272,10 +282,15 @@ export type Profile = Node & {
 
 export type Query = {
   __typename?: "Query";
+  articleOpg: ArticleOgp;
   /** Get articles */
   articles: ArticleConnection;
   /** Get bookmarks */
   bookmarks: BookmarkConnection;
+};
+
+export type QueryArticleOpgArgs = {
+  articleUrl: Scalars["String"]["input"];
 };
 
 export type QueryArticlesArgs = {
@@ -284,6 +299,16 @@ export type QueryArticlesArgs = {
 
 export type QueryBookmarksArgs = {
   input: BookmarksInput;
+};
+
+export type OgpPreviewContentFragmentFragment = {
+  __typename?: "ArticleOGP";
+  title: string;
+  description?: string | null;
+  thumbnailUrl: string;
+  articleUrl: string;
+  siteName: string;
+  faviconUrl: string;
 };
 
 export type CreateBookmarkMutationMutationVariables = Exact<{
@@ -383,6 +408,36 @@ export type ArticleListQueryQuery = {
         feeds?: Array<{ __typename?: "Feed"; id: string; name: string }> | null;
       };
     }>;
+  };
+};
+
+export type ArticleOgpFragmentFragment = {
+  __typename?: "Query";
+  articleOpg: {
+    __typename?: "ArticleOGP";
+    title: string;
+    description?: string | null;
+    thumbnailUrl: string;
+    articleUrl: string;
+    siteName: string;
+    faviconUrl: string;
+  };
+};
+
+export type ArticleOgpQueryQueryVariables = Exact<{
+  url: Scalars["String"]["input"];
+}>;
+
+export type ArticleOgpQueryQuery = {
+  __typename?: "Query";
+  articleOpg: {
+    __typename?: "ArticleOGP";
+    title: string;
+    description?: string | null;
+    thumbnailUrl: string;
+    articleUrl: string;
+    siteName: string;
+    faviconUrl: string;
   };
 };
 
@@ -567,6 +622,16 @@ export type BookmarkCardWrapperFragmentFragment = {
   isRead: boolean;
   createdAt: number;
   updatedAt: number;
+};
+
+export type CreateBookmarkDialogContentFragmentFragment = {
+  __typename?: "ArticleOGP";
+  title: string;
+  description?: string | null;
+  thumbnailUrl: string;
+  articleUrl: string;
+  siteName: string;
+  faviconUrl: string;
 };
 
 export type BookmarkListFragmentFragment = {
@@ -803,6 +868,30 @@ export const ArticleDashboardTemplateFragmentFragmentDoc = gql`
     }
   }
   ${ArticleListFragmentFragmentDoc}
+`;
+export const OgpPreviewContentFragmentFragmentDoc = gql`
+  fragment OGPPreviewContentFragment on ArticleOGP {
+    title
+    description
+    thumbnailUrl
+    articleUrl
+    siteName
+    faviconUrl
+  }
+`;
+export const CreateBookmarkDialogContentFragmentFragmentDoc = gql`
+  fragment CreateBookmarkDialogContentFragment on ArticleOGP {
+    ...OGPPreviewContentFragment
+  }
+  ${OgpPreviewContentFragmentFragmentDoc}
+`;
+export const ArticleOgpFragmentFragmentDoc = gql`
+  fragment ArticleOGPFragment on Query {
+    articleOpg(articleUrl: $url) {
+      ...CreateBookmarkDialogContentFragment
+    }
+  }
+  ${CreateBookmarkDialogContentFragmentFragmentDoc}
 `;
 export const BookmarkCardItemFragmentFragmentDoc = gql`
   fragment BookmarkCardItemFragment on Bookmark {
@@ -1084,6 +1173,82 @@ export type ArticleListQuerySuspenseQueryHookResult = ReturnType<
 export type ArticleListQueryQueryResult = Apollo.QueryResult<
   ArticleListQueryQuery,
   ArticleListQueryQueryVariables
+>;
+export const ArticleOgpQueryDocument = gql`
+  query ArticleOGPQuery($url: String!) {
+    ...ArticleOGPFragment
+  }
+  ${ArticleOgpFragmentFragmentDoc}
+`;
+
+/**
+ * __useArticleOgpQueryQuery__
+ *
+ * To run a query within a React component, call `useArticleOgpQueryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useArticleOgpQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useArticleOgpQueryQuery({
+ *   variables: {
+ *      url: // value for 'url'
+ *   },
+ * });
+ */
+export function useArticleOgpQueryQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    ArticleOgpQueryQuery,
+    ArticleOgpQueryQueryVariables
+  > &
+    (
+      | { variables: ArticleOgpQueryQueryVariables; skip?: boolean }
+      | { skip: boolean }
+    )
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<ArticleOgpQueryQuery, ArticleOgpQueryQueryVariables>(
+    ArticleOgpQueryDocument,
+    options
+  );
+}
+export function useArticleOgpQueryLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ArticleOgpQueryQuery,
+    ArticleOgpQueryQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    ArticleOgpQueryQuery,
+    ArticleOgpQueryQueryVariables
+  >(ArticleOgpQueryDocument, options);
+}
+export function useArticleOgpQuerySuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    ArticleOgpQueryQuery,
+    ArticleOgpQueryQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    ArticleOgpQueryQuery,
+    ArticleOgpQueryQueryVariables
+  >(ArticleOgpQueryDocument, options);
+}
+export type ArticleOgpQueryQueryHookResult = ReturnType<
+  typeof useArticleOgpQueryQuery
+>;
+export type ArticleOgpQueryLazyQueryHookResult = ReturnType<
+  typeof useArticleOgpQueryLazyQuery
+>;
+export type ArticleOgpQuerySuspenseQueryHookResult = ReturnType<
+  typeof useArticleOgpQuerySuspenseQuery
+>;
+export type ArticleOgpQueryQueryResult = Apollo.QueryResult<
+  ArticleOgpQueryQuery,
+  ArticleOgpQueryQueryVariables
 >;
 export const BookmarkListQueryDocument = gql`
   query BookmarkListQuery($input: BookmarksInput!) {
