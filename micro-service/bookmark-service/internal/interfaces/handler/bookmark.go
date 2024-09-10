@@ -18,6 +18,14 @@ func NewBookmarkHandler(bu usecase.BookmarkUseCase) bpb.BookmarkServiceServer {
 	}
 }
 
+func (bh *bookmarkHandler) GetBookmarks(ctx context.Context, req *bpb.GetBookmarksRequest) (*bpb.GetBookmarksResponse, error) {
+	res, err := bh.bookmarkUseCase.GetBookmarks(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}
+
 func (bh *bookmarkHandler) GetBookmarkByArticleID(ctx context.Context, req *bpb.GetBookmarkByArticleIDRequest) (*bpb.GetBookmarkResponse, error) {
 	res, err := bh.bookmarkUseCase.GetBookmarkByArticleID(ctx, req)
 	if err != nil {
