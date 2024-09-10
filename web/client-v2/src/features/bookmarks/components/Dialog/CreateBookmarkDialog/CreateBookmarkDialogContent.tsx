@@ -4,7 +4,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import { User } from "@supabase/supabase-js";
 import { FragmentOf, readFragment } from "gql.tada";
-import { Loader } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, {
   useCallback,
@@ -35,8 +34,11 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Loader } from "@/components/ui/loader";
 
 import { useStatusToast } from "@/hooks/useStatusToast";
+
+import { checkURL } from "@/lib/check";
 
 import { CreateBookmarkDialogContentFragment } from "./CreateBookmarkDialogContentFragment";
 
@@ -80,6 +82,7 @@ export const CreateBookmarkDialogContent: FC<
 
   const onSubmit = useCallback(async (data: z.infer<typeof FormSchema>) => {
     startTransition(async () => {
+      if (!checkURL(data.url)) return;
       const { data: resOgpData, error } = await getArticleOGPQuery(data.url);
       if (!error && resOgpData) {
         setOgpData(resOgpData.articleOpg);

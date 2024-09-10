@@ -27,3 +27,12 @@ export const checkHTTPUrl = (url: string): boolean => {
   const rege = new RegExp(regeHTTP, "gmi");
   return rege.test(url);
 };
+
+export const checkURL = (url: string): boolean => {
+  try {
+    new URL(url);
+    return true;
+  } catch (_) {
+    return false;
+  }
+};
