@@ -164,7 +164,8 @@ func (au *articleUseCase) GetArticleOGP(ctx context.Context, articleUrl string) 
 		Ogp: &cpb.OGP{
 			Title:        au.sanitizeToUTF8(ogp.Title),
 			Description:  wrapperspb.String(au.sanitizeToUTF8(ogp.Description)),
-			SiteUrl:      au.sanitizeToUTF8(articleUrl),
+			ArticleUrl:   au.sanitizeToUTF8(articleUrl),
+			SiteUrl:      au.sanitizeToUTF8(parsedURL.Host),
 			SiteName:     au.sanitizeToUTF8(ogp.SiteName),
 			ThumbnailUrl: au.sanitizeToUTF8(thumbnailURL),
 			FaviconUrl:   au.sanitizeToUTF8(ogp.Favicon),

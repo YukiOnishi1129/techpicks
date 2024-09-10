@@ -98,6 +98,7 @@ export class ArticleOGP {
     description?: Nullable<string>;
     thumbnailUrl: string;
     articleUrl: string;
+    siteUrl: string;
     siteName: string;
     faviconUrl: string;
 }

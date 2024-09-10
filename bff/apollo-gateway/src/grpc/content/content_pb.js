@@ -3795,10 +3795,11 @@ proto.checkpicks.content.v1.OGP.toObject = function(includeInstance, msg) {
   var f, obj = {
     title: jspb.Message.getFieldWithDefault(msg, 1, ""),
     description: (f = msg.getDescription()) && google_protobuf_wrappers_pb.StringValue.toObject(includeInstance, f),
-    siteUrl: jspb.Message.getFieldWithDefault(msg, 3, ""),
-    siteName: jspb.Message.getFieldWithDefault(msg, 4, ""),
-    thumbnailUrl: jspb.Message.getFieldWithDefault(msg, 5, ""),
-    faviconUrl: jspb.Message.getFieldWithDefault(msg, 6, "")
+    articleUrl: jspb.Message.getFieldWithDefault(msg, 3, ""),
+    siteUrl: jspb.Message.getFieldWithDefault(msg, 4, ""),
+    siteName: jspb.Message.getFieldWithDefault(msg, 5, ""),
+    thumbnailUrl: jspb.Message.getFieldWithDefault(msg, 6, ""),
+    faviconUrl: jspb.Message.getFieldWithDefault(msg, 7, "")
   };
 
   if (includeInstance) {
@@ -3846,17 +3847,21 @@ proto.checkpicks.content.v1.OGP.deserializeBinaryFromReader = function(msg, read
       break;
     case 3:
       var value = /** @type {string} */ (reader.readString());
-      msg.setSiteUrl(value);
+      msg.setArticleUrl(value);
       break;
     case 4:
       var value = /** @type {string} */ (reader.readString());
-      msg.setSiteName(value);
+      msg.setSiteUrl(value);
       break;
     case 5:
       var value = /** @type {string} */ (reader.readString());
-      msg.setThumbnailUrl(value);
+      msg.setSiteName(value);
       break;
     case 6:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setThumbnailUrl(value);
+      break;
+    case 7:
       var value = /** @type {string} */ (reader.readString());
       msg.setFaviconUrl(value);
       break;
@@ -3904,31 +3909,38 @@ proto.checkpicks.content.v1.OGP.serializeBinaryToWriter = function(message, writ
       google_protobuf_wrappers_pb.StringValue.serializeBinaryToWriter
     );
   }
-  f = message.getSiteUrl();
+  f = message.getArticleUrl();
   if (f.length > 0) {
     writer.writeString(
       3,
       f
     );
   }
-  f = message.getSiteName();
+  f = message.getSiteUrl();
   if (f.length > 0) {
     writer.writeString(
       4,
       f
     );
   }
-  f = message.getThumbnailUrl();
+  f = message.getSiteName();
   if (f.length > 0) {
     writer.writeString(
       5,
       f
     );
   }
-  f = message.getFaviconUrl();
+  f = message.getThumbnailUrl();
   if (f.length > 0) {
     writer.writeString(
       6,
+      f
+    );
+  }
+  f = message.getFaviconUrl();
+  if (f.length > 0) {
+    writer.writeString(
+      7,
       f
     );
   }
@@ -3991,10 +4003,10 @@ proto.checkpicks.content.v1.OGP.prototype.hasDescription = function() {
 
 
 /**
- * optional string site_url = 3;
+ * optional string article_url = 3;
  * @return {string}
  */
-proto.checkpicks.content.v1.OGP.prototype.getSiteUrl = function() {
+proto.checkpicks.content.v1.OGP.prototype.getArticleUrl = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 3, ""));
 };
 
@@ -4003,16 +4015,16 @@ proto.checkpicks.content.v1.OGP.prototype.getSiteUrl = function() {
  * @param {string} value
  * @return {!proto.checkpicks.content.v1.OGP} returns this
  */
-proto.checkpicks.content.v1.OGP.prototype.setSiteUrl = function(value) {
+proto.checkpicks.content.v1.OGP.prototype.setArticleUrl = function(value) {
   return jspb.Message.setProto3StringField(this, 3, value);
 };
 
 
 /**
- * optional string site_name = 4;
+ * optional string site_url = 4;
  * @return {string}
  */
-proto.checkpicks.content.v1.OGP.prototype.getSiteName = function() {
+proto.checkpicks.content.v1.OGP.prototype.getSiteUrl = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 4, ""));
 };
 
@@ -4021,16 +4033,16 @@ proto.checkpicks.content.v1.OGP.prototype.getSiteName = function() {
  * @param {string} value
  * @return {!proto.checkpicks.content.v1.OGP} returns this
  */
-proto.checkpicks.content.v1.OGP.prototype.setSiteName = function(value) {
+proto.checkpicks.content.v1.OGP.prototype.setSiteUrl = function(value) {
   return jspb.Message.setProto3StringField(this, 4, value);
 };
 
 
 /**
- * optional string thumbnail_url = 5;
+ * optional string site_name = 5;
  * @return {string}
  */
-proto.checkpicks.content.v1.OGP.prototype.getThumbnailUrl = function() {
+proto.checkpicks.content.v1.OGP.prototype.getSiteName = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 5, ""));
 };
 
@@ -4039,16 +4051,16 @@ proto.checkpicks.content.v1.OGP.prototype.getThumbnailUrl = function() {
  * @param {string} value
  * @return {!proto.checkpicks.content.v1.OGP} returns this
  */
-proto.checkpicks.content.v1.OGP.prototype.setThumbnailUrl = function(value) {
+proto.checkpicks.content.v1.OGP.prototype.setSiteName = function(value) {
   return jspb.Message.setProto3StringField(this, 5, value);
 };
 
 
 /**
- * optional string favicon_url = 6;
+ * optional string thumbnail_url = 6;
  * @return {string}
  */
-proto.checkpicks.content.v1.OGP.prototype.getFaviconUrl = function() {
+proto.checkpicks.content.v1.OGP.prototype.getThumbnailUrl = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 6, ""));
 };
 
@@ -4057,8 +4069,26 @@ proto.checkpicks.content.v1.OGP.prototype.getFaviconUrl = function() {
  * @param {string} value
  * @return {!proto.checkpicks.content.v1.OGP} returns this
  */
-proto.checkpicks.content.v1.OGP.prototype.setFaviconUrl = function(value) {
+proto.checkpicks.content.v1.OGP.prototype.setThumbnailUrl = function(value) {
   return jspb.Message.setProto3StringField(this, 6, value);
+};
+
+
+/**
+ * optional string favicon_url = 7;
+ * @return {string}
+ */
+proto.checkpicks.content.v1.OGP.prototype.getFaviconUrl = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 7, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.checkpicks.content.v1.OGP} returns this
+ */
+proto.checkpicks.content.v1.OGP.prototype.setFaviconUrl = function(value) {
+  return jspb.Message.setProto3StringField(this, 7, value);
 };
 
 

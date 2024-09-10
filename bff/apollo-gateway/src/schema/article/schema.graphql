@@ -38,6 +38,7 @@ type ArticleOGP {
   description: String
   thumbnailUrl: String!
   articleUrl: String!
+  siteUrl: String!
   siteName: String!
   faviconUrl: String!
 }

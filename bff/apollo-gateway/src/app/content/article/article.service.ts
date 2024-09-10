@@ -165,10 +165,11 @@ export class ArticleService {
 
         const resArticleOgp = res.toObject();
         const articleOgp: ArticleOGP = {
-          articleUrl: resArticleOgp.ogp.siteUrl,
+          articleUrl: resArticleOgp.ogp.articleUrl,
           description: resArticleOgp.ogp?.description?.value,
           faviconUrl: resArticleOgp.ogp?.faviconUrl,
           siteName: resArticleOgp.ogp.siteName,
+          siteUrl: resArticleOgp.ogp.siteUrl,
           thumbnailUrl: resArticleOgp.ogp.thumbnailUrl,
           title: resArticleOgp.ogp.title,
         };
