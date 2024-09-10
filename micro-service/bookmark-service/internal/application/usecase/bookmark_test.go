@@ -21,6 +21,90 @@ import (
 	"google.golang.org/protobuf/types/known/wrapperspb"
 )
 
+func Test_UseCase_GetBookmarks(t *testing.T) {
+	t.Parallel()
+
+	// TODO: Create later
+
+	// bookmarkID1, _ := uuid.NewRandom()
+	// bookmarkID2, _ := uuid.NewRandom()
+	// bookmarkID3, _ := uuid.NewRandom()
+	// bookmarkID4, _ := uuid.NewRandom()
+	// bookmarkID5, _ := uuid.NewRandom()
+	// bookmarkID6, _ := uuid.NewRandom()
+	// bookmarkID7, _ := uuid.NewRandom()
+	// bookmarkID8, _ := uuid.NewRandom()
+	// bookmarkID9, _ := uuid.NewRandom()
+	// bookmarkID10, _ := uuid.NewRandom()
+
+	// publishedAt := time.Now().Add(-time.Hour * 24 * 7).Unix()
+
+	// mockPlatforms := mock.GetPlatformMock()
+	// mockArticles := mock.GetArticleMock()
+	// mockProfiles := mock.GetProfileMock()
+
+	// test := map[string]struct {
+	// 	recordBookmarks []entity.Bookmark
+	// 	arg             *bpb.GetBookmarksRequest
+	// 	want            *bpb.GetBookmarksResponse
+	// }{
+	// 	"Success: get bookmarks":                   {},
+	// 	"Success: get bookmarks with custom limit": {},
+	// 	"Success: get bookmarks with keyword":      {},
+	// 	"Success: get bookmarks with cursor":       {},
+
+	// 	"Fail: get bookmarks with invalid cursor":  {},
+	// 	"Fail: get bookmarks with invalid keyword": {},
+	// 	"Fail: get bookmarks with invalid limit":   {},
+	// 	"Fail: get bookmarks with invalid userID":  {},
+	// }
+
+	// for name, tt := range test {
+	// 	tt := tt
+	// 	t.Run(name, func(t *testing.T) {
+	// 		t.Parallel()
+	// 		ctx := context.Background()
+
+	// 		pgContainer, err := testutil.SetupTest(ctx, t, "../../util/testutil/schema/")
+	// 		if err != nil {
+	// 			t.Fatalf("Failed to setup database: %s", err)
+	// 		}
+	// 		t.Cleanup(pgContainer.Down)
+
+	// 		db := pgContainer.DB
+
+	// 		testBookmarkRepository := persistence.NewBookmarkPersistence(db)
+	// 		testBookmarkAdapter := adapter.NewBookmarkAdapter(testBookmarkRepository)
+	// 		testBookmarkUseCase := NewBookmarkUseCase(testBookmarkAdapter)
+
+	// 		if tt.recordBookmarks != nil {
+	// 			for _, v := range tt.recordBookmarks {
+	// 				err = v.Insert(ctx, db, boil.Infer())
+	// 				if err != nil {
+	// 					t.Fatalf("Failed to insert record: %s", err)
+	// 				}
+	// 			}
+	// 		}
+
+	// 		got, err := testBookmarkUseCase.GetBookmarks(ctx, tt.arg)
+	// 		if err != nil {
+	// 			t.Fatalf("Failed to get bookmark: %s", err)
+	// 			return
+	// 		}
+
+	// 		opts := []cmp.Option{
+	// 			cmp.AllowUnexported(bpb.Bookmark{}),
+	// 			cmpopts.IgnoreFields(bpb.Bookmark{}, "state", "sizeCache", "unknownFields", "CreatedAt", "UpdatedAt"),
+	// 			cmpopts.IgnoreUnexported(wrapperspb.StringValue{}, timestamppb.Timestamp{}),
+	// 		}
+	// 		if diff := cmp.Diff(got.Bookmarks, tt.want.Bookmarks, opts...); diff != "" {
+	// 			t.Fatalf("request is not expected: %s", diff)
+	// 		}
+	// 	})
+	// }
+
+}
+
 func Test_UseCase_GetBookmarkByArticleID(t *testing.T) {
 	t.Parallel()
 
