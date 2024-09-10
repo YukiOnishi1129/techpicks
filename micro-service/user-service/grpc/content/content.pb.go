@@ -164,6 +164,100 @@ func (x *GetArticlesResponse) GetPageInfo() *PageInfo {
 	return nil
 }
 
+type GetArticleOGPResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Ogp *OGP `protobuf:"bytes,1,opt,name=ogp,proto3" json:"ogp,omitempty"`
+}
+
+func (x *GetArticleOGPResponse) Reset() {
+	*x = GetArticleOGPResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_content_content_proto_msgTypes[2]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *GetArticleOGPResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetArticleOGPResponse) ProtoMessage() {}
+
+func (x *GetArticleOGPResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_content_content_proto_msgTypes[2]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetArticleOGPResponse.ProtoReflect.Descriptor instead.
+func (*GetArticleOGPResponse) Descriptor() ([]byte, []int) {
+	return file_content_content_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *GetArticleOGPResponse) GetOgp() *OGP {
+	if x != nil {
+		return x.Ogp
+	}
+	return nil
+}
+
+type GetArticleOGPRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	ArticleUrl string `protobuf:"bytes,1,opt,name=article_url,json=articleUrl,proto3" json:"article_url,omitempty"`
+}
+
+func (x *GetArticleOGPRequest) Reset() {
+	*x = GetArticleOGPRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_content_content_proto_msgTypes[3]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *GetArticleOGPRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetArticleOGPRequest) ProtoMessage() {}
+
+func (x *GetArticleOGPRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_content_content_proto_msgTypes[3]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetArticleOGPRequest.ProtoReflect.Descriptor instead.
+func (*GetArticleOGPRequest) Descriptor() ([]byte, []int) {
+	return file_content_content_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *GetArticleOGPRequest) GetArticleUrl() string {
+	if x != nil {
+		return x.ArticleUrl
+	}
+	return ""
+}
+
 type PageInfo struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -176,7 +270,7 @@ type PageInfo struct {
 func (x *PageInfo) Reset() {
 	*x = PageInfo{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_content_content_proto_msgTypes[2]
+		mi := &file_content_content_proto_msgTypes[4]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -189,7 +283,7 @@ func (x *PageInfo) String() string {
 func (*PageInfo) ProtoMessage() {}
 
 func (x *PageInfo) ProtoReflect() protoreflect.Message {
-	mi := &file_content_content_proto_msgTypes[2]
+	mi := &file_content_content_proto_msgTypes[4]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -202,7 +296,7 @@ func (x *PageInfo) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PageInfo.ProtoReflect.Descriptor instead.
 func (*PageInfo) Descriptor() ([]byte, []int) {
-	return file_content_content_proto_rawDescGZIP(), []int{2}
+	return file_content_content_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *PageInfo) GetEndCursor() string {
@@ -242,7 +336,7 @@ type Feed struct {
 func (x *Feed) Reset() {
 	*x = Feed{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_content_content_proto_msgTypes[3]
+		mi := &file_content_content_proto_msgTypes[5]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -255,7 +349,7 @@ func (x *Feed) String() string {
 func (*Feed) ProtoMessage() {}
 
 func (x *Feed) ProtoReflect() protoreflect.Message {
-	mi := &file_content_content_proto_msgTypes[3]
+	mi := &file_content_content_proto_msgTypes[5]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -268,7 +362,7 @@ func (x *Feed) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Feed.ProtoReflect.Descriptor instead.
 func (*Feed) Descriptor() ([]byte, []int) {
-	return file_content_content_proto_rawDescGZIP(), []int{3}
+	return file_content_content_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *Feed) GetId() string {
@@ -378,7 +472,7 @@ type Category struct {
 func (x *Category) Reset() {
 	*x = Category{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_content_content_proto_msgTypes[4]
+		mi := &file_content_content_proto_msgTypes[6]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -391,7 +485,7 @@ func (x *Category) String() string {
 func (*Category) ProtoMessage() {}
 
 func (x *Category) ProtoReflect() protoreflect.Message {
-	mi := &file_content_content_proto_msgTypes[4]
+	mi := &file_content_content_proto_msgTypes[6]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -404,7 +498,7 @@ func (x *Category) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Category.ProtoReflect.Descriptor instead.
 func (*Category) Descriptor() ([]byte, []int) {
-	return file_content_content_proto_rawDescGZIP(), []int{4}
+	return file_content_content_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *Category) GetId() string {
@@ -468,7 +562,7 @@ type Platform struct {
 func (x *Platform) Reset() {
 	*x = Platform{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_content_content_proto_msgTypes[5]
+		mi := &file_content_content_proto_msgTypes[7]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -481,7 +575,7 @@ func (x *Platform) String() string {
 func (*Platform) ProtoMessage() {}
 
 func (x *Platform) ProtoReflect() protoreflect.Message {
-	mi := &file_content_content_proto_msgTypes[5]
+	mi := &file_content_content_proto_msgTypes[7]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -494,7 +588,7 @@ func (x *Platform) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Platform.ProtoReflect.Descriptor instead.
 func (*Platform) Descriptor() ([]byte, []int) {
-	return file_content_content_proto_rawDescGZIP(), []int{5}
+	return file_content_content_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *Platform) GetId() string {
@@ -590,7 +684,7 @@ type Article struct {
 func (x *Article) Reset() {
 	*x = Article{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_content_content_proto_msgTypes[6]
+		mi := &file_content_content_proto_msgTypes[8]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -603,7 +697,7 @@ func (x *Article) String() string {
 func (*Article) ProtoMessage() {}
 
 func (x *Article) ProtoReflect() protoreflect.Message {
-	mi := &file_content_content_proto_msgTypes[6]
+	mi := &file_content_content_proto_msgTypes[8]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -616,7 +710,7 @@ func (x *Article) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Article.ProtoReflect.Descriptor instead.
 func (*Article) Descriptor() ([]byte, []int) {
-	return file_content_content_proto_rawDescGZIP(), []int{6}
+	return file_content_content_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *Article) GetId() string {
@@ -771,7 +865,7 @@ type ArticleEdge struct {
 func (x *ArticleEdge) Reset() {
 	*x = ArticleEdge{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_content_content_proto_msgTypes[7]
+		mi := &file_content_content_proto_msgTypes[9]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -784,7 +878,7 @@ func (x *ArticleEdge) String() string {
 func (*ArticleEdge) ProtoMessage() {}
 
 func (x *ArticleEdge) ProtoReflect() protoreflect.Message {
-	mi := &file_content_content_proto_msgTypes[7]
+	mi := &file_content_content_proto_msgTypes[9]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -797,7 +891,7 @@ func (x *ArticleEdge) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ArticleEdge.ProtoReflect.Descriptor instead.
 func (*ArticleEdge) Descriptor() ([]byte, []int) {
-	return file_content_content_proto_rawDescGZIP(), []int{7}
+	return file_content_content_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *ArticleEdge) GetArticle() *Article {
@@ -810,6 +904,93 @@ func (x *ArticleEdge) GetArticle() *Article {
 func (x *ArticleEdge) GetCursor() string {
 	if x != nil {
 		return x.Cursor
+	}
+	return ""
+}
+
+type OGP struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Title        string                  `protobuf:"bytes,1,opt,name=title,proto3" json:"title,omitempty"`
+	Description  *wrapperspb.StringValue `protobuf:"bytes,2,opt,name=description,proto3" json:"description,omitempty"`
+	SiteUrl      string                  `protobuf:"bytes,3,opt,name=site_url,json=siteUrl,proto3" json:"site_url,omitempty"`
+	SiteName     string                  `protobuf:"bytes,4,opt,name=site_name,json=siteName,proto3" json:"site_name,omitempty"`
+	ThumbnailUrl string                  `protobuf:"bytes,5,opt,name=thumbnail_url,json=thumbnailUrl,proto3" json:"thumbnail_url,omitempty"`
+	FaviconUrl   string                  `protobuf:"bytes,6,opt,name=favicon_url,json=faviconUrl,proto3" json:"favicon_url,omitempty"`
+}
+
+func (x *OGP) Reset() {
+	*x = OGP{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_content_content_proto_msgTypes[10]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *OGP) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*OGP) ProtoMessage() {}
+
+func (x *OGP) ProtoReflect() protoreflect.Message {
+	mi := &file_content_content_proto_msgTypes[10]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use OGP.ProtoReflect.Descriptor instead.
+func (*OGP) Descriptor() ([]byte, []int) {
+	return file_content_content_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *OGP) GetTitle() string {
+	if x != nil {
+		return x.Title
+	}
+	return ""
+}
+
+func (x *OGP) GetDescription() *wrapperspb.StringValue {
+	if x != nil {
+		return x.Description
+	}
+	return nil
+}
+
+func (x *OGP) GetSiteUrl() string {
+	if x != nil {
+		return x.SiteUrl
+	}
+	return ""
+}
+
+func (x *OGP) GetSiteName() string {
+	if x != nil {
+		return x.SiteName
+	}
+	return ""
+}
+
+func (x *OGP) GetThumbnailUrl() string {
+	if x != nil {
+		return x.ThumbnailUrl
+	}
+	return ""
+}
+
+func (x *OGP) GetFaviconUrl() string {
+	if x != nil {
+		return x.FaviconUrl
 	}
 	return ""
 }
@@ -852,7 +1033,15 @@ var file_content_content_proto_rawDesc = []byte{
 	0x67, 0x65, 0x5f, 0x69, 0x6e, 0x66, 0x6f, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1f, 0x2e,
 	0x63, 0x68, 0x65, 0x63, 0x6b, 0x70, 0x69, 0x63, 0x6b, 0x73, 0x2e, 0x63, 0x6f, 0x6e, 0x74, 0x65,
 	0x6e, 0x74, 0x2e, 0x76, 0x31, 0x2e, 0x50, 0x61, 0x67, 0x65, 0x49, 0x6e, 0x66, 0x6f, 0x52, 0x08,
-	0x70, 0x61, 0x67, 0x65, 0x49, 0x6e, 0x66, 0x6f, 0x22, 0x4d, 0x0a, 0x08, 0x50, 0x61, 0x67, 0x65,
+	0x70, 0x61, 0x67, 0x65, 0x49, 0x6e, 0x66, 0x6f, 0x22, 0x45, 0x0a, 0x15, 0x47, 0x65, 0x74, 0x41,
+	0x72, 0x74, 0x69, 0x63, 0x6c, 0x65, 0x4f, 0x47, 0x50, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
+	0x65, 0x12, 0x2c, 0x0a, 0x03, 0x6f, 0x67, 0x70, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a,
+	0x2e, 0x63, 0x68, 0x65, 0x63, 0x6b, 0x70, 0x69, 0x63, 0x6b, 0x73, 0x2e, 0x63, 0x6f, 0x6e, 0x74,
+	0x65, 0x6e, 0x74, 0x2e, 0x76, 0x31, 0x2e, 0x4f, 0x47, 0x50, 0x52, 0x03, 0x6f, 0x67, 0x70, 0x22,
+	0x37, 0x0a, 0x14, 0x47, 0x65, 0x74, 0x41, 0x72, 0x74, 0x69, 0x63, 0x6c, 0x65, 0x4f, 0x47, 0x50,
+	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x1f, 0x0a, 0x0b, 0x61, 0x72, 0x74, 0x69, 0x63,
+	0x6c, 0x65, 0x5f, 0x75, 0x72, 0x6c, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0a, 0x61, 0x72,
+	0x74, 0x69, 0x63, 0x6c, 0x65, 0x55, 0x72, 0x6c, 0x22, 0x4d, 0x0a, 0x08, 0x50, 0x61, 0x67, 0x65,
 	0x49, 0x6e, 0x66, 0x6f, 0x12, 0x1d, 0x0a, 0x0a, 0x65, 0x6e, 0x64, 0x5f, 0x63, 0x75, 0x72, 0x73,
 	0x6f, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x65, 0x6e, 0x64, 0x43, 0x75, 0x72,
 	0x73, 0x6f, 0x72, 0x12, 0x22, 0x0a, 0x0d, 0x68, 0x61, 0x73, 0x5f, 0x6e, 0x65, 0x78, 0x74, 0x5f,
@@ -991,18 +1180,39 @@ var file_content_content_proto_rawDesc = []byte{
 	0x63, 0x68, 0x65, 0x63, 0x6b, 0x70, 0x69, 0x63, 0x6b, 0x73, 0x2e, 0x63, 0x6f, 0x6e, 0x74, 0x65,
 	0x6e, 0x74, 0x2e, 0x76, 0x31, 0x2e, 0x41, 0x72, 0x74, 0x69, 0x63, 0x6c, 0x65, 0x52, 0x07, 0x61,
 	0x72, 0x74, 0x69, 0x63, 0x6c, 0x65, 0x12, 0x16, 0x0a, 0x06, 0x63, 0x75, 0x72, 0x73, 0x6f, 0x72,
-	0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x63, 0x75, 0x72, 0x73, 0x6f, 0x72, 0x32, 0x76,
-	0x0a, 0x0e, 0x43, 0x6f, 0x6e, 0x74, 0x65, 0x6e, 0x74, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65,
-	0x12, 0x64, 0x0a, 0x0b, 0x47, 0x65, 0x74, 0x41, 0x72, 0x74, 0x69, 0x63, 0x6c, 0x65, 0x73, 0x12,
-	0x29, 0x2e, 0x63, 0x68, 0x65, 0x63, 0x6b, 0x70, 0x69, 0x63, 0x6b, 0x73, 0x2e, 0x63, 0x6f, 0x6e,
-	0x74, 0x65, 0x6e, 0x74, 0x2e, 0x76, 0x31, 0x2e, 0x47, 0x65, 0x74, 0x41, 0x72, 0x74, 0x69, 0x63,
-	0x6c, 0x65, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x2a, 0x2e, 0x63, 0x68, 0x65,
-	0x63, 0x6b, 0x70, 0x69, 0x63, 0x6b, 0x73, 0x2e, 0x63, 0x6f, 0x6e, 0x74, 0x65, 0x6e, 0x74, 0x2e,
-	0x76, 0x31, 0x2e, 0x47, 0x65, 0x74, 0x41, 0x72, 0x74, 0x69, 0x63, 0x6c, 0x65, 0x73, 0x52, 0x65,
-	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x42, 0x2d, 0x5a, 0x2b, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62,
-	0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x59, 0x75, 0x6b, 0x69, 0x4f, 0x6e, 0x69, 0x73, 0x68, 0x69, 0x31,
-	0x31, 0x32, 0x39, 0x2f, 0x74, 0x65, 0x63, 0x68, 0x70, 0x69, 0x63, 0x6b, 0x73, 0x2f, 0x63, 0x6f,
-	0x6e, 0x74, 0x65, 0x6e, 0x74, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x63, 0x75, 0x72, 0x73, 0x6f, 0x72, 0x22, 0xd9,
+	0x01, 0x0a, 0x03, 0x4f, 0x47, 0x50, 0x12, 0x14, 0x0a, 0x05, 0x74, 0x69, 0x74, 0x6c, 0x65, 0x18,
+	0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x74, 0x69, 0x74, 0x6c, 0x65, 0x12, 0x3e, 0x0a, 0x0b,
+	0x64, 0x65, 0x73, 0x63, 0x72, 0x69, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x02, 0x20, 0x01, 0x28,
+	0x0b, 0x32, 0x1c, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x62, 0x75, 0x66, 0x2e, 0x53, 0x74, 0x72, 0x69, 0x6e, 0x67, 0x56, 0x61, 0x6c, 0x75, 0x65, 0x52,
+	0x0b, 0x64, 0x65, 0x73, 0x63, 0x72, 0x69, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x19, 0x0a, 0x08,
+	0x73, 0x69, 0x74, 0x65, 0x5f, 0x75, 0x72, 0x6c, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07,
+	0x73, 0x69, 0x74, 0x65, 0x55, 0x72, 0x6c, 0x12, 0x1b, 0x0a, 0x09, 0x73, 0x69, 0x74, 0x65, 0x5f,
+	0x6e, 0x61, 0x6d, 0x65, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x73, 0x69, 0x74, 0x65,
+	0x4e, 0x61, 0x6d, 0x65, 0x12, 0x23, 0x0a, 0x0d, 0x74, 0x68, 0x75, 0x6d, 0x62, 0x6e, 0x61, 0x69,
+	0x6c, 0x5f, 0x75, 0x72, 0x6c, 0x18, 0x05, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0c, 0x74, 0x68, 0x75,
+	0x6d, 0x62, 0x6e, 0x61, 0x69, 0x6c, 0x55, 0x72, 0x6c, 0x12, 0x1f, 0x0a, 0x0b, 0x66, 0x61, 0x76,
+	0x69, 0x63, 0x6f, 0x6e, 0x5f, 0x75, 0x72, 0x6c, 0x18, 0x06, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0a,
+	0x66, 0x61, 0x76, 0x69, 0x63, 0x6f, 0x6e, 0x55, 0x72, 0x6c, 0x32, 0xe2, 0x01, 0x0a, 0x0e, 0x43,
+	0x6f, 0x6e, 0x74, 0x65, 0x6e, 0x74, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x64, 0x0a,
+	0x0b, 0x47, 0x65, 0x74, 0x41, 0x72, 0x74, 0x69, 0x63, 0x6c, 0x65, 0x73, 0x12, 0x29, 0x2e, 0x63,
+	0x68, 0x65, 0x63, 0x6b, 0x70, 0x69, 0x63, 0x6b, 0x73, 0x2e, 0x63, 0x6f, 0x6e, 0x74, 0x65, 0x6e,
+	0x74, 0x2e, 0x76, 0x31, 0x2e, 0x47, 0x65, 0x74, 0x41, 0x72, 0x74, 0x69, 0x63, 0x6c, 0x65, 0x73,
+	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x2a, 0x2e, 0x63, 0x68, 0x65, 0x63, 0x6b, 0x70,
+	0x69, 0x63, 0x6b, 0x73, 0x2e, 0x63, 0x6f, 0x6e, 0x74, 0x65, 0x6e, 0x74, 0x2e, 0x76, 0x31, 0x2e,
+	0x47, 0x65, 0x74, 0x41, 0x72, 0x74, 0x69, 0x63, 0x6c, 0x65, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f,
+	0x6e, 0x73, 0x65, 0x12, 0x6a, 0x0a, 0x0d, 0x47, 0x65, 0x74, 0x41, 0x72, 0x74, 0x69, 0x63, 0x6c,
+	0x65, 0x4f, 0x47, 0x50, 0x12, 0x2b, 0x2e, 0x63, 0x68, 0x65, 0x63, 0x6b, 0x70, 0x69, 0x63, 0x6b,
+	0x73, 0x2e, 0x63, 0x6f, 0x6e, 0x74, 0x65, 0x6e, 0x74, 0x2e, 0x76, 0x31, 0x2e, 0x47, 0x65, 0x74,
+	0x41, 0x72, 0x74, 0x69, 0x63, 0x6c, 0x65, 0x4f, 0x47, 0x50, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
+	0x74, 0x1a, 0x2c, 0x2e, 0x63, 0x68, 0x65, 0x63, 0x6b, 0x70, 0x69, 0x63, 0x6b, 0x73, 0x2e, 0x63,
+	0x6f, 0x6e, 0x74, 0x65, 0x6e, 0x74, 0x2e, 0x76, 0x31, 0x2e, 0x47, 0x65, 0x74, 0x41, 0x72, 0x74,
+	0x69, 0x63, 0x6c, 0x65, 0x4f, 0x47, 0x50, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x42,
+	0x2d, 0x5a, 0x2b, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x59, 0x75,
+	0x6b, 0x69, 0x4f, 0x6e, 0x69, 0x73, 0x68, 0x69, 0x31, 0x31, 0x32, 0x39, 0x2f, 0x74, 0x65, 0x63,
+	0x68, 0x70, 0x69, 0x63, 0x6b, 0x73, 0x2f, 0x63, 0x6f, 0x6e, 0x74, 0x65, 0x6e, 0x74, 0x62, 0x06,
+	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -1017,55 +1227,62 @@ func file_content_content_proto_rawDescGZIP() []byte {
 	return file_content_content_proto_rawDescData
 }
 
-var file_content_content_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
+var file_content_content_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
 var file_content_content_proto_goTypes = []any{
 	(*GetArticlesRequest)(nil),     // 0: checkpicks.content.v1.GetArticlesRequest
 	(*GetArticlesResponse)(nil),    // 1: checkpicks.content.v1.GetArticlesResponse
-	(*PageInfo)(nil),               // 2: checkpicks.content.v1.PageInfo
-	(*Feed)(nil),                   // 3: checkpicks.content.v1.Feed
-	(*Category)(nil),               // 4: checkpicks.content.v1.Category
-	(*Platform)(nil),               // 5: checkpicks.content.v1.Platform
-	(*Article)(nil),                // 6: checkpicks.content.v1.Article
-	(*ArticleEdge)(nil),            // 7: checkpicks.content.v1.ArticleEdge
-	(*wrapperspb.StringValue)(nil), // 8: google.protobuf.StringValue
-	(*wrapperspb.Int64Value)(nil),  // 9: google.protobuf.Int64Value
-	(*timestamppb.Timestamp)(nil),  // 10: google.protobuf.Timestamp
+	(*GetArticleOGPResponse)(nil),  // 2: checkpicks.content.v1.GetArticleOGPResponse
+	(*GetArticleOGPRequest)(nil),   // 3: checkpicks.content.v1.GetArticleOGPRequest
+	(*PageInfo)(nil),               // 4: checkpicks.content.v1.PageInfo
+	(*Feed)(nil),                   // 5: checkpicks.content.v1.Feed
+	(*Category)(nil),               // 6: checkpicks.content.v1.Category
+	(*Platform)(nil),               // 7: checkpicks.content.v1.Platform
+	(*Article)(nil),                // 8: checkpicks.content.v1.Article
+	(*ArticleEdge)(nil),            // 9: checkpicks.content.v1.ArticleEdge
+	(*OGP)(nil),                    // 10: checkpicks.content.v1.OGP
+	(*wrapperspb.StringValue)(nil), // 11: google.protobuf.StringValue
+	(*wrapperspb.Int64Value)(nil),  // 12: google.protobuf.Int64Value
+	(*timestamppb.Timestamp)(nil),  // 13: google.protobuf.Timestamp
 }
 var file_content_content_proto_depIdxs = []int32{
-	8,  // 0: checkpicks.content.v1.GetArticlesRequest.user_id:type_name -> google.protobuf.StringValue
-	9,  // 1: checkpicks.content.v1.GetArticlesRequest.language_status:type_name -> google.protobuf.Int64Value
-	8,  // 2: checkpicks.content.v1.GetArticlesRequest.tag:type_name -> google.protobuf.StringValue
-	8,  // 3: checkpicks.content.v1.GetArticlesRequest.feed_ids:type_name -> google.protobuf.StringValue
-	7,  // 4: checkpicks.content.v1.GetArticlesResponse.articlesEdge:type_name -> checkpicks.content.v1.ArticleEdge
-	2,  // 5: checkpicks.content.v1.GetArticlesResponse.page_info:type_name -> checkpicks.content.v1.PageInfo
-	5,  // 6: checkpicks.content.v1.Feed.platform:type_name -> checkpicks.content.v1.Platform
-	4,  // 7: checkpicks.content.v1.Feed.category:type_name -> checkpicks.content.v1.Category
-	8,  // 8: checkpicks.content.v1.Feed.api_query_param:type_name -> google.protobuf.StringValue
-	10, // 9: checkpicks.content.v1.Feed.created_at:type_name -> google.protobuf.Timestamp
-	10, // 10: checkpicks.content.v1.Feed.updated_at:type_name -> google.protobuf.Timestamp
-	10, // 11: checkpicks.content.v1.Feed.deleted_at:type_name -> google.protobuf.Timestamp
-	10, // 12: checkpicks.content.v1.Category.created_at:type_name -> google.protobuf.Timestamp
-	10, // 13: checkpicks.content.v1.Category.updated_at:type_name -> google.protobuf.Timestamp
-	10, // 14: checkpicks.content.v1.Category.deleted_at:type_name -> google.protobuf.Timestamp
-	10, // 15: checkpicks.content.v1.Platform.created_at:type_name -> google.protobuf.Timestamp
-	10, // 16: checkpicks.content.v1.Platform.updated_at:type_name -> google.protobuf.Timestamp
-	10, // 17: checkpicks.content.v1.Platform.deleted_at:type_name -> google.protobuf.Timestamp
-	5,  // 18: checkpicks.content.v1.Article.platform:type_name -> checkpicks.content.v1.Platform
-	3,  // 19: checkpicks.content.v1.Article.feeds:type_name -> checkpicks.content.v1.Feed
-	10, // 20: checkpicks.content.v1.Article.published_at:type_name -> google.protobuf.Timestamp
-	8,  // 21: checkpicks.content.v1.Article.author_name:type_name -> google.protobuf.StringValue
-	8,  // 22: checkpicks.content.v1.Article.tags:type_name -> google.protobuf.StringValue
-	8,  // 23: checkpicks.content.v1.Article.bookmark_id:type_name -> google.protobuf.StringValue
-	10, // 24: checkpicks.content.v1.Article.created_at:type_name -> google.protobuf.Timestamp
-	10, // 25: checkpicks.content.v1.Article.updated_at:type_name -> google.protobuf.Timestamp
-	6,  // 26: checkpicks.content.v1.ArticleEdge.article:type_name -> checkpicks.content.v1.Article
-	0,  // 27: checkpicks.content.v1.ContentService.GetArticles:input_type -> checkpicks.content.v1.GetArticlesRequest
-	1,  // 28: checkpicks.content.v1.ContentService.GetArticles:output_type -> checkpicks.content.v1.GetArticlesResponse
-	28, // [28:29] is the sub-list for method output_type
-	27, // [27:28] is the sub-list for method input_type
-	27, // [27:27] is the sub-list for extension type_name
-	27, // [27:27] is the sub-list for extension extendee
-	0,  // [0:27] is the sub-list for field type_name
+	11, // 0: checkpicks.content.v1.GetArticlesRequest.user_id:type_name -> google.protobuf.StringValue
+	12, // 1: checkpicks.content.v1.GetArticlesRequest.language_status:type_name -> google.protobuf.Int64Value
+	11, // 2: checkpicks.content.v1.GetArticlesRequest.tag:type_name -> google.protobuf.StringValue
+	11, // 3: checkpicks.content.v1.GetArticlesRequest.feed_ids:type_name -> google.protobuf.StringValue
+	9,  // 4: checkpicks.content.v1.GetArticlesResponse.articlesEdge:type_name -> checkpicks.content.v1.ArticleEdge
+	4,  // 5: checkpicks.content.v1.GetArticlesResponse.page_info:type_name -> checkpicks.content.v1.PageInfo
+	10, // 6: checkpicks.content.v1.GetArticleOGPResponse.ogp:type_name -> checkpicks.content.v1.OGP
+	7,  // 7: checkpicks.content.v1.Feed.platform:type_name -> checkpicks.content.v1.Platform
+	6,  // 8: checkpicks.content.v1.Feed.category:type_name -> checkpicks.content.v1.Category
+	11, // 9: checkpicks.content.v1.Feed.api_query_param:type_name -> google.protobuf.StringValue
+	13, // 10: checkpicks.content.v1.Feed.created_at:type_name -> google.protobuf.Timestamp
+	13, // 11: checkpicks.content.v1.Feed.updated_at:type_name -> google.protobuf.Timestamp
+	13, // 12: checkpicks.content.v1.Feed.deleted_at:type_name -> google.protobuf.Timestamp
+	13, // 13: checkpicks.content.v1.Category.created_at:type_name -> google.protobuf.Timestamp
+	13, // 14: checkpicks.content.v1.Category.updated_at:type_name -> google.protobuf.Timestamp
+	13, // 15: checkpicks.content.v1.Category.deleted_at:type_name -> google.protobuf.Timestamp
+	13, // 16: checkpicks.content.v1.Platform.created_at:type_name -> google.protobuf.Timestamp
+	13, // 17: checkpicks.content.v1.Platform.updated_at:type_name -> google.protobuf.Timestamp
+	13, // 18: checkpicks.content.v1.Platform.deleted_at:type_name -> google.protobuf.Timestamp
+	7,  // 19: checkpicks.content.v1.Article.platform:type_name -> checkpicks.content.v1.Platform
+	5,  // 20: checkpicks.content.v1.Article.feeds:type_name -> checkpicks.content.v1.Feed
+	13, // 21: checkpicks.content.v1.Article.published_at:type_name -> google.protobuf.Timestamp
+	11, // 22: checkpicks.content.v1.Article.author_name:type_name -> google.protobuf.StringValue
+	11, // 23: checkpicks.content.v1.Article.tags:type_name -> google.protobuf.StringValue
+	11, // 24: checkpicks.content.v1.Article.bookmark_id:type_name -> google.protobuf.StringValue
+	13, // 25: checkpicks.content.v1.Article.created_at:type_name -> google.protobuf.Timestamp
+	13, // 26: checkpicks.content.v1.Article.updated_at:type_name -> google.protobuf.Timestamp
+	8,  // 27: checkpicks.content.v1.ArticleEdge.article:type_name -> checkpicks.content.v1.Article
+	11, // 28: checkpicks.content.v1.OGP.description:type_name -> google.protobuf.StringValue
+	0,  // 29: checkpicks.content.v1.ContentService.GetArticles:input_type -> checkpicks.content.v1.GetArticlesRequest
+	3,  // 30: checkpicks.content.v1.ContentService.GetArticleOGP:input_type -> checkpicks.content.v1.GetArticleOGPRequest
+	1,  // 31: checkpicks.content.v1.ContentService.GetArticles:output_type -> checkpicks.content.v1.GetArticlesResponse
+	2,  // 32: checkpicks.content.v1.ContentService.GetArticleOGP:output_type -> checkpicks.content.v1.GetArticleOGPResponse
+	31, // [31:33] is the sub-list for method output_type
+	29, // [29:31] is the sub-list for method input_type
+	29, // [29:29] is the sub-list for extension type_name
+	29, // [29:29] is the sub-list for extension extendee
+	0,  // [0:29] is the sub-list for field type_name
 }
 
 func init() { file_content_content_proto_init() }
@@ -1099,7 +1316,7 @@ func file_content_content_proto_init() {
 			}
 		}
 		file_content_content_proto_msgTypes[2].Exporter = func(v any, i int) any {
-			switch v := v.(*PageInfo); i {
+			switch v := v.(*GetArticleOGPResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1111,7 +1328,7 @@ func file_content_content_proto_init() {
 			}
 		}
 		file_content_content_proto_msgTypes[3].Exporter = func(v any, i int) any {
-			switch v := v.(*Feed); i {
+			switch v := v.(*GetArticleOGPRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1123,7 +1340,7 @@ func file_content_content_proto_init() {
 			}
 		}
 		file_content_content_proto_msgTypes[4].Exporter = func(v any, i int) any {
-			switch v := v.(*Category); i {
+			switch v := v.(*PageInfo); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1135,7 +1352,7 @@ func file_content_content_proto_init() {
 			}
 		}
 		file_content_content_proto_msgTypes[5].Exporter = func(v any, i int) any {
-			switch v := v.(*Platform); i {
+			switch v := v.(*Feed); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1147,7 +1364,7 @@ func file_content_content_proto_init() {
 			}
 		}
 		file_content_content_proto_msgTypes[6].Exporter = func(v any, i int) any {
-			switch v := v.(*Article); i {
+			switch v := v.(*Category); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1159,7 +1376,43 @@ func file_content_content_proto_init() {
 			}
 		}
 		file_content_content_proto_msgTypes[7].Exporter = func(v any, i int) any {
+			switch v := v.(*Platform); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_content_content_proto_msgTypes[8].Exporter = func(v any, i int) any {
+			switch v := v.(*Article); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_content_content_proto_msgTypes[9].Exporter = func(v any, i int) any {
 			switch v := v.(*ArticleEdge); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_content_content_proto_msgTypes[10].Exporter = func(v any, i int) any {
+			switch v := v.(*OGP); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1177,7 +1430,7 @@ func file_content_content_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_content_content_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   8,
+			NumMessages:   11,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

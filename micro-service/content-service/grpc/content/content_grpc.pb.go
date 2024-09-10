@@ -19,7 +19,8 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	ContentService_GetArticles_FullMethodName = "/checkpicks.content.v1.ContentService/GetArticles"
+	ContentService_GetArticles_FullMethodName   = "/checkpicks.content.v1.ContentService/GetArticles"
+	ContentService_GetArticleOGP_FullMethodName = "/checkpicks.content.v1.ContentService/GetArticleOGP"
 )
 
 // ContentServiceClient is the client API for ContentService service.
@@ -27,6 +28,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ContentServiceClient interface {
 	GetArticles(ctx context.Context, in *GetArticlesRequest, opts ...grpc.CallOption) (*GetArticlesResponse, error)
+	GetArticleOGP(ctx context.Context, in *GetArticleOGPRequest, opts ...grpc.CallOption) (*GetArticleOGPResponse, error)
 }
 
 type contentServiceClient struct {
@@ -47,11 +49,22 @@ func (c *contentServiceClient) GetArticles(ctx context.Context, in *GetArticlesR
 	return out, nil
 }
 
+func (c *contentServiceClient) GetArticleOGP(ctx context.Context, in *GetArticleOGPRequest, opts ...grpc.CallOption) (*GetArticleOGPResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetArticleOGPResponse)
+	err := c.cc.Invoke(ctx, ContentService_GetArticleOGP_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ContentServiceServer is the server API for ContentService service.
 // All implementations should embed UnimplementedContentServiceServer
 // for forward compatibility.
 type ContentServiceServer interface {
 	GetArticles(context.Context, *GetArticlesRequest) (*GetArticlesResponse, error)
+	GetArticleOGP(context.Context, *GetArticleOGPRequest) (*GetArticleOGPResponse, error)
 }
 
 // UnimplementedContentServiceServer should be embedded to have
@@ -63,6 +76,9 @@ type UnimplementedContentServiceServer struct{}
 
 func (UnimplementedContentServiceServer) GetArticles(context.Context, *GetArticlesRequest) (*GetArticlesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetArticles not implemented")
+}
+func (UnimplementedContentServiceServer) GetArticleOGP(context.Context, *GetArticleOGPRequest) (*GetArticleOGPResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetArticleOGP not implemented")
 }
 func (UnimplementedContentServiceServer) testEmbeddedByValue() {}
 
@@ -102,6 +118,24 @@ func _ContentService_GetArticles_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ContentService_GetArticleOGP_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetArticleOGPRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ContentServiceServer).GetArticleOGP(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ContentService_GetArticleOGP_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ContentServiceServer).GetArticleOGP(ctx, req.(*GetArticleOGPRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ContentService_ServiceDesc is the grpc.ServiceDesc for ContentService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -112,6 +146,10 @@ var ContentService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetArticles",
 			Handler:    _ContentService_GetArticles_Handler,
+		},
+		{
+			MethodName: "GetArticleOGP",
+			Handler:    _ContentService_GetArticleOGP_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

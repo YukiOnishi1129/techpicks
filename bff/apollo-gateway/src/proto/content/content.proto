@@ -10,6 +10,7 @@ import "google/protobuf/wrappers.proto";
 
 service ContentService {
   rpc GetArticles(GetArticlesRequest) returns (GetArticlesResponse);
+  rpc GetArticleOGP(GetArticleOGPRequest) returns (GetArticleOGPResponse);
 }
 
 
@@ -26,6 +27,15 @@ message GetArticlesResponse {
   repeated ArticleEdge articlesEdge = 1;
   PageInfo page_info = 2;
 }
+
+message GetArticleOGPResponse{
+  OGP ogp = 1;
+}
+
+message GetArticleOGPRequest{
+  string article_url = 1;
+}
+
 
 message PageInfo {
   string end_cursor = 1;
@@ -99,3 +109,12 @@ message ArticleEdge {
   string cursor = 2;
 }
 
+
+message OGP {
+  string title = 1;
+  google.protobuf.StringValue description = 2;
+  string site_url = 3;
+  string site_name= 4;
+  string thumbnail_url = 5;
+  string favicon_url = 6;
+}
