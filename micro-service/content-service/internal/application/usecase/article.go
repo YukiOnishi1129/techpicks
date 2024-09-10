@@ -2,7 +2,11 @@ package usecase
 
 import (
 	"context"
+	"errors"
+	"net/http"
+	"net/url"
 	"time"
+	"unicode/utf8"
 
 	bpb "github.com/YukiOnishi1129/techpicks/micro-service/content-service/grpc/bookmark"
 	cpb "github.com/YukiOnishi1129/techpicks/micro-service/content-service/grpc/content"
@@ -10,13 +14,14 @@ import (
 	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/infrastructure/adapter"
 	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/infrastructure/external"
 	"github.com/otiai10/opengraph"
+	"golang.org/x/net/html/charset"
 	"google.golang.org/protobuf/types/known/timestamppb"
 	"google.golang.org/protobuf/types/known/wrapperspb"
 )
 
 type ArticleUseCase interface {
 	GetArticles(ctx context.Context, req *cpb.GetArticlesRequest) (*cpb.GetArticlesResponse, error)
-	GetArticleOGP(ctx context.Context, url string) (*cpb.GetArticleOGPResponse, error)
+	GetArticleOGP(ctx context.Context, articleURL string) (*cpb.GetArticleOGPResponse, error)
 }
 
 type articleUseCase struct {
@@ -118,13 +123,36 @@ func (au *articleUseCase) convertPBArticle(a entity.Article) *cpb.Article {
 	return article
 }
 
-func (au *articleUseCase) GetArticleOGP(ctx context.Context, url string) (*cpb.GetArticleOGPResponse, error) {
+func (au *articleUseCase) GetArticleOGP(ctx context.Context, articleURL string) (*cpb.GetArticleOGPResponse, error) {
 	ctx, cancel := context.WithTimeout(ctx, 10*time.Second)
 	defer cancel()
 
-	ogp, err := opengraph.FetchWithContext(ctx, url)
+	parsedURL, err := url.Parse(articleURL)
+	if err != nil || parsedURL.Scheme == "" || parsedURL.Host == "" {
+		return nil, errors.New("invalid URL")
+	}
+
+	ogp, err := opengraph.FetchWithContext(ctx, articleURL)
 	if err != nil {
 		return nil, err
+	}
+
+	// en: If the title is not UTF-8, get and parse the HTML
+	if !utf8.ValidString(ogp.Title) || !utf8.ValidString(ogp.Description) {
+		res, err := http.Get(articleURL)
+		if err != nil {
+			return nil, err
+		}
+		reader, err := charset.NewReader(res.Body, res.Header.Get("Content-Type"))
+		if err != nil {
+			return nil, err
+		}
+		defer res.Body.Close()
+
+		err = ogp.Parse(reader)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	thumbnailURL := ""
@@ -134,12 +162,31 @@ func (au *articleUseCase) GetArticleOGP(ctx context.Context, url string) (*cpb.G
 
 	return &cpb.GetArticleOGPResponse{
 		Ogp: &cpb.OGP{
-			Title:        ogp.Title,
-			Description:  wrapperspb.String(ogp.Description),
-			SiteUrl:      url,
-			SiteName:     ogp.SiteName,
-			ThumbnailUrl: thumbnailURL,
-			FaviconUrl:   ogp.Favicon,
+			Title:        au.sanitizeToUTF8(ogp.Title),
+			Description:  wrapperspb.String(au.sanitizeToUTF8(ogp.Description)),
+			ArticleUrl:   au.sanitizeToUTF8(articleURL),
+			SiteUrl:      au.sanitizeToUTF8(parsedURL.Host),
+			SiteName:     au.sanitizeToUTF8(ogp.SiteName),
+			ThumbnailUrl: au.sanitizeToUTF8(thumbnailURL),
+			FaviconUrl:   au.sanitizeToUTF8(ogp.Favicon),
 		},
 	}, nil
+}
+
+func (au *articleUseCase) sanitizeToUTF8(s string) string {
+	if utf8.ValidString(s) {
+		return s
+	}
+	v := make([]rune, 0, len(s))
+	for i := 0; i < len(s); {
+		r, size := utf8.DecodeRuneInString(s[i:])
+		if r == utf8.RuneError && size == 1 {
+			v = append(v, utf8.RuneError) // 無効なバイトを�に置き換える
+			i++
+		} else {
+			v = append(v, r)
+			i += size
+		}
+	}
+	return string(v)
 }

@@ -113,8 +113,9 @@ message ArticleEdge {
 message OGP {
   string title = 1;
   google.protobuf.StringValue description = 2;
-  string site_url = 3;
-  string site_name= 4;
-  string thumbnail_url = 5;
-  string favicon_url = 6;
+  string article_url = 3;
+  string site_url = 4;
+  string site_name= 5;
+  string thumbnail_url = 6;
+  string favicon_url = 7;
 }

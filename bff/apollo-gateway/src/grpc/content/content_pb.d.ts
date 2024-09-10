@@ -455,6 +455,8 @@ export class OGP extends jspb.Message {
     clearDescription(): void;
     getDescription(): google_protobuf_wrappers_pb.StringValue | undefined;
     setDescription(value?: google_protobuf_wrappers_pb.StringValue): OGP;
+    getArticleUrl(): string;
+    setArticleUrl(value: string): OGP;
     getSiteUrl(): string;
     setSiteUrl(value: string): OGP;
     getSiteName(): string;
@@ -478,6 +480,7 @@ export namespace OGP {
     export type AsObject = {
         title: string,
         description?: google_protobuf_wrappers_pb.StringValue.AsObject,
+        articleUrl: string,
         siteUrl: string,
         siteName: string,
         thumbnailUrl: string,

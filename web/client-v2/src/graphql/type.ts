@@ -73,6 +73,7 @@ export type ArticleOgp = {
   description?: Maybe<Scalars["String"]["output"]>;
   faviconUrl: Scalars["String"]["output"];
   siteName: Scalars["String"]["output"];
+  siteUrl: Scalars["String"]["output"];
   thumbnailUrl: Scalars["String"]["output"];
   title: Scalars["String"]["output"];
 };
