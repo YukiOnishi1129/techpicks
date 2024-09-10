@@ -24,6 +24,10 @@ export const convertUnixTime = (targetDate: dayjs.Dayjs) => {
   return targetDate.unix();
 };
 
+export const formatDate = (date?: Dayjs | Date | string | null) => {
+  return getDayjsTz(date).format("YYYY/MM/DD HH:mm:ss");
+};
+
 export const diffHours = (nowUnixTime: number, targetUnixTime: number) => {
   const diff = nowUnixTime - targetUnixTime;
   return Math.floor(diff / 60 / 60);
