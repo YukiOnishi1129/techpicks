@@ -127,9 +127,9 @@ func (au *articleUseCase) GetArticleOGP(ctx context.Context, url string) (*cpb.G
 		return nil, err
 	}
 
-	thumbnailUrl := ""
+	thumbnailURL := ""
 	if len(ogp.Image) > 0 {
-		thumbnailUrl = ogp.Image[0].URL
+		thumbnailURL = ogp.Image[0].URL
 	}
 
 	return &cpb.GetArticleOGPResponse{
@@ -138,7 +138,7 @@ func (au *articleUseCase) GetArticleOGP(ctx context.Context, url string) (*cpb.G
 			Description:  wrapperspb.String(ogp.Description),
 			SiteUrl:      url,
 			SiteName:     ogp.SiteName,
-			ThumbnailUrl: thumbnailUrl,
+			ThumbnailUrl: thumbnailURL,
 			FaviconUrl:   ogp.Favicon,
 		},
 	}, nil
