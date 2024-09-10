@@ -2,10 +2,11 @@
 
 import { User } from "@supabase/supabase-js";
 import { FragmentOf, readFragment } from "gql.tada";
-import { Loader } from "lucide-react";
 import { FC, useCallback, useEffect, useRef, useState } from "react";
 
 import { getBookmarkListQuery } from "@/features/bookmarks/actions/getBookmarkList";
+
+import { Loader } from "@/components/ui/loader";
 
 import { BookmarkListFragment } from "./BookmarkListFragment";
 import { BookmarkCardWrapper } from "../../Card";

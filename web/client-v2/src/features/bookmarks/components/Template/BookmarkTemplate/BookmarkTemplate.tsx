@@ -4,6 +4,8 @@ import { getBookmarkListQuery } from "@/features/bookmarks/actions/getBookmarkLi
 
 import { BookmarksInput } from "@/graphql/type";
 
+import { BookmarkList } from "../../List";
+
 type BookmarkTemplateProps = {
   user: User;
   keyword?: string;
@@ -34,6 +36,8 @@ export const BookmarkTemplate = async ({
         {/* <CreateBookmarkDialog user={user} /> */}
       </div>
       <div className="h-4 md:h-16" />
+
+      <BookmarkList data={data.bookmarks} user={user} />
 
       {/* <BookmarkList
         user={user}
