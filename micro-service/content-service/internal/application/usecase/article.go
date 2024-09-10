@@ -21,7 +21,7 @@ import (
 
 type ArticleUseCase interface {
 	GetArticles(ctx context.Context, req *cpb.GetArticlesRequest) (*cpb.GetArticlesResponse, error)
-	GetArticleOGP(ctx context.Context, articleUrl string) (*cpb.GetArticleOGPResponse, error)
+	GetArticleOGP(ctx context.Context, articleURL string) (*cpb.GetArticleOGPResponse, error)
 }
 
 type articleUseCase struct {
@@ -123,23 +123,23 @@ func (au *articleUseCase) convertPBArticle(a entity.Article) *cpb.Article {
 	return article
 }
 
-func (au *articleUseCase) GetArticleOGP(ctx context.Context, articleUrl string) (*cpb.GetArticleOGPResponse, error) {
+func (au *articleUseCase) GetArticleOGP(ctx context.Context, articleURL string) (*cpb.GetArticleOGPResponse, error) {
 	ctx, cancel := context.WithTimeout(ctx, 10*time.Second)
 	defer cancel()
 
-	parsedURL, err := url.Parse(articleUrl)
+	parsedURL, err := url.Parse(articleURL)
 	if err != nil || parsedURL.Scheme == "" || parsedURL.Host == "" {
 		return nil, errors.New("invalid URL")
 	}
 
-	ogp, err := opengraph.FetchWithContext(ctx, articleUrl)
+	ogp, err := opengraph.FetchWithContext(ctx, articleURL)
 	if err != nil {
 		return nil, err
 	}
 
 	// en: If the title is not UTF-8, get and parse the HTML
 	if !utf8.ValidString(ogp.Title) || !utf8.ValidString(ogp.Description) {
-		res, err := http.Get(articleUrl)
+		res, err := http.Get(articleURL)
 		if err != nil {
 			return nil, err
 		}
@@ -164,7 +164,7 @@ func (au *articleUseCase) GetArticleOGP(ctx context.Context, articleUrl string) 
 		Ogp: &cpb.OGP{
 			Title:        au.sanitizeToUTF8(ogp.Title),
 			Description:  wrapperspb.String(au.sanitizeToUTF8(ogp.Description)),
-			ArticleUrl:   au.sanitizeToUTF8(articleUrl),
+			ArticleUrl:   au.sanitizeToUTF8(articleURL),
 			SiteUrl:      au.sanitizeToUTF8(parsedURL.Host),
 			SiteName:     au.sanitizeToUTF8(ogp.SiteName),
 			ThumbnailUrl: au.sanitizeToUTF8(thumbnailURL),
