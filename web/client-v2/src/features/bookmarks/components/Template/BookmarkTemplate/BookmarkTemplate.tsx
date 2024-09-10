@@ -4,6 +4,7 @@ import { getBookmarkListQuery } from "@/features/bookmarks/actions/getBookmarkLi
 
 import { BookmarksInput } from "@/graphql/type";
 
+import { CreateBookmarkDialog } from "../../Dialog";
 import { BookmarkList } from "../../List";
 
 type BookmarkTemplateProps = {
@@ -33,23 +34,11 @@ export const BookmarkTemplate = async ({
         <div className="mr-2 w-3/4 md:mr-4">
           {/* <BookmarkArticleKeywordSearchInput /> */}
         </div>
-        {/* <CreateBookmarkDialog user={user} /> */}
+        <CreateBookmarkDialog user={user} />
       </div>
       <div className="h-4 md:h-16" />
 
       <BookmarkList data={data.bookmarks} user={user} />
-
-      {/* <BookmarkList
-        user={user}
-        initialBookmarks={res.data.bookmarks}
-        favoriteArticleFolders={
-          resFavoriteArticleFolders.data.favoriteArticleFolders
-        }
-        languageStatus={languageStatus}
-        keyword={keyword}
-        platformIdList={platformIdList}
-        fetchBookmarks={fetchBookmarkListAPI}
-      /> */}
 
       <div className="fixed bottom-20 right-4 z-50  md:hidden">
         {/* <BookmarkSearchKeywordDialogFloatButton keyword={keyword} /> */}
