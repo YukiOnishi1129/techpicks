@@ -1,6 +1,6 @@
 import { graphql } from "gql.tada";
 
-import { BookmarkCardItemFragment } from "../BookmarkCardItem/BookmarkCardItemFragment";
+import { BookmarkCardItemFragment } from "../BookmarkCardItem";
 
 export const BookmarkCardWrapperFragment = graphql(
   `
