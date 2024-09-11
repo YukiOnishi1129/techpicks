@@ -13,6 +13,7 @@ type BookmarkPersistenceAdapter interface {
 	GetBookmarks(ctx context.Context, req *bpb.GetBookmarksRequest) (entity.BookmarkSlice, error)
 	GetBookmarkByID(ctx context.Context, id string) (entity.Bookmark, error)
 	GetBookmarkByArticleID(ctx context.Context, articleID, userID string) (entity.Bookmark, error)
+	GetBookmarkByArticleURL(ctx context.Context, articleURL, userID string) (entity.Bookmark, error)
 	CreateBookmark(ctx context.Context, b entity.Bookmark) (entity.Bookmark, error)
 	DeleteBookmark(ctx context.Context, id, userID string) error
 }
@@ -59,6 +60,14 @@ func (bpa *bookmarkPersistenceAdapter) GetBookmarkByID(ctx context.Context, id s
 func (bpa *bookmarkPersistenceAdapter) GetBookmarkByArticleID(ctx context.Context, articleID, userID string) (entity.Bookmark, error) {
 	q := []qm.QueryMod{
 		qm.Where("article_id = ?", articleID),
+		qm.Where("user_id = ?", userID),
+	}
+	return bpa.BookmarkRepository.GetBookmark(ctx, q)
+}
+
+func (bpa *bookmarkPersistenceAdapter) GetBookmarkByArticleURL(ctx context.Context, articleURL, userID string) (entity.Bookmark, error) {
+	q := []qm.QueryMod{
+		qm.Where("article_url = ?", articleURL),
 		qm.Where("user_id = ?", userID),
 	}
 	return bpa.BookmarkRepository.GetBookmark(ctx, q)

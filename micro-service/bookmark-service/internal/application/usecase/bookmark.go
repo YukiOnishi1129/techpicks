@@ -148,8 +148,14 @@ func (bu *bookmarkUseCase) CreateBookmark(ctx context.Context, req *bpb.CreateBo
 }
 
 func (bu *bookmarkUseCase) CreateBookmarkForUploadArticle(ctx context.Context, req *bpb.CreateBookmarkRequest) (*bpb.CreateBookmarkResponse, error) {
-	// TODO1: urlがすでにbookmarkにあるか
-	// → false: create bookmark
+	// check if the url is already in the bookmark
+	res, err := bu.bookmarkPersistenceAdapter.GetBookmarkByArticleURL(ctx, req.GetArticleUrl(), req.GetUserId())
+	if err != nil {
+		return &bpb.CreateBookmarkResponse{}, err
+	}
+	if res.ID != "" {
+		return &bpb.CreateBookmarkResponse{}, fmt.Errorf("bookmark already exists")
+	}
 
 	// TODO2: private=falseで同じarticleUrlとplatformUrlのarticleがすでにあるなら、そのデータを使ってbookmarkを登録
 	// → true: create bookmark (use already created article)
