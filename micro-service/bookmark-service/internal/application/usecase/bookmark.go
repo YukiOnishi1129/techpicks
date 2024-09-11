@@ -17,6 +17,7 @@ type BookmarkUseCase interface {
 	GetBookmarks(ctx context.Context, req *bpb.GetBookmarksRequest) (*bpb.GetBookmarksResponse, error)
 	GetBookmarkByArticleID(ctx context.Context, req *bpb.GetBookmarkByArticleIDRequest) (*bpb.GetBookmarkResponse, error)
 	CreateBookmark(ctx context.Context, req *bpb.CreateBookmarkRequest) (*bpb.CreateBookmarkResponse, error)
+	CreateBookmarkForUploadArticle(ctx context.Context, req *bpb.CreateBookmarkRequest) (*bpb.CreateBookmarkResponse, error)
 	DeleteBookmark(ctx context.Context, req *bpb.DeleteBookmarkRequest) (*emptypb.Empty, error)
 }
 
@@ -144,6 +145,25 @@ func (bu *bookmarkUseCase) CreateBookmark(ctx context.Context, req *bpb.CreateBo
 	return &bpb.CreateBookmarkResponse{
 		Bookmark: bu.convertPBBookmark(b),
 	}, nil
+}
+
+func (bu *bookmarkUseCase) CreateBookmarkForUploadArticle(ctx context.Context, req *bpb.CreateBookmarkRequest) (*bpb.CreateBookmarkResponse, error) {
+	// TODO1: urlがすでにbookmarkにあるか
+	// → false: create bookmark
+
+	// TODO2: private=falseで同じarticleUrlとplatformUrlのarticleがすでにあるなら、そのデータを使ってbookmarkを登録
+	// → true: create bookmark (use already created article)
+	// → false: create article
+
+	// TODO3:privateで同じarticleUrlのものがある
+	// → true: create bookmark (use already created article)
+	// → false: create article
+
+	// TODO: articleとbookmarkと登録
+	// → true: create bookmark
+	// → false: create article
+
+	return &bpb.CreateBookmarkResponse{}, nil
 }
 
 func (bu *bookmarkUseCase) DeleteBookmark(ctx context.Context, req *bpb.DeleteBookmarkRequest) (*emptypb.Empty, error) {

@@ -42,6 +42,14 @@ func (bh *bookmarkHandler) CreateBookmark(ctx context.Context, req *bpb.CreateBo
 	return res, nil
 }
 
+func (bh *bookmarkHandler) CreateBookmarkForUploadArticle(ctx context.Context, req *bpb.CreateBookmarkRequest) (*bpb.CreateBookmarkResponse, error) {
+	res, err := bh.bookmarkUseCase.CreateBookmarkForUploadArticle(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}
+
 func (bh *bookmarkHandler) DeleteBookmark(ctx context.Context, req *bpb.DeleteBookmarkRequest) (*emptypb.Empty, error) {
 	res, err := bh.bookmarkUseCase.DeleteBookmark(ctx, req)
 	if err != nil {

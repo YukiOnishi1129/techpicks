@@ -20,10 +20,11 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	BookmarkService_GetBookmarks_FullMethodName           = "/checkpicks.bookmark.v1.BookmarkService/GetBookmarks"
-	BookmarkService_GetBookmarkByArticleID_FullMethodName = "/checkpicks.bookmark.v1.BookmarkService/GetBookmarkByArticleID"
-	BookmarkService_CreateBookmark_FullMethodName         = "/checkpicks.bookmark.v1.BookmarkService/CreateBookmark"
-	BookmarkService_DeleteBookmark_FullMethodName         = "/checkpicks.bookmark.v1.BookmarkService/DeleteBookmark"
+	BookmarkService_GetBookmarks_FullMethodName                   = "/checkpicks.bookmark.v1.BookmarkService/GetBookmarks"
+	BookmarkService_GetBookmarkByArticleID_FullMethodName         = "/checkpicks.bookmark.v1.BookmarkService/GetBookmarkByArticleID"
+	BookmarkService_CreateBookmark_FullMethodName                 = "/checkpicks.bookmark.v1.BookmarkService/CreateBookmark"
+	BookmarkService_CreateBookmarkForUploadArticle_FullMethodName = "/checkpicks.bookmark.v1.BookmarkService/CreateBookmarkForUploadArticle"
+	BookmarkService_DeleteBookmark_FullMethodName                 = "/checkpicks.bookmark.v1.BookmarkService/DeleteBookmark"
 )
 
 // BookmarkServiceClient is the client API for BookmarkService service.
@@ -33,6 +34,7 @@ type BookmarkServiceClient interface {
 	GetBookmarks(ctx context.Context, in *GetBookmarksRequest, opts ...grpc.CallOption) (*GetBookmarksResponse, error)
 	GetBookmarkByArticleID(ctx context.Context, in *GetBookmarkByArticleIDRequest, opts ...grpc.CallOption) (*GetBookmarkResponse, error)
 	CreateBookmark(ctx context.Context, in *CreateBookmarkRequest, opts ...grpc.CallOption) (*CreateBookmarkResponse, error)
+	CreateBookmarkForUploadArticle(ctx context.Context, in *CreateBookmarkRequest, opts ...grpc.CallOption) (*CreateBookmarkResponse, error)
 	DeleteBookmark(ctx context.Context, in *DeleteBookmarkRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
@@ -74,6 +76,16 @@ func (c *bookmarkServiceClient) CreateBookmark(ctx context.Context, in *CreateBo
 	return out, nil
 }
 
+func (c *bookmarkServiceClient) CreateBookmarkForUploadArticle(ctx context.Context, in *CreateBookmarkRequest, opts ...grpc.CallOption) (*CreateBookmarkResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CreateBookmarkResponse)
+	err := c.cc.Invoke(ctx, BookmarkService_CreateBookmarkForUploadArticle_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *bookmarkServiceClient) DeleteBookmark(ctx context.Context, in *DeleteBookmarkRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(emptypb.Empty)
@@ -91,6 +103,7 @@ type BookmarkServiceServer interface {
 	GetBookmarks(context.Context, *GetBookmarksRequest) (*GetBookmarksResponse, error)
 	GetBookmarkByArticleID(context.Context, *GetBookmarkByArticleIDRequest) (*GetBookmarkResponse, error)
 	CreateBookmark(context.Context, *CreateBookmarkRequest) (*CreateBookmarkResponse, error)
+	CreateBookmarkForUploadArticle(context.Context, *CreateBookmarkRequest) (*CreateBookmarkResponse, error)
 	DeleteBookmark(context.Context, *DeleteBookmarkRequest) (*emptypb.Empty, error)
 }
 
@@ -109,6 +122,9 @@ func (UnimplementedBookmarkServiceServer) GetBookmarkByArticleID(context.Context
 }
 func (UnimplementedBookmarkServiceServer) CreateBookmark(context.Context, *CreateBookmarkRequest) (*CreateBookmarkResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateBookmark not implemented")
+}
+func (UnimplementedBookmarkServiceServer) CreateBookmarkForUploadArticle(context.Context, *CreateBookmarkRequest) (*CreateBookmarkResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateBookmarkForUploadArticle not implemented")
 }
 func (UnimplementedBookmarkServiceServer) DeleteBookmark(context.Context, *DeleteBookmarkRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteBookmark not implemented")
@@ -187,6 +203,24 @@ func _BookmarkService_CreateBookmark_Handler(srv interface{}, ctx context.Contex
 	return interceptor(ctx, in, info, handler)
 }
 
+func _BookmarkService_CreateBookmarkForUploadArticle_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateBookmarkRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BookmarkServiceServer).CreateBookmarkForUploadArticle(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: BookmarkService_CreateBookmarkForUploadArticle_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BookmarkServiceServer).CreateBookmarkForUploadArticle(ctx, req.(*CreateBookmarkRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _BookmarkService_DeleteBookmark_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(DeleteBookmarkRequest)
 	if err := dec(in); err != nil {
@@ -223,6 +257,10 @@ var BookmarkService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreateBookmark",
 			Handler:    _BookmarkService_CreateBookmark_Handler,
+		},
+		{
+			MethodName: "CreateBookmarkForUploadArticle",
+			Handler:    _BookmarkService_CreateBookmarkForUploadArticle_Handler,
 		},
 		{
 			MethodName: "DeleteBookmark",
