@@ -1,4 +1,4 @@
-package adapter
+package persistence_adapter
 
 import (
 	"context"
@@ -9,7 +9,7 @@ import (
 	"github.com/volatiletech/sqlboiler/v4/queries/qm"
 )
 
-type BookmarkAdapter interface {
+type BookmarkPersistenceAdapter interface {
 	GetBookmarks(ctx context.Context, req *bpb.GetBookmarksRequest) (entity.BookmarkSlice, error)
 	GetBookmarkByID(ctx context.Context, id string) (entity.Bookmark, error)
 	GetBookmarkByArticleID(ctx context.Context, articleID, userID string) (entity.Bookmark, error)
@@ -17,17 +17,17 @@ type BookmarkAdapter interface {
 	DeleteBookmark(ctx context.Context, id, userID string) error
 }
 
-type bookmarkAdapter struct {
+type bookmarkPersistenceAdapter struct {
 	BookmarkRepository repository.BookmarkRepository
 }
 
-func NewBookmarkAdapter(br repository.BookmarkRepository) BookmarkAdapter {
-	return &bookmarkAdapter{
+func NewBookmarkPersistenceAdapter(br repository.BookmarkRepository) BookmarkPersistenceAdapter {
+	return &bookmarkPersistenceAdapter{
 		BookmarkRepository: br,
 	}
 }
 
-func (ba *bookmarkAdapter) GetBookmarks(ctx context.Context, req *bpb.GetBookmarksRequest) (entity.BookmarkSlice, error) {
+func (bpa *bookmarkPersistenceAdapter) GetBookmarks(ctx context.Context, req *bpb.GetBookmarksRequest) (entity.BookmarkSlice, error) {
 	limit := 20
 	if req.GetLimit() != 0 {
 		limit = int(req.GetLimit())
@@ -49,35 +49,35 @@ func (ba *bookmarkAdapter) GetBookmarks(ctx context.Context, req *bpb.GetBookmar
 		))
 	}
 
-	return ba.BookmarkRepository.GetBookmarks(ctx, q)
+	return bpa.BookmarkRepository.GetBookmarks(ctx, q)
 }
 
-func (ba *bookmarkAdapter) GetBookmarkByID(ctx context.Context, id string) (entity.Bookmark, error) {
-	return ba.BookmarkRepository.GetBookmarkByID(ctx, id)
+func (bpa *bookmarkPersistenceAdapter) GetBookmarkByID(ctx context.Context, id string) (entity.Bookmark, error) {
+	return bpa.BookmarkRepository.GetBookmarkByID(ctx, id)
 }
 
-func (ba *bookmarkAdapter) GetBookmarkByArticleID(ctx context.Context, articleID, userID string) (entity.Bookmark, error) {
+func (bpa *bookmarkPersistenceAdapter) GetBookmarkByArticleID(ctx context.Context, articleID, userID string) (entity.Bookmark, error) {
 	q := []qm.QueryMod{
 		qm.Where("article_id = ?", articleID),
 		qm.Where("user_id = ?", userID),
 	}
-	return ba.BookmarkRepository.GetBookmark(ctx, q)
+	return bpa.BookmarkRepository.GetBookmark(ctx, q)
 }
 
-func (ba *bookmarkAdapter) CreateBookmark(ctx context.Context, b entity.Bookmark) (entity.Bookmark, error) {
-	if err := ba.BookmarkRepository.CreateBookmark(ctx, b); err != nil {
+func (bpa *bookmarkPersistenceAdapter) CreateBookmark(ctx context.Context, b entity.Bookmark) (entity.Bookmark, error) {
+	if err := bpa.BookmarkRepository.CreateBookmark(ctx, b); err != nil {
 		return entity.Bookmark{}, err
 	}
-	return ba.BookmarkRepository.GetBookmarkByID(ctx, b.ID)
+	return bpa.BookmarkRepository.GetBookmarkByID(ctx, b.ID)
 }
 
-func (ba *bookmarkAdapter) DeleteBookmark(ctx context.Context, id, userID string) error {
-	b, err := ba.BookmarkRepository.GetBookmarkByID(ctx, id)
+func (bpa *bookmarkPersistenceAdapter) DeleteBookmark(ctx context.Context, id, userID string) error {
+	b, err := bpa.BookmarkRepository.GetBookmarkByID(ctx, id)
 	if err != nil {
 		return err
 	}
 	if b.UserID != userID {
 		return entity.ErrSyncFail
 	}
-	return ba.BookmarkRepository.DeleteBookmark(ctx, b)
+	return bpa.BookmarkRepository.DeleteBookmark(ctx, b)
 }
