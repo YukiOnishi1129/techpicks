@@ -1,4 +1,4 @@
-package persistence_adapter
+package persistenceadapter
 
 import (
 	"context"

@@ -8,7 +8,7 @@ import (
 	"os/signal"
 
 	bpb "github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/grpc/bookmark"
-	"github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/internal/adapter/persistence_adapter"
+	persistenceadapter "github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/internal/adapter/persistence_adapter"
 	"github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/internal/application/usecase"
 	"github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/internal/config/database"
 	"github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/internal/infrastructure/persistence"
@@ -40,7 +40,7 @@ func main() {
 	bps := persistence.NewBookmarkPersistence(db)
 
 	// adapter layer
-	bpa := persistence_adapter.NewBookmarkPersistenceAdapter(bps)
+	bpa := persistenceadapter.NewBookmarkPersistenceAdapter(bps)
 
 	// application layer
 	// usecase layer

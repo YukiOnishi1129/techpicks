@@ -6,7 +6,7 @@ import (
 	"time"
 
 	bpb "github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/grpc/bookmark"
-	"github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/internal/adapter/persistence_adapter"
+	persistenceadapter "github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/internal/adapter/persistence_adapter"
 	"github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/internal/domain/entity"
 	"github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/internal/infrastructure/persistence"
 	"github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/internal/util/testutil"
@@ -250,7 +250,7 @@ func Test_UseCase_GetBookmarkByArticleID(t *testing.T) {
 			db := pgContainer.DB
 
 			testBookmarkRepository := persistence.NewBookmarkPersistence(db)
-			testBookmarkPersistenceAdapter := persistence_adapter.NewBookmarkPersistenceAdapter(testBookmarkRepository)
+			testBookmarkPersistenceAdapter := persistenceadapter.NewBookmarkPersistenceAdapter(testBookmarkRepository)
 			testBookmarkUseCase := NewBookmarkUseCase(testBookmarkPersistenceAdapter)
 
 			if tt.recordBookmarks != nil {
@@ -480,7 +480,7 @@ func Test_UseCase_CreateBookmark(t *testing.T) {
 			db := pgContainer.DB
 
 			testBookmarkRepository := persistence.NewBookmarkPersistence(db)
-			testBookmarkPersistenceAdapter := persistence_adapter.NewBookmarkPersistenceAdapter(testBookmarkRepository)
+			testBookmarkPersistenceAdapter := persistenceadapter.NewBookmarkPersistenceAdapter(testBookmarkRepository)
 			testBookmarkUseCase := NewBookmarkUseCase(testBookmarkPersistenceAdapter)
 
 			if tt.recordBookmarks != nil {
@@ -650,7 +650,7 @@ func Test_UseCase_DeleteBookmark(t *testing.T) {
 			db := pgContainer.DB
 
 			testBookmarkRepository := persistence.NewBookmarkPersistence(db)
-			testBookmarkPersistenceAdapter := persistence_adapter.NewBookmarkPersistenceAdapter(testBookmarkRepository)
+			testBookmarkPersistenceAdapter := persistenceadapter.NewBookmarkPersistenceAdapter(testBookmarkRepository)
 			testBookmarkUseCase := NewBookmarkUseCase(testBookmarkPersistenceAdapter)
 
 			if tt.recordBookmarks != nil {

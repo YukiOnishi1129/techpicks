@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	bpb "github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/grpc/bookmark"
-	"github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/internal/adapter/persistence_adapter"
+	persistenceadapter "github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/internal/adapter/persistence_adapter"
 	"github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/internal/domain/entity"
 	"github.com/google/uuid"
 	"google.golang.org/protobuf/types/known/emptypb"
@@ -22,10 +22,10 @@ type BookmarkUseCase interface {
 }
 
 type bookmarkUseCase struct {
-	bookmarkPersistenceAdapter persistence_adapter.BookmarkPersistenceAdapter
+	bookmarkPersistenceAdapter persistenceadapter.BookmarkPersistenceAdapter
 }
 
-func NewBookmarkUseCase(bpa persistence_adapter.BookmarkPersistenceAdapter) BookmarkUseCase {
+func NewBookmarkUseCase(bpa persistenceadapter.BookmarkPersistenceAdapter) BookmarkUseCase {
 	return &bookmarkUseCase{
 		bookmarkPersistenceAdapter: bpa,
 	}

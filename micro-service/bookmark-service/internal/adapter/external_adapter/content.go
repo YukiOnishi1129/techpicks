@@ -1,1 +1,1 @@
-package external_adapter
+package externaladapter
