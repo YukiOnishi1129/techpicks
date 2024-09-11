@@ -7,6 +7,17 @@ var google_protobuf_empty_pb = require('google-protobuf/google/protobuf/empty_pb
 var google_protobuf_timestamp_pb = require('google-protobuf/google/protobuf/timestamp_pb.js');
 var google_protobuf_wrappers_pb = require('google-protobuf/google/protobuf/wrappers_pb.js');
 
+function serialize_checkpicks_bookmark_v1_CreateBookmarkForUploadArticleRequest(arg) {
+  if (!(arg instanceof bookmark_bookmark_pb.CreateBookmarkForUploadArticleRequest)) {
+    throw new Error('Expected argument of type checkpicks.bookmark.v1.CreateBookmarkForUploadArticleRequest');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_checkpicks_bookmark_v1_CreateBookmarkForUploadArticleRequest(buffer_arg) {
+  return bookmark_bookmark_pb.CreateBookmarkForUploadArticleRequest.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
 function serialize_checkpicks_bookmark_v1_CreateBookmarkRequest(arg) {
   if (!(arg instanceof bookmark_bookmark_pb.CreateBookmarkRequest)) {
     throw new Error('Expected argument of type checkpicks.bookmark.v1.CreateBookmarkRequest');
@@ -134,10 +145,10 @@ var BookmarkServiceService = exports.BookmarkServiceService = {
     path: '/checkpicks.bookmark.v1.BookmarkService/CreateBookmarkForUploadArticle',
     requestStream: false,
     responseStream: false,
-    requestType: bookmark_bookmark_pb.CreateBookmarkRequest,
+    requestType: bookmark_bookmark_pb.CreateBookmarkForUploadArticleRequest,
     responseType: bookmark_bookmark_pb.CreateBookmarkResponse,
-    requestSerialize: serialize_checkpicks_bookmark_v1_CreateBookmarkRequest,
-    requestDeserialize: deserialize_checkpicks_bookmark_v1_CreateBookmarkRequest,
+    requestSerialize: serialize_checkpicks_bookmark_v1_CreateBookmarkForUploadArticleRequest,
+    requestDeserialize: deserialize_checkpicks_bookmark_v1_CreateBookmarkForUploadArticleRequest,
     responseSerialize: serialize_checkpicks_bookmark_v1_CreateBookmarkResponse,
     responseDeserialize: deserialize_checkpicks_bookmark_v1_CreateBookmarkResponse,
   },

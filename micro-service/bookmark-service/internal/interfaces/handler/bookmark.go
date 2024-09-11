@@ -42,7 +42,7 @@ func (bh *bookmarkHandler) CreateBookmark(ctx context.Context, req *bpb.CreateBo
 	return res, nil
 }
 
-func (bh *bookmarkHandler) CreateBookmarkForUploadArticle(ctx context.Context, req *bpb.CreateBookmarkRequest) (*bpb.CreateBookmarkResponse, error) {
+func (bh *bookmarkHandler) CreateBookmarkForUploadArticle(ctx context.Context, req *bpb.CreateBookmarkForUploadArticleRequest) (*bpb.CreateBookmarkResponse, error) {
 	res, err := bh.bookmarkUseCase.CreateBookmarkForUploadArticle(ctx, req)
 	if err != nil {
 		return nil, err

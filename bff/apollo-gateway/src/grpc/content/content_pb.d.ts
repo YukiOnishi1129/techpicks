@@ -82,6 +82,76 @@ export namespace GetArticlesResponse {
     }
 }
 
+export class CreateArticleResponse extends jspb.Message { 
+
+    hasArticle(): boolean;
+    clearArticle(): void;
+    getArticle(): Article | undefined;
+    setArticle(value?: Article): CreateArticleResponse;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): CreateArticleResponse.AsObject;
+    static toObject(includeInstance: boolean, msg: CreateArticleResponse): CreateArticleResponse.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: CreateArticleResponse, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): CreateArticleResponse;
+    static deserializeBinaryFromReader(message: CreateArticleResponse, reader: jspb.BinaryReader): CreateArticleResponse;
+}
+
+export namespace CreateArticleResponse {
+    export type AsObject = {
+        article?: Article.AsObject,
+    }
+}
+
+export class CreateUploadArticleRequest extends jspb.Message { 
+    getUserId(): string;
+    setUserId(value: string): CreateUploadArticleRequest;
+    getTitle(): string;
+    setTitle(value: string): CreateUploadArticleRequest;
+    getDescription(): string;
+    setDescription(value: string): CreateUploadArticleRequest;
+    getArticleUrl(): string;
+    setArticleUrl(value: string): CreateUploadArticleRequest;
+    getThumbnailUrl(): string;
+    setThumbnailUrl(value: string): CreateUploadArticleRequest;
+    getPlatformName(): string;
+    setPlatformName(value: string): CreateUploadArticleRequest;
+    getPlatformUrl(): string;
+    setPlatformUrl(value: string): CreateUploadArticleRequest;
+    getPlatformFaviconUrl(): string;
+    setPlatformFaviconUrl(value: string): CreateUploadArticleRequest;
+    getIsEng(): boolean;
+    setIsEng(value: boolean): CreateUploadArticleRequest;
+    getIsRead(): boolean;
+    setIsRead(value: boolean): CreateUploadArticleRequest;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): CreateUploadArticleRequest.AsObject;
+    static toObject(includeInstance: boolean, msg: CreateUploadArticleRequest): CreateUploadArticleRequest.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: CreateUploadArticleRequest, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): CreateUploadArticleRequest;
+    static deserializeBinaryFromReader(message: CreateUploadArticleRequest, reader: jspb.BinaryReader): CreateUploadArticleRequest;
+}
+
+export namespace CreateUploadArticleRequest {
+    export type AsObject = {
+        userId: string,
+        title: string,
+        description: string,
+        articleUrl: string,
+        thumbnailUrl: string,
+        platformName: string,
+        platformUrl: string,
+        platformFaviconUrl: string,
+        isEng: boolean,
+        isRead: boolean,
+    }
+}
+
 export class GetArticleOGPResponse extends jspb.Message { 
 
     hasOgp(): boolean;

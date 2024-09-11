@@ -10,6 +10,8 @@ import "google/protobuf/wrappers.proto";
 
 service ContentService {
   rpc GetArticles(GetArticlesRequest) returns (GetArticlesResponse);
+  rpc CreateUploadArticle(CreateUploadArticleRequest) returns (CreateArticleResponse);
+
   rpc GetArticleOGP(GetArticleOGPRequest) returns (GetArticleOGPResponse);
 }
 
@@ -26,6 +28,23 @@ message GetArticlesRequest {
 message GetArticlesResponse {
   repeated ArticleEdge articlesEdge = 1;
   PageInfo page_info = 2;
+}
+
+message CreateArticleResponse {
+  Article article = 1;
+}
+
+message CreateUploadArticleRequest {
+  string user_id = 1;
+  string title = 2;
+  string description = 3;
+  string article_url = 4;
+  string thumbnail_url = 5;
+  string platform_name = 6;
+  string platform_url = 7;
+  string platform_favicon_url = 8;
+  bool is_eng = 9;
+  bool is_read = 10;
 }
 
 message GetArticleOGPResponse{

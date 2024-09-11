@@ -223,6 +223,53 @@ export namespace CreateBookmarkRequest {
     }
 }
 
+export class CreateBookmarkForUploadArticleRequest extends jspb.Message { 
+    getUserId(): string;
+    setUserId(value: string): CreateBookmarkForUploadArticleRequest;
+    getTitle(): string;
+    setTitle(value: string): CreateBookmarkForUploadArticleRequest;
+    getDescription(): string;
+    setDescription(value: string): CreateBookmarkForUploadArticleRequest;
+    getArticleUrl(): string;
+    setArticleUrl(value: string): CreateBookmarkForUploadArticleRequest;
+    getThumbnailUrl(): string;
+    setThumbnailUrl(value: string): CreateBookmarkForUploadArticleRequest;
+    getPlatformName(): string;
+    setPlatformName(value: string): CreateBookmarkForUploadArticleRequest;
+    getPlatformUrl(): string;
+    setPlatformUrl(value: string): CreateBookmarkForUploadArticleRequest;
+    getPlatformFaviconUrl(): string;
+    setPlatformFaviconUrl(value: string): CreateBookmarkForUploadArticleRequest;
+    getIsEng(): boolean;
+    setIsEng(value: boolean): CreateBookmarkForUploadArticleRequest;
+    getIsRead(): boolean;
+    setIsRead(value: boolean): CreateBookmarkForUploadArticleRequest;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): CreateBookmarkForUploadArticleRequest.AsObject;
+    static toObject(includeInstance: boolean, msg: CreateBookmarkForUploadArticleRequest): CreateBookmarkForUploadArticleRequest.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: CreateBookmarkForUploadArticleRequest, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): CreateBookmarkForUploadArticleRequest;
+    static deserializeBinaryFromReader(message: CreateBookmarkForUploadArticleRequest, reader: jspb.BinaryReader): CreateBookmarkForUploadArticleRequest;
+}
+
+export namespace CreateBookmarkForUploadArticleRequest {
+    export type AsObject = {
+        userId: string,
+        title: string,
+        description: string,
+        articleUrl: string,
+        thumbnailUrl: string,
+        platformName: string,
+        platformUrl: string,
+        platformFaviconUrl: string,
+        isEng: boolean,
+        isRead: boolean,
+    }
+}
+
 export class DeleteBookmarkRequest extends jspb.Message { 
     getBookmarkId(): string;
     setBookmarkId(value: string): DeleteBookmarkRequest;

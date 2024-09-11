@@ -21,6 +21,7 @@ import (
 
 type ArticleUseCase interface {
 	GetArticles(ctx context.Context, req *cpb.GetArticlesRequest) (*cpb.GetArticlesResponse, error)
+	CreateUploadArticle(ctx context.Context, req *cpb.CreateUploadArticleRequest) (*cpb.CreateArticleResponse, error)
 	GetArticleOGP(ctx context.Context, articleURL string) (*cpb.GetArticleOGPResponse, error)
 }
 
@@ -121,6 +122,17 @@ func (au *articleUseCase) convertPBArticle(a entity.Article) *cpb.Article {
 	}
 	article.Platform = au.convertPBPlatform(*a.R.Platform)
 	return article
+}
+
+func (au *articleUseCase) CreateUploadArticle(ctx context.Context, req *cpb.CreateUploadArticleRequest) (*cpb.CreateArticleResponse, error) {
+	// article, err := au.articleAdapter.CreateUploadArticle(ctx, req)
+	// if err != nil {
+	// 	return nil, err
+	// }
+
+	return &cpb.CreateArticleResponse{
+		// Article: au.convertPBArticle(*article),
+	}, nil
 }
 
 func (au *articleUseCase) GetArticleOGP(ctx context.Context, articleURL string) (*cpb.GetArticleOGPResponse, error) {

@@ -19,8 +19,9 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	ContentService_GetArticles_FullMethodName   = "/checkpicks.content.v1.ContentService/GetArticles"
-	ContentService_GetArticleOGP_FullMethodName = "/checkpicks.content.v1.ContentService/GetArticleOGP"
+	ContentService_GetArticles_FullMethodName         = "/checkpicks.content.v1.ContentService/GetArticles"
+	ContentService_CreateUploadArticle_FullMethodName = "/checkpicks.content.v1.ContentService/CreateUploadArticle"
+	ContentService_GetArticleOGP_FullMethodName       = "/checkpicks.content.v1.ContentService/GetArticleOGP"
 )
 
 // ContentServiceClient is the client API for ContentService service.
@@ -28,6 +29,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ContentServiceClient interface {
 	GetArticles(ctx context.Context, in *GetArticlesRequest, opts ...grpc.CallOption) (*GetArticlesResponse, error)
+	CreateUploadArticle(ctx context.Context, in *CreateUploadArticleRequest, opts ...grpc.CallOption) (*CreateArticleResponse, error)
 	GetArticleOGP(ctx context.Context, in *GetArticleOGPRequest, opts ...grpc.CallOption) (*GetArticleOGPResponse, error)
 }
 
@@ -49,6 +51,16 @@ func (c *contentServiceClient) GetArticles(ctx context.Context, in *GetArticlesR
 	return out, nil
 }
 
+func (c *contentServiceClient) CreateUploadArticle(ctx context.Context, in *CreateUploadArticleRequest, opts ...grpc.CallOption) (*CreateArticleResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CreateArticleResponse)
+	err := c.cc.Invoke(ctx, ContentService_CreateUploadArticle_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *contentServiceClient) GetArticleOGP(ctx context.Context, in *GetArticleOGPRequest, opts ...grpc.CallOption) (*GetArticleOGPResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(GetArticleOGPResponse)
@@ -64,6 +76,7 @@ func (c *contentServiceClient) GetArticleOGP(ctx context.Context, in *GetArticle
 // for forward compatibility.
 type ContentServiceServer interface {
 	GetArticles(context.Context, *GetArticlesRequest) (*GetArticlesResponse, error)
+	CreateUploadArticle(context.Context, *CreateUploadArticleRequest) (*CreateArticleResponse, error)
 	GetArticleOGP(context.Context, *GetArticleOGPRequest) (*GetArticleOGPResponse, error)
 }
 
@@ -76,6 +89,9 @@ type UnimplementedContentServiceServer struct{}
 
 func (UnimplementedContentServiceServer) GetArticles(context.Context, *GetArticlesRequest) (*GetArticlesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetArticles not implemented")
+}
+func (UnimplementedContentServiceServer) CreateUploadArticle(context.Context, *CreateUploadArticleRequest) (*CreateArticleResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateUploadArticle not implemented")
 }
 func (UnimplementedContentServiceServer) GetArticleOGP(context.Context, *GetArticleOGPRequest) (*GetArticleOGPResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetArticleOGP not implemented")
@@ -118,6 +134,24 @@ func _ContentService_GetArticles_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ContentService_CreateUploadArticle_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateUploadArticleRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ContentServiceServer).CreateUploadArticle(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ContentService_CreateUploadArticle_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ContentServiceServer).CreateUploadArticle(ctx, req.(*CreateUploadArticleRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _ContentService_GetArticleOGP_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetArticleOGPRequest)
 	if err := dec(in); err != nil {
@@ -146,6 +180,10 @@ var ContentService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetArticles",
 			Handler:    _ContentService_GetArticles_Handler,
+		},
+		{
+			MethodName: "CreateUploadArticle",
+			Handler:    _ContentService_CreateUploadArticle_Handler,
 		},
 		{
 			MethodName: "GetArticleOGP",

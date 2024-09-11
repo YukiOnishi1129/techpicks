@@ -6,6 +6,28 @@ var content_content_pb = require('../content/content_pb.js');
 var google_protobuf_timestamp_pb = require('google-protobuf/google/protobuf/timestamp_pb.js');
 var google_protobuf_wrappers_pb = require('google-protobuf/google/protobuf/wrappers_pb.js');
 
+function serialize_checkpicks_content_v1_CreateArticleResponse(arg) {
+  if (!(arg instanceof content_content_pb.CreateArticleResponse)) {
+    throw new Error('Expected argument of type checkpicks.content.v1.CreateArticleResponse');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_checkpicks_content_v1_CreateArticleResponse(buffer_arg) {
+  return content_content_pb.CreateArticleResponse.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
+function serialize_checkpicks_content_v1_CreateUploadArticleRequest(arg) {
+  if (!(arg instanceof content_content_pb.CreateUploadArticleRequest)) {
+    throw new Error('Expected argument of type checkpicks.content.v1.CreateUploadArticleRequest');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_checkpicks_content_v1_CreateUploadArticleRequest(buffer_arg) {
+  return content_content_pb.CreateUploadArticleRequest.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
 function serialize_checkpicks_content_v1_GetArticleOGPRequest(arg) {
   if (!(arg instanceof content_content_pb.GetArticleOGPRequest)) {
     throw new Error('Expected argument of type checkpicks.content.v1.GetArticleOGPRequest');
@@ -62,6 +84,17 @@ var ContentServiceService = exports.ContentServiceService = {
     requestDeserialize: deserialize_checkpicks_content_v1_GetArticlesRequest,
     responseSerialize: serialize_checkpicks_content_v1_GetArticlesResponse,
     responseDeserialize: deserialize_checkpicks_content_v1_GetArticlesResponse,
+  },
+  createUploadArticle: {
+    path: '/checkpicks.content.v1.ContentService/CreateUploadArticle',
+    requestStream: false,
+    responseStream: false,
+    requestType: content_content_pb.CreateUploadArticleRequest,
+    responseType: content_content_pb.CreateArticleResponse,
+    requestSerialize: serialize_checkpicks_content_v1_CreateUploadArticleRequest,
+    requestDeserialize: deserialize_checkpicks_content_v1_CreateUploadArticleRequest,
+    responseSerialize: serialize_checkpicks_content_v1_CreateArticleResponse,
+    responseDeserialize: deserialize_checkpicks_content_v1_CreateArticleResponse,
   },
   getArticleOGP: {
     path: '/checkpicks.content.v1.ContentService/GetArticleOGP',
