@@ -13,6 +13,7 @@ service BookmarkService {
     rpc GetBookmarks(GetBookmarksRequest) returns (GetBookmarksResponse) {}
     rpc GetBookmarkByArticleID(GetBookmarkByArticleIDRequest) returns (GetBookmarkResponse) {}
     rpc CreateBookmark(CreateBookmarkRequest) returns (CreateBookmarkResponse) {}
+    rpc CreateBookmarkForUploadArticle(CreateBookmarkRequest) returns (CreateBookmarkResponse) {}
     rpc DeleteBookmark(DeleteBookmarkRequest) returns (google.protobuf.Empty) {}
 }
 

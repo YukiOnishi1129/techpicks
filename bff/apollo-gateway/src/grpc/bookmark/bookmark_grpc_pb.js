@@ -130,6 +130,17 @@ var BookmarkServiceService = exports.BookmarkServiceService = {
     responseSerialize: serialize_checkpicks_bookmark_v1_CreateBookmarkResponse,
     responseDeserialize: deserialize_checkpicks_bookmark_v1_CreateBookmarkResponse,
   },
+  createBookmarkForUploadArticle: {
+    path: '/checkpicks.bookmark.v1.BookmarkService/CreateBookmarkForUploadArticle',
+    requestStream: false,
+    responseStream: false,
+    requestType: bookmark_bookmark_pb.CreateBookmarkRequest,
+    responseType: bookmark_bookmark_pb.CreateBookmarkResponse,
+    requestSerialize: serialize_checkpicks_bookmark_v1_CreateBookmarkRequest,
+    requestDeserialize: deserialize_checkpicks_bookmark_v1_CreateBookmarkRequest,
+    responseSerialize: serialize_checkpicks_bookmark_v1_CreateBookmarkResponse,
+    responseDeserialize: deserialize_checkpicks_bookmark_v1_CreateBookmarkResponse,
+  },
   deleteBookmark: {
     path: '/checkpicks.bookmark.v1.BookmarkService/DeleteBookmark',
     requestStream: false,

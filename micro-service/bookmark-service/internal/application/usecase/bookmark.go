@@ -5,8 +5,8 @@ import (
 	"fmt"
 
 	bpb "github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/grpc/bookmark"
+	persistenceadapter "github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/internal/adapter/persistence_adapter"
 	"github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/internal/domain/entity"
-	"github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/internal/infrastructure/adapter"
 	"github.com/google/uuid"
 	"google.golang.org/protobuf/types/known/emptypb"
 	"google.golang.org/protobuf/types/known/timestamppb"
@@ -17,21 +17,22 @@ type BookmarkUseCase interface {
 	GetBookmarks(ctx context.Context, req *bpb.GetBookmarksRequest) (*bpb.GetBookmarksResponse, error)
 	GetBookmarkByArticleID(ctx context.Context, req *bpb.GetBookmarkByArticleIDRequest) (*bpb.GetBookmarkResponse, error)
 	CreateBookmark(ctx context.Context, req *bpb.CreateBookmarkRequest) (*bpb.CreateBookmarkResponse, error)
+	CreateBookmarkForUploadArticle(ctx context.Context, req *bpb.CreateBookmarkRequest) (*bpb.CreateBookmarkResponse, error)
 	DeleteBookmark(ctx context.Context, req *bpb.DeleteBookmarkRequest) (*emptypb.Empty, error)
 }
 
 type bookmarkUseCase struct {
-	bookmarkAdapter adapter.BookmarkAdapter
+	bookmarkPersistenceAdapter persistenceadapter.BookmarkPersistenceAdapter
 }
 
-func NewBookmarkUseCase(ba adapter.BookmarkAdapter) BookmarkUseCase {
+func NewBookmarkUseCase(bpa persistenceadapter.BookmarkPersistenceAdapter) BookmarkUseCase {
 	return &bookmarkUseCase{
-		bookmarkAdapter: ba,
+		bookmarkPersistenceAdapter: bpa,
 	}
 }
 
 func (bu *bookmarkUseCase) GetBookmarks(ctx context.Context, req *bpb.GetBookmarksRequest) (*bpb.GetBookmarksResponse, error) {
-	bookmarks, err := bu.bookmarkAdapter.GetBookmarks(ctx, req)
+	bookmarks, err := bu.bookmarkPersistenceAdapter.GetBookmarks(ctx, req)
 	if err != nil {
 		return nil, err
 	}
@@ -64,7 +65,7 @@ func (bu *bookmarkUseCase) GetBookmarks(ctx context.Context, req *bpb.GetBookmar
 }
 
 func (bu *bookmarkUseCase) GetBookmarkByArticleID(ctx context.Context, req *bpb.GetBookmarkByArticleIDRequest) (*bpb.GetBookmarkResponse, error) {
-	bookmark, err := bu.bookmarkAdapter.GetBookmarkByArticleID(ctx, req.GetArticleId(), req.GetUserId())
+	bookmark, err := bu.bookmarkPersistenceAdapter.GetBookmarkByArticleID(ctx, req.GetArticleId(), req.GetUserId())
 	if err != nil {
 		return nil, err
 	}
@@ -104,7 +105,7 @@ func (bu *bookmarkUseCase) convertPBBookmark(b entity.Bookmark) *bpb.Bookmark {
 }
 
 func (bu *bookmarkUseCase) CreateBookmark(ctx context.Context, req *bpb.CreateBookmarkRequest) (*bpb.CreateBookmarkResponse, error) {
-	data, err := bu.bookmarkAdapter.GetBookmarkByArticleID(ctx, req.GetArticleId(), req.GetUserId())
+	data, err := bu.bookmarkPersistenceAdapter.GetBookmarkByArticleID(ctx, req.GetArticleId(), req.GetUserId())
 	if err != nil {
 		return &bpb.CreateBookmarkResponse{}, err
 	}
@@ -136,7 +137,7 @@ func (bu *bookmarkUseCase) CreateBookmark(ctx context.Context, req *bpb.CreateBo
 		bookmark.PublishedAt.Time = req.GetPublishedAt().AsTime()
 		bookmark.PublishedAt.Valid = true
 	}
-	b, err := bu.bookmarkAdapter.CreateBookmark(ctx, bookmark)
+	b, err := bu.bookmarkPersistenceAdapter.CreateBookmark(ctx, bookmark)
 	if err != nil {
 		return &bpb.CreateBookmarkResponse{}, err
 	}
@@ -146,8 +147,33 @@ func (bu *bookmarkUseCase) CreateBookmark(ctx context.Context, req *bpb.CreateBo
 	}, nil
 }
 
+func (bu *bookmarkUseCase) CreateBookmarkForUploadArticle(ctx context.Context, req *bpb.CreateBookmarkRequest) (*bpb.CreateBookmarkResponse, error) {
+	// check if the url is already in the bookmark
+	res, err := bu.bookmarkPersistenceAdapter.GetBookmarkByArticleURL(ctx, req.GetArticleUrl(), req.GetUserId())
+	if err != nil {
+		return &bpb.CreateBookmarkResponse{}, err
+	}
+	if res.ID != "" {
+		return &bpb.CreateBookmarkResponse{}, fmt.Errorf("bookmark already exists")
+	}
+
+	// TODO2: private=falseで同じarticleUrlとplatformUrlのarticleがすでにあるなら、そのデータを使ってbookmarkを登録
+	// → true: create bookmark (use already created article)
+	// → false: create article
+
+	// TODO3:privateで同じarticleUrlのものがある
+	// → true: create bookmark (use already created article)
+	// → false: create article
+
+	// TODO: articleとbookmarkと登録
+	// → true: create bookmark
+	// → false: create article
+
+	return &bpb.CreateBookmarkResponse{}, nil
+}
+
 func (bu *bookmarkUseCase) DeleteBookmark(ctx context.Context, req *bpb.DeleteBookmarkRequest) (*emptypb.Empty, error) {
-	data, err := bu.bookmarkAdapter.GetBookmarkByID(ctx, req.GetBookmarkId())
+	data, err := bu.bookmarkPersistenceAdapter.GetBookmarkByID(ctx, req.GetBookmarkId())
 	if err != nil {
 		return &emptypb.Empty{}, err
 	}
@@ -158,7 +184,7 @@ func (bu *bookmarkUseCase) DeleteBookmark(ctx context.Context, req *bpb.DeleteBo
 		return &emptypb.Empty{}, fmt.Errorf("bookmark does not belong to the user")
 	}
 
-	if err := bu.bookmarkAdapter.DeleteBookmark(ctx, req.GetBookmarkId(), req.GetUserId()); err != nil {
+	if err := bu.bookmarkPersistenceAdapter.DeleteBookmark(ctx, req.GetBookmarkId(), req.GetUserId()); err != nil {
 		return &emptypb.Empty{}, err
 	}
 	return &emptypb.Empty{}, nil

@@ -16,6 +16,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { getArticleOGPQuery } from "@/features/articles/actions/getArticleOGPQuery";
+import { logoutToLoginPage } from "@/features/auth/actions/auth";
 
 import { Button } from "@/components/ui/button";
 import { OGPPreviewContent } from "@/components/ui/dialog";
@@ -99,8 +100,16 @@ export const CreateBookmarkDialogContent: FC<
   );
 
   const handleAddSubmit = useCallback(async () => {
-    startOgpPending(async () => {});
-  }, []);
+    startOgpPending(async () => {
+      if (!user) {
+        failToast({
+          description: "Fail: Please login to bookmark this article",
+        });
+        await logoutToLoginPage();
+        return;
+      }
+    });
+  }, [user, failToast]);
 
   return (
     <DialogContent onCloseAutoFocus={resetDialog}>

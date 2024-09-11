@@ -8,9 +8,9 @@ import (
 	"os/signal"
 
 	bpb "github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/grpc/bookmark"
+	persistenceadapter "github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/internal/adapter/persistence_adapter"
 	"github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/internal/application/usecase"
 	"github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/internal/config/database"
-	"github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/internal/infrastructure/adapter"
 	"github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/internal/infrastructure/persistence"
 	"github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/internal/interfaces/handler"
 	"github.com/joho/godotenv"
@@ -36,15 +36,15 @@ func main() {
 	}
 
 	// infrastructure layer
-	// repository layer
+	// persistence layer
 	bps := persistence.NewBookmarkPersistence(db)
 
 	// adapter layer
-	bad := adapter.NewBookmarkAdapter(bps)
+	bpa := persistenceadapter.NewBookmarkPersistenceAdapter(bps)
 
 	// application layer
 	// usecase layer
-	buc := usecase.NewBookmarkUseCase(bad)
+	buc := usecase.NewBookmarkUseCase(bpa)
 
 	// interface layer
 	bhd := handler.NewBookmarkHandler(buc)
