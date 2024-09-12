@@ -39,6 +39,7 @@ export const getArticleListQuery = async (input: ArticlesInput) => {
     variables: {
       input,
     },
+    errorPolicy: "all",
   });
 
   const newData = readFragment(ArticleDashboardTemplateFragment, data);

@@ -39,6 +39,7 @@ export const getBookmarkListQuery = async (input: BookmarksInput) => {
     variables: {
       input,
     },
+    errorPolicy: "all",
   });
 
   const newData = readFragment(BookmarkTemplateFragment, data);
