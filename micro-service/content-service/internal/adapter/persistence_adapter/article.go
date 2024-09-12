@@ -148,9 +148,8 @@ func (apa *articlePersistenceAdapter) CreateUploadArticle(ctx context.Context, r
 		Title:        req.GetTitle(),
 		Description:  req.GetDescription(),
 		ThumbnailURL: req.GetThumbnailUrl(),
-
-		IsPrivate: true,
-		IsEng:     req.GetIsEng(),
+		IsPrivate:    true,
+		IsEng:        req.GetIsEng(),
 	}
 
 	err := apa.articleRepository.CreateArticle(ctx, article)
