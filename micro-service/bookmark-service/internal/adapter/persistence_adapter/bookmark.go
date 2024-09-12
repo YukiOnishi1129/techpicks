@@ -119,7 +119,7 @@ func (bpa *bookmarkPersistenceAdapter) CreateBookmarkForUploadArticle(ctx contex
 		ArticleURL:   article.GetArticleUrl(),
 		ThumbnailURL: article.GetThumbnailUrl(),
 		IsEng:        article.GetIsEng(),
-		IsRead:       req.GetIsRead(),
+		IsRead:       false,
 	}
 	if article.GetPublishedAt() != nil {
 		bookmark.PublishedAt.Time = article.GetPublishedAt().AsTime()

@@ -9,6 +9,7 @@ import (
 	externaladapter "github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/internal/adapter/external_adapter"
 	persistenceadapter "github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/internal/adapter/persistence_adapter"
 	"github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/internal/domain/entity"
+	"github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/internal/util"
 	"google.golang.org/protobuf/types/known/emptypb"
 	"google.golang.org/protobuf/types/known/timestamppb"
 	"google.golang.org/protobuf/types/known/wrapperspb"
@@ -146,8 +147,8 @@ func (bu *bookmarkUseCase) CreateBookmarkForUploadArticle(ctx context.Context, r
 		PlatformName:       req.GetPlatformName(),
 		PlatformUrl:        req.GetPlatformUrl(),
 		PlatformFaviconUrl: req.GetPlatformFaviconUrl(),
-		IsEng:              req.GetIsEng(),
-		IsRead:             req.GetIsRead(),
+		IsEng:              !util.JapaneseTextCheck(req.GetTitle()) && !util.JapaneseTextCheck(req.GetDescription()) && !util.JapaneseTextCheck(req.GetPlatformName()),
+		IsRead:             false,
 	})
 	if err != nil {
 		return &bpb.CreateBookmarkResponse{}, err
