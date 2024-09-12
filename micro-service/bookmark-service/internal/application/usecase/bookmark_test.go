@@ -6,11 +6,15 @@ import (
 	"time"
 
 	bpb "github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/grpc/bookmark"
+	cpb "github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/grpc/content"
+	externaladapter "github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/internal/adapter/external_adapter"
 	persistenceadapter "github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/internal/adapter/persistence_adapter"
 	"github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/internal/domain/entity"
+	"github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/internal/infrastructure/external"
 	"github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/internal/infrastructure/persistence"
 	"github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/internal/util/testutil"
 	"github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/internal/util/testutil/mock"
+	"github.com/golang/mock/gomock"
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
 	"github.com/google/uuid"
@@ -249,9 +253,18 @@ func Test_UseCase_GetBookmarkByArticleID(t *testing.T) {
 
 			db := pgContainer.DB
 
+			ctrl := gomock.NewController(t)
+			defer ctrl.Finish()
+
+			mockContentClient := mock.NewMockContentServiceClient(ctrl)
+
 			testBookmarkRepository := persistence.NewBookmarkPersistence(db)
+			testContentExternal := external.NewContentExternal(mockContentClient)
+
 			testBookmarkPersistenceAdapter := persistenceadapter.NewBookmarkPersistenceAdapter(testBookmarkRepository)
-			testBookmarkUseCase := NewBookmarkUseCase(testBookmarkPersistenceAdapter)
+			testContentExternalAdapter := externaladapter.NewContentExternalAdapter(testContentExternal)
+
+			testBookmarkUseCase := NewBookmarkUseCase(testBookmarkPersistenceAdapter, testContentExternalAdapter)
 
 			if tt.recordBookmarks != nil {
 				for _, v := range tt.recordBookmarks {
@@ -479,10 +492,18 @@ func Test_UseCase_CreateBookmark(t *testing.T) {
 
 			db := pgContainer.DB
 
-			testBookmarkRepository := persistence.NewBookmarkPersistence(db)
-			testBookmarkPersistenceAdapter := persistenceadapter.NewBookmarkPersistenceAdapter(testBookmarkRepository)
-			testBookmarkUseCase := NewBookmarkUseCase(testBookmarkPersistenceAdapter)
+			ctrl := gomock.NewController(t)
+			defer ctrl.Finish()
 
+			mockContentClient := mock.NewMockContentServiceClient(ctrl)
+
+			testBookmarkRepository := persistence.NewBookmarkPersistence(db)
+			testContentExternal := external.NewContentExternal(mockContentClient)
+
+			testBookmarkPersistenceAdapter := persistenceadapter.NewBookmarkPersistenceAdapter(testBookmarkRepository)
+			testContentExternalAdapter := externaladapter.NewContentExternalAdapter(testContentExternal)
+
+			testBookmarkUseCase := NewBookmarkUseCase(testBookmarkPersistenceAdapter, testContentExternalAdapter)
 			if tt.recordBookmarks != nil {
 				for _, v := range tt.recordBookmarks {
 					err = v.Insert(ctx, db, boil.Infer())
@@ -493,6 +514,319 @@ func Test_UseCase_CreateBookmark(t *testing.T) {
 			}
 
 			got, err := testBookmarkUseCase.CreateBookmark(ctx, tt.arg)
+			if err != nil {
+				if tt.wantErrMsg == "" {
+					t.Error(err)
+					return
+				}
+				if diff := cmp.Diff(err.Error(), tt.wantErrMsg); diff != "" {
+					t.Errorf("failed DeleteBookmark (-got +want):\n%s", diff)
+				}
+				return
+			}
+			optsPbBookmark := []cmp.Option{
+				cmp.AllowUnexported(bpb.Bookmark{}),
+				cmpopts.IgnoreFields(bpb.Bookmark{}, "state", "sizeCache", "unknownFields", "Id", "CreatedAt", "UpdatedAt"),
+				cmpopts.IgnoreUnexported(wrapperspb.StringValue{}, timestamppb.Timestamp{}),
+			}
+			if diff := cmp.Diff(got.Bookmark, tt.want, optsPbBookmark...); diff != "" {
+				t.Fatalf("request is not expected: %s", diff)
+			}
+
+			gotRecord, err := testBookmarkRepository.GetBookmarkByID(ctx, got.Bookmark.Id)
+			if err != nil {
+				t.Fatalf("Failed to get bookmark record: %s", err)
+			}
+			optBookmarkRecord := cmpopts.IgnoreFields(entity.Bookmark{}, "ID", "CreatedAt", "UpdatedAt")
+			if diff := cmp.Diff(gotRecord, tt.wantBookmarkRecord, optBookmarkRecord); diff != "" {
+				t.Fatalf("record is not expected: %s", diff)
+			}
+		})
+	}
+}
+
+func Test_UseCase_CreateBookmarkForUploadArticle(t *testing.T) {
+	t.Parallel()
+
+	bookmarkID, _ := uuid.NewRandom()
+
+	publishedAt := time.Now().Add(-time.Hour * 24 * 7).Unix()
+
+	mockPlatforms := mock.GetPlatformMock()
+	mockArticles := mock.GetArticleMock()
+	mockProfiles := mock.GetProfileMock()
+
+	platformID1 := mockPlatforms[0].ID
+	articleID1 := mockArticles[0].ID
+	articleID2 := mockArticles[1].ID
+	userID1 := mockProfiles[0].ID
+
+	test := map[string]struct {
+		recordBookmarks                 []entity.Bookmark
+		arg                             *bpb.CreateBookmarkForUploadArticleRequest
+		mockCreateUploadArticleResponse *cpb.CreateArticleResponse
+		want                            *bpb.Bookmark
+		wantBookmarkRecord              entity.Bookmark
+		wantErrMsg                      string
+	}{
+		"Success: create bookmark already article": {
+			recordBookmarks: []entity.Bookmark{
+				{
+					ID:     bookmarkID.String(),
+					UserID: userID1,
+					PlatformID: null.String{
+						Valid:  true,
+						String: platformID1,
+					},
+					ArticleID:          articleID2,
+					Title:              "title_2",
+					Description:        "description_2",
+					ArticleURL:         "https://test.com/article2",
+					PublishedAt:        null.TimeFrom(time.Unix(publishedAt, 0)),
+					ThumbnailURL:       "thumbnail_url_2",
+					PlatformName:       "platform_name_2",
+					PlatformURL:        "platform_url_2",
+					PlatformFaviconURL: "platform_favicon_url_2",
+					IsEng:              true,
+					IsRead:             false,
+				},
+			},
+			arg: &bpb.CreateBookmarkForUploadArticleRequest{
+				UserId:             userID1,
+				Title:              "title_1",
+				Description:        "description_1",
+				ArticleUrl:         "https://test.com/article1",
+				ThumbnailUrl:       "thumbnail_url_1",
+				PlatformName:       "upload_platform_name_1",
+				PlatformUrl:        "upload_platform_url_1",
+				PlatformFaviconUrl: "upload_platform_favicon_url_1",
+				IsEng:              true,
+				IsRead:             false,
+			},
+			mockCreateUploadArticleResponse: &cpb.CreateArticleResponse{
+				Article: &cpb.Article{
+					Id: articleID1,
+					Platform: &cpb.Platform{
+						Id:               platformID1,
+						Name:             "platform_name_1",
+						PlatformSiteType: 1,
+						SiteUrl:          "platform_url_1",
+						FaviconUrl:       "platform_favicon_url_1",
+					},
+					Title:        "title_1",
+					Description:  "description_1",
+					ArticleUrl:   "https://test.com/article1",
+					ThumbnailUrl: "thumbnail_url_1",
+					PublishedAt:  &timestamppb.Timestamp{Seconds: publishedAt},
+					IsEng:        true,
+					IsPrivate:    false,
+				},
+			},
+			want: &bpb.Bookmark{
+				ArticleId: articleID1,
+				UserId:    userID1,
+				PlatformId: &wrapperspb.StringValue{
+					Value: platformID1,
+				},
+				Title:              "title_1",
+				Description:        "description_1",
+				ArticleUrl:         "https://test.com/article1",
+				ThumbnailUrl:       "thumbnail_url_1",
+				PublishedAt:        &timestamppb.Timestamp{Seconds: publishedAt},
+				PlatformName:       "platform_name_1",
+				PlatformUrl:        "platform_url_1",
+				PlatformFaviconUrl: "platform_favicon_url_1",
+				IsEng:              true,
+				IsRead:             false,
+			},
+			wantBookmarkRecord: entity.Bookmark{
+				ArticleID: articleID1,
+				UserID:    userID1,
+				PlatformID: null.String{
+					Valid:  true,
+					String: platformID1,
+				},
+				Title:              "title_1",
+				Description:        "description_1",
+				ArticleURL:         "https://test.com/article1",
+				ThumbnailURL:       "thumbnail_url_1",
+				PublishedAt:        null.TimeFrom(time.Unix(publishedAt, 0)),
+				PlatformName:       "platform_name_1",
+				PlatformURL:        "platform_url_1",
+				PlatformFaviconURL: "platform_favicon_url_1",
+				IsEng:              true,
+				IsRead:             false,
+			},
+		},
+		"Success: create bookmark not already article": {
+			recordBookmarks: []entity.Bookmark{
+				{
+					ID:     bookmarkID.String(),
+					UserID: userID1,
+					PlatformID: null.String{
+						Valid:  true,
+						String: platformID1,
+					},
+					ArticleID:          articleID2,
+					Title:              "title_2",
+					Description:        "description_2",
+					ArticleURL:         "https://test.com/article2",
+					PublishedAt:        null.TimeFrom(time.Unix(publishedAt, 0)),
+					ThumbnailURL:       "thumbnail_url_2",
+					PlatformName:       "platform_name_2",
+					PlatformURL:        "platform_url_2",
+					PlatformFaviconURL: "platform_favicon_url_2",
+					IsEng:              true,
+					IsRead:             false,
+				},
+			},
+			arg: &bpb.CreateBookmarkForUploadArticleRequest{
+				UserId:             userID1,
+				Title:              "title_1",
+				Description:        "description_1",
+				ArticleUrl:         "https://test.com/article1",
+				ThumbnailUrl:       "thumbnail_url_1",
+				PlatformName:       "upload_platform_name_1",
+				PlatformUrl:        "upload_platform_url_1",
+				PlatformFaviconUrl: "upload_platform_favicon_url_1",
+				IsEng:              true,
+				IsRead:             false,
+			},
+			mockCreateUploadArticleResponse: &cpb.CreateArticleResponse{
+				Article: &cpb.Article{
+					Id:           articleID1,
+					Title:        "title_1",
+					Description:  "description_1",
+					ArticleUrl:   "https://test.com/article1",
+					ThumbnailUrl: "thumbnail_url_1",
+					IsEng:        true,
+					IsPrivate:    true,
+				},
+			},
+			want: &bpb.Bookmark{
+				ArticleId:          articleID1,
+				UserId:             userID1,
+				Title:              "title_1",
+				Description:        "description_1",
+				ArticleUrl:         "https://test.com/article1",
+				ThumbnailUrl:       "thumbnail_url_1",
+				PlatformName:       "upload_platform_name_1",
+				PlatformUrl:        "upload_platform_url_1",
+				PlatformFaviconUrl: "upload_platform_favicon_url_1",
+				IsEng:              true,
+				IsRead:             false,
+			},
+			wantBookmarkRecord: entity.Bookmark{
+				ArticleID:          articleID1,
+				UserID:             userID1,
+				Title:              "title_1",
+				Description:        "description_1",
+				ArticleURL:         "https://test.com/article1",
+				ThumbnailURL:       "thumbnail_url_1",
+				PlatformName:       "upload_platform_name_1",
+				PlatformURL:        "upload_platform_url_1",
+				PlatformFaviconURL: "upload_platform_favicon_url_1",
+				IsEng:              true,
+				IsRead:             false,
+			},
+		},
+		"Fail: create bookmark already bookmark": {
+			recordBookmarks: []entity.Bookmark{
+				{
+					ID:        bookmarkID.String(),
+					ArticleID: articleID1,
+					UserID:    userID1,
+					PlatformID: null.String{
+						Valid:  true,
+						String: platformID1,
+					},
+					Title:              "title_1",
+					Description:        "description_1",
+					ArticleURL:         "https://test.com/article1",
+					ThumbnailURL:       "thumbnail_url_1",
+					PublishedAt:        null.TimeFrom(time.Unix(publishedAt, 0)),
+					PlatformName:       "platform_name_1",
+					PlatformURL:        "platform_url_1",
+					PlatformFaviconURL: "platform_favicon_url_1",
+					IsEng:              true,
+					IsRead:             false,
+				},
+			},
+			arg: &bpb.CreateBookmarkForUploadArticleRequest{
+				UserId:             userID1,
+				Title:              "title_1",
+				Description:        "description_1",
+				ArticleUrl:         "https://test.com/article1",
+				ThumbnailUrl:       "thumbnail_url_1",
+				PlatformName:       "upload_platform_name_1",
+				PlatformUrl:        "upload_platform_url_1",
+				PlatformFaviconUrl: "upload_platform_favicon_url_1",
+				IsEng:              true,
+				IsRead:             false,
+			},
+			want: &bpb.Bookmark{},
+			wantBookmarkRecord: entity.Bookmark{
+				ArticleID: articleID1,
+				UserID:    userID1,
+				PlatformID: null.String{
+					Valid:  true,
+					String: platformID1,
+				},
+				Title:              "title_1",
+				Description:        "description_1",
+				ArticleURL:         "https://test.com/article1",
+				ThumbnailURL:       "thumbnail_url_1",
+				PublishedAt:        null.TimeFrom(time.Unix(publishedAt, 0)),
+				PlatformName:       "platform_name_1",
+				PlatformURL:        "platform_url_1",
+				PlatformFaviconURL: "platform_favicon_url_1",
+				IsEng:              true,
+				IsRead:             false,
+			},
+			wantErrMsg: "bookmark already exists",
+		},
+	}
+
+	for name, tt := range test {
+		tt := tt
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+			ctx := context.Background()
+
+			pgContainer, err := testutil.SetupTest(ctx, t, "../../util/testutil/schema/")
+			if err != nil {
+				t.Fatalf("Failed to setup database: %s", err)
+			}
+			t.Cleanup(pgContainer.Down)
+
+			db := pgContainer.DB
+
+			ctrl := gomock.NewController(t)
+			defer ctrl.Finish()
+
+			mockContentClient := mock.NewMockContentServiceClient(ctrl)
+
+			if tt.mockCreateUploadArticleResponse != nil {
+				mockContentClient.EXPECT().CreateUploadArticle(gomock.Any(), gomock.Any()).Return(tt.mockCreateUploadArticleResponse, nil)
+			}
+
+			testBookmarkRepository := persistence.NewBookmarkPersistence(db)
+			testContentExternal := external.NewContentExternal(mockContentClient)
+
+			testBookmarkPersistenceAdapter := persistenceadapter.NewBookmarkPersistenceAdapter(testBookmarkRepository)
+			testContentExternalAdapter := externaladapter.NewContentExternalAdapter(testContentExternal)
+
+			testBookmarkUseCase := NewBookmarkUseCase(testBookmarkPersistenceAdapter, testContentExternalAdapter)
+			if tt.recordBookmarks != nil {
+				for _, v := range tt.recordBookmarks {
+					err = v.Insert(ctx, db, boil.Infer())
+					if err != nil {
+						t.Fatalf("Failed to insert record: %s", err)
+					}
+				}
+			}
+
+			got, err := testBookmarkUseCase.CreateBookmarkForUploadArticle(ctx, tt.arg)
 			if err != nil {
 				if tt.wantErrMsg == "" {
 					t.Error(err)
@@ -649,9 +983,18 @@ func Test_UseCase_DeleteBookmark(t *testing.T) {
 
 			db := pgContainer.DB
 
+			ctrl := gomock.NewController(t)
+			defer ctrl.Finish()
+
+			mockContentClient := mock.NewMockContentServiceClient(ctrl)
+
 			testBookmarkRepository := persistence.NewBookmarkPersistence(db)
+			testContentExternal := external.NewContentExternal(mockContentClient)
+
 			testBookmarkPersistenceAdapter := persistenceadapter.NewBookmarkPersistenceAdapter(testBookmarkRepository)
-			testBookmarkUseCase := NewBookmarkUseCase(testBookmarkPersistenceAdapter)
+			testContentExternalAdapter := externaladapter.NewContentExternalAdapter(testContentExternal)
+
+			testBookmarkUseCase := NewBookmarkUseCase(testBookmarkPersistenceAdapter, testContentExternalAdapter)
 
 			if tt.recordBookmarks != nil {
 				for _, v := range tt.recordBookmarks {

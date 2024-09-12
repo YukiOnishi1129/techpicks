@@ -61,7 +61,6 @@ func main() {
 	if isDev {
 		brpcURL = fmt.Sprintf("%s:%s", os.Getenv("BOOKMARK_SERVICE_CONTAINER_NAME"), os.Getenv("BOOKMARK_SERVICE_CONTAINER_PORT"))
 	}
-	// brpcURL := fmt.Sprintf("%s:%s", os.Getenv("BOOKMARK_SERVICE_CONTAINER_NAME"), os.Getenv("BOOKMARK_SERVICE_CONTAINER_PORT"))
 	bConn, err := grpc.NewClient(brpcURL, grpc.WithTransportCredentials(grpcCredential))
 	if err != nil {
 		log.Fatal("Error connecting to bookmark service")
