@@ -11,6 +11,7 @@ import * as google_protobuf_wrappers_pb from "google-protobuf/google/protobuf/wr
 
 interface IFavoriteServiceService extends grpc.ServiceDefinition<grpc.UntypedServiceImplementation> {
     getFavoriteArticleFolderByArticleId: IFavoriteServiceService_IGetFavoriteArticleFolderByArticleId;
+    createFavoriteArticleFolder: IFavoriteServiceService_ICreateFavoriteArticleFolder;
 }
 
 interface IFavoriteServiceService_IGetFavoriteArticleFolderByArticleId extends grpc.MethodDefinition<favorite_favorite_pb.GetFavoriteArticleFolderByArticleIdRequest, favorite_favorite_pb.GetFavoriteArticleFolderResponse> {
@@ -22,17 +23,30 @@ interface IFavoriteServiceService_IGetFavoriteArticleFolderByArticleId extends g
     responseSerialize: grpc.serialize<favorite_favorite_pb.GetFavoriteArticleFolderResponse>;
     responseDeserialize: grpc.deserialize<favorite_favorite_pb.GetFavoriteArticleFolderResponse>;
 }
+interface IFavoriteServiceService_ICreateFavoriteArticleFolder extends grpc.MethodDefinition<favorite_favorite_pb.CreateFavoriteArticleFolderRequest, favorite_favorite_pb.CreateFavoriteArticleFolderResponse> {
+    path: "/checkpicks.favorite.v1.FavoriteService/CreateFavoriteArticleFolder";
+    requestStream: false;
+    responseStream: false;
+    requestSerialize: grpc.serialize<favorite_favorite_pb.CreateFavoriteArticleFolderRequest>;
+    requestDeserialize: grpc.deserialize<favorite_favorite_pb.CreateFavoriteArticleFolderRequest>;
+    responseSerialize: grpc.serialize<favorite_favorite_pb.CreateFavoriteArticleFolderResponse>;
+    responseDeserialize: grpc.deserialize<favorite_favorite_pb.CreateFavoriteArticleFolderResponse>;
+}
 
 export const FavoriteServiceService: IFavoriteServiceService;
 
 export interface IFavoriteServiceServer extends grpc.UntypedServiceImplementation {
     getFavoriteArticleFolderByArticleId: grpc.handleUnaryCall<favorite_favorite_pb.GetFavoriteArticleFolderByArticleIdRequest, favorite_favorite_pb.GetFavoriteArticleFolderResponse>;
+    createFavoriteArticleFolder: grpc.handleUnaryCall<favorite_favorite_pb.CreateFavoriteArticleFolderRequest, favorite_favorite_pb.CreateFavoriteArticleFolderResponse>;
 }
 
 export interface IFavoriteServiceClient {
     getFavoriteArticleFolderByArticleId(request: favorite_favorite_pb.GetFavoriteArticleFolderByArticleIdRequest, callback: (error: grpc.ServiceError | null, response: favorite_favorite_pb.GetFavoriteArticleFolderResponse) => void): grpc.ClientUnaryCall;
     getFavoriteArticleFolderByArticleId(request: favorite_favorite_pb.GetFavoriteArticleFolderByArticleIdRequest, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: favorite_favorite_pb.GetFavoriteArticleFolderResponse) => void): grpc.ClientUnaryCall;
     getFavoriteArticleFolderByArticleId(request: favorite_favorite_pb.GetFavoriteArticleFolderByArticleIdRequest, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: favorite_favorite_pb.GetFavoriteArticleFolderResponse) => void): grpc.ClientUnaryCall;
+    createFavoriteArticleFolder(request: favorite_favorite_pb.CreateFavoriteArticleFolderRequest, callback: (error: grpc.ServiceError | null, response: favorite_favorite_pb.CreateFavoriteArticleFolderResponse) => void): grpc.ClientUnaryCall;
+    createFavoriteArticleFolder(request: favorite_favorite_pb.CreateFavoriteArticleFolderRequest, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: favorite_favorite_pb.CreateFavoriteArticleFolderResponse) => void): grpc.ClientUnaryCall;
+    createFavoriteArticleFolder(request: favorite_favorite_pb.CreateFavoriteArticleFolderRequest, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: favorite_favorite_pb.CreateFavoriteArticleFolderResponse) => void): grpc.ClientUnaryCall;
 }
 
 export class FavoriteServiceClient extends grpc.Client implements IFavoriteServiceClient {
@@ -40,4 +54,7 @@ export class FavoriteServiceClient extends grpc.Client implements IFavoriteServi
     public getFavoriteArticleFolderByArticleId(request: favorite_favorite_pb.GetFavoriteArticleFolderByArticleIdRequest, callback: (error: grpc.ServiceError | null, response: favorite_favorite_pb.GetFavoriteArticleFolderResponse) => void): grpc.ClientUnaryCall;
     public getFavoriteArticleFolderByArticleId(request: favorite_favorite_pb.GetFavoriteArticleFolderByArticleIdRequest, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: favorite_favorite_pb.GetFavoriteArticleFolderResponse) => void): grpc.ClientUnaryCall;
     public getFavoriteArticleFolderByArticleId(request: favorite_favorite_pb.GetFavoriteArticleFolderByArticleIdRequest, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: favorite_favorite_pb.GetFavoriteArticleFolderResponse) => void): grpc.ClientUnaryCall;
+    public createFavoriteArticleFolder(request: favorite_favorite_pb.CreateFavoriteArticleFolderRequest, callback: (error: grpc.ServiceError | null, response: favorite_favorite_pb.CreateFavoriteArticleFolderResponse) => void): grpc.ClientUnaryCall;
+    public createFavoriteArticleFolder(request: favorite_favorite_pb.CreateFavoriteArticleFolderRequest, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: favorite_favorite_pb.CreateFavoriteArticleFolderResponse) => void): grpc.ClientUnaryCall;
+    public createFavoriteArticleFolder(request: favorite_favorite_pb.CreateFavoriteArticleFolderRequest, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: favorite_favorite_pb.CreateFavoriteArticleFolderResponse) => void): grpc.ClientUnaryCall;
 }

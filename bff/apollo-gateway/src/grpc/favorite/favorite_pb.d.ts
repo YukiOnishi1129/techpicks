@@ -51,6 +51,55 @@ export namespace GetFavoriteArticleFolderByArticleIdRequest {
     }
 }
 
+export class CreateFavoriteArticleFolderResponse extends jspb.Message { 
+
+    hasFavoriteArticleFolder(): boolean;
+    clearFavoriteArticleFolder(): void;
+    getFavoriteArticleFolder(): FavoriteArticleFolder | undefined;
+    setFavoriteArticleFolder(value?: FavoriteArticleFolder): CreateFavoriteArticleFolderResponse;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): CreateFavoriteArticleFolderResponse.AsObject;
+    static toObject(includeInstance: boolean, msg: CreateFavoriteArticleFolderResponse): CreateFavoriteArticleFolderResponse.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: CreateFavoriteArticleFolderResponse, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): CreateFavoriteArticleFolderResponse;
+    static deserializeBinaryFromReader(message: CreateFavoriteArticleFolderResponse, reader: jspb.BinaryReader): CreateFavoriteArticleFolderResponse;
+}
+
+export namespace CreateFavoriteArticleFolderResponse {
+    export type AsObject = {
+        favoriteArticleFolder?: FavoriteArticleFolder.AsObject,
+    }
+}
+
+export class CreateFavoriteArticleFolderRequest extends jspb.Message { 
+    getUserId(): string;
+    setUserId(value: string): CreateFavoriteArticleFolderRequest;
+    getTitle(): string;
+    setTitle(value: string): CreateFavoriteArticleFolderRequest;
+    getDescription(): string;
+    setDescription(value: string): CreateFavoriteArticleFolderRequest;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): CreateFavoriteArticleFolderRequest.AsObject;
+    static toObject(includeInstance: boolean, msg: CreateFavoriteArticleFolderRequest): CreateFavoriteArticleFolderRequest.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: CreateFavoriteArticleFolderRequest, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): CreateFavoriteArticleFolderRequest;
+    static deserializeBinaryFromReader(message: CreateFavoriteArticleFolderRequest, reader: jspb.BinaryReader): CreateFavoriteArticleFolderRequest;
+}
+
+export namespace CreateFavoriteArticleFolderRequest {
+    export type AsObject = {
+        userId: string,
+        title: string,
+        description: string,
+    }
+}
+
 export class FavoriteArticle extends jspb.Message { 
     getId(): string;
     setId(value: string): FavoriteArticle;
