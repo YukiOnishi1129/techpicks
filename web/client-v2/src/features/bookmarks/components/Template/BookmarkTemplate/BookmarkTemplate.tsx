@@ -6,6 +6,7 @@ import { BookmarksInput } from "@/graphql/type";
 
 import { CreateBookmarkDialog } from "../../Dialog";
 import { BookmarkList } from "../../List";
+import { BookmarkArticleKeywordSearchInput } from "../../Search";
 
 type BookmarkTemplateProps = {
   user: User;
@@ -32,7 +33,7 @@ export const BookmarkTemplate = async ({
           Bookmark
         </h1>
         <div className="mr-2 w-3/4 md:mr-4">
-          {/* <BookmarkArticleKeywordSearchInput /> */}
+          <BookmarkArticleKeywordSearchInput keyword={keyword} />
         </div>
         <CreateBookmarkDialog user={user} />
       </div>
