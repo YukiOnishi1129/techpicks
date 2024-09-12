@@ -1,6 +1,6 @@
 import { User } from "@supabase/supabase-js";
 
-import { getBookmarkListQuery } from "@/features/bookmarks/actions/getBookmarkList";
+import { getBookmarkListQuery } from "@/features/bookmarks/actions/getBookmarkListQuery";
 
 import { BookmarksInput } from "@/graphql/type";
 

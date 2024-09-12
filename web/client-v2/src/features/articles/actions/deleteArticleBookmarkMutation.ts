@@ -25,6 +25,7 @@ export const deleteArticleBookmarkMutation = async (
     variables: {
       input,
     },
+    errorPolicy: "all",
   });
 
   const res = await deleteArticleBookmark;

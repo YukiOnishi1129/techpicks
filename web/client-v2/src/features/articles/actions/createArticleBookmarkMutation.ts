@@ -27,6 +27,7 @@ export const createArticleBookmarkMutation = async (
     variables: {
       input,
     },
+    errorPolicy: "all",
   });
 
   const res = await createArticleBookmark;

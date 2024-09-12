@@ -141,6 +141,16 @@ export type Category = Node & {
   updatedAt: Scalars["Int"]["output"];
 };
 
+export type CreateBookmarkForUploadArticleInput = {
+  articleUrl: Scalars["String"]["input"];
+  description: Scalars["String"]["input"];
+  platformFaviconUrl: Scalars["String"]["input"];
+  platformName: Scalars["String"]["input"];
+  platformUrl: Scalars["String"]["input"];
+  thumbnailUrl: Scalars["String"]["input"];
+  title: Scalars["String"]["input"];
+};
+
 export type CreateBookmarkInput = {
   articleId: Scalars["ID"]["input"];
   articleUrl: Scalars["String"]["input"];
@@ -218,11 +228,16 @@ export type Feed = Node & {
 export type Mutation = {
   __typename?: "Mutation";
   createBookmark: Bookmark;
+  createBookmarkForUploadArticle: Bookmark;
   deleteBookmark: Scalars["Boolean"]["output"];
 };
 
 export type MutationCreateBookmarkArgs = {
   createBookmarkInput: CreateBookmarkInput;
+};
+
+export type MutationCreateBookmarkForUploadArticleArgs = {
+  input: CreateBookmarkForUploadArticleInput;
 };
 
 export type MutationDeleteBookmarkArgs = {
@@ -420,6 +435,7 @@ export type ArticleOgpFragmentFragment = {
     description?: string | null;
     thumbnailUrl: string;
     articleUrl: string;
+    siteUrl: string;
     siteName: string;
     faviconUrl: string;
   };
@@ -437,6 +453,7 @@ export type ArticleOgpQueryQuery = {
     description?: string | null;
     thumbnailUrl: string;
     articleUrl: string;
+    siteUrl: string;
     siteName: string;
     faviconUrl: string;
   };
@@ -522,6 +539,15 @@ export type ArticleListFragmentFragment = {
       feeds?: Array<{ __typename?: "Feed"; id: string; name: string }> | null;
     };
   }>;
+};
+
+export type CreateBookmarkForUploadArticleMutationMutationVariables = Exact<{
+  input: CreateBookmarkForUploadArticleInput;
+}>;
+
+export type CreateBookmarkForUploadArticleMutationMutation = {
+  __typename?: "Mutation";
+  createBookmarkForUploadArticle: { __typename?: "Bookmark"; id: string };
 };
 
 export type BookmarkTemplateFragmentFragment = {
@@ -631,6 +657,7 @@ export type CreateBookmarkDialogContentFragmentFragment = {
   description?: string | null;
   thumbnailUrl: string;
   articleUrl: string;
+  siteUrl: string;
   siteName: string;
   faviconUrl: string;
 };
@@ -882,6 +909,13 @@ export const OgpPreviewContentFragmentFragmentDoc = gql`
 `;
 export const CreateBookmarkDialogContentFragmentFragmentDoc = gql`
   fragment CreateBookmarkDialogContentFragment on ArticleOGP {
+    title
+    description
+    thumbnailUrl
+    articleUrl
+    siteUrl
+    siteName
+    faviconUrl
     ...OGPPreviewContentFragment
   }
   ${OgpPreviewContentFragmentFragmentDoc}
@@ -1251,6 +1285,59 @@ export type ArticleOgpQueryQueryResult = Apollo.QueryResult<
   ArticleOgpQueryQuery,
   ArticleOgpQueryQueryVariables
 >;
+export const CreateBookmarkForUploadArticleMutationDocument = gql`
+  mutation CreateBookmarkForUploadArticleMutation(
+    $input: CreateBookmarkForUploadArticleInput!
+  ) {
+    createBookmarkForUploadArticle(input: $input) {
+      id
+    }
+  }
+`;
+export type CreateBookmarkForUploadArticleMutationMutationFn =
+  Apollo.MutationFunction<
+    CreateBookmarkForUploadArticleMutationMutation,
+    CreateBookmarkForUploadArticleMutationMutationVariables
+  >;
+
+/**
+ * __useCreateBookmarkForUploadArticleMutationMutation__
+ *
+ * To run a mutation, you first call `useCreateBookmarkForUploadArticleMutationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateBookmarkForUploadArticleMutationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createBookmarkForUploadArticleMutationMutation, { data, loading, error }] = useCreateBookmarkForUploadArticleMutationMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateBookmarkForUploadArticleMutationMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateBookmarkForUploadArticleMutationMutation,
+    CreateBookmarkForUploadArticleMutationMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    CreateBookmarkForUploadArticleMutationMutation,
+    CreateBookmarkForUploadArticleMutationMutationVariables
+  >(CreateBookmarkForUploadArticleMutationDocument, options);
+}
+export type CreateBookmarkForUploadArticleMutationMutationHookResult =
+  ReturnType<typeof useCreateBookmarkForUploadArticleMutationMutation>;
+export type CreateBookmarkForUploadArticleMutationMutationResult =
+  Apollo.MutationResult<CreateBookmarkForUploadArticleMutationMutation>;
+export type CreateBookmarkForUploadArticleMutationMutationOptions =
+  Apollo.BaseMutationOptions<
+    CreateBookmarkForUploadArticleMutationMutation,
+    CreateBookmarkForUploadArticleMutationMutationVariables
+  >;
 export const BookmarkListQueryDocument = gql`
   query BookmarkListQuery($input: BookmarksInput!) {
     ...BookmarkTemplateFragment

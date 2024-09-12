@@ -39,6 +39,7 @@ func (bpa *bookmarkPersistenceAdapter) GetBookmarks(ctx context.Context, req *bp
 
 	q := []qm.QueryMod{
 		qm.Where("user_id = ?", req.GetUserId()),
+		qm.OrderBy("created_at DESC"),
 		qm.Limit(limit),
 	}
 

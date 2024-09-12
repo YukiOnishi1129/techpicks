@@ -4,7 +4,7 @@ import { User } from "@supabase/supabase-js";
 import { FragmentOf, readFragment } from "gql.tada";
 import { FC, useCallback, useEffect, useRef, useState } from "react";
 
-import { getBookmarkListQuery } from "@/features/bookmarks/actions/getBookmarkList";
+import { getBookmarkListQuery } from "@/features/bookmarks/actions/getBookmarkListQuery";
 
 import { Loader } from "@/components/ui/loader";
 

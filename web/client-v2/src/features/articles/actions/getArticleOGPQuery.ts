@@ -32,6 +32,7 @@ export const getArticleOGPQuery = async (url: string) => {
     variables: {
       url,
     },
+    errorPolicy: "all",
   });
 
   const newData = readFragment(ArticleOGPFragment, data);
