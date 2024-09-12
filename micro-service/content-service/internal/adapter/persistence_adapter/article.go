@@ -17,6 +17,7 @@ type ArticlePersistenceAdapter interface {
 	GetArticles(ctx context.Context, req *cpb.GetArticlesRequest) (entity.ArticleSlice, error)
 	GetArticlesByArticleURLAndPlatformURL(ctx context.Context, articleURL, platformURL string) (entity.ArticleSlice, error)
 	GetPrivateArticlesByArticleURL(ctx context.Context, articleURL string) (entity.ArticleSlice, error)
+	GetArticleRelationPlatform(ctx context.Context, articleID string) (entity.Article, error)
 	CreateUploadArticle(ctx context.Context, req *cpb.CreateUploadArticleRequest) (*entity.Article, error)
 }
 
@@ -141,6 +142,18 @@ func (apa *articlePersistenceAdapter) GetPrivateArticlesByArticleURL(ctx context
 	return articles, nil
 }
 
+func (apa *articlePersistenceAdapter) GetArticleRelationPlatform(ctx context.Context, articleID string) (entity.Article, error) {
+	q := []qm.QueryMod{
+		qm.Load(qm.Rels(entity.ArticleRels.Platform)),
+	}
+	article, err := apa.articleRepository.GetArticleByID(ctx, articleID, q)
+	if err != nil {
+		return entity.Article{}, err
+	}
+
+	return article, nil
+}
+
 func (apa *articlePersistenceAdapter) CreateUploadArticle(ctx context.Context, req *cpb.CreateUploadArticleRequest) (*entity.Article, error) {
 	articleID, _ := uuid.NewUUID()
 	article := entity.Article{
@@ -155,8 +168,6 @@ func (apa *articlePersistenceAdapter) CreateUploadArticle(ctx context.Context, r
 
 	err := apa.articleRepository.CreateArticle(ctx, article)
 	if err != nil {
-		println("❤️‍🔥")
-		println(err.Error())
 		fmt.Printf("Error creating article: %v\n", err)
 		return nil, err
 	}

@@ -150,13 +150,18 @@ func (au *articleUseCase) CreateUploadArticle(ctx context.Context, req *cpb.Crea
 		}, nil
 	}
 
-	article, err := au.articlePersistenceAdapter.CreateUploadArticle(ctx, req)
+	createdArticle, err := au.articlePersistenceAdapter.CreateUploadArticle(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+
+	article, err := au.articlePersistenceAdapter.GetArticleRelationPlatform(ctx, createdArticle.ID)
 	if err != nil {
 		return nil, err
 	}
 
 	return &cpb.CreateArticleResponse{
-		Article: au.convertPBArticle(*article),
+		Article: au.convertPBArticle(article),
 	}, nil
 }
 

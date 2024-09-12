@@ -3,7 +3,6 @@ package persistence
 import (
 	"context"
 	"database/sql"
-	"fmt"
 
 	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/domain/entity"
 	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/domain/repository"
@@ -29,11 +28,21 @@ func (ap *articlePersistence) GetArticles(ctx context.Context, q []qm.QueryMod) 
 		if err == sql.ErrNoRows {
 			return nil, nil
 		}
-		fmt.Printf("Error executing query: %v\n", err)
 		return nil, err
 	}
 	// boil.DebugMode = false
 	return articles, nil
+}
+
+func (ap *articlePersistence) GetArticleByID(ctx context.Context, id string, q []qm.QueryMod) (entity.Article, error) {
+	article, err := entity.FindArticle(ctx, ap.db, id)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return entity.Article{}, nil
+		}
+		return entity.Article{}, err
+	}
+	return *article, nil
 }
 
 func (ap *articlePersistence) CreateArticle(ctx context.Context, a entity.Article) error {
