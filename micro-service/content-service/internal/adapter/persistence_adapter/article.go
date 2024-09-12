@@ -57,7 +57,7 @@ func (apa *articlePersistenceAdapter) GetArticles(ctx context.Context, req *cpb.
 		qm.Limit(limit),
 	}
 
-	if req.GetCursor() != "" {
+	if req.GetCursor() != "" && req.Tag.GetValue() != "trend" {
 		q = append(q, qm.Where("articles.published_at < (SELECT published_at FROM articles WHERE id = ?)", req.GetCursor()))
 	}
 
@@ -76,6 +76,9 @@ func (apa *articlePersistenceAdapter) GetArticles(ctx context.Context, req *cpb.
 			q = append(q, qm.Where("trend_articles.updated_at > ?", sixHoursAgo))
 			q = append(q, qm.GroupBy("trend_articles.id, trend_articles.like_count"))
 			q = append(q, qm.OrderBy("trend_articles.like_count desc"))
+			if req.GetCursor() != "" {
+				q = append(q, qm.Where("trend_articles.like_count < (SELECT like_count FROM trend_articles WHERE article_id = ?)", req.GetCursor()))
+			}
 		case tag == "site":
 			q = append(q, qm.Where("platforms.platform_site_type = ?", 1))
 		case tag == "company":
