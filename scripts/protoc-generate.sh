@@ -113,4 +113,4 @@ mkdir "${OUT_DIR_BFF}"
 #      $(find "${SRC_DIR}" -iname "*.proto")
 
 cd "${ROOT_DIR}/bff/apollo-gateway"
-npm run gen:proto
+npm run gen:proto > /dev/null 2>&1 || exit 1

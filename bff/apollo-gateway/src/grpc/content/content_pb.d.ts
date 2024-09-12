@@ -122,10 +122,6 @@ export class CreateUploadArticleRequest extends jspb.Message {
     setPlatformUrl(value: string): CreateUploadArticleRequest;
     getPlatformFaviconUrl(): string;
     setPlatformFaviconUrl(value: string): CreateUploadArticleRequest;
-    getIsEng(): boolean;
-    setIsEng(value: boolean): CreateUploadArticleRequest;
-    getIsRead(): boolean;
-    setIsRead(value: boolean): CreateUploadArticleRequest;
 
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): CreateUploadArticleRequest.AsObject;
@@ -147,8 +143,6 @@ export namespace CreateUploadArticleRequest {
         platformName: string,
         platformUrl: string,
         platformFaviconUrl: string,
-        isEng: boolean,
-        isRead: boolean,
     }
 }
 

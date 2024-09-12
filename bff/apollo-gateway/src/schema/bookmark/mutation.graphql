@@ -1,5 +1,8 @@
 type Mutation {
   createBookmark(createBookmarkInput: CreateBookmarkInput!): Bookmark!
+  createBookmarkForUploadArticle(
+    input: CreateBookmarkForUploadArticleInput!
+  ): Bookmark!
   deleteBookmark(deleteBookmarkInput: DeleteBookmarkInput!): Boolean!
 }
 
@@ -17,6 +20,16 @@ input CreateBookmarkInput {
   platformFaviconUrl: String!
   isEng: Boolean!
   isRead: Boolean!
+}
+
+input CreateBookmarkForUploadArticleInput {
+  title: String!
+  description: String!
+  articleUrl: String!
+  thumbnailUrl: String!
+  platformName: String!
+  platformUrl: String!
+  platformFaviconUrl: String!
 }
 
 input DeleteBookmarkInput {

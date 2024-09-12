@@ -240,10 +240,6 @@ export class CreateBookmarkForUploadArticleRequest extends jspb.Message {
     setPlatformUrl(value: string): CreateBookmarkForUploadArticleRequest;
     getPlatformFaviconUrl(): string;
     setPlatformFaviconUrl(value: string): CreateBookmarkForUploadArticleRequest;
-    getIsEng(): boolean;
-    setIsEng(value: boolean): CreateBookmarkForUploadArticleRequest;
-    getIsRead(): boolean;
-    setIsRead(value: boolean): CreateBookmarkForUploadArticleRequest;
 
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): CreateBookmarkForUploadArticleRequest.AsObject;
@@ -265,8 +261,6 @@ export namespace CreateBookmarkForUploadArticleRequest {
         platformName: string,
         platformUrl: string,
         platformFaviconUrl: string,
-        isEng: boolean,
-        isRead: boolean,
     }
 }
 

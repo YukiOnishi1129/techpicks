@@ -600,8 +600,6 @@ func Test_UseCase_CreateBookmarkForUploadArticle(t *testing.T) {
 				PlatformName:       "upload_platform_name_1",
 				PlatformUrl:        "upload_platform_url_1",
 				PlatformFaviconUrl: "upload_platform_favicon_url_1",
-				IsEng:              true,
-				IsRead:             false,
 			},
 			mockCreateUploadArticleResponse: &cpb.CreateArticleResponse{
 				Article: &cpb.Article{
@@ -689,8 +687,6 @@ func Test_UseCase_CreateBookmarkForUploadArticle(t *testing.T) {
 				PlatformName:       "upload_platform_name_1",
 				PlatformUrl:        "upload_platform_url_1",
 				PlatformFaviconUrl: "upload_platform_favicon_url_1",
-				IsEng:              true,
-				IsRead:             false,
 			},
 			mockCreateUploadArticleResponse: &cpb.CreateArticleResponse{
 				Article: &cpb.Article{
@@ -761,8 +757,6 @@ func Test_UseCase_CreateBookmarkForUploadArticle(t *testing.T) {
 				PlatformName:       "upload_platform_name_1",
 				PlatformUrl:        "upload_platform_url_1",
 				PlatformFaviconUrl: "upload_platform_favicon_url_1",
-				IsEng:              true,
-				IsRead:             false,
 			},
 			want: &bpb.Bookmark{},
 			wantBookmarkRecord: entity.Bookmark{

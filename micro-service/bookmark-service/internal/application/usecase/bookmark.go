@@ -146,8 +146,6 @@ func (bu *bookmarkUseCase) CreateBookmarkForUploadArticle(ctx context.Context, r
 		PlatformName:       req.GetPlatformName(),
 		PlatformUrl:        req.GetPlatformUrl(),
 		PlatformFaviconUrl: req.GetPlatformFaviconUrl(),
-		IsEng:              req.GetIsEng(),
-		IsRead:             req.GetIsRead(),
 	})
 	if err != nil {
 		return &bpb.CreateBookmarkResponse{}, err

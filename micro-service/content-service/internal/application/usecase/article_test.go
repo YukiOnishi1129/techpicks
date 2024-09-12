@@ -65,8 +65,6 @@ func Test_UseCase_CreateUploadArticle(t *testing.T) {
 				PlatformName:       mockPlatforms[1].Name,
 				PlatformUrl:        mockPlatforms[1].SiteURL,
 				PlatformFaviconUrl: mockPlatforms[1].FaviconURL,
-				IsEng:              true,
-				IsRead:             true,
 			},
 			want: &cpb.CreateArticleResponse{
 				Article: &cpb.Article{
@@ -76,6 +74,84 @@ func Test_UseCase_CreateUploadArticle(t *testing.T) {
 					ArticleUrl:   "https://test.com/article2",
 					ThumbnailUrl: "https://test.com/article2/thumbnail",
 					IsEng:        true,
+					IsPrivate:    true,
+				},
+			},
+		},
+		"success: create upload article when not already article title hiragana": {
+			recordArticles: []entity.Article{
+				{
+					ID: articleID.String(),
+					PlatformID: null.String{
+						Valid:  true,
+						String: mockPlatforms[0].ID,
+					},
+					Title:        "test title1",
+					Description:  "test description1",
+					ArticleURL:   "https://test.com/article1",
+					PublishedAt:  null.TimeFrom(time.Unix(publishedAt, 0)),
+					ThumbnailURL: "https://test.com/article1/thumbnail",
+					IsEng:        true,
+					IsPrivate:    false,
+				},
+			},
+			arg: &cpb.CreateUploadArticleRequest{
+				UserId:             "test userId2",
+				Title:              "test タイトル2",
+				Description:        "test description2",
+				ArticleUrl:         "https://test.com/article2",
+				ThumbnailUrl:       "https://test.com/article2/thumbnail",
+				PlatformName:       mockPlatforms[1].Name,
+				PlatformUrl:        mockPlatforms[1].SiteURL,
+				PlatformFaviconUrl: mockPlatforms[1].FaviconURL,
+			},
+			want: &cpb.CreateArticleResponse{
+				Article: &cpb.Article{
+					Id:           articleID.String(),
+					Title:        "test タイトル2",
+					Description:  "test description2",
+					ArticleUrl:   "https://test.com/article2",
+					ThumbnailUrl: "https://test.com/article2/thumbnail",
+					IsEng:        false,
+					IsPrivate:    true,
+				},
+			},
+		},
+		"success: create upload article when not already article description hiragana": {
+			recordArticles: []entity.Article{
+				{
+					ID: articleID.String(),
+					PlatformID: null.String{
+						Valid:  true,
+						String: mockPlatforms[0].ID,
+					},
+					Title:        "test title1",
+					Description:  "test description1",
+					ArticleURL:   "https://test.com/article1",
+					PublishedAt:  null.TimeFrom(time.Unix(publishedAt, 0)),
+					ThumbnailURL: "https://test.com/article1/thumbnail",
+					IsEng:        true,
+					IsPrivate:    false,
+				},
+			},
+			arg: &cpb.CreateUploadArticleRequest{
+				UserId:             "test userId2",
+				Title:              "test title2",
+				Description:        "test 本文2",
+				ArticleUrl:         "https://test.com/article2",
+				ThumbnailUrl:       "https://test.com/article2/thumbnail",
+				PlatformName:       mockPlatforms[1].Name,
+				PlatformUrl:        mockPlatforms[1].SiteURL,
+				PlatformFaviconUrl: mockPlatforms[1].FaviconURL,
+			},
+			want: &cpb.CreateArticleResponse{
+				Article: &cpb.Article{
+					Id:           articleID.String(),
+					Title:        "test title2",
+					Description:  "test 本文2",
+					ArticleUrl:   "https://test.com/article2",
+					ThumbnailUrl: "https://test.com/article2/thumbnail",
+					IsEng:        false,
 					IsPrivate:    true,
 				},
 			},
@@ -106,8 +182,6 @@ func Test_UseCase_CreateUploadArticle(t *testing.T) {
 				PlatformName:       mockPlatforms[0].Name,
 				PlatformUrl:        mockPlatforms[0].SiteURL,
 				PlatformFaviconUrl: mockPlatforms[0].FaviconURL,
-				IsEng:              true,
-				IsRead:             true,
 			},
 			want: &cpb.CreateArticleResponse{
 				Article: &cpb.Article{
@@ -152,8 +226,6 @@ func Test_UseCase_CreateUploadArticle(t *testing.T) {
 				PlatformName:       mockPlatforms[0].Name,
 				PlatformUrl:        mockPlatforms[0].SiteURL,
 				PlatformFaviconUrl: mockPlatforms[0].FaviconURL,
-				IsEng:              true,
-				IsRead:             true,
 			},
 			want: &cpb.CreateArticleResponse{
 				Article: &cpb.Article{

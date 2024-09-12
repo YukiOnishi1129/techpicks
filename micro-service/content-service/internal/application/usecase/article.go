@@ -13,6 +13,7 @@ import (
 	externaladapter "github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/adapter/external_adapter"
 	persistenceadapter "github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/adapter/persistence_adapter"
 	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/domain/entity"
+	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/util"
 	"github.com/otiai10/opengraph"
 	"golang.org/x/net/html/charset"
 	"google.golang.org/protobuf/types/known/timestamppb"
@@ -149,7 +150,8 @@ func (au *articleUseCase) CreateUploadArticle(ctx context.Context, req *cpb.Crea
 		}, nil
 	}
 
-	createdArticle, err := au.articlePersistenceAdapter.CreateUploadArticle(ctx, req)
+	isEng := !util.JapaneseTextCheck(req.GetTitle()) && !util.JapaneseTextCheck(req.GetDescription())
+	createdArticle, err := au.articlePersistenceAdapter.CreateUploadArticle(ctx, req, isEng)
 	if err != nil {
 		return nil, err
 	}

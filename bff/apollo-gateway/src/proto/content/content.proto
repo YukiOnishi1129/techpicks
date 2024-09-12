@@ -43,8 +43,6 @@ message CreateUploadArticleRequest {
   string platform_name = 6;
   string platform_url = 7;
   string platform_favicon_url = 8;
-  bool is_eng = 9;
-  bool is_read = 10;
 }
 
 message GetArticleOGPResponse{

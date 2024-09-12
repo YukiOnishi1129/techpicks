@@ -35,6 +35,16 @@ export class CreateBookmarkInput {
     isRead: boolean;
 }
 
+export class CreateBookmarkForUploadArticleInput {
+    title: string;
+    description: string;
+    articleUrl: string;
+    thumbnailUrl: string;
+    platformName: string;
+    platformUrl: string;
+    platformFaviconUrl: string;
+}
+
 export class DeleteBookmarkInput {
     bookmarkId: string;
     userId: string;
@@ -112,6 +122,8 @@ export class PageInfo {
 
 export abstract class IMutation {
     abstract createBookmark(createBookmarkInput: CreateBookmarkInput): Bookmark | Promise<Bookmark>;
+
+    abstract createBookmarkForUploadArticle(input: CreateBookmarkForUploadArticleInput): Bookmark | Promise<Bookmark>;
 
     abstract deleteBookmark(deleteBookmarkInput: DeleteBookmarkInput): boolean | Promise<boolean>;
 }
