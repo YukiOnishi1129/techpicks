@@ -1,16 +1,16 @@
-### 🎫 チケット
+### 🎫 Ticket
 
-<!-- チケットのリンクを貼る -->
+<!-- Post a link to the ticket -->
 
-### 📝 対応した内容
+### 📝 What we have responded to
 
-### 📝 確認すべき項目/観点
+### 📝 Items/perspectives to be checked
 
-<!-- レビュアーがわかるように修正内容を書く（URL の記載もあるとなお良い） -->
+<!-- Write a description of the modifications so that the reviewer can understand them (it is better if the URL is also mentioned) -->
 
-### 📷 修正点のスクリーンショット
+### 📷 Screenshots of the modifications
 
-<!-- 変更有りの場合は修正前・修正後があると尚良い（無ければ消す） -->
+<!-- If there are changes, it is better to have a before and after version (if not, delete it). -->
 
 | before                    | after                     |
 | ------------------------- | ------------------------- |
