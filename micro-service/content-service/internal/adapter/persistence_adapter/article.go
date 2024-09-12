@@ -1,4 +1,4 @@
-package adapter
+package persistenceadapter
 
 import (
 	"context"
@@ -12,21 +12,21 @@ import (
 	"github.com/volatiletech/sqlboiler/v4/queries/qm"
 )
 
-type ArticleAdapter interface {
+type ArticlePersistenceAdapter interface {
 	GetArticles(ctx context.Context, req *cpb.GetArticlesRequest) (entity.ArticleSlice, error)
 }
 
-type articleAdapter struct {
+type articlePersistenceAdapter struct {
 	articleRepository repository.ArticleRepository
 }
 
-func NewArticleAdapter(ar repository.ArticleRepository) ArticleAdapter {
-	return &articleAdapter{
+func NewArticleAdapter(ar repository.ArticleRepository) ArticlePersistenceAdapter {
+	return &articlePersistenceAdapter{
 		articleRepository: ar,
 	}
 }
 
-func (aa *articleAdapter) GetArticles(ctx context.Context, req *cpb.GetArticlesRequest) (entity.ArticleSlice, error) {
+func (apa *articlePersistenceAdapter) GetArticles(ctx context.Context, req *cpb.GetArticlesRequest) (entity.ArticleSlice, error) {
 	limit := 20
 	if req.GetLimit() != 0 {
 		limit = int(req.GetLimit())
@@ -92,7 +92,7 @@ func (aa *articleAdapter) GetArticles(ctx context.Context, req *cpb.GetArticlesR
 		q = append(q, qm.WhereIn("feed_article_relations.feed_id IN ?", qmWhere...))
 	}
 
-	articles, err := aa.articleRepository.GetArticles(ctx, q)
+	articles, err := apa.articleRepository.GetArticles(ctx, q)
 	if err != nil {
 		fmt.Printf("Error executing query: %v\n", err)
 		return nil, err

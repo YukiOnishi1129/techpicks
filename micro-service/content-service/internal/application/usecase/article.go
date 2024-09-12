@@ -10,8 +10,8 @@ import (
 
 	bpb "github.com/YukiOnishi1129/techpicks/micro-service/content-service/grpc/bookmark"
 	cpb "github.com/YukiOnishi1129/techpicks/micro-service/content-service/grpc/content"
+	persistenceadapter "github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/adapter/persistence_adapter"
 	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/domain/entity"
-	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/infrastructure/adapter"
 	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/infrastructure/external"
 	"github.com/otiai10/opengraph"
 	"golang.org/x/net/html/charset"
@@ -26,19 +26,19 @@ type ArticleUseCase interface {
 }
 
 type articleUseCase struct {
-	articleAdapter   adapter.ArticleAdapter
-	bookmarkExternal external.BookmarkExternal
+	articlePersistenceAdapter persistenceadapter.ArticlePersistenceAdapter
+	bookmarkExternal          external.BookmarkExternal
 }
 
-func NewArticleUseCase(aa adapter.ArticleAdapter, be external.BookmarkExternal) ArticleUseCase {
+func NewArticleUseCase(apa persistenceadapter.ArticlePersistenceAdapter, be external.BookmarkExternal) ArticleUseCase {
 	return &articleUseCase{
-		articleAdapter:   aa,
-		bookmarkExternal: be,
+		articlePersistenceAdapter: apa,
+		bookmarkExternal:          be,
 	}
 }
 
 func (au *articleUseCase) GetArticles(ctx context.Context, req *cpb.GetArticlesRequest) (*cpb.GetArticlesResponse, error) {
-	articles, err := au.articleAdapter.GetArticles(ctx, req)
+	articles, err := au.articlePersistenceAdapter.GetArticles(ctx, req)
 	if err != nil {
 		return nil, err
 	}
@@ -125,10 +125,11 @@ func (au *articleUseCase) convertPBArticle(a entity.Article) *cpb.Article {
 }
 
 func (au *articleUseCase) CreateUploadArticle(ctx context.Context, req *cpb.CreateUploadArticleRequest) (*cpb.CreateArticleResponse, error) {
-	// article, err := au.articleAdapter.CreateUploadArticle(ctx, req)
-	// if err != nil {
-	// 	return nil, err
-	// }
+	// TODO: where private = false & articleURL & platformURL
+
+	// TODO: fetch where private = true & articleURL
+
+	// TODO: create article
 
 	return &cpb.CreateArticleResponse{
 		// Article: au.convertPBArticle(*article),
