@@ -30,8 +30,8 @@ sqlboiler psql \
 
 # favorite-service
 sqlboiler psql \
-    -c micro-service/favorite-service/database/sqlboiler.toml \
-    -o micro-service/favorite-service/entity \
+    -c micro-service/favorite-service/internal/config/database/sqlboiler.toml \
+    -o micro-service/favorite-service/internal/domain/entity \
     -p entity \
     --no-tests --wipe
 
