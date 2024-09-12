@@ -80,8 +80,93 @@ func Test_UseCase_CreateUploadArticle(t *testing.T) {
 				},
 			},
 		},
-		// "success: already article not private article": {},
-		// "success: already article private article":     {},
+		"success: already article not private article": {
+			recordArticles: []entity.Article{
+				{
+					ID: articleID.String(),
+					PlatformID: null.String{
+						Valid:  true,
+						String: mockPlatforms[0].ID,
+					},
+					Title:        "test title1",
+					Description:  "test description1",
+					ArticleURL:   "https://test.com/article1",
+					PublishedAt:  null.TimeFrom(time.Unix(publishedAt, 0)),
+					ThumbnailURL: "https://test.com/article1/thumbnail",
+					IsEng:        true,
+					IsPrivate:    false,
+				},
+			},
+			arg: &cpb.CreateUploadArticleRequest{
+				UserId:             "test userId1",
+				Title:              "test title1",
+				Description:        "test description1",
+				ArticleUrl:         "https://test.com/article1",
+				ThumbnailUrl:       "https://test.com/article1/thumbnail",
+				PlatformName:       mockPlatforms[0].Name,
+				PlatformUrl:        mockPlatforms[0].SiteURL,
+				PlatformFaviconUrl: mockPlatforms[0].FaviconURL,
+				IsEng:              true,
+				IsRead:             true,
+			},
+			want: &cpb.CreateArticleResponse{
+				Article: &cpb.Article{
+					Id:          articleID.String(),
+					Title:       "test title1",
+					Description: "test description1",
+					Platform: &cpb.Platform{
+						Id:               mockPlatforms[0].ID,
+						Name:             mockPlatforms[0].Name,
+						SiteUrl:          mockPlatforms[0].SiteURL,
+						PlatformSiteType: int64(mockPlatforms[0].PlatformSiteType),
+						FaviconUrl:       mockPlatforms[0].FaviconURL,
+						IsEng:            mockPlatforms[0].IsEng,
+					},
+					ArticleUrl:   "https://test.com/article1",
+					ThumbnailUrl: "https://test.com/article1/thumbnail",
+					PublishedAt:  &timestamppb.Timestamp{Seconds: publishedAt},
+					IsEng:        true,
+					IsPrivate:    false,
+				},
+			},
+		},
+		"success: already article private article": {
+			recordArticles: []entity.Article{
+				{
+					ID:           articleID.String(),
+					Title:        "test title1",
+					Description:  "test description1",
+					ArticleURL:   "https://test.com/article1",
+					PublishedAt:  null.TimeFrom(time.Unix(publishedAt, 0)),
+					ThumbnailURL: "https://test.com/article1/thumbnail",
+					IsEng:        true,
+					IsPrivate:    true,
+				},
+			},
+			arg: &cpb.CreateUploadArticleRequest{
+				UserId:             "test userId1",
+				Title:              "test title1",
+				Description:        "test description1",
+				ArticleUrl:         "https://test.com/article1",
+				ThumbnailUrl:       "https://test.com/article1/thumbnail",
+				PlatformName:       mockPlatforms[0].Name,
+				PlatformUrl:        mockPlatforms[0].SiteURL,
+				PlatformFaviconUrl: mockPlatforms[0].FaviconURL,
+				IsEng:              true,
+				IsRead:             true,
+			},
+			want: &cpb.CreateArticleResponse{
+				Article: &cpb.Article{
+					Id:           articleID.String(),
+					Title:        "test title1",
+					Description:  "test description1",
+					ArticleUrl:   "https://test.com/article1",
+					ThumbnailUrl: "https://test.com/article1/thumbnail",
+					IsEng:        true,
+					IsPrivate:    true,
+				},
+			},
+		},
 	}
 
 	for name, tt := range test {
@@ -142,6 +227,7 @@ func Test_UseCase_CreateUploadArticle(t *testing.T) {
 			opts := []cmp.Option{
 				cmp.AllowUnexported(cpb.Article{}),
 				cmpopts.IgnoreFields(cpb.Article{}, "state", "sizeCache", "unknownFields", "Id", "CreatedAt", "UpdatedAt"),
+				cmpopts.IgnoreFields(cpb.Platform{}, "state", "sizeCache", "unknownFields", "CreatedAt", "UpdatedAt", "DeletedAt"),
 				cmpopts.IgnoreUnexported(wrapperspb.StringValue{}, timestamppb.Timestamp{}),
 			}
 

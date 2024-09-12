@@ -121,7 +121,6 @@ func (au *articleUseCase) convertPBArticle(a entity.Article) *cpb.Article {
 		article.Tags = wrapperspb.String(a.Tags.String)
 	}
 	if a.R != nil && a.R.Platform != nil {
-		println("💧")
 		article.Platform = au.convertPBPlatform(*a.R.Platform)
 	}
 	return article
