@@ -5,9 +5,10 @@ import (
 	"fmt"
 
 	bpb "github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/grpc/bookmark"
+	cpb "github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/grpc/content"
+	externaladapter "github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/internal/adapter/external_adapter"
 	persistenceadapter "github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/internal/adapter/persistence_adapter"
 	"github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/internal/domain/entity"
-	"github.com/google/uuid"
 	"google.golang.org/protobuf/types/known/emptypb"
 	"google.golang.org/protobuf/types/known/timestamppb"
 	"google.golang.org/protobuf/types/known/wrapperspb"
@@ -23,11 +24,13 @@ type BookmarkUseCase interface {
 
 type bookmarkUseCase struct {
 	bookmarkPersistenceAdapter persistenceadapter.BookmarkPersistenceAdapter
+	contentExternalAdapter     externaladapter.ContentExternalAdapter
 }
 
-func NewBookmarkUseCase(bpa persistenceadapter.BookmarkPersistenceAdapter) BookmarkUseCase {
+func NewBookmarkUseCase(bpa persistenceadapter.BookmarkPersistenceAdapter, cea externaladapter.ContentExternalAdapter) BookmarkUseCase {
 	return &bookmarkUseCase{
 		bookmarkPersistenceAdapter: bpa,
+		contentExternalAdapter:     cea,
 	}
 }
 
@@ -113,31 +116,7 @@ func (bu *bookmarkUseCase) CreateBookmark(ctx context.Context, req *bpb.CreateBo
 		return &bpb.CreateBookmarkResponse{}, fmt.Errorf("bookmark already exists")
 	}
 
-	bookmarkID, _ := uuid.NewUUID()
-	bookmark := entity.Bookmark{
-		ID:                 bookmarkID.String(),
-		ArticleID:          req.GetArticleId(),
-		UserID:             req.GetUserId(),
-		Title:              req.GetTitle(),
-		Description:        req.GetDescription(),
-		ArticleURL:         req.GetArticleUrl(),
-		ThumbnailURL:       req.GetThumbnailUrl(),
-		PlatformName:       req.GetPlatformName(),
-		PlatformURL:        req.GetPlatformUrl(),
-		PlatformFaviconURL: req.GetPlatformFaviconUrl(),
-		IsEng:              req.GetIsEng(),
-		IsRead:             req.GetIsRead(),
-	}
-
-	if req.GetPlatformId() != nil {
-		bookmark.PlatformID.String = req.GetPlatformId().GetValue()
-		bookmark.PlatformID.Valid = true
-	}
-	if req.GetPublishedAt() != nil {
-		bookmark.PublishedAt.Time = req.GetPublishedAt().AsTime()
-		bookmark.PublishedAt.Valid = true
-	}
-	b, err := bu.bookmarkPersistenceAdapter.CreateBookmark(ctx, bookmark)
+	b, err := bu.bookmarkPersistenceAdapter.CreateBookmark(ctx, req)
 	if err != nil {
 		return &bpb.CreateBookmarkResponse{}, err
 	}
@@ -157,19 +136,32 @@ func (bu *bookmarkUseCase) CreateBookmarkForUploadArticle(ctx context.Context, r
 		return &bpb.CreateBookmarkResponse{}, fmt.Errorf("bookmark already exists")
 	}
 
-	// TODO2: private=falseで同じarticleUrlとplatformUrlのarticleがすでにあるなら、そのデータを使ってbookmarkを登録
-	// → true: create bookmark (use already created article)
-	// → false: create article
+	// create article
+	article, err := bu.contentExternalAdapter.CreateUploadArticle(ctx, &cpb.CreateUploadArticleRequest{
+		UserId:             req.GetUserId(),
+		Title:              req.GetTitle(),
+		Description:        req.GetDescription(),
+		ArticleUrl:         req.GetArticleUrl(),
+		ThumbnailUrl:       req.GetThumbnailUrl(),
+		PlatformName:       req.GetPlatformName(),
+		PlatformUrl:        req.GetPlatformUrl(),
+		PlatformFaviconUrl: req.GetPlatformFaviconUrl(),
+		IsEng:              req.GetIsEng(),
+		IsRead:             req.GetIsRead(),
+	})
+	if err != nil {
+		return &bpb.CreateBookmarkResponse{}, err
+	}
 
-	// TODO3:privateで同じarticleUrlのものがある
-	// → true: create bookmark (use already created article)
-	// → false: create article
+	// create bookmark
+	bookmark, err := bu.bookmarkPersistenceAdapter.CreateBookmarkForUploadArticle(ctx, req, article.Article)
+	if err != nil {
+		return &bpb.CreateBookmarkResponse{}, err
+	}
 
-	// TODO: articleとbookmarkと登録
-	// → true: create bookmark
-	// → false: create article
-
-	return &bpb.CreateBookmarkResponse{}, nil
+	return &bpb.CreateBookmarkResponse{
+		Bookmark: bu.convertPBBookmark(bookmark),
+	}, nil
 }
 
 func (bu *bookmarkUseCase) DeleteBookmark(ctx context.Context, req *bpb.DeleteBookmarkRequest) (*emptypb.Empty, error) {

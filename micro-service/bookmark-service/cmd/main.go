@@ -1,6 +1,8 @@
 package main
 
 import (
+	"crypto/tls"
+	"crypto/x509"
 	"fmt"
 	"log"
 	"net"
@@ -8,19 +10,26 @@ import (
 	"os/signal"
 
 	bpb "github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/grpc/bookmark"
+	cpb "github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/grpc/content"
+	externaladapter "github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/internal/adapter/external_adapter"
 	persistenceadapter "github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/internal/adapter/persistence_adapter"
 	"github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/internal/application/usecase"
 	"github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/internal/config/database"
+	"github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/internal/infrastructure/external"
 	"github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/internal/infrastructure/persistence"
 	"github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/internal/interfaces/handler"
 	"github.com/joho/godotenv"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials"
+	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/reflection"
 )
 
 func main() {
 	log.Printf("Start bookmark service")
-	if os.Getenv("GO_ENV") != "production" && os.Getenv("GO_ENV") != "staging" {
+
+	isDev := os.Getenv("GO_ENV") != "production" && os.Getenv("GO_ENV") != "staging"
+	if isDev {
 		err := godotenv.Load()
 		if err != nil {
 			log.Fatalf("Error loading .env file")
@@ -35,16 +44,46 @@ func main() {
 		return
 	}
 
+	systemRoots, err := x509.SystemCertPool()
+	if err != nil {
+		fmt.Println("failed to read system root certificate pool")
+	}
+	grpcCredential := credentials.NewTLS(&tls.Config{
+		RootCAs: systemRoots,
+	})
+	if isDev {
+		grpcCredential = insecure.NewCredentials()
+	}
+
+	// create grpc client
+	// content client
+	crpcURL := os.Getenv("CONTENT_SERVICE_CONTAINER_NAME")
+	if isDev {
+		crpcURL = fmt.Sprintf("%s:%s", os.Getenv("CONTENT_SERVICE_CONTAINER_NAME"), os.Getenv("CONTENT_SERVICE_CONTAINER_PORT"))
+	}
+	cConn, err := grpc.NewClient(crpcURL, grpc.WithTransportCredentials(grpcCredential))
+	if err != nil {
+		log.Fatal("Error connecting to content service")
+		return
+	}
+	defer cConn.Close()
+	cClient := cpb.NewContentServiceClient(cConn)
+
 	// infrastructure layer
 	// persistence layer
 	bps := persistence.NewBookmarkPersistence(db)
+	// external layer
+	cex := external.NewContentExternal(cClient)
 
 	// adapter layer
+	// persistence adapter
 	bpa := persistenceadapter.NewBookmarkPersistenceAdapter(bps)
+	// external adapter
+	cea := externaladapter.NewContentExternalAdapter(cex)
 
 	// application layer
 	// usecase layer
-	buc := usecase.NewBookmarkUseCase(bpa)
+	buc := usecase.NewBookmarkUseCase(bpa, cea)
 
 	// interface layer
 	bhd := handler.NewBookmarkHandler(buc)
