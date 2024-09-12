@@ -7,11 +7,13 @@ import {
   DeleteBookmarkInput,
   BookmarksInput,
   BookmarkConnection,
+  CreateBookmarkForUploadArticleInput,
 } from 'src/graphql/types/graphql';
 import {
   GetBookmarksRequest,
   CreateBookmarkRequest,
   DeleteBookmarkRequest,
+  CreateBookmarkForUploadArticleRequest,
 } from 'src/grpc/bookmark/bookmark_pb';
 import { convertTimestampToInt } from 'src/utils/timestamp';
 
@@ -116,6 +118,58 @@ export class BookmarkService {
 
         const resBookmark = res.toObject().bookmark;
 
+        const bookmark: Bookmark = {
+          articleId: resBookmark.articleId,
+          articleUrl: resBookmark.articleUrl,
+          createdAt: convertTimestampToInt(resBookmark.createdAt),
+          description: resBookmark.description,
+          id: resBookmark.id,
+          isEng: resBookmark.isEng,
+          isRead: resBookmark.isRead,
+          platformFaviconUrl: resBookmark.platformFaviconUrl,
+          platformId: resBookmark?.platformId?.value,
+          platformName: resBookmark.platformName,
+          platformUrl: resBookmark.platformUrl,
+          publishedAt: resBookmark?.publishedAt
+            ? convertTimestampToInt(resBookmark.publishedAt)
+            : undefined,
+          thumbnailUrl: resBookmark.thumbnailUrl,
+          title: resBookmark.title,
+          updatedAt: convertTimestampToInt(resBookmark.updatedAt),
+        };
+
+        resolve(bookmark);
+      });
+    });
+  }
+
+  async createBookmarkForUploadArticle(
+    userId: string,
+    input: CreateBookmarkForUploadArticleInput,
+  ): Promise<Bookmark> {
+    return new Promise((resolve, reject) => {
+      const req = new CreateBookmarkForUploadArticleRequest();
+      req.setUserId(userId);
+      req.setTitle(input.title);
+      req.setDescription(input.description);
+      req.setArticleUrl(input.articleUrl);
+      req.setThumbnailUrl(input.thumbnailUrl);
+      req.setThumbnailUrl(input.thumbnailUrl);
+      req.setPlatformName(input.platformName);
+      req.setPlatformUrl(input.platformUrl);
+      req.setPlatformFaviconUrl(input.platformFaviconUrl);
+
+      const client = this.grpcBookmarkClientService.getGrpcBookmarkService();
+      client.createBookmarkForUploadArticle(req, (err, res) => {
+        if (err) {
+          reject({
+            code: err?.code || 500,
+            message: err?.message || 'something went wrong',
+          });
+          return;
+        }
+
+        const resBookmark = res.toObject().bookmark;
         const bookmark: Bookmark = {
           articleId: resBookmark.articleId,
           articleUrl: resBookmark.articleUrl,

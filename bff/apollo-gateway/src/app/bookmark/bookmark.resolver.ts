@@ -6,6 +6,7 @@ import {
   BookmarksInput,
   CreateBookmarkInput,
   DeleteBookmarkInput,
+  CreateBookmarkForUploadArticleInput,
 } from 'src/graphql/types/graphql';
 
 import { BookmarkService } from './bookmark.service';
@@ -33,6 +34,19 @@ export class BookmarkResolver {
     // @Context() context: GraphQLContext,
   ): Promise<Bookmark> {
     return await this.bookmarkService.createBookmark(input);
+  }
+
+  @Mutation(() => Bookmark)
+  @UseGuards(SupabaseAuthGuard)
+  async createBookmarkForUploadArticle(
+    @Args('input') input: CreateBookmarkForUploadArticleInput,
+    @Context() context: GraphQLContext,
+  ): Promise<Bookmark> {
+    const user = context.req.user;
+    return await this.bookmarkService.createBookmarkForUploadArticle(
+      user.id,
+      input,
+    );
   }
 
   @Mutation(() => Boolean)

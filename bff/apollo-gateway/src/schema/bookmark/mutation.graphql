@@ -30,8 +30,6 @@ input CreateBookmarkForUploadArticleInput {
   platformName: String!
   platformUrl: String!
   platformFaviconUrl: String!
-  isEng: Boolean!
-  isRead: Boolean!
 }
 
 input DeleteBookmarkInput {
