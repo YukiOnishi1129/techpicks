@@ -3,6 +3,8 @@ import { usePathname } from "next/navigation";
 import { FC } from "react";
 import { FcBookmark } from "react-icons/fc";
 
+import { useBookmark } from "@/features/bookmarks/hooks/useBookmark";
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -33,7 +35,7 @@ export const DeleteBookmarkAlertDialog: FC<DeleteBookmarkAlertDialogProps> = ({
   bookmarkTitle,
 }) => {
   const pathname = usePathname();
-  //   const { handleRemoveBookmark } = useBookmark(pathname);
+  const { handleRemoveBookmark } = useBookmark(pathname);
   return (
     <AlertDialog>
       <TooltipProvider>
@@ -57,14 +59,13 @@ export const DeleteBookmarkAlertDialog: FC<DeleteBookmarkAlertDialogProps> = ({
             This action cannot be undone. This will permanently remove your data
             from our servers.
             <br></br>
-            Delete bookmark title is ${bookmarkTitle}
+            Delete bookmark title is{" "}
+            <span className="font-bold text-white">{`「${bookmarkTitle}」`}</span>
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>CANCEL</AlertDialogCancel>
-          <AlertDialogAction
-          //   onClick={() => handleRemoveBookmark(bookmarkId) }
-          >
+          <AlertDialogAction onClick={() => handleRemoveBookmark(bookmarkId)}>
             DELETE
           </AlertDialogAction>
         </AlertDialogFooter>
