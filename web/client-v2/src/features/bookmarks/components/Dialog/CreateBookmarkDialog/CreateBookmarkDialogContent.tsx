@@ -17,6 +17,7 @@ import { z } from "zod";
 
 import { getArticleOGPQuery } from "@/features/articles/actions/getArticleOGPQuery";
 import { logoutToLoginPage } from "@/features/auth/actions/auth";
+import { createBookmarkForUploadArticleMutation } from "@/features/bookmarks/actions/createBookmarkForUploadArticleMutation";
 
 import { Button } from "@/components/ui/button";
 import { OGPPreviewContent } from "@/components/ui/dialog";
@@ -37,6 +38,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Loader } from "@/components/ui/loader";
 
+import { useServerRevalidatePage } from "@/hooks/useServerRevalidatePage";
 import { useStatusToast } from "@/hooks/useStatusToast";
 
 import { checkURL } from "@/lib/check";
@@ -60,7 +62,7 @@ export const CreateBookmarkDialogContent: FC<
   CreateBookmarkDialogContentProps
 > = ({ user, handleClose }) => {
   const router = useRouter();
-  //   const { revalidatePage } = useServerRevalidatePage();
+  const { revalidatePage } = useServerRevalidatePage();
   const [ogpData, setOgpData] = useState<FragmentOf<
     typeof CreateBookmarkDialogContentFragment
   > | null>(null);
@@ -108,8 +110,58 @@ export const CreateBookmarkDialogContent: FC<
         await logoutToLoginPage();
         return;
       }
+
+      const fragment = readFragment(
+        CreateBookmarkDialogContentFragment,
+        ogpData
+      );
+      if (!fragment) return;
+
+      const { data, error } = await createBookmarkForUploadArticleMutation({
+        title: fragment.title,
+        description: fragment?.description || "",
+        articleUrl: form.getValues("url"),
+        thumbnailUrl: fragment.thumbnailUrl,
+        platformName: fragment.siteName,
+        platformUrl: fragment.siteUrl,
+        platformFaviconUrl: fragment.faviconUrl,
+      });
+
+      if (error) {
+        if (error.length > 0) {
+          failToast({
+            description: error[0].message,
+          });
+          return;
+        }
+        failToast({
+          description: "Fail: Something went wrong",
+        });
+        return;
+      }
+
+      if (data?.createBookmarkForUploadArticle?.id) {
+        successToast({
+          description: "Add bookmark",
+        });
+      }
+      await revalidatePage();
+      router.replace(`/bookmark`);
+      resetDialog();
+      handleClose();
+      return;
     });
-  }, [user, failToast]);
+  }, [
+    user,
+    successToast,
+    failToast,
+    form,
+    ogpData,
+    handleClose,
+    resetDialog,
+    revalidatePage,
+    router,
+  ]);
 
   return (
     <DialogContent onCloseAutoFocus={resetDialog}>
