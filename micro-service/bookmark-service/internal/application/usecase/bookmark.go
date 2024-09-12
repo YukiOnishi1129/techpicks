@@ -17,7 +17,7 @@ type BookmarkUseCase interface {
 	GetBookmarks(ctx context.Context, req *bpb.GetBookmarksRequest) (*bpb.GetBookmarksResponse, error)
 	GetBookmarkByArticleID(ctx context.Context, req *bpb.GetBookmarkByArticleIDRequest) (*bpb.GetBookmarkResponse, error)
 	CreateBookmark(ctx context.Context, req *bpb.CreateBookmarkRequest) (*bpb.CreateBookmarkResponse, error)
-	CreateBookmarkForUploadArticle(ctx context.Context, req *bpb.CreateBookmarkRequest) (*bpb.CreateBookmarkResponse, error)
+	CreateBookmarkForUploadArticle(ctx context.Context, req *bpb.CreateBookmarkForUploadArticleRequest) (*bpb.CreateBookmarkResponse, error)
 	DeleteBookmark(ctx context.Context, req *bpb.DeleteBookmarkRequest) (*emptypb.Empty, error)
 }
 
@@ -147,7 +147,7 @@ func (bu *bookmarkUseCase) CreateBookmark(ctx context.Context, req *bpb.CreateBo
 	}, nil
 }
 
-func (bu *bookmarkUseCase) CreateBookmarkForUploadArticle(ctx context.Context, req *bpb.CreateBookmarkRequest) (*bpb.CreateBookmarkResponse, error) {
+func (bu *bookmarkUseCase) CreateBookmarkForUploadArticle(ctx context.Context, req *bpb.CreateBookmarkForUploadArticleRequest) (*bpb.CreateBookmarkResponse, error) {
 	// check if the url is already in the bookmark
 	res, err := bu.bookmarkPersistenceAdapter.GetBookmarkByArticleURL(ctx, req.GetArticleUrl(), req.GetUserId())
 	if err != nil {

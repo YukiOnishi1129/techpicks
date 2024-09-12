@@ -10,9 +10,9 @@ import (
 
 	bpb "github.com/YukiOnishi1129/techpicks/micro-service/content-service/grpc/bookmark"
 	cpb "github.com/YukiOnishi1129/techpicks/micro-service/content-service/grpc/content"
+	externaladapter "github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/adapter/external_adapter"
+	persistenceadapter "github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/adapter/persistence_adapter"
 	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/domain/entity"
-	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/infrastructure/adapter"
-	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/infrastructure/external"
 	"github.com/otiai10/opengraph"
 	"golang.org/x/net/html/charset"
 	"google.golang.org/protobuf/types/known/timestamppb"
@@ -21,23 +21,24 @@ import (
 
 type ArticleUseCase interface {
 	GetArticles(ctx context.Context, req *cpb.GetArticlesRequest) (*cpb.GetArticlesResponse, error)
+	CreateUploadArticle(ctx context.Context, req *cpb.CreateUploadArticleRequest) (*cpb.CreateArticleResponse, error)
 	GetArticleOGP(ctx context.Context, articleURL string) (*cpb.GetArticleOGPResponse, error)
 }
 
 type articleUseCase struct {
-	articleAdapter   adapter.ArticleAdapter
-	bookmarkExternal external.BookmarkExternal
+	articlePersistenceAdapter persistenceadapter.ArticlePersistenceAdapter
+	bookmarkExternalAdapter   externaladapter.BookmarkExternalAdapter
 }
 
-func NewArticleUseCase(aa adapter.ArticleAdapter, be external.BookmarkExternal) ArticleUseCase {
+func NewArticleUseCase(apa persistenceadapter.ArticlePersistenceAdapter, bea externaladapter.BookmarkExternalAdapter) ArticleUseCase {
 	return &articleUseCase{
-		articleAdapter:   aa,
-		bookmarkExternal: be,
+		articlePersistenceAdapter: apa,
+		bookmarkExternalAdapter:   bea,
 	}
 }
 
 func (au *articleUseCase) GetArticles(ctx context.Context, req *cpb.GetArticlesRequest) (*cpb.GetArticlesResponse, error) {
-	articles, err := au.articleAdapter.GetArticles(ctx, req)
+	articles, err := au.articlePersistenceAdapter.GetArticles(ctx, req)
 	if err != nil {
 		return nil, err
 	}
@@ -58,7 +59,7 @@ func (au *articleUseCase) GetArticles(ctx context.Context, req *cpb.GetArticlesR
 		}
 
 		if req.UserId != nil {
-			resBookmark, err := au.bookmarkExternal.GetBookmarkByArticleID(ctx, &bpb.GetBookmarkByArticleIDRequest{
+			resBookmark, err := au.bookmarkExternalAdapter.GetBookmarkByArticleID(ctx, &bpb.GetBookmarkByArticleIDRequest{
 				ArticleId: article.ID,
 				UserId:    req.UserId.GetValue(),
 			})
@@ -119,8 +120,48 @@ func (au *articleUseCase) convertPBArticle(a entity.Article) *cpb.Article {
 	if a.Tags.Valid {
 		article.Tags = wrapperspb.String(a.Tags.String)
 	}
-	article.Platform = au.convertPBPlatform(*a.R.Platform)
+	if a.R != nil && a.R.Platform != nil {
+		article.Platform = au.convertPBPlatform(*a.R.Platform)
+	}
 	return article
+}
+
+func (au *articleUseCase) CreateUploadArticle(ctx context.Context, req *cpb.CreateUploadArticleRequest) (*cpb.CreateArticleResponse, error) {
+	// check public article
+	res, err := au.articlePersistenceAdapter.GetArticlesByArticleURLAndPlatformURL(ctx, req.GetArticleUrl(), req.GetPlatformUrl())
+	if err != nil {
+		return nil, err
+	}
+	if len(res) > 0 {
+		return &cpb.CreateArticleResponse{
+			Article: au.convertPBArticle(*res[0]),
+		}, nil
+	}
+
+	// check private article
+	res, err = au.articlePersistenceAdapter.GetPrivateArticlesByArticleURL(ctx, req.GetArticleUrl())
+	if err != nil {
+		return nil, err
+	}
+	if len(res) > 0 {
+		return &cpb.CreateArticleResponse{
+			Article: au.convertPBArticle(*res[0]),
+		}, nil
+	}
+
+	createdArticle, err := au.articlePersistenceAdapter.CreateUploadArticle(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+
+	article, err := au.articlePersistenceAdapter.GetArticleRelationPlatform(ctx, createdArticle.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	return &cpb.CreateArticleResponse{
+		Article: au.convertPBArticle(article),
+	}, nil
 }
 
 func (au *articleUseCase) GetArticleOGP(ctx context.Context, articleURL string) (*cpb.GetArticleOGPResponse, error) {
