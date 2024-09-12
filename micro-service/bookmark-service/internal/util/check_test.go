@@ -37,6 +37,14 @@ func Test_Util_JapaneseTextCheck(t *testing.T) {
 			text: "Hello コンニチハ",
 			want: true,
 		},
+		"number": {
+			text: "123",
+			want: false,
+		},
+		"symbol": {
+			text: "!@#",
+			want: false,
+		},
 	}
 
 	for name, tt := range test {
