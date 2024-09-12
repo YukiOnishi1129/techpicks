@@ -6,11 +6,14 @@ import (
 	"time"
 
 	bpb "github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/grpc/bookmark"
+	externaladapter "github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/internal/adapter/external_adapter"
 	persistenceadapter "github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/internal/adapter/persistence_adapter"
 	"github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/internal/domain/entity"
+	"github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/internal/infrastructure/external"
 	"github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/internal/infrastructure/persistence"
 	"github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/internal/util/testutil"
 	"github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/internal/util/testutil/mock"
+	"github.com/golang/mock/gomock"
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
 	"github.com/google/uuid"
@@ -249,9 +252,18 @@ func Test_UseCase_GetBookmarkByArticleID(t *testing.T) {
 
 			db := pgContainer.DB
 
+			ctrl := gomock.NewController(t)
+			defer ctrl.Finish()
+
+			mockContentClient := mock.NewMockContentServiceClient(ctrl)
+
 			testBookmarkRepository := persistence.NewBookmarkPersistence(db)
+			testContentExternal := external.NewContentExternal(mockContentClient)
+
 			testBookmarkPersistenceAdapter := persistenceadapter.NewBookmarkPersistenceAdapter(testBookmarkRepository)
-			testBookmarkUseCase := NewBookmarkUseCase(testBookmarkPersistenceAdapter)
+			testContentExternalAdapter := externaladapter.NewContentExternalAdapter(testContentExternal)
+
+			testBookmarkUseCase := NewBookmarkUseCase(testBookmarkPersistenceAdapter, testContentExternalAdapter)
 
 			if tt.recordBookmarks != nil {
 				for _, v := range tt.recordBookmarks {
@@ -479,10 +491,18 @@ func Test_UseCase_CreateBookmark(t *testing.T) {
 
 			db := pgContainer.DB
 
-			testBookmarkRepository := persistence.NewBookmarkPersistence(db)
-			testBookmarkPersistenceAdapter := persistenceadapter.NewBookmarkPersistenceAdapter(testBookmarkRepository)
-			testBookmarkUseCase := NewBookmarkUseCase(testBookmarkPersistenceAdapter)
+			ctrl := gomock.NewController(t)
+			defer ctrl.Finish()
 
+			mockContentClient := mock.NewMockContentServiceClient(ctrl)
+
+			testBookmarkRepository := persistence.NewBookmarkPersistence(db)
+			testContentExternal := external.NewContentExternal(mockContentClient)
+
+			testBookmarkPersistenceAdapter := persistenceadapter.NewBookmarkPersistenceAdapter(testBookmarkRepository)
+			testContentExternalAdapter := externaladapter.NewContentExternalAdapter(testContentExternal)
+
+			testBookmarkUseCase := NewBookmarkUseCase(testBookmarkPersistenceAdapter, testContentExternalAdapter)
 			if tt.recordBookmarks != nil {
 				for _, v := range tt.recordBookmarks {
 					err = v.Insert(ctx, db, boil.Infer())
@@ -649,9 +669,18 @@ func Test_UseCase_DeleteBookmark(t *testing.T) {
 
 			db := pgContainer.DB
 
+			ctrl := gomock.NewController(t)
+			defer ctrl.Finish()
+
+			mockContentClient := mock.NewMockContentServiceClient(ctrl)
+
 			testBookmarkRepository := persistence.NewBookmarkPersistence(db)
+			testContentExternal := external.NewContentExternal(mockContentClient)
+
 			testBookmarkPersistenceAdapter := persistenceadapter.NewBookmarkPersistenceAdapter(testBookmarkRepository)
-			testBookmarkUseCase := NewBookmarkUseCase(testBookmarkPersistenceAdapter)
+			testContentExternalAdapter := externaladapter.NewContentExternalAdapter(testContentExternal)
+
+			testBookmarkUseCase := NewBookmarkUseCase(testBookmarkPersistenceAdapter, testContentExternalAdapter)
 
 			if tt.recordBookmarks != nil {
 				for _, v := range tt.recordBookmarks {
