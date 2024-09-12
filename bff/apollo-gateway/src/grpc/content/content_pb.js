@@ -1085,9 +1085,7 @@ proto.checkpicks.content.v1.CreateUploadArticleRequest.toObject = function(inclu
     thumbnailUrl: jspb.Message.getFieldWithDefault(msg, 5, ""),
     platformName: jspb.Message.getFieldWithDefault(msg, 6, ""),
     platformUrl: jspb.Message.getFieldWithDefault(msg, 7, ""),
-    platformFaviconUrl: jspb.Message.getFieldWithDefault(msg, 8, ""),
-    isEng: jspb.Message.getBooleanFieldWithDefault(msg, 9, false),
-    isRead: jspb.Message.getBooleanFieldWithDefault(msg, 10, false)
+    platformFaviconUrl: jspb.Message.getFieldWithDefault(msg, 8, "")
   };
 
   if (includeInstance) {
@@ -1155,14 +1153,6 @@ proto.checkpicks.content.v1.CreateUploadArticleRequest.deserializeBinaryFromRead
     case 8:
       var value = /** @type {string} */ (reader.readString());
       msg.setPlatformFaviconUrl(value);
-      break;
-    case 9:
-      var value = /** @type {boolean} */ (reader.readBool());
-      msg.setIsEng(value);
-      break;
-    case 10:
-      var value = /** @type {boolean} */ (reader.readBool());
-      msg.setIsRead(value);
       break;
     default:
       reader.skipField();
@@ -1246,20 +1236,6 @@ proto.checkpicks.content.v1.CreateUploadArticleRequest.serializeBinaryToWriter =
   if (f.length > 0) {
     writer.writeString(
       8,
-      f
-    );
-  }
-  f = message.getIsEng();
-  if (f) {
-    writer.writeBool(
-      9,
-      f
-    );
-  }
-  f = message.getIsRead();
-  if (f) {
-    writer.writeBool(
-      10,
       f
     );
   }
@@ -1407,42 +1383,6 @@ proto.checkpicks.content.v1.CreateUploadArticleRequest.prototype.getPlatformFavi
  */
 proto.checkpicks.content.v1.CreateUploadArticleRequest.prototype.setPlatformFaviconUrl = function(value) {
   return jspb.Message.setProto3StringField(this, 8, value);
-};
-
-
-/**
- * optional bool is_eng = 9;
- * @return {boolean}
- */
-proto.checkpicks.content.v1.CreateUploadArticleRequest.prototype.getIsEng = function() {
-  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 9, false));
-};
-
-
-/**
- * @param {boolean} value
- * @return {!proto.checkpicks.content.v1.CreateUploadArticleRequest} returns this
- */
-proto.checkpicks.content.v1.CreateUploadArticleRequest.prototype.setIsEng = function(value) {
-  return jspb.Message.setProto3BooleanField(this, 9, value);
-};
-
-
-/**
- * optional bool is_read = 10;
- * @return {boolean}
- */
-proto.checkpicks.content.v1.CreateUploadArticleRequest.prototype.getIsRead = function() {
-  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 10, false));
-};
-
-
-/**
- * @param {boolean} value
- * @return {!proto.checkpicks.content.v1.CreateUploadArticleRequest} returns this
- */
-proto.checkpicks.content.v1.CreateUploadArticleRequest.prototype.setIsRead = function(value) {
-  return jspb.Message.setProto3BooleanField(this, 10, value);
 };
 
 

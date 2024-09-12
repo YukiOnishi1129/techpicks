@@ -18,7 +18,7 @@ type ArticlePersistenceAdapter interface {
 	GetArticlesByArticleURLAndPlatformURL(ctx context.Context, articleURL, platformURL string) (entity.ArticleSlice, error)
 	GetPrivateArticlesByArticleURL(ctx context.Context, articleURL string) (entity.ArticleSlice, error)
 	GetArticleRelationPlatform(ctx context.Context, articleID string) (entity.Article, error)
-	CreateUploadArticle(ctx context.Context, req *cpb.CreateUploadArticleRequest) (*entity.Article, error)
+	CreateUploadArticle(ctx context.Context, req *cpb.CreateUploadArticleRequest, isEng bool) (*entity.Article, error)
 }
 
 type articlePersistenceAdapter struct {
@@ -154,7 +154,7 @@ func (apa *articlePersistenceAdapter) GetArticleRelationPlatform(ctx context.Con
 	return article, nil
 }
 
-func (apa *articlePersistenceAdapter) CreateUploadArticle(ctx context.Context, req *cpb.CreateUploadArticleRequest) (*entity.Article, error) {
+func (apa *articlePersistenceAdapter) CreateUploadArticle(ctx context.Context, req *cpb.CreateUploadArticleRequest, isEng bool) (*entity.Article, error) {
 	articleID, _ := uuid.NewUUID()
 	article := entity.Article{
 		ID:           articleID.String(),
@@ -163,7 +163,7 @@ func (apa *articlePersistenceAdapter) CreateUploadArticle(ctx context.Context, r
 		Description:  req.GetDescription(),
 		ThumbnailURL: req.GetThumbnailUrl(),
 		IsPrivate:    true,
-		IsEng:        req.GetIsEng(),
+		IsEng:        isEng,
 	}
 
 	err := apa.articleRepository.CreateArticle(ctx, article)
