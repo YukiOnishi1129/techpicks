@@ -11,9 +11,10 @@ import (
 
 	bpb "github.com/YukiOnishi1129/techpicks/micro-service/content-service/grpc/bookmark"
 	cpb "github.com/YukiOnishi1129/techpicks/micro-service/content-service/grpc/content"
+	externaladapter "github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/adapter/external_adapter"
+	persistenceadapter "github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/adapter/persistence_adapter"
 	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/application/usecase"
 	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/config/database"
-	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/infrastructure/adapter"
 	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/infrastructure/external"
 	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/infrastructure/persistence"
 	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/interfacess/handler"
@@ -70,17 +71,20 @@ func main() {
 	bClient := bpb.NewBookmarkServiceClient(bConn)
 
 	// infrastructure layer
-	// repository layer
+	// persistence layer
 	aps := persistence.NewArticlePersistence(db)
 	// external layer
 	bex := external.NewBookmarkExternal(bClient)
 
 	// adapter layer
-	aad := adapter.NewArticleAdapter(aps)
+	// persistence adapter
+	apa := persistenceadapter.NewArticlePersistenceAdapter(aps)
+	// external adapter
+	bea := externaladapter.NewBookmarkExternalAdapter(bex)
 
 	// application layer
 	// usecase layer
-	auc := usecase.NewArticleUseCase(aad, bex)
+	auc := usecase.NewArticleUseCase(apa, bea)
 
 	// interface layer
 	chd := handler.NewContentHandler(auc)

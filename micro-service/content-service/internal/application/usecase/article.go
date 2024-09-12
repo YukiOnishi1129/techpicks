@@ -10,9 +10,9 @@ import (
 
 	bpb "github.com/YukiOnishi1129/techpicks/micro-service/content-service/grpc/bookmark"
 	cpb "github.com/YukiOnishi1129/techpicks/micro-service/content-service/grpc/content"
+	externaladapter "github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/adapter/external_adapter"
 	persistenceadapter "github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/adapter/persistence_adapter"
 	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/domain/entity"
-	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/infrastructure/external"
 	"github.com/otiai10/opengraph"
 	"golang.org/x/net/html/charset"
 	"google.golang.org/protobuf/types/known/timestamppb"
@@ -27,13 +27,13 @@ type ArticleUseCase interface {
 
 type articleUseCase struct {
 	articlePersistenceAdapter persistenceadapter.ArticlePersistenceAdapter
-	bookmarkExternal          external.BookmarkExternal
+	bookmarkExternalAdapter   externaladapter.BookmarkExternalAdapter
 }
 
-func NewArticleUseCase(apa persistenceadapter.ArticlePersistenceAdapter, be external.BookmarkExternal) ArticleUseCase {
+func NewArticleUseCase(apa persistenceadapter.ArticlePersistenceAdapter, bea externaladapter.BookmarkExternalAdapter) ArticleUseCase {
 	return &articleUseCase{
 		articlePersistenceAdapter: apa,
-		bookmarkExternal:          be,
+		bookmarkExternalAdapter:   bea,
 	}
 }
 
@@ -59,7 +59,7 @@ func (au *articleUseCase) GetArticles(ctx context.Context, req *cpb.GetArticlesR
 		}
 
 		if req.UserId != nil {
-			resBookmark, err := au.bookmarkExternal.GetBookmarkByArticleID(ctx, &bpb.GetBookmarkByArticleIDRequest{
+			resBookmark, err := au.bookmarkExternalAdapter.GetBookmarkByArticleID(ctx, &bpb.GetBookmarkByArticleIDRequest{
 				ArticleId: article.ID,
 				UserId:    req.UserId.GetValue(),
 			})

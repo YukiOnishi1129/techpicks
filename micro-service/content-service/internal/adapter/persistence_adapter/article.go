@@ -20,7 +20,7 @@ type articlePersistenceAdapter struct {
 	articleRepository repository.ArticleRepository
 }
 
-func NewArticleAdapter(ar repository.ArticleRepository) ArticlePersistenceAdapter {
+func NewArticlePersistenceAdapter(ar repository.ArticleRepository) ArticlePersistenceAdapter {
 	return &articlePersistenceAdapter{
 		articleRepository: ar,
 	}
