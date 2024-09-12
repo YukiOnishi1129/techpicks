@@ -9,4 +9,5 @@ import (
 
 type ArticleRepository interface {
 	GetArticles(ctx context.Context, q []qm.QueryMod) (entity.ArticleSlice, error)
+	CreateArticle(ctx context.Context, a entity.Article) error
 }

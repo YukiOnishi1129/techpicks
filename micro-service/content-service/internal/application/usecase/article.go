@@ -125,14 +125,35 @@ func (au *articleUseCase) convertPBArticle(a entity.Article) *cpb.Article {
 }
 
 func (au *articleUseCase) CreateUploadArticle(ctx context.Context, req *cpb.CreateUploadArticleRequest) (*cpb.CreateArticleResponse, error) {
-	// TODO: where private = false & articleURL & platformURL
+	// check public article
+	res, err := au.articlePersistenceAdapter.GetArticlesByArticleURLAndPlatformURL(ctx, req.ArticleUrl, req.PlatformUrl)
+	if err != nil {
+		return nil, err
+	}
+	if len(res) > 0 {
+		return &cpb.CreateArticleResponse{
+			Article: au.convertPBArticle(*res[0]),
+		}, nil
+	}
 
-	// TODO: fetch where private = true & articleURL
+	// check private article
+	res, err = au.articlePersistenceAdapter.GetPrivateArticlesByArticleURL(ctx, req.ArticleUrl)
+	if err != nil {
+		return nil, err
+	}
+	if len(res) > 0 {
+		return &cpb.CreateArticleResponse{
+			Article: au.convertPBArticle(*res[0]),
+		}, nil
+	}
 
-	// TODO: create article
+	article, err := au.articlePersistenceAdapter.CreateUploadArticle(ctx, req)
+	if err != nil {
+		return nil, err
+	}
 
 	return &cpb.CreateArticleResponse{
-		// Article: au.convertPBArticle(*article),
+		Article: au.convertPBArticle(*article),
 	}, nil
 }
 

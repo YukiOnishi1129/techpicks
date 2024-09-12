@@ -9,11 +9,15 @@ import (
 	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/domain"
 	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/domain/entity"
 	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/domain/repository"
+	"github.com/google/uuid"
 	"github.com/volatiletech/sqlboiler/v4/queries/qm"
 )
 
 type ArticlePersistenceAdapter interface {
 	GetArticles(ctx context.Context, req *cpb.GetArticlesRequest) (entity.ArticleSlice, error)
+	GetArticlesByArticleURLAndPlatformURL(ctx context.Context, articleURL, platformURL string) (entity.ArticleSlice, error)
+	GetPrivateArticlesByArticleURL(ctx context.Context, articleURL string) (entity.ArticleSlice, error)
+	CreateUploadArticle(ctx context.Context, req *cpb.CreateUploadArticleRequest) (*entity.Article, error)
 }
 
 type articlePersistenceAdapter struct {
@@ -99,4 +103,61 @@ func (apa *articlePersistenceAdapter) GetArticles(ctx context.Context, req *cpb.
 	}
 
 	return articles, nil
+}
+
+func (apa *articlePersistenceAdapter) GetArticlesByArticleURLAndPlatformURL(ctx context.Context, articleURL, platformURL string) (entity.ArticleSlice, error) {
+	q := []qm.QueryMod{
+		qm.InnerJoin("platforms ON articles.platform_id = platforms.id"),
+		qm.Where("articles.url = ?", articleURL),
+		qm.Where("platforms.url = ?", platformURL),
+		qm.Load(qm.Rels(entity.ArticleRels.Platform)),
+		qm.Where("articles.is_private = ?", false),
+	}
+
+	articles, err := apa.articleRepository.GetArticles(ctx, q)
+	if err != nil {
+		fmt.Printf("Error executing query: %v\n", err)
+		return nil, err
+	}
+
+	return articles, nil
+}
+
+func (apa *articlePersistenceAdapter) GetPrivateArticlesByArticleURL(ctx context.Context, articleURL string) (entity.ArticleSlice, error) {
+	q := []qm.QueryMod{
+		qm.InnerJoin("platforms ON articles.platform_id = platforms.id"),
+		qm.Where("articles.url = ?", articleURL),
+		qm.Load(qm.Rels(entity.ArticleRels.Platform)),
+		qm.Where("articles.is_private = ?", true),
+	}
+
+	articles, err := apa.articleRepository.GetArticles(ctx, q)
+	if err != nil {
+		fmt.Printf("Error executing query: %v\n", err)
+		return nil, err
+	}
+
+	return articles, nil
+}
+
+func (apa *articlePersistenceAdapter) CreateUploadArticle(ctx context.Context, req *cpb.CreateUploadArticleRequest) (*entity.Article, error) {
+	articleID, _ := uuid.NewUUID()
+	article := entity.Article{
+		ID:           articleID.String(),
+		ArticleURL:   req.GetArticleUrl(),
+		Title:        req.GetTitle(),
+		Description:  req.GetDescription(),
+		ThumbnailURL: req.GetThumbnailUrl(),
+
+		IsPrivate: true,
+		IsEng:     req.GetIsEng(),
+	}
+
+	err := apa.articleRepository.CreateArticle(ctx, article)
+	if err != nil {
+		fmt.Printf("Error creating article: %v\n", err)
+		return nil, err
+	}
+
+	return &article, nil
 }
