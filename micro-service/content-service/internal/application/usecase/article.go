@@ -120,13 +120,16 @@ func (au *articleUseCase) convertPBArticle(a entity.Article) *cpb.Article {
 	if a.Tags.Valid {
 		article.Tags = wrapperspb.String(a.Tags.String)
 	}
-	article.Platform = au.convertPBPlatform(*a.R.Platform)
+	if a.R != nil && a.R.Platform != nil {
+		println("💧")
+		article.Platform = au.convertPBPlatform(*a.R.Platform)
+	}
 	return article
 }
 
 func (au *articleUseCase) CreateUploadArticle(ctx context.Context, req *cpb.CreateUploadArticleRequest) (*cpb.CreateArticleResponse, error) {
 	// check public article
-	res, err := au.articlePersistenceAdapter.GetArticlesByArticleURLAndPlatformURL(ctx, req.ArticleUrl, req.PlatformUrl)
+	res, err := au.articlePersistenceAdapter.GetArticlesByArticleURLAndPlatformURL(ctx, req.GetArticleUrl(), req.GetPlatformUrl())
 	if err != nil {
 		return nil, err
 	}
@@ -137,7 +140,7 @@ func (au *articleUseCase) CreateUploadArticle(ctx context.Context, req *cpb.Crea
 	}
 
 	// check private article
-	res, err = au.articlePersistenceAdapter.GetPrivateArticlesByArticleURL(ctx, req.ArticleUrl)
+	res, err = au.articlePersistenceAdapter.GetPrivateArticlesByArticleURL(ctx, req.GetArticleUrl())
 	if err != nil {
 		return nil, err
 	}

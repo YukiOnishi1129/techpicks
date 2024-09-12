@@ -26,6 +26,9 @@ func (ap *articlePersistence) GetArticles(ctx context.Context, q []qm.QueryMod) 
 	// boil.DebugMode = true
 	articles, err := entity.Articles(q...).All(ctx, ap.db)
 	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, nil
+		}
 		fmt.Printf("Error executing query: %v\n", err)
 		return nil, err
 	}

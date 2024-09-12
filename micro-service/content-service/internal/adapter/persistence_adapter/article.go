@@ -108,14 +108,15 @@ func (apa *articlePersistenceAdapter) GetArticles(ctx context.Context, req *cpb.
 func (apa *articlePersistenceAdapter) GetArticlesByArticleURLAndPlatformURL(ctx context.Context, articleURL, platformURL string) (entity.ArticleSlice, error) {
 	q := []qm.QueryMod{
 		qm.InnerJoin("platforms ON articles.platform_id = platforms.id"),
-		qm.Where("articles.url = ?", articleURL),
-		qm.Where("platforms.url = ?", platformURL),
+		qm.Where("articles.article_url = ?", articleURL),
+		qm.Where("platforms.site_url = ?", platformURL),
 		qm.Load(qm.Rels(entity.ArticleRels.Platform)),
 		qm.Where("articles.is_private = ?", false),
 	}
 
 	articles, err := apa.articleRepository.GetArticles(ctx, q)
 	if err != nil {
+		println("Error executing query: %v\n", err)
 		fmt.Printf("Error executing query: %v\n", err)
 		return nil, err
 	}
@@ -126,7 +127,7 @@ func (apa *articlePersistenceAdapter) GetArticlesByArticleURLAndPlatformURL(ctx 
 func (apa *articlePersistenceAdapter) GetPrivateArticlesByArticleURL(ctx context.Context, articleURL string) (entity.ArticleSlice, error) {
 	q := []qm.QueryMod{
 		qm.InnerJoin("platforms ON articles.platform_id = platforms.id"),
-		qm.Where("articles.url = ?", articleURL),
+		qm.Where("articles.article_url = ?", articleURL),
 		qm.Load(qm.Rels(entity.ArticleRels.Platform)),
 		qm.Where("articles.is_private = ?", true),
 	}
@@ -154,6 +155,8 @@ func (apa *articlePersistenceAdapter) CreateUploadArticle(ctx context.Context, r
 
 	err := apa.articleRepository.CreateArticle(ctx, article)
 	if err != nil {
+		println("❤️‍🔥")
+		println(err.Error())
 		fmt.Printf("Error creating article: %v\n", err)
 		return nil, err
 	}
