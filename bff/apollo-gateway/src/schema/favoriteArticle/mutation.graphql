@@ -1,0 +1,11 @@
+type Mutation {
+  createFavoriteArticleFolder(
+    createFavoriteArticleFolderInput: CreateFavoriteArticleFolderInput!
+  ): FavoriteArticleFolder!
+}
+
+input CreateFavoriteArticleFolderInput {
+  userId: ID!
+  title: String!
+  description: String
+}
