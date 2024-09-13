@@ -16,6 +16,8 @@ import {
 // import { MyFeedFolderType } from "@/types/myFeedFolder";
 
 // import { FavoriteArticleFolderLinks } from "./FavoriteArticleFolderLinks";
+import { CreateFavoriteArticleFolderDialog } from "@/features/favorites/components/Dialog";
+
 import { LogoutLink } from "./LogoutLink";
 // import { MyFeedFolderLinks } from "./MyFeedFolderLinks";
 
@@ -126,10 +128,10 @@ export function DesktopSidebar({ user }: DesktopSidebarProps) {
                   favoriteArticleFolders={favoriteArticleFolders}
                 /> */}
                 <div className="ml-4">
-                  {/* <CreateFavoriteArticleFolderDialog
+                  <CreateFavoriteArticleFolderDialog
                     buttonVariant="ghost"
                     buttonSize={18}
-                  /> */}
+                  />
                 </div>
               </div>
             </div>
