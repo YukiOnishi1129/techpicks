@@ -186,6 +186,32 @@ export namespace FavoriteArticleFolderEdge {
     }
 }
 
+export class FavoriteArticleEdge extends jspb.Message { 
+
+    hasNode(): boolean;
+    clearNode(): void;
+    getNode(): FavoriteArticle | undefined;
+    setNode(value?: FavoriteArticle): FavoriteArticleEdge;
+    getCursor(): string;
+    setCursor(value: string): FavoriteArticleEdge;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): FavoriteArticleEdge.AsObject;
+    static toObject(includeInstance: boolean, msg: FavoriteArticleEdge): FavoriteArticleEdge.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: FavoriteArticleEdge, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): FavoriteArticleEdge;
+    static deserializeBinaryFromReader(message: FavoriteArticleEdge, reader: jspb.BinaryReader): FavoriteArticleEdge;
+}
+
+export namespace FavoriteArticleEdge {
+    export type AsObject = {
+        node?: FavoriteArticle.AsObject,
+        cursor: string,
+    }
+}
+
 export class FavoriteArticle extends jspb.Message { 
     getId(): string;
     setId(value: string): FavoriteArticle;
@@ -202,12 +228,12 @@ export class FavoriteArticle extends jspb.Message {
     setUserId(value: string): FavoriteArticle;
     getTitle(): string;
     setTitle(value: string): FavoriteArticle;
+    getDescription(): string;
+    setDescription(value: string): FavoriteArticle;
     getThumbnailUrl(): string;
     setThumbnailUrl(value: string): FavoriteArticle;
     getArticleUrl(): string;
     setArticleUrl(value: string): FavoriteArticle;
-    getPlatformFaviconUrl(): string;
-    setPlatformFaviconUrl(value: string): FavoriteArticle;
 
     hasPublishedAt(): boolean;
     clearPublishedAt(): void;
@@ -227,6 +253,8 @@ export class FavoriteArticle extends jspb.Message {
     setPlatformName(value: string): FavoriteArticle;
     getPlatformUrl(): string;
     setPlatformUrl(value: string): FavoriteArticle;
+    getPlatformFaviconUrl(): string;
+    setPlatformFaviconUrl(value: string): FavoriteArticle;
     getIsEng(): boolean;
     setIsEng(value: boolean): FavoriteArticle;
     getIsPrivate(): boolean;
@@ -262,14 +290,15 @@ export namespace FavoriteArticle {
         favoriteArticleFolderId: string,
         userId: string,
         title: string,
+        description: string,
         thumbnailUrl: string,
         articleUrl: string,
-        platformFaviconUrl: string,
         publishedAt?: google_protobuf_timestamp_pb.Timestamp.AsObject,
         authorName?: google_protobuf_wrappers_pb.StringValue.AsObject,
         tags?: google_protobuf_wrappers_pb.StringValue.AsObject,
         platformName: string,
         platformUrl: string,
+        platformFaviconUrl: string,
         isEng: boolean,
         isPrivate: boolean,
         isRead: boolean,
@@ -297,6 +326,10 @@ export class FavoriteArticleFolder extends jspb.Message {
     clearUpdatedAt(): void;
     getUpdatedAt(): google_protobuf_timestamp_pb.Timestamp | undefined;
     setUpdatedAt(value?: google_protobuf_timestamp_pb.Timestamp): FavoriteArticleFolder;
+    clearFavoriteArticlesList(): void;
+    getFavoriteArticlesList(): Array<FavoriteArticle>;
+    setFavoriteArticlesList(value: Array<FavoriteArticle>): FavoriteArticleFolder;
+    addFavoriteArticles(value?: FavoriteArticle, index?: number): FavoriteArticle;
 
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): FavoriteArticleFolder.AsObject;
@@ -316,6 +349,7 @@ export namespace FavoriteArticleFolder {
         description: string,
         createdAt?: google_protobuf_timestamp_pb.Timestamp.AsObject,
         updatedAt?: google_protobuf_timestamp_pb.Timestamp.AsObject,
+        favoriteArticlesList: Array<FavoriteArticle.AsObject>,
     }
 }
 

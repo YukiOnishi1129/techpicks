@@ -49,6 +49,11 @@ message FavoriteArticleFolderEdge {
     string cursor = 2;
 }
 
+message FavoriteArticleEdge {
+    FavoriteArticle node = 1;
+    string cursor = 2;
+}
+
 
 
 message FavoriteArticle {
@@ -58,19 +63,20 @@ message FavoriteArticle {
     string favorite_article_folder_id = 4;
     string user_id = 5;
     string title = 6;
-    string thumbnail_url = 7;
-    string article_url = 8;
-    string platform_favicon_url = 9;
+    string description = 7;
+    string thumbnail_url = 8;
+    string article_url = 9;
     google.protobuf.Timestamp published_at = 10;
     google.protobuf.StringValue author_name = 11;
     google.protobuf.StringValue tags = 12;
     string platform_name = 13;
     string platform_url = 14;
-    bool is_eng = 15;
-    bool is_private = 16;
-    bool is_read = 17;
-    google.protobuf.Timestamp created_at = 18;
-    google.protobuf.Timestamp updated_at = 19;
+    string platform_favicon_url = 15;
+    bool is_eng = 16;
+    bool is_private = 17;
+    bool is_read = 18;
+    google.protobuf.Timestamp created_at = 19;
+    google.protobuf.Timestamp updated_at = 20;
 }
 
 message FavoriteArticleFolder {
@@ -80,6 +86,7 @@ message FavoriteArticleFolder {
     string description = 4;
     google.protobuf.Timestamp created_at = 5;
     google.protobuf.Timestamp updated_at = 6;
+    repeated FavoriteArticle favorite_articles = 7;
 }
 
 message PageInfo {
