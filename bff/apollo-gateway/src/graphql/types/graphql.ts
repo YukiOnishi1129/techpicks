@@ -59,6 +59,12 @@ export class BookmarksInput {
     before?: Nullable<string>;
 }
 
+export class CreateFavoriteArticleFolderInput {
+    userId: string;
+    title: string;
+    description?: Nullable<string>;
+}
+
 export interface Node {
     id: string;
 }
@@ -126,6 +132,8 @@ export abstract class IMutation {
     abstract createBookmarkForUploadArticle(input: CreateBookmarkForUploadArticleInput): Bookmark | Promise<Bookmark>;
 
     abstract deleteBookmark(deleteBookmarkInput: DeleteBookmarkInput): boolean | Promise<boolean>;
+
+    abstract createFavoriteArticleFolder(createFavoriteArticleFolderInput: CreateFavoriteArticleFolderInput): FavoriteArticleFolder | Promise<FavoriteArticleFolder>;
 }
 
 export class Bookmark implements Node {
