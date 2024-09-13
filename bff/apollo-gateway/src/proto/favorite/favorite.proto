@@ -9,6 +9,8 @@ import "google/protobuf/wrappers.proto";
 
 service FavoriteService {
     rpc GetFavoriteArticleFolderByArticleId(GetFavoriteArticleFolderByArticleIdRequest) returns (GetFavoriteArticleFolderResponse);
+
+    rpc CreateFavoriteArticleFolder(CreateFavoriteArticleFolderRequest) returns (CreateFavoriteArticleFolderResponse);
 }
 
 message GetFavoriteArticleFolderResponse {
@@ -17,6 +19,16 @@ message GetFavoriteArticleFolderResponse {
 
 message GetFavoriteArticleFolderByArticleIdRequest {
     string article_id = 1;
+}
+
+message CreateFavoriteArticleFolderResponse {
+    FavoriteArticleFolder favorite_article_folder = 1;
+}
+
+message CreateFavoriteArticleFolderRequest {
+    string user_id = 1;
+    string title = 2;
+    string description = 3;
 }
 
 message FavoriteArticle {
