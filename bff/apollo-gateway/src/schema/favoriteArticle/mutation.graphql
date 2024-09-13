@@ -1,11 +1,10 @@
 type Mutation {
   createFavoriteArticleFolder(
-    createFavoriteArticleFolderInput: CreateFavoriteArticleFolderInput!
+    input: CreateFavoriteArticleFolderInput!
   ): FavoriteArticleFolder!
 }
 
 input CreateFavoriteArticleFolderInput {
-  userId: ID!
   title: String!
   description: String
 }

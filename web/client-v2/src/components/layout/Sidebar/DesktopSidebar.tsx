@@ -4,6 +4,7 @@ import { CgWebsite } from "react-icons/cg";
 import { FaRegBookmark } from "react-icons/fa";
 import {
   MdBusiness,
+  MdFeed,
   MdOutlineStarOutline,
   MdOutlineSummarize,
 } from "react-icons/md";
@@ -15,6 +16,8 @@ import {
 // import { MyFeedFolderType } from "@/types/myFeedFolder";
 
 // import { FavoriteArticleFolderLinks } from "./FavoriteArticleFolderLinks";
+import { CreateFavoriteArticleFolderDialog } from "@/features/favorites/components/Dialog";
+
 import { LogoutLink } from "./LogoutLink";
 // import { MyFeedFolderLinks } from "./MyFeedFolderLinks";
 
@@ -85,27 +88,27 @@ export function DesktopSidebar({ user }: DesktopSidebarProps) {
           </div>
         </div>
 
-        {/* {user && (
+        {user && (
           <>
             <div className="px-4 py-2">
               <h2 className="mb-2 px-2 text-lg font-semibold tracking-tight">
                 My Feeds
               </h2>
               <div className="mt-2 text-base">
-                <Link
+                {/* <Link
                   href="/my-feed-folder"
                   className="flex cursor-pointer items-center space-x-2 rounded-md p-2 hover:bg-secondary"
                 >
                   <MdFeed />
                   <span className="pl-2">All</span>
-                </Link>
-                <MyFeedFolderLinks myFeedFolders={myFeedFolders} />
-                <div className="ml-4">
+                </Link> */}
+                {/* <MyFeedFolderLinks myFeedFolders={myFeedFolders} /> */}
+                {/* <div className="ml-4">
                   <CreateMyFeedFolderDialog
                     buttonVariant="ghost"
                     buttonSize={18}
                   />
-                </div>
+                </div> */}
               </div>
             </div>
 
@@ -115,15 +118,15 @@ export function DesktopSidebar({ user }: DesktopSidebarProps) {
               </h2>
               <div className="mt-2">
                 <Link
-                  href="/favorite-article-folder"
+                  href="/favorite"
                   className="flex cursor-pointer items-center space-x-2 rounded-md p-2 hover:bg-secondary"
                 >
                   <MdFeed />
                   <span className="pl-2">All</span>
                 </Link>
-                <FavoriteArticleFolderLinks
+                {/* <FavoriteArticleFolderLinks
                   favoriteArticleFolders={favoriteArticleFolders}
-                />
+                /> */}
                 <div className="ml-4">
                   <CreateFavoriteArticleFolderDialog
                     buttonVariant="ghost"
@@ -133,7 +136,7 @@ export function DesktopSidebar({ user }: DesktopSidebarProps) {
               </div>
             </div>
           </>
-        )} */}
+        )}
         <div className="ml-4 mt-8 px-4 py-2 md:hidden">
           <LogoutLink />
         </div>

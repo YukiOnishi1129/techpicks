@@ -167,6 +167,11 @@ export type CreateBookmarkInput = {
   userId: Scalars["ID"]["input"];
 };
 
+export type CreateFavoriteArticleFolderInput = {
+  description?: InputMaybe<Scalars["String"]["input"]>;
+  title: Scalars["String"]["input"];
+};
+
 export type DeleteBookmarkInput = {
   bookmarkId: Scalars["ID"]["input"];
   userId: Scalars["ID"]["input"];
@@ -229,6 +234,7 @@ export type Mutation = {
   __typename?: "Mutation";
   createBookmark: Bookmark;
   createBookmarkForUploadArticle: Bookmark;
+  createFavoriteArticleFolder: FavoriteArticleFolder;
   deleteBookmark: Scalars["Boolean"]["output"];
 };
 
@@ -238,6 +244,10 @@ export type MutationCreateBookmarkArgs = {
 
 export type MutationCreateBookmarkForUploadArticleArgs = {
   input: CreateBookmarkForUploadArticleInput;
+};
+
+export type MutationCreateFavoriteArticleFolderArgs = {
+  input: CreateFavoriteArticleFolderInput;
 };
 
 export type MutationDeleteBookmarkArgs = {
@@ -692,6 +702,18 @@ export type BookmarkListFragmentFragment = {
       updatedAt: number;
     };
   }>;
+};
+
+export type CreateFavoriteArticleFolderMutationMutationVariables = Exact<{
+  input: CreateFavoriteArticleFolderInput;
+}>;
+
+export type CreateFavoriteArticleFolderMutationMutation = {
+  __typename?: "Mutation";
+  createFavoriteArticleFolder: {
+    __typename?: "FavoriteArticleFolder";
+    id: string;
+  };
 };
 
 export type TrendArticleDashboardTemplateFragmentFragment = {
@@ -1414,6 +1436,60 @@ export type BookmarkListQueryQueryResult = Apollo.QueryResult<
   BookmarkListQueryQuery,
   BookmarkListQueryQueryVariables
 >;
+export const CreateFavoriteArticleFolderMutationDocument = gql`
+  mutation CreateFavoriteArticleFolderMutation(
+    $input: CreateFavoriteArticleFolderInput!
+  ) {
+    createFavoriteArticleFolder(input: $input) {
+      id
+    }
+  }
+`;
+export type CreateFavoriteArticleFolderMutationMutationFn =
+  Apollo.MutationFunction<
+    CreateFavoriteArticleFolderMutationMutation,
+    CreateFavoriteArticleFolderMutationMutationVariables
+  >;
+
+/**
+ * __useCreateFavoriteArticleFolderMutationMutation__
+ *
+ * To run a mutation, you first call `useCreateFavoriteArticleFolderMutationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateFavoriteArticleFolderMutationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createFavoriteArticleFolderMutationMutation, { data, loading, error }] = useCreateFavoriteArticleFolderMutationMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateFavoriteArticleFolderMutationMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateFavoriteArticleFolderMutationMutation,
+    CreateFavoriteArticleFolderMutationMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    CreateFavoriteArticleFolderMutationMutation,
+    CreateFavoriteArticleFolderMutationMutationVariables
+  >(CreateFavoriteArticleFolderMutationDocument, options);
+}
+export type CreateFavoriteArticleFolderMutationMutationHookResult = ReturnType<
+  typeof useCreateFavoriteArticleFolderMutationMutation
+>;
+export type CreateFavoriteArticleFolderMutationMutationResult =
+  Apollo.MutationResult<CreateFavoriteArticleFolderMutationMutation>;
+export type CreateFavoriteArticleFolderMutationMutationOptions =
+  Apollo.BaseMutationOptions<
+    CreateFavoriteArticleFolderMutationMutation,
+    CreateFavoriteArticleFolderMutationMutationVariables
+  >;
 export const TrendArticleListQueryDocument = gql`
   query TrendArticleListQuery($input: ArticlesInput!) {
     ...TrendArticleDashboardTemplateFragment
