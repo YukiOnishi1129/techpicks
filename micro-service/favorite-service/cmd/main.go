@@ -48,10 +48,10 @@ func main() {
 
 	// application layer
 	// usecase layer
-	fafu := usecase.NewFavoriteArticleFolderUseCase(fafap)
+	fafu := usecase.NewFavoriteUseCase(fafap)
 
 	// interface layer
-	fhd := handler.NewFavoriteArticleFolderHandler(fafu)
+	fhd := handler.NewFavoriteHandler(fafu)
 
 	// crate a listener on TCP port 3004
 	port := os.Getenv("FAVORITE_SERVICE_CONTAINER_PORT")

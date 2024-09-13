@@ -4,84 +4,19 @@ import (
 	"context"
 
 	fpb "github.com/YukiOnishi1129/techpicks/micro-service/favorite-service/grpc/favorite"
-	persistenceadapter "github.com/YukiOnishi1129/techpicks/micro-service/favorite-service/internal/adapter/persistence_adapter"
+	"github.com/YukiOnishi1129/techpicks/micro-service/favorite-service/internal/domain/entity"
 	"google.golang.org/protobuf/types/known/timestamppb"
-	"google.golang.org/protobuf/types/known/wrapperspb"
 )
 
-type FavoriteArticleFolderUseCase interface {
-	GetFavoriteArticleFolders(ctx context.Context, req *fpb.GetFavoriteArticleFoldersRequest) (*fpb.GetFavoriteArticleFoldersResponse, error)
-	CreateFavoriteArticleFolder(ctx context.Context, req *fpb.CreateFavoriteArticleFolderRequest) (*fpb.CreateFavoriteArticleFolderResponse, error)
-}
-
-type favoriteArticleFolderUseCase struct {
-	favoriteArticleFolderPersistenceAdapter persistenceadapter.FavoriteArticleFolderPersistenceAdapter
-}
-
-func NewFavoriteArticleFolderUseCase(fafpa persistenceadapter.FavoriteArticleFolderPersistenceAdapter) FavoriteArticleFolderUseCase {
-	return &favoriteArticleFolderUseCase{
-		favoriteArticleFolderPersistenceAdapter: fafpa,
-	}
-}
-
-func (fafu *favoriteArticleFolderUseCase) GetFavoriteArticleFolders(ctx context.Context, req *fpb.GetFavoriteArticleFoldersRequest) (*fpb.GetFavoriteArticleFoldersResponse, error) {
-	fafs, err := fafu.favoriteArticleFolderPersistenceAdapter.GetFavoriteArticleFolders(ctx, req)
+func (fu *favoriteUseCase) GetFavoriteArticleFolders(ctx context.Context, req *fpb.GetFavoriteArticleFoldersRequest) (*fpb.GetFavoriteArticleFoldersResponse, error) {
+	fafs, err := fu.favoriteArticleFolderPersistenceAdapter.GetFavoriteArticleFolders(ctx, req)
 	if err != nil {
 		return &fpb.GetFavoriteArticleFoldersResponse{}, err
 	}
 
 	resFafs := make([]*fpb.FavoriteArticleFolderEdge, 0, len(fafs))
-
 	for i, f := range fafs {
-		faf := &fpb.FavoriteArticleFolder{
-			Id:               f.ID,
-			UserId:           f.UserID,
-			Title:            f.Title,
-			Description:      f.Description.String,
-			CreatedAt:        timestamppb.New(f.CreatedAt),
-			UpdatedAt:        timestamppb.New(f.UpdatedAt),
-			FavoriteArticles: make([]*fpb.FavoriteArticle, 0),
-		}
-
-		if f.R != nil && f.R.FavoriteArticles != nil {
-			resFas := make([]*fpb.FavoriteArticle, 0, len(f.R.FavoriteArticles))
-			for j, fa := range f.R.FavoriteArticles {
-				resFa := &fpb.FavoriteArticle{
-					Id:                      fa.ID,
-					FavoriteArticleFolderId: fa.FavoriteArticleFolderID,
-					ArticleId:               fa.ArticleID,
-					UserId:                  fa.UserID,
-					Title:                   fa.Title,
-					Description:             fa.Description,
-					ThumbnailUrl:            fa.ThumbnailURL,
-					ArticleUrl:              fa.ArticleURL,
-					PlatformName:            fa.PlatformName,
-					PlatformUrl:             fa.PlatformURL,
-					PlatformFaviconUrl:      fa.PlatformFaviconURL,
-					IsEng:                   fa.IsEng,
-					IsPrivate:               fa.IsPrivate,
-					IsRead:                  fa.IsRead,
-					CreatedAt:               timestamppb.New(fa.CreatedAt),
-					UpdatedAt:               timestamppb.New(fa.UpdatedAt),
-				}
-
-				if fa.PlatformID.Valid {
-					resFa.PlatformId = wrapperspb.String(fa.PlatformID.String)
-				}
-				if fa.PublishedAt.Valid {
-					resFa.PublishedAt = timestamppb.New(fa.PublishedAt.Time)
-				}
-				if fa.AuthorName.Valid {
-					resFa.AuthorName = wrapperspb.String(fa.AuthorName.String)
-				}
-				if fa.Tags.Valid {
-					resFa.Tags = wrapperspb.String(fa.Tags.String)
-				}
-				resFas[j] = resFa
-			}
-			faf.FavoriteArticles = resFas
-		}
-
+		faf := fu.convertPBFavoriteArticleFolder(f)
 		resFafs[i] = &fpb.FavoriteArticleFolderEdge{
 			Cursor: f.ID,
 			Node:   faf,
@@ -107,19 +42,34 @@ func (fafu *favoriteArticleFolderUseCase) GetFavoriteArticleFolders(ctx context.
 	}, nil
 }
 
-func (fafu *favoriteArticleFolderUseCase) CreateFavoriteArticleFolder(ctx context.Context, req *fpb.CreateFavoriteArticleFolderRequest) (*fpb.CreateFavoriteArticleFolderResponse, error) {
-	f, err := fafu.favoriteArticleFolderPersistenceAdapter.CreateFavoriteArticleFolder(ctx, req)
+func (fu *favoriteUseCase) CreateFavoriteArticleFolder(ctx context.Context, req *fpb.CreateFavoriteArticleFolderRequest) (*fpb.CreateFavoriteArticleFolderResponse, error) {
+	f, err := fu.favoriteArticleFolderPersistenceAdapter.CreateFavoriteArticleFolder(ctx, req)
 	if err != nil {
 		return &fpb.CreateFavoriteArticleFolderResponse{}, err
 	}
 	return &fpb.CreateFavoriteArticleFolderResponse{
-		FavoriteArticleFolder: &fpb.FavoriteArticleFolder{
-			Id:          f.ID,
-			UserId:      f.UserID,
-			Title:       f.Title,
-			Description: f.Description.String,
-			CreatedAt:   timestamppb.New(f.CreatedAt),
-			UpdatedAt:   timestamppb.New(f.UpdatedAt),
-		},
+		FavoriteArticleFolder: fu.convertPBFavoriteArticleFolder(&f),
 	}, nil
+}
+
+func (fu *favoriteUseCase) convertPBFavoriteArticleFolder(f *entity.FavoriteArticleFolder) *fpb.FavoriteArticleFolder {
+	faf := &fpb.FavoriteArticleFolder{
+		Id:               f.ID,
+		UserId:           f.UserID,
+		Title:            f.Title,
+		Description:      f.Description.String,
+		CreatedAt:        timestamppb.New(f.CreatedAt),
+		UpdatedAt:        timestamppb.New(f.UpdatedAt),
+		FavoriteArticles: make([]*fpb.FavoriteArticle, 0),
+	}
+
+	if f.R != nil && f.R.FavoriteArticles != nil {
+		resFas := make([]*fpb.FavoriteArticle, 0, len(f.R.FavoriteArticles))
+		for i, fa := range f.R.FavoriteArticles {
+			resFa := fu.convertPBFavoriteArticle(fa)
+			resFas[i] = resFa
+		}
+		faf.FavoriteArticles = resFas
+	}
+	return faf
 }
