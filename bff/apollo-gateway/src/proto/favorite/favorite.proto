@@ -8,9 +8,22 @@ import "google/protobuf/timestamp.proto";
 import "google/protobuf/wrappers.proto";
 
 service FavoriteService {
+    rpc GetFavoriteArticleFolders(GetFavoriteArticleFoldersRequest) returns (GetFavoriteArticleFoldersResponse);
     rpc GetFavoriteArticleFolderByArticleId(GetFavoriteArticleFolderByArticleIdRequest) returns (GetFavoriteArticleFolderResponse);
 
     rpc CreateFavoriteArticleFolder(CreateFavoriteArticleFolderRequest) returns (CreateFavoriteArticleFolderResponse);
+}
+
+message GetFavoriteArticleFoldersRequest {
+    string user_id = 1;
+    google.protobuf.StringValue keyword = 2;
+    string cursor = 3;
+    int64 limit = 4;
+}
+
+message GetFavoriteArticleFoldersResponse {
+    repeated FavoriteArticleFolderEdge favorite_article_folders_edge = 1;
+    PageInfo page_info = 2;
 }
 
 message GetFavoriteArticleFolderResponse {
@@ -30,6 +43,13 @@ message CreateFavoriteArticleFolderRequest {
     string title = 2;
     string description = 3;
 }
+
+message FavoriteArticleFolderEdge {
+    FavoriteArticleFolder node = 1;
+    string cursor = 2;
+}
+
+
 
 message FavoriteArticle {
     string id = 1;
@@ -61,3 +81,8 @@ message FavoriteArticleFolder {
     google.protobuf.Timestamp created_at = 5;
     google.protobuf.Timestamp updated_at = 6;
 }
+
+message PageInfo {
+    string end_cursor = 1;
+    bool has_next_page = 2;
+  }

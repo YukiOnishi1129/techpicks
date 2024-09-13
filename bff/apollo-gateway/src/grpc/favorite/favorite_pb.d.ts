@@ -8,6 +8,66 @@ import * as jspb from "google-protobuf";
 import * as google_protobuf_timestamp_pb from "google-protobuf/google/protobuf/timestamp_pb";
 import * as google_protobuf_wrappers_pb from "google-protobuf/google/protobuf/wrappers_pb";
 
+export class GetFavoriteArticleFoldersRequest extends jspb.Message { 
+    getUserId(): string;
+    setUserId(value: string): GetFavoriteArticleFoldersRequest;
+
+    hasKeyword(): boolean;
+    clearKeyword(): void;
+    getKeyword(): google_protobuf_wrappers_pb.StringValue | undefined;
+    setKeyword(value?: google_protobuf_wrappers_pb.StringValue): GetFavoriteArticleFoldersRequest;
+    getCursor(): string;
+    setCursor(value: string): GetFavoriteArticleFoldersRequest;
+    getLimit(): number;
+    setLimit(value: number): GetFavoriteArticleFoldersRequest;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): GetFavoriteArticleFoldersRequest.AsObject;
+    static toObject(includeInstance: boolean, msg: GetFavoriteArticleFoldersRequest): GetFavoriteArticleFoldersRequest.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: GetFavoriteArticleFoldersRequest, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): GetFavoriteArticleFoldersRequest;
+    static deserializeBinaryFromReader(message: GetFavoriteArticleFoldersRequest, reader: jspb.BinaryReader): GetFavoriteArticleFoldersRequest;
+}
+
+export namespace GetFavoriteArticleFoldersRequest {
+    export type AsObject = {
+        userId: string,
+        keyword?: google_protobuf_wrappers_pb.StringValue.AsObject,
+        cursor: string,
+        limit: number,
+    }
+}
+
+export class GetFavoriteArticleFoldersResponse extends jspb.Message { 
+    clearFavoriteArticleFoldersEdgeList(): void;
+    getFavoriteArticleFoldersEdgeList(): Array<FavoriteArticleFolderEdge>;
+    setFavoriteArticleFoldersEdgeList(value: Array<FavoriteArticleFolderEdge>): GetFavoriteArticleFoldersResponse;
+    addFavoriteArticleFoldersEdge(value?: FavoriteArticleFolderEdge, index?: number): FavoriteArticleFolderEdge;
+
+    hasPageInfo(): boolean;
+    clearPageInfo(): void;
+    getPageInfo(): PageInfo | undefined;
+    setPageInfo(value?: PageInfo): GetFavoriteArticleFoldersResponse;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): GetFavoriteArticleFoldersResponse.AsObject;
+    static toObject(includeInstance: boolean, msg: GetFavoriteArticleFoldersResponse): GetFavoriteArticleFoldersResponse.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: GetFavoriteArticleFoldersResponse, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): GetFavoriteArticleFoldersResponse;
+    static deserializeBinaryFromReader(message: GetFavoriteArticleFoldersResponse, reader: jspb.BinaryReader): GetFavoriteArticleFoldersResponse;
+}
+
+export namespace GetFavoriteArticleFoldersResponse {
+    export type AsObject = {
+        favoriteArticleFoldersEdgeList: Array<FavoriteArticleFolderEdge.AsObject>,
+        pageInfo?: PageInfo.AsObject,
+    }
+}
+
 export class GetFavoriteArticleFolderResponse extends jspb.Message { 
 
     hasFavoriteArticleFolder(): boolean;
@@ -97,6 +157,32 @@ export namespace CreateFavoriteArticleFolderRequest {
         userId: string,
         title: string,
         description: string,
+    }
+}
+
+export class FavoriteArticleFolderEdge extends jspb.Message { 
+
+    hasNode(): boolean;
+    clearNode(): void;
+    getNode(): FavoriteArticleFolder | undefined;
+    setNode(value?: FavoriteArticleFolder): FavoriteArticleFolderEdge;
+    getCursor(): string;
+    setCursor(value: string): FavoriteArticleFolderEdge;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): FavoriteArticleFolderEdge.AsObject;
+    static toObject(includeInstance: boolean, msg: FavoriteArticleFolderEdge): FavoriteArticleFolderEdge.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: FavoriteArticleFolderEdge, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): FavoriteArticleFolderEdge;
+    static deserializeBinaryFromReader(message: FavoriteArticleFolderEdge, reader: jspb.BinaryReader): FavoriteArticleFolderEdge;
+}
+
+export namespace FavoriteArticleFolderEdge {
+    export type AsObject = {
+        node?: FavoriteArticleFolder.AsObject,
+        cursor: string,
     }
 }
 
@@ -230,5 +316,28 @@ export namespace FavoriteArticleFolder {
         description: string,
         createdAt?: google_protobuf_timestamp_pb.Timestamp.AsObject,
         updatedAt?: google_protobuf_timestamp_pb.Timestamp.AsObject,
+    }
+}
+
+export class PageInfo extends jspb.Message { 
+    getEndCursor(): string;
+    setEndCursor(value: string): PageInfo;
+    getHasNextPage(): boolean;
+    setHasNextPage(value: boolean): PageInfo;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): PageInfo.AsObject;
+    static toObject(includeInstance: boolean, msg: PageInfo): PageInfo.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: PageInfo, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): PageInfo;
+    static deserializeBinaryFromReader(message: PageInfo, reader: jspb.BinaryReader): PageInfo;
+}
+
+export namespace PageInfo {
+    export type AsObject = {
+        endCursor: string,
+        hasNextPage: boolean,
     }
 }
