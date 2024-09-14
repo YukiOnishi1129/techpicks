@@ -16,10 +16,16 @@ export class GetFavoriteArticleFoldersRequest extends jspb.Message {
     clearKeyword(): void;
     getKeyword(): google_protobuf_wrappers_pb.StringValue | undefined;
     setKeyword(value?: google_protobuf_wrappers_pb.StringValue): GetFavoriteArticleFoldersRequest;
-    getCursor(): string;
-    setCursor(value: string): GetFavoriteArticleFoldersRequest;
-    getLimit(): number;
-    setLimit(value: number): GetFavoriteArticleFoldersRequest;
+
+    hasCursor(): boolean;
+    clearCursor(): void;
+    getCursor(): google_protobuf_wrappers_pb.StringValue | undefined;
+    setCursor(value?: google_protobuf_wrappers_pb.StringValue): GetFavoriteArticleFoldersRequest;
+
+    hasLimit(): boolean;
+    clearLimit(): void;
+    getLimit(): google_protobuf_wrappers_pb.Int64Value | undefined;
+    setLimit(value?: google_protobuf_wrappers_pb.Int64Value): GetFavoriteArticleFoldersRequest;
 
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): GetFavoriteArticleFoldersRequest.AsObject;
@@ -35,8 +41,8 @@ export namespace GetFavoriteArticleFoldersRequest {
     export type AsObject = {
         userId: string,
         keyword?: google_protobuf_wrappers_pb.StringValue.AsObject,
-        cursor: string,
-        limit: number,
+        cursor?: google_protobuf_wrappers_pb.StringValue.AsObject,
+        limit?: google_protobuf_wrappers_pb.Int64Value.AsObject,
     }
 }
 

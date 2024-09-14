@@ -14,7 +14,7 @@ type favoriteArticleFolderPersistence struct {
 	db *sql.DB
 }
 
-func NewArticlePersistenceAdapter(db *sql.DB) repository.FavoriteArticleFolderRepository {
+func NewFavoriteArticleFolderPersistence(db *sql.DB) repository.FavoriteArticleFolderRepository {
 	return &favoriteArticleFolderPersistence{
 		db: db,
 	}

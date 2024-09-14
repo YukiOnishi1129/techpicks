@@ -301,8 +301,8 @@ proto.checkpicks.favorite.v1.GetFavoriteArticleFoldersRequest.toObject = functio
   var f, obj = {
     userId: jspb.Message.getFieldWithDefault(msg, 1, ""),
     keyword: (f = msg.getKeyword()) && google_protobuf_wrappers_pb.StringValue.toObject(includeInstance, f),
-    cursor: jspb.Message.getFieldWithDefault(msg, 3, ""),
-    limit: jspb.Message.getFieldWithDefault(msg, 4, 0)
+    cursor: (f = msg.getCursor()) && google_protobuf_wrappers_pb.StringValue.toObject(includeInstance, f),
+    limit: (f = msg.getLimit()) && google_protobuf_wrappers_pb.Int64Value.toObject(includeInstance, f)
   };
 
   if (includeInstance) {
@@ -349,11 +349,13 @@ proto.checkpicks.favorite.v1.GetFavoriteArticleFoldersRequest.deserializeBinaryF
       msg.setKeyword(value);
       break;
     case 3:
-      var value = /** @type {string} */ (reader.readString());
+      var value = new google_protobuf_wrappers_pb.StringValue;
+      reader.readMessage(value,google_protobuf_wrappers_pb.StringValue.deserializeBinaryFromReader);
       msg.setCursor(value);
       break;
     case 4:
-      var value = /** @type {number} */ (reader.readInt64());
+      var value = new google_protobuf_wrappers_pb.Int64Value;
+      reader.readMessage(value,google_protobuf_wrappers_pb.Int64Value.deserializeBinaryFromReader);
       msg.setLimit(value);
       break;
     default:
@@ -401,17 +403,19 @@ proto.checkpicks.favorite.v1.GetFavoriteArticleFoldersRequest.serializeBinaryToW
     );
   }
   f = message.getCursor();
-  if (f.length > 0) {
-    writer.writeString(
+  if (f != null) {
+    writer.writeMessage(
       3,
-      f
+      f,
+      google_protobuf_wrappers_pb.StringValue.serializeBinaryToWriter
     );
   }
   f = message.getLimit();
-  if (f !== 0) {
-    writer.writeInt64(
+  if (f != null) {
+    writer.writeMessage(
       4,
-      f
+      f,
+      google_protobuf_wrappers_pb.Int64Value.serializeBinaryToWriter
     );
   }
 };
@@ -473,38 +477,76 @@ proto.checkpicks.favorite.v1.GetFavoriteArticleFoldersRequest.prototype.hasKeywo
 
 
 /**
- * optional string cursor = 3;
- * @return {string}
+ * optional google.protobuf.StringValue cursor = 3;
+ * @return {?proto.google.protobuf.StringValue}
  */
 proto.checkpicks.favorite.v1.GetFavoriteArticleFoldersRequest.prototype.getCursor = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 3, ""));
+  return /** @type{?proto.google.protobuf.StringValue} */ (
+    jspb.Message.getWrapperField(this, google_protobuf_wrappers_pb.StringValue, 3));
 };
 
 
 /**
- * @param {string} value
+ * @param {?proto.google.protobuf.StringValue|undefined} value
+ * @return {!proto.checkpicks.favorite.v1.GetFavoriteArticleFoldersRequest} returns this
+*/
+proto.checkpicks.favorite.v1.GetFavoriteArticleFoldersRequest.prototype.setCursor = function(value) {
+  return jspb.Message.setWrapperField(this, 3, value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
  * @return {!proto.checkpicks.favorite.v1.GetFavoriteArticleFoldersRequest} returns this
  */
-proto.checkpicks.favorite.v1.GetFavoriteArticleFoldersRequest.prototype.setCursor = function(value) {
-  return jspb.Message.setProto3StringField(this, 3, value);
+proto.checkpicks.favorite.v1.GetFavoriteArticleFoldersRequest.prototype.clearCursor = function() {
+  return this.setCursor(undefined);
 };
 
 
 /**
- * optional int64 limit = 4;
- * @return {number}
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.checkpicks.favorite.v1.GetFavoriteArticleFoldersRequest.prototype.hasCursor = function() {
+  return jspb.Message.getField(this, 3) != null;
+};
+
+
+/**
+ * optional google.protobuf.Int64Value limit = 4;
+ * @return {?proto.google.protobuf.Int64Value}
  */
 proto.checkpicks.favorite.v1.GetFavoriteArticleFoldersRequest.prototype.getLimit = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 4, 0));
+  return /** @type{?proto.google.protobuf.Int64Value} */ (
+    jspb.Message.getWrapperField(this, google_protobuf_wrappers_pb.Int64Value, 4));
 };
 
 
 /**
- * @param {number} value
+ * @param {?proto.google.protobuf.Int64Value|undefined} value
+ * @return {!proto.checkpicks.favorite.v1.GetFavoriteArticleFoldersRequest} returns this
+*/
+proto.checkpicks.favorite.v1.GetFavoriteArticleFoldersRequest.prototype.setLimit = function(value) {
+  return jspb.Message.setWrapperField(this, 4, value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
  * @return {!proto.checkpicks.favorite.v1.GetFavoriteArticleFoldersRequest} returns this
  */
-proto.checkpicks.favorite.v1.GetFavoriteArticleFoldersRequest.prototype.setLimit = function(value) {
-  return jspb.Message.setProto3IntField(this, 4, value);
+proto.checkpicks.favorite.v1.GetFavoriteArticleFoldersRequest.prototype.clearLimit = function() {
+  return this.setLimit(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.checkpicks.favorite.v1.GetFavoriteArticleFoldersRequest.prototype.hasLimit = function() {
+  return jspb.Message.getField(this, 4) != null;
 };
 
 

@@ -29,26 +29,27 @@ func NewFavoriteArticleFolderPersistenceAdapter(fr repository.FavoriteArticleFol
 
 func (fafa *favoriteArticleFolderPersistenceAdapter) GetFavoriteArticleFolders(ctx context.Context, req *fpb.GetFavoriteArticleFoldersRequest) (entity.FavoriteArticleFolderSlice, error) {
 	limit := 9
-	if req.GetLimit() != 0 {
-		limit = int(req.GetLimit())
+	if req.GetLimit() != nil {
+		limit = int(req.GetLimit().GetValue())
 	}
 
 	q := []qm.QueryMod{
-		qm.LeftOuterJoin(`(
+		qm.Where("favorite_article_folders.user_id = ?", req.GetUserId()),
+		qm.LeftOuterJoin(`LATERAL (
 			SELECT * FROM favorite_articles
 			WHERE favorite_articles.favorite_article_folder_id = favorite_article_folders.id
+			AND favorite_articles.user_id = ?
 			ORDER BY favorite_articles.created_at DESC
 			LIMIT 1
-		) AS favorite_articles ON favorite_article_folders.id = favorite_articles.favorite_article_folder_id`),
-		// qm.LeftOuterJoin("favorite_articles ON favorite_article_folders.id = favorite_articles.favorite_article_folder_id"),
+		) AS favorite_articles ON favorite_article_folders.id = favorite_articles.favorite_article_folder_id`, req.GetUserId()),
 		qm.Load(entity.FavoriteArticleFolderRels.FavoriteArticles),
 		qm.GroupBy("favorite_article_folders.id"),
 		qm.OrderBy("favorite_article_folders.created_at DESC"),
 		qm.Limit(limit),
 	}
 
-	if req.GetCursor() != "" {
-		q = append(q, qm.Where("favorite_article_folders.created_at < (SELECT created_at FROM favorite_article_folders WHERE id = ?)", req.GetCursor()))
+	if req.GetCursor() != nil {
+		q = append(q, qm.Where("favorite_article_folders.created_at < (SELECT created_at FROM favorite_article_folders WHERE id = ?)", req.GetCursor().GetValue()))
 	}
 
 	if req.GetKeyword().GetValue() != "" {

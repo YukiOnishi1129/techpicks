@@ -14,16 +14,8 @@ func (fu *favoriteUseCase) GetFavoriteArticleFolders(ctx context.Context, req *f
 		return &fpb.GetFavoriteArticleFoldersResponse{}, err
 	}
 
-	resFafs := make([]*fpb.FavoriteArticleFolderEdge, 0, len(fafs))
-	for i, f := range fafs {
-		faf := fu.convertPBFavoriteArticleFolder(f)
-		resFafs[i] = &fpb.FavoriteArticleFolderEdge{
-			Cursor: f.ID,
-			Node:   faf,
-		}
-	}
-
-	if len(resFafs) == 0 {
+	resFafs := make([]*fpb.FavoriteArticleFolderEdge, len(fafs))
+	if len(fafs) == 0 {
 		return &fpb.GetFavoriteArticleFoldersResponse{
 			FavoriteArticleFoldersEdge: resFafs,
 			PageInfo: &fpb.PageInfo{
@@ -33,10 +25,18 @@ func (fu *favoriteUseCase) GetFavoriteArticleFolders(ctx context.Context, req *f
 		}, nil
 	}
 
+	for i, f := range fafs {
+		faf := fu.convertPBFavoriteArticleFolder(f)
+		resFafs[i] = &fpb.FavoriteArticleFolderEdge{
+			Cursor: f.ID,
+			Node:   faf,
+		}
+	}
+
 	return &fpb.GetFavoriteArticleFoldersResponse{
 		FavoriteArticleFoldersEdge: resFafs,
 		PageInfo: &fpb.PageInfo{
-			HasNextPage: len(resFafs) == int(req.GetLimit()),
+			HasNextPage: len(resFafs) == int(req.GetLimit().GetValue()),
 			EndCursor:   resFafs[len(resFafs)-1].Cursor,
 		},
 	}, nil
@@ -64,12 +64,15 @@ func (fu *favoriteUseCase) convertPBFavoriteArticleFolder(f *entity.FavoriteArti
 	}
 
 	if f.R != nil && f.R.FavoriteArticles != nil {
-		resFas := make([]*fpb.FavoriteArticle, 0, len(f.R.FavoriteArticles))
-		for i, fa := range f.R.FavoriteArticles {
-			resFa := fu.convertPBFavoriteArticle(fa)
-			resFas[i] = resFa
+		resFas := make([]*fpb.FavoriteArticle, len(f.R.FavoriteArticles))
+		if len(f.R.FavoriteArticles) != 0 {
+			for i, fa := range f.R.FavoriteArticles {
+				resFa := fu.convertPBFavoriteArticle(fa)
+				resFas[i] = resFa
+			}
 		}
 		faf.FavoriteArticles = resFas
 	}
+
 	return faf
 }

@@ -17,8 +17,8 @@ service FavoriteService {
 message GetFavoriteArticleFoldersRequest {
     string user_id = 1;
     google.protobuf.StringValue keyword = 2;
-    string cursor = 3;
-    int64 limit = 4;
+    google.protobuf.StringValue cursor = 3;
+    google.protobuf.Int64Value limit = 4;
 }
 
 message GetFavoriteArticleFoldersResponse {

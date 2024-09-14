@@ -40,7 +40,7 @@ func main() {
 
 	// infrastructure layer
 	// persistence layer
-	fafps := persistence.NewArticlePersistenceAdapter(db)
+	fafps := persistence.NewFavoriteArticleFolderPersistence(db)
 
 	// adapter layer
 	// persistence layer
