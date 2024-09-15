@@ -40,18 +40,20 @@ func main() {
 
 	// infrastructure layer
 	// persistence layer
-	fafps := persistence.NewArticlePersistenceAdapter(db)
+	fafps := persistence.NewFavoriteArticleFolderPersistence(db)
+	faps := persistence.NewFavoriteArticlePersistence(db)
 
 	// adapter layer
 	// persistence layer
-	fafap := persistenceadapter.NewFavoriteArticleFolderPersistenceAdapter(fafps)
+	fafpa := persistenceadapter.NewFavoriteArticleFolderPersistenceAdapter(fafps)
+	fapa := persistenceadapter.NewFavoriteArticlePersistenceAdapter(faps)
 
 	// application layer
 	// usecase layer
-	fafu := usecase.NewFavoriteArticleFolderUseCase(fafap)
+	fafu := usecase.NewFavoriteUseCase(fafpa, fapa)
 
 	// interface layer
-	fhd := handler.NewFavoriteArticleFolderHandler(fafu)
+	fhd := handler.NewFavoriteHandler(fafu)
 
 	// crate a listener on TCP port 3004
 	port := os.Getenv("FAVORITE_SERVICE_CONTAINER_PORT")

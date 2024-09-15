@@ -4,9 +4,15 @@
 package entity
 
 var TableNames = struct {
+	Articles               string
 	FavoriteArticleFolders string
 	FavoriteArticles       string
+	Platforms              string
+	Profiles               string
 }{
+	Articles:               "articles",
 	FavoriteArticleFolders: "favorite_article_folders",
 	FavoriteArticles:       "favorite_articles",
+	Platforms:              "platforms",
+	Profiles:               "profiles",
 }

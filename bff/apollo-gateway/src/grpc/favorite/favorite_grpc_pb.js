@@ -50,8 +50,41 @@ function deserialize_checkpicks_favorite_v1_GetFavoriteArticleFolderResponse(buf
   return favorite_favorite_pb.GetFavoriteArticleFolderResponse.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
+function serialize_checkpicks_favorite_v1_GetFavoriteArticleFoldersRequest(arg) {
+  if (!(arg instanceof favorite_favorite_pb.GetFavoriteArticleFoldersRequest)) {
+    throw new Error('Expected argument of type checkpicks.favorite.v1.GetFavoriteArticleFoldersRequest');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_checkpicks_favorite_v1_GetFavoriteArticleFoldersRequest(buffer_arg) {
+  return favorite_favorite_pb.GetFavoriteArticleFoldersRequest.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
+function serialize_checkpicks_favorite_v1_GetFavoriteArticleFoldersResponse(arg) {
+  if (!(arg instanceof favorite_favorite_pb.GetFavoriteArticleFoldersResponse)) {
+    throw new Error('Expected argument of type checkpicks.favorite.v1.GetFavoriteArticleFoldersResponse');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_checkpicks_favorite_v1_GetFavoriteArticleFoldersResponse(buffer_arg) {
+  return favorite_favorite_pb.GetFavoriteArticleFoldersResponse.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
 
 var FavoriteServiceService = exports.FavoriteServiceService = {
+  getFavoriteArticleFolders: {
+    path: '/checkpicks.favorite.v1.FavoriteService/GetFavoriteArticleFolders',
+    requestStream: false,
+    responseStream: false,
+    requestType: favorite_favorite_pb.GetFavoriteArticleFoldersRequest,
+    responseType: favorite_favorite_pb.GetFavoriteArticleFoldersResponse,
+    requestSerialize: serialize_checkpicks_favorite_v1_GetFavoriteArticleFoldersRequest,
+    requestDeserialize: deserialize_checkpicks_favorite_v1_GetFavoriteArticleFoldersRequest,
+    responseSerialize: serialize_checkpicks_favorite_v1_GetFavoriteArticleFoldersResponse,
+    responseDeserialize: deserialize_checkpicks_favorite_v1_GetFavoriteArticleFoldersResponse,
+  },
   getFavoriteArticleFolderByArticleId: {
     path: '/checkpicks.favorite.v1.FavoriteService/GetFavoriteArticleFolderByArticleId',
     requestStream: false,

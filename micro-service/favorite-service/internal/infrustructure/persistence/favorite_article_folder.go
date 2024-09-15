@@ -14,10 +14,21 @@ type favoriteArticleFolderPersistence struct {
 	db *sql.DB
 }
 
-func NewArticlePersistenceAdapter(db *sql.DB) repository.FavoriteArticleFolderRepository {
+func NewFavoriteArticleFolderPersistence(db *sql.DB) repository.FavoriteArticleFolderRepository {
 	return &favoriteArticleFolderPersistence{
 		db: db,
 	}
+}
+
+func (fafp *favoriteArticleFolderPersistence) GetFavoriteArticleFolders(ctx context.Context, q []qm.QueryMod) (entity.FavoriteArticleFolderSlice, error) {
+	favoriteArticleFolders, err := entity.FavoriteArticleFolders(q...).All(ctx, fafp.db)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, nil
+		}
+		return nil, err
+	}
+	return favoriteArticleFolders, nil
 }
 
 func (fafp *favoriteArticleFolderPersistence) GetFavoriteArticleFolderByID(ctx context.Context, id string, q []qm.QueryMod) (entity.FavoriteArticleFolder, error) {

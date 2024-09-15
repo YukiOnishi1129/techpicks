@@ -6,4 +6,4 @@ user   = "postgres"
 pass   = "postgres"
 sslmode = "disable"
 schema = "public"
-blacklist = ["migrations", "other", "bookmarks", "categories", "articles","trend_articles", "feed_article_relations", "trend_articles", "profiles", "my_feed_folders", "my_feeds", "feeds", "platforms"]
+blacklist = ["migrations", "other", "bookmarks", "categories", "trend_articles", "feed_article_relations", "trend_articles",  "my_feed_folders", "my_feeds", "feeds"]
