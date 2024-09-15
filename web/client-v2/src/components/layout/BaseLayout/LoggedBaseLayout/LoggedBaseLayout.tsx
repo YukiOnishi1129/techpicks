@@ -6,7 +6,8 @@ import { FC, ReactNode } from "react";
 
 import { Header } from "@/components/layout/Header";
 
-import { DesktopSidebar } from "../Sidebar";
+import { getLoggedBaseLayoutQuery } from "./getLoggedBaseLayoutQuery";
+import { DesktopSidebar } from "../../Sidebar";
 
 // import { LoggedBottomNavigationMenu } from "../BottomNavigationMenu";
 // import { DesktopSidebar } from "../Sidebar";
@@ -16,10 +17,14 @@ type LoggedBaseLayoutProps = {
   children: ReactNode;
 };
 
-export const LoggedBaseLayout: FC<LoggedBaseLayoutProps> = ({
+export const LoggedBaseLayout: FC<LoggedBaseLayoutProps> = async ({
   user,
   children,
 }) => {
+  const { data } = await getLoggedBaseLayoutQuery({
+    isAllFetch: true,
+    isFolderOnly: true,
+  });
   //   const myFeedFolderRes = await fetchMyFeedFoldersAPI({});
   //   const favoriteArticleFolderRes = await fetchFavoriteArticleFoldersAPI({});
   return (
