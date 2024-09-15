@@ -34,3 +34,13 @@ type FavoriteArticleFolder implements Node {
   createdAt: Int!
   updatedAt: Int!
 }
+
+type FavoriteArticleFolderConnection {
+  edges: [FavoriteArticleFolderEdge!]!
+  pageInfo: PageInfo!
+}
+
+type FavoriteArticleFolderEdge {
+  cursor: String!
+  node: FavoriteArticleFolder!
+}
