@@ -6,18 +6,7 @@ import { getClient } from "@/lib/apollo/client";
 
 import { BookmarksInput } from "@/graphql/type";
 
-import { BookmarkListFragment } from "../components/List";
-
-const BookmarkTemplateFragment = graphql(
-  `
-    fragment BookmarkTemplateFragment on Query {
-      bookmarks(input: $input) {
-        ...BookmarkListFragment
-      }
-    }
-  `,
-  [BookmarkListFragment]
-);
+import { BookmarkTemplateFragment } from "../components/Template/BookmarkTemplate/BookmarkTemplateFragment";
 
 const BookmarkListQuery = graphql(
   `
