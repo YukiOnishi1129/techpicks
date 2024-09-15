@@ -25,6 +25,8 @@ export const LoggedBaseLayout: FC<LoggedBaseLayoutProps> = async ({
     isAllFetch: true,
     isFolderOnly: true,
   });
+  console.log("❤️‍🔥");
+  console.log(data);
   //   const myFeedFolderRes = await fetchMyFeedFoldersAPI({});
   //   const favoriteArticleFolderRes = await fetchFavoriteArticleFoldersAPI({});
   return (
