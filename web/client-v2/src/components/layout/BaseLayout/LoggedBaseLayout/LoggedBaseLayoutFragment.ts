@@ -1,14 +1,12 @@
 import { graphql } from "gql.tada";
 
-export const LoggedBaseLayoutFragment = graphql(`
-  fragment LoggedBaseLayoutFragment on Query {
-    favoriteArticleFolders(input: $input) {
-      edges {
-        node {
-          id
-          title
-        }
-      }
+import { DeskTopSidebarFragment } from "../../Sidebar/DesktopSidebar/DesktopSidebarFragment";
+
+export const LoggedBaseLayoutFragment = graphql(
+  `
+    fragment LoggedBaseLayoutFragment on Query {
+      ...DeskTopSidebarFragment
     }
-  }
-`);
+  `,
+  [DeskTopSidebarFragment]
+);

@@ -4,8 +4,6 @@
 
 import { graphql, readFragment } from "gql.tada";
 
-import { FavoriteArticleFolderListTemplateFragment } from "@/features/favorites/components/Template/FavoriteArticleFolderListTemplate/FavoriteArticleFolderListTemplateFragment";
-
 import { getClient } from "@/lib/apollo/client";
 
 import { FavoriteArticleFoldersInput } from "@/graphql/type";
@@ -37,7 +35,7 @@ export const getLoggedBaseLayoutQuery = async (
     errorPolicy: "all",
   });
 
-  const newData = readFragment(FavoriteArticleFolderListTemplateFragment, data);
+  const newData = readFragment(LoggedBaseLayoutFragment, data);
 
   return { data: newData, error, loading };
 };
