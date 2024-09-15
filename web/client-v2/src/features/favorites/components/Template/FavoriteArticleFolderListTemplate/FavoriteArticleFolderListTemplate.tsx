@@ -6,6 +6,7 @@ import { getFavoriteArticleFolderListQuery } from "@/features/favorites/actions/
 
 import { CreateFavoriteArticleFolderDialog } from "../../Dialog";
 import { FavoriteArticleFolderList } from "../../List";
+import { FavoriteArticleFolderKeywordSearchForm } from "../../Search";
 
 type FavoriteArticleFolderListTemplateProps = {
   user: User;
@@ -25,7 +26,7 @@ export const FavoriteArticleFolderListTemplate: FC<
         </h1>
         <div className="mt-2 flex w-full items-center justify-between">
           <div className="w-4/5 pr-4">
-            {/* <FavoriteArticleFolderKeywordSearchInput keyword={keyword} /> */}
+            <FavoriteArticleFolderKeywordSearchForm keyword={keyword} />
           </div>
           <div>
             <CreateFavoriteArticleFolderDialog />

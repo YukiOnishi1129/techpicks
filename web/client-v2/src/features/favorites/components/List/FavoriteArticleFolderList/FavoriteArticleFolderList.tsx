@@ -158,7 +158,7 @@ export const FavoriteArticleFolderList: FC<FavoriteArticleFolderListProps> = ({
             ))}
           </div>
           <div ref={observerTarget}>
-            {hashMore && (
+            {hashMore && isNextPage && (
               <div className="flex justify-center py-4">
                 <Loader />
               </div>
