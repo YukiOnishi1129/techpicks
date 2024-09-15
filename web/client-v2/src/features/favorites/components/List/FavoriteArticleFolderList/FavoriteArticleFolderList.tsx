@@ -38,6 +38,7 @@ export const FavoriteArticleFolderList: FC<FavoriteArticleFolderListProps> = ({
   const [hashMore, setHashMore] = useState(true);
   const [offset, setOffset] = useState(1);
   const [endCursor, setEndCursor] = useState(fragment.pageInfo.endCursor);
+  const [isNextPage, setIsNextPage] = useState(true);
 
   const flatFolders = edges ? edges.flatMap((edge) => edge.node) : [];
 
@@ -79,8 +80,9 @@ export const FavoriteArticleFolderList: FC<FavoriteArticleFolderListProps> = ({
   );
 
   const loadMore = useCallback(async () => {
+    if (!isNextPage) return;
     const { data: res, error } = await getFavoriteArticleFolderListQuery({
-      first: 20,
+      first: 9,
       after: endCursor,
       keyword: keyword,
     });
@@ -90,16 +92,18 @@ export const FavoriteArticleFolderList: FC<FavoriteArticleFolderListProps> = ({
       FavoriteArticleFolderListFragment,
       res.favoriteArticleFolders
     );
-    if (newFolders.pageInfo.hasNextPage) {
+
+    if (newFolders.pageInfo?.endCursor) {
       const endCursor = newFolders.pageInfo?.endCursor || null;
       setEndCursor(endCursor);
     }
+    if (!newFolders.pageInfo.hasNextPage) setIsNextPage(false);
 
     if (newFolders.edges.length > 0) {
       setEdges((prev) => [...prev, ...newFolders.edges]);
       setHashMore(newFolders.edges.length > 0);
     }
-  }, [endCursor, keyword]);
+  }, [endCursor, keyword, isNextPage]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -139,17 +143,17 @@ export const FavoriteArticleFolderList: FC<FavoriteArticleFolderListProps> = ({
 
   return (
     <>
-      {edges.length === 0 ? (
+      {flatFolders.length === 0 ? (
         <div className="flex flex-col items-center justify-center ">
           <NotFoundList message="No folder found" />
         </div>
       ) : (
         <div className="m-auto mb-8">
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {edges.map((favoriteArticleFolder, i) => (
+            {flatFolders.map((favoriteArticleFolder, i) => (
               <FavoriteArticleFolderCard
                 key={`favorite-folder-${i}`}
-                data={favoriteArticleFolder.node}
+                data={favoriteArticleFolder}
               />
             ))}
           </div>
