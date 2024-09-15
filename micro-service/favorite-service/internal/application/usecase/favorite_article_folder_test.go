@@ -45,6 +45,7 @@ func Test_UseCase_GetFavoriteArticleFolders(t *testing.T) {
 	articleID3 := mockArticles[2].ID
 	userID1 := mockProfiles[0].ID
 	userID2 := mockProfiles[1].ID
+	userID3 := mockProfiles[2].ID
 
 	test := map[string]struct {
 		recordFavoriteArticleFolders []entity.FavoriteArticleFolder
@@ -728,6 +729,101 @@ func Test_UseCase_GetFavoriteArticleFolders(t *testing.T) {
 				PageInfo: &fpb.PageInfo{
 					HasNextPage: false,
 					EndCursor:   fafID1.String(),
+				},
+			},
+		},
+		"Success: fetch 0 record": {
+			recordFavoriteArticleFolders: []entity.FavoriteArticleFolder{
+				{
+					ID:     fafID1.String(),
+					UserID: userID1,
+					Title:  "faf_title1",
+					Description: null.String{
+						Valid:  true,
+						String: "faf_description1",
+					},
+				},
+				{
+					ID:     fafID2.String(),
+					UserID: userID1,
+					Title:  "faf_title2",
+					Description: null.String{
+						Valid:  true,
+						String: "faf_description2",
+					},
+				},
+				{
+					ID:     fafID3.String(),
+					UserID: userID2,
+					Title:  "faf_title3",
+					Description: null.String{
+						Valid:  true,
+						String: "faf_description3",
+					},
+				},
+				{
+					ID:     fafID4.String(),
+					UserID: userID1,
+					Title:  "faf_title4",
+					Description: null.String{
+						Valid:  true,
+						String: "faf_description4",
+					},
+				},
+			},
+			recordFavoriteArticles: []entity.FavoriteArticle{
+				{
+					ID:                      faID1.String(),
+					UserID:                  userID1,
+					FavoriteArticleFolderID: fafID1.String(),
+					PlatformID: null.String{
+						Valid:  true,
+						String: platformID1,
+					},
+					ArticleID:   articleID1,
+					Title:       "fa_title1",
+					Description: "fa_description1",
+					ArticleURL:  "https://example.com/article1",
+					PublishedAt: null.TimeFrom(time.Unix(publishedAt, 0)),
+					AuthorName: null.String{
+						Valid:  true,
+						String: "author1",
+					},
+					Tags: null.String{
+						Valid:  true,
+						String: "tag1",
+					},
+					ThumbnailURL:       "https://example.com/thumbnail1",
+					PlatformName:       "platform1",
+					PlatformURL:        "https://example.com/platform1",
+					PlatformFaviconURL: "https://example.com/favicon1",
+					IsEng:              true,
+					IsRead:             false,
+				},
+				{
+					ID:                      faID2.String(),
+					UserID:                  userID1,
+					FavoriteArticleFolderID: fafID1.String(),
+					ArticleID:               articleID2,
+					Title:                   "fa_title2",
+					Description:             "fa_description2",
+					ArticleURL:              "https://example.com/article2",
+					ThumbnailURL:            "https://example.com/thumbnail2",
+					PlatformName:            "platform2",
+					PlatformURL:             "https://example.com/platform2",
+					PlatformFaviconURL:      "https://example.com/favicon2",
+					IsEng:                   true,
+					IsRead:                  false,
+				},
+			},
+			arg: &fpb.GetFavoriteArticleFoldersRequest{
+				UserId: userID3,
+			},
+			want: &fpb.GetFavoriteArticleFoldersResponse{
+				FavoriteArticleFoldersEdge: []*fpb.FavoriteArticleFolderEdge{},
+				PageInfo: &fpb.PageInfo{
+					HasNextPage: false,
+					EndCursor:   "",
 				},
 			},
 		},
