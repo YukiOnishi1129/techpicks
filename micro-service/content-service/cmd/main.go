@@ -83,10 +83,10 @@ func main() {
 
 	// application layer
 	// usecase layer
-	auc := usecase.NewArticleUseCase(apa, bea)
+	cuc := usecase.NewContentUseCase(apa, bea)
 
 	// interface layer
-	chd := handler.NewContentHandler(auc)
+	chd := handler.NewContentHandler(cuc)
 
 	// crate a listener on TCP port 3001
 	port := os.Getenv("CONTENT_SERVICE_CONTAINER_PORT")

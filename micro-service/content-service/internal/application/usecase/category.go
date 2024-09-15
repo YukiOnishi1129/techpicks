@@ -6,7 +6,7 @@ import (
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
-func (au *articleUseCase) convertPBCategory(c entity.Category) *cpb.Category {
+func (cu *contentUseCase) convertPBCategory(c entity.Category) *cpb.Category {
 	return &cpb.Category{
 		Id:        c.ID,
 		Name:      c.Name,
