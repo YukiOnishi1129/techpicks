@@ -184,6 +184,7 @@ export type FavoriteArticle = Node & {
   articleUrl: Scalars["String"]["output"];
   authorName?: Maybe<Scalars["String"]["output"]>;
   createdAt: Scalars["Int"]["output"];
+  description?: Maybe<Scalars["String"]["output"]>;
   id: Scalars["ID"]["output"];
   isEng: Scalars["Boolean"]["output"];
   isPrivate: Scalars["Boolean"]["output"];
@@ -210,6 +211,28 @@ export type FavoriteArticleFolder = Node & {
   title: Scalars["String"]["output"];
   updatedAt: Scalars["Int"]["output"];
   userId: Scalars["String"]["output"];
+};
+
+export type FavoriteArticleFolderConnection = {
+  __typename?: "FavoriteArticleFolderConnection";
+  edges: Array<FavoriteArticleFolderEdge>;
+  pageInfo: PageInfo;
+};
+
+export type FavoriteArticleFolderEdge = {
+  __typename?: "FavoriteArticleFolderEdge";
+  cursor: Scalars["String"]["output"];
+  node: FavoriteArticleFolder;
+};
+
+export type FavoriteArticleFoldersInput = {
+  after?: InputMaybe<Scalars["String"]["input"]>;
+  before?: InputMaybe<Scalars["String"]["input"]>;
+  first?: InputMaybe<Scalars["Int"]["input"]>;
+  isAllFetch?: InputMaybe<Scalars["Boolean"]["input"]>;
+  isFolderOnly?: InputMaybe<Scalars["Boolean"]["input"]>;
+  keyword?: InputMaybe<Scalars["String"]["input"]>;
+  last?: InputMaybe<Scalars["Int"]["input"]>;
 };
 
 /** Feed schema */
@@ -313,6 +336,7 @@ export type Query = {
   articles: ArticleConnection;
   /** Get bookmarks */
   bookmarks: BookmarkConnection;
+  favoriteArticleFolders: FavoriteArticleFolderConnection;
 };
 
 export type QueryArticleOpgArgs = {
@@ -325,6 +349,10 @@ export type QueryArticlesArgs = {
 
 export type QueryBookmarksArgs = {
   input: BookmarksInput;
+};
+
+export type QueryFavoriteArticleFoldersArgs = {
+  input?: InputMaybe<FavoriteArticleFoldersInput>;
 };
 
 export type OgpPreviewContentFragmentFragment = {
@@ -716,6 +744,115 @@ export type CreateFavoriteArticleFolderMutationMutation = {
   };
 };
 
+export type FavoriteArticleFolderListTemplateFragmentFragment = {
+  __typename?: "Query";
+  favoriteArticleFolders: {
+    __typename?: "FavoriteArticleFolderConnection";
+    pageInfo: {
+      __typename?: "PageInfo";
+      hasNextPage: boolean;
+      hasPreviousPage: boolean;
+      startCursor?: string | null;
+      endCursor?: string | null;
+    };
+    edges: Array<{
+      __typename?: "FavoriteArticleFolderEdge";
+      node: {
+        __typename?: "FavoriteArticleFolder";
+        id: string;
+        title: string;
+        description?: string | null;
+        favoriteArticles?: Array<{
+          __typename?: "FavoriteArticle";
+          id: string;
+          title: string;
+          articleUrl: string;
+          thumbnailUrl: string;
+          createdAt: number;
+        }> | null;
+      };
+    }>;
+  };
+};
+
+export type FavoriteArticleFolderListQueryQueryVariables = Exact<{
+  input: FavoriteArticleFoldersInput;
+}>;
+
+export type FavoriteArticleFolderListQueryQuery = {
+  __typename?: "Query";
+  favoriteArticleFolders: {
+    __typename?: "FavoriteArticleFolderConnection";
+    pageInfo: {
+      __typename?: "PageInfo";
+      hasNextPage: boolean;
+      hasPreviousPage: boolean;
+      startCursor?: string | null;
+      endCursor?: string | null;
+    };
+    edges: Array<{
+      __typename?: "FavoriteArticleFolderEdge";
+      node: {
+        __typename?: "FavoriteArticleFolder";
+        id: string;
+        title: string;
+        description?: string | null;
+        favoriteArticles?: Array<{
+          __typename?: "FavoriteArticle";
+          id: string;
+          title: string;
+          articleUrl: string;
+          thumbnailUrl: string;
+          createdAt: number;
+        }> | null;
+      };
+    }>;
+  };
+};
+
+export type FavoriteArticleFolderCardFragmentFragment = {
+  __typename?: "FavoriteArticleFolder";
+  id: string;
+  title: string;
+  description?: string | null;
+  favoriteArticles?: Array<{
+    __typename?: "FavoriteArticle";
+    id: string;
+    title: string;
+    articleUrl: string;
+    thumbnailUrl: string;
+    createdAt: number;
+  }> | null;
+};
+
+export type FavoriteArticleFolderListFragmentFragment = {
+  __typename?: "FavoriteArticleFolderConnection";
+  pageInfo: {
+    __typename?: "PageInfo";
+    hasNextPage: boolean;
+    hasPreviousPage: boolean;
+    startCursor?: string | null;
+    endCursor?: string | null;
+  };
+  edges: Array<{
+    __typename?: "FavoriteArticleFolderEdge";
+    node: {
+      __typename?: "FavoriteArticleFolder";
+      id: string;
+      title: string;
+      description?: string | null;
+      favoriteArticles?: Array<{
+        __typename?: "FavoriteArticle";
+        id: string;
+        title: string;
+        articleUrl: string;
+        thumbnailUrl: string;
+        createdAt: number;
+      }> | null;
+    };
+  }>;
+};
+
 export type TrendArticleDashboardTemplateFragmentFragment = {
   __typename?: "Query";
   articles: {
@@ -1017,6 +1154,44 @@ export const BookmarkTemplateFragmentFragmentDoc = gql`
     }
   }
   ${BookmarkListFragmentFragmentDoc}
+`;
+export const FavoriteArticleFolderCardFragmentFragmentDoc = gql`
+  fragment FavoriteArticleFolderCardFragment on FavoriteArticleFolder {
+    id
+    title
+    description
+    favoriteArticles {
+      id
+      title
+      articleUrl
+      thumbnailUrl
+      createdAt
+    }
+  }
+`;
+export const FavoriteArticleFolderListFragmentFragmentDoc = gql`
+  fragment FavoriteArticleFolderListFragment on FavoriteArticleFolderConnection {
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      startCursor
+      endCursor
+    }
+    edges {
+      node {
+        ...FavoriteArticleFolderCardFragment
+      }
+    }
+  }
+  ${FavoriteArticleFolderCardFragmentFragmentDoc}
+`;
+export const FavoriteArticleFolderListTemplateFragmentFragmentDoc = gql`
+  fragment FavoriteArticleFolderListTemplateFragment on Query {
+    favoriteArticleFolders(input: $input) {
+      ...FavoriteArticleFolderListFragment
+    }
+  }
+  ${FavoriteArticleFolderListFragmentFragmentDoc}
 `;
 export const TrendArticleListFragmentFragmentDoc = gql`
   fragment TrendArticleListFragment on ArticleConnection {
@@ -1490,6 +1665,85 @@ export type CreateFavoriteArticleFolderMutationMutationOptions =
     CreateFavoriteArticleFolderMutationMutation,
     CreateFavoriteArticleFolderMutationMutationVariables
   >;
+export const FavoriteArticleFolderListQueryDocument = gql`
+  query FavoriteArticleFolderListQuery($input: FavoriteArticleFoldersInput!) {
+    ...FavoriteArticleFolderListTemplateFragment
+  }
+  ${FavoriteArticleFolderListTemplateFragmentFragmentDoc}
+`;
+
+/**
+ * __useFavoriteArticleFolderListQueryQuery__
+ *
+ * To run a query within a React component, call `useFavoriteArticleFolderListQueryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFavoriteArticleFolderListQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFavoriteArticleFolderListQueryQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useFavoriteArticleFolderListQueryQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    FavoriteArticleFolderListQueryQuery,
+    FavoriteArticleFolderListQueryQueryVariables
+  > &
+    (
+      | {
+          variables: FavoriteArticleFolderListQueryQueryVariables;
+          skip?: boolean;
+        }
+      | { skip: boolean }
+    )
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    FavoriteArticleFolderListQueryQuery,
+    FavoriteArticleFolderListQueryQueryVariables
+  >(FavoriteArticleFolderListQueryDocument, options);
+}
+export function useFavoriteArticleFolderListQueryLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    FavoriteArticleFolderListQueryQuery,
+    FavoriteArticleFolderListQueryQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    FavoriteArticleFolderListQueryQuery,
+    FavoriteArticleFolderListQueryQueryVariables
+  >(FavoriteArticleFolderListQueryDocument, options);
+}
+export function useFavoriteArticleFolderListQuerySuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    FavoriteArticleFolderListQueryQuery,
+    FavoriteArticleFolderListQueryQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    FavoriteArticleFolderListQueryQuery,
+    FavoriteArticleFolderListQueryQueryVariables
+  >(FavoriteArticleFolderListQueryDocument, options);
+}
+export type FavoriteArticleFolderListQueryQueryHookResult = ReturnType<
+  typeof useFavoriteArticleFolderListQueryQuery
+>;
+export type FavoriteArticleFolderListQueryLazyQueryHookResult = ReturnType<
+  typeof useFavoriteArticleFolderListQueryLazyQuery
+>;
+export type FavoriteArticleFolderListQuerySuspenseQueryHookResult = ReturnType<
+  typeof useFavoriteArticleFolderListQuerySuspenseQuery
+>;
+export type FavoriteArticleFolderListQueryQueryResult = Apollo.QueryResult<
+  FavoriteArticleFolderListQueryQuery,
+  FavoriteArticleFolderListQueryQueryVariables
+>;
 export const TrendArticleListQueryDocument = gql`
   query TrendArticleListQuery($input: ArticlesInput!) {
     ...TrendArticleDashboardTemplateFragment
