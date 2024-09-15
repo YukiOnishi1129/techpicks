@@ -1,8 +1,10 @@
 import { UseGuards } from '@nestjs/common';
-import { Resolver, Mutation, Args, Context } from '@nestjs/graphql';
+import { Resolver, Mutation, Args, Context, Query } from '@nestjs/graphql';
 import {
   CreateFavoriteArticleFolderInput,
   FavoriteArticleFolder,
+  FavoriteArticleFolderConnection,
+  FavoriteArticleFoldersInput,
 } from 'src/graphql/types/graphql';
 
 import { FavoriteService } from './favorite.service';
@@ -12,6 +14,16 @@ import { SupabaseAuthGuard } from '../auth/auth.guard';
 @Resolver()
 export class FavoriteResolver {
   constructor(private readonly favoriteService: FavoriteService) {}
+
+  @Query(() => FavoriteArticleFolderConnection)
+  @UseGuards(SupabaseAuthGuard)
+  async favoriteArticleFolders(
+    @Args('input') input: FavoriteArticleFoldersInput,
+    @Context() context: GraphQLContext,
+  ): Promise<FavoriteArticleFolderConnection> {
+    const userId = context.req.user.id;
+    return await this.favoriteService.getFavoriteArticleFolders(userId, input);
+  }
 
   @Mutation(() => FavoriteArticleFolder)
   @UseGuards(SupabaseAuthGuard)

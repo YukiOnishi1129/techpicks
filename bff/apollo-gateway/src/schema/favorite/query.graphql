@@ -1,0 +1,15 @@
+type Query {
+  favoriteArticleFolders(
+    input: FavoriteArticleFoldersInput
+  ): FavoriteArticleFolderConnection!
+}
+
+input FavoriteArticleFoldersInput {
+  keyword: String
+  isFolderOnly: Boolean
+  isAllFetch: Boolean
+  first: Int
+  after: String
+  last: Int
+  before: String
+}

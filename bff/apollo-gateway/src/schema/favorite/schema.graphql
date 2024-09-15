@@ -7,6 +7,7 @@ type FavoriteArticle implements Node {
   platformId: String
   userId: String!
   title: String!
+  description: String
   thumbnailUrl: String!
   articleUrl: String!
   platformFaviconUrl: String!
@@ -33,4 +34,14 @@ type FavoriteArticleFolder implements Node {
   favoriteArticles: [FavoriteArticle!]
   createdAt: Int!
   updatedAt: Int!
+}
+
+type FavoriteArticleFolderConnection {
+  edges: [FavoriteArticleFolderEdge!]!
+  pageInfo: PageInfo!
+}
+
+type FavoriteArticleFolderEdge {
+  cursor: String!
+  node: FavoriteArticleFolder!
 }

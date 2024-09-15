@@ -64,6 +64,16 @@ export class CreateFavoriteArticleFolderInput {
     description?: Nullable<string>;
 }
 
+export class FavoriteArticleFoldersInput {
+    keyword?: Nullable<string>;
+    isFolderOnly?: Nullable<boolean>;
+    isAllFetch?: Nullable<boolean>;
+    first?: Nullable<number>;
+    after?: Nullable<string>;
+    last?: Nullable<number>;
+    before?: Nullable<string>;
+}
+
 export interface Node {
     id: string;
 }
@@ -74,6 +84,8 @@ export abstract class IQuery {
     abstract articleOpg(articleUrl: string): ArticleOGP | Promise<ArticleOGP>;
 
     abstract bookmarks(input: BookmarksInput): BookmarkConnection | Promise<BookmarkConnection>;
+
+    abstract favoriteArticleFolders(input?: Nullable<FavoriteArticleFoldersInput>): FavoriteArticleFolderConnection | Promise<FavoriteArticleFolderConnection>;
 }
 
 export class Article implements Node {
@@ -178,6 +190,7 @@ export class FavoriteArticle implements Node {
     platformId?: Nullable<string>;
     userId: string;
     title: string;
+    description?: Nullable<string>;
     thumbnailUrl: string;
     articleUrl: string;
     platformFaviconUrl: string;
@@ -201,6 +214,16 @@ export class FavoriteArticleFolder implements Node {
     favoriteArticles?: Nullable<FavoriteArticle[]>;
     createdAt: number;
     updatedAt: number;
+}
+
+export class FavoriteArticleFolderConnection {
+    edges: FavoriteArticleFolderEdge[];
+    pageInfo: PageInfo;
+}
+
+export class FavoriteArticleFolderEdge {
+    cursor: string;
+    node: FavoriteArticleFolder;
 }
 
 export class Feed implements Node {
