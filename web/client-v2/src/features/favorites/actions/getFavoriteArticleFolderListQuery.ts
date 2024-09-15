@@ -1,12 +1,14 @@
-import { graphql } from "gql.tada";
+"use server";
+
+import { graphql, readFragment } from "gql.tada";
 
 import { getClient } from "@/lib/apollo/client";
 
 import { FavoriteArticleFoldersInput } from "@/graphql/type";
 
-import { FavoriteArticleFolderListTemplateFragment } from "../../components/Template/FavoriteArticleFolderListTemplate/FavoriteArticleFolderListTemplateFragment";
+import { FavoriteArticleFolderListTemplateFragment } from "../components/Template/FavoriteArticleFolderListTemplate/FavoriteArticleFolderListTemplateFragment";
 
-export const FavoriteArticleFolderListQuery = graphql(
+const FavoriteArticleFolderListQuery = graphql(
   `
     query FavoriteArticleFolderListQuery($input: FavoriteArticleFoldersInput!) {
       ...FavoriteArticleFolderListTemplateFragment
@@ -15,10 +17,10 @@ export const FavoriteArticleFolderListQuery = graphql(
   [FavoriteArticleFolderListTemplateFragment]
 );
 
-export const favoriteArticleFolderListQuery = (
+export const getFavoriteArticleFolderListQuery = async (
   input: FavoriteArticleFoldersInput
 ) => {
-  const query = getClient().query({
+  const { data, error, loading } = await getClient().query({
     query: FavoriteArticleFolderListQuery,
     context: {
       fetchOptions: {
@@ -31,5 +33,7 @@ export const favoriteArticleFolderListQuery = (
     errorPolicy: "all",
   });
 
-  return query;
+  const newData = readFragment(FavoriteArticleFolderListTemplateFragment, data);
+
+  return { data: newData, error, loading };
 };
