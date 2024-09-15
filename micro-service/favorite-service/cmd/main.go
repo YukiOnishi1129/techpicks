@@ -41,14 +41,16 @@ func main() {
 	// infrastructure layer
 	// persistence layer
 	fafps := persistence.NewFavoriteArticleFolderPersistence(db)
+	faps := persistence.NewFavoriteArticlePersistence(db)
 
 	// adapter layer
 	// persistence layer
-	fafap := persistenceadapter.NewFavoriteArticleFolderPersistenceAdapter(fafps)
+	fafpa := persistenceadapter.NewFavoriteArticleFolderPersistenceAdapter(fafps)
+	fapa := persistenceadapter.NewFavoriteArticlePersistenceAdapter(faps)
 
 	// application layer
 	// usecase layer
-	fafu := usecase.NewFavoriteUseCase(fafap)
+	fafu := usecase.NewFavoriteUseCase(fafpa, fapa)
 
 	// interface layer
 	fhd := handler.NewFavoriteHandler(fafu)

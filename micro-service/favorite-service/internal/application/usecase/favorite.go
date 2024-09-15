@@ -14,10 +14,12 @@ type FavoriteUseCase interface {
 
 type favoriteUseCase struct {
 	favoriteArticleFolderPersistenceAdapter persistenceadapter.FavoriteArticleFolderPersistenceAdapter
+	favoriteArticlePersistenceAdapter       persistenceadapter.FavoriteArticlePersistenceAdapter
 }
 
-func NewFavoriteUseCase(fafpa persistenceadapter.FavoriteArticleFolderPersistenceAdapter) FavoriteUseCase {
+func NewFavoriteUseCase(fafpa persistenceadapter.FavoriteArticleFolderPersistenceAdapter, fapa persistenceadapter.FavoriteArticlePersistenceAdapter) FavoriteUseCase {
 	return &favoriteUseCase{
 		favoriteArticleFolderPersistenceAdapter: fafpa,
+		favoriteArticlePersistenceAdapter:       fapa,
 	}
 }

@@ -26,7 +26,11 @@ func (fu *favoriteUseCase) GetFavoriteArticleFolders(ctx context.Context, req *f
 	}
 
 	for i, f := range fafs {
-		faf := fu.convertPBFavoriteArticleFolder(f)
+		faLimit := 1
+		if req.GetFavoriteArticleLimit().GetValue() != 0 {
+			faLimit = int(req.GetFavoriteArticleLimit().GetValue())
+		}
+		faf := fu.convertPBFavoriteArticleFolder(ctx, f, &faLimit)
 		resFafs[i] = &fpb.FavoriteArticleFolderEdge{
 			Cursor: f.ID,
 			Node:   faf,
@@ -48,11 +52,11 @@ func (fu *favoriteUseCase) CreateFavoriteArticleFolder(ctx context.Context, req 
 		return &fpb.CreateFavoriteArticleFolderResponse{}, err
 	}
 	return &fpb.CreateFavoriteArticleFolderResponse{
-		FavoriteArticleFolder: fu.convertPBFavoriteArticleFolder(&f),
+		FavoriteArticleFolder: fu.convertPBFavoriteArticleFolder(ctx, &f, nil),
 	}, nil
 }
 
-func (fu *favoriteUseCase) convertPBFavoriteArticleFolder(f *entity.FavoriteArticleFolder) *fpb.FavoriteArticleFolder {
+func (fu *favoriteUseCase) convertPBFavoriteArticleFolder(ctx context.Context, f *entity.FavoriteArticleFolder, faLimit *int) *fpb.FavoriteArticleFolder {
 	faf := &fpb.FavoriteArticleFolder{
 		Id:               f.ID,
 		UserId:           f.UserID,
@@ -63,16 +67,19 @@ func (fu *favoriteUseCase) convertPBFavoriteArticleFolder(f *entity.FavoriteArti
 		FavoriteArticles: make([]*fpb.FavoriteArticle, 0),
 	}
 
-	if f.R != nil && f.R.FavoriteArticles != nil {
-		resFas := make([]*fpb.FavoriteArticle, len(f.R.FavoriteArticles))
-		if len(f.R.FavoriteArticles) != 0 {
-			for i, fa := range f.R.FavoriteArticles {
-				resFa := fu.convertPBFavoriteArticle(fa)
-				resFas[i] = resFa
-			}
-		}
-		faf.FavoriteArticles = resFas
+	fas, err := fu.favoriteArticlePersistenceAdapter.GetFavoriteArticlesByFavoriteArticleFolderID(ctx, f.ID, f.UserID, faLimit)
+	if err != nil {
+		return nil
 	}
+
+	resFas := make([]*fpb.FavoriteArticle, len(fas))
+	if len(fas) != 0 {
+		for i, fa := range fas {
+			resFa := fu.convertPBFavoriteArticle(fa)
+			resFas[i] = resFa
+		}
+	}
+	faf.FavoriteArticles = resFas
 
 	return faf
 }

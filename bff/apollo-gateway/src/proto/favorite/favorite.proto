@@ -19,6 +19,7 @@ message GetFavoriteArticleFoldersRequest {
     google.protobuf.StringValue keyword = 2;
     google.protobuf.StringValue cursor = 3;
     google.protobuf.Int64Value limit = 4;
+    google.protobuf.Int64Value favorite_article_limit = 5;
 }
 
 message GetFavoriteArticleFoldersResponse {

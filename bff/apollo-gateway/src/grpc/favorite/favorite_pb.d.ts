@@ -27,6 +27,11 @@ export class GetFavoriteArticleFoldersRequest extends jspb.Message {
     getLimit(): google_protobuf_wrappers_pb.Int64Value | undefined;
     setLimit(value?: google_protobuf_wrappers_pb.Int64Value): GetFavoriteArticleFoldersRequest;
 
+    hasFavoriteArticleLimit(): boolean;
+    clearFavoriteArticleLimit(): void;
+    getFavoriteArticleLimit(): google_protobuf_wrappers_pb.Int64Value | undefined;
+    setFavoriteArticleLimit(value?: google_protobuf_wrappers_pb.Int64Value): GetFavoriteArticleFoldersRequest;
+
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): GetFavoriteArticleFoldersRequest.AsObject;
     static toObject(includeInstance: boolean, msg: GetFavoriteArticleFoldersRequest): GetFavoriteArticleFoldersRequest.AsObject;
@@ -43,6 +48,7 @@ export namespace GetFavoriteArticleFoldersRequest {
         keyword?: google_protobuf_wrappers_pb.StringValue.AsObject,
         cursor?: google_protobuf_wrappers_pb.StringValue.AsObject,
         limit?: google_protobuf_wrappers_pb.Int64Value.AsObject,
+        favoriteArticleLimit?: google_protobuf_wrappers_pb.Int64Value.AsObject,
     }
 }
 

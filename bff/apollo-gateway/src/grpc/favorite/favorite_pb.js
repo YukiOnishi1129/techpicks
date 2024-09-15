@@ -302,7 +302,8 @@ proto.checkpicks.favorite.v1.GetFavoriteArticleFoldersRequest.toObject = functio
     userId: jspb.Message.getFieldWithDefault(msg, 1, ""),
     keyword: (f = msg.getKeyword()) && google_protobuf_wrappers_pb.StringValue.toObject(includeInstance, f),
     cursor: (f = msg.getCursor()) && google_protobuf_wrappers_pb.StringValue.toObject(includeInstance, f),
-    limit: (f = msg.getLimit()) && google_protobuf_wrappers_pb.Int64Value.toObject(includeInstance, f)
+    limit: (f = msg.getLimit()) && google_protobuf_wrappers_pb.Int64Value.toObject(includeInstance, f),
+    favoriteArticleLimit: (f = msg.getFavoriteArticleLimit()) && google_protobuf_wrappers_pb.Int64Value.toObject(includeInstance, f)
   };
 
   if (includeInstance) {
@@ -357,6 +358,11 @@ proto.checkpicks.favorite.v1.GetFavoriteArticleFoldersRequest.deserializeBinaryF
       var value = new google_protobuf_wrappers_pb.Int64Value;
       reader.readMessage(value,google_protobuf_wrappers_pb.Int64Value.deserializeBinaryFromReader);
       msg.setLimit(value);
+      break;
+    case 5:
+      var value = new google_protobuf_wrappers_pb.Int64Value;
+      reader.readMessage(value,google_protobuf_wrappers_pb.Int64Value.deserializeBinaryFromReader);
+      msg.setFavoriteArticleLimit(value);
       break;
     default:
       reader.skipField();
@@ -414,6 +420,14 @@ proto.checkpicks.favorite.v1.GetFavoriteArticleFoldersRequest.serializeBinaryToW
   if (f != null) {
     writer.writeMessage(
       4,
+      f,
+      google_protobuf_wrappers_pb.Int64Value.serializeBinaryToWriter
+    );
+  }
+  f = message.getFavoriteArticleLimit();
+  if (f != null) {
+    writer.writeMessage(
+      5,
       f,
       google_protobuf_wrappers_pb.Int64Value.serializeBinaryToWriter
     );
@@ -547,6 +561,43 @@ proto.checkpicks.favorite.v1.GetFavoriteArticleFoldersRequest.prototype.clearLim
  */
 proto.checkpicks.favorite.v1.GetFavoriteArticleFoldersRequest.prototype.hasLimit = function() {
   return jspb.Message.getField(this, 4) != null;
+};
+
+
+/**
+ * optional google.protobuf.Int64Value favorite_article_limit = 5;
+ * @return {?proto.google.protobuf.Int64Value}
+ */
+proto.checkpicks.favorite.v1.GetFavoriteArticleFoldersRequest.prototype.getFavoriteArticleLimit = function() {
+  return /** @type{?proto.google.protobuf.Int64Value} */ (
+    jspb.Message.getWrapperField(this, google_protobuf_wrappers_pb.Int64Value, 5));
+};
+
+
+/**
+ * @param {?proto.google.protobuf.Int64Value|undefined} value
+ * @return {!proto.checkpicks.favorite.v1.GetFavoriteArticleFoldersRequest} returns this
+*/
+proto.checkpicks.favorite.v1.GetFavoriteArticleFoldersRequest.prototype.setFavoriteArticleLimit = function(value) {
+  return jspb.Message.setWrapperField(this, 5, value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.checkpicks.favorite.v1.GetFavoriteArticleFoldersRequest} returns this
+ */
+proto.checkpicks.favorite.v1.GetFavoriteArticleFoldersRequest.prototype.clearFavoriteArticleLimit = function() {
+  return this.setFavoriteArticleLimit(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.checkpicks.favorite.v1.GetFavoriteArticleFoldersRequest.prototype.hasFavoriteArticleLimit = function() {
+  return jspb.Message.getField(this, 5) != null;
 };
 
 
