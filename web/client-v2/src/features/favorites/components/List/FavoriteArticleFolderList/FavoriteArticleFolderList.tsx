@@ -15,6 +15,7 @@ import { useStatusToast } from "@/hooks/useStatusToast";
 import { serverRevalidatePage } from "@/actions/serverRevalidatePage";
 
 import { FavoriteArticleFolderListFragment } from "./FavoriteArticleFolderListFragment";
+import { FavoriteArticleFolderCard } from "../../Card";
 
 type FavoriteArticleFolderListProps = {
   data: FragmentOf<typeof FavoriteArticleFolderListFragment>;
@@ -145,18 +146,12 @@ export const FavoriteArticleFolderList: FC<FavoriteArticleFolderListProps> = ({
       ) : (
         <div className="m-auto mb-8">
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {/* {edges.map((favoriteArticleFolder) => (
+            {edges.map((favoriteArticleFolder, i) => (
               <FavoriteArticleFolderCard
-                key={`${favoriteArticleFolder.id}`}
-                favoriteArticleFolder={favoriteArticleFolder}
-                handleUpdateFavoriteArticleFolder={
-                  handleUpdateFavoriteArticleFolder
-                }
-                handleDeleteFavoriteArticleFolder={
-                  handleDeleteFavoriteArticleFolder
-                }
+                key={`favorite-folder-${i}`}
+                data={favoriteArticleFolder.node}
               />
-            ))} */}
+            ))}
           </div>
           <div ref={observerTarget}>
             {hashMore && (

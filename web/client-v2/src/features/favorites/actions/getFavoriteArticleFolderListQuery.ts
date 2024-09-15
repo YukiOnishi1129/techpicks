@@ -12,19 +12,6 @@ const FavoriteArticleFolderListTemplateFragment = graphql(
   `
     fragment FavoriteArticleFolderListTemplateFragment on Query {
       favoriteArticleFolders(input: $input) {
-        pageInfo {
-          hasNextPage
-          hasPreviousPage
-          startCursor
-          endCursor
-        }
-        edges {
-          node {
-            id
-            title
-            description
-          }
-        }
         ...FavoriteArticleFolderListFragment
       }
     }

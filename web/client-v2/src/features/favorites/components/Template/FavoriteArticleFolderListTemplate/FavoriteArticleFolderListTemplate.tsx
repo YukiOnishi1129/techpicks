@@ -5,6 +5,7 @@ import { FaHeart } from "react-icons/fa";
 import { getFavoriteArticleFolderListQuery } from "@/features/favorites/actions/getFavoriteArticleFolderListQuery";
 
 import { CreateFavoriteArticleFolderDialog } from "../../Dialog";
+import { FavoriteArticleFolderList } from "../../List";
 
 type FavoriteArticleFolderListTemplateProps = {
   user: User;
@@ -15,8 +16,6 @@ export const FavoriteArticleFolderListTemplate: FC<
   FavoriteArticleFolderListTemplateProps
 > = async ({ user, keyword }) => {
   const { data } = await getFavoriteArticleFolderListQuery({ keyword });
-  console.log("🔥");
-  console.log(data.favoriteArticleFolders.edges);
   return (
     <div>
       <div className="fixed z-10 hidden w-[90%] bg-card md:block md:w-[70%] md:px-4">
@@ -35,10 +34,10 @@ export const FavoriteArticleFolderListTemplate: FC<
       </div>
       <div className="h-4 md:h-[120px]" />
 
-      {/* <FavoriteArticleFolderList
-        initialFavoriteArticleFolders={res.data.favoriteArticleFolders}
+      <FavoriteArticleFolderList
+        data={data.favoriteArticleFolders}
         user={user}
-      /> */}
+      />
 
       {/* <div className="fixed bottom-20 right-4 z-50 md:hidden">
         <FavoriteArticleFolderKeyWordSearchDialog keyword={keyword} />
