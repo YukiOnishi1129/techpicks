@@ -6,25 +6,31 @@ import { getClient } from "@/lib/apollo/client";
 
 import { FavoriteArticleFoldersInput } from "@/graphql/type";
 
-const FavoriteArticleFolderListTemplateFragment = graphql(`
-  fragment FavoriteArticleFolderListTemplateFragment on Query {
-    favoriteArticleFolders(input: $input) {
-      pageInfo {
-        hasNextPage
-        hasPreviousPage
-        startCursor
-        endCursor
-      }
-      edges {
-        node {
-          id
-          title
-          description
+import { FavoriteArticleFolderListFragment } from "../components/List/FavoriteArticleFolderList";
+
+const FavoriteArticleFolderListTemplateFragment = graphql(
+  `
+    fragment FavoriteArticleFolderListTemplateFragment on Query {
+      favoriteArticleFolders(input: $input) {
+        pageInfo {
+          hasNextPage
+          hasPreviousPage
+          startCursor
+          endCursor
         }
+        edges {
+          node {
+            id
+            title
+            description
+          }
+        }
+        ...FavoriteArticleFolderListFragment
       }
     }
-  }
-`);
+  `,
+  [FavoriteArticleFolderListFragment]
+);
 
 const FavoriteArticleFolderListQuery = graphql(
   `
