@@ -303,7 +303,9 @@ proto.checkpicks.favorite.v1.GetFavoriteArticleFoldersRequest.toObject = functio
     keyword: (f = msg.getKeyword()) && google_protobuf_wrappers_pb.StringValue.toObject(includeInstance, f),
     cursor: (f = msg.getCursor()) && google_protobuf_wrappers_pb.StringValue.toObject(includeInstance, f),
     limit: (f = msg.getLimit()) && google_protobuf_wrappers_pb.Int64Value.toObject(includeInstance, f),
-    favoriteArticleLimit: (f = msg.getFavoriteArticleLimit()) && google_protobuf_wrappers_pb.Int64Value.toObject(includeInstance, f)
+    favoriteArticleLimit: (f = msg.getFavoriteArticleLimit()) && google_protobuf_wrappers_pb.Int64Value.toObject(includeInstance, f),
+    isFolderOnly: (f = msg.getIsFolderOnly()) && google_protobuf_wrappers_pb.BoolValue.toObject(includeInstance, f),
+    isAllFetch: (f = msg.getIsAllFetch()) && google_protobuf_wrappers_pb.BoolValue.toObject(includeInstance, f)
   };
 
   if (includeInstance) {
@@ -363,6 +365,16 @@ proto.checkpicks.favorite.v1.GetFavoriteArticleFoldersRequest.deserializeBinaryF
       var value = new google_protobuf_wrappers_pb.Int64Value;
       reader.readMessage(value,google_protobuf_wrappers_pb.Int64Value.deserializeBinaryFromReader);
       msg.setFavoriteArticleLimit(value);
+      break;
+    case 6:
+      var value = new google_protobuf_wrappers_pb.BoolValue;
+      reader.readMessage(value,google_protobuf_wrappers_pb.BoolValue.deserializeBinaryFromReader);
+      msg.setIsFolderOnly(value);
+      break;
+    case 7:
+      var value = new google_protobuf_wrappers_pb.BoolValue;
+      reader.readMessage(value,google_protobuf_wrappers_pb.BoolValue.deserializeBinaryFromReader);
+      msg.setIsAllFetch(value);
       break;
     default:
       reader.skipField();
@@ -430,6 +442,22 @@ proto.checkpicks.favorite.v1.GetFavoriteArticleFoldersRequest.serializeBinaryToW
       5,
       f,
       google_protobuf_wrappers_pb.Int64Value.serializeBinaryToWriter
+    );
+  }
+  f = message.getIsFolderOnly();
+  if (f != null) {
+    writer.writeMessage(
+      6,
+      f,
+      google_protobuf_wrappers_pb.BoolValue.serializeBinaryToWriter
+    );
+  }
+  f = message.getIsAllFetch();
+  if (f != null) {
+    writer.writeMessage(
+      7,
+      f,
+      google_protobuf_wrappers_pb.BoolValue.serializeBinaryToWriter
     );
   }
 };
@@ -598,6 +626,80 @@ proto.checkpicks.favorite.v1.GetFavoriteArticleFoldersRequest.prototype.clearFav
  */
 proto.checkpicks.favorite.v1.GetFavoriteArticleFoldersRequest.prototype.hasFavoriteArticleLimit = function() {
   return jspb.Message.getField(this, 5) != null;
+};
+
+
+/**
+ * optional google.protobuf.BoolValue is_folder_only = 6;
+ * @return {?proto.google.protobuf.BoolValue}
+ */
+proto.checkpicks.favorite.v1.GetFavoriteArticleFoldersRequest.prototype.getIsFolderOnly = function() {
+  return /** @type{?proto.google.protobuf.BoolValue} */ (
+    jspb.Message.getWrapperField(this, google_protobuf_wrappers_pb.BoolValue, 6));
+};
+
+
+/**
+ * @param {?proto.google.protobuf.BoolValue|undefined} value
+ * @return {!proto.checkpicks.favorite.v1.GetFavoriteArticleFoldersRequest} returns this
+*/
+proto.checkpicks.favorite.v1.GetFavoriteArticleFoldersRequest.prototype.setIsFolderOnly = function(value) {
+  return jspb.Message.setWrapperField(this, 6, value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.checkpicks.favorite.v1.GetFavoriteArticleFoldersRequest} returns this
+ */
+proto.checkpicks.favorite.v1.GetFavoriteArticleFoldersRequest.prototype.clearIsFolderOnly = function() {
+  return this.setIsFolderOnly(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.checkpicks.favorite.v1.GetFavoriteArticleFoldersRequest.prototype.hasIsFolderOnly = function() {
+  return jspb.Message.getField(this, 6) != null;
+};
+
+
+/**
+ * optional google.protobuf.BoolValue is_all_fetch = 7;
+ * @return {?proto.google.protobuf.BoolValue}
+ */
+proto.checkpicks.favorite.v1.GetFavoriteArticleFoldersRequest.prototype.getIsAllFetch = function() {
+  return /** @type{?proto.google.protobuf.BoolValue} */ (
+    jspb.Message.getWrapperField(this, google_protobuf_wrappers_pb.BoolValue, 7));
+};
+
+
+/**
+ * @param {?proto.google.protobuf.BoolValue|undefined} value
+ * @return {!proto.checkpicks.favorite.v1.GetFavoriteArticleFoldersRequest} returns this
+*/
+proto.checkpicks.favorite.v1.GetFavoriteArticleFoldersRequest.prototype.setIsAllFetch = function(value) {
+  return jspb.Message.setWrapperField(this, 7, value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.checkpicks.favorite.v1.GetFavoriteArticleFoldersRequest} returns this
+ */
+proto.checkpicks.favorite.v1.GetFavoriteArticleFoldersRequest.prototype.clearIsAllFetch = function() {
+  return this.setIsAllFetch(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.checkpicks.favorite.v1.GetFavoriteArticleFoldersRequest.prototype.hasIsAllFetch = function() {
+  return jspb.Message.getField(this, 7) != null;
 };
 
 

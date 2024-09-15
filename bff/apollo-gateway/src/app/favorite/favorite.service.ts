@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import {
   Int64Value,
   StringValue,
+  BoolValue,
 } from 'google-protobuf/google/protobuf/wrappers_pb';
 import {
   CreateFavoriteArticleFolderInput,
@@ -34,6 +35,10 @@ export class FavoriteService {
     if (input?.after) req.setCursor(new StringValue().setValue(input.after));
     if (input?.keyword)
       req.setKeyword(new StringValue().setValue(input.keyword));
+    if (input?.isFolderOnly)
+      req.setIsFolderOnly(new BoolValue().setValue(input.isFolderOnly));
+    if (input?.isAllFetch)
+      req.setIsAllFetch(new BoolValue().setValue(input.isAllFetch));
     const client = this.grpcFavoriteClientService.getGrpcFavoriteService();
 
     return new Promise((resolve, reject) => {

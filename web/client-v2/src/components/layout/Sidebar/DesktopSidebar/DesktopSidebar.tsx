@@ -1,4 +1,4 @@
-import { User } from "@supabase/supabase-js";
+import { FragmentOf, readFragment } from "gql.tada";
 import Link from "next/link";
 import { CgWebsite } from "react-icons/cg";
 import { FaRegBookmark } from "react-icons/fa";
@@ -18,14 +18,18 @@ import {
 // import { FavoriteArticleFolderLinks } from "./FavoriteArticleFolderLinks";
 import { CreateFavoriteArticleFolderDialog } from "@/features/favorites/components/Dialog";
 
-import { LogoutLink } from "./LogoutLink";
+import { DeskTopSidebarFragment } from "./DesktopSidebarFragment";
+import { FavoriteArticleFolderLink } from "../FavoriteArticleFolderLink";
+import { LogoutLink } from "../LogoutLink";
 // import { MyFeedFolderLinks } from "./MyFeedFolderLinks";
 
 type DesktopSidebarProps = {
-  user?: User;
+  data: FragmentOf<typeof DeskTopSidebarFragment>;
 };
 
-export function DesktopSidebar({ user }: DesktopSidebarProps) {
+export function DesktopSidebar({ data }: DesktopSidebarProps) {
+  const fragment = readFragment(DeskTopSidebarFragment, data);
+
   return (
     <div className="h-lvh w-full overflow-y-auto border-r-2 pb-12">
       <div className="mb-16 space-y-4 py-4">
@@ -62,15 +66,14 @@ export function DesktopSidebar({ user }: DesktopSidebarProps) {
               <MdOutlineSummarize />
               <span>Summary</span>
             </Link>
-            {user && (
-              <Link
-                href="/bookmark"
-                className="flex cursor-pointer items-center space-x-2 rounded-md p-2 hover:bg-secondary"
-              >
-                <FaRegBookmark />
-                <span>Bookmarks</span>
-              </Link>
-            )}
+
+            <Link
+              href="/bookmark"
+              className="flex cursor-pointer items-center space-x-2 rounded-md p-2 hover:bg-secondary"
+            >
+              <FaRegBookmark />
+              <span>Bookmarks</span>
+            </Link>
             {/* <Link
               href="/feed"
               className="flex cursor-pointer items-center space-x-2 rounded-md p-2 hover:bg-secondary"
@@ -88,55 +91,57 @@ export function DesktopSidebar({ user }: DesktopSidebarProps) {
           </div>
         </div>
 
-        {user && (
-          <>
-            <div className="px-4 py-2">
-              <h2 className="mb-2 px-2 text-lg font-semibold tracking-tight">
-                My Feeds
-              </h2>
-              <div className="mt-2 text-base">
-                {/* <Link
+        <>
+          <div className="px-4 py-2">
+            <h2 className="mb-2 px-2 text-lg font-semibold tracking-tight">
+              My Feeds
+            </h2>
+            <div className="mt-2 text-base">
+              {/* <Link
                   href="/my-feed-folder"
                   className="flex cursor-pointer items-center space-x-2 rounded-md p-2 hover:bg-secondary"
                 >
                   <MdFeed />
                   <span className="pl-2">All</span>
                 </Link> */}
-                {/* <MyFeedFolderLinks myFeedFolders={myFeedFolders} /> */}
-                {/* <div className="ml-4">
+              {/* <MyFeedFolderLinks myFeedFolders={myFeedFolders} /> */}
+              {/* <div className="ml-4">
                   <CreateMyFeedFolderDialog
                     buttonVariant="ghost"
                     buttonSize={18}
                   />
                 </div> */}
-              </div>
             </div>
+          </div>
 
-            <div className="px-4 py-2">
-              <h2 className="mb-2 px-2 text-lg font-semibold tracking-tight">
-                Favorite Articles
-              </h2>
-              <div className="mt-2">
-                <Link
-                  href="/favorite"
-                  className="flex cursor-pointer items-center space-x-2 rounded-md p-2 hover:bg-secondary"
-                >
-                  <MdFeed />
-                  <span className="pl-2">All</span>
-                </Link>
-                {/* <FavoriteArticleFolderLinks
-                  favoriteArticleFolders={favoriteArticleFolders}
-                /> */}
-                <div className="ml-4">
-                  <CreateFavoriteArticleFolderDialog
-                    buttonVariant="ghost"
-                    buttonSize={18}
-                  />
-                </div>
+          <div className="px-4 py-2">
+            <h2 className="mb-2 px-2 text-lg font-semibold tracking-tight">
+              Favorite Articles
+            </h2>
+            <div className="mt-2">
+              <Link
+                href="/favorite"
+                className="flex cursor-pointer items-center space-x-2 rounded-md p-2 hover:bg-secondary"
+              >
+                <MdFeed />
+                <span className="pl-2">All</span>
+              </Link>
+              {fragment.favoriteArticleFolders.edges.map((edge, i) => (
+                <FavoriteArticleFolderLink
+                  key={`sidebar-favorite-link-${i}`}
+                  data={edge.node}
+                />
+              ))}
+              <div className="ml-4">
+                <CreateFavoriteArticleFolderDialog
+                  buttonVariant="ghost"
+                  buttonSize={18}
+                />
               </div>
             </div>
-          </>
-        )}
+          </div>
+        </>
+
         <div className="ml-4 mt-8 px-4 py-2 md:hidden">
           <LogoutLink />
         </div>

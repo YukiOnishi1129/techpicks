@@ -355,6 +355,49 @@ export type QueryFavoriteArticleFoldersArgs = {
   input?: InputMaybe<FavoriteArticleFoldersInput>;
 };
 
+export type LoggedBaseLayoutFragmentFragment = {
+  __typename?: "Query";
+  favoriteArticleFolders: {
+    __typename?: "FavoriteArticleFolderConnection";
+    edges: Array<{
+      __typename?: "FavoriteArticleFolderEdge";
+      node: { __typename?: "FavoriteArticleFolder"; id: string; title: string };
+    }>;
+  };
+};
+
+export type LoggedBaseLayoutQueryQueryVariables = Exact<{
+  input: FavoriteArticleFoldersInput;
+}>;
+
+export type LoggedBaseLayoutQueryQuery = {
+  __typename?: "Query";
+  favoriteArticleFolders: {
+    __typename?: "FavoriteArticleFolderConnection";
+    edges: Array<{
+      __typename?: "FavoriteArticleFolderEdge";
+      node: { __typename?: "FavoriteArticleFolder"; id: string; title: string };
+    }>;
+  };
+};
+
+export type DeskTopSidebarFragmentFragment = {
+  __typename?: "Query";
+  favoriteArticleFolders: {
+    __typename?: "FavoriteArticleFolderConnection";
+    edges: Array<{
+      __typename?: "FavoriteArticleFolderEdge";
+      node: { __typename?: "FavoriteArticleFolder"; id: string; title: string };
+    }>;
+  };
+};
+
+export type FavoriteArticleFolderLinksFragmentFragment = {
+  __typename?: "FavoriteArticleFolder";
+  id: string;
+  title: string;
+};
+
 export type OgpPreviewContentFragmentFragment = {
   __typename?: "ArticleOGP";
   title: string;
@@ -381,45 +424,6 @@ export type DeleteBookmarkMutationMutationVariables = Exact<{
 export type DeleteBookmarkMutationMutation = {
   __typename?: "Mutation";
   deleteBookmark: boolean;
-};
-
-export type ArticleDashboardTemplateFragmentFragment = {
-  __typename?: "Query";
-  articles: {
-    __typename?: "ArticleConnection";
-    pageInfo: {
-      __typename?: "PageInfo";
-      hasNextPage: boolean;
-      hasPreviousPage: boolean;
-      startCursor?: string | null;
-      endCursor?: string | null;
-    };
-    edges: Array<{
-      __typename?: "ArticleEdge";
-      node: {
-        __typename?: "Article";
-        id: string;
-        title: string;
-        articleUrl: string;
-        publishedAt?: number | null;
-        thumbnailUrl: string;
-        isEng: boolean;
-        isPrivate: boolean;
-        isBookmarked: boolean;
-        bookmarkId?: string | null;
-        likeCount?: number | null;
-        description: string;
-        platform?: {
-          __typename?: "Platform";
-          id: string;
-          name: string;
-          faviconUrl: string;
-          siteUrl: string;
-        } | null;
-        feeds?: Array<{ __typename?: "Feed"; id: string; name: string }> | null;
-      };
-    }>;
-  };
 };
 
 export type ArticleListQueryQueryVariables = Exact<{
@@ -579,19 +583,10 @@ export type ArticleListFragmentFragment = {
   }>;
 };
 
-export type CreateBookmarkForUploadArticleMutationMutationVariables = Exact<{
-  input: CreateBookmarkForUploadArticleInput;
-}>;
-
-export type CreateBookmarkForUploadArticleMutationMutation = {
-  __typename?: "Mutation";
-  createBookmarkForUploadArticle: { __typename?: "Bookmark"; id: string };
-};
-
-export type BookmarkTemplateFragmentFragment = {
+export type ArticleDashboardTemplateFragmentFragment = {
   __typename?: "Query";
-  bookmarks: {
-    __typename?: "BookmarkConnection";
+  articles: {
+    __typename?: "ArticleConnection";
     pageInfo: {
       __typename?: "PageInfo";
       hasNextPage: boolean;
@@ -600,27 +595,40 @@ export type BookmarkTemplateFragmentFragment = {
       endCursor?: string | null;
     };
     edges: Array<{
-      __typename?: "BookmarkEdge";
+      __typename?: "ArticleEdge";
       node: {
-        __typename?: "Bookmark";
+        __typename?: "Article";
         id: string;
         title: string;
-        description: string;
         articleUrl: string;
-        thumbnailUrl: string;
         publishedAt?: number | null;
-        articleId: string;
-        platformId?: string | null;
-        platformName: string;
-        platformUrl: string;
-        platformFaviconUrl: string;
+        thumbnailUrl: string;
         isEng: boolean;
-        isRead: boolean;
-        createdAt: number;
-        updatedAt: number;
+        isPrivate: boolean;
+        isBookmarked: boolean;
+        bookmarkId?: string | null;
+        likeCount?: number | null;
+        description: string;
+        platform?: {
+          __typename?: "Platform";
+          id: string;
+          name: string;
+          faviconUrl: string;
+          siteUrl: string;
+        } | null;
+        feeds?: Array<{ __typename?: "Feed"; id: string; name: string }> | null;
       };
     }>;
   };
+};
+
+export type CreateBookmarkForUploadArticleMutationMutationVariables = Exact<{
+  input: CreateBookmarkForUploadArticleInput;
+}>;
+
+export type CreateBookmarkForUploadArticleMutationMutation = {
+  __typename?: "Mutation";
+  createBookmarkForUploadArticle: { __typename?: "Bookmark"; id: string };
 };
 
 export type BookmarkListQueryQueryVariables = Exact<{
@@ -732,6 +740,41 @@ export type BookmarkListFragmentFragment = {
   }>;
 };
 
+export type BookmarkTemplateFragmentFragment = {
+  __typename?: "Query";
+  bookmarks: {
+    __typename?: "BookmarkConnection";
+    pageInfo: {
+      __typename?: "PageInfo";
+      hasNextPage: boolean;
+      hasPreviousPage: boolean;
+      startCursor?: string | null;
+      endCursor?: string | null;
+    };
+    edges: Array<{
+      __typename?: "BookmarkEdge";
+      node: {
+        __typename?: "Bookmark";
+        id: string;
+        title: string;
+        description: string;
+        articleUrl: string;
+        thumbnailUrl: string;
+        publishedAt?: number | null;
+        articleId: string;
+        platformId?: string | null;
+        platformName: string;
+        platformUrl: string;
+        platformFaviconUrl: string;
+        isEng: boolean;
+        isRead: boolean;
+        createdAt: number;
+        updatedAt: number;
+      };
+    }>;
+  };
+};
+
 export type CreateFavoriteArticleFolderMutationMutationVariables = Exact<{
   input: CreateFavoriteArticleFolderInput;
 }>;
@@ -741,37 +784,6 @@ export type CreateFavoriteArticleFolderMutationMutation = {
   createFavoriteArticleFolder: {
     __typename?: "FavoriteArticleFolder";
     id: string;
-  };
-};
-
-export type FavoriteArticleFolderListTemplateFragmentFragment = {
-  __typename?: "Query";
-  favoriteArticleFolders: {
-    __typename?: "FavoriteArticleFolderConnection";
-    pageInfo: {
-      __typename?: "PageInfo";
-      hasNextPage: boolean;
-      hasPreviousPage: boolean;
-      startCursor?: string | null;
-      endCursor?: string | null;
-    };
-    edges: Array<{
-      __typename?: "FavoriteArticleFolderEdge";
-      node: {
-        __typename?: "FavoriteArticleFolder";
-        id: string;
-        title: string;
-        description?: string | null;
-        favoriteArticles?: Array<{
-          __typename?: "FavoriteArticle";
-          id: string;
-          title: string;
-          articleUrl: string;
-          thumbnailUrl: string;
-          createdAt: number;
-        }> | null;
-      };
-    }>;
   };
 };
 
@@ -851,6 +863,37 @@ export type FavoriteArticleFolderListFragmentFragment = {
       }> | null;
     };
   }>;
+};
+
+export type FavoriteArticleFolderListTemplateFragmentFragment = {
+  __typename?: "Query";
+  favoriteArticleFolders: {
+    __typename?: "FavoriteArticleFolderConnection";
+    pageInfo: {
+      __typename?: "PageInfo";
+      hasNextPage: boolean;
+      hasPreviousPage: boolean;
+      startCursor?: string | null;
+      endCursor?: string | null;
+    };
+    edges: Array<{
+      __typename?: "FavoriteArticleFolderEdge";
+      node: {
+        __typename?: "FavoriteArticleFolder";
+        id: string;
+        title: string;
+        description?: string | null;
+        favoriteArticles?: Array<{
+          __typename?: "FavoriteArticle";
+          id: string;
+          title: string;
+          articleUrl: string;
+          thumbnailUrl: string;
+          createdAt: number;
+        }> | null;
+      };
+    }>;
+  };
 };
 
 export type TrendArticleDashboardTemplateFragmentFragment = {
@@ -971,6 +1014,61 @@ export type TrendArticleListFragmentFragment = {
   }>;
 };
 
+export const FavoriteArticleFolderLinksFragmentFragmentDoc = gql`
+  fragment FavoriteArticleFolderLinksFragment on FavoriteArticleFolder {
+    id
+    title
+  }
+`;
+export const DeskTopSidebarFragmentFragmentDoc = gql`
+  fragment DeskTopSidebarFragment on Query {
+    favoriteArticleFolders(input: $input) {
+      edges {
+        node {
+          ...FavoriteArticleFolderLinksFragment
+        }
+      }
+    }
+  }
+  ${FavoriteArticleFolderLinksFragmentFragmentDoc}
+`;
+export const LoggedBaseLayoutFragmentFragmentDoc = gql`
+  fragment LoggedBaseLayoutFragment on Query {
+    ...DeskTopSidebarFragment
+  }
+  ${DeskTopSidebarFragmentFragmentDoc}
+`;
+export const OgpPreviewContentFragmentFragmentDoc = gql`
+  fragment OGPPreviewContentFragment on ArticleOGP {
+    title
+    description
+    thumbnailUrl
+    articleUrl
+    siteName
+    faviconUrl
+  }
+`;
+export const CreateBookmarkDialogContentFragmentFragmentDoc = gql`
+  fragment CreateBookmarkDialogContentFragment on ArticleOGP {
+    title
+    description
+    thumbnailUrl
+    articleUrl
+    siteUrl
+    siteName
+    faviconUrl
+    ...OGPPreviewContentFragment
+  }
+  ${OgpPreviewContentFragmentFragmentDoc}
+`;
+export const ArticleOgpFragmentFragmentDoc = gql`
+  fragment ArticleOGPFragment on Query {
+    articleOpg(articleUrl: $url) {
+      ...CreateBookmarkDialogContentFragment
+    }
+  }
+  ${CreateBookmarkDialogContentFragmentFragmentDoc}
+`;
 export const ArticleCardItemFragmentFragmentDoc = gql`
   fragment ArticleCardItemFragment on Article {
     id
@@ -1055,37 +1153,6 @@ export const ArticleDashboardTemplateFragmentFragmentDoc = gql`
     }
   }
   ${ArticleListFragmentFragmentDoc}
-`;
-export const OgpPreviewContentFragmentFragmentDoc = gql`
-  fragment OGPPreviewContentFragment on ArticleOGP {
-    title
-    description
-    thumbnailUrl
-    articleUrl
-    siteName
-    faviconUrl
-  }
-`;
-export const CreateBookmarkDialogContentFragmentFragmentDoc = gql`
-  fragment CreateBookmarkDialogContentFragment on ArticleOGP {
-    title
-    description
-    thumbnailUrl
-    articleUrl
-    siteUrl
-    siteName
-    faviconUrl
-    ...OGPPreviewContentFragment
-  }
-  ${OgpPreviewContentFragmentFragmentDoc}
-`;
-export const ArticleOgpFragmentFragmentDoc = gql`
-  fragment ArticleOGPFragment on Query {
-    articleOpg(articleUrl: $url) {
-      ...CreateBookmarkDialogContentFragment
-    }
-  }
-  ${CreateBookmarkDialogContentFragmentFragmentDoc}
 `;
 export const BookmarkCardItemFragmentFragmentDoc = gql`
   fragment BookmarkCardItemFragment on Bookmark {
@@ -1232,6 +1299,82 @@ export const TrendArticleDashboardTemplateFragmentFragmentDoc = gql`
   }
   ${TrendArticleListFragmentFragmentDoc}
 `;
+export const LoggedBaseLayoutQueryDocument = gql`
+  query LoggedBaseLayoutQuery($input: FavoriteArticleFoldersInput!) {
+    ...LoggedBaseLayoutFragment
+  }
+  ${LoggedBaseLayoutFragmentFragmentDoc}
+`;
+
+/**
+ * __useLoggedBaseLayoutQueryQuery__
+ *
+ * To run a query within a React component, call `useLoggedBaseLayoutQueryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useLoggedBaseLayoutQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useLoggedBaseLayoutQueryQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useLoggedBaseLayoutQueryQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    LoggedBaseLayoutQueryQuery,
+    LoggedBaseLayoutQueryQueryVariables
+  > &
+    (
+      | { variables: LoggedBaseLayoutQueryQueryVariables; skip?: boolean }
+      | { skip: boolean }
+    )
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    LoggedBaseLayoutQueryQuery,
+    LoggedBaseLayoutQueryQueryVariables
+  >(LoggedBaseLayoutQueryDocument, options);
+}
+export function useLoggedBaseLayoutQueryLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    LoggedBaseLayoutQueryQuery,
+    LoggedBaseLayoutQueryQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    LoggedBaseLayoutQueryQuery,
+    LoggedBaseLayoutQueryQueryVariables
+  >(LoggedBaseLayoutQueryDocument, options);
+}
+export function useLoggedBaseLayoutQuerySuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    LoggedBaseLayoutQueryQuery,
+    LoggedBaseLayoutQueryQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    LoggedBaseLayoutQueryQuery,
+    LoggedBaseLayoutQueryQueryVariables
+  >(LoggedBaseLayoutQueryDocument, options);
+}
+export type LoggedBaseLayoutQueryQueryHookResult = ReturnType<
+  typeof useLoggedBaseLayoutQueryQuery
+>;
+export type LoggedBaseLayoutQueryLazyQueryHookResult = ReturnType<
+  typeof useLoggedBaseLayoutQueryLazyQuery
+>;
+export type LoggedBaseLayoutQuerySuspenseQueryHookResult = ReturnType<
+  typeof useLoggedBaseLayoutQuerySuspenseQuery
+>;
+export type LoggedBaseLayoutQueryQueryResult = Apollo.QueryResult<
+  LoggedBaseLayoutQueryQuery,
+  LoggedBaseLayoutQueryQueryVariables
+>;
 export const CreateBookmarkMutationDocument = gql`
   mutation CreateBookmarkMutation($input: CreateBookmarkInput!) {
     createBookmark(createBookmarkInput: $input) {

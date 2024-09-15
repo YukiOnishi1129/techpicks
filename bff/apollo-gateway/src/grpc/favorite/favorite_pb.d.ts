@@ -32,6 +32,16 @@ export class GetFavoriteArticleFoldersRequest extends jspb.Message {
     getFavoriteArticleLimit(): google_protobuf_wrappers_pb.Int64Value | undefined;
     setFavoriteArticleLimit(value?: google_protobuf_wrappers_pb.Int64Value): GetFavoriteArticleFoldersRequest;
 
+    hasIsFolderOnly(): boolean;
+    clearIsFolderOnly(): void;
+    getIsFolderOnly(): google_protobuf_wrappers_pb.BoolValue | undefined;
+    setIsFolderOnly(value?: google_protobuf_wrappers_pb.BoolValue): GetFavoriteArticleFoldersRequest;
+
+    hasIsAllFetch(): boolean;
+    clearIsAllFetch(): void;
+    getIsAllFetch(): google_protobuf_wrappers_pb.BoolValue | undefined;
+    setIsAllFetch(value?: google_protobuf_wrappers_pb.BoolValue): GetFavoriteArticleFoldersRequest;
+
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): GetFavoriteArticleFoldersRequest.AsObject;
     static toObject(includeInstance: boolean, msg: GetFavoriteArticleFoldersRequest): GetFavoriteArticleFoldersRequest.AsObject;
@@ -49,6 +59,8 @@ export namespace GetFavoriteArticleFoldersRequest {
         cursor?: google_protobuf_wrappers_pb.StringValue.AsObject,
         limit?: google_protobuf_wrappers_pb.Int64Value.AsObject,
         favoriteArticleLimit?: google_protobuf_wrappers_pb.Int64Value.AsObject,
+        isFolderOnly?: google_protobuf_wrappers_pb.BoolValue.AsObject,
+        isAllFetch?: google_protobuf_wrappers_pb.BoolValue.AsObject,
     }
 }
 

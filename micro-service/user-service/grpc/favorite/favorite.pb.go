@@ -32,6 +32,8 @@ type GetFavoriteArticleFoldersRequest struct {
 	Cursor               *wrapperspb.StringValue `protobuf:"bytes,3,opt,name=cursor,proto3" json:"cursor,omitempty"`
 	Limit                *wrapperspb.Int64Value  `protobuf:"bytes,4,opt,name=limit,proto3" json:"limit,omitempty"`
 	FavoriteArticleLimit *wrapperspb.Int64Value  `protobuf:"bytes,5,opt,name=favorite_article_limit,json=favoriteArticleLimit,proto3" json:"favorite_article_limit,omitempty"`
+	IsFolderOnly         *wrapperspb.BoolValue   `protobuf:"bytes,6,opt,name=is_folder_only,json=isFolderOnly,proto3" json:"is_folder_only,omitempty"`
+	IsAllFetch           *wrapperspb.BoolValue   `protobuf:"bytes,7,opt,name=is_all_fetch,json=isAllFetch,proto3" json:"is_all_fetch,omitempty"`
 }
 
 func (x *GetFavoriteArticleFoldersRequest) Reset() {
@@ -97,6 +99,20 @@ func (x *GetFavoriteArticleFoldersRequest) GetLimit() *wrapperspb.Int64Value {
 func (x *GetFavoriteArticleFoldersRequest) GetFavoriteArticleLimit() *wrapperspb.Int64Value {
 	if x != nil {
 		return x.FavoriteArticleLimit
+	}
+	return nil
+}
+
+func (x *GetFavoriteArticleFoldersRequest) GetIsFolderOnly() *wrapperspb.BoolValue {
+	if x != nil {
+		return x.IsFolderOnly
+	}
+	return nil
+}
+
+func (x *GetFavoriteArticleFoldersRequest) GetIsAllFetch() *wrapperspb.BoolValue {
+	if x != nil {
+		return x.IsAllFetch
 	}
 	return nil
 }
@@ -829,7 +845,7 @@ var file_favorite_favorite_proto_rawDesc = []byte{
 	0x75, 0x66, 0x2f, 0x74, 0x69, 0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d, 0x70, 0x2e, 0x70, 0x72, 0x6f,
 	0x74, 0x6f, 0x1a, 0x1e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f,
 	0x62, 0x75, 0x66, 0x2f, 0x77, 0x72, 0x61, 0x70, 0x70, 0x65, 0x72, 0x73, 0x2e, 0x70, 0x72, 0x6f,
-	0x74, 0x6f, 0x22, 0xaf, 0x02, 0x0a, 0x20, 0x47, 0x65, 0x74, 0x46, 0x61, 0x76, 0x6f, 0x72, 0x69,
+	0x74, 0x6f, 0x22, 0xaf, 0x03, 0x0a, 0x20, 0x47, 0x65, 0x74, 0x46, 0x61, 0x76, 0x6f, 0x72, 0x69,
 	0x74, 0x65, 0x41, 0x72, 0x74, 0x69, 0x63, 0x6c, 0x65, 0x46, 0x6f, 0x6c, 0x64, 0x65, 0x72, 0x73,
 	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x17, 0x0a, 0x07, 0x75, 0x73, 0x65, 0x72, 0x5f,
 	0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x75, 0x73, 0x65, 0x72, 0x49, 0x64,
@@ -848,7 +864,15 @@ var file_favorite_favorite_proto_rawDesc = []byte{
 	0x0b, 0x32, 0x1b, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
 	0x62, 0x75, 0x66, 0x2e, 0x49, 0x6e, 0x74, 0x36, 0x34, 0x56, 0x61, 0x6c, 0x75, 0x65, 0x52, 0x14,
 	0x66, 0x61, 0x76, 0x6f, 0x72, 0x69, 0x74, 0x65, 0x41, 0x72, 0x74, 0x69, 0x63, 0x6c, 0x65, 0x4c,
-	0x69, 0x6d, 0x69, 0x74, 0x22, 0xd8, 0x01, 0x0a, 0x21, 0x47, 0x65, 0x74, 0x46, 0x61, 0x76, 0x6f,
+	0x69, 0x6d, 0x69, 0x74, 0x12, 0x40, 0x0a, 0x0e, 0x69, 0x73, 0x5f, 0x66, 0x6f, 0x6c, 0x64, 0x65,
+	0x72, 0x5f, 0x6f, 0x6e, 0x6c, 0x79, 0x18, 0x06, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x67,
+	0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x42,
+	0x6f, 0x6f, 0x6c, 0x56, 0x61, 0x6c, 0x75, 0x65, 0x52, 0x0c, 0x69, 0x73, 0x46, 0x6f, 0x6c, 0x64,
+	0x65, 0x72, 0x4f, 0x6e, 0x6c, 0x79, 0x12, 0x3c, 0x0a, 0x0c, 0x69, 0x73, 0x5f, 0x61, 0x6c, 0x6c,
+	0x5f, 0x66, 0x65, 0x74, 0x63, 0x68, 0x18, 0x07, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x67,
+	0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x42,
+	0x6f, 0x6f, 0x6c, 0x56, 0x61, 0x6c, 0x75, 0x65, 0x52, 0x0a, 0x69, 0x73, 0x41, 0x6c, 0x6c, 0x46,
+	0x65, 0x74, 0x63, 0x68, 0x22, 0xd8, 0x01, 0x0a, 0x21, 0x47, 0x65, 0x74, 0x46, 0x61, 0x76, 0x6f,
 	0x72, 0x69, 0x74, 0x65, 0x41, 0x72, 0x74, 0x69, 0x63, 0x6c, 0x65, 0x46, 0x6f, 0x6c, 0x64, 0x65,
 	0x72, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x74, 0x0a, 0x1d, 0x66, 0x61,
 	0x76, 0x6f, 0x72, 0x69, 0x74, 0x65, 0x5f, 0x61, 0x72, 0x74, 0x69, 0x63, 0x6c, 0x65, 0x5f, 0x66,
@@ -1047,39 +1071,42 @@ var file_favorite_favorite_proto_goTypes = []any{
 	(*PageInfo)(nil),                                   // 10: checkpicks.favorite.v1.PageInfo
 	(*wrapperspb.StringValue)(nil),                     // 11: google.protobuf.StringValue
 	(*wrapperspb.Int64Value)(nil),                      // 12: google.protobuf.Int64Value
-	(*timestamppb.Timestamp)(nil),                      // 13: google.protobuf.Timestamp
+	(*wrapperspb.BoolValue)(nil),                       // 13: google.protobuf.BoolValue
+	(*timestamppb.Timestamp)(nil),                      // 14: google.protobuf.Timestamp
 }
 var file_favorite_favorite_proto_depIdxs = []int32{
 	11, // 0: checkpicks.favorite.v1.GetFavoriteArticleFoldersRequest.keyword:type_name -> google.protobuf.StringValue
 	11, // 1: checkpicks.favorite.v1.GetFavoriteArticleFoldersRequest.cursor:type_name -> google.protobuf.StringValue
 	12, // 2: checkpicks.favorite.v1.GetFavoriteArticleFoldersRequest.limit:type_name -> google.protobuf.Int64Value
 	12, // 3: checkpicks.favorite.v1.GetFavoriteArticleFoldersRequest.favorite_article_limit:type_name -> google.protobuf.Int64Value
-	6,  // 4: checkpicks.favorite.v1.GetFavoriteArticleFoldersResponse.favorite_article_folders_edge:type_name -> checkpicks.favorite.v1.FavoriteArticleFolderEdge
-	10, // 5: checkpicks.favorite.v1.GetFavoriteArticleFoldersResponse.page_info:type_name -> checkpicks.favorite.v1.PageInfo
-	9,  // 6: checkpicks.favorite.v1.GetFavoriteArticleFolderResponse.favorite_article_folder:type_name -> checkpicks.favorite.v1.FavoriteArticleFolder
-	9,  // 7: checkpicks.favorite.v1.CreateFavoriteArticleFolderResponse.favorite_article_folder:type_name -> checkpicks.favorite.v1.FavoriteArticleFolder
-	9,  // 8: checkpicks.favorite.v1.FavoriteArticleFolderEdge.node:type_name -> checkpicks.favorite.v1.FavoriteArticleFolder
-	8,  // 9: checkpicks.favorite.v1.FavoriteArticleEdge.node:type_name -> checkpicks.favorite.v1.FavoriteArticle
-	11, // 10: checkpicks.favorite.v1.FavoriteArticle.platform_id:type_name -> google.protobuf.StringValue
-	13, // 11: checkpicks.favorite.v1.FavoriteArticle.published_at:type_name -> google.protobuf.Timestamp
-	11, // 12: checkpicks.favorite.v1.FavoriteArticle.author_name:type_name -> google.protobuf.StringValue
-	11, // 13: checkpicks.favorite.v1.FavoriteArticle.tags:type_name -> google.protobuf.StringValue
-	13, // 14: checkpicks.favorite.v1.FavoriteArticle.created_at:type_name -> google.protobuf.Timestamp
-	13, // 15: checkpicks.favorite.v1.FavoriteArticle.updated_at:type_name -> google.protobuf.Timestamp
-	13, // 16: checkpicks.favorite.v1.FavoriteArticleFolder.created_at:type_name -> google.protobuf.Timestamp
-	13, // 17: checkpicks.favorite.v1.FavoriteArticleFolder.updated_at:type_name -> google.protobuf.Timestamp
-	8,  // 18: checkpicks.favorite.v1.FavoriteArticleFolder.favorite_articles:type_name -> checkpicks.favorite.v1.FavoriteArticle
-	0,  // 19: checkpicks.favorite.v1.FavoriteService.GetFavoriteArticleFolders:input_type -> checkpicks.favorite.v1.GetFavoriteArticleFoldersRequest
-	3,  // 20: checkpicks.favorite.v1.FavoriteService.GetFavoriteArticleFolderByArticleId:input_type -> checkpicks.favorite.v1.GetFavoriteArticleFolderByArticleIdRequest
-	5,  // 21: checkpicks.favorite.v1.FavoriteService.CreateFavoriteArticleFolder:input_type -> checkpicks.favorite.v1.CreateFavoriteArticleFolderRequest
-	1,  // 22: checkpicks.favorite.v1.FavoriteService.GetFavoriteArticleFolders:output_type -> checkpicks.favorite.v1.GetFavoriteArticleFoldersResponse
-	2,  // 23: checkpicks.favorite.v1.FavoriteService.GetFavoriteArticleFolderByArticleId:output_type -> checkpicks.favorite.v1.GetFavoriteArticleFolderResponse
-	4,  // 24: checkpicks.favorite.v1.FavoriteService.CreateFavoriteArticleFolder:output_type -> checkpicks.favorite.v1.CreateFavoriteArticleFolderResponse
-	22, // [22:25] is the sub-list for method output_type
-	19, // [19:22] is the sub-list for method input_type
-	19, // [19:19] is the sub-list for extension type_name
-	19, // [19:19] is the sub-list for extension extendee
-	0,  // [0:19] is the sub-list for field type_name
+	13, // 4: checkpicks.favorite.v1.GetFavoriteArticleFoldersRequest.is_folder_only:type_name -> google.protobuf.BoolValue
+	13, // 5: checkpicks.favorite.v1.GetFavoriteArticleFoldersRequest.is_all_fetch:type_name -> google.protobuf.BoolValue
+	6,  // 6: checkpicks.favorite.v1.GetFavoriteArticleFoldersResponse.favorite_article_folders_edge:type_name -> checkpicks.favorite.v1.FavoriteArticleFolderEdge
+	10, // 7: checkpicks.favorite.v1.GetFavoriteArticleFoldersResponse.page_info:type_name -> checkpicks.favorite.v1.PageInfo
+	9,  // 8: checkpicks.favorite.v1.GetFavoriteArticleFolderResponse.favorite_article_folder:type_name -> checkpicks.favorite.v1.FavoriteArticleFolder
+	9,  // 9: checkpicks.favorite.v1.CreateFavoriteArticleFolderResponse.favorite_article_folder:type_name -> checkpicks.favorite.v1.FavoriteArticleFolder
+	9,  // 10: checkpicks.favorite.v1.FavoriteArticleFolderEdge.node:type_name -> checkpicks.favorite.v1.FavoriteArticleFolder
+	8,  // 11: checkpicks.favorite.v1.FavoriteArticleEdge.node:type_name -> checkpicks.favorite.v1.FavoriteArticle
+	11, // 12: checkpicks.favorite.v1.FavoriteArticle.platform_id:type_name -> google.protobuf.StringValue
+	14, // 13: checkpicks.favorite.v1.FavoriteArticle.published_at:type_name -> google.protobuf.Timestamp
+	11, // 14: checkpicks.favorite.v1.FavoriteArticle.author_name:type_name -> google.protobuf.StringValue
+	11, // 15: checkpicks.favorite.v1.FavoriteArticle.tags:type_name -> google.protobuf.StringValue
+	14, // 16: checkpicks.favorite.v1.FavoriteArticle.created_at:type_name -> google.protobuf.Timestamp
+	14, // 17: checkpicks.favorite.v1.FavoriteArticle.updated_at:type_name -> google.protobuf.Timestamp
+	14, // 18: checkpicks.favorite.v1.FavoriteArticleFolder.created_at:type_name -> google.protobuf.Timestamp
+	14, // 19: checkpicks.favorite.v1.FavoriteArticleFolder.updated_at:type_name -> google.protobuf.Timestamp
+	8,  // 20: checkpicks.favorite.v1.FavoriteArticleFolder.favorite_articles:type_name -> checkpicks.favorite.v1.FavoriteArticle
+	0,  // 21: checkpicks.favorite.v1.FavoriteService.GetFavoriteArticleFolders:input_type -> checkpicks.favorite.v1.GetFavoriteArticleFoldersRequest
+	3,  // 22: checkpicks.favorite.v1.FavoriteService.GetFavoriteArticleFolderByArticleId:input_type -> checkpicks.favorite.v1.GetFavoriteArticleFolderByArticleIdRequest
+	5,  // 23: checkpicks.favorite.v1.FavoriteService.CreateFavoriteArticleFolder:input_type -> checkpicks.favorite.v1.CreateFavoriteArticleFolderRequest
+	1,  // 24: checkpicks.favorite.v1.FavoriteService.GetFavoriteArticleFolders:output_type -> checkpicks.favorite.v1.GetFavoriteArticleFoldersResponse
+	2,  // 25: checkpicks.favorite.v1.FavoriteService.GetFavoriteArticleFolderByArticleId:output_type -> checkpicks.favorite.v1.GetFavoriteArticleFolderResponse
+	4,  // 26: checkpicks.favorite.v1.FavoriteService.CreateFavoriteArticleFolder:output_type -> checkpicks.favorite.v1.CreateFavoriteArticleFolderResponse
+	24, // [24:27] is the sub-list for method output_type
+	21, // [21:24] is the sub-list for method input_type
+	21, // [21:21] is the sub-list for extension type_name
+	21, // [21:21] is the sub-list for extension extendee
+	0,  // [0:21] is the sub-list for field type_name
 }
 
 func init() { file_favorite_favorite_proto_init() }

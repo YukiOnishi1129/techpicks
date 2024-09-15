@@ -1,6 +1,6 @@
 import { FC, ReactNode } from "react";
 
-import { Header } from "../Header";
+import { Header } from "../../Header";
 
 type NotLoggedBaseLayoutProps = {
   children: ReactNode;
