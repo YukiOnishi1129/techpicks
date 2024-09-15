@@ -25,16 +25,33 @@ func (fu *favoriteUseCase) GetFavoriteArticleFolders(ctx context.Context, req *f
 		}, nil
 	}
 
+	isFolderOnly := false
+
+	if req.GetIsFolderOnly() != nil && req.GetIsFolderOnly().GetValue() {
+		isFolderOnly = req.GetIsFolderOnly().GetValue()
+	}
+
 	for i, f := range fafs {
 		faLimit := 1
 		if req.GetFavoriteArticleLimit().GetValue() != 0 {
 			faLimit = int(req.GetFavoriteArticleLimit().GetValue())
 		}
-		faf := fu.convertPBFavoriteArticleFolder(ctx, f, &faLimit)
+
+		faf := fu.convertPBFavoriteArticleFolder(ctx, f, &faLimit, &isFolderOnly)
 		resFafs[i] = &fpb.FavoriteArticleFolderEdge{
 			Cursor: f.ID,
 			Node:   faf,
 		}
+	}
+
+	if req.GetIsAllFetch() != nil && req.GetIsAllFetch().GetValue() {
+		return &fpb.GetFavoriteArticleFoldersResponse{
+			FavoriteArticleFoldersEdge: resFafs,
+			PageInfo: &fpb.PageInfo{
+				HasNextPage: false,
+				EndCursor:   resFafs[len(resFafs)-1].Cursor,
+			},
+		}, nil
 	}
 
 	return &fpb.GetFavoriteArticleFoldersResponse{
@@ -47,16 +64,17 @@ func (fu *favoriteUseCase) GetFavoriteArticleFolders(ctx context.Context, req *f
 }
 
 func (fu *favoriteUseCase) CreateFavoriteArticleFolder(ctx context.Context, req *fpb.CreateFavoriteArticleFolderRequest) (*fpb.CreateFavoriteArticleFolderResponse, error) {
+	isFolderOnly := true
 	f, err := fu.favoriteArticleFolderPersistenceAdapter.CreateFavoriteArticleFolder(ctx, req)
 	if err != nil {
 		return &fpb.CreateFavoriteArticleFolderResponse{}, err
 	}
 	return &fpb.CreateFavoriteArticleFolderResponse{
-		FavoriteArticleFolder: fu.convertPBFavoriteArticleFolder(ctx, &f, nil),
+		FavoriteArticleFolder: fu.convertPBFavoriteArticleFolder(ctx, &f, nil, &isFolderOnly),
 	}, nil
 }
 
-func (fu *favoriteUseCase) convertPBFavoriteArticleFolder(ctx context.Context, f *entity.FavoriteArticleFolder, faLimit *int) *fpb.FavoriteArticleFolder {
+func (fu *favoriteUseCase) convertPBFavoriteArticleFolder(ctx context.Context, f *entity.FavoriteArticleFolder, faLimit *int, isFolderOnly *bool) *fpb.FavoriteArticleFolder {
 	faf := &fpb.FavoriteArticleFolder{
 		Id:               f.ID,
 		UserId:           f.UserID,
@@ -65,6 +83,10 @@ func (fu *favoriteUseCase) convertPBFavoriteArticleFolder(ctx context.Context, f
 		CreatedAt:        timestamppb.New(f.CreatedAt),
 		UpdatedAt:        timestamppb.New(f.UpdatedAt),
 		FavoriteArticles: make([]*fpb.FavoriteArticle, 0),
+	}
+
+	if isFolderOnly != nil && *isFolderOnly {
+		return faf
 	}
 
 	fas, err := fu.favoriteArticlePersistenceAdapter.GetFavoriteArticlesByFavoriteArticleFolderID(ctx, f.ID, f.UserID, faLimit)
