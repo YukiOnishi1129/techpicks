@@ -190,6 +190,7 @@ export class FavoriteArticle implements Node {
     platformId?: Nullable<string>;
     userId: string;
     title: string;
+    description?: Nullable<string>;
     thumbnailUrl: string;
     articleUrl: string;
     platformFaviconUrl: string;
