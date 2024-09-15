@@ -267,13 +267,13 @@ func Test_UseCase_CreateUploadArticle(t *testing.T) {
 				Bookmark: &bpb.Bookmark{},
 			}, nil).AnyTimes()
 
-			testContentRepository := persistence.NewArticlePersistence(db)
+			testArticleRepository := persistence.NewArticlePersistence(db)
 			testBookmarkExternal := external.NewBookmarkExternal(mockBookmarkClient)
 
-			testContentPersistenceAdapter := persistenceadapter.NewArticlePersistenceAdapter(testContentRepository)
+			testArticlePersistenceAdapter := persistenceadapter.NewArticlePersistenceAdapter(testArticleRepository)
 			testBookmarkExternalAdapter := externaladapter.NewBookmarkExternalAdapter(testBookmarkExternal)
 
-			testContentUseCase := NewArticleUseCase(testContentPersistenceAdapter, testBookmarkExternalAdapter)
+			testContentUseCase := NewContentUseCase(testArticlePersistenceAdapter, testBookmarkExternalAdapter)
 
 			if tt.recordArticles != nil {
 				for _, v := range tt.recordArticles {
