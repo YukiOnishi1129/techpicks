@@ -1,4 +1,3 @@
-import { User } from "@supabase/supabase-js";
 import { FragmentOf, readFragment } from "gql.tada";
 import Link from "next/link";
 import { CgWebsite } from "react-icons/cg";
@@ -25,11 +24,10 @@ import { LogoutLink } from "../LogoutLink";
 // import { MyFeedFolderLinks } from "./MyFeedFolderLinks";
 
 type DesktopSidebarProps = {
-  user: User;
   data: FragmentOf<typeof DeskTopSidebarFragment>;
 };
 
-export function DesktopSidebar({ user, data }: DesktopSidebarProps) {
+export function DesktopSidebar({ data }: DesktopSidebarProps) {
   const fragment = readFragment(DeskTopSidebarFragment, data);
 
   return (
