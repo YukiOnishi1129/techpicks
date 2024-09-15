@@ -32,8 +32,6 @@ type DesktopSidebarProps = {
 export function DesktopSidebar({ user, data }: DesktopSidebarProps) {
   const fragment = readFragment(DeskTopSidebarFragment, data);
 
-  console.log("❤️‍🔥");
-  console.log("fragment", fragment);
   return (
     <div className="h-lvh w-full overflow-y-auto border-r-2 pb-12">
       <div className="mb-16 space-y-4 py-4">
