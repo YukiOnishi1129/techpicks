@@ -6,27 +6,34 @@ import { getClient } from "@/lib/apollo/client";
 
 import { ArticlesInput } from "@/graphql/type";
 
-import { ArticleDashboardTemplateFragment } from "../components/Template/ArticleDashboardTemplate/ArticleDashboardTemplateFragmentFragment";
+import { ArticleDashboardTemplateFragment } from "./ArticleDashboardTemplateFragment";
 
-const ArticleListQuery = graphql(
+const ArticleDashboardTemplateQuery = graphql(
   `
-    query ArticleListQuery($input: ArticlesInput!) {
+    query ArticleDashboardTemplateQuery(
+      $enInput: ArticlesInput!
+      $jpInput: ArticlesInput!
+    ) {
       ...ArticleDashboardTemplateFragment
     }
   `,
   [ArticleDashboardTemplateFragment]
 );
 
-export const getArticleListQuery = async (input: ArticlesInput) => {
+export const getArticleDashboardTemplateQuery = async (
+  enInput: ArticlesInput,
+  jpInput: ArticlesInput
+) => {
   const { data, error, loading } = await getClient().query({
-    query: ArticleListQuery,
+    query: ArticleDashboardTemplateQuery,
     context: {
       fetchOptions: {
         cache: "no-cache",
       },
     },
     variables: {
-      input,
+      enInput,
+      jpInput,
     },
     errorPolicy: "all",
   });

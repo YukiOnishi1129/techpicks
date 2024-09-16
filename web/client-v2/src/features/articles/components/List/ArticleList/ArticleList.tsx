@@ -13,8 +13,8 @@ import { ArticleTabType } from "@/types/article";
 // import { FavoriteArticleFolderType } from "@/types/favoriteArticleFolder";
 import { LanguageStatus } from "@/types/language";
 
+import { getArticleListQuery } from "./actionArticleListQuery";
 import { ArticleListFragment } from "./ArticleListFragment";
-import { getArticleListQuery } from "../../../actions/getArticleListQuery";
 import { ArticleCardWrapper } from "../../Card/ArticleCardWrapper/ArticleCardWrapper";
 
 type ArticleListProps = {
@@ -49,7 +49,7 @@ export function ArticleList({
   const flatArticles = edges ? edges.flatMap((edge) => edge.node) : [];
 
   const loadMore = useCallback(async () => {
-    const { data: res, error } = await getArticleListQuery({
+    const { newData: res, error } = await getArticleListQuery({
       first: 20,
       after: endCursor,
       languageStatus,
@@ -57,7 +57,7 @@ export function ArticleList({
     });
     if (error) return;
 
-    const newArticles = readFragment(ArticleListFragment, res.articles);
+    const newArticles = readFragment(ArticleListFragment, res);
     if (newArticles.pageInfo.hasNextPage) {
       const endCursor = newArticles.pageInfo?.endCursor || null;
       setEndCursor(endCursor);

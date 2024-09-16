@@ -9,7 +9,7 @@ import { LanguageStatus } from "@/types/language";
 import { ENGLISH_IMAGE, JAPANESE_IMAGE } from "@/constant/image";
 import { ArticlesInput } from "@/graphql/type";
 
-import { getArticleListQuery } from "../../../actions/getArticleListQuery";
+import { getArticleDashboardTemplateQuery } from "./actionArticleDashboardTemplateQuery";
 import { ArticleList } from "../../List";
 
 type ArticleDashboardTemplateProps = {
@@ -38,12 +38,10 @@ export const ArticleDashboardTemplate: FC<
     tab,
     languageStatus: 1,
   };
-  const { data: enData, error: enErr } = await getArticleListQuery(enInput);
-  const { data: jpData, error: error } = await getArticleListQuery(jpInput);
-
-  if (enErr) {
-    return <div>{enErr.message}</div>;
-  }
+  const { data, error } = await getArticleDashboardTemplateQuery(
+    enInput,
+    jpInput
+  );
 
   if (error) {
     return <div>{error.message}</div>;
@@ -89,7 +87,7 @@ export const ArticleDashboardTemplate: FC<
         <div className="h-[40px]" />
         <TabsContent value={TAB_LIST.ENGLISH}>
           <ArticleList
-            data={enData.articles}
+            data={data.enArticles}
             user={user}
             languageStatus={2}
             feedIdList={[]}
@@ -98,7 +96,7 @@ export const ArticleDashboardTemplate: FC<
         </TabsContent>
         <TabsContent value={TAB_LIST.JAPANESE}>
           <ArticleList
-            data={jpData.articles}
+            data={data.jpArticles}
             user={user}
             languageStatus={1}
             feedIdList={[]}
