@@ -6,26 +6,17 @@ import { getClient } from "@/lib/apollo/client";
 
 import { ArticlesInput } from "@/graphql/type";
 
-import { TrendArticleListFragment } from "../components/List";
+import { TrendArticleListFragment } from "..";
 
-const TrendArticleDashboardTemplateFragment = graphql(
+const TrendArticleListQuery = graphql(
   `
-    fragment TrendArticleDashboardTemplateFragment on Query {
+    query TrendArticleListQuery($input: ArticlesInput!) {
       articles(articlesInput: $input) {
         ...TrendArticleListFragment
       }
     }
   `,
   [TrendArticleListFragment]
-);
-
-const TrendArticleListQuery = graphql(
-  `
-    query TrendArticleListQuery($input: ArticlesInput!) {
-      ...TrendArticleDashboardTemplateFragment
-    }
-  `,
-  [TrendArticleDashboardTemplateFragment]
 );
 
 export const getTrendArticleListQuery = async (input: ArticlesInput) => {
@@ -41,7 +32,7 @@ export const getTrendArticleListQuery = async (input: ArticlesInput) => {
     },
   });
 
-  const newData = readFragment(TrendArticleDashboardTemplateFragment, data);
+  const newData = readFragment(TrendArticleListFragment, data.articles);
 
-  return { data: newData, error, loading };
+  return { newData, error, loading };
 };

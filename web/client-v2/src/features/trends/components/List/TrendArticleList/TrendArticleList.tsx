@@ -5,13 +5,13 @@ import { FragmentOf, readFragment } from "gql.tada";
 import { useCallback, useRef, useState, useEffect } from "react";
 
 import { ArticleCardWrapper } from "@/features/articles/components/Card";
-import { getTrendArticleListQuery } from "@/features/trends/actions/getTrendArticleListQuery";
 
 import { Loader } from "@/components/ui/loader";
 
 import { ArticleTabType } from "@/types/article";
 import { LanguageStatus } from "@/types/language";
 
+import { getTrendArticleListQuery } from "./actionTrendArticleListQuery";
 import { TrendArticleListFragment } from "./TrendArticleListFragment";
 
 type TrendArticleListProps = {
@@ -45,7 +45,7 @@ export function TrendArticleList({
   const flatArticles = edges ? edges.flatMap((edge) => edge.node) : [];
 
   const loadMore = useCallback(async () => {
-    const { data: res, error } = await getTrendArticleListQuery({
+    const { newData: res, error } = await getTrendArticleListQuery({
       first: 20,
       after: endCursor,
       languageStatus,
@@ -53,7 +53,7 @@ export function TrendArticleList({
     });
     if (error) return;
 
-    const newArticles = readFragment(TrendArticleListFragment, res.articles);
+    const newArticles = readFragment(TrendArticleListFragment, res);
     if (newArticles.pageInfo.hasNextPage) {
       const endCursor = newArticles.pageInfo?.endCursor || null;
       setEndCursor(endCursor);
