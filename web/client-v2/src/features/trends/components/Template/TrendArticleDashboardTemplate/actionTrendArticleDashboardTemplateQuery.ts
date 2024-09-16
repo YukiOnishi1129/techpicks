@@ -7,7 +7,6 @@ import { getClient } from "@/lib/apollo/client";
 import { ArticlesInput } from "@/graphql/type";
 
 import { TrendArticleDashboardTemplateFragment } from "./TrendArticleDashboardTemplateFragment";
-import { TrendArticleListFragment } from "../../List";
 
 const TrendArticleDashboardTemplateQuery = graphql(
   `
@@ -15,16 +14,10 @@ const TrendArticleDashboardTemplateQuery = graphql(
       $enInput: ArticlesInput!
       $jpInput: ArticlesInput!
     ) {
-      enArticles: articles(articlesInput: $enInput) {
-        ...TrendArticleListFragment
-      }
-      jpArticles: articles(articlesInput: $jpInput) {
-        ...TrendArticleListFragment
-      }
       ...TrendArticleDashboardTemplateFragment
     }
   `,
-  [TrendArticleDashboardTemplateFragment, TrendArticleListFragment]
+  [TrendArticleDashboardTemplateFragment]
 );
 
 export const getTrendArticleDashboardTemplateQuery = async (
