@@ -1,4 +1,5 @@
 import { User } from "@supabase/supabase-js";
+import { readFragment } from "gql.tada";
 import Image from "next/image";
 import { FC } from "react";
 
@@ -9,7 +10,8 @@ import { LanguageStatus } from "@/types/language";
 import { ENGLISH_IMAGE, JAPANESE_IMAGE } from "@/constant/image";
 import { ArticlesInput } from "@/graphql/type";
 
-import { getArticleDashboardTemplateQuery } from "./actionArticleDashboardTemplateQuery";
+import { getArticleDashboardTemplateQuery } from "./actionGetArticleDashboardTemplateQuery";
+import { ArticleDashboardTemplateFragment } from "./ArticleDashboardTemplateFragment";
 import { ArticleList } from "../../List";
 
 type ArticleDashboardTemplateProps = {
@@ -26,6 +28,9 @@ const TAB_LIST = {
 export const ArticleDashboardTemplate: FC<
   ArticleDashboardTemplateProps
 > = async ({ user, languageStatus = 2, tab }) => {
+  const title =
+    tab === "site" ? "Site" : tab === "company" ? "Company" : "Summary";
+
   const enInput: ArticlesInput = {
     first: 20,
     after: null,
@@ -47,8 +52,7 @@ export const ArticleDashboardTemplate: FC<
     return <div>{error.message}</div>;
   }
 
-  const title =
-    tab === "site" ? "Site" : tab === "company" ? "Company" : "Summary";
+  const fragment = readFragment(ArticleDashboardTemplateFragment, data);
 
   return (
     <div>
@@ -87,7 +91,7 @@ export const ArticleDashboardTemplate: FC<
         <div className="h-[40px]" />
         <TabsContent value={TAB_LIST.ENGLISH}>
           <ArticleList
-            data={data.enArticles}
+            data={fragment.enArticles}
             user={user}
             languageStatus={2}
             feedIdList={[]}
@@ -96,7 +100,7 @@ export const ArticleDashboardTemplate: FC<
         </TabsContent>
         <TabsContent value={TAB_LIST.JAPANESE}>
           <ArticleList
-            data={data.jpArticles}
+            data={fragment.jpArticles}
             user={user}
             languageStatus={1}
             feedIdList={[]}
