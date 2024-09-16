@@ -1,9 +1,10 @@
 import { User } from "@supabase/supabase-js";
-
-import { getBookmarkListQuery } from "@/features/bookmarks/actions/getBookmarkListQuery";
+import { readFragment } from "gql.tada";
 
 import { BookmarksInput } from "@/graphql/type";
 
+import { getBookmarkTemplateQuery } from "./actionGetBookmarkListQuery";
+import { BookmarkTemplateFragment } from "./BookmarkTemplateFragment";
 import { CreateBookmarkDialog } from "../../Dialog";
 import { BookmarkList } from "../../List";
 import { BookmarkArticleKeywordSearchInput } from "../../Search";
@@ -21,11 +22,14 @@ export const BookmarkTemplate = async ({
     userId: user.id,
     keyword: keyword,
   };
-  const { data, error } = await getBookmarkListQuery(input);
+  const { data, error } = await getBookmarkTemplateQuery(input);
 
   if (error) {
     throw new Error(error.message);
   }
+
+  const fragment = readFragment(BookmarkTemplateFragment, data);
+
   return (
     <div>
       <div className="fixed z-10  hidden  w-[90%]  items-center  justify-between bg-card md:flex md:w-[70%] md:px-4">
@@ -39,7 +43,7 @@ export const BookmarkTemplate = async ({
       </div>
       <div className="h-4 md:h-16" />
 
-      <BookmarkList data={data.bookmarks} user={user} />
+      <BookmarkList data={fragment.bookmarks} user={user} />
 
       <div className="fixed bottom-20 right-4 z-50  md:hidden">
         {/* <BookmarkSearchKeywordDialogFloatButton keyword={keyword} /> */}
