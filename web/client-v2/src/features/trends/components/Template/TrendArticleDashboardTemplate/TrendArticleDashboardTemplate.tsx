@@ -1,4 +1,5 @@
 import { User } from "@supabase/supabase-js";
+import { readFragment } from "gql.tada";
 import Image from "next/image";
 import { FC } from "react";
 
@@ -9,7 +10,8 @@ import { LanguageStatus } from "@/types/language";
 import { ENGLISH_IMAGE, JAPANESE_IMAGE } from "@/constant/image";
 import { ArticlesInput } from "@/graphql/type";
 
-import { getTrendArticleDashboardTemplateQuery } from "./actionTrendArticleDashboardTemplateQuery";
+import { getTrendArticleDashboardTemplateQuery } from "./actionGetTrendArticleDashboardTemplateQuery";
+import { TrendArticleDashboardTemplateFragment } from "./TrendArticleDashboardTemplateFragment";
 import { TrendArticleList } from "../../List";
 
 type TrendArticleDashboardTemplateProps = {
@@ -39,10 +41,12 @@ export const TrendArticleDashboardTemplate: FC<
     tab,
     languageStatus: 1,
   };
-  const { newData, error } = await getTrendArticleDashboardTemplateQuery(
+  const { data, error } = await getTrendArticleDashboardTemplateQuery(
     enInput,
     jpInput
   );
+
+  const fragment = readFragment(TrendArticleDashboardTemplateFragment, data);
 
   if (error) {
     return <div>{error.message}</div>;
@@ -85,7 +89,7 @@ export const TrendArticleDashboardTemplate: FC<
         <div className="h-[40px]" />
         <TabsContent value={TAB_LIST.ENGLISH}>
           <TrendArticleList
-            data={newData.enArticles}
+            data={fragment.enArticles}
             user={user}
             languageStatus={2}
             feedIdList={[]}
@@ -94,7 +98,7 @@ export const TrendArticleDashboardTemplate: FC<
         </TabsContent>
         <TabsContent value={TAB_LIST.JAPANESE}>
           <TrendArticleList
-            data={newData.jpArticles}
+            data={fragment.jpArticles}
             user={user}
             languageStatus={1}
             feedIdList={[]}

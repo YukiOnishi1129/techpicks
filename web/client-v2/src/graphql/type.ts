@@ -378,15 +378,6 @@ export type DeleteBookmarkMutationMutationVariables = Exact<{
 
 export type DeleteBookmarkMutationMutation = { __typename?: 'Mutation', deleteBookmark: boolean };
 
-export type ArticleOgpFragmentFragment = { __typename?: 'Query', articleOpg: { __typename?: 'ArticleOGP', title: string, description?: string | null, thumbnailUrl: string, articleUrl: string, siteUrl: string, siteName: string, faviconUrl: string } };
-
-export type ArticleOgpQueryQueryVariables = Exact<{
-  url: Scalars['String']['input'];
-}>;
-
-
-export type ArticleOgpQueryQuery = { __typename?: 'Query', articleOpg: { __typename?: 'ArticleOGP', title: string, description?: string | null, thumbnailUrl: string, articleUrl: string, siteUrl: string, siteName: string, faviconUrl: string } };
-
 export type ArticleCardItemFragmentFragment = { __typename?: 'Article', id: string, title: string, description: string, articleUrl: string, publishedAt?: number | null, thumbnailUrl: string, isEng: boolean, isPrivate: boolean, isBookmarked: boolean, bookmarkId?: string | null, likeCount?: number | null, platform?: { __typename?: 'Platform', id: string, name: string, siteUrl: string, faviconUrl: string } | null, feeds?: Array<{ __typename?: 'Feed', id: string, name: string }> | null };
 
 export type ArticleCardWrapperFragmentFragment = { __typename?: 'Article', id: string, title: string, articleUrl: string, publishedAt?: number | null, thumbnailUrl: string, isEng: boolean, isPrivate: boolean, isBookmarked: boolean, bookmarkId?: string | null, likeCount?: number | null, description: string, platform?: { __typename?: 'Platform', id: string, name: string, faviconUrl: string, siteUrl: string } | null, feeds?: Array<{ __typename?: 'Feed', id: string, name: string }> | null };
@@ -428,7 +419,14 @@ export type BookmarkCardItemFragmentFragment = { __typename?: 'Bookmark', id: st
 
 export type BookmarkCardWrapperFragmentFragment = { __typename?: 'Bookmark', id: string, title: string, description: string, articleUrl: string, thumbnailUrl: string, publishedAt?: number | null, articleId: string, platformId?: string | null, platformName: string, platformUrl: string, platformFaviconUrl: string, isEng: boolean, isRead: boolean, createdAt: number, updatedAt: number };
 
-export type CreateBookmarkDialogContentFragmentFragment = { __typename?: 'ArticleOGP', title: string, description?: string | null, thumbnailUrl: string, articleUrl: string, siteUrl: string, siteName: string, faviconUrl: string };
+export type CreateBookmarkDialogContentFragmentFragment = { __typename?: 'Query', articleOpg: { __typename?: 'ArticleOGP', title: string, description?: string | null, thumbnailUrl: string, articleUrl: string, siteUrl: string, siteName: string, faviconUrl: string } };
+
+export type GetCreateBookmarkDialogArticleOgpQueryQueryVariables = Exact<{
+  url: Scalars['String']['input'];
+}>;
+
+
+export type GetCreateBookmarkDialogArticleOgpQueryQuery = { __typename?: 'Query', articleOpg: { __typename?: 'ArticleOGP', title: string, description?: string | null, thumbnailUrl: string, articleUrl: string, siteUrl: string, siteName: string, faviconUrl: string } };
 
 export type BookmarkListFragmentFragment = { __typename?: 'BookmarkConnection', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null }, edges: Array<{ __typename?: 'BookmarkEdge', node: { __typename?: 'Bookmark', id: string, title: string, description: string, articleUrl: string, thumbnailUrl: string, publishedAt?: number | null, articleId: string, platformId?: string | null, platformName: string, platformUrl: string, platformFaviconUrl: string, isEng: boolean, isRead: boolean, createdAt: number, updatedAt: number } }> };
 
@@ -456,12 +454,12 @@ export type FavoriteArticleFolderListTemplateFragmentFragment = { __typename?: '
 
 export type TrendArticleListFragmentFragment = { __typename?: 'ArticleConnection', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null }, edges: Array<{ __typename?: 'ArticleEdge', node: { __typename?: 'Article', id: string, title: string, articleUrl: string, publishedAt?: number | null, thumbnailUrl: string, isEng: boolean, isPrivate: boolean, isBookmarked: boolean, bookmarkId?: string | null, likeCount?: number | null, description: string, platform?: { __typename?: 'Platform', id: string, name: string, faviconUrl: string, siteUrl: string } | null, feeds?: Array<{ __typename?: 'Feed', id: string, name: string }> | null } }> };
 
-export type TrendArticleListQueryQueryVariables = Exact<{
+export type GetTrendArticleListQueryQueryVariables = Exact<{
   input: ArticlesInput;
 }>;
 
 
-export type TrendArticleListQueryQuery = { __typename?: 'Query', articles: { __typename?: 'ArticleConnection', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null }, edges: Array<{ __typename?: 'ArticleEdge', node: { __typename?: 'Article', id: string, title: string, articleUrl: string, publishedAt?: number | null, thumbnailUrl: string, isEng: boolean, isPrivate: boolean, isBookmarked: boolean, bookmarkId?: string | null, likeCount?: number | null, description: string, platform?: { __typename?: 'Platform', id: string, name: string, faviconUrl: string, siteUrl: string } | null, feeds?: Array<{ __typename?: 'Feed', id: string, name: string }> | null } }> } };
+export type GetTrendArticleListQueryQuery = { __typename?: 'Query', articles: { __typename?: 'ArticleConnection', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null }, edges: Array<{ __typename?: 'ArticleEdge', node: { __typename?: 'Article', id: string, title: string, articleUrl: string, publishedAt?: number | null, thumbnailUrl: string, isEng: boolean, isPrivate: boolean, isBookmarked: boolean, bookmarkId?: string | null, likeCount?: number | null, description: string, platform?: { __typename?: 'Platform', id: string, name: string, faviconUrl: string, siteUrl: string } | null, feeds?: Array<{ __typename?: 'Feed', id: string, name: string }> | null } }> } };
 
 export type TrendArticleDashboardTemplateFragmentFragment = { __typename?: 'Query', enArticles: { __typename?: 'ArticleConnection', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null }, edges: Array<{ __typename?: 'ArticleEdge', node: { __typename?: 'Article', id: string, title: string, articleUrl: string, publishedAt?: number | null, thumbnailUrl: string, isEng: boolean, isPrivate: boolean, isBookmarked: boolean, bookmarkId?: string | null, likeCount?: number | null, description: string, platform?: { __typename?: 'Platform', id: string, name: string, faviconUrl: string, siteUrl: string } | null, feeds?: Array<{ __typename?: 'Feed', id: string, name: string }> | null } }> }, jpArticles: { __typename?: 'ArticleConnection', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null }, edges: Array<{ __typename?: 'ArticleEdge', node: { __typename?: 'Article', id: string, title: string, articleUrl: string, publishedAt?: number | null, thumbnailUrl: string, isEng: boolean, isPrivate: boolean, isBookmarked: boolean, bookmarkId?: string | null, likeCount?: number | null, description: string, platform?: { __typename?: 'Platform', id: string, name: string, faviconUrl: string, siteUrl: string } | null, feeds?: Array<{ __typename?: 'Feed', id: string, name: string }> | null } }> } };
 
@@ -495,35 +493,6 @@ export const LoggedBaseLayoutFragmentFragmentDoc = gql`
   ...DeskTopSidebarFragment
 }
     ${DeskTopSidebarFragmentFragmentDoc}`;
-export const OgpPreviewContentFragmentFragmentDoc = gql`
-    fragment OGPPreviewContentFragment on ArticleOGP {
-  title
-  description
-  thumbnailUrl
-  articleUrl
-  siteName
-  faviconUrl
-}
-    `;
-export const CreateBookmarkDialogContentFragmentFragmentDoc = gql`
-    fragment CreateBookmarkDialogContentFragment on ArticleOGP {
-  title
-  description
-  thumbnailUrl
-  articleUrl
-  siteUrl
-  siteName
-  faviconUrl
-  ...OGPPreviewContentFragment
-}
-    ${OgpPreviewContentFragmentFragmentDoc}`;
-export const ArticleOgpFragmentFragmentDoc = gql`
-    fragment ArticleOGPFragment on Query {
-  articleOpg(articleUrl: $url) {
-    ...CreateBookmarkDialogContentFragment
-  }
-}
-    ${CreateBookmarkDialogContentFragmentFragmentDoc}`;
 export const ArticleCardItemFragmentFragmentDoc = gql`
     fragment ArticleCardItemFragment on Article {
   id
@@ -609,6 +578,30 @@ export const ArticleDashboardTemplateFragmentFragmentDoc = gql`
   }
 }
     ${ArticleListFragmentFragmentDoc}`;
+export const OgpPreviewContentFragmentFragmentDoc = gql`
+    fragment OGPPreviewContentFragment on ArticleOGP {
+  title
+  description
+  thumbnailUrl
+  articleUrl
+  siteName
+  faviconUrl
+}
+    `;
+export const CreateBookmarkDialogContentFragmentFragmentDoc = gql`
+    fragment CreateBookmarkDialogContentFragment on Query {
+  articleOpg(articleUrl: $url) {
+    title
+    description
+    thumbnailUrl
+    articleUrl
+    siteUrl
+    siteName
+    faviconUrl
+    ...OGPPreviewContentFragment
+  }
+}
+    ${OgpPreviewContentFragmentFragmentDoc}`;
 export const BookmarkCardItemFragmentFragmentDoc = gql`
     fragment BookmarkCardItemFragment on Bookmark {
   id
@@ -852,44 +845,6 @@ export function useDeleteBookmarkMutationMutation(baseOptions?: Apollo.MutationH
 export type DeleteBookmarkMutationMutationHookResult = ReturnType<typeof useDeleteBookmarkMutationMutation>;
 export type DeleteBookmarkMutationMutationResult = Apollo.MutationResult<DeleteBookmarkMutationMutation>;
 export type DeleteBookmarkMutationMutationOptions = Apollo.BaseMutationOptions<DeleteBookmarkMutationMutation, DeleteBookmarkMutationMutationVariables>;
-export const ArticleOgpQueryDocument = gql`
-    query ArticleOGPQuery($url: String!) {
-  ...ArticleOGPFragment
-}
-    ${ArticleOgpFragmentFragmentDoc}`;
-
-/**
- * __useArticleOgpQueryQuery__
- *
- * To run a query within a React component, call `useArticleOgpQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useArticleOgpQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useArticleOgpQueryQuery({
- *   variables: {
- *      url: // value for 'url'
- *   },
- * });
- */
-export function useArticleOgpQueryQuery(baseOptions: Apollo.QueryHookOptions<ArticleOgpQueryQuery, ArticleOgpQueryQueryVariables> & ({ variables: ArticleOgpQueryQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<ArticleOgpQueryQuery, ArticleOgpQueryQueryVariables>(ArticleOgpQueryDocument, options);
-      }
-export function useArticleOgpQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ArticleOgpQueryQuery, ArticleOgpQueryQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<ArticleOgpQueryQuery, ArticleOgpQueryQueryVariables>(ArticleOgpQueryDocument, options);
-        }
-export function useArticleOgpQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<ArticleOgpQueryQuery, ArticleOgpQueryQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<ArticleOgpQueryQuery, ArticleOgpQueryQueryVariables>(ArticleOgpQueryDocument, options);
-        }
-export type ArticleOgpQueryQueryHookResult = ReturnType<typeof useArticleOgpQueryQuery>;
-export type ArticleOgpQueryLazyQueryHookResult = ReturnType<typeof useArticleOgpQueryLazyQuery>;
-export type ArticleOgpQuerySuspenseQueryHookResult = ReturnType<typeof useArticleOgpQuerySuspenseQuery>;
-export type ArticleOgpQueryQueryResult = Apollo.QueryResult<ArticleOgpQueryQuery, ArticleOgpQueryQueryVariables>;
 export const ArticleListQueryDocument = gql`
     query ArticleListQuery($input: ArticlesInput!) {
   articles(articlesInput: $input) {
@@ -1040,6 +995,44 @@ export type BookmarkListQueryQueryHookResult = ReturnType<typeof useBookmarkList
 export type BookmarkListQueryLazyQueryHookResult = ReturnType<typeof useBookmarkListQueryLazyQuery>;
 export type BookmarkListQuerySuspenseQueryHookResult = ReturnType<typeof useBookmarkListQuerySuspenseQuery>;
 export type BookmarkListQueryQueryResult = Apollo.QueryResult<BookmarkListQueryQuery, BookmarkListQueryQueryVariables>;
+export const GetCreateBookmarkDialogArticleOgpQueryDocument = gql`
+    query GetCreateBookmarkDialogArticleOGPQuery($url: String!) {
+  ...CreateBookmarkDialogContentFragment
+}
+    ${CreateBookmarkDialogContentFragmentFragmentDoc}`;
+
+/**
+ * __useGetCreateBookmarkDialogArticleOgpQueryQuery__
+ *
+ * To run a query within a React component, call `useGetCreateBookmarkDialogArticleOgpQueryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCreateBookmarkDialogArticleOgpQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCreateBookmarkDialogArticleOgpQueryQuery({
+ *   variables: {
+ *      url: // value for 'url'
+ *   },
+ * });
+ */
+export function useGetCreateBookmarkDialogArticleOgpQueryQuery(baseOptions: Apollo.QueryHookOptions<GetCreateBookmarkDialogArticleOgpQueryQuery, GetCreateBookmarkDialogArticleOgpQueryQueryVariables> & ({ variables: GetCreateBookmarkDialogArticleOgpQueryQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetCreateBookmarkDialogArticleOgpQueryQuery, GetCreateBookmarkDialogArticleOgpQueryQueryVariables>(GetCreateBookmarkDialogArticleOgpQueryDocument, options);
+      }
+export function useGetCreateBookmarkDialogArticleOgpQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCreateBookmarkDialogArticleOgpQueryQuery, GetCreateBookmarkDialogArticleOgpQueryQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetCreateBookmarkDialogArticleOgpQueryQuery, GetCreateBookmarkDialogArticleOgpQueryQueryVariables>(GetCreateBookmarkDialogArticleOgpQueryDocument, options);
+        }
+export function useGetCreateBookmarkDialogArticleOgpQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetCreateBookmarkDialogArticleOgpQueryQuery, GetCreateBookmarkDialogArticleOgpQueryQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetCreateBookmarkDialogArticleOgpQueryQuery, GetCreateBookmarkDialogArticleOgpQueryQueryVariables>(GetCreateBookmarkDialogArticleOgpQueryDocument, options);
+        }
+export type GetCreateBookmarkDialogArticleOgpQueryQueryHookResult = ReturnType<typeof useGetCreateBookmarkDialogArticleOgpQueryQuery>;
+export type GetCreateBookmarkDialogArticleOgpQueryLazyQueryHookResult = ReturnType<typeof useGetCreateBookmarkDialogArticleOgpQueryLazyQuery>;
+export type GetCreateBookmarkDialogArticleOgpQuerySuspenseQueryHookResult = ReturnType<typeof useGetCreateBookmarkDialogArticleOgpQuerySuspenseQuery>;
+export type GetCreateBookmarkDialogArticleOgpQueryQueryResult = Apollo.QueryResult<GetCreateBookmarkDialogArticleOgpQueryQuery, GetCreateBookmarkDialogArticleOgpQueryQueryVariables>;
 export const CreateFavoriteArticleFolderMutationDocument = gql`
     mutation CreateFavoriteArticleFolderMutation($input: CreateFavoriteArticleFolderInput!) {
   createFavoriteArticleFolder(input: $input) {
@@ -1111,8 +1104,8 @@ export type FavoriteArticleFolderListQueryQueryHookResult = ReturnType<typeof us
 export type FavoriteArticleFolderListQueryLazyQueryHookResult = ReturnType<typeof useFavoriteArticleFolderListQueryLazyQuery>;
 export type FavoriteArticleFolderListQuerySuspenseQueryHookResult = ReturnType<typeof useFavoriteArticleFolderListQuerySuspenseQuery>;
 export type FavoriteArticleFolderListQueryQueryResult = Apollo.QueryResult<FavoriteArticleFolderListQueryQuery, FavoriteArticleFolderListQueryQueryVariables>;
-export const TrendArticleListQueryDocument = gql`
-    query TrendArticleListQuery($input: ArticlesInput!) {
+export const GetTrendArticleListQueryDocument = gql`
+    query GetTrendArticleListQuery($input: ArticlesInput!) {
   articles(articlesInput: $input) {
     ...TrendArticleListFragment
   }
@@ -1120,37 +1113,37 @@ export const TrendArticleListQueryDocument = gql`
     ${TrendArticleListFragmentFragmentDoc}`;
 
 /**
- * __useTrendArticleListQueryQuery__
+ * __useGetTrendArticleListQueryQuery__
  *
- * To run a query within a React component, call `useTrendArticleListQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useTrendArticleListQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetTrendArticleListQueryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetTrendArticleListQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useTrendArticleListQueryQuery({
+ * const { data, loading, error } = useGetTrendArticleListQueryQuery({
  *   variables: {
  *      input: // value for 'input'
  *   },
  * });
  */
-export function useTrendArticleListQueryQuery(baseOptions: Apollo.QueryHookOptions<TrendArticleListQueryQuery, TrendArticleListQueryQueryVariables> & ({ variables: TrendArticleListQueryQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+export function useGetTrendArticleListQueryQuery(baseOptions: Apollo.QueryHookOptions<GetTrendArticleListQueryQuery, GetTrendArticleListQueryQueryVariables> & ({ variables: GetTrendArticleListQueryQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<TrendArticleListQueryQuery, TrendArticleListQueryQueryVariables>(TrendArticleListQueryDocument, options);
+        return Apollo.useQuery<GetTrendArticleListQueryQuery, GetTrendArticleListQueryQueryVariables>(GetTrendArticleListQueryDocument, options);
       }
-export function useTrendArticleListQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TrendArticleListQueryQuery, TrendArticleListQueryQueryVariables>) {
+export function useGetTrendArticleListQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetTrendArticleListQueryQuery, GetTrendArticleListQueryQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<TrendArticleListQueryQuery, TrendArticleListQueryQueryVariables>(TrendArticleListQueryDocument, options);
+          return Apollo.useLazyQuery<GetTrendArticleListQueryQuery, GetTrendArticleListQueryQueryVariables>(GetTrendArticleListQueryDocument, options);
         }
-export function useTrendArticleListQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<TrendArticleListQueryQuery, TrendArticleListQueryQueryVariables>) {
+export function useGetTrendArticleListQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetTrendArticleListQueryQuery, GetTrendArticleListQueryQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<TrendArticleListQueryQuery, TrendArticleListQueryQueryVariables>(TrendArticleListQueryDocument, options);
+          return Apollo.useSuspenseQuery<GetTrendArticleListQueryQuery, GetTrendArticleListQueryQueryVariables>(GetTrendArticleListQueryDocument, options);
         }
-export type TrendArticleListQueryQueryHookResult = ReturnType<typeof useTrendArticleListQueryQuery>;
-export type TrendArticleListQueryLazyQueryHookResult = ReturnType<typeof useTrendArticleListQueryLazyQuery>;
-export type TrendArticleListQuerySuspenseQueryHookResult = ReturnType<typeof useTrendArticleListQuerySuspenseQuery>;
-export type TrendArticleListQueryQueryResult = Apollo.QueryResult<TrendArticleListQueryQuery, TrendArticleListQueryQueryVariables>;
+export type GetTrendArticleListQueryQueryHookResult = ReturnType<typeof useGetTrendArticleListQueryQuery>;
+export type GetTrendArticleListQueryLazyQueryHookResult = ReturnType<typeof useGetTrendArticleListQueryLazyQuery>;
+export type GetTrendArticleListQuerySuspenseQueryHookResult = ReturnType<typeof useGetTrendArticleListQuerySuspenseQuery>;
+export type GetTrendArticleListQueryQueryResult = Apollo.QueryResult<GetTrendArticleListQueryQuery, GetTrendArticleListQueryQueryVariables>;
 export const TrendArticleDashboardTemplateQueryDocument = gql`
     query TrendArticleDashboardTemplateQuery($enInput: ArticlesInput!, $jpInput: ArticlesInput!) {
   ...TrendArticleDashboardTemplateFragment

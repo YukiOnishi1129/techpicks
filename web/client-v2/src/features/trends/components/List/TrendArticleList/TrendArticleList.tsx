@@ -11,7 +11,7 @@ import { Loader } from "@/components/ui/loader";
 import { ArticleTabType } from "@/types/article";
 import { LanguageStatus } from "@/types/language";
 
-import { getTrendArticleListQuery } from "./actionTrendArticleListQuery";
+import { getTrendArticleListQuery } from "./actionGetTrendArticleListQuery";
 import { TrendArticleListFragment } from "./TrendArticleListFragment";
 
 type TrendArticleListProps = {
@@ -45,7 +45,7 @@ export function TrendArticleList({
   const flatArticles = edges ? edges.flatMap((edge) => edge.node) : [];
 
   const loadMore = useCallback(async () => {
-    const { newData: res, error } = await getTrendArticleListQuery({
+    const { data: res, error } = await getTrendArticleListQuery({
       first: 20,
       after: endCursor,
       languageStatus,
@@ -53,7 +53,7 @@ export function TrendArticleList({
     });
     if (error) return;
 
-    const newArticles = readFragment(TrendArticleListFragment, res);
+    const newArticles = readFragment(TrendArticleListFragment, res.articles);
     if (newArticles.pageInfo.hasNextPage) {
       const endCursor = newArticles.pageInfo?.endCursor || null;
       setEndCursor(endCursor);

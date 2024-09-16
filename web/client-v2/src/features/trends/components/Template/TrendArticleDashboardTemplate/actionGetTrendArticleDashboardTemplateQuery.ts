@@ -1,6 +1,6 @@
 "use server";
 
-import { graphql, readFragment } from "gql.tada";
+import { graphql } from "gql.tada";
 
 import { getClient } from "@/lib/apollo/client";
 
@@ -8,9 +8,9 @@ import { ArticlesInput } from "@/graphql/type";
 
 import { TrendArticleDashboardTemplateFragment } from "./TrendArticleDashboardTemplateFragment";
 
-const TrendArticleDashboardTemplateQuery = graphql(
+const GetTrendArticleDashboardTemplateQuery = graphql(
   `
-    query TrendArticleDashboardTemplateQuery(
+    query GetTrendArticleDashboardTemplateQuery(
       $enInput: ArticlesInput!
       $jpInput: ArticlesInput!
     ) {
@@ -25,7 +25,7 @@ export const getTrendArticleDashboardTemplateQuery = async (
   jpInput: ArticlesInput
 ) => {
   const { data, error, loading } = await getClient().query({
-    query: TrendArticleDashboardTemplateQuery,
+    query: GetTrendArticleDashboardTemplateQuery,
     context: {
       fetchOptions: {
         cache: "no-cache",
@@ -37,7 +37,5 @@ export const getTrendArticleDashboardTemplateQuery = async (
     },
   });
 
-  const newData = readFragment(TrendArticleDashboardTemplateFragment, data);
-
-  return { newData, error, loading };
+  return { data, error, loading };
 };
