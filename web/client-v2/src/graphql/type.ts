@@ -459,6 +459,13 @@ export type FavoriteArticleFolderListFragmentFragment = { __typename?: 'Favorite
 
 export type FavoriteArticleFolderListTemplateFragmentFragment = { __typename?: 'Query', favoriteArticleFolders: { __typename?: 'FavoriteArticleFolderConnection', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null }, edges: Array<{ __typename?: 'FavoriteArticleFolderEdge', node: { __typename?: 'FavoriteArticleFolder', id: string, title: string, description?: string | null, favoriteArticles?: Array<{ __typename?: 'FavoriteArticle', id: string, title: string, articleUrl: string, thumbnailUrl: string, createdAt: number }> | null } }> } };
 
+export type GetFavoriteArticleFolderListTemplateQueryQueryVariables = Exact<{
+  input: FavoriteArticleFoldersInput;
+}>;
+
+
+export type GetFavoriteArticleFolderListTemplateQueryQuery = { __typename?: 'Query', favoriteArticleFolders: { __typename?: 'FavoriteArticleFolderConnection', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null }, edges: Array<{ __typename?: 'FavoriteArticleFolderEdge', node: { __typename?: 'FavoriteArticleFolder', id: string, title: string, description?: string | null, favoriteArticles?: Array<{ __typename?: 'FavoriteArticle', id: string, title: string, articleUrl: string, thumbnailUrl: string, createdAt: number }> | null } }> } };
+
 export type TrendArticleListFragmentFragment = { __typename?: 'ArticleConnection', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null }, edges: Array<{ __typename?: 'ArticleEdge', node: { __typename?: 'Article', id: string, title: string, articleUrl: string, publishedAt?: number | null, thumbnailUrl: string, isEng: boolean, isPrivate: boolean, isBookmarked: boolean, bookmarkId?: string | null, likeCount?: number | null, description: string, platform?: { __typename?: 'Platform', id: string, name: string, faviconUrl: string, siteUrl: string } | null, feeds?: Array<{ __typename?: 'Feed', id: string, name: string }> | null } }> };
 
 export type GetTrendArticleListQueryQueryVariables = Exact<{
@@ -1151,6 +1158,44 @@ export type FavoriteArticleFolderListQueryQueryHookResult = ReturnType<typeof us
 export type FavoriteArticleFolderListQueryLazyQueryHookResult = ReturnType<typeof useFavoriteArticleFolderListQueryLazyQuery>;
 export type FavoriteArticleFolderListQuerySuspenseQueryHookResult = ReturnType<typeof useFavoriteArticleFolderListQuerySuspenseQuery>;
 export type FavoriteArticleFolderListQueryQueryResult = Apollo.QueryResult<FavoriteArticleFolderListQueryQuery, FavoriteArticleFolderListQueryQueryVariables>;
+export const GetFavoriteArticleFolderListTemplateQueryDocument = gql`
+    query GetFavoriteArticleFolderListTemplateQuery($input: FavoriteArticleFoldersInput!) {
+  ...FavoriteArticleFolderListTemplateFragment
+}
+    ${FavoriteArticleFolderListTemplateFragmentFragmentDoc}`;
+
+/**
+ * __useGetFavoriteArticleFolderListTemplateQueryQuery__
+ *
+ * To run a query within a React component, call `useGetFavoriteArticleFolderListTemplateQueryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetFavoriteArticleFolderListTemplateQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetFavoriteArticleFolderListTemplateQueryQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useGetFavoriteArticleFolderListTemplateQueryQuery(baseOptions: Apollo.QueryHookOptions<GetFavoriteArticleFolderListTemplateQueryQuery, GetFavoriteArticleFolderListTemplateQueryQueryVariables> & ({ variables: GetFavoriteArticleFolderListTemplateQueryQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetFavoriteArticleFolderListTemplateQueryQuery, GetFavoriteArticleFolderListTemplateQueryQueryVariables>(GetFavoriteArticleFolderListTemplateQueryDocument, options);
+      }
+export function useGetFavoriteArticleFolderListTemplateQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetFavoriteArticleFolderListTemplateQueryQuery, GetFavoriteArticleFolderListTemplateQueryQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetFavoriteArticleFolderListTemplateQueryQuery, GetFavoriteArticleFolderListTemplateQueryQueryVariables>(GetFavoriteArticleFolderListTemplateQueryDocument, options);
+        }
+export function useGetFavoriteArticleFolderListTemplateQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetFavoriteArticleFolderListTemplateQueryQuery, GetFavoriteArticleFolderListTemplateQueryQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetFavoriteArticleFolderListTemplateQueryQuery, GetFavoriteArticleFolderListTemplateQueryQueryVariables>(GetFavoriteArticleFolderListTemplateQueryDocument, options);
+        }
+export type GetFavoriteArticleFolderListTemplateQueryQueryHookResult = ReturnType<typeof useGetFavoriteArticleFolderListTemplateQueryQuery>;
+export type GetFavoriteArticleFolderListTemplateQueryLazyQueryHookResult = ReturnType<typeof useGetFavoriteArticleFolderListTemplateQueryLazyQuery>;
+export type GetFavoriteArticleFolderListTemplateQuerySuspenseQueryHookResult = ReturnType<typeof useGetFavoriteArticleFolderListTemplateQuerySuspenseQuery>;
+export type GetFavoriteArticleFolderListTemplateQueryQueryResult = Apollo.QueryResult<GetFavoriteArticleFolderListTemplateQueryQuery, GetFavoriteArticleFolderListTemplateQueryQueryVariables>;
 export const GetTrendArticleListQueryDocument = gql`
     query GetTrendArticleListQuery($input: ArticlesInput!) {
   articles(articlesInput: $input) {

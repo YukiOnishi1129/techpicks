@@ -5,7 +5,6 @@ import { usePathname } from "next/navigation";
 import { FC, useCallback, useEffect, useRef, useState } from "react";
 
 import { logoutToLoginPage } from "@/features/auth/actions/auth";
-import { getFavoriteArticleFolderListQuery } from "@/features/favorites/actions/getFavoriteArticleFolderListQuery";
 
 import { NotFoundList } from "@/components/layout/NotFoundList";
 import { Loader } from "@/components/ui/loader";
@@ -14,6 +13,7 @@ import { useStatusToast } from "@/hooks/useStatusToast";
 
 import { serverRevalidatePage } from "@/actions/serverRevalidatePage";
 
+import { getFavoriteArticleFolderListQuery } from "./actionGetFavoriteArticleFolderListQuery";
 import { FavoriteArticleFolderListFragment } from "./FavoriteArticleFolderListFragment";
 import { FavoriteArticleFolderCard } from "../../Card";
 
