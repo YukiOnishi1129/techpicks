@@ -15,7 +15,6 @@ import React, {
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { getArticleOGPQuery } from "@/features/articles/actions/getArticleOGPQuery";
 import { logoutToLoginPage } from "@/features/auth/actions/auth";
 import { createBookmarkForUploadArticleMutation } from "@/features/bookmarks/actions/createBookmarkForUploadArticleMutation";
 
@@ -43,6 +42,7 @@ import { useStatusToast } from "@/hooks/useStatusToast";
 
 import { checkURL } from "@/lib/check";
 
+import { getCreateBookmarkDialogArticleOGPQuery } from "./actionGetCreateBookmarkDialogArticleOGPQuery";
 import { CreateBookmarkDialogContentFragment } from "./CreateBookmarkDialogContentFragment";
 
 type CreateBookmarkDialogContentProps = {
@@ -86,9 +86,10 @@ export const CreateBookmarkDialogContent: FC<
   const onSubmit = useCallback(async (data: z.infer<typeof FormSchema>) => {
     startTransition(async () => {
       if (!checkURL(data.url)) return;
-      const { data: resOgpData, error } = await getArticleOGPQuery(data.url);
+      const { data: resOgpData, error } =
+        await getCreateBookmarkDialogArticleOGPQuery(data.url);
       if (!error && resOgpData) {
-        setOgpData(resOgpData.articleOpg);
+        setOgpData(resOgpData);
       }
     });
   }, []);
@@ -117,14 +118,16 @@ export const CreateBookmarkDialogContent: FC<
       );
       if (!fragment) return;
 
+      fragment.articleOpg.title;
+
       const { data, error } = await createBookmarkForUploadArticleMutation({
-        title: fragment.title,
-        description: fragment?.description || "",
+        title: fragment.articleOpg.title,
+        description: fragment?.articleOpg?.description || "",
         articleUrl: form.getValues("url"),
-        thumbnailUrl: fragment.thumbnailUrl,
-        platformName: fragment.siteName,
-        platformUrl: fragment.siteUrl,
-        platformFaviconUrl: fragment.faviconUrl,
+        thumbnailUrl: fragment.articleOpg.thumbnailUrl,
+        platformName: fragment.articleOpg.siteName,
+        platformUrl: fragment.articleOpg.siteUrl,
+        platformFaviconUrl: fragment.articleOpg.faviconUrl,
       });
 
       if (error) {
@@ -204,7 +207,10 @@ export const CreateBookmarkDialogContent: FC<
       {isPending && <Loader />}
       {!isPending && ogpData && (
         <OGPPreviewContent
-          data={readFragment(CreateBookmarkDialogContentFragment, ogpData)}
+          data={
+            readFragment(CreateBookmarkDialogContentFragment, ogpData)
+              .articleOpg
+          }
         />
       )}
 
