@@ -9,7 +9,7 @@ import { z } from "zod";
 
 import { logoutToLoginPage } from "@/features/auth/actions/auth";
 import { getUser } from "@/features/auth/actions/user";
-import { createFavoriteArticleFolderMutation } from "@/features/favorites/actions/createFavoriteArticleFolderMutation";
+import { createFavoriteArticleFolderMutation } from "@/features/favorites/actions/actCreateFavoriteArticleFolderMutation";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -30,7 +30,7 @@ import { Input } from "@/components/ui/input";
 
 import { useStatusToast } from "@/hooks/useStatusToast";
 
-import { serverRevalidatePage } from "@/actions/serverRevalidatePage";
+import { serverRevalidatePage } from "@/actions/actServerRevalidatePage";
 
 const FormSchema = z.object({
   title: z

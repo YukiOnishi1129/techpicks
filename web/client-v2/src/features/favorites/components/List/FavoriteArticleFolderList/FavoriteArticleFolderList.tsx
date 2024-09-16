@@ -11,9 +11,9 @@ import { Loader } from "@/components/ui/loader";
 
 import { useStatusToast } from "@/hooks/useStatusToast";
 
-import { serverRevalidatePage } from "@/actions/serverRevalidatePage";
+import { serverRevalidatePage } from "@/actions/actServerRevalidatePage";
 
-import { getFavoriteArticleFolderListQuery } from "./actionGetFavoriteArticleFolderListQuery";
+import { getFavoriteArticleFolderListQuery } from "./actGetFavoriteArticleFolderListQuery";
 import { FavoriteArticleFolderListFragment } from "./FavoriteArticleFolderListFragment";
 import { FavoriteArticleFolderCard } from "../../Card";
 

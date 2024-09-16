@@ -5,9 +5,9 @@ import { getUser } from "@/features/auth/actions/user";
 
 import { useStatusToast } from "@/hooks/useStatusToast";
 
-import { serverRevalidatePage } from "@/actions/serverRevalidatePage";
+import { serverRevalidatePage } from "@/actions/actServerRevalidatePage";
 
-import { deleteBookmarkMutation } from "../actions/deleteBookmarkMutation";
+import { deleteBookmarkMutation } from "../actions/actDeleteBookmarkMutation";
 
 export const useBookmark = (pathname: string) => {
   const { successToast, failToast } = useStatusToast();

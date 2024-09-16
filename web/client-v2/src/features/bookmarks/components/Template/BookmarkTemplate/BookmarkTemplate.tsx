@@ -3,7 +3,7 @@ import { readFragment } from "gql.tada";
 
 import { BookmarksInput } from "@/graphql/type";
 
-import { getBookmarkTemplateQuery } from "./actionGetBookmarkListQuery";
+import { getBookmarkTemplateQuery } from "./actGetBookmarkListQuery";
 import { BookmarkTemplateFragment } from "./BookmarkTemplateFragment";
 import { CreateBookmarkDialog } from "../../Dialog";
 import { BookmarkList } from "../../List";

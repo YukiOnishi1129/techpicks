@@ -10,7 +10,7 @@ import { LanguageStatus } from "@/types/language";
 import { ENGLISH_IMAGE, JAPANESE_IMAGE } from "@/constant/image";
 import { ArticlesInput } from "@/graphql/type";
 
-import { getArticleDashboardTemplateQuery } from "./actionGetArticleDashboardTemplateQuery";
+import { getArticleDashboardTemplateQuery } from "./actGetArticleDashboardTemplateQuery";
 import { ArticleDashboardTemplateFragment } from "./ArticleDashboardTemplateFragment";
 import { ArticleList } from "../../List";
 

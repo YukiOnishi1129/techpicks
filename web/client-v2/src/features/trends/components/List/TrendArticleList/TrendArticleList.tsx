@@ -11,7 +11,7 @@ import { Loader } from "@/components/ui/loader";
 import { ArticleTabType } from "@/types/article";
 import { LanguageStatus } from "@/types/language";
 
-import { getTrendArticleListQuery } from "./actionGetTrendArticleListQuery";
+import { getTrendArticleListQuery } from "./actGetTrendArticleListQuery";
 import { TrendArticleListFragment } from "./TrendArticleListFragment";
 
 type TrendArticleListProps = {

@@ -16,7 +16,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { logoutToLoginPage } from "@/features/auth/actions/auth";
-import { createBookmarkForUploadArticleMutation } from "@/features/bookmarks/actions/createBookmarkForUploadArticleMutation";
+import { createBookmarkForUploadArticleMutation } from "@/features/bookmarks/actions/actCreateBookmarkForUploadArticleMutation";
 import { OGPPreviewContent } from "@/features/ogp/components/Dialog";
 
 import { Button } from "@/components/ui/button";
@@ -42,7 +42,7 @@ import { useStatusToast } from "@/hooks/useStatusToast";
 
 import { checkURL } from "@/lib/check";
 
-import { getCreateBookmarkDialogArticleOGPQuery } from "./actionGetCreateBookmarkDialogArticleOGPQuery";
+import { getCreateBookmarkDialogArticleOGPQuery } from "./actGetCreateBookmarkDialogArticleOGPQuery";
 import { CreateBookmarkDialogContentFragment } from "./CreateBookmarkDialogContentFragment";
 
 type CreateBookmarkDialogContentProps = {

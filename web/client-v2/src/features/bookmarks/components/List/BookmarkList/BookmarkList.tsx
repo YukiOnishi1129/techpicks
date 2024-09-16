@@ -6,7 +6,7 @@ import { FC, useCallback, useEffect, useRef, useState } from "react";
 
 import { Loader } from "@/components/ui/loader";
 
-import { getBookmarkListQuery } from "./actionGetBookmarkListQuery";
+import { getBookmarkListQuery } from "./actGetBookmarkListQuery";
 import { BookmarkListFragment } from "./BookmarkListFragment";
 import { BookmarkCardWrapper } from "../../Card";
 

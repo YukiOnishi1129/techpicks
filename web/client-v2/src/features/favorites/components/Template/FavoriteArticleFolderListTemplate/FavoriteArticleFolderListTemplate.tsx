@@ -3,7 +3,7 @@ import { readFragment } from "gql.tada";
 import { FC } from "react";
 import { FaHeart } from "react-icons/fa";
 
-import { getFavoriteArticleFolderListTemplateQuery } from "./actionGetFavoriteArticleFolderListTemplateQuery";
+import { getFavoriteArticleFolderListTemplateQuery } from "./actGetFavoriteArticleFolderListTemplateQuery";
 import { FavoriteArticleFolderListTemplateFragment } from "./FavoriteArticleFolderListTemplateFragment";
 import { CreateFavoriteArticleFolderDialog } from "../../Dialog";
 import { FavoriteArticleFolderList } from "../../List";

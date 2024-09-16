@@ -10,7 +10,7 @@ import { z } from "zod";
 import { Form, FormField, FormItem, FormControl } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
-import { serverRevalidatePage } from "@/actions/serverRevalidatePage";
+import { serverRevalidatePage } from "@/actions/actServerRevalidatePage";
 
 const formSchema = z.object({
   keyword: z.string().optional(),

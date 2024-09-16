@@ -13,7 +13,7 @@ import { ArticleTabType } from "@/types/article";
 // import { FavoriteArticleFolderType } from "@/types/favoriteArticleFolder";
 import { LanguageStatus } from "@/types/language";
 
-import { getArticleListQuery } from "./actionGetArticleListQuery";
+import { getArticleListQuery } from "./actGetArticleListQuery";
 import { ArticleListFragment } from "./ArticleListFragment";
 import { ArticleCardWrapper } from "../../Card/ArticleCardWrapper/ArticleCardWrapper";
 
