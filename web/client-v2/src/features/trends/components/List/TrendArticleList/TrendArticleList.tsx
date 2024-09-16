@@ -41,10 +41,12 @@ export function TrendArticleList({
   const [hashMore, setHashMore] = useState(true);
   const [offset, setOffset] = useState(1);
   const [endCursor, setEndCursor] = useState(fragment.pageInfo.endCursor);
+  const [isNextPage, setIsNextPage] = useState(true);
 
   const flatArticles = edges ? edges.flatMap((edge) => edge.node) : [];
 
   const loadMore = useCallback(async () => {
+    if (!isNextPage) return;
     const { data: res, error } = await getTrendArticleListQuery({
       first: 20,
       after: endCursor,
@@ -58,12 +60,13 @@ export function TrendArticleList({
       const endCursor = newArticles.pageInfo?.endCursor || null;
       setEndCursor(endCursor);
     }
+    if (!newArticles.pageInfo.hasNextPage) setIsNextPage(false);
 
     if (newArticles.edges.length > 0) {
       setEdges((prev) => [...prev, ...newArticles.edges]);
       setHashMore(newArticles.edges.length > 0);
     }
-  }, [languageStatus, tab, endCursor]);
+  }, [languageStatus, tab, endCursor, isNextPage]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -116,7 +119,7 @@ export function TrendArticleList({
             </div>
           ))}
           <div ref={observerTarget}>
-            {hashMore && (
+            {hashMore && isNextPage && (
               <div className="flex justify-center py-4">
                 <Loader />
               </div>
