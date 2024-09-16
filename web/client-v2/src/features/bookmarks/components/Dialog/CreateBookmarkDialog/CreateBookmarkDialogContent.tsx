@@ -132,8 +132,13 @@ export const CreateBookmarkDialogContent: FC<
 
       if (error) {
         if (error.length > 0) {
+          // TODO: Modify the error message response on the BFF side
+          const errMsg =
+            error[0].message.indexOf("bookmark already exists") != -1
+              ? "bookmark already exists"
+              : error[0].message;
           failToast({
-            description: error[0].message,
+            description: errMsg,
           });
           return;
         }
