@@ -5,7 +5,10 @@ import { ArticleListFragment } from "../../List";
 export const ArticleDashboardTemplateFragment = graphql(
   `
     fragment ArticleDashboardTemplateFragment on Query {
-      articles(articlesInput: $input) {
+      enArticles: articles(articlesInput: $enInput) {
+        ...ArticleListFragment
+      }
+      jpArticles: articles(articlesInput: $jpInput) {
         ...ArticleListFragment
       }
     }

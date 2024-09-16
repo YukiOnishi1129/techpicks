@@ -4,10 +4,9 @@ import { User } from "@supabase/supabase-js";
 import { FragmentOf, readFragment } from "gql.tada";
 import { FC, useCallback, useEffect, useRef, useState } from "react";
 
-import { getBookmarkListQuery } from "@/features/bookmarks/actions/getBookmarkListQuery";
-
 import { Loader } from "@/components/ui/loader";
 
+import { getBookmarkListQuery } from "./actGetBookmarkListQuery";
 import { BookmarkListFragment } from "./BookmarkListFragment";
 import { BookmarkCardWrapper } from "../../Card";
 
@@ -30,10 +29,12 @@ export const BookmarkList: FC<BookmarkListProps> = ({
   const [hashMore, setHashMore] = useState(true);
   const [offset, setOffset] = useState(1);
   const [endCursor, setEndCursor] = useState(fragment.pageInfo.endCursor);
+  const [isNextPage, setIsNextPage] = useState(true);
 
   const flatBookmarks = edges ? edges.flatMap((edge) => edge.node) : [];
 
   const loadMore = useCallback(async () => {
+    if (!isNextPage) return;
     const { data: res, error } = await getBookmarkListQuery({
       userId: user.id,
       first: 20,
@@ -43,10 +44,15 @@ export const BookmarkList: FC<BookmarkListProps> = ({
     if (error) return;
     const newBookmarks = readFragment(BookmarkListFragment, res.bookmarks);
     if (newBookmarks.pageInfo.hasNextPage) {
-      setEdges((prev) => [...prev, ...newBookmarks.edges]);
       setEndCursor(newBookmarks.pageInfo.endCursor);
     }
-  }, [keyword, user.id, endCursor]);
+    if (!newBookmarks.pageInfo.hasNextPage) setIsNextPage(false);
+
+    if (newBookmarks.edges.length > 0) {
+      setEdges((prev) => [...prev, ...newBookmarks.edges]);
+      setHashMore(newBookmarks.edges.length > 0);
+    }
+  }, [keyword, user.id, endCursor, isNextPage]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -99,7 +105,7 @@ export const BookmarkList: FC<BookmarkListProps> = ({
             </div>
           ))}
           <div ref={observerTarget}>
-            {hashMore && (
+            {hashMore && isNextPage && (
               <div className="flex justify-center py-4">
                 <Loader />
               </div>

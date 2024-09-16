@@ -9,8 +9,6 @@ import { Dialog, DialogTrigger } from "@/components/ui/dialog/dialog";
 
 import { CreateBookmarkDialogContent } from "./CreateBookmarkDialogContent";
 
-// import { CreateBookmarkDialogContent } from "./CreateBookmarkDialogContent";
-
 type CreateBookmarkDialogProps = {
   user?: User;
   buttonVariant?:

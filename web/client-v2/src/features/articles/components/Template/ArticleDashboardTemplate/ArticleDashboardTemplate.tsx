@@ -1,4 +1,5 @@
 import { User } from "@supabase/supabase-js";
+import { readFragment } from "gql.tada";
 import Image from "next/image";
 import { FC } from "react";
 
@@ -9,7 +10,8 @@ import { LanguageStatus } from "@/types/language";
 import { ENGLISH_IMAGE, JAPANESE_IMAGE } from "@/constant/image";
 import { ArticlesInput } from "@/graphql/type";
 
-import { getArticleListQuery } from "../../../actions/getArticleListQuery";
+import { getArticleDashboardTemplateQuery } from "./actGetArticleDashboardTemplateQuery";
+import { ArticleDashboardTemplateFragment } from "./ArticleDashboardTemplateFragment";
 import { ArticleList } from "../../List";
 
 type ArticleDashboardTemplateProps = {
@@ -26,6 +28,9 @@ const TAB_LIST = {
 export const ArticleDashboardTemplate: FC<
   ArticleDashboardTemplateProps
 > = async ({ user, languageStatus = 2, tab }) => {
+  const title =
+    tab === "site" ? "Site" : tab === "company" ? "Company" : "Summary";
+
   const enInput: ArticlesInput = {
     first: 20,
     after: null,
@@ -38,19 +43,16 @@ export const ArticleDashboardTemplate: FC<
     tab,
     languageStatus: 1,
   };
-  const { data: enData, error: enErr } = await getArticleListQuery(enInput);
-  const { data: jpData, error: error } = await getArticleListQuery(jpInput);
-
-  if (enErr) {
-    return <div>{enErr.message}</div>;
-  }
+  const { data, error } = await getArticleDashboardTemplateQuery(
+    enInput,
+    jpInput
+  );
 
   if (error) {
     return <div>{error.message}</div>;
   }
 
-  const title =
-    tab === "site" ? "Site" : tab === "company" ? "Company" : "Summary";
+  const fragment = readFragment(ArticleDashboardTemplateFragment, data);
 
   return (
     <div>
@@ -89,7 +91,7 @@ export const ArticleDashboardTemplate: FC<
         <div className="h-[40px]" />
         <TabsContent value={TAB_LIST.ENGLISH}>
           <ArticleList
-            data={enData.articles}
+            data={fragment.enArticles}
             user={user}
             languageStatus={2}
             feedIdList={[]}
@@ -98,7 +100,7 @@ export const ArticleDashboardTemplate: FC<
         </TabsContent>
         <TabsContent value={TAB_LIST.JAPANESE}>
           <ArticleList
-            data={jpData.articles}
+            data={fragment.jpArticles}
             user={user}
             languageStatus={1}
             feedIdList={[]}

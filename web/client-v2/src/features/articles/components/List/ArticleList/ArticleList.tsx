@@ -13,8 +13,8 @@ import { ArticleTabType } from "@/types/article";
 // import { FavoriteArticleFolderType } from "@/types/favoriteArticleFolder";
 import { LanguageStatus } from "@/types/language";
 
+import { getArticleListQuery } from "./actGetArticleListQuery";
 import { ArticleListFragment } from "./ArticleListFragment";
-import { getArticleListQuery } from "../../../actions/getArticleListQuery";
 import { ArticleCardWrapper } from "../../Card/ArticleCardWrapper/ArticleCardWrapper";
 
 type ArticleListProps = {
@@ -45,10 +45,12 @@ export function ArticleList({
   const [hashMore, setHashMore] = useState(true);
   const [offset, setOffset] = useState(1);
   const [endCursor, setEndCursor] = useState(fragment.pageInfo.endCursor);
+  const [isNextPage, setIsNextPage] = useState(true);
 
   const flatArticles = edges ? edges.flatMap((edge) => edge.node) : [];
 
   const loadMore = useCallback(async () => {
+    if (!isNextPage) return;
     const { data: res, error } = await getArticleListQuery({
       first: 20,
       after: endCursor,
@@ -62,12 +64,13 @@ export function ArticleList({
       const endCursor = newArticles.pageInfo?.endCursor || null;
       setEndCursor(endCursor);
     }
+    if (!newArticles.pageInfo.hasNextPage) setIsNextPage(false);
 
     if (newArticles.edges.length > 0) {
       setEdges((prev) => [...prev, ...newArticles.edges]);
       setHashMore(newArticles.edges.length > 0);
     }
-  }, [languageStatus, tab, endCursor]);
+  }, [languageStatus, tab, endCursor, isNextPage]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -120,7 +123,7 @@ export function ArticleList({
             </div>
           ))}
           <div ref={observerTarget}>
-            {hashMore && (
+            {hashMore && isNextPage && (
               <div className="flex justify-center py-4">
                 <Loader />
               </div>

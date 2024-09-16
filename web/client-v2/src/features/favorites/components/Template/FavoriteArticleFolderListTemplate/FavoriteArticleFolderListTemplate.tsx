@@ -1,9 +1,10 @@
 import { User } from "@supabase/supabase-js";
+import { readFragment } from "gql.tada";
 import { FC } from "react";
 import { FaHeart } from "react-icons/fa";
 
-import { getFavoriteArticleFolderListQuery } from "@/features/favorites/actions/getFavoriteArticleFolderListQuery";
-
+import { getFavoriteArticleFolderListTemplateQuery } from "./actGetFavoriteArticleFolderListTemplateQuery";
+import { FavoriteArticleFolderListTemplateFragment } from "./FavoriteArticleFolderListTemplateFragment";
 import { CreateFavoriteArticleFolderDialog } from "../../Dialog";
 import { FavoriteArticleFolderList } from "../../List";
 import { FavoriteArticleFolderKeywordSearchForm } from "../../Search";
@@ -16,7 +17,11 @@ type FavoriteArticleFolderListTemplateProps = {
 export const FavoriteArticleFolderListTemplate: FC<
   FavoriteArticleFolderListTemplateProps
 > = async ({ user, keyword }) => {
-  const { data } = await getFavoriteArticleFolderListQuery({ keyword });
+  const { data } = await getFavoriteArticleFolderListTemplateQuery({ keyword });
+  const fragment = readFragment(
+    FavoriteArticleFolderListTemplateFragment,
+    data
+  );
   return (
     <div>
       <div className="fixed z-10 hidden w-[90%] bg-card md:block md:w-[70%] md:px-4">
@@ -36,7 +41,7 @@ export const FavoriteArticleFolderListTemplate: FC<
       <div className="h-4 md:h-[120px]" />
 
       <FavoriteArticleFolderList
-        data={data.favoriteArticleFolders}
+        data={fragment.favoriteArticleFolders}
         user={user}
       />
 

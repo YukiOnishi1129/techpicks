@@ -1,8 +1,7 @@
 import { User } from "@supabase/supabase-js";
+import { readFragment } from "gql.tada";
 import Image from "next/image";
 import { FC } from "react";
-
-import { getTrendArticleListQuery } from "@/features/trends/actions/getTrendArticleListQuery";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -11,6 +10,8 @@ import { LanguageStatus } from "@/types/language";
 import { ENGLISH_IMAGE, JAPANESE_IMAGE } from "@/constant/image";
 import { ArticlesInput } from "@/graphql/type";
 
+import { getTrendArticleDashboardTemplateQuery } from "./actGetTrendArticleDashboardTemplateQuery";
+import { TrendArticleDashboardTemplateFragment } from "./TrendArticleDashboardTemplateFragment";
 import { TrendArticleList } from "../../List";
 
 type TrendArticleDashboardTemplateProps = {
@@ -40,14 +41,12 @@ export const TrendArticleDashboardTemplate: FC<
     tab,
     languageStatus: 1,
   };
-  const { data: enData, error: enErr } =
-    await getTrendArticleListQuery(enInput);
-  const { data: jpData, error: error } =
-    await getTrendArticleListQuery(jpInput);
+  const { data, error } = await getTrendArticleDashboardTemplateQuery(
+    enInput,
+    jpInput
+  );
 
-  if (enErr) {
-    return <div>{enErr.message}</div>;
-  }
+  const fragment = readFragment(TrendArticleDashboardTemplateFragment, data);
 
   if (error) {
     return <div>{error.message}</div>;
@@ -90,7 +89,7 @@ export const TrendArticleDashboardTemplate: FC<
         <div className="h-[40px]" />
         <TabsContent value={TAB_LIST.ENGLISH}>
           <TrendArticleList
-            data={enData.articles}
+            data={fragment.enArticles}
             user={user}
             languageStatus={2}
             feedIdList={[]}
@@ -99,7 +98,7 @@ export const TrendArticleDashboardTemplate: FC<
         </TabsContent>
         <TabsContent value={TAB_LIST.JAPANESE}>
           <TrendArticleList
-            data={jpData.articles}
+            data={fragment.jpArticles}
             user={user}
             languageStatus={1}
             feedIdList={[]}

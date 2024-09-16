@@ -1,8 +1,8 @@
 import { FragmentOf, readFragment } from "gql.tada";
 import { useCallback, useState } from "react";
 
-import { createArticleBookmarkMutation } from "@/features/articles/actions/createArticleBookmarkMutation";
-import { deleteArticleBookmarkMutation } from "@/features/articles/actions/deleteArticleBookmarkMutation";
+import { createArticleBookmarkMutation } from "@/features/articles/actions/actCreateArticleBookmarkMutation";
+import { deleteArticleBookmarkMutation } from "@/features/articles/actions/actDeleteArticleBookmarkMutation";
 import { logoutToLoginPage } from "@/features/auth/actions/auth";
 import { getUser } from "@/features/auth/actions/user";
 

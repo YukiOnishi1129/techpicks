@@ -2,7 +2,7 @@
 import { usePathname } from "next/navigation";
 import { useCallback } from "react";
 
-import { serverRevalidatePage } from "@/actions/serverRevalidatePage";
+import { serverRevalidatePage } from "@/actions/actServerRevalidatePage";
 
 export const useServerRevalidatePage = () => {
   const pathname = usePathname();

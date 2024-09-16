@@ -5,15 +5,15 @@ import { usePathname } from "next/navigation";
 import { FC, useCallback, useEffect, useRef, useState } from "react";
 
 import { logoutToLoginPage } from "@/features/auth/actions/auth";
-import { getFavoriteArticleFolderListQuery } from "@/features/favorites/actions/getFavoriteArticleFolderListQuery";
 
 import { NotFoundList } from "@/components/layout/NotFoundList";
 import { Loader } from "@/components/ui/loader";
 
 import { useStatusToast } from "@/hooks/useStatusToast";
 
-import { serverRevalidatePage } from "@/actions/serverRevalidatePage";
+import { serverRevalidatePage } from "@/actions/actServerRevalidatePage";
 
+import { getFavoriteArticleFolderListQuery } from "./actGetFavoriteArticleFolderListQuery";
 import { FavoriteArticleFolderListFragment } from "./FavoriteArticleFolderListFragment";
 import { FavoriteArticleFolderCard } from "../../Card";
 
