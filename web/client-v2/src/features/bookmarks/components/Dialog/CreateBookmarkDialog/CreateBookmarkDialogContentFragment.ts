@@ -1,6 +1,6 @@
 import { graphql } from "gql.tada";
 
-import { OGPPreviewContentFragment } from "@/components/ui/dialog";
+import { OGPPreviewContentFragment } from "@/features/ogp/components/Dialog";
 
 export const CreateBookmarkDialogContentFragment = graphql(
   `

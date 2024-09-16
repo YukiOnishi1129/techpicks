@@ -17,9 +17,9 @@ import { z } from "zod";
 
 import { logoutToLoginPage } from "@/features/auth/actions/auth";
 import { createBookmarkForUploadArticleMutation } from "@/features/bookmarks/actions/createBookmarkForUploadArticleMutation";
+import { OGPPreviewContent } from "@/features/ogp/components/Dialog";
 
 import { Button } from "@/components/ui/button";
-import { OGPPreviewContent } from "@/components/ui/dialog";
 import {
   DialogHeader,
   DialogTitle,
