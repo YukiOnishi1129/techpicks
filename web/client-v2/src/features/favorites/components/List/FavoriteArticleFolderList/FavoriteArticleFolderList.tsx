@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { FC, useCallback, useEffect, useRef, useState } from "react";
 
 import { logoutToLoginPage } from "@/features/auth/actions/auth";
+import { deleteFavoriteArticleFolderMutation } from "@/features/favorites/actions/actDeleteFavoriteArticleFolderMutation";
 import { updateFavoriteArticleFolderMutation } from "@/features/favorites/actions/actUpdateFavoriteArticleFolderMutation";
 
 import { NotFoundList } from "@/components/layout/NotFoundList";
@@ -104,9 +105,35 @@ export const FavoriteArticleFolderList: FC<FavoriteArticleFolderListProps> = ({
         await logoutToLoginPage();
         return;
       }
+
+      const { data: deleteData, error } =
+        await deleteFavoriteArticleFolderMutation({ id });
+
+      let errMsg = "";
+      if (error) {
+        errMsg = "Fail: Something went wrong";
+        if (error.length > 0) {
+          errMsg = error[0].message;
+        }
+      }
+
+      if (!deleteData?.deleteFavoriteArticleFolder)
+        errMsg = "Fail: Something went wrong";
+
+      if (errMsg !== "") {
+        failToast({
+          description: errMsg,
+        });
+        return;
+      }
+
+      successToast({
+        description: "Successfully deleted favorite article folder",
+      });
+
       await serverRevalidatePage(pathname);
     },
-    [user, failToast, pathname]
+    [user, successToast, failToast, pathname]
   );
 
   const loadMore = useCallback(async () => {
