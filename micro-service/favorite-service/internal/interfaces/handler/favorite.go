@@ -36,3 +36,11 @@ func (fh *favoriteHandler) CreateFavoriteArticleFolder(ctx context.Context, req 
 	}
 	return res, nil
 }
+
+func (fh *favoriteHandler) UpdateFavoriteArticleFolder(ctx context.Context, req *fpb.UpdateFavoriteArticleFolderRequest) (*fpb.UpdateFavoriteArticleFolderResponse, error) {
+	res, err := fh.favoriteUseCase.UpdateFavoriteArticleFolder(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}

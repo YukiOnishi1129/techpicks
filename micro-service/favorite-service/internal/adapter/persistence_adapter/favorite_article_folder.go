@@ -14,6 +14,7 @@ import (
 type FavoriteArticleFolderPersistenceAdapter interface {
 	GetFavoriteArticleFolders(ctx context.Context, req *fpb.GetFavoriteArticleFoldersRequest) (entity.FavoriteArticleFolderSlice, error)
 	CreateFavoriteArticleFolder(ctx context.Context, req *fpb.CreateFavoriteArticleFolderRequest) (entity.FavoriteArticleFolder, error)
+	UpdateFavoriteArticleFolder(ctx context.Context, req *fpb.UpdateFavoriteArticleFolderRequest) (entity.FavoriteArticleFolder, error)
 }
 
 type favoriteArticleFolderPersistenceAdapter struct {
@@ -77,6 +78,32 @@ func (fafa *favoriteArticleFolderPersistenceAdapter) CreateFavoriteArticleFolder
 	}
 
 	f, err := fafa.favoriteArticleFolderRepository.GetFavoriteArticleFolderByID(ctx, favoriteFolderID.String(), nil)
+	if err != nil {
+		return entity.FavoriteArticleFolder{}, err
+	}
+
+	return f, nil
+}
+
+func (fafa *favoriteArticleFolderPersistenceAdapter) UpdateFavoriteArticleFolder(ctx context.Context, req *fpb.UpdateFavoriteArticleFolderRequest) (entity.FavoriteArticleFolder, error) {
+	q := []qm.QueryMod{
+		qm.Where("favorite_article_folders.user_id = ?", req.GetUserId()),
+	}
+
+	f, err := fafa.favoriteArticleFolderRepository.GetFavoriteArticleFolderByID(ctx, req.GetId(), q)
+	if err != nil {
+		return entity.FavoriteArticleFolder{}, err
+	}
+
+	f.Title = req.GetTitle()
+	if req.GetDescription() != nil {
+		f.Description = null.String{
+			Valid:  true,
+			String: req.GetDescription().GetValue(),
+		}
+	}
+
+	err = fafa.favoriteArticleFolderRepository.UpdateFavoriteArticleFolder(ctx, f)
 	if err != nil {
 		return entity.FavoriteArticleFolder{}, err
 	}

@@ -72,6 +72,28 @@ function deserialize_checkpicks_favorite_v1_GetFavoriteArticleFoldersResponse(bu
   return favorite_favorite_pb.GetFavoriteArticleFoldersResponse.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
+function serialize_checkpicks_favorite_v1_UpdateFavoriteArticleFolderRequest(arg) {
+  if (!(arg instanceof favorite_favorite_pb.UpdateFavoriteArticleFolderRequest)) {
+    throw new Error('Expected argument of type checkpicks.favorite.v1.UpdateFavoriteArticleFolderRequest');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_checkpicks_favorite_v1_UpdateFavoriteArticleFolderRequest(buffer_arg) {
+  return favorite_favorite_pb.UpdateFavoriteArticleFolderRequest.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
+function serialize_checkpicks_favorite_v1_UpdateFavoriteArticleFolderResponse(arg) {
+  if (!(arg instanceof favorite_favorite_pb.UpdateFavoriteArticleFolderResponse)) {
+    throw new Error('Expected argument of type checkpicks.favorite.v1.UpdateFavoriteArticleFolderResponse');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_checkpicks_favorite_v1_UpdateFavoriteArticleFolderResponse(buffer_arg) {
+  return favorite_favorite_pb.UpdateFavoriteArticleFolderResponse.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
 
 var FavoriteServiceService = exports.FavoriteServiceService = {
   getFavoriteArticleFolders: {
@@ -106,6 +128,17 @@ var FavoriteServiceService = exports.FavoriteServiceService = {
     requestDeserialize: deserialize_checkpicks_favorite_v1_CreateFavoriteArticleFolderRequest,
     responseSerialize: serialize_checkpicks_favorite_v1_CreateFavoriteArticleFolderResponse,
     responseDeserialize: deserialize_checkpicks_favorite_v1_CreateFavoriteArticleFolderResponse,
+  },
+  updateFavoriteArticleFolder: {
+    path: '/checkpicks.favorite.v1.FavoriteService/UpdateFavoriteArticleFolder',
+    requestStream: false,
+    responseStream: false,
+    requestType: favorite_favorite_pb.UpdateFavoriteArticleFolderRequest,
+    responseType: favorite_favorite_pb.UpdateFavoriteArticleFolderResponse,
+    requestSerialize: serialize_checkpicks_favorite_v1_UpdateFavoriteArticleFolderRequest,
+    requestDeserialize: deserialize_checkpicks_favorite_v1_UpdateFavoriteArticleFolderRequest,
+    responseSerialize: serialize_checkpicks_favorite_v1_UpdateFavoriteArticleFolderResponse,
+    responseDeserialize: deserialize_checkpicks_favorite_v1_UpdateFavoriteArticleFolderResponse,
   },
 };
 

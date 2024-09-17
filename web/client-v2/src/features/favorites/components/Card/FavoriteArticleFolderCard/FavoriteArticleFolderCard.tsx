@@ -7,27 +7,26 @@ import { FC } from "react";
 import { Button } from "@/components/ui/button";
 
 import { FavoriteArticleFolderCardFragment } from "./FavoriteArticleFolderCardFragment";
-
-// import { FavoriteArticleFolderType } from "@/types/favoriteArticleFolder";
-
-// import { UpdateFavoriteArticleFolderDialog } from "../Dialog";
+import { UpdateFavoriteArticleFolderDialog } from "../../Dialog";
 
 type FavoriteArticleFolderCardProps = {
   data: FragmentOf<typeof FavoriteArticleFolderCardFragment>;
-  //   handleUpdateFavoriteArticleFolder: ({
-  //     id,
-  //     title,
-  //     description,
-  //   }: {
-  //     id: string;
-  //     title: string;
-  //     description: string;
-  //   }) => Promise<void>;
-  //   handleDeleteFavoriteArticleFolder: (id: string) => Promise<void>;
+  handleUpdateFavoriteArticleFolder: ({
+    id,
+    title,
+    description,
+  }: {
+    id: string;
+    title: string;
+    description: string;
+  }) => Promise<void>;
+  handleDeleteFavoriteArticleFolder: (id: string) => Promise<void>;
 };
 
 export const FavoriteArticleFolderCard: FC<FavoriteArticleFolderCardProps> = ({
   data,
+  handleUpdateFavoriteArticleFolder,
+  handleDeleteFavoriteArticleFolder,
 }) => {
   const fragment = readFragment(FavoriteArticleFolderCardFragment, data);
 
@@ -46,17 +45,17 @@ export const FavoriteArticleFolderCard: FC<FavoriteArticleFolderCardProps> = ({
             </Link> */}
             {fragment.title}
           </h3>
-          {/* <UpdateFavoriteArticleFolderDialog
-            favoriteArticleFolderId={favoriteArticleFolder.id}
-            title={favoriteArticleFolder.title}
-            description={favoriteArticleFolder.description || ""}
+          <UpdateFavoriteArticleFolderDialog
+            favoriteArticleFolderId={fragment.id}
+            title={fragment.title}
+            description={fragment.description || ""}
             handleUpdateFavoriteArticleFolder={
               handleUpdateFavoriteArticleFolder
             }
             handleDeleteFavoriteArticleFolder={
               handleDeleteFavoriteArticleFolder
             }
-          /> */}
+          />
         </div>
 
         {/* <p className="line-clamp-3 h-[62px] w-full text-sm">

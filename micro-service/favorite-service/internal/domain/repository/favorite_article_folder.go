@@ -11,4 +11,5 @@ type FavoriteArticleFolderRepository interface {
 	GetFavoriteArticleFolders(ctx context.Context, q []qm.QueryMod) (entity.FavoriteArticleFolderSlice, error)
 	GetFavoriteArticleFolderByID(ctx context.Context, id string, q []qm.QueryMod) (entity.FavoriteArticleFolder, error)
 	CreateFavoriteArticleFolder(ctx context.Context, f entity.FavoriteArticleFolder) error
+	UpdateFavoriteArticleFolder(ctx context.Context, f entity.FavoriteArticleFolder) error
 }

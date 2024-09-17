@@ -54,7 +54,7 @@ export const FavoriteArticleFolderList: FC<FavoriteArticleFolderListProps> = ({
     }) => {
       if (!user) {
         failToast({
-          description: "Please login to edit a  favorite folder",
+          description: "Please login to edit a favorite folder",
         });
         await logoutToLoginPage();
         return;
@@ -69,7 +69,7 @@ export const FavoriteArticleFolderList: FC<FavoriteArticleFolderListProps> = ({
       // 1. login check
       if (!user) {
         failToast({
-          description: "Please login to delete a  favorite folder",
+          description: "Please login to delete a favorite folder",
         });
         await logoutToLoginPage();
         return;
@@ -154,6 +154,12 @@ export const FavoriteArticleFolderList: FC<FavoriteArticleFolderListProps> = ({
               <FavoriteArticleFolderCard
                 key={`favorite-folder-${i}`}
                 data={favoriteArticleFolder}
+                handleUpdateFavoriteArticleFolder={
+                  handleUpdateFavoriteArticleFolder
+                }
+                handleDeleteFavoriteArticleFolder={
+                  handleDeleteFavoriteArticleFolder
+                }
               />
             ))}
           </div>
