@@ -2,9 +2,11 @@ package usecase
 
 import (
 	"context"
+	"errors"
 
 	fpb "github.com/YukiOnishi1129/techpicks/micro-service/favorite-service/grpc/favorite"
 	"github.com/YukiOnishi1129/techpicks/micro-service/favorite-service/internal/domain/entity"
+	"google.golang.org/protobuf/types/known/emptypb"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
@@ -108,11 +110,42 @@ func (fu *favoriteUseCase) convertPBFavoriteArticleFolder(ctx context.Context, f
 
 func (fu *favoriteUseCase) UpdateFavoriteArticleFolder(ctx context.Context, req *fpb.UpdateFavoriteArticleFolderRequest) (*fpb.UpdateFavoriteArticleFolderResponse, error) {
 	isFolderOnly := true
-	f, err := fu.favoriteArticleFolderPersistenceAdapter.UpdateFavoriteArticleFolder(ctx, req)
+	tf, err := fu.favoriteArticleFolderPersistenceAdapter.GetFavoriteArticleFolderByID(ctx, req.GetId(), req.GetUserId(), nil)
+	if err != nil {
+		return &fpb.UpdateFavoriteArticleFolderResponse{}, err
+	}
+	if tf.ID == "" {
+		return &fpb.UpdateFavoriteArticleFolderResponse{}, errors.New("favorite article folder not found")
+	}
+
+	f, err := fu.favoriteArticleFolderPersistenceAdapter.UpdateFavoriteArticleFolder(ctx, tf, req)
 	if err != nil {
 		return &fpb.UpdateFavoriteArticleFolderResponse{}, err
 	}
 	return &fpb.UpdateFavoriteArticleFolderResponse{
 		FavoriteArticleFolder: fu.convertPBFavoriteArticleFolder(ctx, &f, nil, &isFolderOnly),
 	}, nil
+}
+
+func (fu *favoriteUseCase) DeleteFavoriteArticleFolder(ctx context.Context, req *fpb.DeleteFavoriteArticleFolderRequest) (*emptypb.Empty, error) {
+	f, err := fu.favoriteArticleFolderPersistenceAdapter.GetFavoriteArticleFolderByID(ctx, req.GetId(), req.GetUserId(), nil)
+	if err != nil {
+		return &emptypb.Empty{}, err
+	}
+	if f.ID == "" {
+		return &emptypb.Empty{}, errors.New("favorite article folder not found")
+	}
+
+	if f.R != nil && len(f.R.FavoriteArticles) > 0 {
+		err := fu.favoriteArticlePersistenceAdapter.MultiDeleteFavoriteArticles(ctx, f.R.FavoriteArticles)
+		if err != nil {
+			return &emptypb.Empty{}, err
+		}
+	}
+
+	err = fu.favoriteArticleFolderPersistenceAdapter.DeleteFavoriteArticleFolder(ctx, f)
+	if err != nil {
+		return &emptypb.Empty{}, err
+	}
+	return &emptypb.Empty{}, nil
 }

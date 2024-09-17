@@ -6,6 +6,7 @@
 
 import * as grpc from "@grpc/grpc-js";
 import * as favorite_favorite_pb from "../favorite/favorite_pb";
+import * as google_protobuf_empty_pb from "google-protobuf/google/protobuf/empty_pb";
 import * as google_protobuf_timestamp_pb from "google-protobuf/google/protobuf/timestamp_pb";
 import * as google_protobuf_wrappers_pb from "google-protobuf/google/protobuf/wrappers_pb";
 
@@ -14,6 +15,7 @@ interface IFavoriteServiceService extends grpc.ServiceDefinition<grpc.UntypedSer
     getFavoriteArticleFolderByArticleId: IFavoriteServiceService_IGetFavoriteArticleFolderByArticleId;
     createFavoriteArticleFolder: IFavoriteServiceService_ICreateFavoriteArticleFolder;
     updateFavoriteArticleFolder: IFavoriteServiceService_IUpdateFavoriteArticleFolder;
+    deleteFavoriteArticleFolder: IFavoriteServiceService_IDeleteFavoriteArticleFolder;
 }
 
 interface IFavoriteServiceService_IGetFavoriteArticleFolders extends grpc.MethodDefinition<favorite_favorite_pb.GetFavoriteArticleFoldersRequest, favorite_favorite_pb.GetFavoriteArticleFoldersResponse> {
@@ -52,6 +54,15 @@ interface IFavoriteServiceService_IUpdateFavoriteArticleFolder extends grpc.Meth
     responseSerialize: grpc.serialize<favorite_favorite_pb.UpdateFavoriteArticleFolderResponse>;
     responseDeserialize: grpc.deserialize<favorite_favorite_pb.UpdateFavoriteArticleFolderResponse>;
 }
+interface IFavoriteServiceService_IDeleteFavoriteArticleFolder extends grpc.MethodDefinition<favorite_favorite_pb.DeleteFavoriteArticleFolderRequest, google_protobuf_empty_pb.Empty> {
+    path: "/checkpicks.favorite.v1.FavoriteService/DeleteFavoriteArticleFolder";
+    requestStream: false;
+    responseStream: false;
+    requestSerialize: grpc.serialize<favorite_favorite_pb.DeleteFavoriteArticleFolderRequest>;
+    requestDeserialize: grpc.deserialize<favorite_favorite_pb.DeleteFavoriteArticleFolderRequest>;
+    responseSerialize: grpc.serialize<google_protobuf_empty_pb.Empty>;
+    responseDeserialize: grpc.deserialize<google_protobuf_empty_pb.Empty>;
+}
 
 export const FavoriteServiceService: IFavoriteServiceService;
 
@@ -60,6 +71,7 @@ export interface IFavoriteServiceServer extends grpc.UntypedServiceImplementatio
     getFavoriteArticleFolderByArticleId: grpc.handleUnaryCall<favorite_favorite_pb.GetFavoriteArticleFolderByArticleIdRequest, favorite_favorite_pb.GetFavoriteArticleFolderResponse>;
     createFavoriteArticleFolder: grpc.handleUnaryCall<favorite_favorite_pb.CreateFavoriteArticleFolderRequest, favorite_favorite_pb.CreateFavoriteArticleFolderResponse>;
     updateFavoriteArticleFolder: grpc.handleUnaryCall<favorite_favorite_pb.UpdateFavoriteArticleFolderRequest, favorite_favorite_pb.UpdateFavoriteArticleFolderResponse>;
+    deleteFavoriteArticleFolder: grpc.handleUnaryCall<favorite_favorite_pb.DeleteFavoriteArticleFolderRequest, google_protobuf_empty_pb.Empty>;
 }
 
 export interface IFavoriteServiceClient {
@@ -75,6 +87,9 @@ export interface IFavoriteServiceClient {
     updateFavoriteArticleFolder(request: favorite_favorite_pb.UpdateFavoriteArticleFolderRequest, callback: (error: grpc.ServiceError | null, response: favorite_favorite_pb.UpdateFavoriteArticleFolderResponse) => void): grpc.ClientUnaryCall;
     updateFavoriteArticleFolder(request: favorite_favorite_pb.UpdateFavoriteArticleFolderRequest, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: favorite_favorite_pb.UpdateFavoriteArticleFolderResponse) => void): grpc.ClientUnaryCall;
     updateFavoriteArticleFolder(request: favorite_favorite_pb.UpdateFavoriteArticleFolderRequest, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: favorite_favorite_pb.UpdateFavoriteArticleFolderResponse) => void): grpc.ClientUnaryCall;
+    deleteFavoriteArticleFolder(request: favorite_favorite_pb.DeleteFavoriteArticleFolderRequest, callback: (error: grpc.ServiceError | null, response: google_protobuf_empty_pb.Empty) => void): grpc.ClientUnaryCall;
+    deleteFavoriteArticleFolder(request: favorite_favorite_pb.DeleteFavoriteArticleFolderRequest, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: google_protobuf_empty_pb.Empty) => void): grpc.ClientUnaryCall;
+    deleteFavoriteArticleFolder(request: favorite_favorite_pb.DeleteFavoriteArticleFolderRequest, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: google_protobuf_empty_pb.Empty) => void): grpc.ClientUnaryCall;
 }
 
 export class FavoriteServiceClient extends grpc.Client implements IFavoriteServiceClient {
@@ -91,4 +106,7 @@ export class FavoriteServiceClient extends grpc.Client implements IFavoriteServi
     public updateFavoriteArticleFolder(request: favorite_favorite_pb.UpdateFavoriteArticleFolderRequest, callback: (error: grpc.ServiceError | null, response: favorite_favorite_pb.UpdateFavoriteArticleFolderResponse) => void): grpc.ClientUnaryCall;
     public updateFavoriteArticleFolder(request: favorite_favorite_pb.UpdateFavoriteArticleFolderRequest, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: favorite_favorite_pb.UpdateFavoriteArticleFolderResponse) => void): grpc.ClientUnaryCall;
     public updateFavoriteArticleFolder(request: favorite_favorite_pb.UpdateFavoriteArticleFolderRequest, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: favorite_favorite_pb.UpdateFavoriteArticleFolderResponse) => void): grpc.ClientUnaryCall;
+    public deleteFavoriteArticleFolder(request: favorite_favorite_pb.DeleteFavoriteArticleFolderRequest, callback: (error: grpc.ServiceError | null, response: google_protobuf_empty_pb.Empty) => void): grpc.ClientUnaryCall;
+    public deleteFavoriteArticleFolder(request: favorite_favorite_pb.DeleteFavoriteArticleFolderRequest, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: google_protobuf_empty_pb.Empty) => void): grpc.ClientUnaryCall;
+    public deleteFavoriteArticleFolder(request: favorite_favorite_pb.DeleteFavoriteArticleFolderRequest, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: google_protobuf_empty_pb.Empty) => void): grpc.ClientUnaryCall;
 }

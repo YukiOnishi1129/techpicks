@@ -5,6 +5,7 @@
 /* eslint-disable */
 
 import * as jspb from "google-protobuf";
+import * as google_protobuf_empty_pb from "google-protobuf/google/protobuf/empty_pb";
 import * as google_protobuf_timestamp_pb from "google-protobuf/google/protobuf/timestamp_pb";
 import * as google_protobuf_wrappers_pb from "google-protobuf/google/protobuf/wrappers_pb";
 
@@ -236,6 +237,29 @@ export namespace UpdateFavoriteArticleFolderRequest {
         userId: string,
         title: string,
         description?: google_protobuf_wrappers_pb.StringValue.AsObject,
+    }
+}
+
+export class DeleteFavoriteArticleFolderRequest extends jspb.Message { 
+    getId(): string;
+    setId(value: string): DeleteFavoriteArticleFolderRequest;
+    getUserId(): string;
+    setUserId(value: string): DeleteFavoriteArticleFolderRequest;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): DeleteFavoriteArticleFolderRequest.AsObject;
+    static toObject(includeInstance: boolean, msg: DeleteFavoriteArticleFolderRequest): DeleteFavoriteArticleFolderRequest.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: DeleteFavoriteArticleFolderRequest, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): DeleteFavoriteArticleFolderRequest;
+    static deserializeBinaryFromReader(message: DeleteFavoriteArticleFolderRequest, reader: jspb.BinaryReader): DeleteFavoriteArticleFolderRequest;
+}
+
+export namespace DeleteFavoriteArticleFolderRequest {
+    export type AsObject = {
+        id: string,
+        userId: string,
     }
 }
 
