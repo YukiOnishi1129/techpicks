@@ -1287,6 +1287,97 @@ func Test_UseCase_CreateFavoriteArticleFolder(t *testing.T) {
 				},
 			},
 		},
+		"Success: no description": {
+			recordFavoriteArticleFolders: []entity.FavoriteArticleFolder{
+				{
+					ID:     fafID1.String(),
+					UserID: userID1,
+					Title:  "faf_title1",
+					Description: null.String{
+						Valid:  true,
+						String: "faf_description1",
+					},
+				},
+				{
+					ID:     fafID2.String(),
+					UserID: userID1,
+					Title:  "faf_title2",
+					Description: null.String{
+						Valid:  true,
+						String: "faf_description2",
+					},
+				},
+				{
+					ID:     fafID3.String(),
+					UserID: userID2,
+					Title:  "faf_title3",
+					Description: null.String{
+						Valid:  true,
+						String: "faf_description3",
+					},
+				},
+				{
+					ID:     fafID4.String(),
+					UserID: userID1,
+					Title:  "faf_title4",
+					Description: null.String{
+						Valid:  true,
+						String: "faf_description4",
+					},
+				},
+			},
+			arg: &fpb.CreateFavoriteArticleFolderRequest{
+				UserId: userID1,
+				Title:  "faf_title6_created",
+			},
+			want: &fpb.CreateFavoriteArticleFolderResponse{
+				FavoriteArticleFolder: &fpb.FavoriteArticleFolder{
+					UserId:           userID1,
+					Title:            "faf_title6_created",
+					Description:      "",
+					FavoriteArticles: []*fpb.FavoriteArticle{},
+				},
+			},
+			wantRecordFavoriteArticleFolders: entity.FavoriteArticleFolderSlice{
+				{
+					UserID: userID1,
+					Title:  "faf_title1",
+					Description: null.String{
+						Valid:  true,
+						String: "faf_description1",
+					},
+				},
+				{
+					UserID: userID1,
+					Title:  "faf_title2",
+					Description: null.String{
+						Valid:  true,
+						String: "faf_description2",
+					},
+				},
+				{
+					UserID: userID2,
+					Title:  "faf_title3",
+					Description: null.String{
+						Valid:  true,
+						String: "faf_description3",
+					},
+				},
+				{
+					UserID: userID1,
+					Title:  "faf_title4",
+					Description: null.String{
+						Valid:  true,
+						String: "faf_description4",
+					},
+				},
+
+				{
+					UserID: userID1,
+					Title:  "faf_title6_created",
+				},
+			},
+		},
 	}
 
 	for name, tt := range test {
