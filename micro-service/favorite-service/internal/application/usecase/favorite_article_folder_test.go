@@ -1171,3 +1171,191 @@ func Test_UseCase_GetFavoriteArticleFolders(t *testing.T) {
 		})
 	}
 }
+
+func Test_UseCase_UpdateFavoriteArticleFolder(t *testing.T) {
+	t.Parallel()
+
+	fafID1, _ := uuid.NewRandom()
+	fafID2, _ := uuid.NewRandom()
+	fafID3, _ := uuid.NewRandom()
+	fafID4, _ := uuid.NewRandom()
+	mockProfiles := mock.GetProfileMock()
+
+	userID1 := mockProfiles[0].ID
+	userID2 := mockProfiles[1].ID
+
+	test := map[string]struct {
+		recordFavoriteArticleFolders     []entity.FavoriteArticleFolder
+		arg                              *fpb.UpdateFavoriteArticleFolderRequest
+		want                             *fpb.UpdateFavoriteArticleFolderResponse
+		wantRecordFavoriteArticleFolders entity.FavoriteArticleFolderSlice
+		wantErrMsg                       string
+	}{
+		"Success": {
+			recordFavoriteArticleFolders: []entity.FavoriteArticleFolder{
+				{
+					ID:     fafID1.String(),
+					UserID: userID1,
+					Title:  "faf_title1",
+					Description: null.String{
+						Valid:  true,
+						String: "faf_description1",
+					},
+				},
+				{
+					ID:     fafID2.String(),
+					UserID: userID1,
+					Title:  "faf_title2",
+					Description: null.String{
+						Valid:  true,
+						String: "faf_description2",
+					},
+				},
+				{
+					ID:     fafID3.String(),
+					UserID: userID2,
+					Title:  "faf_title3",
+					Description: null.String{
+						Valid:  true,
+						String: "faf_description3",
+					},
+				},
+				{
+					ID:     fafID4.String(),
+					UserID: userID1,
+					Title:  "faf_title4",
+					Description: null.String{
+						Valid:  true,
+						String: "faf_description4",
+					},
+				},
+			},
+			arg: &fpb.UpdateFavoriteArticleFolderRequest{
+				Id:          fafID1.String(),
+				UserId:      userID1,
+				Title:       "faf_title1_updated",
+				Description: "faf_description1_updated",
+			},
+			want: &fpb.UpdateFavoriteArticleFolderResponse{
+				FavoriteArticleFolder: &fpb.FavoriteArticleFolder{
+					Id:               fafID1.String(),
+					UserId:           userID1,
+					Title:            "faf_title1_updated",
+					Description:      "faf_description1_updated",
+					FavoriteArticles: []*fpb.FavoriteArticle{},
+				},
+			},
+			wantRecordFavoriteArticleFolders: entity.FavoriteArticleFolderSlice{
+				{
+					ID:     fafID2.String(),
+					UserID: userID1,
+					Title:  "faf_title2",
+					Description: null.String{
+						Valid:  true,
+						String: "faf_description2",
+					},
+				},
+				{
+					ID:     fafID3.String(),
+					UserID: userID2,
+					Title:  "faf_title3",
+					Description: null.String{
+						Valid:  true,
+						String: "faf_description3",
+					},
+				},
+				{
+					ID:     fafID4.String(),
+					UserID: userID1,
+					Title:  "faf_title4",
+					Description: null.String{
+						Valid:  true,
+						String: "faf_description4",
+					},
+				},
+				{
+					ID:     fafID1.String(),
+					UserID: userID1,
+					Title:  "faf_title1_updated",
+					Description: null.String{
+						Valid:  true,
+						String: "faf_description1_updated",
+					},
+				},
+			},
+		},
+	}
+
+	for name, tt := range test {
+		tt := tt
+
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+			ctx := context.Background()
+
+			pgContainer, err := testutil.SetupTest(ctx, t, "../../util/testutil/schema/")
+			if err != nil {
+				t.Fatalf("Failed to setup database: %s", err)
+			}
+			t.Cleanup(pgContainer.Down)
+
+			db := pgContainer.DB
+
+			testFavoriteArticleFolderRepository := persistence.NewFavoriteArticleFolderPersistence(db)
+			testFavoriteArticleRepository := persistence.NewFavoriteArticlePersistence(db)
+
+			testFavoriteArticleFolderPersistenceAdapter := persistenceadapter.NewFavoriteArticleFolderPersistenceAdapter(testFavoriteArticleFolderRepository)
+			testFavoriteArticlePersistenceAdapter := persistenceadapter.NewFavoriteArticlePersistenceAdapter(testFavoriteArticleRepository)
+
+			testFavoriteUsecase := NewFavoriteUseCase(testFavoriteArticleFolderPersistenceAdapter, testFavoriteArticlePersistenceAdapter)
+
+			if tt.recordFavoriteArticleFolders != nil {
+				for _, v := range tt.recordFavoriteArticleFolders {
+					err = v.Insert(ctx, db, boil.Infer())
+					if err != nil {
+						t.Fatalf("Failed to insert record: %s", err)
+					}
+				}
+			}
+
+			got, err := testFavoriteUsecase.UpdateFavoriteArticleFolder(ctx, tt.arg)
+			if err != nil {
+				if tt.wantErrMsg == "" {
+					t.Error(err)
+					return
+				}
+				if diff := cmp.Diff(err.Error(), tt.wantErrMsg); diff != "" {
+					t.Errorf("failed UpdateFavoriteArticleFolder (-got +want):\n%s", diff)
+				}
+				return
+			}
+
+			opts := []cmp.Option{
+				cmp.AllowUnexported(fpb.UpdateFavoriteArticleFolderResponse{}),
+				cmp.AllowUnexported(fpb.FavoriteArticleFolder{}),
+				cmpopts.IgnoreFields(fpb.UpdateFavoriteArticleFolderResponse{}, "state", "sizeCache", "unknownFields"),
+				cmpopts.IgnoreFields(fpb.FavoriteArticleFolder{}, "state", "sizeCache", "unknownFields", "CreatedAt", "UpdatedAt"),
+				cmpopts.IgnoreUnexported(wrapperspb.StringValue{}, timestamppb.Timestamp{}),
+			}
+			if diff := cmp.Diff(got, tt.want, opts...); diff != "" {
+				t.Fatalf("request is not expected: %s", diff)
+			}
+
+			gotRecords, err := testFavoriteArticleFolderRepository.GetFavoriteArticleFolders(ctx, nil)
+			if err != nil {
+				t.Errorf("Failed to get record: %s", err)
+				return
+			}
+
+			optRecords := []cmp.Option{
+				cmp.AllowUnexported(entity.FavoriteArticleFolder{}),
+				cmpopts.IgnoreFields(entity.FavoriteArticleFolder{}, "CreatedAt", "UpdatedAt"),
+			}
+
+			if diff := cmp.Diff(gotRecords, tt.wantRecordFavoriteArticleFolders, optRecords...); diff != "" {
+				t.Fatalf("record is not expected: %s", diff)
+			}
+
+		})
+	}
+}
