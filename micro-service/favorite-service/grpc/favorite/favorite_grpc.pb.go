@@ -22,6 +22,7 @@ const (
 	FavoriteService_GetFavoriteArticleFolders_FullMethodName           = "/checkpicks.favorite.v1.FavoriteService/GetFavoriteArticleFolders"
 	FavoriteService_GetFavoriteArticleFolderByArticleId_FullMethodName = "/checkpicks.favorite.v1.FavoriteService/GetFavoriteArticleFolderByArticleId"
 	FavoriteService_CreateFavoriteArticleFolder_FullMethodName         = "/checkpicks.favorite.v1.FavoriteService/CreateFavoriteArticleFolder"
+	FavoriteService_UpdateFavoriteArticleFolder_FullMethodName         = "/checkpicks.favorite.v1.FavoriteService/UpdateFavoriteArticleFolder"
 )
 
 // FavoriteServiceClient is the client API for FavoriteService service.
@@ -31,6 +32,7 @@ type FavoriteServiceClient interface {
 	GetFavoriteArticleFolders(ctx context.Context, in *GetFavoriteArticleFoldersRequest, opts ...grpc.CallOption) (*GetFavoriteArticleFoldersResponse, error)
 	GetFavoriteArticleFolderByArticleId(ctx context.Context, in *GetFavoriteArticleFolderByArticleIdRequest, opts ...grpc.CallOption) (*GetFavoriteArticleFolderResponse, error)
 	CreateFavoriteArticleFolder(ctx context.Context, in *CreateFavoriteArticleFolderRequest, opts ...grpc.CallOption) (*CreateFavoriteArticleFolderResponse, error)
+	UpdateFavoriteArticleFolder(ctx context.Context, in *UpdateFavoriteArticleFolderRequest, opts ...grpc.CallOption) (*UpdateFavoriteArticleFolderResponse, error)
 }
 
 type favoriteServiceClient struct {
@@ -71,6 +73,16 @@ func (c *favoriteServiceClient) CreateFavoriteArticleFolder(ctx context.Context,
 	return out, nil
 }
 
+func (c *favoriteServiceClient) UpdateFavoriteArticleFolder(ctx context.Context, in *UpdateFavoriteArticleFolderRequest, opts ...grpc.CallOption) (*UpdateFavoriteArticleFolderResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(UpdateFavoriteArticleFolderResponse)
+	err := c.cc.Invoke(ctx, FavoriteService_UpdateFavoriteArticleFolder_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // FavoriteServiceServer is the server API for FavoriteService service.
 // All implementations should embed UnimplementedFavoriteServiceServer
 // for forward compatibility.
@@ -78,6 +90,7 @@ type FavoriteServiceServer interface {
 	GetFavoriteArticleFolders(context.Context, *GetFavoriteArticleFoldersRequest) (*GetFavoriteArticleFoldersResponse, error)
 	GetFavoriteArticleFolderByArticleId(context.Context, *GetFavoriteArticleFolderByArticleIdRequest) (*GetFavoriteArticleFolderResponse, error)
 	CreateFavoriteArticleFolder(context.Context, *CreateFavoriteArticleFolderRequest) (*CreateFavoriteArticleFolderResponse, error)
+	UpdateFavoriteArticleFolder(context.Context, *UpdateFavoriteArticleFolderRequest) (*UpdateFavoriteArticleFolderResponse, error)
 }
 
 // UnimplementedFavoriteServiceServer should be embedded to have
@@ -95,6 +108,9 @@ func (UnimplementedFavoriteServiceServer) GetFavoriteArticleFolderByArticleId(co
 }
 func (UnimplementedFavoriteServiceServer) CreateFavoriteArticleFolder(context.Context, *CreateFavoriteArticleFolderRequest) (*CreateFavoriteArticleFolderResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateFavoriteArticleFolder not implemented")
+}
+func (UnimplementedFavoriteServiceServer) UpdateFavoriteArticleFolder(context.Context, *UpdateFavoriteArticleFolderRequest) (*UpdateFavoriteArticleFolderResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateFavoriteArticleFolder not implemented")
 }
 func (UnimplementedFavoriteServiceServer) testEmbeddedByValue() {}
 
@@ -170,6 +186,24 @@ func _FavoriteService_CreateFavoriteArticleFolder_Handler(srv interface{}, ctx c
 	return interceptor(ctx, in, info, handler)
 }
 
+func _FavoriteService_UpdateFavoriteArticleFolder_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateFavoriteArticleFolderRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FavoriteServiceServer).UpdateFavoriteArticleFolder(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: FavoriteService_UpdateFavoriteArticleFolder_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FavoriteServiceServer).UpdateFavoriteArticleFolder(ctx, req.(*UpdateFavoriteArticleFolderRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // FavoriteService_ServiceDesc is the grpc.ServiceDesc for FavoriteService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -188,6 +222,10 @@ var FavoriteService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreateFavoriteArticleFolder",
 			Handler:    _FavoriteService_CreateFavoriteArticleFolder_Handler,
+		},
+		{
+			MethodName: "UpdateFavoriteArticleFolder",
+			Handler:    _FavoriteService_UpdateFavoriteArticleFolder_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

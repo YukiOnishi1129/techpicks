@@ -49,3 +49,10 @@ func (fafp *favoriteArticleFolderPersistence) CreateFavoriteArticleFolder(ctx co
 	}
 	return nil
 }
+
+func (fafp *favoriteArticleFolderPersistence) UpdateFavoriteArticleFolder(ctx context.Context, f entity.FavoriteArticleFolder) error {
+	if _, err := f.Update(ctx, fafp.db, boil.Infer()); err != nil {
+		return err
+	}
+	return nil
+}

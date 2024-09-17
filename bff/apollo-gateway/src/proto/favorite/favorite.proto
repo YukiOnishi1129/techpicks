@@ -12,6 +12,7 @@ service FavoriteService {
     rpc GetFavoriteArticleFolderByArticleId(GetFavoriteArticleFolderByArticleIdRequest) returns (GetFavoriteArticleFolderResponse);
 
     rpc CreateFavoriteArticleFolder(CreateFavoriteArticleFolderRequest) returns (CreateFavoriteArticleFolderResponse);
+    rpc UpdateFavoriteArticleFolder(UpdateFavoriteArticleFolderRequest) returns (UpdateFavoriteArticleFolderResponse);
 }
 
 message GetFavoriteArticleFoldersRequest {
@@ -45,6 +46,17 @@ message CreateFavoriteArticleFolderRequest {
     string user_id = 1;
     string title = 2;
     string description = 3;
+}
+
+message UpdateFavoriteArticleFolderResponse {
+    FavoriteArticleFolder favorite_article_folder = 1;
+}
+
+message UpdateFavoriteArticleFolderRequest {
+    string id = 1;
+    string user_id = 2;
+    string title = 3;
+    string description = 4;
 }
 
 message FavoriteArticleFolderEdge {
