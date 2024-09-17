@@ -85,10 +85,13 @@ func (fafa *favoriteArticleFolderPersistenceAdapter) CreateFavoriteArticleFolder
 		ID:     favoriteFolderID.String(),
 		UserID: req.GetUserId(),
 		Title:  req.GetTitle(),
-		Description: null.String{
+	}
+
+	if req.GetDescription() != nil {
+		faf.Description = null.String{
 			Valid:  true,
-			String: req.GetDescription(),
-		},
+			String: req.GetDescription().GetValue(),
+		}
 	}
 
 	err := fafa.favoriteArticleFolderRepository.CreateFavoriteArticleFolder(ctx, faf)
