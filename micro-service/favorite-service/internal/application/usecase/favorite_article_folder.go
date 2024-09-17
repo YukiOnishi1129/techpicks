@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"context"
+	"errors"
 
 	fpb "github.com/YukiOnishi1129/techpicks/micro-service/favorite-service/grpc/favorite"
 	"github.com/YukiOnishi1129/techpicks/micro-service/favorite-service/internal/domain/entity"
@@ -122,6 +123,9 @@ func (fu *favoriteUseCase) DeleteFavoriteArticleFolder(ctx context.Context, req 
 	f, err := fu.favoriteArticleFolderPersistenceAdapter.GetFavoriteArticleFolderByID(ctx, req.GetId(), req.GetUserId(), nil)
 	if err != nil {
 		return &emptypb.Empty{}, err
+	}
+	if f.ID == "" {
+		return &emptypb.Empty{}, errors.New("favorite article folder not found")
 	}
 
 	if f.R != nil && len(f.R.FavoriteArticles) > 0 {
