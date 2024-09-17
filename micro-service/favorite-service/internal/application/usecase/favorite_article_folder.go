@@ -110,7 +110,15 @@ func (fu *favoriteUseCase) convertPBFavoriteArticleFolder(ctx context.Context, f
 
 func (fu *favoriteUseCase) UpdateFavoriteArticleFolder(ctx context.Context, req *fpb.UpdateFavoriteArticleFolderRequest) (*fpb.UpdateFavoriteArticleFolderResponse, error) {
 	isFolderOnly := true
-	f, err := fu.favoriteArticleFolderPersistenceAdapter.UpdateFavoriteArticleFolder(ctx, req)
+	tf, err := fu.favoriteArticleFolderPersistenceAdapter.GetFavoriteArticleFolderByID(ctx, req.GetId(), req.GetUserId(), nil)
+	if err != nil {
+		return &fpb.UpdateFavoriteArticleFolderResponse{}, err
+	}
+	if tf.ID == "" {
+		return &fpb.UpdateFavoriteArticleFolderResponse{}, errors.New("favorite article folder not found")
+	}
+
+	f, err := fu.favoriteArticleFolderPersistenceAdapter.UpdateFavoriteArticleFolder(ctx, tf, req)
 	if err != nil {
 		return &fpb.UpdateFavoriteArticleFolderResponse{}, err
 	}

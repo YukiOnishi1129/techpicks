@@ -15,7 +15,7 @@ type FavoriteArticleFolderPersistenceAdapter interface {
 	GetFavoriteArticleFolders(ctx context.Context, req *fpb.GetFavoriteArticleFoldersRequest) (entity.FavoriteArticleFolderSlice, error)
 	GetFavoriteArticleFolderByID(ctx context.Context, id, userID string, isFolderOnly *bool) (entity.FavoriteArticleFolder, error)
 	CreateFavoriteArticleFolder(ctx context.Context, req *fpb.CreateFavoriteArticleFolderRequest) (entity.FavoriteArticleFolder, error)
-	UpdateFavoriteArticleFolder(ctx context.Context, req *fpb.UpdateFavoriteArticleFolderRequest) (entity.FavoriteArticleFolder, error)
+	UpdateFavoriteArticleFolder(ctx context.Context, f entity.FavoriteArticleFolder, req *fpb.UpdateFavoriteArticleFolderRequest) (entity.FavoriteArticleFolder, error)
 	DeleteFavoriteArticleFolder(ctx context.Context, f entity.FavoriteArticleFolder) error
 }
 
@@ -104,16 +104,7 @@ func (fafa *favoriteArticleFolderPersistenceAdapter) CreateFavoriteArticleFolder
 	return f, nil
 }
 
-func (fafa *favoriteArticleFolderPersistenceAdapter) UpdateFavoriteArticleFolder(ctx context.Context, req *fpb.UpdateFavoriteArticleFolderRequest) (entity.FavoriteArticleFolder, error) {
-	q := []qm.QueryMod{
-		qm.Where("favorite_article_folders.user_id = ?", req.GetUserId()),
-	}
-
-	f, err := fafa.favoriteArticleFolderRepository.GetFavoriteArticleFolderByID(ctx, req.GetId(), q)
-	if err != nil {
-		return entity.FavoriteArticleFolder{}, err
-	}
-
+func (fafa *favoriteArticleFolderPersistenceAdapter) UpdateFavoriteArticleFolder(ctx context.Context, f entity.FavoriteArticleFolder, req *fpb.UpdateFavoriteArticleFolderRequest) (entity.FavoriteArticleFolder, error) {
 	f.Title = req.GetTitle()
 	if req.GetDescription() != nil {
 		f.Description = null.String{
@@ -122,7 +113,7 @@ func (fafa *favoriteArticleFolderPersistenceAdapter) UpdateFavoriteArticleFolder
 		}
 	}
 
-	err = fafa.favoriteArticleFolderRepository.UpdateFavoriteArticleFolder(ctx, f)
+	err := fafa.favoriteArticleFolderRepository.UpdateFavoriteArticleFolder(ctx, f)
 	if err != nil {
 		return entity.FavoriteArticleFolder{}, err
 	}

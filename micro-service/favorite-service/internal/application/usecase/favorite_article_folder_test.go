@@ -1462,7 +1462,7 @@ func Test_UseCase_UpdateFavoriteArticleFolder(t *testing.T) {
 					},
 				},
 			},
-			wantErrMsg: `entity: unable to update favorite_article_folders row: pq: invalid input syntax for type uuid: ""`,
+			wantErrMsg: `favorite article folder not found`,
 		},
 	}
 
