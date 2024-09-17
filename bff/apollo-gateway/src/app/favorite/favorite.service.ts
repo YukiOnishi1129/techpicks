@@ -11,6 +11,7 @@ import {
   FavoriteArticleFoldersInput,
   FavoriteArticleFolderEdge,
   UpdateFavoriteArticleFolderInput,
+  DeleteFavoriteArticleFolderInput,
 } from 'src/graphql/types/graphql';
 import {
   CreateFavoriteArticleFolderRequest,
@@ -203,11 +204,11 @@ export class FavoriteService {
 
   async deleteFavoriteArticleFolder(
     userId: string,
-    id: string,
+    input: DeleteFavoriteArticleFolderInput,
   ): Promise<boolean> {
     return new Promise((resolve, reject) => {
       const req = new DeleteFavoriteArticleFolderRequest();
-      req.setId(id);
+      req.setId(input.id);
       req.setUserId(userId);
 
       const client = this.grpcFavoriteClientService.getGrpcFavoriteService();

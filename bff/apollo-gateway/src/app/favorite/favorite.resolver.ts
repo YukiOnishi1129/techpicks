@@ -6,6 +6,7 @@ import {
   FavoriteArticleFolderConnection,
   FavoriteArticleFoldersInput,
   UpdateFavoriteArticleFolderInput,
+  DeleteFavoriteArticleFolderInput,
 } from 'src/graphql/types/graphql';
 
 import { FavoriteService } from './favorite.service';
@@ -55,10 +56,13 @@ export class FavoriteResolver {
   @Mutation(() => FavoriteArticleFolder)
   @UseGuards(SupabaseAuthGuard)
   async deleteFavoriteArticleFolder(
-    @Args('id') id: string,
+    @Args('input') input: DeleteFavoriteArticleFolderInput,
     @Context() context: GraphQLContext,
   ): Promise<boolean> {
     const userId = context.req.user.id;
-    return await this.favoriteService.deleteFavoriteArticleFolder(userId, id);
+    return await this.favoriteService.deleteFavoriteArticleFolder(
+      userId,
+      input,
+    );
   }
 }
