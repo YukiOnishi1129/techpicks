@@ -1539,3 +1539,296 @@ func Test_UseCase_UpdateFavoriteArticleFolder(t *testing.T) {
 		})
 	}
 }
+
+func Test_UseCase_DeleteFavoriteArticleFolder(t *testing.T) {
+	t.Parallel()
+
+	fafID1, _ := uuid.NewRandom()
+	fafID2, _ := uuid.NewRandom()
+	fafID3, _ := uuid.NewRandom()
+	fafID4, _ := uuid.NewRandom()
+	fafID5, _ := uuid.NewRandom()
+
+	faID1, _ := uuid.NewRandom()
+	faID2, _ := uuid.NewRandom()
+	faID3, _ := uuid.NewRandom()
+
+	publishedAt := time.Now().Add(-time.Hour * 24 * 7).Unix()
+
+	mockPlatforms := mock.GetPlatformMock()
+	mockArticles := mock.GetArticleMock()
+	mockProfiles := mock.GetProfileMock()
+
+	platformID1 := mockPlatforms[0].ID
+	articleID1 := mockArticles[0].ID
+	articleID2 := mockArticles[1].ID
+	articleID3 := mockArticles[2].ID
+	userID1 := mockProfiles[0].ID
+	userID2 := mockProfiles[1].ID
+	userID3 := mockProfiles[2].ID
+
+	test := map[string]struct {
+		recordFavoriteArticleFolders     []entity.FavoriteArticleFolder
+		recordFavoriteArticles           []entity.FavoriteArticle
+		arg                              *fpb.DeleteFavoriteArticleFolderRequest
+		wantRecordFavoriteArticleFolders entity.FavoriteArticleFolderSlice
+		wantRecordFavoriteArticles       entity.FavoriteArticleSlice
+
+		wantErrMsg string
+	}{
+		"Success": {
+			recordFavoriteArticleFolders: []entity.FavoriteArticleFolder{
+				{
+					ID:     fafID1.String(),
+					UserID: userID1,
+					Title:  "faf_title1",
+					Description: null.String{
+						Valid:  true,
+						String: "faf_description1",
+					},
+				},
+				{
+					ID:     fafID2.String(),
+					UserID: userID1,
+					Title:  "faf_title2",
+					Description: null.String{
+						Valid:  true,
+						String: "faf_description2",
+					},
+				},
+				{
+					ID:     fafID3.String(),
+					UserID: userID2,
+					Title:  "faf_title3",
+					Description: null.String{
+						Valid:  true,
+						String: "faf_description3",
+					},
+				},
+				{
+					ID:     fafID4.String(),
+					UserID: userID1,
+					Title:  "faf_title4",
+					Description: null.String{
+						Valid:  true,
+						String: "faf_description4",
+					},
+				},
+				{
+					ID:     fafID5.String(),
+					UserID: userID3,
+					Title:  "faf_title5",
+					Description: null.String{
+						Valid:  true,
+						String: "faf_description5",
+					},
+				},
+			},
+			recordFavoriteArticles: []entity.FavoriteArticle{
+				{
+					ID:                      faID1.String(),
+					UserID:                  userID1,
+					FavoriteArticleFolderID: fafID1.String(),
+					PlatformID: null.String{
+						Valid:  true,
+						String: platformID1,
+					},
+					ArticleID:   articleID1,
+					Title:       "fa_title1",
+					Description: "fa_description1",
+					ArticleURL:  "https://example.com/article1",
+					PublishedAt: null.TimeFrom(time.Unix(publishedAt, 0)),
+					AuthorName: null.String{
+						Valid:  true,
+						String: "author1",
+					},
+					Tags: null.String{
+						Valid:  true,
+						String: "tag1",
+					},
+					ThumbnailURL:       "https://example.com/thumbnail1",
+					PlatformName:       "platform1",
+					PlatformURL:        "https://example.com/platform1",
+					PlatformFaviconURL: "https://example.com/favicon1",
+					IsEng:              true,
+					IsRead:             false,
+				},
+				{
+					ID:                      faID2.String(),
+					UserID:                  userID1,
+					FavoriteArticleFolderID: fafID1.String(),
+					ArticleID:               articleID2,
+					Title:                   "fa_title2",
+					Description:             "fa_description2",
+					ArticleURL:              "https://example.com/article2",
+					ThumbnailURL:            "https://example.com/thumbnail2",
+					PlatformName:            "platform2",
+					PlatformURL:             "https://example.com/platform2",
+					PlatformFaviconURL:      "https://example.com/favicon2",
+					IsEng:                   true,
+					IsRead:                  false,
+				},
+				{
+					ID:                      faID3.String(),
+					UserID:                  userID3,
+					FavoriteArticleFolderID: fafID3.String(),
+					ArticleID:               articleID3,
+					Title:                   "fa_title3",
+					Description:             "fa_description3",
+					ArticleURL:              "https://example.com/article3",
+					ThumbnailURL:            "https://example.com/thumbnail3",
+					PlatformName:            "platform3",
+					PlatformURL:             "https://example.com/platform3",
+					PlatformFaviconURL:      "https://example.com/favicon3",
+					IsEng:                   true,
+					IsRead:                  false,
+				},
+			},
+			arg: &fpb.DeleteFavoriteArticleFolderRequest{
+				Id:     fafID1.String(),
+				UserId: userID1,
+			},
+			wantRecordFavoriteArticleFolders: entity.FavoriteArticleFolderSlice{
+				{
+					ID:     fafID2.String(),
+					UserID: userID1,
+					Title:  "faf_title2",
+					Description: null.String{
+						Valid:  true,
+						String: "faf_description2",
+					},
+				},
+				{
+					ID:     fafID3.String(),
+					UserID: userID2,
+					Title:  "faf_title3",
+					Description: null.String{
+						Valid:  true,
+						String: "faf_description3",
+					},
+				},
+				{
+					ID:     fafID4.String(),
+					UserID: userID1,
+					Title:  "faf_title4",
+					Description: null.String{
+						Valid:  true,
+						String: "faf_description4",
+					},
+				},
+				{
+					ID:     fafID5.String(),
+					UserID: userID3,
+					Title:  "faf_title5",
+					Description: null.String{
+						Valid:  true,
+						String: "faf_description5",
+					},
+				},
+			},
+			wantRecordFavoriteArticles: entity.FavoriteArticleSlice{
+				{
+					ID:                      faID3.String(),
+					UserID:                  userID3,
+					FavoriteArticleFolderID: fafID3.String(),
+					ArticleID:               articleID3,
+					Title:                   "fa_title3",
+					Description:             "fa_description3",
+					ArticleURL:              "https://example.com/article3",
+					ThumbnailURL:            "https://example.com/thumbnail3",
+					PlatformName:            "platform3",
+					PlatformURL:             "https://example.com/platform3",
+					PlatformFaviconURL:      "https://example.com/favicon3",
+					IsEng:                   true,
+					IsRead:                  false,
+				},
+			},
+		},
+	}
+
+	for name, tt := range test {
+		tt := tt
+
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+			ctx := context.Background()
+
+			pgContainer, err := testutil.SetupTest(ctx, t, "../../util/testutil/schema/")
+			if err != nil {
+				t.Fatalf("Failed to setup database: %s", err)
+			}
+			t.Cleanup(pgContainer.Down)
+
+			db := pgContainer.DB
+
+			testFavoriteArticleFolderRepository := persistence.NewFavoriteArticleFolderPersistence(db)
+			testFavoriteArticleRepository := persistence.NewFavoriteArticlePersistence(db)
+
+			testFavoriteArticleFolderPersistenceAdapter := persistenceadapter.NewFavoriteArticleFolderPersistenceAdapter(testFavoriteArticleFolderRepository)
+			testFavoriteArticlePersistenceAdapter := persistenceadapter.NewFavoriteArticlePersistenceAdapter(testFavoriteArticleRepository)
+
+			testFavoriteUsecase := NewFavoriteUseCase(testFavoriteArticleFolderPersistenceAdapter, testFavoriteArticlePersistenceAdapter)
+
+			if tt.recordFavoriteArticleFolders != nil {
+				for _, v := range tt.recordFavoriteArticleFolders {
+					err = v.Insert(ctx, db, boil.Infer())
+					if err != nil {
+						t.Fatalf("Failed to insert record: %s", err)
+					}
+				}
+			}
+
+			if tt.recordFavoriteArticles != nil {
+				for _, v := range tt.recordFavoriteArticles {
+					err = v.Insert(ctx, db, boil.Infer())
+					if err != nil {
+						t.Fatalf("Failed to insert record: %s", err)
+					}
+				}
+			}
+
+			_, err = testFavoriteUsecase.DeleteFavoriteArticleFolder(ctx, tt.arg)
+			if err != nil {
+				if tt.wantErrMsg == "" {
+					t.Error(err)
+					return
+				}
+				if diff := cmp.Diff(err.Error(), tt.wantErrMsg); diff != "" {
+					t.Errorf("failed UpdateFavoriteArticleFolder (-got +want):\n%s", diff)
+				}
+				return
+			}
+
+			gotFolderRecords, err := testFavoriteArticleFolderRepository.GetFavoriteArticleFolders(ctx, nil)
+			if err != nil {
+				t.Errorf("Failed to get record: %s", err)
+				return
+			}
+
+			optFolderRecords := []cmp.Option{
+				cmp.AllowUnexported(entity.FavoriteArticleFolder{}),
+				cmpopts.IgnoreFields(entity.FavoriteArticleFolder{}, "CreatedAt", "UpdatedAt"),
+			}
+
+			if diff := cmp.Diff(gotFolderRecords, tt.wantRecordFavoriteArticleFolders, optFolderRecords...); diff != "" {
+				t.Fatalf("record is not expected: %s", diff)
+			}
+
+			gotFavoriteArticles, err := testFavoriteArticleRepository.GetFavoriteArticles(ctx, nil)
+			if err != nil {
+				t.Errorf("Failed to get record: %s", err)
+				return
+			}
+
+			optFArticleRecords := []cmp.Option{
+				cmp.AllowUnexported(entity.FavoriteArticle{}),
+				cmpopts.IgnoreFields(entity.FavoriteArticle{}, "CreatedAt", "UpdatedAt"),
+			}
+
+			if diff := cmp.Diff(gotFavoriteArticles, tt.wantRecordFavoriteArticles, optFArticleRecords...); diff != "" {
+				t.Fatalf("record is not expected: %s", diff)
+			}
+
+		})
+	}
+}
