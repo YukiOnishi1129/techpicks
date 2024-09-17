@@ -36,7 +36,9 @@ func (fap *favoriteArticlePersistence) MultiDeleteFavoriteArticles(ctx context.C
 		return err
 	}
 	if _, err := fa.DeleteAll(ctx, tx); err != nil {
-		tx.Rollback()
+		if err := tx.Rollback(); err != nil {
+			return err
+		}
 		return err
 	}
 
