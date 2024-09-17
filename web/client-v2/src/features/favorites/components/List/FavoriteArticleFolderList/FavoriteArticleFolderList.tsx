@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { FC, useCallback, useEffect, useRef, useState } from "react";
 
 import { logoutToLoginPage } from "@/features/auth/actions/auth";
+import { updateFavoriteArticleFolderMutation } from "@/features/favorites/actions/actUpdateFavoriteArticleFolderMutation";
 
 import { NotFoundList } from "@/components/layout/NotFoundList";
 import { Loader } from "@/components/ui/loader";
@@ -50,7 +51,7 @@ export const FavoriteArticleFolderList: FC<FavoriteArticleFolderListProps> = ({
     }: {
       id: string;
       title: string;
-      description: string;
+      description?: string;
     }) => {
       if (!user) {
         failToast({
@@ -59,9 +60,38 @@ export const FavoriteArticleFolderList: FC<FavoriteArticleFolderListProps> = ({
         await logoutToLoginPage();
         return;
       }
+      const { data: updateData, error } =
+        await updateFavoriteArticleFolderMutation({
+          id,
+          title,
+          description,
+        });
+
+      let errMsg = "";
+      if (error) {
+        errMsg = "Fail: Something went wrong";
+        if (error.length > 0) {
+          errMsg = error[0].message;
+        }
+      }
+
+      if (!updateData?.updateFavoriteArticleFolder?.id)
+        errMsg = "Fail: Something went wrong";
+
+      if (errMsg !== "") {
+        failToast({
+          description: errMsg,
+        });
+        return;
+      }
+
+      successToast({
+        description: "Successfully updated favorite article folder",
+      });
+
       await serverRevalidatePage(pathname);
     },
-    [user, failToast, pathname]
+    [user, successToast, failToast, pathname]
   );
 
   const handleDeleteFavoriteArticleFolder = useCallback(

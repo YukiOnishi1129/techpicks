@@ -9,7 +9,7 @@ import { UpdateFavoriteArticleFolderDialogContent } from "./UpdateFavoriteArticl
 type UpdateFavoriteArticleFolderDialogProps = {
   favoriteArticleFolderId: string;
   title: string;
-  description: string;
+  description?: string;
   handleUpdateFavoriteArticleFolder: ({
     id,
     title,
@@ -17,7 +17,7 @@ type UpdateFavoriteArticleFolderDialogProps = {
   }: {
     id: string;
     title: string;
-    description: string;
+    description?: string;
   }) => Promise<void>;
   handleDeleteFavoriteArticleFolder: (id: string) => Promise<void>;
 };
