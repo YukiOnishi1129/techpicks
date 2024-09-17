@@ -1234,7 +1234,7 @@ func Test_UseCase_UpdateFavoriteArticleFolder(t *testing.T) {
 				Id:          fafID1.String(),
 				UserId:      userID1,
 				Title:       "faf_title1_updated",
-				Description: "faf_description1_updated",
+				Description: &wrapperspb.StringValue{Value: "faf_description1_updated"},
 			},
 			want: &fpb.UpdateFavoriteArticleFolderResponse{
 				FavoriteArticleFolder: &fpb.FavoriteArticleFolder{
@@ -1280,6 +1280,98 @@ func Test_UseCase_UpdateFavoriteArticleFolder(t *testing.T) {
 					Description: null.String{
 						Valid:  true,
 						String: "faf_description1_updated",
+					},
+				},
+			},
+		},
+		"Success: not description": {
+			recordFavoriteArticleFolders: []entity.FavoriteArticleFolder{
+				{
+					ID:     fafID1.String(),
+					UserID: userID1,
+					Title:  "faf_title1",
+					Description: null.String{
+						Valid:  true,
+						String: "faf_description1",
+					},
+				},
+				{
+					ID:     fafID2.String(),
+					UserID: userID1,
+					Title:  "faf_title2",
+					Description: null.String{
+						Valid:  true,
+						String: "faf_description2",
+					},
+				},
+				{
+					ID:     fafID3.String(),
+					UserID: userID2,
+					Title:  "faf_title3",
+					Description: null.String{
+						Valid:  true,
+						String: "faf_description3",
+					},
+				},
+				{
+					ID:     fafID4.String(),
+					UserID: userID1,
+					Title:  "faf_title4",
+					Description: null.String{
+						Valid:  true,
+						String: "faf_description4",
+					},
+				},
+			},
+			arg: &fpb.UpdateFavoriteArticleFolderRequest{
+				Id:     fafID1.String(),
+				UserId: userID1,
+				Title:  "faf_title1_updated",
+			},
+			want: &fpb.UpdateFavoriteArticleFolderResponse{
+				FavoriteArticleFolder: &fpb.FavoriteArticleFolder{
+					Id:               fafID1.String(),
+					UserId:           userID1,
+					Title:            "faf_title1_updated",
+					Description:      "faf_description1",
+					FavoriteArticles: []*fpb.FavoriteArticle{},
+				},
+			},
+			wantRecordFavoriteArticleFolders: entity.FavoriteArticleFolderSlice{
+				{
+					ID:     fafID2.String(),
+					UserID: userID1,
+					Title:  "faf_title2",
+					Description: null.String{
+						Valid:  true,
+						String: "faf_description2",
+					},
+				},
+				{
+					ID:     fafID3.String(),
+					UserID: userID2,
+					Title:  "faf_title3",
+					Description: null.String{
+						Valid:  true,
+						String: "faf_description3",
+					},
+				},
+				{
+					ID:     fafID4.String(),
+					UserID: userID1,
+					Title:  "faf_title4",
+					Description: null.String{
+						Valid:  true,
+						String: "faf_description4",
+					},
+				},
+				{
+					ID:     fafID1.String(),
+					UserID: userID1,
+					Title:  "faf_title1_updated",
+					Description: null.String{
+						Valid:  true,
+						String: "faf_description1",
 					},
 				},
 			},

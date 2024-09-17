@@ -56,7 +56,7 @@ message UpdateFavoriteArticleFolderRequest {
     string id = 1;
     string user_id = 2;
     string title = 3;
-    string description = 4;
+    google.protobuf.StringValue description = 4;
 }
 
 message FavoriteArticleFolderEdge {

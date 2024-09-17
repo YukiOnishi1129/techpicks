@@ -96,9 +96,11 @@ func (fafa *favoriteArticleFolderPersistenceAdapter) UpdateFavoriteArticleFolder
 	}
 
 	f.Title = req.GetTitle()
-	f.Description = null.String{
-		Valid:  true,
-		String: req.GetDescription(),
+	if req.GetDescription() != nil {
+		f.Description = null.String{
+			Valid:  true,
+			String: req.GetDescription().GetValue(),
+		}
 	}
 
 	err = fafa.favoriteArticleFolderRepository.UpdateFavoriteArticleFolder(ctx, f)

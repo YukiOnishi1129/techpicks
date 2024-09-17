@@ -214,8 +214,11 @@ export class UpdateFavoriteArticleFolderRequest extends jspb.Message {
     setUserId(value: string): UpdateFavoriteArticleFolderRequest;
     getTitle(): string;
     setTitle(value: string): UpdateFavoriteArticleFolderRequest;
-    getDescription(): string;
-    setDescription(value: string): UpdateFavoriteArticleFolderRequest;
+
+    hasDescription(): boolean;
+    clearDescription(): void;
+    getDescription(): google_protobuf_wrappers_pb.StringValue | undefined;
+    setDescription(value?: google_protobuf_wrappers_pb.StringValue): UpdateFavoriteArticleFolderRequest;
 
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): UpdateFavoriteArticleFolderRequest.AsObject;
@@ -232,7 +235,7 @@ export namespace UpdateFavoriteArticleFolderRequest {
         id: string,
         userId: string,
         title: string,
-        description: string,
+        description?: google_protobuf_wrappers_pb.StringValue.AsObject,
     }
 }
 
