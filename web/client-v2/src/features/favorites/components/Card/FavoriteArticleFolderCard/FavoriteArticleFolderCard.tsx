@@ -18,7 +18,7 @@ type FavoriteArticleFolderCardProps = {
   }: {
     id: string;
     title: string;
-    description: string;
+    description?: string;
   }) => Promise<void>;
   handleDeleteFavoriteArticleFolder: (id: string) => Promise<void>;
 };
@@ -40,10 +40,7 @@ export const FavoriteArticleFolderCard: FC<FavoriteArticleFolderCardProps> = ({
       <div className="w-full rounded border-2 px-4 py-2">
         <div className="mb-2 flex h-[48px] w-full items-center justify-between border-b-2 pb-2">
           <h3 className="truncate px-2 text-left text-base font-bold tracking-wide md:text-xl">
-            {/* <Link href={`/favorite-article-folder/${favoriteArticleFolder.id}`}>
-              {favoriteArticleFolder.title}
-            </Link> */}
-            {fragment.title}
+            <Link href={`/favorite/${fragment.id}`}>{fragment.title}</Link>
           </h3>
           <UpdateFavoriteArticleFolderDialog
             favoriteArticleFolderId={fragment.id}
@@ -59,8 +56,8 @@ export const FavoriteArticleFolderCard: FC<FavoriteArticleFolderCardProps> = ({
         </div>
 
         {/* <p className="line-clamp-3 h-[62px] w-full text-sm">
-          <Link href={`/favorite-article-folder/${favoriteArticleFolder.id}`}>
-            {favoriteArticleFolder?.description ? (
+          <Link href={`/favorite-article-folder/${fragment.id}`}>
+            {fragmn?.description ? (
               favoriteArticleFolder.description
             ) : (
               <span className="text-gray-500">{"No description"}</span>
@@ -83,11 +80,9 @@ export const FavoriteArticleFolderCard: FC<FavoriteArticleFolderCardProps> = ({
                 />
               </div>
               <div className="mt-4 flex justify-center">
-                {/* <Link
-                  href={`/favorite-article-folder/${favoriteArticleFolder.id}`}
-                >
+                <Link href={`/favorite/${fragment.id}`}>
                   <Button>{"SHOW MORE"}</Button>
-                </Link> */}
+                </Link>
               </div>
             </div>
           ) : (

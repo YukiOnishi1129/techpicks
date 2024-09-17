@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FC, useCallback } from "react";
-import { useForm, Form } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
@@ -13,6 +13,7 @@ import {
   DialogHeader,
 } from "@/components/ui/dialog";
 import {
+  Form,
   FormField,
   FormItem,
   FormLabel,
@@ -36,7 +37,7 @@ const formSchema = z.object({
 type UpdateFavoriteArticleFolderDialogContentProps = {
   favoriteArticleFolderId: string;
   title: string;
-  description: string;
+  description?: string;
   handleUpdateFavoriteArticleFolder: ({
     id,
     title,
@@ -44,7 +45,7 @@ type UpdateFavoriteArticleFolderDialogContentProps = {
   }: {
     id: string;
     title: string;
-    description: string;
+    description?: string;
   }) => Promise<void>;
   handleDeleteFavoriteArticleFolder: (id: string) => Promise<void>;
   handleClose: () => void;
