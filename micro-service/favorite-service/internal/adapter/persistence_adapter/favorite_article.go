@@ -10,6 +10,8 @@ import (
 
 type FavoriteArticlePersistenceAdapter interface {
 	GetFavoriteArticlesByFavoriteArticleFolderID(ctx context.Context, fafID, userID string, limit *int) (entity.FavoriteArticleSlice, error)
+
+	MultiDeleteFavoriteArticles(ctx context.Context, fa entity.FavoriteArticleSlice) error
 }
 
 type favoriteArticlePersistenceAdapter struct {
@@ -40,4 +42,8 @@ func (fapa *favoriteArticlePersistenceAdapter) GetFavoriteArticlesByFavoriteArti
 		return nil, err
 	}
 	return favoriteArticles, nil
+}
+
+func (fapa *favoriteArticlePersistenceAdapter) MultiDeleteFavoriteArticles(ctx context.Context, fa entity.FavoriteArticleSlice) error {
+	return fapa.favoriteArticleFolderRepository.MultiDeleteFavoriteArticles(ctx, fa)
 }

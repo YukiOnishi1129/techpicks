@@ -56,3 +56,10 @@ func (fafp *favoriteArticleFolderPersistence) UpdateFavoriteArticleFolder(ctx co
 	}
 	return nil
 }
+
+func (fafp *favoriteArticleFolderPersistence) DeleteFavoriteArticleFolder(ctx context.Context, f entity.FavoriteArticleFolder) error {
+	if _, err := f.Delete(ctx, fafp.db); err != nil {
+		return err
+	}
+	return nil
+}

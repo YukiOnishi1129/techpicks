@@ -5,6 +5,7 @@ import (
 
 	fpb "github.com/YukiOnishi1129/techpicks/micro-service/favorite-service/grpc/favorite"
 	"github.com/YukiOnishi1129/techpicks/micro-service/favorite-service/internal/application/usecase"
+	"google.golang.org/protobuf/types/known/emptypb"
 )
 
 type favoriteHandler struct {
@@ -39,6 +40,14 @@ func (fh *favoriteHandler) CreateFavoriteArticleFolder(ctx context.Context, req 
 
 func (fh *favoriteHandler) UpdateFavoriteArticleFolder(ctx context.Context, req *fpb.UpdateFavoriteArticleFolderRequest) (*fpb.UpdateFavoriteArticleFolderResponse, error) {
 	res, err := fh.favoriteUseCase.UpdateFavoriteArticleFolder(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}
+
+func (fh *favoriteHandler) DeleteFavoriteArticleFolder(ctx context.Context, req *fpb.DeleteFavoriteArticleFolderRequest) (*emptypb.Empty, error) {
+	res, err := fh.favoriteUseCase.DeleteFavoriteArticleFolder(ctx, req)
 	if err != nil {
 		return nil, err
 	}

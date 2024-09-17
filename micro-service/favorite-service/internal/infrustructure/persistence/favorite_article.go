@@ -29,3 +29,16 @@ func (fap *favoriteArticlePersistence) GetFavoriteArticles(ctx context.Context, 
 	}
 	return favoriteArticles, nil
 }
+
+func (fap *favoriteArticlePersistence) MultiDeleteFavoriteArticles(ctx context.Context, fa entity.FavoriteArticleSlice) error {
+	tx, err := fap.db.BeginTx(ctx, nil)
+	if err != nil {
+		return err
+	}
+	if _, err := fa.DeleteAll(ctx, tx); err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	return tx.Commit()
+}

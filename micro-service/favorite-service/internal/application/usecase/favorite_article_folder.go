@@ -5,6 +5,7 @@ import (
 
 	fpb "github.com/YukiOnishi1129/techpicks/micro-service/favorite-service/grpc/favorite"
 	"github.com/YukiOnishi1129/techpicks/micro-service/favorite-service/internal/domain/entity"
+	"google.golang.org/protobuf/types/known/emptypb"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
@@ -115,4 +116,24 @@ func (fu *favoriteUseCase) UpdateFavoriteArticleFolder(ctx context.Context, req 
 	return &fpb.UpdateFavoriteArticleFolderResponse{
 		FavoriteArticleFolder: fu.convertPBFavoriteArticleFolder(ctx, &f, nil, &isFolderOnly),
 	}, nil
+}
+
+func (fu *favoriteUseCase) DeleteFavoriteArticleFolder(ctx context.Context, req *fpb.DeleteFavoriteArticleFolderRequest) (*emptypb.Empty, error) {
+	f, err := fu.favoriteArticleFolderPersistenceAdapter.GetFavoriteArticleFolderByID(ctx, req.GetId(), req.GetUserId(), nil)
+	if err != nil {
+		return &emptypb.Empty{}, err
+	}
+
+	if f.R != nil && len(f.R.FavoriteArticles) > 0 {
+		err := fu.favoriteArticlePersistenceAdapter.MultiDeleteFavoriteArticles(ctx, f.R.FavoriteArticles)
+		if err != nil {
+			return &emptypb.Empty{}, err
+		}
+	}
+
+	err = fu.favoriteArticleFolderPersistenceAdapter.DeleteFavoriteArticleFolder(ctx, f)
+	if err != nil {
+		return &emptypb.Empty{}, err
+	}
+	return &emptypb.Empty{}, nil
 }

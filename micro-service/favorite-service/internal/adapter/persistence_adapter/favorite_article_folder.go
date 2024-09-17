@@ -13,8 +13,10 @@ import (
 
 type FavoriteArticleFolderPersistenceAdapter interface {
 	GetFavoriteArticleFolders(ctx context.Context, req *fpb.GetFavoriteArticleFoldersRequest) (entity.FavoriteArticleFolderSlice, error)
+	GetFavoriteArticleFolderByID(ctx context.Context, id, userID string, isFolderOnly *bool) (entity.FavoriteArticleFolder, error)
 	CreateFavoriteArticleFolder(ctx context.Context, req *fpb.CreateFavoriteArticleFolderRequest) (entity.FavoriteArticleFolder, error)
 	UpdateFavoriteArticleFolder(ctx context.Context, req *fpb.UpdateFavoriteArticleFolderRequest) (entity.FavoriteArticleFolder, error)
+	DeleteFavoriteArticleFolder(ctx context.Context, f entity.FavoriteArticleFolder) error
 }
 
 type favoriteArticleFolderPersistenceAdapter struct {
@@ -58,6 +60,23 @@ func (fafa *favoriteArticleFolderPersistenceAdapter) GetFavoriteArticleFolders(c
 	}
 
 	return favoriteArticleFolders, nil
+}
+
+func (fafa *favoriteArticleFolderPersistenceAdapter) GetFavoriteArticleFolderByID(ctx context.Context, id, userID string, isFolderOnly *bool) (entity.FavoriteArticleFolder, error) {
+	q := []qm.QueryMod{
+		qm.Where("favorite_article_folders.user_id = ?", userID),
+	}
+
+	if isFolderOnly != nil && *isFolderOnly {
+		q = append(q, qm.Load(qm.Rels(entity.FavoriteArticleFolderRels.FavoriteArticles)))
+	}
+
+	f, err := fafa.favoriteArticleFolderRepository.GetFavoriteArticleFolderByID(ctx, id, q)
+	if err != nil {
+		return entity.FavoriteArticleFolder{}, err
+	}
+
+	return f, nil
 }
 
 func (fafa *favoriteArticleFolderPersistenceAdapter) CreateFavoriteArticleFolder(ctx context.Context, req *fpb.CreateFavoriteArticleFolderRequest) (entity.FavoriteArticleFolder, error) {
@@ -109,4 +128,13 @@ func (fafa *favoriteArticleFolderPersistenceAdapter) UpdateFavoriteArticleFolder
 	}
 
 	return f, nil
+}
+
+func (fafa *favoriteArticleFolderPersistenceAdapter) DeleteFavoriteArticleFolder(ctx context.Context, f entity.FavoriteArticleFolder) error {
+	err := fafa.favoriteArticleFolderRepository.DeleteFavoriteArticleFolder(ctx, f)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
