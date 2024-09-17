@@ -5,6 +5,9 @@ type Mutation {
   updateFavoriteArticleFolder(
     input: UpdateFavoriteArticleFolderInput!
   ): FavoriteArticleFolder!
+  deleteFavoriteArticleFolder(
+    input: DeleteFavoriteArticleFolderInput!
+  ): Boolean!
 }
 
 input CreateFavoriteArticleFolderInput {
@@ -16,4 +19,8 @@ input UpdateFavoriteArticleFolderInput {
   id: ID!
   title: String!
   description: String
+}
+
+input DeleteFavoriteArticleFolderInput {
+  id: ID!
 }

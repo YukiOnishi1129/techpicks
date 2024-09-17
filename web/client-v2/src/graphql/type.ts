@@ -177,6 +177,10 @@ export type DeleteBookmarkInput = {
   userId: Scalars["ID"]["input"];
 };
 
+export type DeleteFavoriteArticleFolderInput = {
+  id: Scalars["ID"]["input"];
+};
+
 /** Favorite Article schema */
 export type FavoriteArticle = Node & {
   __typename?: "FavoriteArticle";
@@ -259,6 +263,7 @@ export type Mutation = {
   createBookmarkForUploadArticle: Bookmark;
   createFavoriteArticleFolder: FavoriteArticleFolder;
   deleteBookmark: Scalars["Boolean"]["output"];
+  deleteFavoriteArticleFolder: Scalars["Boolean"]["output"];
   updateFavoriteArticleFolder: FavoriteArticleFolder;
 };
 
@@ -276,6 +281,10 @@ export type MutationCreateFavoriteArticleFolderArgs = {
 
 export type MutationDeleteBookmarkArgs = {
   deleteBookmarkInput: DeleteBookmarkInput;
+};
+
+export type MutationDeleteFavoriteArticleFolderArgs = {
+  input: DeleteFavoriteArticleFolderInput;
 };
 
 export type MutationUpdateFavoriteArticleFolderArgs = {
@@ -928,6 +937,15 @@ export type CreateFavoriteArticleFolderMutationMutation = {
     __typename?: "FavoriteArticleFolder";
     id: string;
   };
+};
+
+export type DeleteFavoriteArticleFolderMutationMutationVariables = Exact<{
+  input: DeleteFavoriteArticleFolderInput;
+}>;
+
+export type DeleteFavoriteArticleFolderMutationMutation = {
+  __typename?: "Mutation";
+  deleteFavoriteArticleFolder: boolean;
 };
 
 export type UpdateFavoriteArticleFolderMutationMutationVariables = Exact<{
@@ -2285,6 +2303,58 @@ export type CreateFavoriteArticleFolderMutationMutationOptions =
   Apollo.BaseMutationOptions<
     CreateFavoriteArticleFolderMutationMutation,
     CreateFavoriteArticleFolderMutationMutationVariables
+  >;
+export const DeleteFavoriteArticleFolderMutationDocument = gql`
+  mutation DeleteFavoriteArticleFolderMutation(
+    $input: DeleteFavoriteArticleFolderInput!
+  ) {
+    deleteFavoriteArticleFolder(input: $input)
+  }
+`;
+export type DeleteFavoriteArticleFolderMutationMutationFn =
+  Apollo.MutationFunction<
+    DeleteFavoriteArticleFolderMutationMutation,
+    DeleteFavoriteArticleFolderMutationMutationVariables
+  >;
+
+/**
+ * __useDeleteFavoriteArticleFolderMutationMutation__
+ *
+ * To run a mutation, you first call `useDeleteFavoriteArticleFolderMutationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteFavoriteArticleFolderMutationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteFavoriteArticleFolderMutationMutation, { data, loading, error }] = useDeleteFavoriteArticleFolderMutationMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useDeleteFavoriteArticleFolderMutationMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeleteFavoriteArticleFolderMutationMutation,
+    DeleteFavoriteArticleFolderMutationMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    DeleteFavoriteArticleFolderMutationMutation,
+    DeleteFavoriteArticleFolderMutationMutationVariables
+  >(DeleteFavoriteArticleFolderMutationDocument, options);
+}
+export type DeleteFavoriteArticleFolderMutationMutationHookResult = ReturnType<
+  typeof useDeleteFavoriteArticleFolderMutationMutation
+>;
+export type DeleteFavoriteArticleFolderMutationMutationResult =
+  Apollo.MutationResult<DeleteFavoriteArticleFolderMutationMutation>;
+export type DeleteFavoriteArticleFolderMutationMutationOptions =
+  Apollo.BaseMutationOptions<
+    DeleteFavoriteArticleFolderMutationMutation,
+    DeleteFavoriteArticleFolderMutationMutationVariables
   >;
 export const UpdateFavoriteArticleFolderMutationDocument = gql`
   mutation UpdateFavoriteArticleFolderMutation(
