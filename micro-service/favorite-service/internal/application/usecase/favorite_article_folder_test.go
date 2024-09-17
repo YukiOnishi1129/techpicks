@@ -1744,6 +1744,99 @@ func Test_UseCase_DeleteFavoriteArticleFolder(t *testing.T) {
 				},
 			},
 		},
+		"Success: no favorite article data": {
+			recordFavoriteArticleFolders: []entity.FavoriteArticleFolder{
+				{
+					ID:     fafID1.String(),
+					UserID: userID1,
+					Title:  "faf_title1",
+					Description: null.String{
+						Valid:  true,
+						String: "faf_description1",
+					},
+				},
+				{
+					ID:     fafID2.String(),
+					UserID: userID1,
+					Title:  "faf_title2",
+					Description: null.String{
+						Valid:  true,
+						String: "faf_description2",
+					},
+				},
+				{
+					ID:     fafID3.String(),
+					UserID: userID2,
+					Title:  "faf_title3",
+					Description: null.String{
+						Valid:  true,
+						String: "faf_description3",
+					},
+				},
+				{
+					ID:     fafID4.String(),
+					UserID: userID1,
+					Title:  "faf_title4",
+					Description: null.String{
+						Valid:  true,
+						String: "faf_description4",
+					},
+				},
+				{
+					ID:     fafID5.String(),
+					UserID: userID3,
+					Title:  "faf_title5",
+					Description: null.String{
+						Valid:  true,
+						String: "faf_description5",
+					},
+				},
+			},
+			recordFavoriteArticles: []entity.FavoriteArticle{},
+			arg: &fpb.DeleteFavoriteArticleFolderRequest{
+				Id:     fafID1.String(),
+				UserId: userID1,
+			},
+			wantRecordFavoriteArticleFolders: entity.FavoriteArticleFolderSlice{
+				{
+					ID:     fafID2.String(),
+					UserID: userID1,
+					Title:  "faf_title2",
+					Description: null.String{
+						Valid:  true,
+						String: "faf_description2",
+					},
+				},
+				{
+					ID:     fafID3.String(),
+					UserID: userID2,
+					Title:  "faf_title3",
+					Description: null.String{
+						Valid:  true,
+						String: "faf_description3",
+					},
+				},
+				{
+					ID:     fafID4.String(),
+					UserID: userID1,
+					Title:  "faf_title4",
+					Description: null.String{
+						Valid:  true,
+						String: "faf_description4",
+					},
+				},
+				{
+					ID:     fafID5.String(),
+					UserID: userID3,
+					Title:  "faf_title5",
+					Description: null.String{
+						Valid:  true,
+						String: "faf_description5",
+					},
+				},
+			},
+			wantRecordFavoriteArticles: nil,
+		},
 	}
 
 	for name, tt := range test {
