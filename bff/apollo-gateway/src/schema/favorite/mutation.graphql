@@ -2,9 +2,18 @@ type Mutation {
   createFavoriteArticleFolder(
     input: CreateFavoriteArticleFolderInput!
   ): FavoriteArticleFolder!
+  updateFavoriteArticleFolder(
+    input: UpdateFavoriteArticleFolderInput!
+  ): FavoriteArticleFolder!
 }
 
 input CreateFavoriteArticleFolderInput {
+  title: String!
+  description: String
+}
+
+input UpdateFavoriteArticleFolderInput {
+  id: ID!
   title: String!
   description: String
 }
