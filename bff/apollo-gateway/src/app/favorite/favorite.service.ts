@@ -10,10 +10,12 @@ import {
   FavoriteArticleFolderConnection,
   FavoriteArticleFoldersInput,
   FavoriteArticleFolderEdge,
+  UpdateFavoriteArticleFolderInput,
 } from 'src/graphql/types/graphql';
 import {
   CreateFavoriteArticleFolderRequest,
   GetFavoriteArticleFoldersRequest,
+  UpdateFavoriteArticleFolderRequest,
 } from 'src/grpc/favorite/favorite_pb';
 import { convertTimestampToInt } from 'src/utils/timestamp';
 
@@ -123,6 +125,50 @@ export class FavoriteService {
 
       const client = this.grpcFavoriteClientService.getGrpcFavoriteService();
       client.createFavoriteArticleFolder(req, (err, res) => {
+        if (err) {
+          reject({
+            code: err?.code || 500,
+            message: err?.message || 'something went wrong',
+          });
+          return;
+        }
+
+        const resFavoriteArticleFolder = res.toObject();
+
+        const favoriteArticleFolder: FavoriteArticleFolder = {
+          createdAt: convertTimestampToInt(
+            resFavoriteArticleFolder.favoriteArticleFolder.createdAt,
+          ),
+          description:
+            resFavoriteArticleFolder.favoriteArticleFolder.description,
+          id: resFavoriteArticleFolder.favoriteArticleFolder.id,
+          title: resFavoriteArticleFolder.favoriteArticleFolder.title,
+          updatedAt: convertTimestampToInt(
+            resFavoriteArticleFolder.favoriteArticleFolder.updatedAt,
+          ),
+          userId: resFavoriteArticleFolder.favoriteArticleFolder.userId,
+        };
+
+        resolve(favoriteArticleFolder);
+      });
+    });
+  }
+
+  async updateFavoriteArticleFolder(
+    userId: string,
+    input: UpdateFavoriteArticleFolderInput,
+  ): Promise<FavoriteArticleFolder> {
+    return new Promise((resolve, reject) => {
+      const req = new UpdateFavoriteArticleFolderRequest();
+      req.setId(input.id);
+      req.setUserId(userId);
+      req.setTitle(input.title);
+      if (input.description) {
+        req.setDescription(new StringValue().setValue(input.description));
+      }
+
+      const client = this.grpcFavoriteClientService.getGrpcFavoriteService();
+      client.updateFavoriteArticleFolder(req, (err, res) => {
         if (err) {
           reject({
             code: err?.code || 500,
