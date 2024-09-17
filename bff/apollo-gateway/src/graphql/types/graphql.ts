@@ -153,6 +153,8 @@ export abstract class IMutation {
     abstract createFavoriteArticleFolder(input: CreateFavoriteArticleFolderInput): FavoriteArticleFolder | Promise<FavoriteArticleFolder>;
 
     abstract updateFavoriteArticleFolder(input: UpdateFavoriteArticleFolderInput): FavoriteArticleFolder | Promise<FavoriteArticleFolder>;
+
+    abstract deleteFavoriteArticleFolder(id: string): boolean | Promise<boolean>;
 }
 
 export class Bookmark implements Node {

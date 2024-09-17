@@ -51,4 +51,14 @@ export class FavoriteResolver {
       input,
     );
   }
+
+  @Mutation(() => FavoriteArticleFolder)
+  @UseGuards(SupabaseAuthGuard)
+  async deleteFavoriteArticleFolder(
+    @Args('id') id: string,
+    @Context() context: GraphQLContext,
+  ): Promise<boolean> {
+    const userId = context.req.user.id;
+    return await this.favoriteService.deleteFavoriteArticleFolder(userId, id);
+  }
 }

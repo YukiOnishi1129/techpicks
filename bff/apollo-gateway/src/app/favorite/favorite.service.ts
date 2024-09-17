@@ -14,6 +14,7 @@ import {
 } from 'src/graphql/types/graphql';
 import {
   CreateFavoriteArticleFolderRequest,
+  DeleteFavoriteArticleFolderRequest,
   GetFavoriteArticleFoldersRequest,
   UpdateFavoriteArticleFolderRequest,
 } from 'src/grpc/favorite/favorite_pb';
@@ -196,6 +197,30 @@ export class FavoriteService {
         };
 
         resolve(favoriteArticleFolder);
+      });
+    });
+  }
+
+  async deleteFavoriteArticleFolder(
+    userId: string,
+    id: string,
+  ): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      const req = new DeleteFavoriteArticleFolderRequest();
+      req.setId(id);
+      req.setUserId(userId);
+
+      const client = this.grpcFavoriteClientService.getGrpcFavoriteService();
+      client.deleteFavoriteArticleFolder(req, (err) => {
+        if (err) {
+          reject({
+            code: err?.code || 500,
+            message: err?.message || 'something went wrong',
+          });
+          return;
+        }
+
+        resolve(true);
       });
     });
   }

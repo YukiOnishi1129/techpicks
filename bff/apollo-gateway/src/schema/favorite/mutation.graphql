@@ -5,6 +5,7 @@ type Mutation {
   updateFavoriteArticleFolder(
     input: UpdateFavoriteArticleFolderInput!
   ): FavoriteArticleFolder!
+  deleteFavoriteArticleFolder(id: ID!): Boolean!
 }
 
 input CreateFavoriteArticleFolderInput {
