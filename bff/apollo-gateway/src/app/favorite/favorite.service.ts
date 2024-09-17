@@ -63,13 +63,13 @@ export class FavoriteService {
                 cursor: folder.id,
                 node: {
                   createdAt: convertTimestampToInt(folder.createdAt),
-                  description: folder.description,
+                  description: folder?.description,
                   favoriteArticles: folder.favoriteArticlesList.map(
                     (article) => {
                       return {
                         articleId: article.articleId,
                         articleUrl: article.articleUrl,
-                        authorName: article.authorName.value,
+                        authorName: article?.authorName?.value,
                         createdAt: convertTimestampToInt(article.createdAt),
                         description: article.description,
                         id: article.id,
@@ -77,11 +77,13 @@ export class FavoriteService {
                         isPrivate: article.isPrivate,
                         isRead: article.isRead,
                         platformFaviconUrl: article.platformFaviconUrl,
-                        platformId: article.platformId.value,
+                        platformId: article?.platformId?.value,
                         platformName: article.platformName,
                         platformUrl: article.platformUrl,
-                        publishedAt: convertTimestampToInt(article.publishedAt),
-                        tags: article.tags.value,
+                        publishedAt: article?.publishedAt
+                          ? convertTimestampToInt(article.publishedAt)
+                          : undefined,
+                        tags: article?.tags?.value,
                         thumbnailUrl: article.thumbnailUrl,
                         title: article.title,
                         updatedAt: convertTimestampToInt(article.updatedAt),
