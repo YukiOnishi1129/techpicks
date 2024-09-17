@@ -1376,6 +1376,94 @@ func Test_UseCase_UpdateFavoriteArticleFolder(t *testing.T) {
 				},
 			},
 		},
+		"Fail: not target data": {
+			recordFavoriteArticleFolders: []entity.FavoriteArticleFolder{
+				{
+					ID:     fafID1.String(),
+					UserID: userID1,
+					Title:  "faf_title1",
+					Description: null.String{
+						Valid:  true,
+						String: "faf_description1",
+					},
+				},
+				{
+					ID:     fafID2.String(),
+					UserID: userID1,
+					Title:  "faf_title2",
+					Description: null.String{
+						Valid:  true,
+						String: "faf_description2",
+					},
+				},
+				{
+					ID:     fafID3.String(),
+					UserID: userID2,
+					Title:  "faf_title3",
+					Description: null.String{
+						Valid:  true,
+						String: "faf_description3",
+					},
+				},
+				{
+					ID:     fafID4.String(),
+					UserID: userID1,
+					Title:  "faf_title4",
+					Description: null.String{
+						Valid:  true,
+						String: "faf_description4",
+					},
+				},
+			},
+			arg: &fpb.UpdateFavoriteArticleFolderRequest{
+				Id:          fafID1.String(),
+				UserId:      userID2,
+				Title:       "faf_title1_updated",
+				Description: &wrapperspb.StringValue{Value: "faf_description1_updated"},
+			},
+			want: &fpb.UpdateFavoriteArticleFolderResponse{
+				FavoriteArticleFolder: &fpb.FavoriteArticleFolder{},
+			},
+			wantRecordFavoriteArticleFolders: entity.FavoriteArticleFolderSlice{
+				{
+					ID:     fafID1.String(),
+					UserID: userID1,
+					Title:  "faf_title1",
+					Description: null.String{
+						Valid:  true,
+						String: "faf_description1",
+					},
+				},
+				{
+					ID:     fafID2.String(),
+					UserID: userID1,
+					Title:  "faf_title2",
+					Description: null.String{
+						Valid:  true,
+						String: "faf_description2",
+					},
+				},
+				{
+					ID:     fafID3.String(),
+					UserID: userID2,
+					Title:  "faf_title3",
+					Description: null.String{
+						Valid:  true,
+						String: "faf_description3",
+					},
+				},
+				{
+					ID:     fafID4.String(),
+					UserID: userID1,
+					Title:  "faf_title4",
+					Description: null.String{
+						Valid:  true,
+						String: "faf_description4",
+					},
+				},
+			},
+			wantErrMsg: `entity: unable to update favorite_article_folders row: pq: invalid input syntax for type uuid: ""`,
+		},
 	}
 
 	for name, tt := range test {
