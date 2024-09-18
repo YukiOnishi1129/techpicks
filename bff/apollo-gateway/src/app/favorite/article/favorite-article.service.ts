@@ -4,8 +4,12 @@ import { StringValue } from 'google-protobuf/google/protobuf/wrappers_pb';
 import {
   CreateFavoriteArticleInput,
   FavoriteArticle,
+  DeleteFavoriteArticleInput,
 } from 'src/graphql/types/graphql';
-import { CreateFavoriteArticleRequest } from 'src/grpc/favorite/favorite_pb';
+import {
+  CreateFavoriteArticleRequest,
+  DeleteFavoriteArticleRequest,
+} from 'src/grpc/favorite/favorite_pb';
 import { convertTimestampToInt } from 'src/utils/timestamp';
 
 import { GrpcFavoriteClientService } from '../../grpc/grpc-favorite-client.service';
@@ -89,6 +93,30 @@ export class FavoriteArticleService {
         };
 
         resolve(favoriteArticle);
+      });
+    });
+  }
+
+  async deleteFavoriteArticle(
+    userId: string,
+    input: DeleteFavoriteArticleInput,
+  ): Promise<boolean> {
+    const client = this.grpcFavoriteClientService.getGrpcFavoriteService();
+    const req = new DeleteFavoriteArticleRequest();
+    req.setId(input.id);
+    req.setUserId(userId);
+
+    return new Promise((resolve, reject) => {
+      client.deleteFavoriteArticle(req, (err) => {
+        if (err) {
+          reject({
+            code: err?.code || 500,
+            message: err?.message || 'something went wrong',
+          });
+          return;
+        }
+
+        resolve(true);
       });
     });
   }
