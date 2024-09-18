@@ -62,6 +62,17 @@ function deserialize_checkpicks_favorite_v1_DeleteFavoriteArticleFolderRequest(b
   return favorite_favorite_pb.DeleteFavoriteArticleFolderRequest.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
+function serialize_checkpicks_favorite_v1_DeleteFavoriteArticleRequest(arg) {
+  if (!(arg instanceof favorite_favorite_pb.DeleteFavoriteArticleRequest)) {
+    throw new Error('Expected argument of type checkpicks.favorite.v1.DeleteFavoriteArticleRequest');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_checkpicks_favorite_v1_DeleteFavoriteArticleRequest(buffer_arg) {
+  return favorite_favorite_pb.DeleteFavoriteArticleRequest.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
 function serialize_checkpicks_favorite_v1_GetFavoriteArticleFolderByArticleIdRequest(arg) {
   if (!(arg instanceof favorite_favorite_pb.GetFavoriteArticleFolderByArticleIdRequest)) {
     throw new Error('Expected argument of type checkpicks.favorite.v1.GetFavoriteArticleFolderByArticleIdRequest');
@@ -206,6 +217,17 @@ var FavoriteServiceService = exports.FavoriteServiceService = {
     requestDeserialize: deserialize_checkpicks_favorite_v1_CreateFavoriteArticleRequest,
     responseSerialize: serialize_checkpicks_favorite_v1_CreateFavoriteArticleResponse,
     responseDeserialize: deserialize_checkpicks_favorite_v1_CreateFavoriteArticleResponse,
+  },
+  deleteFavoriteArticle: {
+    path: '/checkpicks.favorite.v1.FavoriteService/DeleteFavoriteArticle',
+    requestStream: false,
+    responseStream: false,
+    requestType: favorite_favorite_pb.DeleteFavoriteArticleRequest,
+    responseType: google_protobuf_empty_pb.Empty,
+    requestSerialize: serialize_checkpicks_favorite_v1_DeleteFavoriteArticleRequest,
+    requestDeserialize: deserialize_checkpicks_favorite_v1_DeleteFavoriteArticleRequest,
+    responseSerialize: serialize_google_protobuf_Empty,
+    responseDeserialize: deserialize_google_protobuf_Empty,
   },
 };
 

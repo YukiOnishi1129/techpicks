@@ -372,6 +372,29 @@ export namespace CreateFavoriteArticleRequest {
     }
 }
 
+export class DeleteFavoriteArticleRequest extends jspb.Message { 
+    getId(): string;
+    setId(value: string): DeleteFavoriteArticleRequest;
+    getUserId(): string;
+    setUserId(value: string): DeleteFavoriteArticleRequest;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): DeleteFavoriteArticleRequest.AsObject;
+    static toObject(includeInstance: boolean, msg: DeleteFavoriteArticleRequest): DeleteFavoriteArticleRequest.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: DeleteFavoriteArticleRequest, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): DeleteFavoriteArticleRequest;
+    static deserializeBinaryFromReader(message: DeleteFavoriteArticleRequest, reader: jspb.BinaryReader): DeleteFavoriteArticleRequest;
+}
+
+export namespace DeleteFavoriteArticleRequest {
+    export type AsObject = {
+        id: string,
+        userId: string,
+    }
+}
+
 export class FavoriteArticleFolderEdge extends jspb.Message { 
 
     hasNode(): boolean;
