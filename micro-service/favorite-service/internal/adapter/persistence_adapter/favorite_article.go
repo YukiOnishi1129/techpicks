@@ -12,6 +12,7 @@ import (
 )
 
 type FavoriteArticlePersistenceAdapter interface {
+	GetFavoriteArticles(ctx context.Context, req *fpb.GetFavoriteArticlesRequest, limit int) (entity.FavoriteArticleSlice, error)
 	GetFavoriteArticleByID(ctx context.Context, id string, userID string) (entity.FavoriteArticle, error)
 	GetFavoriteArticlesByFavoriteArticleFolderID(ctx context.Context, fafID, userID string, limit *int) (entity.FavoriteArticleSlice, error)
 	CreateFavoriteArticle(ctx context.Context, req *fpb.CreateFavoriteArticleRequest) (entity.FavoriteArticle, error)
@@ -20,20 +21,46 @@ type FavoriteArticlePersistenceAdapter interface {
 }
 
 type favoriteArticlePersistenceAdapter struct {
-	favoriteArticleFolderRepository repository.FavoriteArticleRepository
+	favoriteArticleRepository repository.FavoriteArticleRepository
 }
 
-func NewFavoriteArticlePersistenceAdapter(favoriteArticleFolderRepository repository.FavoriteArticleRepository) FavoriteArticlePersistenceAdapter {
+func NewFavoriteArticlePersistenceAdapter(favoriteArticleRepository repository.FavoriteArticleRepository) FavoriteArticlePersistenceAdapter {
 	return &favoriteArticlePersistenceAdapter{
-		favoriteArticleFolderRepository: favoriteArticleFolderRepository,
+		favoriteArticleRepository: favoriteArticleRepository,
 	}
+}
+
+func (fapa *favoriteArticlePersistenceAdapter) GetFavoriteArticles(ctx context.Context, req *fpb.GetFavoriteArticlesRequest, limit int) (entity.FavoriteArticleSlice, error) {
+	q := []qm.QueryMod{
+		qm.Where("user_id = ?", req.GetUserId()),
+		qm.OrderBy("created_at DESC"),
+		qm.Limit(limit),
+	}
+	if req.GetCursor() != nil {
+		q = append(q, qm.Where("created_at < (SELECT created_at FROM favorite_articles WHERE id = ?)", req.GetCursor().GetValue()))
+	}
+	if req.GetKeyword() != nil {
+		q = append(q, qm.Expr(
+			qm.And("title LIKE ?", "%"+req.GetKeyword().GetValue()+"%"),
+			qm.Or("description LIKE ?", "%"+req.GetKeyword().GetValue()+"%"),
+		))
+	}
+	if req.GetFavoriteArticleFolderId() != nil {
+		q = append(q, qm.Where("favorite_article_folder_id = ?", req.GetFavoriteArticleFolderId().GetValue()))
+	}
+
+	favoriteArticles, err := fapa.favoriteArticleRepository.GetFavoriteArticles(ctx, q)
+	if err != nil {
+		return nil, err
+	}
+	return favoriteArticles, nil
 }
 
 func (fapa *favoriteArticlePersistenceAdapter) GetFavoriteArticleByID(ctx context.Context, id string, userID string) (entity.FavoriteArticle, error) {
 	q := []qm.QueryMod{
 		qm.Where("user_id = ?", userID),
 	}
-	fa, err := fapa.favoriteArticleFolderRepository.GetFavoriteArticleByID(ctx, id, q)
+	fa, err := fapa.favoriteArticleRepository.GetFavoriteArticleByID(ctx, id, q)
 	if err != nil {
 		return entity.FavoriteArticle{}, err
 	}
@@ -53,7 +80,7 @@ func (fapa *favoriteArticlePersistenceAdapter) GetFavoriteArticlesByFavoriteArti
 		qm.Limit(paramLimit),
 	}
 
-	favoriteArticles, err := fapa.favoriteArticleFolderRepository.GetFavoriteArticles(ctx, q)
+	favoriteArticles, err := fapa.favoriteArticleRepository.GetFavoriteArticles(ctx, q)
 	if err != nil {
 		return nil, err
 	}
@@ -93,16 +120,16 @@ func (fapa *favoriteArticlePersistenceAdapter) CreateFavoriteArticle(ctx context
 		fa.Tags = null.String{String: req.GetTags().GetValue(), Valid: true}
 	}
 
-	if _, err := fapa.favoriteArticleFolderRepository.CreateFavoriteArticle(ctx, fa); err != nil {
+	if _, err := fapa.favoriteArticleRepository.CreateFavoriteArticle(ctx, fa); err != nil {
 		return entity.FavoriteArticle{}, err
 	}
 	return fa, nil
 }
 
 func (fapa *favoriteArticlePersistenceAdapter) DeleteFavoriteArticle(ctx context.Context, fa entity.FavoriteArticle) error {
-	return fapa.favoriteArticleFolderRepository.DeleteFavoriteArticle(ctx, fa)
+	return fapa.favoriteArticleRepository.DeleteFavoriteArticle(ctx, fa)
 }
 
 func (fapa *favoriteArticlePersistenceAdapter) MultiDeleteFavoriteArticles(ctx context.Context, fa entity.FavoriteArticleSlice) error {
-	return fapa.favoriteArticleFolderRepository.MultiDeleteFavoriteArticles(ctx, fa)
+	return fapa.favoriteArticleRepository.MultiDeleteFavoriteArticles(ctx, fa)
 }

@@ -20,6 +20,8 @@ import (
 	"google.golang.org/protobuf/types/known/wrapperspb"
 )
 
+func Test_UseCase_GetFavoriteArticles(t *testing.T) {}
+
 func Test_UseCase_CreateFavoriteArticle(t *testing.T) {
 	t.Parallel()
 

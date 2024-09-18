@@ -117,6 +117,28 @@ function deserialize_checkpicks_favorite_v1_GetFavoriteArticleFoldersResponse(bu
   return favorite_favorite_pb.GetFavoriteArticleFoldersResponse.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
+function serialize_checkpicks_favorite_v1_GetFavoriteArticlesRequest(arg) {
+  if (!(arg instanceof favorite_favorite_pb.GetFavoriteArticlesRequest)) {
+    throw new Error('Expected argument of type checkpicks.favorite.v1.GetFavoriteArticlesRequest');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_checkpicks_favorite_v1_GetFavoriteArticlesRequest(buffer_arg) {
+  return favorite_favorite_pb.GetFavoriteArticlesRequest.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
+function serialize_checkpicks_favorite_v1_GetFavoriteArticlesResponse(arg) {
+  if (!(arg instanceof favorite_favorite_pb.GetFavoriteArticlesResponse)) {
+    throw new Error('Expected argument of type checkpicks.favorite.v1.GetFavoriteArticlesResponse');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_checkpicks_favorite_v1_GetFavoriteArticlesResponse(buffer_arg) {
+  return favorite_favorite_pb.GetFavoriteArticlesResponse.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
 function serialize_checkpicks_favorite_v1_UpdateFavoriteArticleFolderRequest(arg) {
   if (!(arg instanceof favorite_favorite_pb.UpdateFavoriteArticleFolderRequest)) {
     throw new Error('Expected argument of type checkpicks.favorite.v1.UpdateFavoriteArticleFolderRequest');
@@ -206,6 +228,17 @@ var FavoriteServiceService = exports.FavoriteServiceService = {
     requestDeserialize: deserialize_checkpicks_favorite_v1_DeleteFavoriteArticleFolderRequest,
     responseSerialize: serialize_google_protobuf_Empty,
     responseDeserialize: deserialize_google_protobuf_Empty,
+  },
+  getFavoriteArticles: {
+    path: '/checkpicks.favorite.v1.FavoriteService/GetFavoriteArticles',
+    requestStream: false,
+    responseStream: false,
+    requestType: favorite_favorite_pb.GetFavoriteArticlesRequest,
+    responseType: favorite_favorite_pb.GetFavoriteArticlesResponse,
+    requestSerialize: serialize_checkpicks_favorite_v1_GetFavoriteArticlesRequest,
+    requestDeserialize: deserialize_checkpicks_favorite_v1_GetFavoriteArticlesRequest,
+    responseSerialize: serialize_checkpicks_favorite_v1_GetFavoriteArticlesResponse,
+    responseDeserialize: deserialize_checkpicks_favorite_v1_GetFavoriteArticlesResponse,
   },
   createFavoriteArticle: {
     path: '/checkpicks.favorite.v1.FavoriteService/CreateFavoriteArticle',

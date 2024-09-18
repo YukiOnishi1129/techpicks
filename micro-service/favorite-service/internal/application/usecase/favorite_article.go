@@ -11,6 +11,44 @@ import (
 	"google.golang.org/protobuf/types/known/wrapperspb"
 )
 
+func (fu *favoriteUseCase) GetFavoriteArticles(ctx context.Context, req *fpb.GetFavoriteArticlesRequest) (*fpb.GetFavoriteArticlesResponse, error) {
+	limit := 20
+	if req.GetLimit() != nil {
+		limit = int(req.GetLimit().GetValue())
+	}
+
+	fas, err := fu.favoriteArticlePersistenceAdapter.GetFavoriteArticles(ctx, req, limit)
+	if err != nil {
+		return &fpb.GetFavoriteArticlesResponse{}, err
+	}
+
+	resFas := make([]*fpb.FavoriteArticleEdge, 0, len(fas))
+	if len(fas) == 0 {
+		return &fpb.GetFavoriteArticlesResponse{
+			FavoriteArticlesEdge: resFas,
+			PageInfo: &fpb.PageInfo{
+				HasNextPage: false,
+				EndCursor:   "",
+			},
+		}, nil
+	}
+
+	for _, fa := range fas {
+		resFas = append(resFas, &fpb.FavoriteArticleEdge{
+			Cursor: fa.ID,
+			Node:   fu.convertPBFavoriteArticle(fa),
+		})
+	}
+
+	return &fpb.GetFavoriteArticlesResponse{
+		FavoriteArticlesEdge: resFas,
+		PageInfo: &fpb.PageInfo{
+			HasNextPage: len(resFas) == limit,
+			EndCursor:   resFas[len(resFas)-1].Cursor,
+		},
+	}, nil
+}
+
 func (fu *favoriteUseCase) CreateFavoriteArticle(ctx context.Context, req *fpb.CreateFavoriteArticleRequest) (*fpb.CreateFavoriteArticleResponse, error) {
 	cfa, err := fu.favoriteArticlePersistenceAdapter.CreateFavoriteArticle(ctx, req)
 	if err != nil {
