@@ -5,7 +5,7 @@ import { GrpcClientModule } from '../../grpc/grpc-client.module';
 
 @Module({
   exports: [FavoriteArticleService],
-  imports: [GrpcClientModule],
+  imports: [GrpcClientModule, FavoriteArticleModule],
   providers: [FavoriteArticleService],
 })
 export class FavoriteArticleModule {}
