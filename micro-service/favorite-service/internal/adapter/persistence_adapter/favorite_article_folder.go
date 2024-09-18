@@ -99,12 +99,12 @@ func (fafa *favoriteArticleFolderPersistenceAdapter) CreateFavoriteArticleFolder
 		return entity.FavoriteArticleFolder{}, err
 	}
 
-	f, err := fafa.favoriteArticleFolderRepository.GetFavoriteArticleFolderByID(ctx, favoriteFolderID.String(), nil)
-	if err != nil {
-		return entity.FavoriteArticleFolder{}, err
-	}
+	// f, err := fafa.favoriteArticleFolderRepository.GetFavoriteArticleFolderByID(ctx, favoriteFolderID.String(), nil)
+	// if err != nil {
+	// 	return entity.FavoriteArticleFolder{}, err
+	// }
 
-	return f, nil
+	return faf, nil
 }
 
 func (fafa *favoriteArticleFolderPersistenceAdapter) UpdateFavoriteArticleFolder(ctx context.Context, f entity.FavoriteArticleFolder, req *fpb.UpdateFavoriteArticleFolderRequest) (entity.FavoriteArticleFolder, error) {
