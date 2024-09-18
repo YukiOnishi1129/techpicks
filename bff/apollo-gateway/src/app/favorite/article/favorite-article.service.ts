@@ -1,14 +1,21 @@
 import { Injectable } from '@nestjs/common';
 import { Timestamp } from 'google-protobuf/google/protobuf/timestamp_pb';
-import { StringValue } from 'google-protobuf/google/protobuf/wrappers_pb';
+import {
+  StringValue,
+  Int64Value,
+} from 'google-protobuf/google/protobuf/wrappers_pb';
 import {
   CreateFavoriteArticleInput,
   FavoriteArticle,
+  FavoriteArticleConnection,
+  FavoriteArticlesInput,
   DeleteFavoriteArticleInput,
+  FavoriteArticleEdge,
 } from 'src/graphql/types/graphql';
 import {
   CreateFavoriteArticleRequest,
   DeleteFavoriteArticleRequest,
+  GetFavoriteArticlesRequest,
 } from 'src/grpc/favorite/favorite_pb';
 import { convertTimestampToInt } from 'src/utils/timestamp';
 
@@ -19,6 +26,82 @@ export class FavoriteArticleService {
   constructor(
     private readonly grpcFavoriteClientService: GrpcFavoriteClientService,
   ) {}
+
+  async getFavoriteArticles(
+    userId: string,
+    input: FavoriteArticlesInput,
+  ): Promise<FavoriteArticleConnection> {
+    const req = new GetFavoriteArticlesRequest();
+    req.setUserId(userId);
+    if (input?.first) req.setLimit(new Int64Value().setValue(input.first));
+    if (input?.after) req.setCursor(new StringValue().setValue(input.after));
+    if (input?.keyword)
+      req.setKeyword(new StringValue().setValue(input.keyword));
+    if (input?.folderId)
+      req.setFavoriteArticleFolderId(
+        new StringValue().setValue(input.folderId),
+      );
+
+    const client = this.grpcFavoriteClientService.getGrpcFavoriteService();
+
+    return new Promise((resolve, reject) => {
+      client.getFavoriteArticles(req, (err, res) => {
+        if (err) {
+          reject({
+            code: err?.code || 500,
+            message: err?.message || 'something went wrong',
+          });
+          return;
+        }
+
+        const resFavoriteArticles = res.toObject();
+
+        const favoriteArticleEdges: FavoriteArticleEdge[] =
+          resFavoriteArticles.favoriteArticlesEdgeList.map(
+            (resFavoriteArticle) => {
+              const article = resFavoriteArticle.node;
+              return {
+                cursor: article.id,
+                node: {
+                  articleId: article.articleId,
+                  articleUrl: article.articleUrl,
+                  authorName: article?.authorName?.value,
+                  createdAt: convertTimestampToInt(article.createdAt),
+                  description: article.description,
+                  id: article.id,
+                  isEng: article.isEng,
+                  isPrivate: article.isPrivate,
+                  isRead: article.isRead,
+                  platformFaviconUrl: article.platformFaviconUrl,
+                  platformId: article?.platformId?.value,
+                  platformName: article.platformName,
+                  platformUrl: article.platformUrl,
+                  publishedAt: article?.publishedAt
+                    ? convertTimestampToInt(article.publishedAt)
+                    : undefined,
+                  tags: article?.tags?.value,
+                  thumbnailUrl: article.thumbnailUrl,
+                  title: article.title,
+                  updatedAt: convertTimestampToInt(article.updatedAt),
+                  userId: article.userId,
+                },
+              };
+            },
+          );
+
+        const favoriteArticleConnection: FavoriteArticleConnection = {
+          edges: favoriteArticleEdges,
+          pageInfo: {
+            endCursor: resFavoriteArticles.pageInfo.endCursor,
+            hasNextPage: resFavoriteArticles.pageInfo.hasNextPage,
+            hasPreviousPage: false,
+          },
+        };
+
+        resolve(favoriteArticleConnection);
+      });
+    });
+  }
 
   async createFavoriteArticle(
     userId: string,
