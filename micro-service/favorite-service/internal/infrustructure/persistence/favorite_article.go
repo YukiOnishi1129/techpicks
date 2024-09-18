@@ -50,6 +50,13 @@ func (fap *favoriteArticlePersistence) CreateFavoriteArticle(ctx context.Context
 	return fa, nil
 }
 
+func (fap *favoriteArticlePersistence) DeleteFavoriteArticle(ctx context.Context, fa entity.FavoriteArticle) error {
+	if _, err := fa.Delete(ctx, fap.db); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (fap *favoriteArticlePersistence) MultiDeleteFavoriteArticles(ctx context.Context, fa entity.FavoriteArticleSlice) error {
 	tx, err := fap.db.BeginTx(ctx, nil)
 	if err != nil {

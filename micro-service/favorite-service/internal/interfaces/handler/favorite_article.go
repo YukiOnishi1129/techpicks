@@ -4,6 +4,7 @@ import (
 	"context"
 
 	fpb "github.com/YukiOnishi1129/techpicks/micro-service/favorite-service/grpc/favorite"
+	"google.golang.org/protobuf/types/known/emptypb"
 )
 
 func (fh *favoriteHandler) CreateFavoriteArticle(ctx context.Context, req *fpb.CreateFavoriteArticleRequest) (*fpb.CreateFavoriteArticleResponse, error) {
@@ -12,4 +13,8 @@ func (fh *favoriteHandler) CreateFavoriteArticle(ctx context.Context, req *fpb.C
 		return nil, err
 	}
 	return res, nil
+}
+
+func (fh *favoriteHandler) DeleteFavoriteArticle(ctx context.Context, req *fpb.DeleteFavoriteArticleRequest) (*emptypb.Empty, error) {
+	return nil, nil
 }

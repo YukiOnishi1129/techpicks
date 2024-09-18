@@ -15,6 +15,7 @@ type FavoriteArticlePersistenceAdapter interface {
 	GetFavoriteArticleByID(ctx context.Context, id string, userID string) (entity.FavoriteArticle, error)
 	GetFavoriteArticlesByFavoriteArticleFolderID(ctx context.Context, fafID, userID string, limit *int) (entity.FavoriteArticleSlice, error)
 	CreateFavoriteArticle(ctx context.Context, req *fpb.CreateFavoriteArticleRequest) (entity.FavoriteArticle, error)
+	DeleteFavoriteArticle(ctx context.Context, fa entity.FavoriteArticle) error
 	MultiDeleteFavoriteArticles(ctx context.Context, fa entity.FavoriteArticleSlice) error
 }
 
@@ -96,6 +97,10 @@ func (fapa *favoriteArticlePersistenceAdapter) CreateFavoriteArticle(ctx context
 		return entity.FavoriteArticle{}, err
 	}
 	return fa, nil
+}
+
+func (fapa *favoriteArticlePersistenceAdapter) DeleteFavoriteArticle(ctx context.Context, fa entity.FavoriteArticle) error {
+	return fapa.favoriteArticleFolderRepository.DeleteFavoriteArticle(ctx, fa)
 }
 
 func (fapa *favoriteArticlePersistenceAdapter) MultiDeleteFavoriteArticles(ctx context.Context, fa entity.FavoriteArticleSlice) error {
