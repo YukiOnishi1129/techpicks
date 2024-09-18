@@ -12,12 +12,27 @@ import (
 )
 
 func (fu *favoriteUseCase) GetFavoriteArticles(ctx context.Context, req *fpb.GetFavoriteArticlesRequest) (*fpb.GetFavoriteArticlesResponse, error) {
-	fas, err := fu.favoriteArticlePersistenceAdapter.GetFavoriteArticles(ctx, req)
+	limit := 20
+	if req.GetLimit() != nil {
+		limit = int(req.GetLimit().GetValue())
+	}
+
+	fas, err := fu.favoriteArticlePersistenceAdapter.GetFavoriteArticles(ctx, req, limit)
 	if err != nil {
 		return &fpb.GetFavoriteArticlesResponse{}, err
 	}
 
 	resFas := make([]*fpb.FavoriteArticleEdge, 0, len(fas))
+	if len(fas) == 0 {
+		return &fpb.GetFavoriteArticlesResponse{
+			FavoriteArticlesEdge: resFas,
+			PageInfo: &fpb.PageInfo{
+				HasNextPage: false,
+				EndCursor:   "",
+			},
+		}, nil
+	}
+
 	for _, fa := range fas {
 		resFas = append(resFas, &fpb.FavoriteArticleEdge{
 			Cursor: fa.ID,
@@ -28,7 +43,7 @@ func (fu *favoriteUseCase) GetFavoriteArticles(ctx context.Context, req *fpb.Get
 	return &fpb.GetFavoriteArticlesResponse{
 		FavoriteArticlesEdge: resFas,
 		PageInfo: &fpb.PageInfo{
-			HasNextPage: len(resFas) == int(req.GetLimit().GetValue()),
+			HasNextPage: len(resFas) == limit,
 			EndCursor:   resFas[len(resFas)-1].Cursor,
 		},
 	}, nil

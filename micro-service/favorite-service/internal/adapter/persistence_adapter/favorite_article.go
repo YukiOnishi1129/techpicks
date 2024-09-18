@@ -12,7 +12,7 @@ import (
 )
 
 type FavoriteArticlePersistenceAdapter interface {
-	GetFavoriteArticles(ctx context.Context, req *fpb.GetFavoriteArticlesRequest) (entity.FavoriteArticleSlice, error)
+	GetFavoriteArticles(ctx context.Context, req *fpb.GetFavoriteArticlesRequest, limit int) (entity.FavoriteArticleSlice, error)
 	GetFavoriteArticleByID(ctx context.Context, id string, userID string) (entity.FavoriteArticle, error)
 	GetFavoriteArticlesByFavoriteArticleFolderID(ctx context.Context, fafID, userID string, limit *int) (entity.FavoriteArticleSlice, error)
 	CreateFavoriteArticle(ctx context.Context, req *fpb.CreateFavoriteArticleRequest) (entity.FavoriteArticle, error)
@@ -30,12 +30,7 @@ func NewFavoriteArticlePersistenceAdapter(favoriteArticleRepository repository.F
 	}
 }
 
-func (fapa *favoriteArticlePersistenceAdapter) GetFavoriteArticles(ctx context.Context, req *fpb.GetFavoriteArticlesRequest) (entity.FavoriteArticleSlice, error) {
-	limit := 20
-	if req.GetLimit() != nil {
-		limit = int(req.GetLimit().GetValue())
-	}
-
+func (fapa *favoriteArticlePersistenceAdapter) GetFavoriteArticles(ctx context.Context, req *fpb.GetFavoriteArticlesRequest, limit int) (entity.FavoriteArticleSlice, error) {
 	q := []qm.QueryMod{
 		qm.Where("user_id = ?", req.GetUserId()),
 		qm.OrderBy("created_at DESC"),
