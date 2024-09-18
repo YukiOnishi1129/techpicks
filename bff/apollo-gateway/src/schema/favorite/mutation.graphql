@@ -8,6 +8,9 @@ type Mutation {
   deleteFavoriteArticleFolder(
     input: DeleteFavoriteArticleFolderInput!
   ): Boolean!
+
+  createFavoriteArticle(input: CreateFavoriteArticleInput!): FavoriteArticle!
+  deleteFavoriteArticle(input: DeleteFavoriteArticleInput!): Boolean!
 }
 
 input CreateFavoriteArticleFolderInput {
@@ -22,5 +25,28 @@ input UpdateFavoriteArticleFolderInput {
 }
 
 input DeleteFavoriteArticleFolderInput {
+  id: ID!
+}
+
+input CreateFavoriteArticleInput {
+  articleId: ID!
+  favoriteArticleFolderId: ID!
+  platformId: ID
+  title: String!
+  description: String
+  thumbnailUrl: String!
+  articleUrl: String!
+  publishedAt: Int
+  authorName: String
+  tags: String
+  platformName: String!
+  platformUrl: String!
+  platformFaviconUrl: String!
+  isEng: Boolean!
+  isPrivate: Boolean!
+  isRead: Boolean!
+}
+
+input DeleteFavoriteArticleInput {
   id: ID!
 }
