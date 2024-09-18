@@ -125,7 +125,9 @@ export class FavoriteService {
       const req = new CreateFavoriteArticleFolderRequest();
       req.setUserId(userId);
       req.setTitle(input.title);
-      req.setDescription(input.description);
+      if (input?.description) {
+        req.setDescription(new StringValue().setValue(input.description));
+      }
 
       const client = this.grpcFavoriteClientService.getGrpcFavoriteService();
       client.createFavoriteArticleFolder(req, (err, res) => {

@@ -85,10 +85,13 @@ func (fafa *favoriteArticleFolderPersistenceAdapter) CreateFavoriteArticleFolder
 		ID:     favoriteFolderID.String(),
 		UserID: req.GetUserId(),
 		Title:  req.GetTitle(),
-		Description: null.String{
+	}
+
+	if req.GetDescription() != nil {
+		faf.Description = null.String{
 			Valid:  true,
-			String: req.GetDescription(),
-		},
+			String: req.GetDescription().GetValue(),
+		}
 	}
 
 	err := fafa.favoriteArticleFolderRepository.CreateFavoriteArticleFolder(ctx, faf)
@@ -96,12 +99,12 @@ func (fafa *favoriteArticleFolderPersistenceAdapter) CreateFavoriteArticleFolder
 		return entity.FavoriteArticleFolder{}, err
 	}
 
-	f, err := fafa.favoriteArticleFolderRepository.GetFavoriteArticleFolderByID(ctx, favoriteFolderID.String(), nil)
-	if err != nil {
-		return entity.FavoriteArticleFolder{}, err
-	}
+	// f, err := fafa.favoriteArticleFolderRepository.GetFavoriteArticleFolderByID(ctx, favoriteFolderID.String(), nil)
+	// if err != nil {
+	// 	return entity.FavoriteArticleFolder{}, err
+	// }
 
-	return f, nil
+	return faf, nil
 }
 
 func (fafa *favoriteArticleFolderPersistenceAdapter) UpdateFavoriteArticleFolder(ctx context.Context, f entity.FavoriteArticleFolder, req *fpb.UpdateFavoriteArticleFolderRequest) (entity.FavoriteArticleFolder, error) {

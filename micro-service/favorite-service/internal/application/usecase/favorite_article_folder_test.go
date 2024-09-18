@@ -1172,6 +1172,288 @@ func Test_UseCase_GetFavoriteArticleFolders(t *testing.T) {
 	}
 }
 
+func Test_UseCase_CreateFavoriteArticleFolder(t *testing.T) {
+	t.Parallel()
+
+	fafID1, _ := uuid.NewRandom()
+	fafID2, _ := uuid.NewRandom()
+	fafID3, _ := uuid.NewRandom()
+	fafID4, _ := uuid.NewRandom()
+	mockProfiles := mock.GetProfileMock()
+
+	userID1 := mockProfiles[0].ID
+	userID2 := mockProfiles[1].ID
+
+	test := map[string]struct {
+		recordFavoriteArticleFolders     []entity.FavoriteArticleFolder
+		arg                              *fpb.CreateFavoriteArticleFolderRequest
+		want                             *fpb.CreateFavoriteArticleFolderResponse
+		wantRecordFavoriteArticleFolders entity.FavoriteArticleFolderSlice
+		wantErrMsg                       string
+	}{
+		"Success": {
+			recordFavoriteArticleFolders: []entity.FavoriteArticleFolder{
+				{
+					ID:     fafID1.String(),
+					UserID: userID1,
+					Title:  "faf_title1",
+					Description: null.String{
+						Valid:  true,
+						String: "faf_description1",
+					},
+				},
+				{
+					ID:     fafID2.String(),
+					UserID: userID1,
+					Title:  "faf_title2",
+					Description: null.String{
+						Valid:  true,
+						String: "faf_description2",
+					},
+				},
+				{
+					ID:     fafID3.String(),
+					UserID: userID2,
+					Title:  "faf_title3",
+					Description: null.String{
+						Valid:  true,
+						String: "faf_description3",
+					},
+				},
+				{
+					ID:     fafID4.String(),
+					UserID: userID1,
+					Title:  "faf_title4",
+					Description: null.String{
+						Valid:  true,
+						String: "faf_description4",
+					},
+				},
+			},
+			arg: &fpb.CreateFavoriteArticleFolderRequest{
+				UserId:      userID1,
+				Title:       "faf_title6_created",
+				Description: &wrapperspb.StringValue{Value: "faf_description6_created"},
+			},
+			want: &fpb.CreateFavoriteArticleFolderResponse{
+				FavoriteArticleFolder: &fpb.FavoriteArticleFolder{
+					UserId:           userID1,
+					Title:            "faf_title6_created",
+					Description:      "faf_description6_created",
+					FavoriteArticles: []*fpb.FavoriteArticle{},
+				},
+			},
+			wantRecordFavoriteArticleFolders: entity.FavoriteArticleFolderSlice{
+				{
+					UserID: userID1,
+					Title:  "faf_title1",
+					Description: null.String{
+						Valid:  true,
+						String: "faf_description1",
+					},
+				},
+				{
+					UserID: userID1,
+					Title:  "faf_title2",
+					Description: null.String{
+						Valid:  true,
+						String: "faf_description2",
+					},
+				},
+				{
+					UserID: userID2,
+					Title:  "faf_title3",
+					Description: null.String{
+						Valid:  true,
+						String: "faf_description3",
+					},
+				},
+				{
+					UserID: userID1,
+					Title:  "faf_title4",
+					Description: null.String{
+						Valid:  true,
+						String: "faf_description4",
+					},
+				},
+
+				{
+					UserID: userID1,
+					Title:  "faf_title6_created",
+					Description: null.String{
+						Valid:  true,
+						String: "faf_description6_created",
+					},
+				},
+			},
+		},
+		"Success: no description": {
+			recordFavoriteArticleFolders: []entity.FavoriteArticleFolder{
+				{
+					ID:     fafID1.String(),
+					UserID: userID1,
+					Title:  "faf_title1",
+					Description: null.String{
+						Valid:  true,
+						String: "faf_description1",
+					},
+				},
+				{
+					ID:     fafID2.String(),
+					UserID: userID1,
+					Title:  "faf_title2",
+					Description: null.String{
+						Valid:  true,
+						String: "faf_description2",
+					},
+				},
+				{
+					ID:     fafID3.String(),
+					UserID: userID2,
+					Title:  "faf_title3",
+					Description: null.String{
+						Valid:  true,
+						String: "faf_description3",
+					},
+				},
+				{
+					ID:     fafID4.String(),
+					UserID: userID1,
+					Title:  "faf_title4",
+					Description: null.String{
+						Valid:  true,
+						String: "faf_description4",
+					},
+				},
+			},
+			arg: &fpb.CreateFavoriteArticleFolderRequest{
+				UserId: userID1,
+				Title:  "faf_title6_created",
+			},
+			want: &fpb.CreateFavoriteArticleFolderResponse{
+				FavoriteArticleFolder: &fpb.FavoriteArticleFolder{
+					UserId:           userID1,
+					Title:            "faf_title6_created",
+					Description:      "",
+					FavoriteArticles: []*fpb.FavoriteArticle{},
+				},
+			},
+			wantRecordFavoriteArticleFolders: entity.FavoriteArticleFolderSlice{
+				{
+					UserID: userID1,
+					Title:  "faf_title1",
+					Description: null.String{
+						Valid:  true,
+						String: "faf_description1",
+					},
+				},
+				{
+					UserID: userID1,
+					Title:  "faf_title2",
+					Description: null.String{
+						Valid:  true,
+						String: "faf_description2",
+					},
+				},
+				{
+					UserID: userID2,
+					Title:  "faf_title3",
+					Description: null.String{
+						Valid:  true,
+						String: "faf_description3",
+					},
+				},
+				{
+					UserID: userID1,
+					Title:  "faf_title4",
+					Description: null.String{
+						Valid:  true,
+						String: "faf_description4",
+					},
+				},
+
+				{
+					UserID: userID1,
+					Title:  "faf_title6_created",
+				},
+			},
+		},
+	}
+
+	for name, tt := range test {
+		tt := tt
+
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+			ctx := context.Background()
+
+			pgContainer, err := testutil.SetupTest(ctx, t, "../../util/testutil/schema/")
+			if err != nil {
+				t.Fatalf("Failed to setup database: %s", err)
+			}
+			t.Cleanup(pgContainer.Down)
+
+			db := pgContainer.DB
+
+			testFavoriteArticleFolderRepository := persistence.NewFavoriteArticleFolderPersistence(db)
+			testFavoriteArticleRepository := persistence.NewFavoriteArticlePersistence(db)
+
+			testFavoriteArticleFolderPersistenceAdapter := persistenceadapter.NewFavoriteArticleFolderPersistenceAdapter(testFavoriteArticleFolderRepository)
+			testFavoriteArticlePersistenceAdapter := persistenceadapter.NewFavoriteArticlePersistenceAdapter(testFavoriteArticleRepository)
+
+			testFavoriteUsecase := NewFavoriteUseCase(testFavoriteArticleFolderPersistenceAdapter, testFavoriteArticlePersistenceAdapter)
+
+			if tt.recordFavoriteArticleFolders != nil {
+				for _, v := range tt.recordFavoriteArticleFolders {
+					err = v.Insert(ctx, db, boil.Infer())
+					if err != nil {
+						t.Fatalf("Failed to insert record: %s", err)
+					}
+				}
+			}
+
+			got, err := testFavoriteUsecase.CreateFavoriteArticleFolder(ctx, tt.arg)
+			if err != nil {
+				if tt.wantErrMsg == "" {
+					t.Error(err)
+					return
+				}
+				if diff := cmp.Diff(err.Error(), tt.wantErrMsg); diff != "" {
+					t.Errorf("failed CreateFavoriteArticleFolder (-got +want):\n%s", diff)
+				}
+				return
+			}
+
+			opts := []cmp.Option{
+				cmp.AllowUnexported(fpb.CreateFavoriteArticleFolderResponse{}),
+				cmp.AllowUnexported(fpb.FavoriteArticleFolder{}),
+				cmpopts.IgnoreFields(fpb.CreateFavoriteArticleFolderResponse{}, "state", "sizeCache", "unknownFields"),
+				cmpopts.IgnoreFields(fpb.FavoriteArticleFolder{}, "state", "sizeCache", "unknownFields", "Id", "CreatedAt", "UpdatedAt"),
+				cmpopts.IgnoreUnexported(wrapperspb.StringValue{}, timestamppb.Timestamp{}),
+			}
+			if diff := cmp.Diff(got, tt.want, opts...); diff != "" {
+				t.Fatalf("request is not expected: %s", diff)
+			}
+
+			gotRecords, err := testFavoriteArticleFolderRepository.GetFavoriteArticleFolders(ctx, nil)
+			if err != nil {
+				t.Errorf("Failed to get record: %s", err)
+				return
+			}
+
+			optRecords := []cmp.Option{
+				cmp.AllowUnexported(entity.FavoriteArticleFolder{}),
+				cmpopts.IgnoreFields(entity.FavoriteArticleFolder{}, "ID", "CreatedAt", "UpdatedAt"),
+			}
+
+			if diff := cmp.Diff(gotRecords, tt.wantRecordFavoriteArticleFolders, optRecords...); diff != "" {
+				t.Fatalf("record is not expected: %s", diff)
+			}
+
+		})
+	}
+}
+
 func Test_UseCase_UpdateFavoriteArticleFolder(t *testing.T) {
 	t.Parallel()
 

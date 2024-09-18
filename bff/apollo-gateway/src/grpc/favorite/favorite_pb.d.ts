@@ -164,8 +164,11 @@ export class CreateFavoriteArticleFolderRequest extends jspb.Message {
     setUserId(value: string): CreateFavoriteArticleFolderRequest;
     getTitle(): string;
     setTitle(value: string): CreateFavoriteArticleFolderRequest;
-    getDescription(): string;
-    setDescription(value: string): CreateFavoriteArticleFolderRequest;
+
+    hasDescription(): boolean;
+    clearDescription(): void;
+    getDescription(): google_protobuf_wrappers_pb.StringValue | undefined;
+    setDescription(value?: google_protobuf_wrappers_pb.StringValue): CreateFavoriteArticleFolderRequest;
 
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): CreateFavoriteArticleFolderRequest.AsObject;
@@ -181,7 +184,7 @@ export namespace CreateFavoriteArticleFolderRequest {
     export type AsObject = {
         userId: string,
         title: string,
-        description: string,
+        description?: google_protobuf_wrappers_pb.StringValue.AsObject,
     }
 }
 

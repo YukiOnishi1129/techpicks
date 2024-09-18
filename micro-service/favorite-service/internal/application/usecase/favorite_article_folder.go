@@ -66,13 +66,19 @@ func (fu *favoriteUseCase) GetFavoriteArticleFolders(ctx context.Context, req *f
 }
 
 func (fu *favoriteUseCase) CreateFavoriteArticleFolder(ctx context.Context, req *fpb.CreateFavoriteArticleFolderRequest) (*fpb.CreateFavoriteArticleFolderResponse, error) {
-	isFolderOnly := true
 	f, err := fu.favoriteArticleFolderPersistenceAdapter.CreateFavoriteArticleFolder(ctx, req)
 	if err != nil {
 		return &fpb.CreateFavoriteArticleFolderResponse{}, err
 	}
+
+	isFolderOnly := true
+	faf, err := fu.favoriteArticleFolderPersistenceAdapter.GetFavoriteArticleFolderByID(ctx, f.ID, req.GetUserId(), nil)
+	if err != nil {
+		return &fpb.CreateFavoriteArticleFolderResponse{}, err
+	}
+
 	return &fpb.CreateFavoriteArticleFolderResponse{
-		FavoriteArticleFolder: fu.convertPBFavoriteArticleFolder(ctx, &f, nil, &isFolderOnly),
+		FavoriteArticleFolder: fu.convertPBFavoriteArticleFolder(ctx, &faf, nil, &isFolderOnly),
 	}, nil
 }
 

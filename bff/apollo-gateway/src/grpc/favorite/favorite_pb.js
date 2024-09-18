@@ -1448,7 +1448,7 @@ proto.checkpicks.favorite.v1.CreateFavoriteArticleFolderRequest.toObject = funct
   var f, obj = {
     userId: jspb.Message.getFieldWithDefault(msg, 1, ""),
     title: jspb.Message.getFieldWithDefault(msg, 2, ""),
-    description: jspb.Message.getFieldWithDefault(msg, 3, "")
+    description: (f = msg.getDescription()) && google_protobuf_wrappers_pb.StringValue.toObject(includeInstance, f)
   };
 
   if (includeInstance) {
@@ -1494,7 +1494,8 @@ proto.checkpicks.favorite.v1.CreateFavoriteArticleFolderRequest.deserializeBinar
       msg.setTitle(value);
       break;
     case 3:
-      var value = /** @type {string} */ (reader.readString());
+      var value = new google_protobuf_wrappers_pb.StringValue;
+      reader.readMessage(value,google_protobuf_wrappers_pb.StringValue.deserializeBinaryFromReader);
       msg.setDescription(value);
       break;
     default:
@@ -1541,10 +1542,11 @@ proto.checkpicks.favorite.v1.CreateFavoriteArticleFolderRequest.serializeBinaryT
     );
   }
   f = message.getDescription();
-  if (f.length > 0) {
-    writer.writeString(
+  if (f != null) {
+    writer.writeMessage(
       3,
-      f
+      f,
+      google_protobuf_wrappers_pb.StringValue.serializeBinaryToWriter
     );
   }
 };
@@ -1587,20 +1589,39 @@ proto.checkpicks.favorite.v1.CreateFavoriteArticleFolderRequest.prototype.setTit
 
 
 /**
- * optional string description = 3;
- * @return {string}
+ * optional google.protobuf.StringValue description = 3;
+ * @return {?proto.google.protobuf.StringValue}
  */
 proto.checkpicks.favorite.v1.CreateFavoriteArticleFolderRequest.prototype.getDescription = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 3, ""));
+  return /** @type{?proto.google.protobuf.StringValue} */ (
+    jspb.Message.getWrapperField(this, google_protobuf_wrappers_pb.StringValue, 3));
 };
 
 
 /**
- * @param {string} value
+ * @param {?proto.google.protobuf.StringValue|undefined} value
+ * @return {!proto.checkpicks.favorite.v1.CreateFavoriteArticleFolderRequest} returns this
+*/
+proto.checkpicks.favorite.v1.CreateFavoriteArticleFolderRequest.prototype.setDescription = function(value) {
+  return jspb.Message.setWrapperField(this, 3, value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
  * @return {!proto.checkpicks.favorite.v1.CreateFavoriteArticleFolderRequest} returns this
  */
-proto.checkpicks.favorite.v1.CreateFavoriteArticleFolderRequest.prototype.setDescription = function(value) {
-  return jspb.Message.setProto3StringField(this, 3, value);
+proto.checkpicks.favorite.v1.CreateFavoriteArticleFolderRequest.prototype.clearDescription = function() {
+  return this.setDescription(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.checkpicks.favorite.v1.CreateFavoriteArticleFolderRequest.prototype.hasDescription = function() {
+  return jspb.Message.getField(this, 3) != null;
 };
 
 

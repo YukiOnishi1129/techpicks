@@ -47,7 +47,7 @@ message CreateFavoriteArticleFolderResponse {
 message CreateFavoriteArticleFolderRequest {
     string user_id = 1;
     string title = 2;
-    string description = 3;
+    google.protobuf.StringValue description = 3;
 }
 
 message UpdateFavoriteArticleFolderResponse {
