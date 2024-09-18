@@ -9,5 +9,6 @@ import (
 
 type FavoriteArticleRepository interface {
 	GetFavoriteArticles(ctx context.Context, q []qm.QueryMod) (entity.FavoriteArticleSlice, error)
+	CreateFavoriteArticle(ctx context.Context, fa entity.FavoriteArticle) (entity.FavoriteArticle, error)
 	MultiDeleteFavoriteArticles(ctx context.Context, fa entity.FavoriteArticleSlice) error
 }

@@ -1,11 +1,25 @@
 package usecase
 
 import (
+	"context"
+
 	fpb "github.com/YukiOnishi1129/techpicks/micro-service/favorite-service/grpc/favorite"
 	"github.com/YukiOnishi1129/techpicks/micro-service/favorite-service/internal/domain/entity"
 	"google.golang.org/protobuf/types/known/timestamppb"
 	"google.golang.org/protobuf/types/known/wrapperspb"
 )
+
+func (fu *favoriteUseCase) CreateFavoriteArticle(ctx context.Context, req *fpb.CreateFavoriteArticleRequest) (*fpb.CreateFavoriteArticleResponse, error) {
+	cfa, err := fu.favoriteArticlePersistenceAdapter.CreateFavoriteArticle(ctx, req)
+	if err != nil {
+		return &fpb.CreateFavoriteArticleResponse{}, err
+	}
+
+	resFa := fu.convertPBFavoriteArticle(&cfa)
+	return &fpb.CreateFavoriteArticleResponse{
+		FavoriteArticle: resFa,
+	}, nil
+}
 
 func (fu *favoriteUseCase) convertPBFavoriteArticle(fa *entity.FavoriteArticle) *fpb.FavoriteArticle {
 	resFa := &fpb.FavoriteArticle{
