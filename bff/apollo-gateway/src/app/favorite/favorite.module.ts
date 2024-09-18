@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 
 import { FavoriteResolver } from './favorite.resolver';
-import { FavoriteService } from './favorite.service';
+import { FavoriteArticleFolderModule } from './folder/favorite-article-folder.module';
 import { GrpcClientModule } from '../grpc/grpc-client.module';
 
 @Module({
-  imports: [GrpcClientModule],
-  providers: [FavoriteResolver, FavoriteService],
+  imports: [GrpcClientModule, FavoriteArticleFolderModule],
+  providers: [FavoriteResolver],
 })
 export class FavoriteModule {}

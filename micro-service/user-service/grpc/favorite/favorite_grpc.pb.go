@@ -25,6 +25,8 @@ const (
 	FavoriteService_CreateFavoriteArticleFolder_FullMethodName         = "/checkpicks.favorite.v1.FavoriteService/CreateFavoriteArticleFolder"
 	FavoriteService_UpdateFavoriteArticleFolder_FullMethodName         = "/checkpicks.favorite.v1.FavoriteService/UpdateFavoriteArticleFolder"
 	FavoriteService_DeleteFavoriteArticleFolder_FullMethodName         = "/checkpicks.favorite.v1.FavoriteService/DeleteFavoriteArticleFolder"
+	FavoriteService_CreateFavoriteArticle_FullMethodName               = "/checkpicks.favorite.v1.FavoriteService/CreateFavoriteArticle"
+	FavoriteService_DeleteFavoriteArticle_FullMethodName               = "/checkpicks.favorite.v1.FavoriteService/DeleteFavoriteArticle"
 )
 
 // FavoriteServiceClient is the client API for FavoriteService service.
@@ -36,6 +38,8 @@ type FavoriteServiceClient interface {
 	CreateFavoriteArticleFolder(ctx context.Context, in *CreateFavoriteArticleFolderRequest, opts ...grpc.CallOption) (*CreateFavoriteArticleFolderResponse, error)
 	UpdateFavoriteArticleFolder(ctx context.Context, in *UpdateFavoriteArticleFolderRequest, opts ...grpc.CallOption) (*UpdateFavoriteArticleFolderResponse, error)
 	DeleteFavoriteArticleFolder(ctx context.Context, in *DeleteFavoriteArticleFolderRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	CreateFavoriteArticle(ctx context.Context, in *CreateFavoriteArticleRequest, opts ...grpc.CallOption) (*CreateFavoriteArticleResponse, error)
+	DeleteFavoriteArticle(ctx context.Context, in *DeleteFavoriteArticleRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
 type favoriteServiceClient struct {
@@ -96,6 +100,26 @@ func (c *favoriteServiceClient) DeleteFavoriteArticleFolder(ctx context.Context,
 	return out, nil
 }
 
+func (c *favoriteServiceClient) CreateFavoriteArticle(ctx context.Context, in *CreateFavoriteArticleRequest, opts ...grpc.CallOption) (*CreateFavoriteArticleResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CreateFavoriteArticleResponse)
+	err := c.cc.Invoke(ctx, FavoriteService_CreateFavoriteArticle_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *favoriteServiceClient) DeleteFavoriteArticle(ctx context.Context, in *DeleteFavoriteArticleRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, FavoriteService_DeleteFavoriteArticle_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // FavoriteServiceServer is the server API for FavoriteService service.
 // All implementations should embed UnimplementedFavoriteServiceServer
 // for forward compatibility.
@@ -105,6 +129,8 @@ type FavoriteServiceServer interface {
 	CreateFavoriteArticleFolder(context.Context, *CreateFavoriteArticleFolderRequest) (*CreateFavoriteArticleFolderResponse, error)
 	UpdateFavoriteArticleFolder(context.Context, *UpdateFavoriteArticleFolderRequest) (*UpdateFavoriteArticleFolderResponse, error)
 	DeleteFavoriteArticleFolder(context.Context, *DeleteFavoriteArticleFolderRequest) (*emptypb.Empty, error)
+	CreateFavoriteArticle(context.Context, *CreateFavoriteArticleRequest) (*CreateFavoriteArticleResponse, error)
+	DeleteFavoriteArticle(context.Context, *DeleteFavoriteArticleRequest) (*emptypb.Empty, error)
 }
 
 // UnimplementedFavoriteServiceServer should be embedded to have
@@ -128,6 +154,12 @@ func (UnimplementedFavoriteServiceServer) UpdateFavoriteArticleFolder(context.Co
 }
 func (UnimplementedFavoriteServiceServer) DeleteFavoriteArticleFolder(context.Context, *DeleteFavoriteArticleFolderRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteFavoriteArticleFolder not implemented")
+}
+func (UnimplementedFavoriteServiceServer) CreateFavoriteArticle(context.Context, *CreateFavoriteArticleRequest) (*CreateFavoriteArticleResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateFavoriteArticle not implemented")
+}
+func (UnimplementedFavoriteServiceServer) DeleteFavoriteArticle(context.Context, *DeleteFavoriteArticleRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteFavoriteArticle not implemented")
 }
 func (UnimplementedFavoriteServiceServer) testEmbeddedByValue() {}
 
@@ -239,6 +271,42 @@ func _FavoriteService_DeleteFavoriteArticleFolder_Handler(srv interface{}, ctx c
 	return interceptor(ctx, in, info, handler)
 }
 
+func _FavoriteService_CreateFavoriteArticle_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateFavoriteArticleRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FavoriteServiceServer).CreateFavoriteArticle(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: FavoriteService_CreateFavoriteArticle_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FavoriteServiceServer).CreateFavoriteArticle(ctx, req.(*CreateFavoriteArticleRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _FavoriteService_DeleteFavoriteArticle_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteFavoriteArticleRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FavoriteServiceServer).DeleteFavoriteArticle(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: FavoriteService_DeleteFavoriteArticle_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FavoriteServiceServer).DeleteFavoriteArticle(ctx, req.(*DeleteFavoriteArticleRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // FavoriteService_ServiceDesc is the grpc.ServiceDesc for FavoriteService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -265,6 +333,14 @@ var FavoriteService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DeleteFavoriteArticleFolder",
 			Handler:    _FavoriteService_DeleteFavoriteArticleFolder_Handler,
+		},
+		{
+			MethodName: "CreateFavoriteArticle",
+			Handler:    _FavoriteService_CreateFavoriteArticle_Handler,
+		},
+		{
+			MethodName: "DeleteFavoriteArticle",
+			Handler:    _FavoriteService_DeleteFavoriteArticle_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

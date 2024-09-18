@@ -9,13 +9,15 @@ import {
   DeleteFavoriteArticleFolderInput,
 } from 'src/graphql/types/graphql';
 
-import { FavoriteService } from './favorite.service';
+import { FavoriteArticleFolderService } from './folder/favorite-article-folder.service';
 import { GraphQLContext } from '../../graphql/context.interface';
 import { SupabaseAuthGuard } from '../auth/auth.guard';
 
 @Resolver()
 export class FavoriteResolver {
-  constructor(private readonly favoriteService: FavoriteService) {}
+  constructor(
+    private readonly favoriteArticleFolderService: FavoriteArticleFolderService,
+  ) {}
 
   @Query(() => FavoriteArticleFolderConnection)
   @UseGuards(SupabaseAuthGuard)
@@ -24,7 +26,10 @@ export class FavoriteResolver {
     @Context() context: GraphQLContext,
   ): Promise<FavoriteArticleFolderConnection> {
     const userId = context.req.user.id;
-    return await this.favoriteService.getFavoriteArticleFolders(userId, input);
+    return await this.favoriteArticleFolderService.getFavoriteArticleFolders(
+      userId,
+      input,
+    );
   }
 
   @Mutation(() => FavoriteArticleFolder)
@@ -34,7 +39,7 @@ export class FavoriteResolver {
     @Context() context: GraphQLContext,
   ): Promise<FavoriteArticleFolder> {
     const userId = context.req.user.id;
-    return await this.favoriteService.createFavoriteArticleFolder(
+    return await this.favoriteArticleFolderService.createFavoriteArticleFolder(
       userId,
       input,
     );
@@ -47,7 +52,7 @@ export class FavoriteResolver {
     @Context() context: GraphQLContext,
   ): Promise<FavoriteArticleFolder> {
     const userId = context.req.user.id;
-    return await this.favoriteService.updateFavoriteArticleFolder(
+    return await this.favoriteArticleFolderService.updateFavoriteArticleFolder(
       userId,
       input,
     );
@@ -60,7 +65,7 @@ export class FavoriteResolver {
     @Context() context: GraphQLContext,
   ): Promise<boolean> {
     const userId = context.req.user.id;
-    return await this.favoriteService.deleteFavoriteArticleFolder(
+    return await this.favoriteArticleFolderService.deleteFavoriteArticleFolder(
       userId,
       input,
     );

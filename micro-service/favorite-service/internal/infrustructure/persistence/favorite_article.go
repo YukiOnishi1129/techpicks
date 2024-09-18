@@ -6,6 +6,7 @@ import (
 
 	"github.com/YukiOnishi1129/techpicks/micro-service/favorite-service/internal/domain/entity"
 	"github.com/YukiOnishi1129/techpicks/micro-service/favorite-service/internal/domain/repository"
+	"github.com/volatiletech/sqlboiler/v4/boil"
 	"github.com/volatiletech/sqlboiler/v4/queries/qm"
 )
 
@@ -28,6 +29,32 @@ func (fap *favoriteArticlePersistence) GetFavoriteArticles(ctx context.Context, 
 		return nil, err
 	}
 	return favoriteArticles, nil
+}
+
+func (fap *favoriteArticlePersistence) GetFavoriteArticleByID(ctx context.Context, id string, q []qm.QueryMod) (entity.FavoriteArticle, error) {
+	q = append(q, qm.Where("id = ?", id))
+	favoriteArticle, err := entity.FavoriteArticles(q...).One(ctx, fap.db)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return entity.FavoriteArticle{}, nil
+		}
+		return entity.FavoriteArticle{}, err
+	}
+	return *favoriteArticle, nil
+}
+
+func (fap *favoriteArticlePersistence) CreateFavoriteArticle(ctx context.Context, fa entity.FavoriteArticle) (entity.FavoriteArticle, error) {
+	if err := fa.Insert(ctx, fap.db, boil.Infer()); err != nil {
+		return entity.FavoriteArticle{}, err
+	}
+	return fa, nil
+}
+
+func (fap *favoriteArticlePersistence) DeleteFavoriteArticle(ctx context.Context, fa entity.FavoriteArticle) error {
+	if _, err := fa.Delete(ctx, fap.db); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (fap *favoriteArticlePersistence) MultiDeleteFavoriteArticles(ctx context.Context, fa entity.FavoriteArticleSlice) error {

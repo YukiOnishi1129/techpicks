@@ -1,11 +1,48 @@
 package usecase
 
 import (
+	"context"
+	"errors"
+
 	fpb "github.com/YukiOnishi1129/techpicks/micro-service/favorite-service/grpc/favorite"
 	"github.com/YukiOnishi1129/techpicks/micro-service/favorite-service/internal/domain/entity"
+	"google.golang.org/protobuf/types/known/emptypb"
 	"google.golang.org/protobuf/types/known/timestamppb"
 	"google.golang.org/protobuf/types/known/wrapperspb"
 )
+
+func (fu *favoriteUseCase) CreateFavoriteArticle(ctx context.Context, req *fpb.CreateFavoriteArticleRequest) (*fpb.CreateFavoriteArticleResponse, error) {
+	cfa, err := fu.favoriteArticlePersistenceAdapter.CreateFavoriteArticle(ctx, req)
+	if err != nil {
+		return &fpb.CreateFavoriteArticleResponse{}, err
+	}
+
+	fa, err := fu.favoriteArticlePersistenceAdapter.GetFavoriteArticleByID(ctx, cfa.ID, cfa.UserID)
+	if err != nil {
+		return &fpb.CreateFavoriteArticleResponse{}, err
+	}
+
+	return &fpb.CreateFavoriteArticleResponse{
+		FavoriteArticle: fu.convertPBFavoriteArticle(&fa),
+	}, nil
+}
+
+func (fu *favoriteUseCase) DeleteFavoriteArticle(ctx context.Context, req *fpb.DeleteFavoriteArticleRequest) (*emptypb.Empty, error) {
+	f, err := fu.favoriteArticlePersistenceAdapter.GetFavoriteArticleByID(ctx, req.GetId(), req.GetUserId())
+	if err != nil {
+		return &emptypb.Empty{}, err
+	}
+	if f.ID == "" {
+		return &emptypb.Empty{}, errors.New("favorite article not found")
+	}
+
+	err = fu.favoriteArticlePersistenceAdapter.DeleteFavoriteArticle(ctx, f)
+	if err != nil {
+		return &emptypb.Empty{}, err
+	}
+
+	return &emptypb.Empty{}, nil
+}
 
 func (fu *favoriteUseCase) convertPBFavoriteArticle(fa *entity.FavoriteArticle) *fpb.FavoriteArticle {
 	resFa := &fpb.FavoriteArticle{
