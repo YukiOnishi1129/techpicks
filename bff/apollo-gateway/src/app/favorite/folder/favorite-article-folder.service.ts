@@ -21,10 +21,10 @@ import {
 } from 'src/grpc/favorite/favorite_pb';
 import { convertTimestampToInt } from 'src/utils/timestamp';
 
-import { GrpcFavoriteClientService } from '../grpc/grpc-favorite-client.service';
+import { GrpcFavoriteClientService } from '../../grpc/grpc-favorite-client.service';
 
 @Injectable()
-export class FavoriteService {
+export class FavoriteArticleFolderService {
   constructor(
     private readonly grpcFavoriteClientService: GrpcFavoriteClientService,
   ) {}
