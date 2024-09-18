@@ -11,10 +11,11 @@ import "google/protobuf/wrappers.proto";
 service FavoriteService {
     rpc GetFavoriteArticleFolders(GetFavoriteArticleFoldersRequest) returns (GetFavoriteArticleFoldersResponse);
     rpc GetFavoriteArticleFolderByArticleId(GetFavoriteArticleFolderByArticleIdRequest) returns (GetFavoriteArticleFolderResponse);
-
     rpc CreateFavoriteArticleFolder(CreateFavoriteArticleFolderRequest) returns (CreateFavoriteArticleFolderResponse);
     rpc UpdateFavoriteArticleFolder(UpdateFavoriteArticleFolderRequest) returns (UpdateFavoriteArticleFolderResponse);
     rpc DeleteFavoriteArticleFolder(DeleteFavoriteArticleFolderRequest) returns (google.protobuf.Empty);
+
+    rpc CreateFavoriteArticle(CreateFavoriteArticleRequest) returns (CreateFavoriteArticleResponse);
 }
 
 message GetFavoriteArticleFoldersRequest {
@@ -64,6 +65,30 @@ message UpdateFavoriteArticleFolderRequest {
 message DeleteFavoriteArticleFolderRequest {
     string id = 1;
     string user_id = 2;
+}
+
+message CreateFavoriteArticleResponse {
+    FavoriteArticle favorite_article = 1;
+}
+
+message CreateFavoriteArticleRequest {
+    string user_id = 1;
+    string article_id = 2;
+    string favorite_article_folder_id = 3;
+    google.protobuf.StringValue platform_id = 4;
+    string title = 5;
+    google.protobuf.StringValue description = 6;
+    string thumbnail_url = 7;
+    string article_url = 8;
+    google.protobuf.Timestamp published_at = 9;
+    google.protobuf.StringValue author_name = 10;
+    google.protobuf.StringValue tags = 11;
+    string platform_name = 12;
+    string platform_url = 13;
+    string platform_favicon_url = 14;
+    bool is_eng = 15;
+    bool is_private = 16;
+    bool is_read = 17;
 }
 
 message FavoriteArticleFolderEdge {

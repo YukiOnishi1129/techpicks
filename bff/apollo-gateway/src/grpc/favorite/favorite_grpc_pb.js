@@ -29,6 +29,28 @@ function deserialize_checkpicks_favorite_v1_CreateFavoriteArticleFolderResponse(
   return favorite_favorite_pb.CreateFavoriteArticleFolderResponse.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
+function serialize_checkpicks_favorite_v1_CreateFavoriteArticleRequest(arg) {
+  if (!(arg instanceof favorite_favorite_pb.CreateFavoriteArticleRequest)) {
+    throw new Error('Expected argument of type checkpicks.favorite.v1.CreateFavoriteArticleRequest');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_checkpicks_favorite_v1_CreateFavoriteArticleRequest(buffer_arg) {
+  return favorite_favorite_pb.CreateFavoriteArticleRequest.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
+function serialize_checkpicks_favorite_v1_CreateFavoriteArticleResponse(arg) {
+  if (!(arg instanceof favorite_favorite_pb.CreateFavoriteArticleResponse)) {
+    throw new Error('Expected argument of type checkpicks.favorite.v1.CreateFavoriteArticleResponse');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_checkpicks_favorite_v1_CreateFavoriteArticleResponse(buffer_arg) {
+  return favorite_favorite_pb.CreateFavoriteArticleResponse.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
 function serialize_checkpicks_favorite_v1_DeleteFavoriteArticleFolderRequest(arg) {
   if (!(arg instanceof favorite_favorite_pb.DeleteFavoriteArticleFolderRequest)) {
     throw new Error('Expected argument of type checkpicks.favorite.v1.DeleteFavoriteArticleFolderRequest');
@@ -173,6 +195,17 @@ var FavoriteServiceService = exports.FavoriteServiceService = {
     requestDeserialize: deserialize_checkpicks_favorite_v1_DeleteFavoriteArticleFolderRequest,
     responseSerialize: serialize_google_protobuf_Empty,
     responseDeserialize: deserialize_google_protobuf_Empty,
+  },
+  createFavoriteArticle: {
+    path: '/checkpicks.favorite.v1.FavoriteService/CreateFavoriteArticle',
+    requestStream: false,
+    responseStream: false,
+    requestType: favorite_favorite_pb.CreateFavoriteArticleRequest,
+    responseType: favorite_favorite_pb.CreateFavoriteArticleResponse,
+    requestSerialize: serialize_checkpicks_favorite_v1_CreateFavoriteArticleRequest,
+    requestDeserialize: deserialize_checkpicks_favorite_v1_CreateFavoriteArticleRequest,
+    responseSerialize: serialize_checkpicks_favorite_v1_CreateFavoriteArticleResponse,
+    responseDeserialize: deserialize_checkpicks_favorite_v1_CreateFavoriteArticleResponse,
   },
 };
 

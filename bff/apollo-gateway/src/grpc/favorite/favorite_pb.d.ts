@@ -266,6 +266,112 @@ export namespace DeleteFavoriteArticleFolderRequest {
     }
 }
 
+export class CreateFavoriteArticleResponse extends jspb.Message { 
+
+    hasFavoriteArticle(): boolean;
+    clearFavoriteArticle(): void;
+    getFavoriteArticle(): FavoriteArticle | undefined;
+    setFavoriteArticle(value?: FavoriteArticle): CreateFavoriteArticleResponse;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): CreateFavoriteArticleResponse.AsObject;
+    static toObject(includeInstance: boolean, msg: CreateFavoriteArticleResponse): CreateFavoriteArticleResponse.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: CreateFavoriteArticleResponse, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): CreateFavoriteArticleResponse;
+    static deserializeBinaryFromReader(message: CreateFavoriteArticleResponse, reader: jspb.BinaryReader): CreateFavoriteArticleResponse;
+}
+
+export namespace CreateFavoriteArticleResponse {
+    export type AsObject = {
+        favoriteArticle?: FavoriteArticle.AsObject,
+    }
+}
+
+export class CreateFavoriteArticleRequest extends jspb.Message { 
+    getUserId(): string;
+    setUserId(value: string): CreateFavoriteArticleRequest;
+    getArticleId(): string;
+    setArticleId(value: string): CreateFavoriteArticleRequest;
+    getFavoriteArticleFolderId(): string;
+    setFavoriteArticleFolderId(value: string): CreateFavoriteArticleRequest;
+
+    hasPlatformId(): boolean;
+    clearPlatformId(): void;
+    getPlatformId(): google_protobuf_wrappers_pb.StringValue | undefined;
+    setPlatformId(value?: google_protobuf_wrappers_pb.StringValue): CreateFavoriteArticleRequest;
+    getTitle(): string;
+    setTitle(value: string): CreateFavoriteArticleRequest;
+
+    hasDescription(): boolean;
+    clearDescription(): void;
+    getDescription(): google_protobuf_wrappers_pb.StringValue | undefined;
+    setDescription(value?: google_protobuf_wrappers_pb.StringValue): CreateFavoriteArticleRequest;
+    getThumbnailUrl(): string;
+    setThumbnailUrl(value: string): CreateFavoriteArticleRequest;
+    getArticleUrl(): string;
+    setArticleUrl(value: string): CreateFavoriteArticleRequest;
+
+    hasPublishedAt(): boolean;
+    clearPublishedAt(): void;
+    getPublishedAt(): google_protobuf_timestamp_pb.Timestamp | undefined;
+    setPublishedAt(value?: google_protobuf_timestamp_pb.Timestamp): CreateFavoriteArticleRequest;
+
+    hasAuthorName(): boolean;
+    clearAuthorName(): void;
+    getAuthorName(): google_protobuf_wrappers_pb.StringValue | undefined;
+    setAuthorName(value?: google_protobuf_wrappers_pb.StringValue): CreateFavoriteArticleRequest;
+
+    hasTags(): boolean;
+    clearTags(): void;
+    getTags(): google_protobuf_wrappers_pb.StringValue | undefined;
+    setTags(value?: google_protobuf_wrappers_pb.StringValue): CreateFavoriteArticleRequest;
+    getPlatformName(): string;
+    setPlatformName(value: string): CreateFavoriteArticleRequest;
+    getPlatformUrl(): string;
+    setPlatformUrl(value: string): CreateFavoriteArticleRequest;
+    getPlatformFaviconUrl(): string;
+    setPlatformFaviconUrl(value: string): CreateFavoriteArticleRequest;
+    getIsEng(): boolean;
+    setIsEng(value: boolean): CreateFavoriteArticleRequest;
+    getIsPrivate(): boolean;
+    setIsPrivate(value: boolean): CreateFavoriteArticleRequest;
+    getIsRead(): boolean;
+    setIsRead(value: boolean): CreateFavoriteArticleRequest;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): CreateFavoriteArticleRequest.AsObject;
+    static toObject(includeInstance: boolean, msg: CreateFavoriteArticleRequest): CreateFavoriteArticleRequest.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: CreateFavoriteArticleRequest, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): CreateFavoriteArticleRequest;
+    static deserializeBinaryFromReader(message: CreateFavoriteArticleRequest, reader: jspb.BinaryReader): CreateFavoriteArticleRequest;
+}
+
+export namespace CreateFavoriteArticleRequest {
+    export type AsObject = {
+        userId: string,
+        articleId: string,
+        favoriteArticleFolderId: string,
+        platformId?: google_protobuf_wrappers_pb.StringValue.AsObject,
+        title: string,
+        description?: google_protobuf_wrappers_pb.StringValue.AsObject,
+        thumbnailUrl: string,
+        articleUrl: string,
+        publishedAt?: google_protobuf_timestamp_pb.Timestamp.AsObject,
+        authorName?: google_protobuf_wrappers_pb.StringValue.AsObject,
+        tags?: google_protobuf_wrappers_pb.StringValue.AsObject,
+        platformName: string,
+        platformUrl: string,
+        platformFaviconUrl: string,
+        isEng: boolean,
+        isPrivate: boolean,
+        isRead: boolean,
+    }
+}
+
 export class FavoriteArticleFolderEdge extends jspb.Message { 
 
     hasNode(): boolean;
