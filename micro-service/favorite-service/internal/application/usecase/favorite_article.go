@@ -15,9 +15,13 @@ func (fu *favoriteUseCase) CreateFavoriteArticle(ctx context.Context, req *fpb.C
 		return &fpb.CreateFavoriteArticleResponse{}, err
 	}
 
-	resFa := fu.convertPBFavoriteArticle(&cfa)
+	fa, err := fu.favoriteArticlePersistenceAdapter.GetFavoriteArticleByID(ctx, cfa.ID, cfa.UserID)
+	if err != nil {
+		return &fpb.CreateFavoriteArticleResponse{}, err
+	}
+
 	return &fpb.CreateFavoriteArticleResponse{
-		FavoriteArticle: resFa,
+		FavoriteArticle: fu.convertPBFavoriteArticle(&fa),
 	}, nil
 }
 
