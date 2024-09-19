@@ -8,7 +8,7 @@ import (
 
 type FavoriteExternal interface {
 	GetFavoriteArticleFolders(ctx context.Context, dto *fpb.GetFavoriteArticleFoldersRequest) (*fpb.GetFavoriteArticleFoldersResponse, error)
-	GetFavoriteArticleFoldersByArticleId(ctx context.Context, dto *fpb.GetFavoriteArticleFoldersByArticleIdRequest) (*fpb.GetFavoriteArticleFoldersResponse, error)
+	GetFavoriteArticleFoldersByArticleID(ctx context.Context, dto *fpb.GetFavoriteArticleFoldersByArticleIdRequest) (*fpb.GetFavoriteArticleFoldersResponse, error)
 }
 
 type favoriteExternal struct {
@@ -37,7 +37,7 @@ func (fe *favoriteExternal) GetFavoriteArticleFolders(ctx context.Context, dto *
 	return res, nil
 }
 
-func (fe *favoriteExternal) GetFavoriteArticleFoldersByArticleId(ctx context.Context, dto *fpb.GetFavoriteArticleFoldersByArticleIdRequest) (*fpb.GetFavoriteArticleFoldersResponse, error) {
+func (fe *favoriteExternal) GetFavoriteArticleFoldersByArticleID(ctx context.Context, dto *fpb.GetFavoriteArticleFoldersByArticleIdRequest) (*fpb.GetFavoriteArticleFoldersResponse, error) {
 	res, err := fe.fpbClient.GetFavoriteArticleFoldersByArticleId(ctx, &fpb.GetFavoriteArticleFoldersByArticleIdRequest{
 		ArticleId: dto.GetArticleId(),
 		UserId:    dto.GetUserId(),

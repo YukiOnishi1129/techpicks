@@ -9,7 +9,7 @@ import (
 
 type FavoriteExternalAdapter interface {
 	GetFavoriteArticleFolders(ctx context.Context, dto *fpb.GetFavoriteArticleFoldersRequest) (*fpb.GetFavoriteArticleFoldersResponse, error)
-	GetFavoriteArticleFoldersByArticleId(ctx context.Context, dto *fpb.GetFavoriteArticleFoldersByArticleIdRequest) (*fpb.GetFavoriteArticleFoldersResponse, error)
+	GetFavoriteArticleFoldersByArticleID(ctx context.Context, dto *fpb.GetFavoriteArticleFoldersByArticleIdRequest) (*fpb.GetFavoriteArticleFoldersResponse, error)
 }
 
 type favoriteExternalAdapter struct {
@@ -30,8 +30,8 @@ func (fea *favoriteExternalAdapter) GetFavoriteArticleFolders(ctx context.Contex
 	return res, nil
 }
 
-func (fea *favoriteExternalAdapter) GetFavoriteArticleFoldersByArticleId(ctx context.Context, dto *fpb.GetFavoriteArticleFoldersByArticleIdRequest) (*fpb.GetFavoriteArticleFoldersResponse, error) {
-	res, err := fea.favoriteExternal.GetFavoriteArticleFoldersByArticleId(ctx, dto)
+func (fea *favoriteExternalAdapter) GetFavoriteArticleFoldersByArticleID(ctx context.Context, dto *fpb.GetFavoriteArticleFoldersByArticleIdRequest) (*fpb.GetFavoriteArticleFoldersResponse, error) {
+	res, err := fea.favoriteExternal.GetFavoriteArticleFoldersByArticleID(ctx, dto)
 	if err != nil {
 		return nil, err
 	}

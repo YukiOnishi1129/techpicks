@@ -46,7 +46,7 @@ func (cu *contentUseCase) GetArticles(ctx context.Context, req *cpb.GetArticlesR
 				res.IsBookmarked = true
 			}
 
-			resFavoriteFolders, err := cu.favoriteExternalAdapter.GetFavoriteArticleFoldersByArticleId(ctx, &fpb.GetFavoriteArticleFoldersByArticleIdRequest{
+			resFavoriteFolders, err := cu.favoriteExternalAdapter.GetFavoriteArticleFoldersByArticleID(ctx, &fpb.GetFavoriteArticleFoldersByArticleIdRequest{
 				ArticleId: article.ID,
 				UserId:    req.GetUserId().GetValue(),
 			})
