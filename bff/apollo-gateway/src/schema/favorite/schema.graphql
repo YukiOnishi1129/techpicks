@@ -32,7 +32,7 @@ type FavoriteArticleFolder implements Node {
   userId: String!
   title: String!
   description: String
-  favoriteArticles: [FavoriteArticle!]
+  favoriteArticles: [FavoriteArticle!]!
   createdAt: Int!
   updatedAt: Int!
 }

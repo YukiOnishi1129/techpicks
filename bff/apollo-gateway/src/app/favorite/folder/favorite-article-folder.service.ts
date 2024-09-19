@@ -149,6 +149,36 @@ export class FavoriteArticleFolderService {
           ),
           description:
             resFavoriteArticleFolder.favoriteArticleFolder.description,
+          favoriteArticles: resFavoriteArticleFolder.favoriteArticleFolder
+            ? resFavoriteArticleFolder.favoriteArticleFolder.favoriteArticlesList.map(
+                (article) => {
+                  return {
+                    articleId: article.articleId,
+                    articleUrl: article.articleUrl,
+                    authorName: article?.authorName?.value,
+                    createdAt: convertTimestampToInt(article.createdAt),
+                    description: article.description,
+                    favoriteArticleFolderId: article.favoriteArticleFolderId,
+                    id: article.id,
+                    isEng: article.isEng,
+                    isPrivate: article.isPrivate,
+                    isRead: article.isRead,
+                    platformFaviconUrl: article.platformFaviconUrl,
+                    platformId: article?.platformId?.value,
+                    platformName: article.platformName,
+                    platformUrl: article.platformUrl,
+                    publishedAt: article?.publishedAt
+                      ? convertTimestampToInt(article.publishedAt)
+                      : undefined,
+                    tags: article?.tags?.value,
+                    thumbnailUrl: article.thumbnailUrl,
+                    title: article.title,
+                    updatedAt: convertTimestampToInt(article.updatedAt),
+                    userId: article.userId,
+                  };
+                },
+              )
+            : [],
           id: resFavoriteArticleFolder.favoriteArticleFolder.id,
           title: resFavoriteArticleFolder.favoriteArticleFolder.title,
           updatedAt: convertTimestampToInt(
@@ -193,6 +223,36 @@ export class FavoriteArticleFolderService {
           ),
           description:
             resFavoriteArticleFolder.favoriteArticleFolder.description,
+          favoriteArticles: resFavoriteArticleFolder.favoriteArticleFolder
+            ? resFavoriteArticleFolder.favoriteArticleFolder.favoriteArticlesList.map(
+                (article) => {
+                  return {
+                    articleId: article.articleId,
+                    articleUrl: article.articleUrl,
+                    authorName: article?.authorName?.value,
+                    createdAt: convertTimestampToInt(article.createdAt),
+                    description: article.description,
+                    favoriteArticleFolderId: article.favoriteArticleFolderId,
+                    id: article.id,
+                    isEng: article.isEng,
+                    isPrivate: article.isPrivate,
+                    isRead: article.isRead,
+                    platformFaviconUrl: article.platformFaviconUrl,
+                    platformId: article?.platformId?.value,
+                    platformName: article.platformName,
+                    platformUrl: article.platformUrl,
+                    publishedAt: article?.publishedAt
+                      ? convertTimestampToInt(article.publishedAt)
+                      : undefined,
+                    tags: article?.tags?.value,
+                    thumbnailUrl: article.thumbnailUrl,
+                    title: article.title,
+                    updatedAt: convertTimestampToInt(article.updatedAt),
+                    userId: article.userId,
+                  };
+                },
+              )
+            : [],
           id: resFavoriteArticleFolder.favoriteArticleFolder.id,
           title: resFavoriteArticleFolder.favoriteArticleFolder.title,
           updatedAt: convertTimestampToInt(

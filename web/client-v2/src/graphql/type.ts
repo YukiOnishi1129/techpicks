@@ -246,7 +246,7 @@ export type FavoriteArticleFolder = Node & {
   __typename?: "FavoriteArticleFolder";
   createdAt: Scalars["Int"]["output"];
   description?: Maybe<Scalars["String"]["output"]>;
-  favoriteArticles?: Maybe<Array<FavoriteArticle>>;
+  favoriteArticles: Array<FavoriteArticle>;
   id: Scalars["ID"]["output"];
   title: Scalars["String"]["output"];
   updatedAt: Scalars["Int"]["output"];
@@ -554,11 +554,11 @@ export type FavoriteFolderArticleCardWrapperFragmentFragment = {
       __typename?: "FavoriteArticleFolder";
       id: string;
       title: string;
-      favoriteArticles?: Array<{
+      favoriteArticles: Array<{
         __typename?: "FavoriteArticle";
         id: string;
         articleId?: string | null;
-      }> | null;
+      }>;
     };
   }>;
 };
@@ -738,11 +738,11 @@ export type ArticleDashboardTemplateFragmentFragment = {
         __typename?: "FavoriteArticleFolder";
         id: string;
         title: string;
-        favoriteArticles?: Array<{
+        favoriteArticles: Array<{
           __typename?: "FavoriteArticle";
           id: string;
           articleId?: string | null;
-        }> | null;
+        }>;
       };
     }>;
   };
@@ -842,11 +842,11 @@ export type GetArticleDashboardTemplateQueryQuery = {
         __typename?: "FavoriteArticleFolder";
         id: string;
         title: string;
-        favoriteArticles?: Array<{
+        favoriteArticles: Array<{
           __typename?: "FavoriteArticle";
           id: string;
           articleId?: string | null;
-        }> | null;
+        }>;
       };
     }>;
   };
@@ -1125,25 +1125,25 @@ export type FavoriteArticleFolderCardFragmentFragment = {
   id: string;
   title: string;
   description?: string | null;
-  favoriteArticles?: Array<{
+  favoriteArticles: Array<{
     __typename?: "FavoriteArticle";
     id: string;
     title: string;
     articleUrl: string;
     thumbnailUrl: string;
     createdAt: number;
-  }> | null;
+  }>;
 };
 
 export type FollowTargetFavoriteArticleFolderItemFragmentFragment = {
   __typename?: "FavoriteArticleFolder";
   id: string;
   title: string;
-  favoriteArticles?: Array<{
+  favoriteArticles: Array<{
     __typename?: "FavoriteArticle";
     id: string;
     articleId?: string | null;
-  }> | null;
+  }>;
 };
 
 export type FollowFavoriteArticleDropdownMenuContentFragmentFragment = {
@@ -1154,11 +1154,11 @@ export type FollowFavoriteArticleDropdownMenuContentFragmentFragment = {
       __typename?: "FavoriteArticleFolder";
       id: string;
       title: string;
-      favoriteArticles?: Array<{
+      favoriteArticles: Array<{
         __typename?: "FavoriteArticle";
         id: string;
         articleId?: string | null;
-      }> | null;
+      }>;
     };
   }>;
 };
@@ -1179,14 +1179,14 @@ export type FavoriteArticleFolderListFragmentFragment = {
       id: string;
       title: string;
       description?: string | null;
-      favoriteArticles?: Array<{
+      favoriteArticles: Array<{
         __typename?: "FavoriteArticle";
         id: string;
         title: string;
         articleUrl: string;
         thumbnailUrl: string;
         createdAt: number;
-      }> | null;
+      }>;
     };
   }>;
 };
@@ -1213,14 +1213,14 @@ export type GetFavoriteArticleFolderListQueryQuery = {
         id: string;
         title: string;
         description?: string | null;
-        favoriteArticles?: Array<{
+        favoriteArticles: Array<{
           __typename?: "FavoriteArticle";
           id: string;
           title: string;
           articleUrl: string;
           thumbnailUrl: string;
           createdAt: number;
-        }> | null;
+        }>;
       };
     }>;
   };
@@ -1244,14 +1244,14 @@ export type FavoriteArticleFolderListTemplateFragmentFragment = {
         id: string;
         title: string;
         description?: string | null;
-        favoriteArticles?: Array<{
+        favoriteArticles: Array<{
           __typename?: "FavoriteArticle";
           id: string;
           title: string;
           articleUrl: string;
           thumbnailUrl: string;
           createdAt: number;
-        }> | null;
+        }>;
       };
     }>;
   };
@@ -1279,14 +1279,14 @@ export type GetFavoriteArticleFolderListTemplateQueryQuery = {
         id: string;
         title: string;
         description?: string | null;
-        favoriteArticles?: Array<{
+        favoriteArticles: Array<{
           __typename?: "FavoriteArticle";
           id: string;
           title: string;
           articleUrl: string;
           thumbnailUrl: string;
           createdAt: number;
-        }> | null;
+        }>;
       };
     }>;
   };
@@ -1477,11 +1477,11 @@ export type TrendArticleDashboardTemplateFragmentFragment = {
         __typename?: "FavoriteArticleFolder";
         id: string;
         title: string;
-        favoriteArticles?: Array<{
+        favoriteArticles: Array<{
           __typename?: "FavoriteArticle";
           id: string;
           articleId?: string | null;
-        }> | null;
+        }>;
       };
     }>;
   };
@@ -1581,11 +1581,11 @@ export type GetTrendArticleDashboardTemplateQueryQuery = {
         __typename?: "FavoriteArticleFolder";
         id: string;
         title: string;
-        favoriteArticles?: Array<{
+        favoriteArticles: Array<{
           __typename?: "FavoriteArticle";
           id: string;
           articleId?: string | null;
-        }> | null;
+        }>;
       };
     }>;
   };

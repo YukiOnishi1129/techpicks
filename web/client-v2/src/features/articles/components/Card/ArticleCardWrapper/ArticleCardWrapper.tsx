@@ -6,6 +6,7 @@ import { FC, useCallback, useState } from "react";
 
 import { logoutToLoginPage } from "@/features/auth/actions/auth";
 import { createFavoriteArticleMutation } from "@/features/favorites/actions/actCreateFavoriteArticleMutaion";
+import { deleteFavoriteArticleMutation } from "@/features/favorites/actions/actDeleteFavoriteArticleMutation";
 import { FollowFavoriteArticleDropdownMenu } from "@/features/favorites/components/DropdownMenu";
 import { FollowFavoriteArticleDropdownMenuContentFragment } from "@/features/favorites/components/DropdownMenu/FollowFavoriteArticleDropdownMenu/FollowFavoriteArticleDropdownMenuFragment";
 
@@ -46,14 +47,14 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
     FollowFavoriteArticleDropdownMenuContentFragment,
     favoriteArticleFolders
   );
-  const [favoriteArticleFolderIds, setFavoriteArticleFolderIds] = useState(
-    fragment?.favoriteArticleFolderIds || []
-  );
   const [isFollowing, setIsFollowing] = useState<boolean>(
     fragment.isFollowing || false
   );
 
   const [showArticle, setShowArticle] = useState(fragment);
+  const [showFavoriteArticleFolders, setShowFavoriteArticleFolders] = useState(
+    fragmentFavoriteArticleFolders
+  );
 
   const { bookmarkId, handleAddBookmark, handleRemoveBookmark } =
     useArticleBookmark(showArticle);
@@ -136,9 +137,58 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
         return;
       }
 
-      return "id";
+      const { data, error } = await deleteFavoriteArticleMutation({
+        id: favoriteArticleId,
+      });
+
+      if (error || !data?.deleteFavoriteArticle) {
+        if (error && error.length > 0) {
+          // TODO: Modify the error message response on the BFF side
+          const errMsg =
+            error[0].message.indexOf("favorite article not found") != -1
+              ? "favorite article not found"
+              : error[0].message;
+          failToast({
+            description: errMsg,
+          });
+          return;
+        }
+        failToast({
+          description: "Fail: Something went wrong",
+        });
+        return;
+      }
+
+      showArticle.favoriteArticleFolderIds.filter(
+        (id) => id !== favoriteArticleFolderId
+      );
+
+      if (isFollowing)
+        setIsFollowing(
+          showArticle.favoriteArticleFolderIds.filter(
+            (id) => id !== favoriteArticleFolderId
+          ).length > 0
+        );
+      setShowArticle((prev) => ({
+        ...prev,
+        favoriteArticleFolderIds: prev.favoriteArticleFolderIds?.filter(
+          (id) => id !== favoriteArticleFolderId
+        ),
+      }));
+
+      successToast({
+        description: "Unfollow the article",
+      });
+
+      return favoriteArticleId;
     },
-    [failToast, user]
+    [
+      successToast,
+      failToast,
+      user,
+      isFollowing,
+      showArticle.favoriteArticleFolderIds,
+    ]
   );
 
   const handleCreateFavoriteArticleFolder = useCallback(

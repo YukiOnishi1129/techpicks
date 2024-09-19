@@ -93,7 +93,7 @@ export class FavoriteResolver {
   async createFavoriteArticle(
     @Args('input') input: CreateFavoriteArticleInput,
     @Context() context: GraphQLContext,
-  ): Promise<FavoriteArticleFolder> {
+  ): Promise<FavoriteArticle> {
     const userId = context.req.user.id;
     return await this.favoriteArticleService.createFavoriteArticle(
       userId,

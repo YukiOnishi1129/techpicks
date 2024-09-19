@@ -264,7 +264,7 @@ export class FavoriteArticleFolder implements Node {
     userId: string;
     title: string;
     description?: Nullable<string>;
-    favoriteArticles?: Nullable<FavoriteArticle[]>;
+    favoriteArticles: FavoriteArticle[];
     createdAt: number;
     updatedAt: number;
 }
