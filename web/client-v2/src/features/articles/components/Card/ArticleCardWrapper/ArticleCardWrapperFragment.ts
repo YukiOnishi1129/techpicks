@@ -20,6 +20,8 @@ export const ArticleCardWrapperFragment = graphql(
       isBookmarked
       bookmarkId
       likeCount
+      isFollowing
+      favoriteArticleFolderIds
       ...ArticleCardItemFragment
     }
   `,
