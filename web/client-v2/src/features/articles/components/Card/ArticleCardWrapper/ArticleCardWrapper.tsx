@@ -5,6 +5,7 @@ import { FragmentOf, readFragment } from "gql.tada";
 import { FC, useCallback, useState } from "react";
 
 import { logoutToLoginPage } from "@/features/auth/actions/auth";
+import { createFavoriteArticleMutation } from "@/features/favorites/actions/actCreateFavoriteArticleMutaion";
 import { FollowFavoriteArticleDropdownMenu } from "@/features/favorites/components/DropdownMenu";
 import { FollowFavoriteArticleDropdownMenuContentFragment } from "@/features/favorites/components/DropdownMenu/FollowFavoriteArticleDropdownMenu/FollowFavoriteArticleDropdownMenuFragment";
 
@@ -13,6 +14,8 @@ import { ShareLinks } from "@/components/ui/share";
 import { useStatusToast } from "@/hooks/useStatusToast";
 
 import { ArticleTabType } from "@/types/article";
+
+import { CreateFavoriteArticleInput } from "@/graphql/type";
 
 import style from "./ArticleCardWrapper.module.css";
 import { ArticleCardWrapperFragment } from "./ArticleCardWrapperFragment";
@@ -57,7 +60,6 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
 
   const handleCreateFavoriteArticle = useCallback(
     async (favoriteArticleFolderId: string) => {
-      // 1. check user
       if (!user) {
         failToast({
           description: "Please login to follow the article",
@@ -65,14 +67,69 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
         await logoutToLoginPage();
         return;
       }
-      return "id";
+
+      const input: CreateFavoriteArticleInput = {
+        articleId: showArticle.id,
+        favoriteArticleFolderId,
+        platformId: showArticle.platform?.id,
+        title: showArticle.title,
+        description: showArticle?.description,
+        articleUrl: showArticle.articleUrl,
+        publishedAt: showArticle.publishedAt,
+        authorName: showArticle.authorName,
+        tags: showArticle.tags,
+        thumbnailUrl: showArticle.thumbnailUrl,
+        platformName: showArticle.platform?.name || "",
+        platformUrl: showArticle.platform?.siteUrl || "",
+        platformFaviconUrl: showArticle.platform?.faviconUrl || "",
+        isEng: showArticle.isEng,
+        isRead: false,
+        isPrivate: showArticle.isPrivate,
+      };
+
+      const { data, error } = await createFavoriteArticleMutation(input);
+
+      if (error || !data?.createFavoriteArticle) {
+        if (error && error.length > 0) {
+          // TODO: Modify the error message response on the BFF side
+          const errMsg =
+            error[0].message.indexOf("favorite article already exists") != -1
+              ? "favorite article already exists"
+              : error[0].message;
+          failToast({
+            description: errMsg,
+          });
+          return;
+        }
+        failToast({
+          description: "Fail: Something went wrong",
+        });
+        return;
+      }
+
+      if (!isFollowing) setIsFollowing(true);
+      setFavoriteArticleFolderIds([
+        ...favoriteArticleFolderIds,
+        favoriteArticleFolderId,
+      ]);
+      successToast({
+        description: "Follow the article",
+      });
+
+      return data.createFavoriteArticle.id;
     },
-    [failToast, user]
+    [
+      successToast,
+      failToast,
+      user,
+      showArticle,
+      isFollowing,
+      favoriteArticleFolderIds,
+    ]
   );
 
   const handleRemoveFavoriteArticle = useCallback(
     async (favoriteArticleId: string, favoriteArticleFolderId: string) => {
-      // 1. check user
       if (!user) {
         failToast({
           description: "Please login to follow the article",
@@ -80,6 +137,7 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
         await logoutToLoginPage();
         return;
       }
+
       return "id";
     },
     [failToast, user]

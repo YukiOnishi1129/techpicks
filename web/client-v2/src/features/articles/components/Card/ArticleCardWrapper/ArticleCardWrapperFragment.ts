@@ -11,11 +11,15 @@ export const ArticleCardWrapperFragment = graphql(
       platform {
         id
         name
+        siteUrl
         faviconUrl
       }
       title
+      description
       articleUrl
       publishedAt
+      authorName
+      tags
       thumbnailUrl
       isEng
       isPrivate
