@@ -76,7 +76,7 @@ export const FollowFavoriteArticleDropdownMenuContent: FC<
   }, [searchKeyword, fragment.edges]);
 
   return (
-    <DropdownMenuContent align="end" className="w-[200px]">
+    <DropdownMenuContent align="end" className="max-w-[200px]">
       <Controller
         name="keyword"
         control={control}
@@ -90,7 +90,7 @@ export const FollowFavoriteArticleDropdownMenuContent: FC<
         )}
       />
       <DropdownMenuSeparator />
-      <div className="max-h-[200px] overflow-y-auto">
+      <div className="max-h-[200px] overflow-y-auto overflow-x-hidden">
         {showFavoriteArticleFolders.length > 0 &&
           showFavoriteArticleFolders.map((favoriteArticleFolder) => {
             const nodeFragment = readFragment(
