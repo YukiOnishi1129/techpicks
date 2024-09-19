@@ -228,6 +228,18 @@ export type FavoriteArticle = Node & {
   userId: Scalars["String"]["output"];
 };
 
+export type FavoriteArticleConnection = {
+  __typename?: "FavoriteArticleConnection";
+  edges: Array<FavoriteArticleEdge>;
+  pageInfo: PageInfo;
+};
+
+export type FavoriteArticleEdge = {
+  __typename?: "FavoriteArticleEdge";
+  cursor: Scalars["String"]["output"];
+  node: FavoriteArticle;
+};
+
 /** Favorite Article Folder schema */
 export type FavoriteArticleFolder = Node & {
   __typename?: "FavoriteArticleFolder";
@@ -258,6 +270,15 @@ export type FavoriteArticleFoldersInput = {
   first?: InputMaybe<Scalars["Int"]["input"]>;
   isAllFetch?: InputMaybe<Scalars["Boolean"]["input"]>;
   isFolderOnly?: InputMaybe<Scalars["Boolean"]["input"]>;
+  keyword?: InputMaybe<Scalars["String"]["input"]>;
+  last?: InputMaybe<Scalars["Int"]["input"]>;
+};
+
+export type FavoriteArticlesInput = {
+  after?: InputMaybe<Scalars["String"]["input"]>;
+  before?: InputMaybe<Scalars["String"]["input"]>;
+  first?: InputMaybe<Scalars["Int"]["input"]>;
+  folderId?: InputMaybe<Scalars["ID"]["input"]>;
   keyword?: InputMaybe<Scalars["String"]["input"]>;
   last?: InputMaybe<Scalars["Int"]["input"]>;
 };
@@ -384,6 +405,7 @@ export type Query = {
   /** Get bookmarks */
   bookmarks: BookmarkConnection;
   favoriteArticleFolders: FavoriteArticleFolderConnection;
+  favoriteArticles: FavoriteArticleConnection;
 };
 
 export type QueryArticleOpgArgs = {
@@ -400,6 +422,10 @@ export type QueryBookmarksArgs = {
 
 export type QueryFavoriteArticleFoldersArgs = {
   input?: InputMaybe<FavoriteArticleFoldersInput>;
+};
+
+export type QueryFavoriteArticlesArgs = {
+  input?: InputMaybe<FavoriteArticlesInput>;
 };
 
 export type UpdateFavoriteArticleFolderInput = {
@@ -666,11 +692,28 @@ export type ArticleDashboardTemplateFragmentFragment = {
       };
     }>;
   };
+  favoriteArticleFolders: {
+    __typename?: "FavoriteArticleFolderConnection";
+    edges: Array<{
+      __typename?: "FavoriteArticleFolderEdge";
+      node: {
+        __typename?: "FavoriteArticleFolder";
+        id: string;
+        title: string;
+        favoriteArticles?: Array<{
+          __typename?: "FavoriteArticle";
+          id: string;
+          articleId?: string | null;
+        }> | null;
+      };
+    }>;
+  };
 };
 
 export type GetArticleDashboardTemplateQueryQueryVariables = Exact<{
   enInput: ArticlesInput;
   jpInput: ArticlesInput;
+  favoriteArticleFoldersInput: FavoriteArticleFoldersInput;
 }>;
 
 export type GetArticleDashboardTemplateQueryQuery = {
@@ -742,6 +785,22 @@ export type GetArticleDashboardTemplateQueryQuery = {
           siteUrl: string;
         } | null;
         feeds?: Array<{ __typename?: "Feed"; id: string; name: string }> | null;
+      };
+    }>;
+  };
+  favoriteArticleFolders: {
+    __typename?: "FavoriteArticleFolderConnection";
+    edges: Array<{
+      __typename?: "FavoriteArticleFolderEdge";
+      node: {
+        __typename?: "FavoriteArticleFolder";
+        id: string;
+        title: string;
+        favoriteArticles?: Array<{
+          __typename?: "FavoriteArticle";
+          id: string;
+          articleId?: string | null;
+        }> | null;
       };
     }>;
   };
@@ -1024,6 +1083,34 @@ export type FavoriteArticleFolderCardFragmentFragment = {
     thumbnailUrl: string;
     createdAt: number;
   }> | null;
+};
+
+export type FollowTargetFavoriteArticleFolderItemFragmentFragment = {
+  __typename?: "FavoriteArticleFolder";
+  id: string;
+  title: string;
+  favoriteArticles?: Array<{
+    __typename?: "FavoriteArticle";
+    id: string;
+    articleId?: string | null;
+  }> | null;
+};
+
+export type FollowFavoriteArticleDropdownMenuContentFragmentFragment = {
+  __typename?: "FavoriteArticleFolderConnection";
+  edges: Array<{
+    __typename?: "FavoriteArticleFolderEdge";
+    node: {
+      __typename?: "FavoriteArticleFolder";
+      id: string;
+      title: string;
+      favoriteArticles?: Array<{
+        __typename?: "FavoriteArticle";
+        id: string;
+        articleId?: string | null;
+      }> | null;
+    };
+  }>;
 };
 
 export type FavoriteArticleFolderListFragmentFragment = {
@@ -1498,6 +1585,26 @@ export const ArticleListFragmentFragmentDoc = gql`
   }
   ${ArticleCardWrapperFragmentFragmentDoc}
 `;
+export const FollowTargetFavoriteArticleFolderItemFragmentFragmentDoc = gql`
+  fragment FollowTargetFavoriteArticleFolderItemFragment on FavoriteArticleFolder {
+    id
+    title
+    favoriteArticles {
+      id
+      articleId
+    }
+  }
+`;
+export const FollowFavoriteArticleDropdownMenuContentFragmentFragmentDoc = gql`
+  fragment FollowFavoriteArticleDropdownMenuContentFragment on FavoriteArticleFolderConnection {
+    edges {
+      node {
+        ...FollowTargetFavoriteArticleFolderItemFragment
+      }
+    }
+  }
+  ${FollowTargetFavoriteArticleFolderItemFragmentFragmentDoc}
+`;
 export const ArticleDashboardTemplateFragmentFragmentDoc = gql`
   fragment ArticleDashboardTemplateFragment on Query {
     enArticles: articles(articlesInput: $enInput) {
@@ -1506,8 +1613,12 @@ export const ArticleDashboardTemplateFragmentFragmentDoc = gql`
     jpArticles: articles(articlesInput: $jpInput) {
       ...ArticleListFragment
     }
+    favoriteArticleFolders(input: $favoriteArticleFoldersInput) {
+      ...FollowFavoriteArticleDropdownMenuContentFragment
+    }
   }
   ${ArticleListFragmentFragmentDoc}
+  ${FollowFavoriteArticleDropdownMenuContentFragmentFragmentDoc}
 `;
 export const OgpPreviewContentFragmentFragmentDoc = gql`
   fragment OGPPreviewContentFragment on ArticleOGP {
@@ -1938,6 +2049,7 @@ export const GetArticleDashboardTemplateQueryDocument = gql`
   query GetArticleDashboardTemplateQuery(
     $enInput: ArticlesInput!
     $jpInput: ArticlesInput!
+    $favoriteArticleFoldersInput: FavoriteArticleFoldersInput!
   ) {
     ...ArticleDashboardTemplateFragment
   }
@@ -1958,6 +2070,7 @@ export const GetArticleDashboardTemplateQueryDocument = gql`
  *   variables: {
  *      enInput: // value for 'enInput'
  *      jpInput: // value for 'jpInput'
+ *      favoriteArticleFoldersInput: // value for 'favoriteArticleFoldersInput'
  *   },
  * });
  */

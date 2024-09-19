@@ -8,7 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { LanguageStatus } from "@/types/language";
 
 import { ENGLISH_IMAGE, JAPANESE_IMAGE } from "@/constant/image";
-import { ArticlesInput } from "@/graphql/type";
+import { ArticlesInput, FavoriteArticleFoldersInput } from "@/graphql/type";
 
 import { getArticleDashboardTemplateQuery } from "./actGetArticleDashboardTemplateQuery";
 import { ArticleDashboardTemplateFragment } from "./ArticleDashboardTemplateFragment";
@@ -43,9 +43,14 @@ export const ArticleDashboardTemplate: FC<
     tab,
     languageStatus: 1,
   };
+  const favoriteArticleFoldersInput: FavoriteArticleFoldersInput = {
+    isAllFetch: true,
+  };
+
   const { data, error } = await getArticleDashboardTemplateQuery(
     enInput,
-    jpInput
+    jpInput,
+    favoriteArticleFoldersInput
   );
 
   if (error) {

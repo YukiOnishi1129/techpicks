@@ -4,7 +4,7 @@ import { graphql } from "gql.tada";
 
 import { getClient } from "@/lib/apollo/client";
 
-import { ArticlesInput } from "@/graphql/type";
+import { ArticlesInput, FavoriteArticleFoldersInput } from "@/graphql/type";
 
 import { ArticleDashboardTemplateFragment } from "./ArticleDashboardTemplateFragment";
 
@@ -13,6 +13,7 @@ const GetArticleDashboardTemplateQuery = graphql(
     query GetArticleDashboardTemplateQuery(
       $enInput: ArticlesInput!
       $jpInput: ArticlesInput!
+      $favoriteArticleFoldersInput: FavoriteArticleFoldersInput!
     ) {
       ...ArticleDashboardTemplateFragment
     }
@@ -22,7 +23,8 @@ const GetArticleDashboardTemplateQuery = graphql(
 
 export const getArticleDashboardTemplateQuery = async (
   enInput: ArticlesInput,
-  jpInput: ArticlesInput
+  jpInput: ArticlesInput,
+  favoriteArticleFoldersInput: FavoriteArticleFoldersInput
 ) => {
   const { data, error, loading } = await getClient().query({
     query: GetArticleDashboardTemplateQuery,
@@ -34,6 +36,7 @@ export const getArticleDashboardTemplateQuery = async (
     variables: {
       enInput,
       jpInput,
+      favoriteArticleFoldersInput,
     },
     errorPolicy: "all",
   });
