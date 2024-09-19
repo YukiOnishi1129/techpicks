@@ -19,20 +19,14 @@ import {
 // import { FavoriteArticleFolderType } from "@/types/favoriteArticleFolder";
 
 import { FollowFavoriteArticleDropdownMenuContent } from "./FollowFavoriteArticleDropdownMenuContent";
-import {
-  FollowFavoriteArticleDropdownMenuContentFragment,
-  FollowTargetFavoriteArticleFolderItemFragment,
-} from "./FollowFavoriteArticleDropdownMenuFragment";
+import { FollowFavoriteArticleDropdownMenuContentFragment } from "./FollowFavoriteArticleDropdownMenuFragment";
 
 type FollowFavoriteArticleDropdownMenuProps = {
   isFollowing: boolean;
   articleId: string;
   data: FragmentOf<typeof FollowFavoriteArticleDropdownMenuContentFragment>;
   handleCreateFavoriteArticle: (
-    favoriteArticleFolderId: string,
-    createdFavoriteArticleFolder?: FragmentOf<
-      typeof FollowTargetFavoriteArticleFolderItemFragment
-    >
+    favoriteArticleFolderId: string
   ) => Promise<string | undefined>;
   handleRemoveFavoriteArticle: (
     favoriteArticleId: string,

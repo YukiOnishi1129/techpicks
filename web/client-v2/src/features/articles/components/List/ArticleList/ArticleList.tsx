@@ -7,6 +7,7 @@ import { useCallback, useRef, useState, useEffect } from "react";
 // import { FetchArticlesAPIResponse } from "@/features/articles/actions/article";
 
 // import { NotFoundList } from "@/components/layout/NotFoundList";
+
 import { FollowFavoriteArticleDropdownMenuContentFragment } from "@/features/favorites/components/DropdownMenu/FollowFavoriteArticleDropdownMenu/FollowFavoriteArticleDropdownMenuFragment";
 
 import { Loader } from "@/components/ui/loader";

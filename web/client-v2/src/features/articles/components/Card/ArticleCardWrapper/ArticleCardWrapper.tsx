@@ -2,11 +2,15 @@
 import { User } from "@supabase/supabase-js";
 import { clsx } from "clsx";
 import { FragmentOf, readFragment } from "gql.tada";
-import { FC, useState } from "react";
+import { FC, useCallback, useState } from "react";
 
+import { logoutToLoginPage } from "@/features/auth/actions/auth";
+import { FollowFavoriteArticleDropdownMenu } from "@/features/favorites/components/DropdownMenu";
 import { FollowFavoriteArticleDropdownMenuContentFragment } from "@/features/favorites/components/DropdownMenu/FollowFavoriteArticleDropdownMenu/FollowFavoriteArticleDropdownMenuFragment";
 
 import { ShareLinks } from "@/components/ui/share";
+
+import { useStatusToast } from "@/hooks/useStatusToast";
 
 import { ArticleTabType } from "@/types/article";
 
@@ -33,18 +37,58 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
   user,
   tab,
 }: ArticleCardWrapperProps) => {
-  //   const { successToast, failToast } = useStatusToast();
-  //   const [isFollowing, setIsFollowing] = useState<boolean>(
-  //     article.isFollowing || false
-  //   );
+  const { successToast, failToast } = useStatusToast();
   const fragment = readFragment(ArticleCardWrapperFragment, data);
+  const fragmentFavoriteArticleFolders = readFragment(
+    FollowFavoriteArticleDropdownMenuContentFragment,
+    favoriteArticleFolders
+  );
+  const [favoriteArticleFolderIds, setFavoriteArticleFolderIds] = useState(
+    fragment?.favoriteArticleFolderIds || []
+  );
+  const [isFollowing, setIsFollowing] = useState<boolean>(
+    fragment.isFollowing || false
+  );
+
   const [showArticle, setShowArticle] = useState(fragment);
-  //   const [showFavoriteArticleFolders, setShowFavoriteArticleFolders] = useState<
-  //     Array<FavoriteArticleFolderType>
-  //   >(favoriteArticleFolders);
 
   const { bookmarkId, handleAddBookmark, handleRemoveBookmark } =
     useArticleBookmark(showArticle);
+
+  const handleCreateFavoriteArticle = useCallback(
+    async (favoriteArticleFolderId: string) => {
+      // 1. check user
+      if (!user) {
+        failToast({
+          description: "Please login to follow the article",
+        });
+        await logoutToLoginPage();
+        return;
+      }
+      return "id";
+    },
+    [failToast, user]
+  );
+
+  const handleRemoveFavoriteArticle = useCallback(
+    async (favoriteArticleId: string, favoriteArticleFolderId: string) => {
+      // 1. check user
+      if (!user) {
+        failToast({
+          description: "Please login to follow the article",
+        });
+        await logoutToLoginPage();
+        return;
+      }
+      return "id";
+    },
+    [failToast, user]
+  );
+
+  const handleCreateFavoriteArticleFolder = useCallback(
+    async (favoriteArticleFolderId: string) => {},
+    []
+  );
 
   return (
     <div
@@ -108,6 +152,18 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
                     handleAddBookmark={handleAddBookmark}
                   />
                 )}
+                <div className="mx-4  mt-2">
+                  <FollowFavoriteArticleDropdownMenu
+                    isFollowing={isFollowing}
+                    articleId={showArticle.id}
+                    data={favoriteArticleFolders}
+                    handleCreateFavoriteArticle={handleCreateFavoriteArticle}
+                    handleRemoveFavoriteArticle={handleRemoveFavoriteArticle}
+                    handleCreateFavoriteArticleFolder={
+                      handleCreateFavoriteArticleFolder
+                    }
+                  />
+                </div>
               </>
             </div>
           </>
