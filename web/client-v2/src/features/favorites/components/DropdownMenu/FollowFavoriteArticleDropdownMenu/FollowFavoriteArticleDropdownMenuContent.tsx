@@ -26,6 +26,7 @@ const formSchema = z.object({
 type FollowFavoriteArticleDropdownMenuContentProps = {
   articleId: string;
   data: FragmentOf<typeof FollowFavoriteArticleDropdownMenuContentFragment>;
+  followedFolderIds: Array<string>;
   handleCreateFavoriteArticle: (
     favoriteArticleFolderId: string,
     createdFavoriteArticleFolder?: FragmentOf<
@@ -46,6 +47,7 @@ export const FollowFavoriteArticleDropdownMenuContent: FC<
 > = ({
   articleId,
   data,
+  followedFolderIds,
   handleCreateFavoriteArticle,
   handleRemoveFavoriteArticle,
   handleCreateFavoriteArticleFolder,
@@ -100,6 +102,7 @@ export const FollowFavoriteArticleDropdownMenuContent: FC<
                 key={nodeFragment.id}
                 articleId={articleId}
                 data={favoriteArticleFolder.node}
+                followedFolderIds={followedFolderIds}
                 handleCreateFavoriteArticle={handleCreateFavoriteArticle}
                 handleRemoveFavoriteArticle={handleRemoveFavoriteArticle}
               />

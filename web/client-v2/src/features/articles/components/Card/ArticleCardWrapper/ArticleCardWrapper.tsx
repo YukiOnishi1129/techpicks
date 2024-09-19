@@ -108,24 +108,25 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
       }
 
       if (!isFollowing) setIsFollowing(true);
-      setFavoriteArticleFolderIds([
-        ...favoriteArticleFolderIds,
-        favoriteArticleFolderId,
-      ]);
+      if (showArticle.favoriteArticleFolderIds) {
+        setShowArticle((prev) => {
+          if (!prev.favoriteArticleFolderIds) return prev;
+          return {
+            ...prev,
+            favoriteArticleFolderIds: [
+              ...prev.favoriteArticleFolderIds,
+              data.createFavoriteArticle.id,
+            ],
+          };
+        });
+      }
       successToast({
         description: "Follow the article",
       });
 
       return data.createFavoriteArticle.id;
     },
-    [
-      successToast,
-      failToast,
-      user,
-      showArticle,
-      isFollowing,
-      favoriteArticleFolderIds,
-    ]
+    [successToast, failToast, user, showArticle, isFollowing, ,]
   );
 
   const handleRemoveFavoriteArticle = useCallback(
@@ -212,9 +213,12 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
                 )}
                 <div className="mx-4  mt-2">
                   <FollowFavoriteArticleDropdownMenu
+                    data={favoriteArticleFolders}
                     isFollowing={isFollowing}
                     articleId={showArticle.id}
-                    data={favoriteArticleFolders}
+                    followedFolderIds={
+                      showArticle.favoriteArticleFolderIds || []
+                    }
                     handleCreateFavoriteArticle={handleCreateFavoriteArticle}
                     handleRemoveFavoriteArticle={handleRemoveFavoriteArticle}
                     handleCreateFavoriteArticleFolder={

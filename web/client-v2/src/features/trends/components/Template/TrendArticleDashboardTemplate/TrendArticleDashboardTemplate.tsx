@@ -43,7 +43,6 @@ export const TrendArticleDashboardTemplate: FC<
   };
   const favoriteArticleFoldersInput: FavoriteArticleFoldersInput = {
     isAllFetch: true,
-    isFolderOnly: true,
   };
   const { data, error } = await getTrendArticleDashboardTemplateQuery(
     enInput,

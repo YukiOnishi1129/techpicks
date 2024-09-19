@@ -45,7 +45,6 @@ export const ArticleDashboardTemplate: FC<
   };
   const favoriteArticleFoldersInput: FavoriteArticleFoldersInput = {
     isAllFetch: true,
-    isFolderOnly: true,
   };
 
   const { data, error } = await getArticleDashboardTemplateQuery(

@@ -11,6 +11,7 @@ import { FollowTargetFavoriteArticleFolderItemFragment } from "./FollowFavoriteA
 type FollowTargetFavoriteArticleFolderItemProps = {
   data: FragmentOf<typeof FollowTargetFavoriteArticleFolderItemFragment>;
   articleId: string;
+  followedFolderIds: Array<string>;
   handleCreateFavoriteArticle: (
     favoriteArticleFolderId: string,
     createdFavoriteArticleFolder?: FragmentOf<
@@ -28,6 +29,7 @@ export const FollowTargetFavoriteArticleFolderItem: FC<
 > = ({
   data,
   articleId,
+  followedFolderIds,
   handleCreateFavoriteArticle,
   handleRemoveFavoriteArticle,
 }) => {
@@ -37,12 +39,10 @@ export const FollowTargetFavoriteArticleFolderItem: FC<
   );
   const isFollowed = useMemo(
     () =>
-      fragment?.favoriteArticles
-        ? fragment.favoriteArticles.some(
-            (favoriteArticle) => favoriteArticle.articleId === articleId
-          )
-        : false,
-    [articleId, fragment]
+      followedFolderIds.some(
+        (followedFolderId) => followedFolderId === fragment.id
+      ),
+    [fragment, followedFolderIds]
   );
 
   const targetFavoriteArticleId = useMemo(() => {

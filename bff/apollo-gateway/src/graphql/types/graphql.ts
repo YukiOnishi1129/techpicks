@@ -136,7 +136,7 @@ export class Article implements Node {
     id: string;
     platform?: Nullable<Platform>;
     feeds?: Nullable<Feed[]>;
-    favoriteArticleFolderIds?: Nullable<string[]>;
+    favoriteArticleFolderIds: string[];
     title: string;
     description: string;
     articleUrl: string;

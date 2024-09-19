@@ -25,6 +25,7 @@ type FollowFavoriteArticleDropdownMenuProps = {
   isFollowing: boolean;
   articleId: string;
   data: FragmentOf<typeof FollowFavoriteArticleDropdownMenuContentFragment>;
+  followedFolderIds: Array<string>;
   handleCreateFavoriteArticle: (
     favoriteArticleFolderId: string
   ) => Promise<string | undefined>;
@@ -43,6 +44,7 @@ export const FollowFavoriteArticleDropdownMenu: FC<
   isFollowing,
   articleId,
   data,
+  followedFolderIds,
   handleCreateFavoriteArticle,
   handleRemoveFavoriteArticle,
   handleCreateFavoriteArticleFolder,
@@ -78,6 +80,7 @@ export const FollowFavoriteArticleDropdownMenu: FC<
       <FollowFavoriteArticleDropdownMenuContent
         articleId={articleId}
         data={data}
+        followedFolderIds={followedFolderIds}
         handleCreateFavoriteArticle={handleCreateFavoriteArticle}
         handleRemoveFavoriteArticle={handleRemoveFavoriteArticle}
         handleCreateFavoriteArticleFolder={handleCreateFavoriteArticleFolder}
