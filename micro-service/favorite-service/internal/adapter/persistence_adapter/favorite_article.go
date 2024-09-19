@@ -14,6 +14,7 @@ import (
 type FavoriteArticlePersistenceAdapter interface {
 	GetFavoriteArticles(ctx context.Context, req *fpb.GetFavoriteArticlesRequest, limit int) (entity.FavoriteArticleSlice, error)
 	GetFavoriteArticlesByArticleID(ctx context.Context, articleID, userID string) (entity.FavoriteArticleSlice, error)
+	GetFavoriteArticleBtArticleIDAndFavoriteArticleFolderID(ctx context.Context, articleID, favoriteArticleFolderID, userID string) (entity.FavoriteArticle, error)
 	GetFavoriteArticlesByFavoriteArticleFolderID(ctx context.Context, fafID, userID string, limit *int) (entity.FavoriteArticleSlice, error)
 	GetFavoriteArticleByID(ctx context.Context, id string, userID string) (entity.FavoriteArticle, error)
 	CreateFavoriteArticle(ctx context.Context, req *fpb.CreateFavoriteArticleRequest) (entity.FavoriteArticle, error)
@@ -65,6 +66,19 @@ func (fapa *favoriteArticlePersistenceAdapter) GetFavoriteArticlesByArticleID(ct
 	fa, err := fapa.favoriteArticleRepository.GetFavoriteArticles(ctx, q)
 	if err != nil {
 		return entity.FavoriteArticleSlice{}, err
+	}
+	return fa, nil
+}
+
+func (fapa *favoriteArticlePersistenceAdapter) GetFavoriteArticleBtArticleIDAndFavoriteArticleFolderID(ctx context.Context, articleID, favoriteArticleFolderID, userID string) (entity.FavoriteArticle, error) {
+	q := []qm.QueryMod{
+		qm.Where("article_id = ?", articleID),
+		qm.Where("favorite_article_folder_id = ?", favoriteArticleFolderID),
+		qm.Where("user_id = ?", userID),
+	}
+	fa, err := fapa.favoriteArticleRepository.GetFavoriteArticle(ctx, q)
+	if err != nil {
+		return entity.FavoriteArticle{}, err
 	}
 	return fa, nil
 }
