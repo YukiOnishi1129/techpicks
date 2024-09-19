@@ -7,6 +7,8 @@ import { useCallback, useRef, useState, useEffect } from "react";
 // import { FetchArticlesAPIResponse } from "@/features/articles/actions/article";
 
 // import { NotFoundList } from "@/components/layout/NotFoundList";
+import { FollowFavoriteArticleDropdownMenuContentFragment } from "@/features/favorites/components/DropdownMenu/FollowFavoriteArticleDropdownMenu/FollowFavoriteArticleDropdownMenuFragment";
+
 import { Loader } from "@/components/ui/loader";
 
 import { ArticleTabType } from "@/types/article";
@@ -18,9 +20,11 @@ import { ArticleListFragment } from "./ArticleListFragment";
 import { ArticleCardWrapper } from "../../Card/ArticleCardWrapper/ArticleCardWrapper";
 
 type ArticleListProps = {
-  user?: User;
+  user: User;
   data: FragmentOf<typeof ArticleListFragment>;
-  // favoriteArticleFolders: Array<FavoriteArticleFolderType>;
+  favoriteArticleFolders: FragmentOf<
+    typeof FollowFavoriteArticleDropdownMenuContentFragment
+  >;
   languageStatus: LanguageStatus;
   keyword?: string;
   feedIdList: Array<string>;
@@ -31,6 +35,7 @@ type ArticleListProps = {
 export function ArticleList({
   user,
   data,
+  favoriteArticleFolders,
   languageStatus,
   keyword,
   feedIdList,
@@ -119,7 +124,12 @@ export function ArticleList({
         <div className="m-auto">
           {flatArticles.map((article) => (
             <div key={article.id} className="mb-4">
-              <ArticleCardWrapper data={article} user={user} tab={tab} />
+              <ArticleCardWrapper
+                data={article}
+                favoriteArticleFolders={favoriteArticleFolders}
+                user={user}
+                tab={tab}
+              />
             </div>
           ))}
           <div ref={observerTarget}>

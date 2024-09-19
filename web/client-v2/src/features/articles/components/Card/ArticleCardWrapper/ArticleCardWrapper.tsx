@@ -4,6 +4,8 @@ import { clsx } from "clsx";
 import { FragmentOf, readFragment } from "gql.tada";
 import { FC, useState } from "react";
 
+import { FollowFavoriteArticleDropdownMenuContentFragment } from "@/features/favorites/components/DropdownMenu/FollowFavoriteArticleDropdownMenu/FollowFavoriteArticleDropdownMenuFragment";
+
 import { ShareLinks } from "@/components/ui/share";
 
 import { ArticleTabType } from "@/types/article";
@@ -16,8 +18,10 @@ import { ArticleCardItem } from "../ArticleCardItem";
 
 type ArticleCardWrapperProps = {
   data: FragmentOf<typeof ArticleCardWrapperFragment>;
-  //   favoriteArticleFolders: Array<FavoriteArticleFolderType>;
-  user: User | undefined;
+  favoriteArticleFolders: FragmentOf<
+    typeof FollowFavoriteArticleDropdownMenuContentFragment
+  >;
+  user: User;
   tab: ArticleTabType;
 };
 
@@ -25,6 +29,7 @@ const TREND_TAB = "trend";
 
 export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
   data,
+  favoriteArticleFolders,
   user,
   tab,
 }: ArticleCardWrapperProps) => {
@@ -91,21 +96,19 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
                 />
               </div>
 
-              {user && (
-                <>
-                  {bookmarkId ? (
-                    <DeleteBookmarkTooltip
-                      bookmarkId={bookmarkId}
-                      handleRemoveBookmark={handleRemoveBookmark}
-                    />
-                  ) : (
-                    <AddBookmarkTooltip
-                      articleId={showArticle.id}
-                      handleAddBookmark={handleAddBookmark}
-                    />
-                  )}
-                </>
-              )}
+              <>
+                {bookmarkId ? (
+                  <DeleteBookmarkTooltip
+                    bookmarkId={bookmarkId}
+                    handleRemoveBookmark={handleRemoveBookmark}
+                  />
+                ) : (
+                  <AddBookmarkTooltip
+                    articleId={showArticle.id}
+                    handleAddBookmark={handleAddBookmark}
+                  />
+                )}
+              </>
             </div>
           </>
         </div>

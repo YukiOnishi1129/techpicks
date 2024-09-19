@@ -15,7 +15,7 @@ import { ArticleDashboardTemplateFragment } from "./ArticleDashboardTemplateFrag
 import { ArticleList } from "../../List";
 
 type ArticleDashboardTemplateProps = {
-  user?: User;
+  user: User;
   languageStatus?: LanguageStatus;
   tab: "site" | "company" | "summary";
 };
@@ -97,6 +97,7 @@ export const ArticleDashboardTemplate: FC<
         <TabsContent value={TAB_LIST.ENGLISH}>
           <ArticleList
             data={fragment.enArticles}
+            favoriteArticleFolders={fragment.favoriteArticleFolders}
             user={user}
             languageStatus={2}
             feedIdList={[]}
@@ -106,6 +107,7 @@ export const ArticleDashboardTemplate: FC<
         <TabsContent value={TAB_LIST.JAPANESE}>
           <ArticleList
             data={fragment.jpArticles}
+            favoriteArticleFolders={fragment.favoriteArticleFolders}
             user={user}
             languageStatus={1}
             feedIdList={[]}

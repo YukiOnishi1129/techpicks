@@ -5,6 +5,7 @@ import { FragmentOf, readFragment } from "gql.tada";
 import { useCallback, useRef, useState, useEffect } from "react";
 
 import { ArticleCardWrapper } from "@/features/articles/components/Card";
+import { FollowFavoriteArticleDropdownMenuContentFragment } from "@/features/favorites/components/DropdownMenu/FollowFavoriteArticleDropdownMenu/FollowFavoriteArticleDropdownMenuFragment";
 
 import { Loader } from "@/components/ui/loader";
 
@@ -15,8 +16,11 @@ import { getTrendArticleListQuery } from "./actGetTrendArticleListQuery";
 import { TrendArticleListFragment } from "./TrendArticleListFragment";
 
 type TrendArticleListProps = {
-  user?: User;
+  user: User;
   data: FragmentOf<typeof TrendArticleListFragment>;
+  favoriteArticleFolders: FragmentOf<
+    typeof FollowFavoriteArticleDropdownMenuContentFragment
+  >;
   languageStatus: LanguageStatus;
   keyword?: string;
   feedIdList: Array<string>;
@@ -27,6 +31,7 @@ type TrendArticleListProps = {
 export function TrendArticleList({
   user,
   data,
+  favoriteArticleFolders,
   languageStatus,
   keyword,
   feedIdList,
@@ -115,7 +120,12 @@ export function TrendArticleList({
         <div className="m-auto">
           {flatArticles.map((article) => (
             <div key={article.id} className="mb-4">
-              <ArticleCardWrapper data={article} user={user} tab={tab} />
+              <ArticleCardWrapper
+                data={article}
+                favoriteArticleFolders={favoriteArticleFolders}
+                user={user}
+                tab={tab}
+              />
             </div>
           ))}
           <div ref={observerTarget}>
