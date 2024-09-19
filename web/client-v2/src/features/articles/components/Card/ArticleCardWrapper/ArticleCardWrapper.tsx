@@ -43,18 +43,10 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
 }: ArticleCardWrapperProps) => {
   const { successToast, failToast } = useStatusToast();
   const fragment = readFragment(ArticleCardWrapperFragment, data);
-  const fragmentFavoriteArticleFolders = readFragment(
-    FollowFavoriteArticleDropdownMenuContentFragment,
-    favoriteArticleFolders
-  );
   const [isFollowing, setIsFollowing] = useState<boolean>(
     fragment.isFollowing || false
   );
-
   const [showArticle, setShowArticle] = useState(fragment);
-  const [showFavoriteArticleFolders, setShowFavoriteArticleFolders] = useState(
-    fragmentFavoriteArticleFolders
-  );
 
   const { bookmarkId, handleAddBookmark, handleRemoveBookmark } =
     useArticleBookmark(showArticle);
@@ -158,10 +150,6 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
         });
         return;
       }
-
-      showArticle.favoriteArticleFolderIds.filter(
-        (id) => id !== favoriteArticleFolderId
-      );
 
       if (isFollowing)
         setIsFollowing(
