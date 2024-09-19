@@ -20,14 +20,14 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	FavoriteService_GetFavoriteArticleFolders_FullMethodName           = "/checkpicks.favorite.v1.FavoriteService/GetFavoriteArticleFolders"
-	FavoriteService_GetFavoriteArticleFolderByArticleId_FullMethodName = "/checkpicks.favorite.v1.FavoriteService/GetFavoriteArticleFolderByArticleId"
-	FavoriteService_CreateFavoriteArticleFolder_FullMethodName         = "/checkpicks.favorite.v1.FavoriteService/CreateFavoriteArticleFolder"
-	FavoriteService_UpdateFavoriteArticleFolder_FullMethodName         = "/checkpicks.favorite.v1.FavoriteService/UpdateFavoriteArticleFolder"
-	FavoriteService_DeleteFavoriteArticleFolder_FullMethodName         = "/checkpicks.favorite.v1.FavoriteService/DeleteFavoriteArticleFolder"
-	FavoriteService_GetFavoriteArticles_FullMethodName                 = "/checkpicks.favorite.v1.FavoriteService/GetFavoriteArticles"
-	FavoriteService_CreateFavoriteArticle_FullMethodName               = "/checkpicks.favorite.v1.FavoriteService/CreateFavoriteArticle"
-	FavoriteService_DeleteFavoriteArticle_FullMethodName               = "/checkpicks.favorite.v1.FavoriteService/DeleteFavoriteArticle"
+	FavoriteService_GetFavoriteArticleFolders_FullMethodName            = "/checkpicks.favorite.v1.FavoriteService/GetFavoriteArticleFolders"
+	FavoriteService_GetFavoriteArticleFoldersByArticleId_FullMethodName = "/checkpicks.favorite.v1.FavoriteService/GetFavoriteArticleFoldersByArticleId"
+	FavoriteService_CreateFavoriteArticleFolder_FullMethodName          = "/checkpicks.favorite.v1.FavoriteService/CreateFavoriteArticleFolder"
+	FavoriteService_UpdateFavoriteArticleFolder_FullMethodName          = "/checkpicks.favorite.v1.FavoriteService/UpdateFavoriteArticleFolder"
+	FavoriteService_DeleteFavoriteArticleFolder_FullMethodName          = "/checkpicks.favorite.v1.FavoriteService/DeleteFavoriteArticleFolder"
+	FavoriteService_GetFavoriteArticles_FullMethodName                  = "/checkpicks.favorite.v1.FavoriteService/GetFavoriteArticles"
+	FavoriteService_CreateFavoriteArticle_FullMethodName                = "/checkpicks.favorite.v1.FavoriteService/CreateFavoriteArticle"
+	FavoriteService_DeleteFavoriteArticle_FullMethodName                = "/checkpicks.favorite.v1.FavoriteService/DeleteFavoriteArticle"
 )
 
 // FavoriteServiceClient is the client API for FavoriteService service.
@@ -35,7 +35,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type FavoriteServiceClient interface {
 	GetFavoriteArticleFolders(ctx context.Context, in *GetFavoriteArticleFoldersRequest, opts ...grpc.CallOption) (*GetFavoriteArticleFoldersResponse, error)
-	GetFavoriteArticleFolderByArticleId(ctx context.Context, in *GetFavoriteArticleFolderByArticleIdRequest, opts ...grpc.CallOption) (*GetFavoriteArticleFolderResponse, error)
+	GetFavoriteArticleFoldersByArticleId(ctx context.Context, in *GetFavoriteArticleFoldersByArticleIdRequest, opts ...grpc.CallOption) (*GetFavoriteArticleFoldersResponse, error)
 	CreateFavoriteArticleFolder(ctx context.Context, in *CreateFavoriteArticleFolderRequest, opts ...grpc.CallOption) (*CreateFavoriteArticleFolderResponse, error)
 	UpdateFavoriteArticleFolder(ctx context.Context, in *UpdateFavoriteArticleFolderRequest, opts ...grpc.CallOption) (*UpdateFavoriteArticleFolderResponse, error)
 	DeleteFavoriteArticleFolder(ctx context.Context, in *DeleteFavoriteArticleFolderRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
@@ -62,10 +62,10 @@ func (c *favoriteServiceClient) GetFavoriteArticleFolders(ctx context.Context, i
 	return out, nil
 }
 
-func (c *favoriteServiceClient) GetFavoriteArticleFolderByArticleId(ctx context.Context, in *GetFavoriteArticleFolderByArticleIdRequest, opts ...grpc.CallOption) (*GetFavoriteArticleFolderResponse, error) {
+func (c *favoriteServiceClient) GetFavoriteArticleFoldersByArticleId(ctx context.Context, in *GetFavoriteArticleFoldersByArticleIdRequest, opts ...grpc.CallOption) (*GetFavoriteArticleFoldersResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(GetFavoriteArticleFolderResponse)
-	err := c.cc.Invoke(ctx, FavoriteService_GetFavoriteArticleFolderByArticleId_FullMethodName, in, out, cOpts...)
+	out := new(GetFavoriteArticleFoldersResponse)
+	err := c.cc.Invoke(ctx, FavoriteService_GetFavoriteArticleFoldersByArticleId_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -137,7 +137,7 @@ func (c *favoriteServiceClient) DeleteFavoriteArticle(ctx context.Context, in *D
 // for forward compatibility.
 type FavoriteServiceServer interface {
 	GetFavoriteArticleFolders(context.Context, *GetFavoriteArticleFoldersRequest) (*GetFavoriteArticleFoldersResponse, error)
-	GetFavoriteArticleFolderByArticleId(context.Context, *GetFavoriteArticleFolderByArticleIdRequest) (*GetFavoriteArticleFolderResponse, error)
+	GetFavoriteArticleFoldersByArticleId(context.Context, *GetFavoriteArticleFoldersByArticleIdRequest) (*GetFavoriteArticleFoldersResponse, error)
 	CreateFavoriteArticleFolder(context.Context, *CreateFavoriteArticleFolderRequest) (*CreateFavoriteArticleFolderResponse, error)
 	UpdateFavoriteArticleFolder(context.Context, *UpdateFavoriteArticleFolderRequest) (*UpdateFavoriteArticleFolderResponse, error)
 	DeleteFavoriteArticleFolder(context.Context, *DeleteFavoriteArticleFolderRequest) (*emptypb.Empty, error)
@@ -156,8 +156,8 @@ type UnimplementedFavoriteServiceServer struct{}
 func (UnimplementedFavoriteServiceServer) GetFavoriteArticleFolders(context.Context, *GetFavoriteArticleFoldersRequest) (*GetFavoriteArticleFoldersResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetFavoriteArticleFolders not implemented")
 }
-func (UnimplementedFavoriteServiceServer) GetFavoriteArticleFolderByArticleId(context.Context, *GetFavoriteArticleFolderByArticleIdRequest) (*GetFavoriteArticleFolderResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetFavoriteArticleFolderByArticleId not implemented")
+func (UnimplementedFavoriteServiceServer) GetFavoriteArticleFoldersByArticleId(context.Context, *GetFavoriteArticleFoldersByArticleIdRequest) (*GetFavoriteArticleFoldersResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetFavoriteArticleFoldersByArticleId not implemented")
 }
 func (UnimplementedFavoriteServiceServer) CreateFavoriteArticleFolder(context.Context, *CreateFavoriteArticleFolderRequest) (*CreateFavoriteArticleFolderResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateFavoriteArticleFolder not implemented")
@@ -215,20 +215,20 @@ func _FavoriteService_GetFavoriteArticleFolders_Handler(srv interface{}, ctx con
 	return interceptor(ctx, in, info, handler)
 }
 
-func _FavoriteService_GetFavoriteArticleFolderByArticleId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetFavoriteArticleFolderByArticleIdRequest)
+func _FavoriteService_GetFavoriteArticleFoldersByArticleId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetFavoriteArticleFoldersByArticleIdRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(FavoriteServiceServer).GetFavoriteArticleFolderByArticleId(ctx, in)
+		return srv.(FavoriteServiceServer).GetFavoriteArticleFoldersByArticleId(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: FavoriteService_GetFavoriteArticleFolderByArticleId_FullMethodName,
+		FullMethod: FavoriteService_GetFavoriteArticleFoldersByArticleId_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(FavoriteServiceServer).GetFavoriteArticleFolderByArticleId(ctx, req.(*GetFavoriteArticleFolderByArticleIdRequest))
+		return srv.(FavoriteServiceServer).GetFavoriteArticleFoldersByArticleId(ctx, req.(*GetFavoriteArticleFoldersByArticleIdRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -353,8 +353,8 @@ var FavoriteService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _FavoriteService_GetFavoriteArticleFolders_Handler,
 		},
 		{
-			MethodName: "GetFavoriteArticleFolderByArticleId",
-			Handler:    _FavoriteService_GetFavoriteArticleFolderByArticleId_Handler,
+			MethodName: "GetFavoriteArticleFoldersByArticleId",
+			Handler:    _FavoriteService_GetFavoriteArticleFoldersByArticleId_Handler,
 		},
 		{
 			MethodName: "CreateFavoriteArticleFolder",

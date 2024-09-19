@@ -117,26 +117,6 @@ func (mr *MockFavoriteServiceClientMockRecorder) DeleteFavoriteArticleFolder(ctx
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteFavoriteArticleFolder", reflect.TypeOf((*MockFavoriteServiceClient)(nil).DeleteFavoriteArticleFolder), varargs...)
 }
 
-// GetFavoriteArticleFolderByArticleId mocks base method.
-func (m *MockFavoriteServiceClient) GetFavoriteArticleFolderByArticleId(ctx context.Context, in *favorite.GetFavoriteArticleFolderByArticleIdRequest, opts ...grpc.CallOption) (*favorite.GetFavoriteArticleFolderResponse, error) {
-	m.ctrl.T.Helper()
-	varargs := []interface{}{ctx, in}
-	for _, a := range opts {
-		varargs = append(varargs, a)
-	}
-	ret := m.ctrl.Call(m, "GetFavoriteArticleFolderByArticleId", varargs...)
-	ret0, _ := ret[0].(*favorite.GetFavoriteArticleFolderResponse)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// GetFavoriteArticleFolderByArticleId indicates an expected call of GetFavoriteArticleFolderByArticleId.
-func (mr *MockFavoriteServiceClientMockRecorder) GetFavoriteArticleFolderByArticleId(ctx, in interface{}, opts ...interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	varargs := append([]interface{}{ctx, in}, opts...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetFavoriteArticleFolderByArticleId", reflect.TypeOf((*MockFavoriteServiceClient)(nil).GetFavoriteArticleFolderByArticleId), varargs...)
-}
-
 // GetFavoriteArticleFolders mocks base method.
 func (m *MockFavoriteServiceClient) GetFavoriteArticleFolders(ctx context.Context, in *favorite.GetFavoriteArticleFoldersRequest, opts ...grpc.CallOption) (*favorite.GetFavoriteArticleFoldersResponse, error) {
 	m.ctrl.T.Helper()
@@ -155,6 +135,26 @@ func (mr *MockFavoriteServiceClientMockRecorder) GetFavoriteArticleFolders(ctx, 
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{ctx, in}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetFavoriteArticleFolders", reflect.TypeOf((*MockFavoriteServiceClient)(nil).GetFavoriteArticleFolders), varargs...)
+}
+
+// GetFavoriteArticleFoldersByArticleId mocks base method.
+func (m *MockFavoriteServiceClient) GetFavoriteArticleFoldersByArticleId(ctx context.Context, in *favorite.GetFavoriteArticleFoldersByArticleIdRequest, opts ...grpc.CallOption) (*favorite.GetFavoriteArticleFoldersResponse, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{ctx, in}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "GetFavoriteArticleFoldersByArticleId", varargs...)
+	ret0, _ := ret[0].(*favorite.GetFavoriteArticleFoldersResponse)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetFavoriteArticleFoldersByArticleId indicates an expected call of GetFavoriteArticleFoldersByArticleId.
+func (mr *MockFavoriteServiceClientMockRecorder) GetFavoriteArticleFoldersByArticleId(ctx, in interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{ctx, in}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetFavoriteArticleFoldersByArticleId", reflect.TypeOf((*MockFavoriteServiceClient)(nil).GetFavoriteArticleFoldersByArticleId), varargs...)
 }
 
 // GetFavoriteArticles mocks base method.
@@ -280,21 +280,6 @@ func (mr *MockFavoriteServiceServerMockRecorder) DeleteFavoriteArticleFolder(arg
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteFavoriteArticleFolder", reflect.TypeOf((*MockFavoriteServiceServer)(nil).DeleteFavoriteArticleFolder), arg0, arg1)
 }
 
-// GetFavoriteArticleFolderByArticleId mocks base method.
-func (m *MockFavoriteServiceServer) GetFavoriteArticleFolderByArticleId(arg0 context.Context, arg1 *favorite.GetFavoriteArticleFolderByArticleIdRequest) (*favorite.GetFavoriteArticleFolderResponse, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetFavoriteArticleFolderByArticleId", arg0, arg1)
-	ret0, _ := ret[0].(*favorite.GetFavoriteArticleFolderResponse)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// GetFavoriteArticleFolderByArticleId indicates an expected call of GetFavoriteArticleFolderByArticleId.
-func (mr *MockFavoriteServiceServerMockRecorder) GetFavoriteArticleFolderByArticleId(arg0, arg1 interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetFavoriteArticleFolderByArticleId", reflect.TypeOf((*MockFavoriteServiceServer)(nil).GetFavoriteArticleFolderByArticleId), arg0, arg1)
-}
-
 // GetFavoriteArticleFolders mocks base method.
 func (m *MockFavoriteServiceServer) GetFavoriteArticleFolders(arg0 context.Context, arg1 *favorite.GetFavoriteArticleFoldersRequest) (*favorite.GetFavoriteArticleFoldersResponse, error) {
 	m.ctrl.T.Helper()
@@ -308,6 +293,21 @@ func (m *MockFavoriteServiceServer) GetFavoriteArticleFolders(arg0 context.Conte
 func (mr *MockFavoriteServiceServerMockRecorder) GetFavoriteArticleFolders(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetFavoriteArticleFolders", reflect.TypeOf((*MockFavoriteServiceServer)(nil).GetFavoriteArticleFolders), arg0, arg1)
+}
+
+// GetFavoriteArticleFoldersByArticleId mocks base method.
+func (m *MockFavoriteServiceServer) GetFavoriteArticleFoldersByArticleId(arg0 context.Context, arg1 *favorite.GetFavoriteArticleFoldersByArticleIdRequest) (*favorite.GetFavoriteArticleFoldersResponse, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetFavoriteArticleFoldersByArticleId", arg0, arg1)
+	ret0, _ := ret[0].(*favorite.GetFavoriteArticleFoldersResponse)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetFavoriteArticleFoldersByArticleId indicates an expected call of GetFavoriteArticleFoldersByArticleId.
+func (mr *MockFavoriteServiceServerMockRecorder) GetFavoriteArticleFoldersByArticleId(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetFavoriteArticleFoldersByArticleId", reflect.TypeOf((*MockFavoriteServiceServer)(nil).GetFavoriteArticleFoldersByArticleId), arg0, arg1)
 }
 
 // GetFavoriteArticles mocks base method.

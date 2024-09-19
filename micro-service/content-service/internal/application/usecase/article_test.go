@@ -269,7 +269,7 @@ func Test_UseCase_CreateUploadArticle(t *testing.T) {
 			}, nil).AnyTimes()
 
 			mockFavoriteClient := mock.NewMockFavoriteServiceClient(ctrl)
-			mockFavoriteClient.EXPECT().GetFavoriteArticleFolders(gomock.Any(), gomock.Any()).Return(&fpb.GetFavoriteArticleFoldersResponse{
+			mockFavoriteClient.EXPECT().GetFavoriteArticleFoldersByArticleId(gomock.Any(), gomock.Any()).Return(&fpb.GetFavoriteArticleFoldersResponse{
 				FavoriteArticleFoldersEdge: []*fpb.FavoriteArticleFolderEdge{},
 			}, nil).AnyTimes()
 

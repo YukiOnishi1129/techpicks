@@ -65,6 +65,61 @@ func (fu *favoriteUseCase) GetFavoriteArticleFolders(ctx context.Context, req *f
 	}, nil
 }
 
+func (fu *favoriteUseCase) GetFavoriteArticleFoldersByArticleId(ctx context.Context, req *fpb.GetFavoriteArticleFoldersByArticleIdRequest) (*fpb.GetFavoriteArticleFoldersResponse, error) {
+	fa, err := fu.favoriteArticlePersistenceAdapter.GetFavoriteArticlesByArticleID(ctx, req.GetArticleId(), req.GetUserId())
+	if err != nil {
+		return &fpb.GetFavoriteArticleFoldersResponse{}, err
+	}
+
+	if len(fa) == 0 {
+		return &fpb.GetFavoriteArticleFoldersResponse{
+			FavoriteArticleFoldersEdge: make([]*fpb.FavoriteArticleFolderEdge, 0),
+			PageInfo: &fpb.PageInfo{
+				HasNextPage: false,
+				EndCursor:   "",
+			},
+		}, nil
+	}
+
+	ids := make([]string, len(fa))
+	for i, f := range fa {
+		ids[i] = f.FavoriteArticleFolderID
+	}
+
+	fafs, err := fu.favoriteArticleFolderPersistenceAdapter.GetFavoriteArticleFoldersByIds(ctx, ids)
+	if err != nil {
+		return &fpb.GetFavoriteArticleFoldersResponse{}, err
+	}
+
+	if len(fafs) == 0 {
+		return &fpb.GetFavoriteArticleFoldersResponse{
+			FavoriteArticleFoldersEdge: make([]*fpb.FavoriteArticleFolderEdge, 0),
+			PageInfo: &fpb.PageInfo{
+				HasNextPage: false,
+				EndCursor:   "",
+			},
+		}, nil
+	}
+
+	resFavFolders := make([]*fpb.FavoriteArticleFolderEdge, len(fafs))
+	for i, f := range fafs {
+		isFolderOnly := false
+		faf := fu.convertPBFavoriteArticleFolder(ctx, f, nil, &isFolderOnly)
+		resFavFolders[i] = &fpb.FavoriteArticleFolderEdge{
+			Cursor: f.ID,
+			Node:   faf,
+		}
+	}
+
+	return &fpb.GetFavoriteArticleFoldersResponse{
+		FavoriteArticleFoldersEdge: resFavFolders,
+		PageInfo: &fpb.PageInfo{
+			HasNextPage: false,
+			EndCursor:   "",
+		},
+	}, nil
+}
+
 func (fu *favoriteUseCase) CreateFavoriteArticleFolder(ctx context.Context, req *fpb.CreateFavoriteArticleFolderRequest) (*fpb.CreateFavoriteArticleFolderResponse, error) {
 	f, err := fu.favoriteArticleFolderPersistenceAdapter.CreateFavoriteArticleFolder(ctx, req)
 	if err != nil {

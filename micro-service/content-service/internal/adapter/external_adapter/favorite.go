@@ -9,6 +9,7 @@ import (
 
 type FavoriteExternalAdapter interface {
 	GetFavoriteArticleFolders(ctx context.Context, dto *fpb.GetFavoriteArticleFoldersRequest) (*fpb.GetFavoriteArticleFoldersResponse, error)
+	GetFavoriteArticleFoldersByArticleId(ctx context.Context, dto *fpb.GetFavoriteArticleFoldersByArticleIdRequest) (*fpb.GetFavoriteArticleFoldersResponse, error)
 }
 
 type favoriteExternalAdapter struct {
@@ -23,6 +24,14 @@ func NewFavoriteExternalAdapter(fe external.FavoriteExternal) FavoriteExternalAd
 
 func (fea *favoriteExternalAdapter) GetFavoriteArticleFolders(ctx context.Context, dto *fpb.GetFavoriteArticleFoldersRequest) (*fpb.GetFavoriteArticleFoldersResponse, error) {
 	res, err := fea.favoriteExternal.GetFavoriteArticleFolders(ctx, dto)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}
+
+func (fea *favoriteExternalAdapter) GetFavoriteArticleFoldersByArticleId(ctx context.Context, dto *fpb.GetFavoriteArticleFoldersByArticleIdRequest) (*fpb.GetFavoriteArticleFoldersResponse, error) {
+	res, err := fea.favoriteExternal.GetFavoriteArticleFoldersByArticleId(ctx, dto)
 	if err != nil {
 		return nil, err
 	}
