@@ -108,18 +108,15 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
       }
 
       if (!isFollowing) setIsFollowing(true);
-      if (showArticle.favoriteArticleFolderIds) {
-        setShowArticle((prev) => {
-          if (!prev.favoriteArticleFolderIds) return prev;
-          return {
-            ...prev,
-            favoriteArticleFolderIds: [
-              ...prev.favoriteArticleFolderIds,
-              data.createFavoriteArticle.id,
-            ],
-          };
-        });
-      }
+      setShowArticle((prev) => {
+        return {
+          ...prev,
+          favoriteArticleFolderIds: [
+            ...prev.favoriteArticleFolderIds,
+            data.createFavoriteArticle.favoriteArticleFolderId,
+          ],
+        };
+      });
       successToast({
         description: "Follow the article",
       });

@@ -240,6 +240,7 @@ export class FavoriteArticle implements Node {
     id: string;
     articleId?: Nullable<string>;
     platformId?: Nullable<string>;
+    favoriteArticleFolderId: string;
     userId: string;
     title: string;
     description?: Nullable<string>;

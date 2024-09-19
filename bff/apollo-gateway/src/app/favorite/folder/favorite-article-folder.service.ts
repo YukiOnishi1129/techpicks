@@ -74,6 +74,8 @@ export class FavoriteArticleFolderService {
                         authorName: article?.authorName?.value,
                         createdAt: convertTimestampToInt(article.createdAt),
                         description: article.description,
+                        favoriteArticleFolderId:
+                          article.favoriteArticleFolderId,
                         id: article.id,
                         isEng: article.isEng,
                         isPrivate: article.isPrivate,
