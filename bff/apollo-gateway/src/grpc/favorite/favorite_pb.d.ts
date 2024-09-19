@@ -116,23 +116,26 @@ export namespace GetFavoriteArticleFolderResponse {
     }
 }
 
-export class GetFavoriteArticleFolderByArticleIdRequest extends jspb.Message { 
+export class GetFavoriteArticleFoldersByArticleIdRequest extends jspb.Message { 
     getArticleId(): string;
-    setArticleId(value: string): GetFavoriteArticleFolderByArticleIdRequest;
+    setArticleId(value: string): GetFavoriteArticleFoldersByArticleIdRequest;
+    getUserId(): string;
+    setUserId(value: string): GetFavoriteArticleFoldersByArticleIdRequest;
 
     serializeBinary(): Uint8Array;
-    toObject(includeInstance?: boolean): GetFavoriteArticleFolderByArticleIdRequest.AsObject;
-    static toObject(includeInstance: boolean, msg: GetFavoriteArticleFolderByArticleIdRequest): GetFavoriteArticleFolderByArticleIdRequest.AsObject;
+    toObject(includeInstance?: boolean): GetFavoriteArticleFoldersByArticleIdRequest.AsObject;
+    static toObject(includeInstance: boolean, msg: GetFavoriteArticleFoldersByArticleIdRequest): GetFavoriteArticleFoldersByArticleIdRequest.AsObject;
     static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
     static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
-    static serializeBinaryToWriter(message: GetFavoriteArticleFolderByArticleIdRequest, writer: jspb.BinaryWriter): void;
-    static deserializeBinary(bytes: Uint8Array): GetFavoriteArticleFolderByArticleIdRequest;
-    static deserializeBinaryFromReader(message: GetFavoriteArticleFolderByArticleIdRequest, reader: jspb.BinaryReader): GetFavoriteArticleFolderByArticleIdRequest;
+    static serializeBinaryToWriter(message: GetFavoriteArticleFoldersByArticleIdRequest, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): GetFavoriteArticleFoldersByArticleIdRequest;
+    static deserializeBinaryFromReader(message: GetFavoriteArticleFoldersByArticleIdRequest, reader: jspb.BinaryReader): GetFavoriteArticleFoldersByArticleIdRequest;
 }
 
-export namespace GetFavoriteArticleFolderByArticleIdRequest {
+export namespace GetFavoriteArticleFoldersByArticleIdRequest {
     export type AsObject = {
         articleId: string,
+        userId: string,
     }
 }
 

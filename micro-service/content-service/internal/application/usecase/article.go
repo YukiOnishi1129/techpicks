@@ -5,6 +5,7 @@ import (
 
 	bpb "github.com/YukiOnishi1129/techpicks/micro-service/content-service/grpc/bookmark"
 	cpb "github.com/YukiOnishi1129/techpicks/micro-service/content-service/grpc/content"
+	fpb "github.com/YukiOnishi1129/techpicks/micro-service/content-service/grpc/favorite"
 	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/domain/entity"
 	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/util"
 	"google.golang.org/protobuf/types/known/timestamppb"
@@ -35,17 +36,32 @@ func (cu *contentUseCase) GetArticles(ctx context.Context, req *cpb.GetArticlesR
 		if req.UserId != nil {
 			resBookmark, err := cu.bookmarkExternalAdapter.GetBookmarkByArticleID(ctx, &bpb.GetBookmarkByArticleIDRequest{
 				ArticleId: article.ID,
-				UserId:    req.UserId.GetValue(),
+				UserId:    req.GetUserId().GetValue(),
 			})
 			if err != nil {
 				return nil, err
 			}
-			if resBookmark.Bookmark.GetId() != "" {
+			if resBookmark.GetBookmark().GetId() != "" {
 				res.BookmarkId = wrapperspb.String(resBookmark.Bookmark.GetId())
 				res.IsBookmarked = true
 			}
-			// TODO: favorite
-			// println(req.UserId.GetValue())
+
+			resFavoriteFolders, err := cu.favoriteExternalAdapter.GetFavoriteArticleFoldersByArticleID(ctx, &fpb.GetFavoriteArticleFoldersByArticleIdRequest{
+				ArticleId: article.ID,
+				UserId:    req.GetUserId().GetValue(),
+			})
+			if err != nil {
+				return nil, err
+			}
+
+			if len(resFavoriteFolders.GetFavoriteArticleFoldersEdge()) > 0 {
+				resFavIds := make([]string, len(resFavoriteFolders.GetFavoriteArticleFoldersEdge()))
+				for i, f := range resFavoriteFolders.GetFavoriteArticleFoldersEdge() {
+					resFavIds[i] = f.GetNode().GetId()
+				}
+				res.FavoriteArticleFolderIds = resFavIds
+				res.IsFollowing = true
+			}
 		}
 
 		edges[i] = &cpb.ArticleEdge{

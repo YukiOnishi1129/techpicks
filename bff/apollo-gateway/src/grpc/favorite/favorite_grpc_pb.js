@@ -73,26 +73,15 @@ function deserialize_checkpicks_favorite_v1_DeleteFavoriteArticleRequest(buffer_
   return favorite_favorite_pb.DeleteFavoriteArticleRequest.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
-function serialize_checkpicks_favorite_v1_GetFavoriteArticleFolderByArticleIdRequest(arg) {
-  if (!(arg instanceof favorite_favorite_pb.GetFavoriteArticleFolderByArticleIdRequest)) {
-    throw new Error('Expected argument of type checkpicks.favorite.v1.GetFavoriteArticleFolderByArticleIdRequest');
+function serialize_checkpicks_favorite_v1_GetFavoriteArticleFoldersByArticleIdRequest(arg) {
+  if (!(arg instanceof favorite_favorite_pb.GetFavoriteArticleFoldersByArticleIdRequest)) {
+    throw new Error('Expected argument of type checkpicks.favorite.v1.GetFavoriteArticleFoldersByArticleIdRequest');
   }
   return Buffer.from(arg.serializeBinary());
 }
 
-function deserialize_checkpicks_favorite_v1_GetFavoriteArticleFolderByArticleIdRequest(buffer_arg) {
-  return favorite_favorite_pb.GetFavoriteArticleFolderByArticleIdRequest.deserializeBinary(new Uint8Array(buffer_arg));
-}
-
-function serialize_checkpicks_favorite_v1_GetFavoriteArticleFolderResponse(arg) {
-  if (!(arg instanceof favorite_favorite_pb.GetFavoriteArticleFolderResponse)) {
-    throw new Error('Expected argument of type checkpicks.favorite.v1.GetFavoriteArticleFolderResponse');
-  }
-  return Buffer.from(arg.serializeBinary());
-}
-
-function deserialize_checkpicks_favorite_v1_GetFavoriteArticleFolderResponse(buffer_arg) {
-  return favorite_favorite_pb.GetFavoriteArticleFolderResponse.deserializeBinary(new Uint8Array(buffer_arg));
+function deserialize_checkpicks_favorite_v1_GetFavoriteArticleFoldersByArticleIdRequest(buffer_arg) {
+  return favorite_favorite_pb.GetFavoriteArticleFoldersByArticleIdRequest.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
 function serialize_checkpicks_favorite_v1_GetFavoriteArticleFoldersRequest(arg) {
@@ -185,16 +174,16 @@ var FavoriteServiceService = exports.FavoriteServiceService = {
     responseSerialize: serialize_checkpicks_favorite_v1_GetFavoriteArticleFoldersResponse,
     responseDeserialize: deserialize_checkpicks_favorite_v1_GetFavoriteArticleFoldersResponse,
   },
-  getFavoriteArticleFolderByArticleId: {
-    path: '/checkpicks.favorite.v1.FavoriteService/GetFavoriteArticleFolderByArticleId',
+  getFavoriteArticleFoldersByArticleId: {
+    path: '/checkpicks.favorite.v1.FavoriteService/GetFavoriteArticleFoldersByArticleId',
     requestStream: false,
     responseStream: false,
-    requestType: favorite_favorite_pb.GetFavoriteArticleFolderByArticleIdRequest,
-    responseType: favorite_favorite_pb.GetFavoriteArticleFolderResponse,
-    requestSerialize: serialize_checkpicks_favorite_v1_GetFavoriteArticleFolderByArticleIdRequest,
-    requestDeserialize: deserialize_checkpicks_favorite_v1_GetFavoriteArticleFolderByArticleIdRequest,
-    responseSerialize: serialize_checkpicks_favorite_v1_GetFavoriteArticleFolderResponse,
-    responseDeserialize: deserialize_checkpicks_favorite_v1_GetFavoriteArticleFolderResponse,
+    requestType: favorite_favorite_pb.GetFavoriteArticleFoldersByArticleIdRequest,
+    responseType: favorite_favorite_pb.GetFavoriteArticleFoldersResponse,
+    requestSerialize: serialize_checkpicks_favorite_v1_GetFavoriteArticleFoldersByArticleIdRequest,
+    requestDeserialize: deserialize_checkpicks_favorite_v1_GetFavoriteArticleFoldersByArticleIdRequest,
+    responseSerialize: serialize_checkpicks_favorite_v1_GetFavoriteArticleFoldersResponse,
+    responseDeserialize: deserialize_checkpicks_favorite_v1_GetFavoriteArticleFoldersResponse,
   },
   createFavoriteArticleFolder: {
     path: '/checkpicks.favorite.v1.FavoriteService/CreateFavoriteArticleFolder',

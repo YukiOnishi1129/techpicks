@@ -65,6 +65,10 @@ export class ArticleService {
                     bookmarkId: edge.article?.bookmarkId?.value,
                     createdAt: convertTimestampToInt(edge.article.createdAt),
                     description: edge.article.description,
+                    favoriteArticleIds: edge.article
+                      ?.favoriteArticleFolderIdsList
+                      ? edge.article?.favoriteArticleFolderIdsList
+                      : [],
                     feeds: edge.article?.feedsList
                       ? edge.article.feedsList.map((feed) => {
                           return {
@@ -109,7 +113,7 @@ export class ArticleService {
                     id: edge.article.id,
                     isBookmarked: false,
                     isEng: edge.article.isEng,
-                    isFollowing: false,
+                    isFollowing: edge.article.isFollowing,
                     isPrivate: edge.article?.isPrivate || false,
                     likeCount: edge.article.likeCount,
                     platform: {

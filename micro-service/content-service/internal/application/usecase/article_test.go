@@ -7,6 +7,7 @@ import (
 
 	bpb "github.com/YukiOnishi1129/techpicks/micro-service/content-service/grpc/bookmark"
 	cpb "github.com/YukiOnishi1129/techpicks/micro-service/content-service/grpc/content"
+	fpb "github.com/YukiOnishi1129/techpicks/micro-service/content-service/grpc/favorite"
 	externaladapter "github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/adapter/external_adapter"
 	persistenceadapter "github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/adapter/persistence_adapter"
 	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/domain/entity"
@@ -267,13 +268,20 @@ func Test_UseCase_CreateUploadArticle(t *testing.T) {
 				Bookmark: &bpb.Bookmark{},
 			}, nil).AnyTimes()
 
+			mockFavoriteClient := mock.NewMockFavoriteServiceClient(ctrl)
+			mockFavoriteClient.EXPECT().GetFavoriteArticleFoldersByArticleId(gomock.Any(), gomock.Any()).Return(&fpb.GetFavoriteArticleFoldersResponse{
+				FavoriteArticleFoldersEdge: []*fpb.FavoriteArticleFolderEdge{},
+			}, nil).AnyTimes()
+
 			testArticleRepository := persistence.NewArticlePersistence(db)
 			testBookmarkExternal := external.NewBookmarkExternal(mockBookmarkClient)
+			testFavoriteExternal := external.NewFavoriteExternal(mockFavoriteClient)
 
 			testArticlePersistenceAdapter := persistenceadapter.NewArticlePersistenceAdapter(testArticleRepository)
 			testBookmarkExternalAdapter := externaladapter.NewBookmarkExternalAdapter(testBookmarkExternal)
+			testFavoriteExternalAdapter := externaladapter.NewFavoriteExternalAdapter(testFavoriteExternal)
 
-			testContentUseCase := NewContentUseCase(testArticlePersistenceAdapter, testBookmarkExternalAdapter)
+			testContentUseCase := NewContentUseCase(testArticlePersistenceAdapter, testBookmarkExternalAdapter, testFavoriteExternalAdapter)
 
 			if tt.recordArticles != nil {
 				for _, v := range tt.recordArticles {

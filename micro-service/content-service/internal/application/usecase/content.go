@@ -17,11 +17,13 @@ type ContentUseCase interface {
 type contentUseCase struct {
 	articlePersistenceAdapter persistenceadapter.ArticlePersistenceAdapter
 	bookmarkExternalAdapter   externaladapter.BookmarkExternalAdapter
+	favoriteExternalAdapter   externaladapter.FavoriteExternalAdapter
 }
 
-func NewContentUseCase(apa persistenceadapter.ArticlePersistenceAdapter, bea externaladapter.BookmarkExternalAdapter) ContentUseCase {
+func NewContentUseCase(apa persistenceadapter.ArticlePersistenceAdapter, bea externaladapter.BookmarkExternalAdapter, fea externaladapter.FavoriteExternalAdapter) ContentUseCase {
 	return &contentUseCase{
 		articlePersistenceAdapter: apa,
 		bookmarkExternalAdapter:   bea,
+		favoriteExternalAdapter:   fea,
 	}
 }

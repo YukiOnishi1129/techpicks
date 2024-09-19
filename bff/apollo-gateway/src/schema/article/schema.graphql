@@ -5,7 +5,7 @@ type Article implements Node {
   id: ID!
   platform: Platform
   feeds: [Feed!]
-  favoriteArticles: [FavoriteArticle!]
+  favoriteArticleFolderIds: [String!]
   title: String!
   description: String!
   articleUrl: String!

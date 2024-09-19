@@ -13,6 +13,7 @@ import (
 
 type FavoriteArticleFolderPersistenceAdapter interface {
 	GetFavoriteArticleFolders(ctx context.Context, req *fpb.GetFavoriteArticleFoldersRequest) (entity.FavoriteArticleFolderSlice, error)
+	GetFavoriteArticleFoldersByIds(ctx context.Context, ids []string) (entity.FavoriteArticleFolderSlice, error)
 	GetFavoriteArticleFolderByID(ctx context.Context, id, userID string, isFolderOnly *bool) (entity.FavoriteArticleFolder, error)
 	CreateFavoriteArticleFolder(ctx context.Context, req *fpb.CreateFavoriteArticleFolderRequest) (entity.FavoriteArticleFolder, error)
 	UpdateFavoriteArticleFolder(ctx context.Context, f entity.FavoriteArticleFolder, req *fpb.UpdateFavoriteArticleFolderRequest) (entity.FavoriteArticleFolder, error)
@@ -54,6 +55,20 @@ func (fafa *favoriteArticleFolderPersistenceAdapter) GetFavoriteArticleFolders(c
 			qm.Or("favorite_article_folders.description LIKE ?", "%"+req.GetKeyword().GetValue()+"%"),
 		))
 	}
+	favoriteArticleFolders, err := fafa.favoriteArticleFolderRepository.GetFavoriteArticleFolders(ctx, q)
+	if err != nil {
+		return nil, err
+	}
+
+	return favoriteArticleFolders, nil
+}
+
+func (fafa *favoriteArticleFolderPersistenceAdapter) GetFavoriteArticleFoldersByIds(ctx context.Context, ids []string) (entity.FavoriteArticleFolderSlice, error) {
+	q := []qm.QueryMod{
+		qm.WhereIn("id IN ?", ids),
+		qm.GroupBy("favorite_article_folders.id"),
+	}
+
 	favoriteArticleFolders, err := fafa.favoriteArticleFolderRepository.GetFavoriteArticleFolders(ctx, q)
 	if err != nil {
 		return nil, err
