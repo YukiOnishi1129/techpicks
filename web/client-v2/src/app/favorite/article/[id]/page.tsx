@@ -1,22 +1,37 @@
 import { redirect } from "next/navigation";
+import { Suspense } from "react";
 
 import { getUser } from "@/features/auth/actions/user";
+import { FavoriteArticleListByFolderIdTemplate } from "@/features/favorites/components";
+
+import { ScreenLoader } from "@/components/layout/ScreenLoader";
 
 type FavoriteArticleListPageProps = {
-  params: { slug: string };
+  params: { id: string };
   searchParams: { [key: string]: string | string[] | undefined };
 };
 
 export default async function FavoriteArticleListPage({
+  params,
   searchParams,
 }: FavoriteArticleListPageProps) {
   const user = await getUser();
   if (!user) {
     redirect("/login");
   }
+  const { id } = params;
+  const keyword =
+    typeof searchParams["keyword"] === "string"
+      ? searchParams["keyword"]
+      : undefined;
+
   return (
-    <div>
-      <h1>Favorite Article Page</h1>
-    </div>
+    <Suspense fallback={<ScreenLoader />}>
+      <FavoriteArticleListByFolderIdTemplate
+        user={user}
+        id={id}
+        keyword={keyword}
+      />
+    </Suspense>
   );
 }
