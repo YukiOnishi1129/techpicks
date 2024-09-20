@@ -11,9 +11,11 @@ import {
   FavoriteArticlesInput,
   DeleteFavoriteArticleInput,
   FavoriteArticleEdge,
+  DeleteFavoriteArticleByArticleIdInput,
 } from 'src/graphql/types/graphql';
 import {
   CreateFavoriteArticleRequest,
+  DeleteFavoriteArticleByArticleIdRequest,
   DeleteFavoriteArticleRequest,
   GetFavoriteArticlesRequest,
 } from 'src/grpc/favorite/favorite_pb';
@@ -193,6 +195,31 @@ export class FavoriteArticleService {
 
     return new Promise((resolve, reject) => {
       client.deleteFavoriteArticle(req, (err) => {
+        if (err) {
+          reject({
+            code: err?.code || 500,
+            message: err?.message || 'something went wrong',
+          });
+          return;
+        }
+
+        resolve(true);
+      });
+    });
+  }
+
+  async deleteFavoriteArticleByArticleId(
+    userId: string,
+    input: DeleteFavoriteArticleByArticleIdInput,
+  ): Promise<boolean> {
+    const client = this.grpcFavoriteClientService.getGrpcFavoriteService();
+    const req = new DeleteFavoriteArticleByArticleIdRequest();
+    req.setArticleId(input.articleId);
+    req.setUserId(userId);
+    req.setFavoriteArticleFolderId(input.favoriteArticleFolderId);
+
+    return new Promise((resolve, reject) => {
+      client.deleteFavoriteArticlesByArticleId(req, (err) => {
         if (err) {
           reject({
             code: err?.code || 500,

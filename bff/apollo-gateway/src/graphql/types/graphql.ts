@@ -97,6 +97,11 @@ export class DeleteFavoriteArticleInput {
     id: string;
 }
 
+export class DeleteFavoriteArticleByArticleIdInput {
+    articleId: string;
+    favoriteArticleFolderId: string;
+}
+
 export class FavoriteArticleFoldersInput {
     keyword?: Nullable<string>;
     isFolderOnly?: Nullable<boolean>;
@@ -197,6 +202,10 @@ export abstract class IMutation {
     abstract createFavoriteArticle(input: CreateFavoriteArticleInput): FavoriteArticle | Promise<FavoriteArticle>;
 
     abstract deleteFavoriteArticle(input: DeleteFavoriteArticleInput): boolean | Promise<boolean>;
+
+    abstract deleteFavoriteArticleByArticleID(input: DeleteFavoriteArticleByArticleIdInput): boolean | Promise<boolean>;
+
+    abstract deleteFavoriteArticleByArticleId(input: DeleteFavoriteArticleByArticleIdInput): boolean | Promise<boolean>;
 }
 
 export class Bookmark implements Node {
