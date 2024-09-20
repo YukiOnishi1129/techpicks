@@ -8,8 +8,6 @@ import { useCallback, useRef, useState, useEffect } from "react";
 
 // import { NotFoundList } from "@/components/layout/NotFoundList";
 
-import { FollowFavoriteArticleDropdownMenuContentFragment } from "@/features/favorites/components/DropdownMenu/FollowFavoriteArticleDropdownMenu/FollowFavoriteArticleDropdownMenuFragment";
-
 import { Loader } from "@/components/ui/loader";
 
 import { ArticleTabType } from "@/types/article";
@@ -18,13 +16,14 @@ import { LanguageStatus } from "@/types/language";
 
 import { getArticleListQuery } from "./actGetArticleListQuery";
 import { ArticleListFragment } from "./ArticleListFragment";
+import { FavoriteFolderArticleCardWrapperFragment } from "../../Card";
 import { ArticleCardWrapper } from "../../Card/ArticleCardWrapper/ArticleCardWrapper";
 
 type ArticleListProps = {
   user: User;
   data: FragmentOf<typeof ArticleListFragment>;
   favoriteArticleFolders: FragmentOf<
-    typeof FollowFavoriteArticleDropdownMenuContentFragment
+    typeof FavoriteFolderArticleCardWrapperFragment
   >;
   languageStatus: LanguageStatus;
   keyword?: string;

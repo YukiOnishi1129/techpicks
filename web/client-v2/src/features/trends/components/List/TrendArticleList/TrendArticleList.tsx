@@ -4,8 +4,10 @@ import { User } from "@supabase/supabase-js";
 import { FragmentOf, readFragment } from "gql.tada";
 import { useCallback, useRef, useState, useEffect } from "react";
 
-import { ArticleCardWrapper } from "@/features/articles/components/Card";
-import { FollowFavoriteArticleDropdownMenuContentFragment } from "@/features/favorites/components/DropdownMenu/FollowFavoriteArticleDropdownMenu/FollowFavoriteArticleDropdownMenuFragment";
+import {
+  ArticleCardWrapper,
+  FavoriteFolderArticleCardWrapperFragment,
+} from "@/features/articles/components/Card";
 
 import { Loader } from "@/components/ui/loader";
 
@@ -19,7 +21,7 @@ type TrendArticleListProps = {
   user: User;
   data: FragmentOf<typeof TrendArticleListFragment>;
   favoriteArticleFolders: FragmentOf<
-    typeof FollowFavoriteArticleDropdownMenuContentFragment
+    typeof FavoriteFolderArticleCardWrapperFragment
   >;
   languageStatus: LanguageStatus;
   keyword?: string;

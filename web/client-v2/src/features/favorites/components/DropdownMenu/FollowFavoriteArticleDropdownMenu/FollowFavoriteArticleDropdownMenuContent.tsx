@@ -18,6 +18,7 @@ import {
   FollowTargetFavoriteArticleFolderItemFragment,
 } from "./FollowFavoriteArticleDropdownMenuFragment";
 import { FollowTargetFavoriteArticleFolderItem } from "./FollowTargetFavoriteArticleFolderItem";
+import { CreateFavoriteArticleFolderDialog } from "../../Dialog";
 
 const formSchema = z.object({
   keyword: z.string(),
@@ -110,9 +111,9 @@ export const FollowFavoriteArticleDropdownMenuContent: FC<
           })}
       </div>
       <DropdownMenuLabel>
-        {/* <CreateFavoriteArticleFolderDialog
+        <CreateFavoriteArticleFolderDialog
           handleCreateFavoriteArticleFolder={handleCreateFavoriteArticleFolder}
-        /> */}
+        />
       </DropdownMenuLabel>
     </DropdownMenuContent>
   );

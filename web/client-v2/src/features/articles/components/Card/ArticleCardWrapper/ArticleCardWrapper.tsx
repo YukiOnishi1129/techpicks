@@ -8,7 +8,6 @@ import { logoutToLoginPage } from "@/features/auth/actions/auth";
 import { createFavoriteArticleMutation } from "@/features/favorites/actions/actCreateFavoriteArticleMutaion";
 import { deleteFavoriteArticleMutation } from "@/features/favorites/actions/actDeleteFavoriteArticleMutation";
 import { FollowFavoriteArticleDropdownMenu } from "@/features/favorites/components/DropdownMenu";
-import { FollowFavoriteArticleDropdownMenuContentFragment } from "@/features/favorites/components/DropdownMenu/FollowFavoriteArticleDropdownMenu/FollowFavoriteArticleDropdownMenuFragment";
 
 import { ShareLinks } from "@/components/ui/share";
 
@@ -19,7 +18,10 @@ import { ArticleTabType } from "@/types/article";
 import { CreateFavoriteArticleInput } from "@/graphql/type";
 
 import style from "./ArticleCardWrapper.module.css";
-import { ArticleCardWrapperFragment } from "./ArticleCardWrapperFragment";
+import {
+  ArticleCardWrapperFragment,
+  FavoriteFolderArticleCardWrapperFragment,
+} from "./ArticleCardWrapperFragment";
 import { useArticleBookmark } from "./useArticleBookmark";
 import { AddBookmarkTooltip, DeleteBookmarkTooltip } from "../../ToolTip";
 import { ArticleCardItem } from "../ArticleCardItem";
@@ -27,7 +29,7 @@ import { ArticleCardItem } from "../ArticleCardItem";
 type ArticleCardWrapperProps = {
   data: FragmentOf<typeof ArticleCardWrapperFragment>;
   favoriteArticleFolders: FragmentOf<
-    typeof FollowFavoriteArticleDropdownMenuContentFragment
+    typeof FavoriteFolderArticleCardWrapperFragment
   >;
   user: User;
   tab: ArticleTabType;
@@ -43,10 +45,17 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
 }: ArticleCardWrapperProps) => {
   const { successToast, failToast } = useStatusToast();
   const fragment = readFragment(ArticleCardWrapperFragment, data);
+  const fragmentFavoriteFolder = readFragment(
+    FavoriteFolderArticleCardWrapperFragment,
+    favoriteArticleFolders
+  );
   const [isFollowing, setIsFollowing] = useState<boolean>(
     fragment.isFollowing || false
   );
   const [showArticle, setShowArticle] = useState(fragment);
+  const [showFavoriteFolder, setShowFavoriteFolder] = useState(
+    fragmentFavoriteFolder
+  );
 
   const { bookmarkId, handleAddBookmark, handleRemoveBookmark } =
     useArticleBookmark(showArticle);
@@ -180,8 +189,19 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
   );
 
   const handleCreateFavoriteArticleFolder = useCallback(
-    async (favoriteArticleFolderId: string) => {},
-    []
+    async (favoriteArticleFolderId: string) => {
+      const id = await handleCreateFavoriteArticle(favoriteArticleFolderId);
+      if (!id) {
+        failToast({
+          description: "Fail: Something went wrong",
+        });
+        return;
+      }
+      successToast({
+        description: "Successfully followed the article",
+      });
+    },
+    [handleCreateFavoriteArticle, successToast, failToast]
   );
 
   return (
@@ -248,7 +268,7 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
                 )}
                 <div className="mx-4  mt-2">
                   <FollowFavoriteArticleDropdownMenu
-                    data={favoriteArticleFolders}
+                    data={showFavoriteFolder}
                     isFollowing={isFollowing}
                     articleId={showArticle.id}
                     followedFolderIds={

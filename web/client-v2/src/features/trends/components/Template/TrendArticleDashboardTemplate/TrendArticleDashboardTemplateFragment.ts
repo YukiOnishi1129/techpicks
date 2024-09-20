@@ -1,6 +1,6 @@
 import { graphql } from "gql.tada";
 
-import { FollowFavoriteArticleDropdownMenuContentFragment } from "@/features/favorites/components/DropdownMenu/FollowFavoriteArticleDropdownMenu/FollowFavoriteArticleDropdownMenuFragment";
+import { FavoriteFolderArticleCardWrapperFragment } from "@/features/articles/components/Card";
 
 import { TrendArticleListFragment } from "../../List";
 
@@ -14,9 +14,9 @@ export const TrendArticleDashboardTemplateFragment = graphql(
         ...TrendArticleListFragment
       }
       favoriteArticleFolders(input: $favoriteArticleFoldersInput) {
-        ...FollowFavoriteArticleDropdownMenuContentFragment
+        ...FavoriteFolderArticleCardWrapperFragment
       }
     }
   `,
-  [TrendArticleListFragment, FollowFavoriteArticleDropdownMenuContentFragment]
+  [TrendArticleListFragment, FavoriteFolderArticleCardWrapperFragment]
 );
