@@ -4,7 +4,6 @@ import { clsx } from "clsx";
 import { FragmentOf, readFragment } from "gql.tada";
 import { FC, useCallback, useState, useTransition } from "react";
 
-import { logoutToLoginPage } from "@/features/auth/actions/auth";
 import { createFavoriteArticleMutation } from "@/features/favorites/actions/actCreateFavoriteArticleMutaion";
 import { deleteFavoriteArticleByArticleIdMutation } from "@/features/favorites/actions/actDeleteFavoriteArticleByArticleIdMutation";
 import { FollowFavoriteArticleDropdownMenu } from "@/features/favorites/components/DropdownMenu";
@@ -63,14 +62,6 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
 
   const handleCreateFavoriteArticle = useCallback(
     async (favoriteArticleFolderId: string) => {
-      if (!user) {
-        failToast({
-          description: "Please login to follow the article",
-        });
-        await logoutToLoginPage();
-        return;
-      }
-
       const input: CreateFavoriteArticleInput = {
         articleId: showArticle.id,
         favoriteArticleFolderId,
@@ -127,19 +118,11 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
 
       return data.createFavoriteArticle.id;
     },
-    [successToast, failToast, user, showArticle, isFollowing, ,]
+    [successToast, failToast, showArticle, isFollowing, ,]
   );
 
   const handleRemoveFavoriteArticle = useCallback(
     async (favoriteArticleFolderId: string, favoriteArticleId?: string) => {
-      if (!user) {
-        failToast({
-          description: "Please login to follow the article",
-        });
-        await logoutToLoginPage();
-        return;
-      }
-
       const { data, error } = await deleteFavoriteArticleByArticleIdMutation({
         articleId: showArticle.id,
         favoriteArticleFolderId,
@@ -187,7 +170,6 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
     [
       successToast,
       failToast,
-      user,
       isFollowing,
       showArticle.id,
       showArticle.favoriteArticleFolderIds,
