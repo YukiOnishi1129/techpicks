@@ -18,6 +18,7 @@ service FavoriteService {
     rpc GetFavoriteArticles(GetFavoriteArticlesRequest) returns (GetFavoriteArticlesResponse);
     rpc CreateFavoriteArticle(CreateFavoriteArticleRequest) returns (CreateFavoriteArticleResponse);
     rpc DeleteFavoriteArticle(DeleteFavoriteArticleRequest) returns (google.protobuf.Empty);
+    rpc DeleteFavoriteArticlesByArticleId(DeleteFavoriteArticleByArticleIdRequest) returns (google.protobuf.Empty);
 }
 
 message GetFavoriteArticleFoldersRequest {
@@ -110,6 +111,12 @@ message CreateFavoriteArticleRequest {
 message DeleteFavoriteArticleRequest {
     string id = 1;
     string user_id = 2;
+}
+
+message DeleteFavoriteArticleByArticleIdRequest {
+    string article_id = 1;
+    string user_id = 2;
+    string favorite_article_folder_id = 3;
 }
 
 message FavoriteArticleFolderEdge {

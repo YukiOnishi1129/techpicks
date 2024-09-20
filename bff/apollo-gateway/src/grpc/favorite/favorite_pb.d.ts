@@ -470,6 +470,32 @@ export namespace DeleteFavoriteArticleRequest {
     }
 }
 
+export class DeleteFavoriteArticleByArticleIdRequest extends jspb.Message { 
+    getArticleId(): string;
+    setArticleId(value: string): DeleteFavoriteArticleByArticleIdRequest;
+    getUserId(): string;
+    setUserId(value: string): DeleteFavoriteArticleByArticleIdRequest;
+    getFavoriteArticleFolderId(): string;
+    setFavoriteArticleFolderId(value: string): DeleteFavoriteArticleByArticleIdRequest;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): DeleteFavoriteArticleByArticleIdRequest.AsObject;
+    static toObject(includeInstance: boolean, msg: DeleteFavoriteArticleByArticleIdRequest): DeleteFavoriteArticleByArticleIdRequest.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: DeleteFavoriteArticleByArticleIdRequest, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): DeleteFavoriteArticleByArticleIdRequest;
+    static deserializeBinaryFromReader(message: DeleteFavoriteArticleByArticleIdRequest, reader: jspb.BinaryReader): DeleteFavoriteArticleByArticleIdRequest;
+}
+
+export namespace DeleteFavoriteArticleByArticleIdRequest {
+    export type AsObject = {
+        articleId: string,
+        userId: string,
+        favoriteArticleFolderId: string,
+    }
+}
+
 export class FavoriteArticleFolderEdge extends jspb.Message { 
 
     hasNode(): boolean;

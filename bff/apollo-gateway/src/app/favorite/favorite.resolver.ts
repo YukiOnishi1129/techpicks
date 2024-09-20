@@ -12,6 +12,7 @@ import {
   DeleteFavoriteArticleInput,
   FavoriteArticleConnection,
   FavoriteArticlesInput,
+  DeleteFavoriteArticleByArticleIdInput,
 } from 'src/graphql/types/graphql';
 
 import { FavoriteArticleService } from './article/favorite-article.service';
@@ -109,6 +110,19 @@ export class FavoriteResolver {
   ): Promise<boolean> {
     const userId = context.req.user.id;
     return await this.favoriteArticleService.deleteFavoriteArticle(
+      userId,
+      input,
+    );
+  }
+
+  @Mutation(() => FavoriteArticle)
+  @UseGuards(SupabaseAuthGuard)
+  async deleteFavoriteArticleByArticleId(
+    @Args('input') input: DeleteFavoriteArticleByArticleIdInput,
+    @Context() context: GraphQLContext,
+  ): Promise<boolean> {
+    const userId = context.req.user.id;
+    return await this.favoriteArticleService.deleteFavoriteArticleByArticleId(
       userId,
       input,
     );

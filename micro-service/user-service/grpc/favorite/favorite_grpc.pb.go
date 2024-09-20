@@ -28,6 +28,7 @@ const (
 	FavoriteService_GetFavoriteArticles_FullMethodName                  = "/checkpicks.favorite.v1.FavoriteService/GetFavoriteArticles"
 	FavoriteService_CreateFavoriteArticle_FullMethodName                = "/checkpicks.favorite.v1.FavoriteService/CreateFavoriteArticle"
 	FavoriteService_DeleteFavoriteArticle_FullMethodName                = "/checkpicks.favorite.v1.FavoriteService/DeleteFavoriteArticle"
+	FavoriteService_DeleteFavoriteArticlesByArticleId_FullMethodName    = "/checkpicks.favorite.v1.FavoriteService/DeleteFavoriteArticlesByArticleId"
 )
 
 // FavoriteServiceClient is the client API for FavoriteService service.
@@ -42,6 +43,7 @@ type FavoriteServiceClient interface {
 	GetFavoriteArticles(ctx context.Context, in *GetFavoriteArticlesRequest, opts ...grpc.CallOption) (*GetFavoriteArticlesResponse, error)
 	CreateFavoriteArticle(ctx context.Context, in *CreateFavoriteArticleRequest, opts ...grpc.CallOption) (*CreateFavoriteArticleResponse, error)
 	DeleteFavoriteArticle(ctx context.Context, in *DeleteFavoriteArticleRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	DeleteFavoriteArticlesByArticleId(ctx context.Context, in *DeleteFavoriteArticleByArticleIdRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
 type favoriteServiceClient struct {
@@ -132,6 +134,16 @@ func (c *favoriteServiceClient) DeleteFavoriteArticle(ctx context.Context, in *D
 	return out, nil
 }
 
+func (c *favoriteServiceClient) DeleteFavoriteArticlesByArticleId(ctx context.Context, in *DeleteFavoriteArticleByArticleIdRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, FavoriteService_DeleteFavoriteArticlesByArticleId_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // FavoriteServiceServer is the server API for FavoriteService service.
 // All implementations should embed UnimplementedFavoriteServiceServer
 // for forward compatibility.
@@ -144,6 +156,7 @@ type FavoriteServiceServer interface {
 	GetFavoriteArticles(context.Context, *GetFavoriteArticlesRequest) (*GetFavoriteArticlesResponse, error)
 	CreateFavoriteArticle(context.Context, *CreateFavoriteArticleRequest) (*CreateFavoriteArticleResponse, error)
 	DeleteFavoriteArticle(context.Context, *DeleteFavoriteArticleRequest) (*emptypb.Empty, error)
+	DeleteFavoriteArticlesByArticleId(context.Context, *DeleteFavoriteArticleByArticleIdRequest) (*emptypb.Empty, error)
 }
 
 // UnimplementedFavoriteServiceServer should be embedded to have
@@ -176,6 +189,9 @@ func (UnimplementedFavoriteServiceServer) CreateFavoriteArticle(context.Context,
 }
 func (UnimplementedFavoriteServiceServer) DeleteFavoriteArticle(context.Context, *DeleteFavoriteArticleRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteFavoriteArticle not implemented")
+}
+func (UnimplementedFavoriteServiceServer) DeleteFavoriteArticlesByArticleId(context.Context, *DeleteFavoriteArticleByArticleIdRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteFavoriteArticlesByArticleId not implemented")
 }
 func (UnimplementedFavoriteServiceServer) testEmbeddedByValue() {}
 
@@ -341,6 +357,24 @@ func _FavoriteService_DeleteFavoriteArticle_Handler(srv interface{}, ctx context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _FavoriteService_DeleteFavoriteArticlesByArticleId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteFavoriteArticleByArticleIdRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FavoriteServiceServer).DeleteFavoriteArticlesByArticleId(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: FavoriteService_DeleteFavoriteArticlesByArticleId_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FavoriteServiceServer).DeleteFavoriteArticlesByArticleId(ctx, req.(*DeleteFavoriteArticleByArticleIdRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // FavoriteService_ServiceDesc is the grpc.ServiceDesc for FavoriteService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -379,6 +413,10 @@ var FavoriteService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DeleteFavoriteArticle",
 			Handler:    _FavoriteService_DeleteFavoriteArticle_Handler,
+		},
+		{
+			MethodName: "DeleteFavoriteArticlesByArticleId",
+			Handler:    _FavoriteService_DeleteFavoriteArticlesByArticleId_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
