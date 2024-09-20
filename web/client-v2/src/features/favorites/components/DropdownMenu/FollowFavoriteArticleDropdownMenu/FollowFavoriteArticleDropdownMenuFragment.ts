@@ -4,10 +4,6 @@ export const FollowTargetFavoriteArticleFolderItemFragment = graphql(`
   fragment FollowTargetFavoriteArticleFolderItemFragment on FavoriteArticleFolder {
     id
     title
-    favoriteArticles {
-      id
-      articleId
-    }
   }
 `);
 

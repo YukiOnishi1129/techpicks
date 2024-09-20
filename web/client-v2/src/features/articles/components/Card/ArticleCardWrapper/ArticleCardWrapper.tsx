@@ -2,11 +2,10 @@
 import { User } from "@supabase/supabase-js";
 import { clsx } from "clsx";
 import { FragmentOf, readFragment } from "gql.tada";
-import { FC, useCallback, useState } from "react";
+import { FC, useCallback, useState, useTransition } from "react";
 
-import { logoutToLoginPage } from "@/features/auth/actions/auth";
 import { createFavoriteArticleMutation } from "@/features/favorites/actions/actCreateFavoriteArticleMutaion";
-import { deleteFavoriteArticleMutation } from "@/features/favorites/actions/actDeleteFavoriteArticleMutation";
+import { deleteFavoriteArticleByArticleIdMutation } from "@/features/favorites/actions/actDeleteFavoriteArticleByArticleIdMutation";
 import { FollowFavoriteArticleDropdownMenu } from "@/features/favorites/components/DropdownMenu";
 
 import { ShareLinks } from "@/components/ui/share";
@@ -44,6 +43,7 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
   tab,
 }: ArticleCardWrapperProps) => {
   const { successToast, failToast } = useStatusToast();
+  const [isPending, startTransition] = useTransition();
   const fragment = readFragment(ArticleCardWrapperFragment, data);
   const fragmentFavoriteFolder = readFragment(
     FavoriteFolderArticleCardWrapperFragment,
@@ -53,7 +53,7 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
     fragment.isFollowing || false
   );
   const [showArticle, setShowArticle] = useState(fragment);
-  const [showFavoriteFolder, setShowFavoriteFolder] = useState(
+  const [showFavoriteFolders, setShowFavoriteFolders] = useState(
     fragmentFavoriteFolder
   );
 
@@ -62,14 +62,6 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
 
   const handleCreateFavoriteArticle = useCallback(
     async (favoriteArticleFolderId: string) => {
-      if (!user) {
-        failToast({
-          description: "Please login to follow the article",
-        });
-        await logoutToLoginPage();
-        return;
-      }
-
       const input: CreateFavoriteArticleInput = {
         articleId: showArticle.id,
         favoriteArticleFolderId,
@@ -119,45 +111,41 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
           ],
         };
       });
+
       successToast({
         description: "Follow the article",
       });
 
       return data.createFavoriteArticle.id;
     },
-    [successToast, failToast, user, showArticle, isFollowing, ,]
+    [successToast, failToast, showArticle, isFollowing, ,]
   );
 
   const handleRemoveFavoriteArticle = useCallback(
-    async (favoriteArticleId: string, favoriteArticleFolderId: string) => {
-      if (!user) {
-        failToast({
-          description: "Please login to follow the article",
-        });
-        await logoutToLoginPage();
-        return;
-      }
-
-      const { data, error } = await deleteFavoriteArticleMutation({
-        id: favoriteArticleId,
+    async (favoriteArticleFolderId: string, favoriteArticleId?: string) => {
+      const { data, error } = await deleteFavoriteArticleByArticleIdMutation({
+        articleId: showArticle.id,
+        favoriteArticleFolderId,
       });
 
-      if (error || !data?.deleteFavoriteArticle) {
-        if (error && error.length > 0) {
-          // TODO: Modify the error message response on the BFF side
-          const errMsg =
-            error[0].message.indexOf("favorite article not found") != -1
-              ? "favorite article not found"
-              : error[0].message;
+      if (error || !data?.deleteFavoriteArticleByArticleId) {
+        if (error || !data?.deleteFavoriteArticleByArticleId) {
+          if (error && error.length > 0) {
+            // TODO: Modify the error message response on the BFF side
+            const errMsg =
+              error[0].message.indexOf("favorite article not found") != -1
+                ? "favorite article not found"
+                : error[0].message;
+            failToast({
+              description: errMsg,
+            });
+            return;
+          }
           failToast({
-            description: errMsg,
+            description: "Fail: Something went wrong",
           });
           return;
         }
-        failToast({
-          description: "Fail: Something went wrong",
-        });
-        return;
       }
 
       if (isFollowing)
@@ -182,26 +170,40 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
     [
       successToast,
       failToast,
-      user,
       isFollowing,
+      showArticle.id,
       showArticle.favoriteArticleFolderIds,
     ]
   );
 
   const handleCreateFavoriteArticleFolder = useCallback(
-    async (favoriteArticleFolderId: string) => {
-      const id = await handleCreateFavoriteArticle(favoriteArticleFolderId);
-      if (!id) {
-        failToast({
-          description: "Fail: Something went wrong",
+    async (favoriteArticleFolderId: string, title: string) => {
+      startTransition(async () => {
+        const id = await handleCreateFavoriteArticle(favoriteArticleFolderId);
+        if (!id) {
+          failToast({
+            description: "Fail: Something went wrong",
+          });
+          return;
+        }
+
+        setShowFavoriteFolders((prev) => {
+          return {
+            ...prev,
+            favoriteArticleFolders: [
+              ...prev.edges,
+              {
+                node: {
+                  id,
+                  title,
+                },
+              },
+            ],
+          };
         });
-        return;
-      }
-      successToast({
-        description: "Successfully followed the article",
       });
     },
-    [handleCreateFavoriteArticle, successToast, failToast]
+    [handleCreateFavoriteArticle, failToast]
   );
 
   return (
@@ -267,19 +269,20 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
                   />
                 )}
                 <div className="mx-4  mt-2">
-                  <FollowFavoriteArticleDropdownMenu
-                    data={showFavoriteFolder}
-                    isFollowing={isFollowing}
-                    articleId={showArticle.id}
-                    followedFolderIds={
-                      showArticle.favoriteArticleFolderIds || []
-                    }
-                    handleCreateFavoriteArticle={handleCreateFavoriteArticle}
-                    handleRemoveFavoriteArticle={handleRemoveFavoriteArticle}
-                    handleCreateFavoriteArticleFolder={
-                      handleCreateFavoriteArticleFolder
-                    }
-                  />
+                  {!isPending && (
+                    <FollowFavoriteArticleDropdownMenu
+                      data={showFavoriteFolders}
+                      isFollowing={isFollowing}
+                      followedFolderIds={
+                        showArticle.favoriteArticleFolderIds || []
+                      }
+                      handleCreateFavoriteArticle={handleCreateFavoriteArticle}
+                      handleRemoveFavoriteArticle={handleRemoveFavoriteArticle}
+                      handleCreateFavoriteArticleFolder={
+                        handleCreateFavoriteArticleFolder
+                      }
+                    />
+                  )}
                 </div>
               </>
             </div>

@@ -18,7 +18,8 @@ type CreateMyFeedFolderDialogProps = {
     | "link";
   buttonSize?: number;
   handleCreateFavoriteArticleFolder?: (
-    favoriteArticleFolderId: string
+    favoriteArticleFolderId: string,
+    title: string
   ) => Promise<void>;
 };
 

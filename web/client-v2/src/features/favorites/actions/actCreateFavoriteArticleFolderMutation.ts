@@ -12,6 +12,7 @@ const CreateFavoriteArticleFolderMutation = graphql(`
   ) {
     createFavoriteArticleFolder(input: $input) {
       id
+      title
     }
   }
 `);

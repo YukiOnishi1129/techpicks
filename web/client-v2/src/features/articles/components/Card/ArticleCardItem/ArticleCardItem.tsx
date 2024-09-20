@@ -16,15 +16,13 @@ import { ArticleCardItemFragment } from "./ArticleCardItemFragment";
 
 type ArticleCardItemProps = {
   data: FragmentOf<typeof ArticleCardItemFragment>;
-  user: User | undefined;
+  user: User;
   tab: ArticleTabType;
 };
 
 export const ArticleCardItem: FC<ArticleCardItemProps> = ({ data }) => {
   const fragment = readFragment(ArticleCardItemFragment, data);
   const imageUrl = useCheckImageExist(fragment.thumbnailUrl);
-
-  fragment.feeds;
 
   return (
     <div className="relative w-full cursor-pointer rounded">
