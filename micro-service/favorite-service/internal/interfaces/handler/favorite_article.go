@@ -30,3 +30,11 @@ func (fh *favoriteHandler) DeleteFavoriteArticle(ctx context.Context, req *fpb.D
 	}
 	return res, nil
 }
+
+func (fh *favoriteHandler) DeleteFavoriteArticlesByArticleId(ctx context.Context, req *fpb.DeleteFavoriteArticleByArticleIdRequest) (*emptypb.Empty, error) {
+	res, err := fh.favoriteUseCase.DeleteFavoriteArticlesByArticleID(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}

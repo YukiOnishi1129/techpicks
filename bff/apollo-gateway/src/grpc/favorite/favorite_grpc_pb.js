@@ -51,6 +51,17 @@ function deserialize_checkpicks_favorite_v1_CreateFavoriteArticleResponse(buffer
   return favorite_favorite_pb.CreateFavoriteArticleResponse.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
+function serialize_checkpicks_favorite_v1_DeleteFavoriteArticleByArticleIdRequest(arg) {
+  if (!(arg instanceof favorite_favorite_pb.DeleteFavoriteArticleByArticleIdRequest)) {
+    throw new Error('Expected argument of type checkpicks.favorite.v1.DeleteFavoriteArticleByArticleIdRequest');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_checkpicks_favorite_v1_DeleteFavoriteArticleByArticleIdRequest(buffer_arg) {
+  return favorite_favorite_pb.DeleteFavoriteArticleByArticleIdRequest.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
 function serialize_checkpicks_favorite_v1_DeleteFavoriteArticleFolderRequest(arg) {
   if (!(arg instanceof favorite_favorite_pb.DeleteFavoriteArticleFolderRequest)) {
     throw new Error('Expected argument of type checkpicks.favorite.v1.DeleteFavoriteArticleFolderRequest');
@@ -248,6 +259,17 @@ var FavoriteServiceService = exports.FavoriteServiceService = {
     responseType: google_protobuf_empty_pb.Empty,
     requestSerialize: serialize_checkpicks_favorite_v1_DeleteFavoriteArticleRequest,
     requestDeserialize: deserialize_checkpicks_favorite_v1_DeleteFavoriteArticleRequest,
+    responseSerialize: serialize_google_protobuf_Empty,
+    responseDeserialize: deserialize_google_protobuf_Empty,
+  },
+  deleteFavoriteArticlesByArticleId: {
+    path: '/checkpicks.favorite.v1.FavoriteService/DeleteFavoriteArticlesByArticleId',
+    requestStream: false,
+    responseStream: false,
+    requestType: favorite_favorite_pb.DeleteFavoriteArticleByArticleIdRequest,
+    responseType: google_protobuf_empty_pb.Empty,
+    requestSerialize: serialize_checkpicks_favorite_v1_DeleteFavoriteArticleByArticleIdRequest,
+    requestDeserialize: deserialize_checkpicks_favorite_v1_DeleteFavoriteArticleByArticleIdRequest,
     responseSerialize: serialize_google_protobuf_Empty,
     responseDeserialize: deserialize_google_protobuf_Empty,
   },

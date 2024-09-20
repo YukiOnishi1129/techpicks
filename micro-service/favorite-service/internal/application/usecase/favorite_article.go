@@ -89,6 +89,23 @@ func (fu *favoriteUseCase) DeleteFavoriteArticle(ctx context.Context, req *fpb.D
 	return &emptypb.Empty{}, nil
 }
 
+func (fu *favoriteUseCase) DeleteFavoriteArticlesByArticleID(ctx context.Context, req *fpb.DeleteFavoriteArticleByArticleIdRequest) (*emptypb.Empty, error) {
+	f, err := fu.favoriteArticlePersistenceAdapter.GetFavoriteArticleBtArticleIDAndFavoriteArticleFolderID(ctx, req.GetArticleId(), req.GetFavoriteArticleFolderId(), req.GetUserId())
+	if err != nil {
+		return &emptypb.Empty{}, err
+	}
+	if f.ID == "" {
+		return &emptypb.Empty{}, errors.New("favorite article not found")
+	}
+
+	err = fu.favoriteArticlePersistenceAdapter.DeleteFavoriteArticle(ctx, f)
+	if err != nil {
+		return &emptypb.Empty{}, err
+	}
+
+	return &emptypb.Empty{}, nil
+}
+
 func (fu *favoriteUseCase) convertPBFavoriteArticle(fa *entity.FavoriteArticle) *fpb.FavoriteArticle {
 	resFa := &fpb.FavoriteArticle{
 		Id:                      fa.ID,

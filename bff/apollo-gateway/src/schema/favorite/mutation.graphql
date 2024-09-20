@@ -11,6 +11,9 @@ type Mutation {
 
   createFavoriteArticle(input: CreateFavoriteArticleInput!): FavoriteArticle!
   deleteFavoriteArticle(input: DeleteFavoriteArticleInput!): Boolean!
+  deleteFavoriteArticleByArticleID(
+    input: DeleteFavoriteArticleByArticleIdInput!
+  ): Boolean!
 }
 
 input CreateFavoriteArticleFolderInput {
@@ -49,4 +52,9 @@ input CreateFavoriteArticleInput {
 
 input DeleteFavoriteArticleInput {
   id: ID!
+}
+
+input DeleteFavoriteArticleByArticleIdInput {
+  articleId: ID!
+  favoriteArticleFolderId: ID!
 }

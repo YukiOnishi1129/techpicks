@@ -117,6 +117,26 @@ func (mr *MockFavoriteServiceClientMockRecorder) DeleteFavoriteArticleFolder(ctx
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteFavoriteArticleFolder", reflect.TypeOf((*MockFavoriteServiceClient)(nil).DeleteFavoriteArticleFolder), varargs...)
 }
 
+// DeleteFavoriteArticlesByArticleId mocks base method.
+func (m *MockFavoriteServiceClient) DeleteFavoriteArticlesByArticleId(ctx context.Context, in *favorite.DeleteFavoriteArticleByArticleIdRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{ctx, in}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "DeleteFavoriteArticlesByArticleId", varargs...)
+	ret0, _ := ret[0].(*emptypb.Empty)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// DeleteFavoriteArticlesByArticleId indicates an expected call of DeleteFavoriteArticlesByArticleId.
+func (mr *MockFavoriteServiceClientMockRecorder) DeleteFavoriteArticlesByArticleId(ctx, in interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{ctx, in}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteFavoriteArticlesByArticleId", reflect.TypeOf((*MockFavoriteServiceClient)(nil).DeleteFavoriteArticlesByArticleId), varargs...)
+}
+
 // GetFavoriteArticleFolders mocks base method.
 func (m *MockFavoriteServiceClient) GetFavoriteArticleFolders(ctx context.Context, in *favorite.GetFavoriteArticleFoldersRequest, opts ...grpc.CallOption) (*favorite.GetFavoriteArticleFoldersResponse, error) {
 	m.ctrl.T.Helper()
@@ -278,6 +298,21 @@ func (m *MockFavoriteServiceServer) DeleteFavoriteArticleFolder(arg0 context.Con
 func (mr *MockFavoriteServiceServerMockRecorder) DeleteFavoriteArticleFolder(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteFavoriteArticleFolder", reflect.TypeOf((*MockFavoriteServiceServer)(nil).DeleteFavoriteArticleFolder), arg0, arg1)
+}
+
+// DeleteFavoriteArticlesByArticleId mocks base method.
+func (m *MockFavoriteServiceServer) DeleteFavoriteArticlesByArticleId(arg0 context.Context, arg1 *favorite.DeleteFavoriteArticleByArticleIdRequest) (*emptypb.Empty, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DeleteFavoriteArticlesByArticleId", arg0, arg1)
+	ret0, _ := ret[0].(*emptypb.Empty)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// DeleteFavoriteArticlesByArticleId indicates an expected call of DeleteFavoriteArticlesByArticleId.
+func (mr *MockFavoriteServiceServerMockRecorder) DeleteFavoriteArticlesByArticleId(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteFavoriteArticlesByArticleId", reflect.TypeOf((*MockFavoriteServiceServer)(nil).DeleteFavoriteArticlesByArticleId), arg0, arg1)
 }
 
 // GetFavoriteArticleFolders mocks base method.
