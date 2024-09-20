@@ -64,9 +64,13 @@ func (fafa *favoriteArticleFolderPersistenceAdapter) GetFavoriteArticleFolders(c
 }
 
 func (fafa *favoriteArticleFolderPersistenceAdapter) GetFavoriteArticleFoldersByIds(ctx context.Context, ids []string) (entity.FavoriteArticleFolderSlice, error) {
+	whereIds := make([]interface{}, len(ids))
+	for i, id := range ids {
+		whereIds[i] = id
+	}
 	q := []qm.QueryMod{
-		qm.WhereIn("id IN ?", ids),
-		qm.GroupBy("favorite_article_folders.id"),
+		qm.WhereIn("id IN ?", whereIds...),
+		qm.GroupBy("id"),
 	}
 
 	favoriteArticleFolders, err := fafa.favoriteArticleFolderRepository.GetFavoriteArticleFolders(ctx, q)

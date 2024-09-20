@@ -136,7 +136,7 @@ export class Article implements Node {
     id: string;
     platform?: Nullable<Platform>;
     feeds?: Nullable<Feed[]>;
-    favoriteArticleFolderIds?: Nullable<string[]>;
+    favoriteArticleFolderIds: string[];
     title: string;
     description: string;
     articleUrl: string;
@@ -240,6 +240,7 @@ export class FavoriteArticle implements Node {
     id: string;
     articleId?: Nullable<string>;
     platformId?: Nullable<string>;
+    favoriteArticleFolderId: string;
     userId: string;
     title: string;
     description?: Nullable<string>;
@@ -263,7 +264,7 @@ export class FavoriteArticleFolder implements Node {
     userId: string;
     title: string;
     description?: Nullable<string>;
-    favoriteArticles?: Nullable<FavoriteArticle[]>;
+    favoriteArticles: FavoriteArticle[];
     createdAt: number;
     updatedAt: number;
 }

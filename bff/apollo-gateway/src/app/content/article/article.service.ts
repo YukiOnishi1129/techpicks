@@ -65,7 +65,7 @@ export class ArticleService {
                     bookmarkId: edge.article?.bookmarkId?.value,
                     createdAt: convertTimestampToInt(edge.article.createdAt),
                     description: edge.article.description,
-                    favoriteArticleIds: edge.article
+                    favoriteArticleFolderIds: edge.article
                       ?.favoriteArticleFolderIdsList
                       ? edge.article?.favoriteArticleFolderIdsList
                       : [],

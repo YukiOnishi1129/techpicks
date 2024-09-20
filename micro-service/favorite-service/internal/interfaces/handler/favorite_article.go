@@ -24,5 +24,9 @@ func (fh *favoriteHandler) CreateFavoriteArticle(ctx context.Context, req *fpb.C
 }
 
 func (fh *favoriteHandler) DeleteFavoriteArticle(ctx context.Context, req *fpb.DeleteFavoriteArticleRequest) (*emptypb.Empty, error) {
-	return nil, nil
+	res, err := fh.favoriteUseCase.DeleteFavoriteArticle(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
 }

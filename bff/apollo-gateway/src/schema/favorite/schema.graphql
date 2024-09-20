@@ -5,6 +5,7 @@ type FavoriteArticle implements Node {
   id: ID!
   articleId: String
   platformId: String
+  favoriteArticleFolderId: String!
   userId: String!
   title: String!
   description: String
@@ -31,7 +32,7 @@ type FavoriteArticleFolder implements Node {
   userId: String!
   title: String!
   description: String
-  favoriteArticles: [FavoriteArticle!]
+  favoriteArticles: [FavoriteArticle!]!
   createdAt: Int!
   updatedAt: Int!
 }

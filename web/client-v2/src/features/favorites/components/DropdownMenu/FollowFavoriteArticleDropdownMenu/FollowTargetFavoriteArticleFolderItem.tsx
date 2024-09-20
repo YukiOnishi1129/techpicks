@@ -1,7 +1,7 @@
 "use client";
 
 import { FragmentOf, readFragment } from "gql.tada";
-import { FC, useMemo } from "react";
+import { FC, useCallback, useMemo, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
@@ -11,6 +11,7 @@ import { FollowTargetFavoriteArticleFolderItemFragment } from "./FollowFavoriteA
 type FollowTargetFavoriteArticleFolderItemProps = {
   data: FragmentOf<typeof FollowTargetFavoriteArticleFolderItemFragment>;
   articleId: string;
+  followedFolderIds: Array<string>;
   handleCreateFavoriteArticle: (
     favoriteArticleFolderId: string,
     createdFavoriteArticleFolder?: FragmentOf<
@@ -28,6 +29,7 @@ export const FollowTargetFavoriteArticleFolderItem: FC<
 > = ({
   data,
   articleId,
+  followedFolderIds,
   handleCreateFavoriteArticle,
   handleRemoveFavoriteArticle,
 }) => {
@@ -35,39 +37,71 @@ export const FollowTargetFavoriteArticleFolderItem: FC<
     FollowTargetFavoriteArticleFolderItemFragment,
     data
   );
+
+  const [showFavoriteArticleFolders, setShowFavoriteArticleFolders] =
+    useState(fragment);
+
   const isFollowed = useMemo(
     () =>
-      fragment?.favoriteArticles
-        ? fragment.favoriteArticles.some(
-            (favoriteArticle) => favoriteArticle.articleId === articleId
-          )
-        : false,
-    [articleId, fragment]
+      showFavoriteArticleFolders.favoriteArticles.some(
+        (favoriteArticle) => favoriteArticle.articleId === articleId
+      ),
+    [articleId, showFavoriteArticleFolders]
   );
 
   const targetFavoriteArticleId = useMemo(() => {
-    if (!fragment || !fragment?.favoriteArticles) return;
-    const targetFavoriteArticle = fragment.favoriteArticles.find(
-      (favoriteArticle) => favoriteArticle.articleId === articleId
-    );
+    const targetFavoriteArticle =
+      showFavoriteArticleFolders.favoriteArticles.find(
+        (favoriteArticle) => favoriteArticle.articleId === articleId
+      );
     return targetFavoriteArticle?.id;
-  }, [articleId, fragment]);
+  }, [articleId, showFavoriteArticleFolders]);
+
+  const handleAddFavoriteArticle = useCallback(async () => {
+    const id = await handleCreateFavoriteArticle(showFavoriteArticleFolders.id);
+    if (!id) return;
+    setShowFavoriteArticleFolders((prev) => ({
+      ...prev,
+      favoriteArticles: [
+        ...prev.favoriteArticles,
+        {
+          articleId,
+          id,
+        },
+      ],
+    }));
+  }, [articleId, handleCreateFavoriteArticle, showFavoriteArticleFolders.id]);
+
+  const handleDeleteFavoriteArticle = useCallback(async () => {
+    const id = await handleRemoveFavoriteArticle(
+      targetFavoriteArticleId || "",
+      showFavoriteArticleFolders.id
+    );
+    if (!id) return;
+    setShowFavoriteArticleFolders((prev) => ({
+      ...prev,
+      favoriteArticles: prev.favoriteArticles.filter(
+        (favoriteArticle) => favoriteArticle.id !== id
+      ),
+    }));
+  }, [
+    showFavoriteArticleFolders.id,
+    targetFavoriteArticleId,
+    handleRemoveFavoriteArticle,
+  ]);
 
   return (
     <div>
       <div className="flex items-center justify-between">
-        <p className="ml-2 w-1/2 truncate">{fragment.title}</p>
+        <p className="ml-2 w-1/2 truncate">
+          {showFavoriteArticleFolders.title}
+        </p>
         {isFollowed ? (
           <Button
             variant="outline"
             size="sm"
             className="group relative border-emerald-500 bg-emerald-500 font-bold text-white hover:border-red-600 hover:text-red-600"
-            onClick={() =>
-              handleRemoveFavoriteArticle(
-                targetFavoriteArticleId || "",
-                fragment.id
-              )
-            }
+            onClick={handleDeleteFavoriteArticle}
           >
             <span className="w-full group-hover:invisible">{"SAVED"}</span>
             <span className="invisible absolute w-full group-hover:visible">
@@ -79,7 +113,7 @@ export const FollowTargetFavoriteArticleFolderItem: FC<
             variant="outline"
             size="sm"
             className="border-emerald-500 font-bold text-emerald-500 hover:text-emerald-600"
-            onClick={() => handleCreateFavoriteArticle(fragment.id)}
+            onClick={handleAddFavoriteArticle}
           >
             {"SAVE"}
           </Button>

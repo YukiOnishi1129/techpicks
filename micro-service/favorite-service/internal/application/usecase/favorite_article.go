@@ -50,6 +50,13 @@ func (fu *favoriteUseCase) GetFavoriteArticles(ctx context.Context, req *fpb.Get
 }
 
 func (fu *favoriteUseCase) CreateFavoriteArticle(ctx context.Context, req *fpb.CreateFavoriteArticleRequest) (*fpb.CreateFavoriteArticleResponse, error) {
+	data, err := fu.favoriteArticlePersistenceAdapter.GetFavoriteArticleBtArticleIDAndFavoriteArticleFolderID(ctx, req.GetArticleId(), req.GetFavoriteArticleFolderId(), req.GetUserId())
+	if err != nil {
+		return &fpb.CreateFavoriteArticleResponse{}, err
+	}
+	if data.ID != "" {
+		return &fpb.CreateFavoriteArticleResponse{}, errors.New("favorite article already exists")
+	}
 	cfa, err := fu.favoriteArticlePersistenceAdapter.CreateFavoriteArticle(ctx, req)
 	if err != nil {
 		return &fpb.CreateFavoriteArticleResponse{}, err

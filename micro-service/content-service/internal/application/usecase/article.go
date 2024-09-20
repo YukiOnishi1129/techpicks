@@ -33,7 +33,7 @@ func (cu *contentUseCase) GetArticles(ctx context.Context, req *cpb.GetArticlesR
 			res.IsTrend = true
 		}
 
-		if req.UserId != nil {
+		if req.GetUserId() != nil {
 			resBookmark, err := cu.bookmarkExternalAdapter.GetBookmarkByArticleID(ctx, &bpb.GetBookmarkByArticleIDRequest{
 				ArticleId: article.ID,
 				UserId:    req.GetUserId().GetValue(),

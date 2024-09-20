@@ -8,14 +8,14 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { LanguageStatus } from "@/types/language";
 
 import { ENGLISH_IMAGE, JAPANESE_IMAGE } from "@/constant/image";
-import { ArticlesInput } from "@/graphql/type";
+import { ArticlesInput, FavoriteArticleFoldersInput } from "@/graphql/type";
 
 import { getTrendArticleDashboardTemplateQuery } from "./actGetTrendArticleDashboardTemplateQuery";
 import { TrendArticleDashboardTemplateFragment } from "./TrendArticleDashboardTemplateFragment";
 import { TrendArticleList } from "../../List";
 
 type TrendArticleDashboardTemplateProps = {
-  user?: User;
+  user: User;
   languageStatus?: LanguageStatus;
 };
 
@@ -41,9 +41,13 @@ export const TrendArticleDashboardTemplate: FC<
     tab,
     languageStatus: 1,
   };
+  const favoriteArticleFoldersInput: FavoriteArticleFoldersInput = {
+    isAllFetch: true,
+  };
   const { data, error } = await getTrendArticleDashboardTemplateQuery(
     enInput,
-    jpInput
+    jpInput,
+    favoriteArticleFoldersInput
   );
 
   const fragment = readFragment(TrendArticleDashboardTemplateFragment, data);
@@ -90,6 +94,7 @@ export const TrendArticleDashboardTemplate: FC<
         <TabsContent value={TAB_LIST.ENGLISH}>
           <TrendArticleList
             data={fragment.enArticles}
+            favoriteArticleFolders={fragment.favoriteArticleFolders}
             user={user}
             languageStatus={2}
             feedIdList={[]}
@@ -99,6 +104,7 @@ export const TrendArticleDashboardTemplate: FC<
         <TabsContent value={TAB_LIST.JAPANESE}>
           <TrendArticleList
             data={fragment.jpArticles}
+            favoriteArticleFolders={fragment.favoriteArticleFolders}
             user={user}
             languageStatus={1}
             feedIdList={[]}

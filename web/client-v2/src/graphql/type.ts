@@ -39,7 +39,7 @@ export type Article = Node & {
   bookmarkId?: Maybe<Scalars["String"]["output"]>;
   createdAt: Scalars["Int"]["output"];
   description: Scalars["String"]["output"];
-  favoriteArticles?: Maybe<Array<FavoriteArticle>>;
+  favoriteArticleFolderIds: Array<Scalars["String"]["output"]>;
   feeds?: Maybe<Array<Feed>>;
   id: Scalars["ID"]["output"];
   isBookmarked: Scalars["Boolean"]["output"];
@@ -212,6 +212,7 @@ export type FavoriteArticle = Node & {
   authorName?: Maybe<Scalars["String"]["output"]>;
   createdAt: Scalars["Int"]["output"];
   description?: Maybe<Scalars["String"]["output"]>;
+  favoriteArticleFolderId: Scalars["String"]["output"];
   id: Scalars["ID"]["output"];
   isEng: Scalars["Boolean"]["output"];
   isPrivate: Scalars["Boolean"]["output"];
@@ -245,7 +246,7 @@ export type FavoriteArticleFolder = Node & {
   __typename?: "FavoriteArticleFolder";
   createdAt: Scalars["Int"]["output"];
   description?: Maybe<Scalars["String"]["output"]>;
-  favoriteArticles?: Maybe<Array<FavoriteArticle>>;
+  favoriteArticles: Array<FavoriteArticle>;
   id: Scalars["ID"]["output"];
   title: Scalars["String"]["output"];
   updatedAt: Scalars["Int"]["output"];
@@ -522,23 +523,44 @@ export type ArticleCardWrapperFragmentFragment = {
   __typename?: "Article";
   id: string;
   title: string;
+  description: string;
   articleUrl: string;
   publishedAt?: number | null;
+  authorName?: string | null;
+  tags?: string | null;
   thumbnailUrl: string;
   isEng: boolean;
   isPrivate: boolean;
   isBookmarked: boolean;
   bookmarkId?: string | null;
   likeCount?: number | null;
-  description: string;
+  isFollowing: boolean;
+  favoriteArticleFolderIds: Array<string>;
   platform?: {
     __typename?: "Platform";
     id: string;
     name: string;
-    faviconUrl: string;
     siteUrl: string;
+    faviconUrl: string;
   } | null;
   feeds?: Array<{ __typename?: "Feed"; id: string; name: string }> | null;
+};
+
+export type FavoriteFolderArticleCardWrapperFragmentFragment = {
+  __typename?: "FavoriteArticleFolderConnection";
+  edges: Array<{
+    __typename?: "FavoriteArticleFolderEdge";
+    node: {
+      __typename?: "FavoriteArticleFolder";
+      id: string;
+      title: string;
+      favoriteArticles: Array<{
+        __typename?: "FavoriteArticle";
+        id: string;
+        articleId?: string | null;
+      }>;
+    };
+  }>;
 };
 
 export type ArticleListFragmentFragment = {
@@ -565,12 +587,16 @@ export type ArticleListFragmentFragment = {
       bookmarkId?: string | null;
       likeCount?: number | null;
       description: string;
+      authorName?: string | null;
+      tags?: string | null;
+      isFollowing: boolean;
+      favoriteArticleFolderIds: Array<string>;
       platform?: {
         __typename?: "Platform";
         id: string;
         name: string;
-        faviconUrl: string;
         siteUrl: string;
+        faviconUrl: string;
       } | null;
       feeds?: Array<{ __typename?: "Feed"; id: string; name: string }> | null;
     };
@@ -607,12 +633,16 @@ export type GetArticleListQueryQuery = {
         bookmarkId?: string | null;
         likeCount?: number | null;
         description: string;
+        authorName?: string | null;
+        tags?: string | null;
+        isFollowing: boolean;
+        favoriteArticleFolderIds: Array<string>;
         platform?: {
           __typename?: "Platform";
           id: string;
           name: string;
-          faviconUrl: string;
           siteUrl: string;
+          faviconUrl: string;
         } | null;
         feeds?: Array<{ __typename?: "Feed"; id: string; name: string }> | null;
       };
@@ -646,12 +676,16 @@ export type ArticleDashboardTemplateFragmentFragment = {
         bookmarkId?: string | null;
         likeCount?: number | null;
         description: string;
+        authorName?: string | null;
+        tags?: string | null;
+        isFollowing: boolean;
+        favoriteArticleFolderIds: Array<string>;
         platform?: {
           __typename?: "Platform";
           id: string;
           name: string;
-          faviconUrl: string;
           siteUrl: string;
+          faviconUrl: string;
         } | null;
         feeds?: Array<{ __typename?: "Feed"; id: string; name: string }> | null;
       };
@@ -681,12 +715,16 @@ export type ArticleDashboardTemplateFragmentFragment = {
         bookmarkId?: string | null;
         likeCount?: number | null;
         description: string;
+        authorName?: string | null;
+        tags?: string | null;
+        isFollowing: boolean;
+        favoriteArticleFolderIds: Array<string>;
         platform?: {
           __typename?: "Platform";
           id: string;
           name: string;
-          faviconUrl: string;
           siteUrl: string;
+          faviconUrl: string;
         } | null;
         feeds?: Array<{ __typename?: "Feed"; id: string; name: string }> | null;
       };
@@ -700,11 +738,11 @@ export type ArticleDashboardTemplateFragmentFragment = {
         __typename?: "FavoriteArticleFolder";
         id: string;
         title: string;
-        favoriteArticles?: Array<{
+        favoriteArticles: Array<{
           __typename?: "FavoriteArticle";
           id: string;
           articleId?: string | null;
-        }> | null;
+        }>;
       };
     }>;
   };
@@ -742,12 +780,16 @@ export type GetArticleDashboardTemplateQueryQuery = {
         bookmarkId?: string | null;
         likeCount?: number | null;
         description: string;
+        authorName?: string | null;
+        tags?: string | null;
+        isFollowing: boolean;
+        favoriteArticleFolderIds: Array<string>;
         platform?: {
           __typename?: "Platform";
           id: string;
           name: string;
-          faviconUrl: string;
           siteUrl: string;
+          faviconUrl: string;
         } | null;
         feeds?: Array<{ __typename?: "Feed"; id: string; name: string }> | null;
       };
@@ -777,12 +819,16 @@ export type GetArticleDashboardTemplateQueryQuery = {
         bookmarkId?: string | null;
         likeCount?: number | null;
         description: string;
+        authorName?: string | null;
+        tags?: string | null;
+        isFollowing: boolean;
+        favoriteArticleFolderIds: Array<string>;
         platform?: {
           __typename?: "Platform";
           id: string;
           name: string;
-          faviconUrl: string;
           siteUrl: string;
+          faviconUrl: string;
         } | null;
         feeds?: Array<{ __typename?: "Feed"; id: string; name: string }> | null;
       };
@@ -796,11 +842,11 @@ export type GetArticleDashboardTemplateQueryQuery = {
         __typename?: "FavoriteArticleFolder";
         id: string;
         title: string;
-        favoriteArticles?: Array<{
+        favoriteArticles: Array<{
           __typename?: "FavoriteArticle";
           id: string;
           articleId?: string | null;
-        }> | null;
+        }>;
       };
     }>;
   };
@@ -1037,7 +1083,11 @@ export type CreateFavoriteArticleMutationMutationVariables = Exact<{
 
 export type CreateFavoriteArticleMutationMutation = {
   __typename?: "Mutation";
-  createFavoriteArticle: { __typename?: "FavoriteArticle"; id: string };
+  createFavoriteArticle: {
+    __typename?: "FavoriteArticle";
+    id: string;
+    favoriteArticleFolderId: string;
+  };
 };
 
 export type DeleteFavoriteArticleFolderMutationMutationVariables = Exact<{
@@ -1075,25 +1125,25 @@ export type FavoriteArticleFolderCardFragmentFragment = {
   id: string;
   title: string;
   description?: string | null;
-  favoriteArticles?: Array<{
+  favoriteArticles: Array<{
     __typename?: "FavoriteArticle";
     id: string;
     title: string;
     articleUrl: string;
     thumbnailUrl: string;
     createdAt: number;
-  }> | null;
+  }>;
 };
 
 export type FollowTargetFavoriteArticleFolderItemFragmentFragment = {
   __typename?: "FavoriteArticleFolder";
   id: string;
   title: string;
-  favoriteArticles?: Array<{
+  favoriteArticles: Array<{
     __typename?: "FavoriteArticle";
     id: string;
     articleId?: string | null;
-  }> | null;
+  }>;
 };
 
 export type FollowFavoriteArticleDropdownMenuContentFragmentFragment = {
@@ -1104,11 +1154,11 @@ export type FollowFavoriteArticleDropdownMenuContentFragmentFragment = {
       __typename?: "FavoriteArticleFolder";
       id: string;
       title: string;
-      favoriteArticles?: Array<{
+      favoriteArticles: Array<{
         __typename?: "FavoriteArticle";
         id: string;
         articleId?: string | null;
-      }> | null;
+      }>;
     };
   }>;
 };
@@ -1129,14 +1179,14 @@ export type FavoriteArticleFolderListFragmentFragment = {
       id: string;
       title: string;
       description?: string | null;
-      favoriteArticles?: Array<{
+      favoriteArticles: Array<{
         __typename?: "FavoriteArticle";
         id: string;
         title: string;
         articleUrl: string;
         thumbnailUrl: string;
         createdAt: number;
-      }> | null;
+      }>;
     };
   }>;
 };
@@ -1163,14 +1213,14 @@ export type GetFavoriteArticleFolderListQueryQuery = {
         id: string;
         title: string;
         description?: string | null;
-        favoriteArticles?: Array<{
+        favoriteArticles: Array<{
           __typename?: "FavoriteArticle";
           id: string;
           title: string;
           articleUrl: string;
           thumbnailUrl: string;
           createdAt: number;
-        }> | null;
+        }>;
       };
     }>;
   };
@@ -1194,14 +1244,14 @@ export type FavoriteArticleFolderListTemplateFragmentFragment = {
         id: string;
         title: string;
         description?: string | null;
-        favoriteArticles?: Array<{
+        favoriteArticles: Array<{
           __typename?: "FavoriteArticle";
           id: string;
           title: string;
           articleUrl: string;
           thumbnailUrl: string;
           createdAt: number;
-        }> | null;
+        }>;
       };
     }>;
   };
@@ -1229,14 +1279,14 @@ export type GetFavoriteArticleFolderListTemplateQueryQuery = {
         id: string;
         title: string;
         description?: string | null;
-        favoriteArticles?: Array<{
+        favoriteArticles: Array<{
           __typename?: "FavoriteArticle";
           id: string;
           title: string;
           articleUrl: string;
           thumbnailUrl: string;
           createdAt: number;
-        }> | null;
+        }>;
       };
     }>;
   };
@@ -1276,12 +1326,16 @@ export type TrendArticleListFragmentFragment = {
       bookmarkId?: string | null;
       likeCount?: number | null;
       description: string;
+      authorName?: string | null;
+      tags?: string | null;
+      isFollowing: boolean;
+      favoriteArticleFolderIds: Array<string>;
       platform?: {
         __typename?: "Platform";
         id: string;
         name: string;
-        faviconUrl: string;
         siteUrl: string;
+        faviconUrl: string;
       } | null;
       feeds?: Array<{ __typename?: "Feed"; id: string; name: string }> | null;
     };
@@ -1318,12 +1372,16 @@ export type GetTrendArticleListQueryQuery = {
         bookmarkId?: string | null;
         likeCount?: number | null;
         description: string;
+        authorName?: string | null;
+        tags?: string | null;
+        isFollowing: boolean;
+        favoriteArticleFolderIds: Array<string>;
         platform?: {
           __typename?: "Platform";
           id: string;
           name: string;
-          faviconUrl: string;
           siteUrl: string;
+          faviconUrl: string;
         } | null;
         feeds?: Array<{ __typename?: "Feed"; id: string; name: string }> | null;
       };
@@ -1357,12 +1415,16 @@ export type TrendArticleDashboardTemplateFragmentFragment = {
         bookmarkId?: string | null;
         likeCount?: number | null;
         description: string;
+        authorName?: string | null;
+        tags?: string | null;
+        isFollowing: boolean;
+        favoriteArticleFolderIds: Array<string>;
         platform?: {
           __typename?: "Platform";
           id: string;
           name: string;
-          faviconUrl: string;
           siteUrl: string;
+          faviconUrl: string;
         } | null;
         feeds?: Array<{ __typename?: "Feed"; id: string; name: string }> | null;
       };
@@ -1392,14 +1454,34 @@ export type TrendArticleDashboardTemplateFragmentFragment = {
         bookmarkId?: string | null;
         likeCount?: number | null;
         description: string;
+        authorName?: string | null;
+        tags?: string | null;
+        isFollowing: boolean;
+        favoriteArticleFolderIds: Array<string>;
         platform?: {
           __typename?: "Platform";
           id: string;
           name: string;
-          faviconUrl: string;
           siteUrl: string;
+          faviconUrl: string;
         } | null;
         feeds?: Array<{ __typename?: "Feed"; id: string; name: string }> | null;
+      };
+    }>;
+  };
+  favoriteArticleFolders: {
+    __typename?: "FavoriteArticleFolderConnection";
+    edges: Array<{
+      __typename?: "FavoriteArticleFolderEdge";
+      node: {
+        __typename?: "FavoriteArticleFolder";
+        id: string;
+        title: string;
+        favoriteArticles: Array<{
+          __typename?: "FavoriteArticle";
+          id: string;
+          articleId?: string | null;
+        }>;
       };
     }>;
   };
@@ -1408,6 +1490,7 @@ export type TrendArticleDashboardTemplateFragmentFragment = {
 export type GetTrendArticleDashboardTemplateQueryQueryVariables = Exact<{
   enInput: ArticlesInput;
   jpInput: ArticlesInput;
+  favoriteArticleFoldersInput: FavoriteArticleFoldersInput;
 }>;
 
 export type GetTrendArticleDashboardTemplateQueryQuery = {
@@ -1436,12 +1519,16 @@ export type GetTrendArticleDashboardTemplateQueryQuery = {
         bookmarkId?: string | null;
         likeCount?: number | null;
         description: string;
+        authorName?: string | null;
+        tags?: string | null;
+        isFollowing: boolean;
+        favoriteArticleFolderIds: Array<string>;
         platform?: {
           __typename?: "Platform";
           id: string;
           name: string;
-          faviconUrl: string;
           siteUrl: string;
+          faviconUrl: string;
         } | null;
         feeds?: Array<{ __typename?: "Feed"; id: string; name: string }> | null;
       };
@@ -1471,14 +1558,34 @@ export type GetTrendArticleDashboardTemplateQueryQuery = {
         bookmarkId?: string | null;
         likeCount?: number | null;
         description: string;
+        authorName?: string | null;
+        tags?: string | null;
+        isFollowing: boolean;
+        favoriteArticleFolderIds: Array<string>;
         platform?: {
           __typename?: "Platform";
           id: string;
           name: string;
-          faviconUrl: string;
           siteUrl: string;
+          faviconUrl: string;
         } | null;
         feeds?: Array<{ __typename?: "Feed"; id: string; name: string }> | null;
+      };
+    }>;
+  };
+  favoriteArticleFolders: {
+    __typename?: "FavoriteArticleFolderConnection";
+    edges: Array<{
+      __typename?: "FavoriteArticleFolderEdge";
+      node: {
+        __typename?: "FavoriteArticleFolder";
+        id: string;
+        title: string;
+        favoriteArticles: Array<{
+          __typename?: "FavoriteArticle";
+          id: string;
+          articleId?: string | null;
+        }>;
       };
     }>;
   };
@@ -1539,17 +1646,23 @@ export const ArticleCardWrapperFragmentFragmentDoc = gql`
     platform {
       id
       name
+      siteUrl
       faviconUrl
     }
     title
+    description
     articleUrl
     publishedAt
+    authorName
+    tags
     thumbnailUrl
     isEng
     isPrivate
     isBookmarked
     bookmarkId
     likeCount
+    isFollowing
+    favoriteArticleFolderIds
     ...ArticleCardItemFragment
   }
   ${ArticleCardItemFragmentFragmentDoc}
@@ -1782,6 +1895,18 @@ export const TrendArticleListFragmentFragmentDoc = gql`
   }
   ${ArticleCardWrapperFragmentFragmentDoc}
 `;
+export const FavoriteFolderArticleCardWrapperFragmentFragmentDoc = gql`
+  fragment FavoriteFolderArticleCardWrapperFragment on FavoriteArticleFolderConnection {
+    edges {
+      node {
+        id
+        title
+      }
+    }
+    ...FollowFavoriteArticleDropdownMenuContentFragment
+  }
+  ${FollowFavoriteArticleDropdownMenuContentFragmentFragmentDoc}
+`;
 export const TrendArticleDashboardTemplateFragmentFragmentDoc = gql`
   fragment TrendArticleDashboardTemplateFragment on Query {
     enArticles: articles(articlesInput: $enInput) {
@@ -1790,8 +1915,12 @@ export const TrendArticleDashboardTemplateFragmentFragmentDoc = gql`
     jpArticles: articles(articlesInput: $jpInput) {
       ...TrendArticleListFragment
     }
+    favoriteArticleFolders(input: $favoriteArticleFoldersInput) {
+      ...FavoriteFolderArticleCardWrapperFragment
+    }
   }
   ${TrendArticleListFragmentFragmentDoc}
+  ${FavoriteFolderArticleCardWrapperFragmentFragmentDoc}
 `;
 export const LoggedBaseLayoutQueryDocument = gql`
   query LoggedBaseLayoutQuery($input: FavoriteArticleFoldersInput!) {
@@ -2472,6 +2601,7 @@ export const CreateFavoriteArticleMutationDocument = gql`
   mutation CreateFavoriteArticleMutation($input: CreateFavoriteArticleInput!) {
     createFavoriteArticle(input: $input) {
       id
+      favoriteArticleFolderId
     }
   }
 `;
@@ -2917,6 +3047,7 @@ export const GetTrendArticleDashboardTemplateQueryDocument = gql`
   query GetTrendArticleDashboardTemplateQuery(
     $enInput: ArticlesInput!
     $jpInput: ArticlesInput!
+    $favoriteArticleFoldersInput: FavoriteArticleFoldersInput!
   ) {
     ...TrendArticleDashboardTemplateFragment
   }
@@ -2937,6 +3068,7 @@ export const GetTrendArticleDashboardTemplateQueryDocument = gql`
  *   variables: {
  *      enInput: // value for 'enInput'
  *      jpInput: // value for 'jpInput'
+ *      favoriteArticleFoldersInput: // value for 'favoriteArticleFoldersInput'
  *   },
  * });
  */

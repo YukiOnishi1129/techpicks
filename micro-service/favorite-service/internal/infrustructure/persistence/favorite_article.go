@@ -31,6 +31,17 @@ func (fap *favoriteArticlePersistence) GetFavoriteArticles(ctx context.Context, 
 	return favoriteArticles, nil
 }
 
+func (fap *favoriteArticlePersistence) GetFavoriteArticle(ctx context.Context, q []qm.QueryMod) (entity.FavoriteArticle, error) {
+	favoriteArticle, err := entity.FavoriteArticles(q...).One(ctx, fap.db)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return entity.FavoriteArticle{}, nil
+		}
+		return entity.FavoriteArticle{}, err
+	}
+	return *favoriteArticle, nil
+}
+
 func (fap *favoriteArticlePersistence) GetFavoriteArticleByID(ctx context.Context, id string, q []qm.QueryMod) (entity.FavoriteArticle, error) {
 	q = append(q, qm.Where("id = ?", id))
 	favoriteArticle, err := entity.FavoriteArticles(q...).One(ctx, fap.db)
