@@ -7,7 +7,6 @@ import { FC, useCallback, useState, useTransition } from "react";
 import { logoutToLoginPage } from "@/features/auth/actions/auth";
 import { createFavoriteArticleMutation } from "@/features/favorites/actions/actCreateFavoriteArticleMutaion";
 import { deleteFavoriteArticleByArticleIdMutation } from "@/features/favorites/actions/actDeleteFavoriteArticleByArticleIdMutation";
-import { deleteFavoriteArticleMutation } from "@/features/favorites/actions/actDeleteFavoriteArticleMutation";
 import { FollowFavoriteArticleDropdownMenu } from "@/features/favorites/components/DropdownMenu";
 
 import { ShareLinks } from "@/components/ui/share";
@@ -141,54 +140,28 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
         return;
       }
 
-      if (favoriteArticleId) {
-        const { data, error } = await deleteFavoriteArticleMutation({
-          id: favoriteArticleId,
-        });
+      const { data, error } = await deleteFavoriteArticleByArticleIdMutation({
+        articleId: showArticle.id,
+        favoriteArticleFolderId,
+      });
 
-        if (error || !data?.deleteFavoriteArticle) {
-          if (error || !data?.deleteFavoriteArticle) {
-            if (error && error.length > 0) {
-              // TODO: Modify the error message response on the BFF side
-              const errMsg =
-                error[0].message.indexOf("favorite article not found") != -1
-                  ? "favorite article not found"
-                  : error[0].message;
-              failToast({
-                description: errMsg,
-              });
-              return;
-            }
-            failToast({
-              description: "Fail: Something went wrong",
-            });
-            return;
-          }
-        }
-      } else {
-        const { data, error } = await deleteFavoriteArticleByArticleIdMutation({
-          articleId: showArticle.id,
-          favoriteArticleFolderId,
-        });
-
+      if (error || !data?.deleteFavoriteArticleByArticleId) {
         if (error || !data?.deleteFavoriteArticleByArticleId) {
-          if (error || !data?.deleteFavoriteArticleByArticleId) {
-            if (error && error.length > 0) {
-              // TODO: Modify the error message response on the BFF side
-              const errMsg =
-                error[0].message.indexOf("favorite article not found") != -1
-                  ? "favorite article not found"
-                  : error[0].message;
-              failToast({
-                description: errMsg,
-              });
-              return;
-            }
+          if (error && error.length > 0) {
+            // TODO: Modify the error message response on the BFF side
+            const errMsg =
+              error[0].message.indexOf("favorite article not found") != -1
+                ? "favorite article not found"
+                : error[0].message;
             failToast({
-              description: "Fail: Something went wrong",
+              description: errMsg,
             });
             return;
           }
+          failToast({
+            description: "Fail: Something went wrong",
+          });
+          return;
         }
       }
 
