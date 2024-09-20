@@ -203,8 +203,6 @@ export abstract class IMutation {
 
     abstract deleteFavoriteArticle(input: DeleteFavoriteArticleInput): boolean | Promise<boolean>;
 
-    abstract deleteFavoriteArticleByArticleID(input: DeleteFavoriteArticleByArticleIdInput): boolean | Promise<boolean>;
-
     abstract deleteFavoriteArticleByArticleId(input: DeleteFavoriteArticleByArticleIdInput): boolean | Promise<boolean>;
 }
 

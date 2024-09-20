@@ -25,8 +25,8 @@ const formSchema = z.object({
 });
 
 type FollowFavoriteArticleDropdownMenuContentProps = {
-  articleId: string;
   data: FragmentOf<typeof FollowFavoriteArticleDropdownMenuContentFragment>;
+  targetFavoriteArticleId?: string;
   followedFolderIds: Array<string>;
   handleCreateFavoriteArticle: (
     favoriteArticleFolderId: string,
@@ -35,8 +35,8 @@ type FollowFavoriteArticleDropdownMenuContentProps = {
     >
   ) => Promise<string | undefined>;
   handleRemoveFavoriteArticle: (
-    favoriteArticleId: string,
-    favoriteArticleFolderId: string
+    favoriteArticleFolderId: string,
+    favoriteArticleId?: string
   ) => Promise<string | undefined>;
   handleCreateFavoriteArticleFolder: (
     favoriteArticleFolderId: string
@@ -46,8 +46,8 @@ type FollowFavoriteArticleDropdownMenuContentProps = {
 export const FollowFavoriteArticleDropdownMenuContent: FC<
   FollowFavoriteArticleDropdownMenuContentProps
 > = ({
-  articleId,
   data,
+  targetFavoriteArticleId,
   followedFolderIds,
   handleCreateFavoriteArticle,
   handleRemoveFavoriteArticle,
@@ -101,7 +101,7 @@ export const FollowFavoriteArticleDropdownMenuContent: FC<
             return (
               <FollowTargetFavoriteArticleFolderItem
                 key={nodeFragment.id}
-                articleId={articleId}
+                targetFavoriteArticleId={targetFavoriteArticleId}
                 data={favoriteArticleFolder.node}
                 followedFolderIds={followedFolderIds}
                 handleCreateFavoriteArticle={handleCreateFavoriteArticle}

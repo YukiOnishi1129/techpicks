@@ -196,6 +196,11 @@ export type DeleteBookmarkInput = {
   userId: Scalars["ID"]["input"];
 };
 
+export type DeleteFavoriteArticleByArticleIdInput = {
+  articleId: Scalars["ID"]["input"];
+  favoriteArticleFolderId: Scalars["ID"]["input"];
+};
+
 export type DeleteFavoriteArticleFolderInput = {
   id: Scalars["ID"]["input"];
 };
@@ -310,6 +315,7 @@ export type Mutation = {
   createFavoriteArticleFolder: FavoriteArticleFolder;
   deleteBookmark: Scalars["Boolean"]["output"];
   deleteFavoriteArticle: Scalars["Boolean"]["output"];
+  deleteFavoriteArticleByArticleId: Scalars["Boolean"]["output"];
   deleteFavoriteArticleFolder: Scalars["Boolean"]["output"];
   updateFavoriteArticleFolder: FavoriteArticleFolder;
 };
@@ -336,6 +342,10 @@ export type MutationDeleteBookmarkArgs = {
 
 export type MutationDeleteFavoriteArticleArgs = {
   input: DeleteFavoriteArticleInput;
+};
+
+export type MutationDeleteFavoriteArticleByArticleIdArgs = {
+  input: DeleteFavoriteArticleByArticleIdInput;
 };
 
 export type MutationDeleteFavoriteArticleFolderArgs = {
@@ -550,16 +560,7 @@ export type FavoriteFolderArticleCardWrapperFragmentFragment = {
   __typename?: "FavoriteArticleFolderConnection";
   edges: Array<{
     __typename?: "FavoriteArticleFolderEdge";
-    node: {
-      __typename?: "FavoriteArticleFolder";
-      id: string;
-      title: string;
-      favoriteArticles: Array<{
-        __typename?: "FavoriteArticle";
-        id: string;
-        articleId?: string | null;
-      }>;
-    };
+    node: { __typename?: "FavoriteArticleFolder"; id: string; title: string };
   }>;
 };
 
@@ -734,16 +735,7 @@ export type ArticleDashboardTemplateFragmentFragment = {
     __typename?: "FavoriteArticleFolderConnection";
     edges: Array<{
       __typename?: "FavoriteArticleFolderEdge";
-      node: {
-        __typename?: "FavoriteArticleFolder";
-        id: string;
-        title: string;
-        favoriteArticles: Array<{
-          __typename?: "FavoriteArticle";
-          id: string;
-          articleId?: string | null;
-        }>;
-      };
+      node: { __typename?: "FavoriteArticleFolder"; id: string; title: string };
     }>;
   };
 };
@@ -838,16 +830,7 @@ export type GetArticleDashboardTemplateQueryQuery = {
     __typename?: "FavoriteArticleFolderConnection";
     edges: Array<{
       __typename?: "FavoriteArticleFolderEdge";
-      node: {
-        __typename?: "FavoriteArticleFolder";
-        id: string;
-        title: string;
-        favoriteArticles: Array<{
-          __typename?: "FavoriteArticle";
-          id: string;
-          articleId?: string | null;
-        }>;
-      };
+      node: { __typename?: "FavoriteArticleFolder"; id: string; title: string };
     }>;
   };
 };
@@ -1090,6 +1073,15 @@ export type CreateFavoriteArticleMutationMutation = {
   };
 };
 
+export type DeleteFavoriteArticleByArticleIdMutationMutationVariables = Exact<{
+  input: DeleteFavoriteArticleByArticleIdInput;
+}>;
+
+export type DeleteFavoriteArticleByArticleIdMutationMutation = {
+  __typename?: "Mutation";
+  deleteFavoriteArticleByArticleId: boolean;
+};
+
 export type DeleteFavoriteArticleFolderMutationMutationVariables = Exact<{
   input: DeleteFavoriteArticleFolderInput;
 }>;
@@ -1139,27 +1131,13 @@ export type FollowTargetFavoriteArticleFolderItemFragmentFragment = {
   __typename?: "FavoriteArticleFolder";
   id: string;
   title: string;
-  favoriteArticles: Array<{
-    __typename?: "FavoriteArticle";
-    id: string;
-    articleId?: string | null;
-  }>;
 };
 
 export type FollowFavoriteArticleDropdownMenuContentFragmentFragment = {
   __typename?: "FavoriteArticleFolderConnection";
   edges: Array<{
     __typename?: "FavoriteArticleFolderEdge";
-    node: {
-      __typename?: "FavoriteArticleFolder";
-      id: string;
-      title: string;
-      favoriteArticles: Array<{
-        __typename?: "FavoriteArticle";
-        id: string;
-        articleId?: string | null;
-      }>;
-    };
+    node: { __typename?: "FavoriteArticleFolder"; id: string; title: string };
   }>;
 };
 
@@ -1473,16 +1451,7 @@ export type TrendArticleDashboardTemplateFragmentFragment = {
     __typename?: "FavoriteArticleFolderConnection";
     edges: Array<{
       __typename?: "FavoriteArticleFolderEdge";
-      node: {
-        __typename?: "FavoriteArticleFolder";
-        id: string;
-        title: string;
-        favoriteArticles: Array<{
-          __typename?: "FavoriteArticle";
-          id: string;
-          articleId?: string | null;
-        }>;
-      };
+      node: { __typename?: "FavoriteArticleFolder"; id: string; title: string };
     }>;
   };
 };
@@ -1577,16 +1546,7 @@ export type GetTrendArticleDashboardTemplateQueryQuery = {
     __typename?: "FavoriteArticleFolderConnection";
     edges: Array<{
       __typename?: "FavoriteArticleFolderEdge";
-      node: {
-        __typename?: "FavoriteArticleFolder";
-        id: string;
-        title: string;
-        favoriteArticles: Array<{
-          __typename?: "FavoriteArticle";
-          id: string;
-          articleId?: string | null;
-        }>;
-      };
+      node: { __typename?: "FavoriteArticleFolder"; id: string; title: string };
     }>;
   };
 };
@@ -1702,10 +1662,6 @@ export const FollowTargetFavoriteArticleFolderItemFragmentFragmentDoc = gql`
   fragment FollowTargetFavoriteArticleFolderItemFragment on FavoriteArticleFolder {
     id
     title
-    favoriteArticles {
-      id
-      articleId
-    }
   }
 `;
 export const FollowFavoriteArticleDropdownMenuContentFragmentFragmentDoc = gql`
@@ -1718,6 +1674,18 @@ export const FollowFavoriteArticleDropdownMenuContentFragmentFragmentDoc = gql`
   }
   ${FollowTargetFavoriteArticleFolderItemFragmentFragmentDoc}
 `;
+export const FavoriteFolderArticleCardWrapperFragmentFragmentDoc = gql`
+  fragment FavoriteFolderArticleCardWrapperFragment on FavoriteArticleFolderConnection {
+    edges {
+      node {
+        id
+        title
+      }
+    }
+    ...FollowFavoriteArticleDropdownMenuContentFragment
+  }
+  ${FollowFavoriteArticleDropdownMenuContentFragmentFragmentDoc}
+`;
 export const ArticleDashboardTemplateFragmentFragmentDoc = gql`
   fragment ArticleDashboardTemplateFragment on Query {
     enArticles: articles(articlesInput: $enInput) {
@@ -1727,11 +1695,11 @@ export const ArticleDashboardTemplateFragmentFragmentDoc = gql`
       ...ArticleListFragment
     }
     favoriteArticleFolders(input: $favoriteArticleFoldersInput) {
-      ...FollowFavoriteArticleDropdownMenuContentFragment
+      ...FavoriteFolderArticleCardWrapperFragment
     }
   }
   ${ArticleListFragmentFragmentDoc}
-  ${FollowFavoriteArticleDropdownMenuContentFragmentFragmentDoc}
+  ${FavoriteFolderArticleCardWrapperFragmentFragmentDoc}
 `;
 export const OgpPreviewContentFragmentFragmentDoc = gql`
   fragment OGPPreviewContentFragment on ArticleOGP {
@@ -1894,18 +1862,6 @@ export const TrendArticleListFragmentFragmentDoc = gql`
     }
   }
   ${ArticleCardWrapperFragmentFragmentDoc}
-`;
-export const FavoriteFolderArticleCardWrapperFragmentFragmentDoc = gql`
-  fragment FavoriteFolderArticleCardWrapperFragment on FavoriteArticleFolderConnection {
-    edges {
-      node {
-        id
-        title
-      }
-    }
-    ...FollowFavoriteArticleDropdownMenuContentFragment
-  }
-  ${FollowFavoriteArticleDropdownMenuContentFragmentFragmentDoc}
 `;
 export const TrendArticleDashboardTemplateFragmentFragmentDoc = gql`
   fragment TrendArticleDashboardTemplateFragment on Query {
@@ -2648,6 +2604,57 @@ export type CreateFavoriteArticleMutationMutationOptions =
   Apollo.BaseMutationOptions<
     CreateFavoriteArticleMutationMutation,
     CreateFavoriteArticleMutationMutationVariables
+  >;
+export const DeleteFavoriteArticleByArticleIdMutationDocument = gql`
+  mutation DeleteFavoriteArticleByArticleIdMutation(
+    $input: DeleteFavoriteArticleByArticleIdInput!
+  ) {
+    deleteFavoriteArticleByArticleId(input: $input)
+  }
+`;
+export type DeleteFavoriteArticleByArticleIdMutationMutationFn =
+  Apollo.MutationFunction<
+    DeleteFavoriteArticleByArticleIdMutationMutation,
+    DeleteFavoriteArticleByArticleIdMutationMutationVariables
+  >;
+
+/**
+ * __useDeleteFavoriteArticleByArticleIdMutationMutation__
+ *
+ * To run a mutation, you first call `useDeleteFavoriteArticleByArticleIdMutationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteFavoriteArticleByArticleIdMutationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteFavoriteArticleByArticleIdMutationMutation, { data, loading, error }] = useDeleteFavoriteArticleByArticleIdMutationMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useDeleteFavoriteArticleByArticleIdMutationMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeleteFavoriteArticleByArticleIdMutationMutation,
+    DeleteFavoriteArticleByArticleIdMutationMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    DeleteFavoriteArticleByArticleIdMutationMutation,
+    DeleteFavoriteArticleByArticleIdMutationMutationVariables
+  >(DeleteFavoriteArticleByArticleIdMutationDocument, options);
+}
+export type DeleteFavoriteArticleByArticleIdMutationMutationHookResult =
+  ReturnType<typeof useDeleteFavoriteArticleByArticleIdMutationMutation>;
+export type DeleteFavoriteArticleByArticleIdMutationMutationResult =
+  Apollo.MutationResult<DeleteFavoriteArticleByArticleIdMutationMutation>;
+export type DeleteFavoriteArticleByArticleIdMutationMutationOptions =
+  Apollo.BaseMutationOptions<
+    DeleteFavoriteArticleByArticleIdMutationMutation,
+    DeleteFavoriteArticleByArticleIdMutationMutationVariables
   >;
 export const DeleteFavoriteArticleFolderMutationDocument = gql`
   mutation DeleteFavoriteArticleFolderMutation(

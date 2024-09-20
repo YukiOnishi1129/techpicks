@@ -16,22 +16,20 @@ import {
   TooltipContent,
 } from "@/components/ui/tooltip";
 
-// import { FavoriteArticleFolderType } from "@/types/favoriteArticleFolder";
-
 import { FollowFavoriteArticleDropdownMenuContent } from "./FollowFavoriteArticleDropdownMenuContent";
 import { FollowFavoriteArticleDropdownMenuContentFragment } from "./FollowFavoriteArticleDropdownMenuFragment";
 
 type FollowFavoriteArticleDropdownMenuProps = {
   isFollowing: boolean;
-  articleId: string;
   data: FragmentOf<typeof FollowFavoriteArticleDropdownMenuContentFragment>;
+  targetFavoriteArticleId?: string;
   followedFolderIds: Array<string>;
   handleCreateFavoriteArticle: (
     favoriteArticleFolderId: string
   ) => Promise<string | undefined>;
   handleRemoveFavoriteArticle: (
-    favoriteArticleId: string,
-    favoriteArticleFolderId: string
+    favoriteArticleFolderId: string,
+    favoriteArticleId?: string
   ) => Promise<string | undefined>;
   handleCreateFavoriteArticleFolder: (
     favoriteArticleFolderId: string
@@ -42,8 +40,8 @@ export const FollowFavoriteArticleDropdownMenu: FC<
   FollowFavoriteArticleDropdownMenuProps
 > = ({
   isFollowing,
-  articleId,
   data,
+  targetFavoriteArticleId,
   followedFolderIds,
   handleCreateFavoriteArticle,
   handleRemoveFavoriteArticle,
@@ -78,8 +76,8 @@ export const FollowFavoriteArticleDropdownMenu: FC<
       </TooltipProvider>
 
       <FollowFavoriteArticleDropdownMenuContent
-        articleId={articleId}
         data={data}
+        targetFavoriteArticleId={targetFavoriteArticleId}
         followedFolderIds={followedFolderIds}
         handleCreateFavoriteArticle={handleCreateFavoriteArticle}
         handleRemoveFavoriteArticle={handleRemoveFavoriteArticle}
