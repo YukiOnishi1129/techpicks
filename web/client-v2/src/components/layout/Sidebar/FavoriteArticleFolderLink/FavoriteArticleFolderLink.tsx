@@ -18,7 +18,7 @@ export const FavoriteArticleFolderLink: FC<FavoriteArticleFolderLinksProps> = ({
   return (
     <div className="w-full cursor-pointer ">
       <Link
-        href={`/favorite/${fragment.id}`}
+        href={`/favorite/article/${fragment.id}`}
         className="flex items-center py-2 pl-2 hover:bg-secondary"
         onClick={handleCloseSheet}
       >

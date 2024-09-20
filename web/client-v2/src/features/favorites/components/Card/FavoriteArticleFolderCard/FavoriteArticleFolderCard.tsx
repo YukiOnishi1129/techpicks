@@ -40,7 +40,9 @@ export const FavoriteArticleFolderCard: FC<FavoriteArticleFolderCardProps> = ({
       <div className="w-full rounded border-2 px-4 py-2">
         <div className="mb-2 flex h-[48px] w-full items-center justify-between border-b-2 pb-2">
           <h3 className="truncate px-2 text-left text-base font-bold tracking-wide md:text-xl">
-            <Link href={`/favorite/${fragment.id}`}>{fragment.title}</Link>
+            <Link href={`/favorite/article/${fragment.id}`}>
+              {fragment.title}
+            </Link>
           </h3>
           <UpdateFavoriteArticleFolderDialog
             favoriteArticleFolderId={fragment.id}
@@ -80,7 +82,7 @@ export const FavoriteArticleFolderCard: FC<FavoriteArticleFolderCardProps> = ({
                 />
               </div>
               <div className="mt-4 flex justify-center">
-                <Link href={`/favorite/${fragment.id}`}>
+                <Link href={`/favorite/article/${fragment.id}`}>
                   <Button>{"SHOW MORE"}</Button>
                 </Link>
               </div>
