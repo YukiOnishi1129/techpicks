@@ -45,7 +45,8 @@ const FormSchema = z.object({
 type CreateMyFeedFolderDialogContentProps = {
   handleCloseDialog: () => void;
   handleCreateFavoriteArticleFolder?: (
-    favoriteArticleFolderId: string
+    favoriteArticleFolderId: string,
+    title: string
   ) => Promise<void>;
 };
 
@@ -111,7 +112,8 @@ export const CreateFavoriteArticleFolderDialogContent: FC<
         if (handleCreateFavoriteArticleFolder !== undefined) {
           if (!folderData?.createFavoriteArticleFolder.id) return;
           await handleCreateFavoriteArticleFolder(
-            folderData.createFavoriteArticleFolder.id
+            folderData.createFavoriteArticleFolder.id,
+            data.title
           );
           await serverRevalidatePage(pathname);
           resetDialog();

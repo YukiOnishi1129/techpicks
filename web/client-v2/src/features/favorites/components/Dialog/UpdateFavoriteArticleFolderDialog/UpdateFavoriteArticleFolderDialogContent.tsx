@@ -84,7 +84,8 @@ export const UpdateFavoriteArticleFolderDialogContent: FC<
 
   const onDelete = useCallback(async () => {
     await handleDeleteFavoriteArticleFolder(favoriteArticleFolderId);
-  }, [favoriteArticleFolderId, handleDeleteFavoriteArticleFolder]);
+    handleClose();
+  }, [favoriteArticleFolderId, handleDeleteFavoriteArticleFolder, handleClose]);
 
   return (
     <DialogContent onCloseAutoFocus={resetDialog}>
