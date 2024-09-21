@@ -6,6 +6,8 @@ import { FC } from "react";
 
 import { Button } from "@/components/ui/button";
 
+import { useCheckImageExist } from "@/hooks/useCheckImageExist";
+
 import { FavoriteArticleFolderCardFragment } from "./FavoriteArticleFolderCardFragment";
 import { UpdateFavoriteArticleFolderDialog } from "../../Dialog";
 
@@ -34,6 +36,8 @@ export const FavoriteArticleFolderCard: FC<FavoriteArticleFolderCardProps> = ({
     fragment?.favoriteArticles && fragment.favoriteArticles.length > 0
       ? fragment.favoriteArticles[0]
       : undefined;
+
+  const imageUrl = useCheckImageExist(latestFavoriteArticle?.thumbnailUrl);
 
   return (
     <div className="mb-4 bg-primary-foreground">
@@ -76,7 +80,7 @@ export const FavoriteArticleFolderCard: FC<FavoriteArticleFolderCardProps> = ({
               <div className="mt-2 flex w-full items-center justify-center">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src={latestFavoriteArticle?.thumbnailUrl || ""}
+                  src={imageUrl}
                   alt=""
                   className="mt-2 max-h-[160px] rounded-md object-cover md:max-h-[100px]"
                 />
