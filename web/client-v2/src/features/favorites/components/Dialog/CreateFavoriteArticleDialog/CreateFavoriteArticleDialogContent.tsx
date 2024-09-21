@@ -16,6 +16,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { logoutToLoginPage } from "@/features/auth/actions/auth";
+import { createFavoriteArticleForUploadArticleMutation } from "@/features/favorites/actions/actCreateFavoriteArticleForUploadArticleMutation";
 import { OGPPreviewContent } from "@/features/ogp/components/Dialog";
 
 import { Button } from "@/components/ui/button";
@@ -118,40 +119,41 @@ export const CreateFavoriteArticleDialogContent: FC<
       );
       if (!fragment) return;
 
-      //   const { data, error } = await createFavoriteArticleMutation({
-      //     articleId
-      //     title: fragment.articleOpg.title,
-      //     description: fragment?.articleOpg?.description || "",
-      //     articleUrl: form.getValues("url"),
-      //     thumbnailUrl: fragment.articleOpg.thumbnailUrl,
-      //     platformName: fragment.articleOpg.siteName,
-      //     platformUrl: fragment.articleOpg.siteUrl,
-      //     platformFaviconUrl: fragment.articleOpg.faviconUrl,
-      //   });
+      const { data, error } =
+        await createFavoriteArticleForUploadArticleMutation({
+          favoriteArticleFolderId: favoriteArticleFolderId,
+          title: fragment.articleOpg.title,
+          description: fragment?.articleOpg?.description || "",
+          articleUrl: form.getValues("url"),
+          thumbnailUrl: fragment.articleOpg.thumbnailUrl,
+          platformName: fragment.articleOpg.siteName,
+          platformUrl: fragment.articleOpg.siteUrl,
+          platformFaviconUrl: fragment.articleOpg.faviconUrl,
+        });
 
-      //   if (error) {
-      //     if (error.length > 0) {
-      //       // TODO: Modify the error message response on the BFF side
-      //       const errMsg =
-      //         error[0].message.indexOf("bookmark already exists") != -1
-      //           ? "bookmark already exists"
-      //           : error[0].message;
-      //       failToast({
-      //         description: errMsg,
-      //       });
-      //       return;
-      //     }
-      //     failToast({
-      //       description: "Fail: Something went wrong",
-      //     });
-      //     return;
-      //   }
+      if (error) {
+        if (error.length > 0) {
+          // TODO: Modify the error message response on the BFF side
+          const errMsg =
+            error[0].message.indexOf("favorite article already exists") != -1
+              ? "favorite article already exists"
+              : error[0].message;
+          failToast({
+            description: errMsg,
+          });
+          return;
+        }
+        failToast({
+          description: "Fail: Something went wrong",
+        });
+        return;
+      }
 
-      //   if (data?.createFavoriteArticle?.id) {
-      //     successToast({
-      //       description: "Add bookmark",
-      //     });
-      //   }
+      if (data?.createFavoriteArticleForUploadArticle?.id) {
+        successToast({
+          description: "Add bookmark",
+        });
+      }
       await revalidatePage();
       router.replace(`/favorite/article/${favoriteArticleFolderId}`);
       resetDialog();
@@ -168,6 +170,7 @@ export const CreateFavoriteArticleDialogContent: FC<
     resetDialog,
     revalidatePage,
     router,
+    favoriteArticleFolderId,
   ]);
 
   return (
