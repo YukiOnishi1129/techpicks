@@ -9,6 +9,7 @@ import { Loader } from "@/components/ui/loader";
 
 import { getFavoriteArticleListQuery } from "./actGetFavoriteArticleListQuery";
 import { FavoriteArticleListFragment } from "./FavoriteArticleListFragment";
+import { FavoriteArticleCardWrapper } from "../../Card";
 import { FavoriteFolderFavoriteArticleCardWrapperFragment } from "../../Card/FavoriteArticleCardWrapper/FavoriteArticleCardWrapperFragment";
 
 type FavoriteArticleListProps = {
@@ -114,12 +115,12 @@ export function FavoriteArticleList({
         <div className="m-auto">
           {flatArticles.map((article) => (
             <div key={article.id} className="mb-4">
-              {/* <ArticleCardWrapper
+              <FavoriteArticleCardWrapper
                 data={article}
                 favoriteArticleFolders={favoriteArticleFolders}
                 user={user}
-                tab={tab}
-              /> */}
+                favoriteArticleFolderId={folderId}
+              />
             </div>
           ))}
           <div ref={observerTarget}>
