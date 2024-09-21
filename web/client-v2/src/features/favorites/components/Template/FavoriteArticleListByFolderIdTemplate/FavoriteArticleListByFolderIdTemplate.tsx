@@ -14,7 +14,9 @@ import {
   FavoriteArticleFoldersByFolderIdTemplateFragment,
   FavoriteArticleListByFolderIdTemplateFragment,
 } from "./FavoriteArticleListByFolderIdTemplateFragment";
+import { CreateFavoriteArticleDialog } from "../../Dialog";
 import { FavoriteArticleList } from "../../List/FavoriteArticleList/FavoriteArticleList";
+import { FavoriteArticleKeywordSearchForm } from "../../Search";
 
 type FavoriteArticleListByFolderIdTemplateProps = {
   user: User;
@@ -87,15 +89,15 @@ export const FavoriteArticleListByFolderIdTemplate: FC<
 
         <div className="hidden w-full items-center justify-between md:flex">
           <div className="w-4/5 pt-2">
-            {/* <FavoriteArticleFolderArticleKeywordSearchInput
+            <FavoriteArticleKeywordSearchForm
               favoriteArticleFolderId={id}
               keyword={keyword}
-            /> */}
+            />
           </div>
-          {/* <CreateFavoriteArticleDialog
+          <CreateFavoriteArticleDialog
             user={user}
             favoriteArticleFolderId={id}
-          /> */}
+          />
         </div>
       </div>
 

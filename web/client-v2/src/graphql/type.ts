@@ -1204,6 +1204,38 @@ export type FavoriteArticleFolderCardFragmentFragment = {
   }>;
 };
 
+export type CreateFavoriteArticleDialogContentFragmentFragment = {
+  __typename?: "Query";
+  articleOpg: {
+    __typename?: "ArticleOGP";
+    title: string;
+    description?: string | null;
+    thumbnailUrl: string;
+    articleUrl: string;
+    siteUrl: string;
+    siteName: string;
+    faviconUrl: string;
+  };
+};
+
+export type GetCreateFavoriteArticleDialogOgpQueryQueryVariables = Exact<{
+  url: Scalars["String"]["input"];
+}>;
+
+export type GetCreateFavoriteArticleDialogOgpQueryQuery = {
+  __typename?: "Query";
+  articleOpg: {
+    __typename?: "ArticleOGP";
+    title: string;
+    description?: string | null;
+    thumbnailUrl: string;
+    articleUrl: string;
+    siteUrl: string;
+    siteName: string;
+    faviconUrl: string;
+  };
+};
+
 export type CopyTargetFavoriteArticleFolderItemFragmentFragment = {
   __typename?: "FavoriteArticleFolder";
   id: string;
@@ -2097,6 +2129,21 @@ export const BookmarkTemplateFragmentFragmentDoc = gql`
     }
   }
   ${BookmarkListFragmentFragmentDoc}
+`;
+export const CreateFavoriteArticleDialogContentFragmentFragmentDoc = gql`
+  fragment CreateFavoriteArticleDialogContentFragment on Query {
+    articleOpg(articleUrl: $url) {
+      title
+      description
+      thumbnailUrl
+      articleUrl
+      siteUrl
+      siteName
+      faviconUrl
+      ...OGPPreviewContentFragment
+    }
+  }
+  ${OgpPreviewContentFragmentFragmentDoc}
 `;
 export const FavoriteArticleFolderCardFragmentFragmentDoc = gql`
   fragment FavoriteArticleFolderCardFragment on FavoriteArticleFolder {
@@ -3242,6 +3289,84 @@ export type UpdateFavoriteArticleFolderMutationMutationOptions =
   Apollo.BaseMutationOptions<
     UpdateFavoriteArticleFolderMutationMutation,
     UpdateFavoriteArticleFolderMutationMutationVariables
+  >;
+export const GetCreateFavoriteArticleDialogOgpQueryDocument = gql`
+  query GetCreateFavoriteArticleDialogOGPQuery($url: String!) {
+    ...CreateFavoriteArticleDialogContentFragment
+  }
+  ${CreateFavoriteArticleDialogContentFragmentFragmentDoc}
+`;
+
+/**
+ * __useGetCreateFavoriteArticleDialogOgpQueryQuery__
+ *
+ * To run a query within a React component, call `useGetCreateFavoriteArticleDialogOgpQueryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCreateFavoriteArticleDialogOgpQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCreateFavoriteArticleDialogOgpQueryQuery({
+ *   variables: {
+ *      url: // value for 'url'
+ *   },
+ * });
+ */
+export function useGetCreateFavoriteArticleDialogOgpQueryQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetCreateFavoriteArticleDialogOgpQueryQuery,
+    GetCreateFavoriteArticleDialogOgpQueryQueryVariables
+  > &
+    (
+      | {
+          variables: GetCreateFavoriteArticleDialogOgpQueryQueryVariables;
+          skip?: boolean;
+        }
+      | { skip: boolean }
+    )
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetCreateFavoriteArticleDialogOgpQueryQuery,
+    GetCreateFavoriteArticleDialogOgpQueryQueryVariables
+  >(GetCreateFavoriteArticleDialogOgpQueryDocument, options);
+}
+export function useGetCreateFavoriteArticleDialogOgpQueryLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetCreateFavoriteArticleDialogOgpQueryQuery,
+    GetCreateFavoriteArticleDialogOgpQueryQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetCreateFavoriteArticleDialogOgpQueryQuery,
+    GetCreateFavoriteArticleDialogOgpQueryQueryVariables
+  >(GetCreateFavoriteArticleDialogOgpQueryDocument, options);
+}
+export function useGetCreateFavoriteArticleDialogOgpQuerySuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    GetCreateFavoriteArticleDialogOgpQueryQuery,
+    GetCreateFavoriteArticleDialogOgpQueryQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    GetCreateFavoriteArticleDialogOgpQueryQuery,
+    GetCreateFavoriteArticleDialogOgpQueryQueryVariables
+  >(GetCreateFavoriteArticleDialogOgpQueryDocument, options);
+}
+export type GetCreateFavoriteArticleDialogOgpQueryQueryHookResult = ReturnType<
+  typeof useGetCreateFavoriteArticleDialogOgpQueryQuery
+>;
+export type GetCreateFavoriteArticleDialogOgpQueryLazyQueryHookResult =
+  ReturnType<typeof useGetCreateFavoriteArticleDialogOgpQueryLazyQuery>;
+export type GetCreateFavoriteArticleDialogOgpQuerySuspenseQueryHookResult =
+  ReturnType<typeof useGetCreateFavoriteArticleDialogOgpQuerySuspenseQuery>;
+export type GetCreateFavoriteArticleDialogOgpQueryQueryResult =
+  Apollo.QueryResult<
+    GetCreateFavoriteArticleDialogOgpQueryQuery,
+    GetCreateFavoriteArticleDialogOgpQueryQueryVariables
   >;
 export const GetFavoriteArticleFolderListQueryDocument = gql`
   query GetFavoriteArticleFolderListQuery(
