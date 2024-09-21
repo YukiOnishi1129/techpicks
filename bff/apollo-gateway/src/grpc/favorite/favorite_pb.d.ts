@@ -485,8 +485,6 @@ export namespace CreateFavoriteArticleRequest {
 export class CreateFavoriteArticleForUploadArticleRequest extends jspb.Message { 
     getUserId(): string;
     setUserId(value: string): CreateFavoriteArticleForUploadArticleRequest;
-    getArticleId(): string;
-    setArticleId(value: string): CreateFavoriteArticleForUploadArticleRequest;
     getFavoriteArticleFolderId(): string;
     setFavoriteArticleFolderId(value: string): CreateFavoriteArticleForUploadArticleRequest;
     getTitle(): string;
@@ -503,12 +501,6 @@ export class CreateFavoriteArticleForUploadArticleRequest extends jspb.Message {
     setPlatformUrl(value: string): CreateFavoriteArticleForUploadArticleRequest;
     getPlatformFaviconUrl(): string;
     setPlatformFaviconUrl(value: string): CreateFavoriteArticleForUploadArticleRequest;
-    getIsEng(): boolean;
-    setIsEng(value: boolean): CreateFavoriteArticleForUploadArticleRequest;
-    getIsPrivate(): boolean;
-    setIsPrivate(value: boolean): CreateFavoriteArticleForUploadArticleRequest;
-    getIsRead(): boolean;
-    setIsRead(value: boolean): CreateFavoriteArticleForUploadArticleRequest;
 
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): CreateFavoriteArticleForUploadArticleRequest.AsObject;
@@ -523,7 +515,6 @@ export class CreateFavoriteArticleForUploadArticleRequest extends jspb.Message {
 export namespace CreateFavoriteArticleForUploadArticleRequest {
     export type AsObject = {
         userId: string,
-        articleId: string,
         favoriteArticleFolderId: string,
         title: string,
         description: string,
@@ -532,9 +523,6 @@ export namespace CreateFavoriteArticleForUploadArticleRequest {
         platformName: string,
         platformUrl: string,
         platformFaviconUrl: string,
-        isEng: boolean,
-        isPrivate: boolean,
-        isRead: boolean,
     }
 }
 

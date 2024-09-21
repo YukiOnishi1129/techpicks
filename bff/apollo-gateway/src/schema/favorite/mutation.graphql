@@ -10,6 +10,9 @@ type Mutation {
   ): Boolean!
 
   createFavoriteArticle(input: CreateFavoriteArticleInput!): FavoriteArticle!
+  createFavoriteArticleForUploadArticle(
+    input: CreateFavoriteArticleForUploadArticleInput!
+  ): FavoriteArticle!
   deleteFavoriteArticle(input: DeleteFavoriteArticleInput!): Boolean!
   deleteFavoriteArticleByArticleId(
     input: DeleteFavoriteArticleByArticleIdInput!
@@ -48,6 +51,17 @@ input CreateFavoriteArticleInput {
   isEng: Boolean!
   isPrivate: Boolean!
   isRead: Boolean!
+}
+
+input CreateFavoriteArticleForUploadArticleInput {
+  favoriteArticleFolderId: ID!
+  title: String!
+  description: String
+  thumbnailUrl: String!
+  articleUrl: String!
+  platformName: String!
+  platformUrl: String!
+  platformFaviconUrl: String!
 }
 
 input DeleteFavoriteArticleInput {

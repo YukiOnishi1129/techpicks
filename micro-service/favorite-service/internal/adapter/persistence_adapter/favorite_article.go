@@ -18,7 +18,7 @@ type FavoriteArticlePersistenceAdapter interface {
 	GetFavoriteArticleByArticleIDAndFavoriteArticleFolderID(ctx context.Context, articleID, favoriteArticleFolderID, userID string) (entity.FavoriteArticle, error)
 	GetFavoriteArticlesByFavoriteArticleFolderID(ctx context.Context, fafID, userID string, limit *int, isAllFetch *bool) (entity.FavoriteArticleSlice, error)
 	GetFavoriteArticleByID(ctx context.Context, id string, userID string) (entity.FavoriteArticle, error)
-	GetFavoriteArticleByArticleURL(ctx context.Context, articleURL, userID string) (entity.FavoriteArticle, error)
+	GetFavoriteArticleByArticleURL(ctx context.Context, articleURL, favoriteArticleFolderID, userID string) (entity.FavoriteArticle, error)
 	CreateFavoriteArticle(ctx context.Context, req *fpb.CreateFavoriteArticleRequest) (entity.FavoriteArticle, error)
 	CreateFavoriteArticleForUploadArticle(ctx context.Context, req *fpb.CreateFavoriteArticleForUploadArticleRequest, article *cpb.Article) (entity.FavoriteArticle, error)
 	DeleteFavoriteArticle(ctx context.Context, fa entity.FavoriteArticle) error
@@ -105,7 +105,7 @@ func (fapa *favoriteArticlePersistenceAdapter) GetFavoriteArticlesByFavoriteArti
 		qm.OrderBy("created_at DESC"),
 	}
 
-	if isFavoriteArticleAllFetch == nil || isFavoriteArticleAllFetch != nil && !*isFavoriteArticleAllFetch {
+	if isFavoriteArticleAllFetch == nil || !*isFavoriteArticleAllFetch {
 		paramLimit := 1
 		if limit != nil {
 			paramLimit = int(*limit)
@@ -120,10 +120,11 @@ func (fapa *favoriteArticlePersistenceAdapter) GetFavoriteArticlesByFavoriteArti
 	return favoriteArticles, nil
 }
 
-func (fapa *favoriteArticlePersistenceAdapter) GetFavoriteArticleByArticleURL(ctx context.Context, articleURL, userID string) (entity.FavoriteArticle, error) {
+func (fapa *favoriteArticlePersistenceAdapter) GetFavoriteArticleByArticleURL(ctx context.Context, articleURL, favoriteArticleFolderID, userID string) (entity.FavoriteArticle, error) {
 	q := []qm.QueryMod{
 		qm.Where("article_url = ?", articleURL),
 		qm.Where("user_id = ?", userID),
+		qm.Where("favorite_article_folder_id = ?", favoriteArticleFolderID),
 	}
 	fa, err := fapa.favoriteArticleRepository.GetFavoriteArticle(ctx, q)
 	if err != nil {
@@ -182,9 +183,9 @@ func (fapa *favoriteArticlePersistenceAdapter) CreateFavoriteArticleForUploadArt
 		Description:             article.GetDescription(),
 		ArticleURL:              article.GetArticleUrl(),
 		ThumbnailURL:            article.GetThumbnailUrl(),
-		IsEng:                   req.GetIsEng(),
-		IsPrivate:               req.GetIsPrivate(),
-		IsRead:                  req.GetIsRead(),
+		IsEng:                   article.GetIsEng(),
+		IsPrivate:               article.GetIsPrivate(),
+		IsRead:                  false,
 	}
 
 	if article.GetPublishedAt() != nil {
