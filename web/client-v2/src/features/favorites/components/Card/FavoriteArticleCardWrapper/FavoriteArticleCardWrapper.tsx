@@ -206,7 +206,7 @@ export const FavoriteArticleCardWrapper: FC<
       if (!id) return;
       return id;
     },
-    [handleRemoveFavoriteArticle, revalidatePage, fragment]
+    [handleRemoveFavoriteArticle, fragment]
   );
 
   return (
