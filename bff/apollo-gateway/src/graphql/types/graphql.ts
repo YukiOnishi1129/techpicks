@@ -121,6 +121,11 @@ export class FavoriteArticlesInput {
     before?: Nullable<string>;
 }
 
+export class FavoriteArticleFolderInput {
+    id: string;
+    isFolderOnly?: Nullable<boolean>;
+}
+
 export interface Node {
     id: string;
 }
@@ -135,6 +140,8 @@ export abstract class IQuery {
     abstract favoriteArticleFolders(input?: Nullable<FavoriteArticleFoldersInput>): FavoriteArticleFolderConnection | Promise<FavoriteArticleFolderConnection>;
 
     abstract favoriteArticles(input?: Nullable<FavoriteArticlesInput>): FavoriteArticleConnection | Promise<FavoriteArticleConnection>;
+
+    abstract favoriteArticleFolder(input: FavoriteArticleFolderInput): FavoriteArticleFolder | Promise<FavoriteArticleFolder>;
 }
 
 export class Article implements Node {

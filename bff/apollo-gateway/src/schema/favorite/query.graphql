@@ -2,6 +2,9 @@ type Query {
   favoriteArticleFolders(
     input: FavoriteArticleFoldersInput
   ): FavoriteArticleFolderConnection!
+  favoriteArticleFolder(
+    input: FavoriteArticleFolderInput!
+  ): FavoriteArticleFolder!
   favoriteArticles(input: FavoriteArticlesInput): FavoriteArticleConnection!
 }
 
@@ -13,6 +16,11 @@ input FavoriteArticleFoldersInput {
   after: String
   last: Int
   before: String
+}
+
+input FavoriteArticleFolderInput {
+  id: ID!
+  isFolderOnly: Boolean
 }
 
 input FavoriteArticlesInput {

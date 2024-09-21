@@ -32,5 +32,6 @@ export const FavoriteArticleListByFolderIdTemplateFragment = graphql(`
         endCursor
       }
     }
+    favoriteArticleFolder(input: $input) {
   }
 `);
