@@ -45,6 +45,12 @@ export class FavoriteArticleFolderService {
       req.setIsFolderOnly(new BoolValue().setValue(input.isFolderOnly));
     if (input?.isAllFetch)
       req.setIsAllFetch(new BoolValue().setValue(input.isAllFetch));
+    if (input?.isFavoriteArticleAllFetch) {
+      req.setIsFavoriteArticleAllFetch(
+        new BoolValue().setValue(input.isFavoriteArticleAllFetch),
+      );
+    }
+
     const client = this.grpcFavoriteClientService.getGrpcFavoriteService();
 
     return new Promise((resolve, reject) => {

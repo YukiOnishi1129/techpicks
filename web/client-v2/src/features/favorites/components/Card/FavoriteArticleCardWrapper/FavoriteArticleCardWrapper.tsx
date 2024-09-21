@@ -4,12 +4,15 @@ import { FragmentOf, readFragment } from "gql.tada";
 import { FC, useCallback, useState } from "react";
 
 import { logoutToLoginPage } from "@/features/auth/actions/auth";
+import { createFavoriteArticleMutation } from "@/features/favorites/actions/actCreateFavoriteArticleMutaion";
 
 import { ShareLinks } from "@/components/ui/share";
 
 import { useCheckImageExist } from "@/hooks/useCheckImageExist";
 import { useServerRevalidatePage } from "@/hooks/useServerRevalidatePage";
 import { useStatusToast } from "@/hooks/useStatusToast";
+
+import { CreateFavoriteArticleInput } from "@/graphql/type";
 
 import {
   FavoriteArticleCardWrapperFragment,
@@ -45,21 +48,91 @@ export const FavoriteArticleCardWrapper: FC<
 
   const handleCreateFavoriteArticle = useCallback(
     async (targetFavoriteArticleFolderId: string) => {
-      // 1. check user
-      if (!user) {
+      const input: CreateFavoriteArticleInput = {
+        articleId: fragment.articleId,
+        favoriteArticleFolderId: targetFavoriteArticleFolderId,
+        platformId: fragment.platformId,
+        title: fragment.title,
+        description: fragment.description,
+        articleUrl: fragment.articleUrl,
+        publishedAt: fragment.publishedAt,
+        authorName: fragment.authorName,
+        tags: fragment.tags,
+        thumbnailUrl: fragment.thumbnailUrl,
+        platformName: fragment.platformName,
+        platformUrl: fragment.platformUrl,
+        platformFaviconUrl: fragment.platformFaviconUrl,
+        isEng: fragment.isEng,
+        isRead: fragment.isRead,
+        isPrivate: fragment.isPrivate,
+      };
+      // 3. create favoriteArticle
+      const { data, error } = await createFavoriteArticleMutation(input);
+      if (error || !data?.createFavoriteArticle) {
+        if (error && error.length > 0) {
+          // TODO: Modify the error message response on the BFF side
+          const errMsg =
+            error[0].message.indexOf("favorite article already exists") != -1
+              ? "favorite article already exists"
+              : error[0].message;
+          failToast({
+            description: errMsg,
+          });
+          return;
+        }
         failToast({
-          description: "Please login to follow the article",
+          description: "Fail: Something went wrong",
         });
-        await logoutToLoginPage();
         return;
       }
-      // 2. check out favoriteArticle by favoriteArticleFolderId and articleId
+      successToast({
+        description: "Follow the article",
+      });
 
-      // 3. create favoriteArticle
+      if (targetFavoriteArticleFolderId === favoriteArticleFolderId) {
+        return data.createFavoriteArticle.id;
+      }
 
-      return "id";
+      const targetFavoriteArticleFolder = showFavoriteArticleFolders.edges.find(
+        (favoriteArticleFolder) =>
+          favoriteArticleFolder.node.id === targetFavoriteArticleFolderId
+      );
+
+      if (targetFavoriteArticleFolder) {
+        setShowFavoriteArticleFolders((prev) => {
+          return {
+            ...prev,
+            edges: prev.edges.map((edge) => {
+              if (edge.node.id === targetFavoriteArticleFolderId) {
+                return {
+                  ...edge,
+                  node: {
+                    ...edge.node,
+                    favoriteArticles: [
+                      ...edge.node.favoriteArticles,
+                      {
+                        id: data.createFavoriteArticle.id,
+                        articleId: fragment.articleId,
+                      },
+                    ],
+                  },
+                };
+              }
+              return edge;
+            }),
+          };
+        });
+      }
+
+      return data.createFavoriteArticle.id;
     },
-    [failToast, user]
+    [
+      failToast,
+      fragment,
+      favoriteArticleFolderId,
+      successToast,
+      showFavoriteArticleFolders.edges,
+    ]
   );
 
   const handleCreateFavoriteArticleFolder = useCallback(

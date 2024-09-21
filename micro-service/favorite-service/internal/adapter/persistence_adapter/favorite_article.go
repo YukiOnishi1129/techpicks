@@ -14,8 +14,8 @@ import (
 type FavoriteArticlePersistenceAdapter interface {
 	GetFavoriteArticles(ctx context.Context, req *fpb.GetFavoriteArticlesRequest, limit int) (entity.FavoriteArticleSlice, error)
 	GetFavoriteArticlesByArticleID(ctx context.Context, articleID, userID string) (entity.FavoriteArticleSlice, error)
-	GetFavoriteArticleBtArticleIDAndFavoriteArticleFolderID(ctx context.Context, articleID, favoriteArticleFolderID, userID string) (entity.FavoriteArticle, error)
-	GetFavoriteArticlesByFavoriteArticleFolderID(ctx context.Context, fafID, userID string, limit *int) (entity.FavoriteArticleSlice, error)
+	GetFavoriteArticleByArticleIDAndFavoriteArticleFolderID(ctx context.Context, articleID, favoriteArticleFolderID, userID string) (entity.FavoriteArticle, error)
+	GetFavoriteArticlesByFavoriteArticleFolderID(ctx context.Context, fafID, userID string, limit *int, isAllFetch *bool) (entity.FavoriteArticleSlice, error)
 	GetFavoriteArticleByID(ctx context.Context, id string, userID string) (entity.FavoriteArticle, error)
 	CreateFavoriteArticle(ctx context.Context, req *fpb.CreateFavoriteArticleRequest) (entity.FavoriteArticle, error)
 	DeleteFavoriteArticle(ctx context.Context, fa entity.FavoriteArticle) error
@@ -70,7 +70,7 @@ func (fapa *favoriteArticlePersistenceAdapter) GetFavoriteArticlesByArticleID(ct
 	return fa, nil
 }
 
-func (fapa *favoriteArticlePersistenceAdapter) GetFavoriteArticleBtArticleIDAndFavoriteArticleFolderID(ctx context.Context, articleID, favoriteArticleFolderID, userID string) (entity.FavoriteArticle, error) {
+func (fapa *favoriteArticlePersistenceAdapter) GetFavoriteArticleByArticleIDAndFavoriteArticleFolderID(ctx context.Context, articleID, favoriteArticleFolderID, userID string) (entity.FavoriteArticle, error) {
 	q := []qm.QueryMod{
 		qm.Where("article_id = ?", articleID),
 		qm.Where("favorite_article_folder_id = ?", favoriteArticleFolderID),
@@ -94,17 +94,20 @@ func (fapa *favoriteArticlePersistenceAdapter) GetFavoriteArticleByID(ctx contex
 	return fa, nil
 }
 
-func (fapa *favoriteArticlePersistenceAdapter) GetFavoriteArticlesByFavoriteArticleFolderID(ctx context.Context, fafID, userID string, limit *int) (entity.FavoriteArticleSlice, error) {
-	paramLimit := 1
-	if limit != nil {
-		paramLimit = int(*limit)
-	}
+func (fapa *favoriteArticlePersistenceAdapter) GetFavoriteArticlesByFavoriteArticleFolderID(ctx context.Context, fafID, userID string, limit *int, isFavoriteArticleAllFetch *bool) (entity.FavoriteArticleSlice, error) {
 
 	q := []qm.QueryMod{
 		qm.Where("favorite_article_folder_id = ?", fafID),
 		qm.Where("user_id = ?", userID),
 		qm.OrderBy("created_at DESC"),
-		qm.Limit(paramLimit),
+	}
+
+	if isFavoriteArticleAllFetch == nil || isFavoriteArticleAllFetch != nil && !*isFavoriteArticleAllFetch {
+		paramLimit := 1
+		if limit != nil {
+			paramLimit = int(*limit)
+		}
+		q = append(q, qm.Limit(paramLimit))
 	}
 
 	favoriteArticles, err := fapa.favoriteArticleRepository.GetFavoriteArticles(ctx, q)

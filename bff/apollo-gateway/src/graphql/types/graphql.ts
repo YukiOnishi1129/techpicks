@@ -110,6 +110,7 @@ export class FavoriteArticleFoldersInput {
     after?: Nullable<string>;
     last?: Nullable<number>;
     before?: Nullable<string>;
+    isFavoriteArticleAllFetch?: Nullable<boolean>;
 }
 
 export class FavoriteArticleFolderInput {

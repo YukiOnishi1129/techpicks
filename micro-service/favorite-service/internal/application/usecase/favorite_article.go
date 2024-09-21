@@ -50,7 +50,7 @@ func (fu *favoriteUseCase) GetFavoriteArticles(ctx context.Context, req *fpb.Get
 }
 
 func (fu *favoriteUseCase) CreateFavoriteArticle(ctx context.Context, req *fpb.CreateFavoriteArticleRequest) (*fpb.CreateFavoriteArticleResponse, error) {
-	data, err := fu.favoriteArticlePersistenceAdapter.GetFavoriteArticleBtArticleIDAndFavoriteArticleFolderID(ctx, req.GetArticleId(), req.GetFavoriteArticleFolderId(), req.GetUserId())
+	data, err := fu.favoriteArticlePersistenceAdapter.GetFavoriteArticleByArticleIDAndFavoriteArticleFolderID(ctx, req.GetArticleId(), req.GetFavoriteArticleFolderId(), req.GetUserId())
 	if err != nil {
 		return &fpb.CreateFavoriteArticleResponse{}, err
 	}
@@ -90,7 +90,7 @@ func (fu *favoriteUseCase) DeleteFavoriteArticle(ctx context.Context, req *fpb.D
 }
 
 func (fu *favoriteUseCase) DeleteFavoriteArticlesByArticleID(ctx context.Context, req *fpb.DeleteFavoriteArticleByArticleIdRequest) (*emptypb.Empty, error) {
-	f, err := fu.favoriteArticlePersistenceAdapter.GetFavoriteArticleBtArticleIDAndFavoriteArticleFolderID(ctx, req.GetArticleId(), req.GetFavoriteArticleFolderId(), req.GetUserId())
+	f, err := fu.favoriteArticlePersistenceAdapter.GetFavoriteArticleByArticleIDAndFavoriteArticleFolderID(ctx, req.GetArticleId(), req.GetFavoriteArticleFolderId(), req.GetUserId())
 	if err != nil {
 		return &emptypb.Empty{}, err
 	}

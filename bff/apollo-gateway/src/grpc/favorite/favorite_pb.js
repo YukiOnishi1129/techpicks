@@ -527,7 +527,8 @@ proto.checkpicks.favorite.v1.GetFavoriteArticleFoldersRequest.toObject = functio
     limit: (f = msg.getLimit()) && google_protobuf_wrappers_pb.Int64Value.toObject(includeInstance, f),
     favoriteArticleLimit: (f = msg.getFavoriteArticleLimit()) && google_protobuf_wrappers_pb.Int64Value.toObject(includeInstance, f),
     isFolderOnly: (f = msg.getIsFolderOnly()) && google_protobuf_wrappers_pb.BoolValue.toObject(includeInstance, f),
-    isAllFetch: (f = msg.getIsAllFetch()) && google_protobuf_wrappers_pb.BoolValue.toObject(includeInstance, f)
+    isAllFetch: (f = msg.getIsAllFetch()) && google_protobuf_wrappers_pb.BoolValue.toObject(includeInstance, f),
+    isFavoriteArticleAllFetch: (f = msg.getIsFavoriteArticleAllFetch()) && google_protobuf_wrappers_pb.BoolValue.toObject(includeInstance, f)
   };
 
   if (includeInstance) {
@@ -597,6 +598,11 @@ proto.checkpicks.favorite.v1.GetFavoriteArticleFoldersRequest.deserializeBinaryF
       var value = new google_protobuf_wrappers_pb.BoolValue;
       reader.readMessage(value,google_protobuf_wrappers_pb.BoolValue.deserializeBinaryFromReader);
       msg.setIsAllFetch(value);
+      break;
+    case 8:
+      var value = new google_protobuf_wrappers_pb.BoolValue;
+      reader.readMessage(value,google_protobuf_wrappers_pb.BoolValue.deserializeBinaryFromReader);
+      msg.setIsFavoriteArticleAllFetch(value);
       break;
     default:
       reader.skipField();
@@ -678,6 +684,14 @@ proto.checkpicks.favorite.v1.GetFavoriteArticleFoldersRequest.serializeBinaryToW
   if (f != null) {
     writer.writeMessage(
       7,
+      f,
+      google_protobuf_wrappers_pb.BoolValue.serializeBinaryToWriter
+    );
+  }
+  f = message.getIsFavoriteArticleAllFetch();
+  if (f != null) {
+    writer.writeMessage(
+      8,
       f,
       google_protobuf_wrappers_pb.BoolValue.serializeBinaryToWriter
     );
@@ -922,6 +936,43 @@ proto.checkpicks.favorite.v1.GetFavoriteArticleFoldersRequest.prototype.clearIsA
  */
 proto.checkpicks.favorite.v1.GetFavoriteArticleFoldersRequest.prototype.hasIsAllFetch = function() {
   return jspb.Message.getField(this, 7) != null;
+};
+
+
+/**
+ * optional google.protobuf.BoolValue is_favorite_article_all_fetch = 8;
+ * @return {?proto.google.protobuf.BoolValue}
+ */
+proto.checkpicks.favorite.v1.GetFavoriteArticleFoldersRequest.prototype.getIsFavoriteArticleAllFetch = function() {
+  return /** @type{?proto.google.protobuf.BoolValue} */ (
+    jspb.Message.getWrapperField(this, google_protobuf_wrappers_pb.BoolValue, 8));
+};
+
+
+/**
+ * @param {?proto.google.protobuf.BoolValue|undefined} value
+ * @return {!proto.checkpicks.favorite.v1.GetFavoriteArticleFoldersRequest} returns this
+*/
+proto.checkpicks.favorite.v1.GetFavoriteArticleFoldersRequest.prototype.setIsFavoriteArticleAllFetch = function(value) {
+  return jspb.Message.setWrapperField(this, 8, value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.checkpicks.favorite.v1.GetFavoriteArticleFoldersRequest} returns this
+ */
+proto.checkpicks.favorite.v1.GetFavoriteArticleFoldersRequest.prototype.clearIsFavoriteArticleAllFetch = function() {
+  return this.setIsFavoriteArticleAllFetch(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.checkpicks.favorite.v1.GetFavoriteArticleFoldersRequest.prototype.hasIsFavoriteArticleAllFetch = function() {
+  return jspb.Message.getField(this, 8) != null;
 };
 
 

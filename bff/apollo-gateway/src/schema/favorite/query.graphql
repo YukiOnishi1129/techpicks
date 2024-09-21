@@ -12,6 +12,7 @@ input FavoriteArticleFoldersInput {
   keyword: String
   isFolderOnly: Boolean
   isAllFetch: Boolean
+  isFavoriteArticleAllFetch: Boolean
   first: Int
   after: String
   last: Int

@@ -39,6 +39,10 @@ export const FavoriteFolderFavoriteArticleCardWrapperFragment = graphql(
         node {
           id
           title
+          favoriteArticles {
+            id
+            articleId
+          }
         }
       }
       ...CopyFavoriteArticleDropdownMenuContentFragment
