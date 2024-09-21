@@ -270,6 +270,11 @@ export type FavoriteArticleFolderEdge = {
   node: FavoriteArticleFolder;
 };
 
+export type FavoriteArticleFolderInput = {
+  id: Scalars["ID"]["input"];
+  isFolderOnly?: InputMaybe<Scalars["Boolean"]["input"]>;
+};
+
 export type FavoriteArticleFoldersInput = {
   after?: InputMaybe<Scalars["String"]["input"]>;
   before?: InputMaybe<Scalars["String"]["input"]>;
@@ -415,6 +420,7 @@ export type Query = {
   articles: ArticleConnection;
   /** Get bookmarks */
   bookmarks: BookmarkConnection;
+  favoriteArticleFolder: FavoriteArticleFolder;
   favoriteArticleFolders: FavoriteArticleFolderConnection;
   favoriteArticles: FavoriteArticleConnection;
 };
@@ -429,6 +435,10 @@ export type QueryArticlesArgs = {
 
 export type QueryBookmarksArgs = {
   input: BookmarksInput;
+};
+
+export type QueryFavoriteArticleFolderArgs = {
+  input: FavoriteArticleFolderInput;
 };
 
 export type QueryFavoriteArticleFoldersArgs = {
@@ -1307,11 +1317,17 @@ export type FavoriteArticleListByFolderIdTemplateFragmentFragment = {
       endCursor?: string | null;
     };
   };
+  favoriteArticleFolder: {
+    __typename?: "FavoriteArticleFolder";
+    id: string;
+    title: string;
+  };
 };
 
 export type GetFavoriteArticleListByFolderIdTemplateQueryQueryVariables =
   Exact<{
-    input?: InputMaybe<FavoriteArticlesInput>;
+    favoriteArticlesInput: FavoriteArticlesInput;
+    folderInput: FavoriteArticleFolderInput;
   }>;
 
 export type GetFavoriteArticleListByFolderIdTemplateQueryQuery = {
@@ -1349,6 +1365,11 @@ export type GetFavoriteArticleListByFolderIdTemplateQueryQuery = {
       hasNextPage: boolean;
       endCursor?: string | null;
     };
+  };
+  favoriteArticleFolder: {
+    __typename?: "FavoriteArticleFolder";
+    id: string;
+    title: string;
   };
 };
 
@@ -1916,7 +1937,7 @@ export const FavoriteArticleFolderListTemplateFragmentFragmentDoc = gql`
 `;
 export const FavoriteArticleListByFolderIdTemplateFragmentFragmentDoc = gql`
   fragment FavoriteArticleListByFolderIdTemplateFragment on Query {
-    favoriteArticles(input: $input) {
+    favoriteArticles(input: $favoriteArticlesInput) {
       edges {
         node {
           id
@@ -1945,6 +1966,10 @@ export const FavoriteArticleListByFolderIdTemplateFragmentFragmentDoc = gql`
         hasNextPage
         endCursor
       }
+    }
+    favoriteArticleFolder(input: $folderInput) {
+      id
+      title
     }
   }
 `;
@@ -3091,7 +3116,8 @@ export type GetFavoriteArticleFolderListTemplateQueryQueryResult =
   >;
 export const GetFavoriteArticleListByFolderIdTemplateQueryDocument = gql`
   query GetFavoriteArticleListByFolderIdTemplateQuery(
-    $input: FavoriteArticlesInput
+    $favoriteArticlesInput: FavoriteArticlesInput!
+    $folderInput: FavoriteArticleFolderInput!
   ) {
     ...FavoriteArticleListByFolderIdTemplateFragment
   }
@@ -3110,15 +3136,23 @@ export const GetFavoriteArticleListByFolderIdTemplateQueryDocument = gql`
  * @example
  * const { data, loading, error } = useGetFavoriteArticleListByFolderIdTemplateQueryQuery({
  *   variables: {
- *      input: // value for 'input'
+ *      favoriteArticlesInput: // value for 'favoriteArticlesInput'
+ *      folderInput: // value for 'folderInput'
  *   },
  * });
  */
 export function useGetFavoriteArticleListByFolderIdTemplateQueryQuery(
-  baseOptions?: Apollo.QueryHookOptions<
+  baseOptions: Apollo.QueryHookOptions<
     GetFavoriteArticleListByFolderIdTemplateQueryQuery,
     GetFavoriteArticleListByFolderIdTemplateQueryQueryVariables
-  >
+  > &
+    (
+      | {
+          variables: GetFavoriteArticleListByFolderIdTemplateQueryQueryVariables;
+          skip?: boolean;
+        }
+      | { skip: boolean }
+    )
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useQuery<

@@ -2,7 +2,7 @@ import { graphql } from "gql.tada";
 
 export const FavoriteArticleListByFolderIdTemplateFragment = graphql(`
   fragment FavoriteArticleListByFolderIdTemplateFragment on Query {
-    favoriteArticles(input: $input) {
+    favoriteArticles(input: $favoriteArticlesInput) {
       edges {
         node {
           id
@@ -32,6 +32,9 @@ export const FavoriteArticleListByFolderIdTemplateFragment = graphql(`
         endCursor
       }
     }
-    favoriteArticleFolder(input: $input) {
+    favoriteArticleFolder(input: $folderInput) {
+      id
+      title
+    }
   }
 `);

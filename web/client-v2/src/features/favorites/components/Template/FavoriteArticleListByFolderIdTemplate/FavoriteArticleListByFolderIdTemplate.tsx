@@ -1,9 +1,16 @@
 import { User } from "@supabase/supabase-js";
+import { readFragment } from "gql.tada";
 import { FC } from "react";
 
 import { BreadCrumbType, PageBreadcrumb } from "@/components/ui/breadcrumb";
 
+import {
+  FavoriteArticleFolderInput,
+  FavoriteArticlesInput,
+} from "@/graphql/type";
+
 import { getFavoriteArticleListByFolderIdTemplateQuery } from "./actGetFavoriteArticleListByFolderIdTemplateQuery";
+import { FavoriteArticleListByFolderIdTemplateFragment } from "./FavoriteArticleListByFolderIdTemplateFragment";
 
 type FavoriteArticleListByFolderIdTemplateProps = {
   user: User;
@@ -14,6 +21,33 @@ type FavoriteArticleListByFolderIdTemplateProps = {
 export const FavoriteArticleListByFolderIdTemplate: FC<
   FavoriteArticleListByFolderIdTemplateProps
 > = async ({ user, id, keyword }) => {
+  const favoriteArticleInput: FavoriteArticlesInput = {
+    folderId: id,
+    keyword: keyword,
+  };
+
+  const folderInput: FavoriteArticleFolderInput = {
+    id: id,
+    isFolderOnly: true,
+  };
+
+  const { data, error } = await getFavoriteArticleListByFolderIdTemplateQuery(
+    favoriteArticleInput,
+    folderInput
+  );
+
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
+
+  const fragment = readFragment(
+    FavoriteArticleListByFolderIdTemplateFragment,
+    data
+  );
+
+  console.log("🔥");
+  console.log(fragment);
+
   const breadcrumbs: BreadCrumbType[] = [
     {
       title: "Home",
@@ -24,18 +58,10 @@ export const FavoriteArticleListByFolderIdTemplate: FC<
       href: "/favorite",
     },
     {
-      title: "",
+      title: fragment.favoriteArticleFolder.title,
       href: `/favorite/article/${id}`,
     },
   ];
-
-  const { data, error } = await getFavoriteArticleListByFolderIdTemplateQuery({
-    folderId: id,
-  });
-
-  if (error) {
-    return <div>Error: {error.message}</div>;
-  }
 
   return (
     <div>
