@@ -14,6 +14,7 @@ import (
 
 type FavoriteArticlePersistenceAdapter interface {
 	GetFavoriteArticles(ctx context.Context, req *fpb.GetFavoriteArticlesRequest, limit int) (entity.FavoriteArticleSlice, error)
+	GetFavoriteAllFolderArticles(ctx context.Context, req *fpb.GetFavoriteAllFolderArticlesRequest, limit int) (entity.FavoriteArticleSlice, error)
 	GetFavoriteArticlesByArticleID(ctx context.Context, articleID, userID string) (entity.FavoriteArticleSlice, error)
 	GetFavoriteArticleByArticleIDAndFavoriteArticleFolderID(ctx context.Context, articleID, favoriteArticleFolderID, userID string) (entity.FavoriteArticle, error)
 	GetFavoriteArticlesByFavoriteArticleFolderID(ctx context.Context, fafID, userID string, limit *int, isAllFetch *bool) (entity.FavoriteArticleSlice, error)
@@ -61,10 +62,33 @@ func (fapa *favoriteArticlePersistenceAdapter) GetFavoriteArticles(ctx context.C
 	return favoriteArticles, nil
 }
 
+func (fapa *favoriteArticlePersistenceAdapter) GetFavoriteAllFolderArticles(ctx context.Context, req *fpb.GetFavoriteAllFolderArticlesRequest, limit int) (entity.FavoriteArticleSlice, error) {
+	q := []qm.QueryMod{
+		qm.Where("user_id = ?", req.GetUserId()),
+		qm.Load(qm.Rels(entity.FavoriteArticleRels.FavoriteArticleFolder)),
+		qm.GroupBy("article_id"),
+		qm.OrderBy("created_at DESC"),
+		qm.Limit(limit),
+	}
+	if req.GetKeyword() != nil {
+		q = append(q, qm.Expr(
+			qm.And("title LIKE ?", "%"+req.GetKeyword().GetValue()+"%"),
+			qm.Or("description LIKE ?", "%"+req.GetKeyword().GetValue()+"%"),
+		))
+	}
+
+	favoriteArticles, err := fapa.favoriteArticleRepository.GetFavoriteArticles(ctx, q)
+	if err != nil {
+		return nil, err
+	}
+	return favoriteArticles, nil
+}
+
 func (fapa *favoriteArticlePersistenceAdapter) GetFavoriteArticlesByArticleID(ctx context.Context, articleID, userID string) (entity.FavoriteArticleSlice, error) {
 	q := []qm.QueryMod{
 		qm.Where("article_id = ?", articleID),
 		qm.Where("user_id = ?", userID),
+		qm.Load(qm.Rels(entity.FavoriteArticleRels.FavoriteArticleFolder)),
 	}
 	fa, err := fapa.favoriteArticleRepository.GetFavoriteArticles(ctx, q)
 	if err != nil {

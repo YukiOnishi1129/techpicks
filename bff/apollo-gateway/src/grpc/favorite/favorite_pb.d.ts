@@ -99,6 +99,72 @@ export namespace GetFavoriteArticleFoldersResponse {
     }
 }
 
+export class GetFavoriteAllFolderArticlesRequest extends jspb.Message { 
+    getUserId(): string;
+    setUserId(value: string): GetFavoriteAllFolderArticlesRequest;
+
+    hasKeyword(): boolean;
+    clearKeyword(): void;
+    getKeyword(): google_protobuf_wrappers_pb.StringValue | undefined;
+    setKeyword(value?: google_protobuf_wrappers_pb.StringValue): GetFavoriteAllFolderArticlesRequest;
+
+    hasCursor(): boolean;
+    clearCursor(): void;
+    getCursor(): google_protobuf_wrappers_pb.StringValue | undefined;
+    setCursor(value?: google_protobuf_wrappers_pb.StringValue): GetFavoriteAllFolderArticlesRequest;
+
+    hasLimit(): boolean;
+    clearLimit(): void;
+    getLimit(): google_protobuf_wrappers_pb.Int64Value | undefined;
+    setLimit(value?: google_protobuf_wrappers_pb.Int64Value): GetFavoriteAllFolderArticlesRequest;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): GetFavoriteAllFolderArticlesRequest.AsObject;
+    static toObject(includeInstance: boolean, msg: GetFavoriteAllFolderArticlesRequest): GetFavoriteAllFolderArticlesRequest.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: GetFavoriteAllFolderArticlesRequest, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): GetFavoriteAllFolderArticlesRequest;
+    static deserializeBinaryFromReader(message: GetFavoriteAllFolderArticlesRequest, reader: jspb.BinaryReader): GetFavoriteAllFolderArticlesRequest;
+}
+
+export namespace GetFavoriteAllFolderArticlesRequest {
+    export type AsObject = {
+        userId: string,
+        keyword?: google_protobuf_wrappers_pb.StringValue.AsObject,
+        cursor?: google_protobuf_wrappers_pb.StringValue.AsObject,
+        limit?: google_protobuf_wrappers_pb.Int64Value.AsObject,
+    }
+}
+
+export class GetFavoriteAllFolderArticlesResponse extends jspb.Message { 
+    clearFavoriteAllFolderArticleEdgeList(): void;
+    getFavoriteAllFolderArticleEdgeList(): Array<FavoriteAllFolderArticleEdge>;
+    setFavoriteAllFolderArticleEdgeList(value: Array<FavoriteAllFolderArticleEdge>): GetFavoriteAllFolderArticlesResponse;
+    addFavoriteAllFolderArticleEdge(value?: FavoriteAllFolderArticleEdge, index?: number): FavoriteAllFolderArticleEdge;
+
+    hasPageInfo(): boolean;
+    clearPageInfo(): void;
+    getPageInfo(): PageInfo | undefined;
+    setPageInfo(value?: PageInfo): GetFavoriteAllFolderArticlesResponse;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): GetFavoriteAllFolderArticlesResponse.AsObject;
+    static toObject(includeInstance: boolean, msg: GetFavoriteAllFolderArticlesResponse): GetFavoriteAllFolderArticlesResponse.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: GetFavoriteAllFolderArticlesResponse, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): GetFavoriteAllFolderArticlesResponse;
+    static deserializeBinaryFromReader(message: GetFavoriteAllFolderArticlesResponse, reader: jspb.BinaryReader): GetFavoriteAllFolderArticlesResponse;
+}
+
+export namespace GetFavoriteAllFolderArticlesResponse {
+    export type AsObject = {
+        favoriteAllFolderArticleEdgeList: Array<FavoriteAllFolderArticleEdge.AsObject>,
+        pageInfo?: PageInfo.AsObject,
+    }
+}
+
 export class GetFavoriteArticleFolderResponse extends jspb.Message { 
 
     hasFavoriteArticleFolder(): boolean;
@@ -624,6 +690,37 @@ export namespace FavoriteArticleEdge {
     export type AsObject = {
         node?: FavoriteArticle.AsObject,
         cursor: string,
+    }
+}
+
+export class FavoriteAllFolderArticleEdge extends jspb.Message { 
+
+    hasNode(): boolean;
+    clearNode(): void;
+    getNode(): FavoriteArticle | undefined;
+    setNode(value?: FavoriteArticle): FavoriteAllFolderArticleEdge;
+    getCursor(): string;
+    setCursor(value: string): FavoriteAllFolderArticleEdge;
+    clearFavoriteArticleFoldersList(): void;
+    getFavoriteArticleFoldersList(): Array<FavoriteArticleFolder>;
+    setFavoriteArticleFoldersList(value: Array<FavoriteArticleFolder>): FavoriteAllFolderArticleEdge;
+    addFavoriteArticleFolders(value?: FavoriteArticleFolder, index?: number): FavoriteArticleFolder;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): FavoriteAllFolderArticleEdge.AsObject;
+    static toObject(includeInstance: boolean, msg: FavoriteAllFolderArticleEdge): FavoriteAllFolderArticleEdge.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: FavoriteAllFolderArticleEdge, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): FavoriteAllFolderArticleEdge;
+    static deserializeBinaryFromReader(message: FavoriteAllFolderArticleEdge, reader: jspb.BinaryReader): FavoriteAllFolderArticleEdge;
+}
+
+export namespace FavoriteAllFolderArticleEdge {
+    export type AsObject = {
+        node?: FavoriteArticle.AsObject,
+        cursor: string,
+        favoriteArticleFoldersList: Array<FavoriteArticleFolder.AsObject>,
     }
 }
 
