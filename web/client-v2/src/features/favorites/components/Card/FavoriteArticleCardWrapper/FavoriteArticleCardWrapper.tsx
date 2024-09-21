@@ -124,6 +124,8 @@ export const FavoriteArticleCardWrapper: FC<
         });
       }
 
+      await revalidatePage();
+
       return data.createFavoriteArticle.id;
     },
     [
@@ -132,6 +134,7 @@ export const FavoriteArticleCardWrapper: FC<
       favoriteArticleFolderId,
       successToast,
       showFavoriteArticleFolders.edges,
+      revalidatePage,
     ]
   );
 
@@ -141,25 +144,69 @@ export const FavoriteArticleCardWrapper: FC<
   );
 
   const handleRemoveFavoriteArticle = useCallback(
-    async (favoriteArticleId: string) => {
+    async (
+      favoriteArticleId: string,
+      targetFavoriteArticleFolderId: string
+    ) => {
       // delete favoriteArticle
       const { data, error } = await deleteFavoriteArticleMutation({
         id: favoriteArticleId,
       });
 
-      return "id";
+      if (error || !data?.deleteFavoriteArticle) {
+        if (error && error.length > 0) {
+          failToast({
+            description: error[0].message,
+          });
+          return;
+        }
+        failToast({
+          description: "Fail: Something went wrong",
+        });
+        return;
+      }
+      successToast({
+        description: "Successfully unfollowed the article",
+      });
+
+      setShowFavoriteArticleFolders((prev) => {
+        return {
+          ...prev,
+          edges: prev.edges.map((edge) => {
+            if (edge.node.id === targetFavoriteArticleFolderId) {
+              return {
+                ...edge,
+                node: {
+                  ...edge.node,
+                  favoriteArticles: edge.node.favoriteArticles.filter(
+                    (favoriteArticle) =>
+                      favoriteArticle.id !== favoriteArticleId
+                  ),
+                },
+              };
+            }
+            return edge;
+          }),
+        };
+      });
+
+      await revalidatePage();
+
+      return favoriteArticleId;
     },
-    [failToast, user]
+    [failToast, successToast, revalidatePage]
   );
 
   const handleRemoveFavoriteArticleCard = useCallback(
     async (favoriteArticleId: string) => {
-      const id = await handleRemoveFavoriteArticle(favoriteArticleId);
+      const id = await handleRemoveFavoriteArticle(
+        favoriteArticleId,
+        fragment.favoriteArticleFolderId
+      );
       if (!id) return;
-      await revalidatePage();
       return id;
     },
-    [handleRemoveFavoriteArticle, revalidatePage]
+    [handleRemoveFavoriteArticle, revalidatePage, fragment]
   );
 
   return (

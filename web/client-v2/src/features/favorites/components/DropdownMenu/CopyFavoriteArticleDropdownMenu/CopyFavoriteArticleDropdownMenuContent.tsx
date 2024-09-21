@@ -29,7 +29,8 @@ type CopyFavoriteArticleDropdownMenuContentProps = {
     targetFavoriteArticleFolderId: string
   ) => Promise<string | undefined>;
   handleRemoveFavoriteArticle: (
-    favoriteArticleId: string
+    favoriteArticleId: string,
+    targetFavoriteArticleFolderId: string
   ) => Promise<string | undefined>;
   handleCreateFavoriteArticleFolder: (
     favoriteArticleFolderId: string

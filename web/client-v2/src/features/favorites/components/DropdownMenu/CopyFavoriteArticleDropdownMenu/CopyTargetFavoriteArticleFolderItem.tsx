@@ -15,7 +15,8 @@ type CopyTargetFavoriteArticleFolderItemProps = {
     targetFavoriteArticleFolderId: string
   ) => Promise<string | undefined>;
   handleRemoveFavoriteArticle: (
-    favoriteArticleId: string
+    favoriteArticleId: string,
+    targetFavoriteArticleFolderId: string
   ) => Promise<string | undefined>;
 };
 
@@ -57,7 +58,10 @@ export const CopyTargetFavoriteArticleFolderItem: FC<
             size="sm"
             className="group relative border-emerald-500 bg-emerald-500 font-bold text-white hover:border-red-600 hover:text-red-600"
             onClick={() =>
-              handleRemoveFavoriteArticle(targetFavoriteArticleId || "")
+              handleRemoveFavoriteArticle(
+                targetFavoriteArticleId || "",
+                fragment.id
+              )
             }
           >
             <span className="w-full group-hover:invisible">{"COPIED"}</span>
