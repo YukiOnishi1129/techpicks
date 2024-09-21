@@ -589,6 +589,8 @@ export type UpdateFavoriteArticleFolderMutationMutationVariables = Exact<{
 
 export type UpdateFavoriteArticleFolderMutationMutation = { __typename?: 'Mutation', updateFavoriteArticleFolder: { __typename?: 'FavoriteArticleFolder', id: string } };
 
+export type FavoriteArticleCardItemFragmentFragment = { __typename?: 'FavoriteArticle', id: string, articleId?: string | null, platformId?: string | null, favoriteArticleFolderId: string, userId: string, title: string, description?: string | null, thumbnailUrl: string, articleUrl: string, publishedAt?: number | null, authorName?: string | null, tags?: string | null, platformName: string, platformUrl: string, platformFaviconUrl: string, isEng: boolean, isPrivate: boolean, isRead: boolean, createdAt: number, updatedAt: number };
+
 export type FavoriteArticleCardWrapperFragmentFragment = { __typename?: 'FavoriteArticle', id: string, articleId?: string | null, platformId?: string | null, favoriteArticleFolderId: string, userId: string, title: string, description?: string | null, thumbnailUrl: string, articleUrl: string, publishedAt?: number | null, authorName?: string | null, tags?: string | null, platformName: string, platformUrl: string, platformFaviconUrl: string, isEng: boolean, isPrivate: boolean, isRead: boolean, createdAt: number, updatedAt: number };
 
 export type FavoriteFolderFavoriteArticleCardWrapperFragmentFragment = { __typename?: 'FavoriteArticleFolderConnection', edges: Array<{ __typename?: 'FavoriteArticleFolderEdge', node: { __typename?: 'FavoriteArticleFolder', id: string, title: string } }> };
@@ -928,8 +930,8 @@ export const FavoriteArticleFolderListTemplateFragmentFragmentDoc = gql`
   }
 }
     ${FavoriteArticleFolderListFragmentFragmentDoc}`;
-export const FavoriteArticleCardWrapperFragmentFragmentDoc = gql`
-    fragment FavoriteArticleCardWrapperFragment on FavoriteArticle {
+export const FavoriteArticleCardItemFragmentFragmentDoc = gql`
+    fragment FavoriteArticleCardItemFragment on FavoriteArticle {
   id
   articleId
   platformId
@@ -952,6 +954,31 @@ export const FavoriteArticleCardWrapperFragmentFragmentDoc = gql`
   updatedAt
 }
     `;
+export const FavoriteArticleCardWrapperFragmentFragmentDoc = gql`
+    fragment FavoriteArticleCardWrapperFragment on FavoriteArticle {
+  id
+  articleId
+  platformId
+  favoriteArticleFolderId
+  userId
+  title
+  description
+  thumbnailUrl
+  articleUrl
+  publishedAt
+  authorName
+  tags
+  platformName
+  platformUrl
+  platformFaviconUrl
+  isEng
+  isPrivate
+  isRead
+  createdAt
+  updatedAt
+  ...FavoriteArticleCardItemFragment
+}
+    ${FavoriteArticleCardItemFragmentFragmentDoc}`;
 export const FavoriteArticleListFragmentFragmentDoc = gql`
     fragment FavoriteArticleListFragment on FavoriteArticleConnection {
   edges {

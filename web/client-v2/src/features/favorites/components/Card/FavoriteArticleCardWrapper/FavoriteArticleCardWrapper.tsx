@@ -16,6 +16,7 @@ import {
   FavoriteArticleCardWrapperFragment,
   FavoriteFolderFavoriteArticleCardWrapperFragment,
 } from "./FavoriteArticleCardWrapperFragment";
+import { FavoriteArticleCardItem } from "../FavoriteArticleCardItem";
 
 // import { FavoriteArticleType } from "@/types/favoriteArticle";
 // import { FavoriteArticleFolderType } from "@/types/favoriteArticleFolder";
@@ -159,6 +160,8 @@ export const FavoriteArticleCardWrapper: FC<
             </div>
           </div>
         </div>
+
+        <FavoriteArticleCardItem data={fragment} />
 
         {/* <FavoriteArticleDetailSheet
           favoriteArticle={favoriteArticle}
