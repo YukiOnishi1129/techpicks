@@ -172,6 +172,17 @@ export type CreateFavoriteArticleFolderInput = {
   title: Scalars["String"]["input"];
 };
 
+export type CreateFavoriteArticleForUploadArticleInput = {
+  articleUrl: Scalars["String"]["input"];
+  description?: InputMaybe<Scalars["String"]["input"]>;
+  favoriteArticleFolderId: Scalars["ID"]["input"];
+  platformFaviconUrl: Scalars["String"]["input"];
+  platformName: Scalars["String"]["input"];
+  platformUrl: Scalars["String"]["input"];
+  thumbnailUrl: Scalars["String"]["input"];
+  title: Scalars["String"]["input"];
+};
+
 export type CreateFavoriteArticleInput = {
   articleId: Scalars["ID"]["input"];
   articleUrl: Scalars["String"]["input"];
@@ -319,6 +330,7 @@ export type Mutation = {
   createBookmarkForUploadArticle: Bookmark;
   createFavoriteArticle: FavoriteArticle;
   createFavoriteArticleFolder: FavoriteArticleFolder;
+  createFavoriteArticleForUploadArticle: FavoriteArticle;
   deleteBookmark: Scalars["Boolean"]["output"];
   deleteFavoriteArticle: Scalars["Boolean"]["output"];
   deleteFavoriteArticleByArticleId: Scalars["Boolean"]["output"];
@@ -340,6 +352,10 @@ export type MutationCreateFavoriteArticleArgs = {
 
 export type MutationCreateFavoriteArticleFolderArgs = {
   input: CreateFavoriteArticleFolderInput;
+};
+
+export type MutationCreateFavoriteArticleForUploadArticleArgs = {
+  input: CreateFavoriteArticleForUploadArticleInput;
 };
 
 export type MutationDeleteBookmarkArgs = {
@@ -1069,6 +1085,19 @@ export type CreateFavoriteArticleFolderMutationMutation = {
     __typename?: "FavoriteArticleFolder";
     id: string;
     title: string;
+  };
+};
+
+export type CreateFavoriteArticleForUploadArticleMutationMutationVariables =
+  Exact<{
+    input: CreateFavoriteArticleForUploadArticleInput;
+  }>;
+
+export type CreateFavoriteArticleForUploadArticleMutationMutation = {
+  __typename?: "Mutation";
+  createFavoriteArticleForUploadArticle: {
+    __typename?: "FavoriteArticle";
+    id: string;
   };
 };
 
@@ -3031,6 +3060,59 @@ export type CreateFavoriteArticleFolderMutationMutationOptions =
   Apollo.BaseMutationOptions<
     CreateFavoriteArticleFolderMutationMutation,
     CreateFavoriteArticleFolderMutationMutationVariables
+  >;
+export const CreateFavoriteArticleForUploadArticleMutationDocument = gql`
+  mutation CreateFavoriteArticleForUploadArticleMutation(
+    $input: CreateFavoriteArticleForUploadArticleInput!
+  ) {
+    createFavoriteArticleForUploadArticle(input: $input) {
+      id
+    }
+  }
+`;
+export type CreateFavoriteArticleForUploadArticleMutationMutationFn =
+  Apollo.MutationFunction<
+    CreateFavoriteArticleForUploadArticleMutationMutation,
+    CreateFavoriteArticleForUploadArticleMutationMutationVariables
+  >;
+
+/**
+ * __useCreateFavoriteArticleForUploadArticleMutationMutation__
+ *
+ * To run a mutation, you first call `useCreateFavoriteArticleForUploadArticleMutationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateFavoriteArticleForUploadArticleMutationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createFavoriteArticleForUploadArticleMutationMutation, { data, loading, error }] = useCreateFavoriteArticleForUploadArticleMutationMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateFavoriteArticleForUploadArticleMutationMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateFavoriteArticleForUploadArticleMutationMutation,
+    CreateFavoriteArticleForUploadArticleMutationMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    CreateFavoriteArticleForUploadArticleMutationMutation,
+    CreateFavoriteArticleForUploadArticleMutationMutationVariables
+  >(CreateFavoriteArticleForUploadArticleMutationDocument, options);
+}
+export type CreateFavoriteArticleForUploadArticleMutationMutationHookResult =
+  ReturnType<typeof useCreateFavoriteArticleForUploadArticleMutationMutation>;
+export type CreateFavoriteArticleForUploadArticleMutationMutationResult =
+  Apollo.MutationResult<CreateFavoriteArticleForUploadArticleMutationMutation>;
+export type CreateFavoriteArticleForUploadArticleMutationMutationOptions =
+  Apollo.BaseMutationOptions<
+    CreateFavoriteArticleForUploadArticleMutationMutation,
+    CreateFavoriteArticleForUploadArticleMutationMutationVariables
   >;
 export const CreateFavoriteArticleMutationDocument = gql`
   mutation CreateFavoriteArticleMutation($input: CreateFavoriteArticleInput!) {
