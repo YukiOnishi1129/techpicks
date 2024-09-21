@@ -4,6 +4,7 @@ import (
 	"context"
 
 	fpb "github.com/YukiOnishi1129/techpicks/micro-service/favorite-service/grpc/favorite"
+	externaladapter "github.com/YukiOnishi1129/techpicks/micro-service/favorite-service/internal/adapter/external_adapter"
 	persistenceadapter "github.com/YukiOnishi1129/techpicks/micro-service/favorite-service/internal/adapter/persistence_adapter"
 	"google.golang.org/protobuf/types/known/emptypb"
 )
@@ -25,11 +26,13 @@ type FavoriteUseCase interface {
 type favoriteUseCase struct {
 	favoriteArticleFolderPersistenceAdapter persistenceadapter.FavoriteArticleFolderPersistenceAdapter
 	favoriteArticlePersistenceAdapter       persistenceadapter.FavoriteArticlePersistenceAdapter
+	contentExternalAdapter                  externaladapter.ContentExternalAdapter
 }
 
-func NewFavoriteUseCase(fafpa persistenceadapter.FavoriteArticleFolderPersistenceAdapter, fapa persistenceadapter.FavoriteArticlePersistenceAdapter) FavoriteUseCase {
+func NewFavoriteUseCase(fafpa persistenceadapter.FavoriteArticleFolderPersistenceAdapter, fapa persistenceadapter.FavoriteArticlePersistenceAdapter, cea externaladapter.ContentExternalAdapter) FavoriteUseCase {
 	return &favoriteUseCase{
 		favoriteArticleFolderPersistenceAdapter: fafpa,
 		favoriteArticlePersistenceAdapter:       fapa,
+		contentExternalAdapter:                  cea,
 	}
 }
