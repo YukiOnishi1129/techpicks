@@ -33,13 +33,18 @@ func (fu *favoriteUseCase) GetFavoriteArticleFolders(ctx context.Context, req *f
 		isFolderOnly = req.GetIsFolderOnly().GetValue()
 	}
 
+	isFaAllFetch := false
+	if req.GetIsFavoriteArticleAllFetch() != nil && req.GetIsFavoriteArticleAllFetch().GetValue() {
+		isFaAllFetch = req.GetIsFavoriteArticleAllFetch().GetValue()
+	}
+
 	for i, f := range fafs {
 		faLimit := 1
 		if req.GetFavoriteArticleLimit().GetValue() != 0 {
 			faLimit = int(req.GetFavoriteArticleLimit().GetValue())
 		}
 
-		faf := fu.convertPBFavoriteArticleFolder(ctx, f, &faLimit, &isFolderOnly)
+		faf := fu.convertPBFavoriteArticleFolder(ctx, f, &faLimit, &isFolderOnly, &isFaAllFetch)
 		resFafs[i] = &fpb.FavoriteArticleFolderEdge{
 			Cursor: f.ID,
 			Node:   faf,
@@ -104,7 +109,7 @@ func (fu *favoriteUseCase) GetFavoriteArticleFoldersByArticleId(ctx context.Cont
 	resFavFolders := make([]*fpb.FavoriteArticleFolderEdge, len(fafs))
 	for i, f := range fafs {
 		isFolderOnly := false
-		faf := fu.convertPBFavoriteArticleFolder(ctx, f, nil, &isFolderOnly)
+		faf := fu.convertPBFavoriteArticleFolder(ctx, f, nil, &isFolderOnly, nil)
 		resFavFolders[i] = &fpb.FavoriteArticleFolderEdge{
 			Cursor: f.ID,
 			Node:   faf,
@@ -117,6 +122,24 @@ func (fu *favoriteUseCase) GetFavoriteArticleFoldersByArticleId(ctx context.Cont
 			HasNextPage: false,
 			EndCursor:   "",
 		},
+	}, nil
+}
+
+func (fu *favoriteUseCase) GetFavoriteArticleFolderByID(ctx context.Context, req *fpb.GetFavoriteArticleFolderByIdRequest) (*fpb.GetFavoriteArticleFolderResponse, error) {
+	isFolderOnly := false
+	if req.GetIsFolderOnly() != nil {
+		isFolderOnly = req.GetIsFolderOnly().GetValue()
+	}
+	f, err := fu.favoriteArticleFolderPersistenceAdapter.GetFavoriteArticleFolderByID(ctx, req.GetId(), req.GetUserId(), &isFolderOnly)
+	if err != nil {
+		return &fpb.GetFavoriteArticleFolderResponse{}, err
+	}
+	if f.ID == "" {
+		return &fpb.GetFavoriteArticleFolderResponse{}, errors.New("favorite article folder not found")
+	}
+
+	return &fpb.GetFavoriteArticleFolderResponse{
+		FavoriteArticleFolder: fu.convertPBFavoriteArticleFolder(ctx, &f, nil, &isFolderOnly, nil),
 	}, nil
 }
 
@@ -133,11 +156,11 @@ func (fu *favoriteUseCase) CreateFavoriteArticleFolder(ctx context.Context, req 
 	}
 
 	return &fpb.CreateFavoriteArticleFolderResponse{
-		FavoriteArticleFolder: fu.convertPBFavoriteArticleFolder(ctx, &faf, nil, &isFolderOnly),
+		FavoriteArticleFolder: fu.convertPBFavoriteArticleFolder(ctx, &faf, nil, &isFolderOnly, nil),
 	}, nil
 }
 
-func (fu *favoriteUseCase) convertPBFavoriteArticleFolder(ctx context.Context, f *entity.FavoriteArticleFolder, faLimit *int, isFolderOnly *bool) *fpb.FavoriteArticleFolder {
+func (fu *favoriteUseCase) convertPBFavoriteArticleFolder(ctx context.Context, f *entity.FavoriteArticleFolder, faLimit *int, isFolderOnly *bool, isFavoriteArticleAllFetch *bool) *fpb.FavoriteArticleFolder {
 	faf := &fpb.FavoriteArticleFolder{
 		Id:               f.ID,
 		UserId:           f.UserID,
@@ -152,7 +175,7 @@ func (fu *favoriteUseCase) convertPBFavoriteArticleFolder(ctx context.Context, f
 		return faf
 	}
 
-	fas, err := fu.favoriteArticlePersistenceAdapter.GetFavoriteArticlesByFavoriteArticleFolderID(ctx, f.ID, f.UserID, faLimit)
+	fas, err := fu.favoriteArticlePersistenceAdapter.GetFavoriteArticlesByFavoriteArticleFolderID(ctx, f.ID, f.UserID, faLimit, isFavoriteArticleAllFetch)
 	if err != nil {
 		return nil
 	}
@@ -184,7 +207,7 @@ func (fu *favoriteUseCase) UpdateFavoriteArticleFolder(ctx context.Context, req 
 		return &fpb.UpdateFavoriteArticleFolderResponse{}, err
 	}
 	return &fpb.UpdateFavoriteArticleFolderResponse{
-		FavoriteArticleFolder: fu.convertPBFavoriteArticleFolder(ctx, &f, nil, &isFolderOnly),
+		FavoriteArticleFolder: fu.convertPBFavoriteArticleFolder(ctx, &f, nil, &isFolderOnly, nil),
 	}, nil
 }
 

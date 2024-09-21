@@ -21,7 +21,7 @@ export const deleteFavoriteArticleFolderMutation = async (
     mutation: DeleteFavoriteArticleFolderMutation,
     context: {
       fetchOptions: {
-        cache: "no-cache",
+        cache: "no-store",
       },
     },
     variables: {

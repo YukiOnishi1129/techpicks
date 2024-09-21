@@ -43,6 +43,11 @@ export class GetFavoriteArticleFoldersRequest extends jspb.Message {
     getIsAllFetch(): google_protobuf_wrappers_pb.BoolValue | undefined;
     setIsAllFetch(value?: google_protobuf_wrappers_pb.BoolValue): GetFavoriteArticleFoldersRequest;
 
+    hasIsFavoriteArticleAllFetch(): boolean;
+    clearIsFavoriteArticleAllFetch(): void;
+    getIsFavoriteArticleAllFetch(): google_protobuf_wrappers_pb.BoolValue | undefined;
+    setIsFavoriteArticleAllFetch(value?: google_protobuf_wrappers_pb.BoolValue): GetFavoriteArticleFoldersRequest;
+
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): GetFavoriteArticleFoldersRequest.AsObject;
     static toObject(includeInstance: boolean, msg: GetFavoriteArticleFoldersRequest): GetFavoriteArticleFoldersRequest.AsObject;
@@ -62,6 +67,7 @@ export namespace GetFavoriteArticleFoldersRequest {
         favoriteArticleLimit?: google_protobuf_wrappers_pb.Int64Value.AsObject,
         isFolderOnly?: google_protobuf_wrappers_pb.BoolValue.AsObject,
         isAllFetch?: google_protobuf_wrappers_pb.BoolValue.AsObject,
+        isFavoriteArticleAllFetch?: google_protobuf_wrappers_pb.BoolValue.AsObject,
     }
 }
 
@@ -113,6 +119,35 @@ export class GetFavoriteArticleFolderResponse extends jspb.Message {
 export namespace GetFavoriteArticleFolderResponse {
     export type AsObject = {
         favoriteArticleFolder?: FavoriteArticleFolder.AsObject,
+    }
+}
+
+export class GetFavoriteArticleFolderByIdRequest extends jspb.Message { 
+    getId(): string;
+    setId(value: string): GetFavoriteArticleFolderByIdRequest;
+    getUserId(): string;
+    setUserId(value: string): GetFavoriteArticleFolderByIdRequest;
+
+    hasIsFolderOnly(): boolean;
+    clearIsFolderOnly(): void;
+    getIsFolderOnly(): google_protobuf_wrappers_pb.BoolValue | undefined;
+    setIsFolderOnly(value?: google_protobuf_wrappers_pb.BoolValue): GetFavoriteArticleFolderByIdRequest;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): GetFavoriteArticleFolderByIdRequest.AsObject;
+    static toObject(includeInstance: boolean, msg: GetFavoriteArticleFolderByIdRequest): GetFavoriteArticleFolderByIdRequest.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: GetFavoriteArticleFolderByIdRequest, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): GetFavoriteArticleFolderByIdRequest;
+    static deserializeBinaryFromReader(message: GetFavoriteArticleFolderByIdRequest, reader: jspb.BinaryReader): GetFavoriteArticleFolderByIdRequest;
+}
+
+export namespace GetFavoriteArticleFolderByIdRequest {
+    export type AsObject = {
+        id: string,
+        userId: string,
+        isFolderOnly?: google_protobuf_wrappers_pb.BoolValue.AsObject,
     }
 }
 

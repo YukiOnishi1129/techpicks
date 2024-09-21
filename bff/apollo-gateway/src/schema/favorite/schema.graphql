@@ -3,7 +3,7 @@ Favorite Article schema
 """
 type FavoriteArticle implements Node {
   id: ID!
-  articleId: String
+  articleId: String!
   platformId: String
   favoriteArticleFolderId: String!
   userId: String!
@@ -11,12 +11,12 @@ type FavoriteArticle implements Node {
   description: String
   thumbnailUrl: String!
   articleUrl: String!
-  platformFaviconUrl: String!
   publishedAt: Int
   authorName: String
   tags: String
   platformName: String!
   platformUrl: String!
+  platformFaviconUrl: String!
   isEng: Boolean!
   isPrivate: Boolean!
   isRead: Boolean!

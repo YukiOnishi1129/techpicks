@@ -22,7 +22,7 @@ export const createFavoriteArticleMutation = async (
     mutation: CreateFavoriteArticleMutation,
     context: {
       fetchOptions: {
-        cache: "no-cache",
+        cache: "no-store",
       },
     },
     variables: {

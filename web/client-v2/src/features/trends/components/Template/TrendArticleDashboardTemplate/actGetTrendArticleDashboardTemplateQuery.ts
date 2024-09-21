@@ -30,7 +30,7 @@ export const getTrendArticleDashboardTemplateQuery = async (
     query: GetTrendArticleDashboardTemplateQuery,
     context: {
       fetchOptions: {
-        cache: "no-cache",
+        cache: "no-store",
       },
     },
     variables: {

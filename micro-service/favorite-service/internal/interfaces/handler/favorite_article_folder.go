@@ -23,6 +23,14 @@ func (fh *favoriteHandler) GetFavoriteArticleFoldersByArticleId(ctx context.Cont
 	return res, nil
 }
 
+func (fh *favoriteHandler) GetFavoriteArticleFolderById(ctx context.Context, req *fpb.GetFavoriteArticleFolderByIdRequest) (*fpb.GetFavoriteArticleFolderResponse, error) {
+	res, err := fh.favoriteUseCase.GetFavoriteArticleFolderByID(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}
+
 func (fh *favoriteHandler) CreateFavoriteArticleFolder(ctx context.Context, req *fpb.CreateFavoriteArticleFolderRequest) (*fpb.CreateFavoriteArticleFolderResponse, error) {
 	res, err := fh.favoriteUseCase.CreateFavoriteArticleFolder(ctx, req)
 	if err != nil {

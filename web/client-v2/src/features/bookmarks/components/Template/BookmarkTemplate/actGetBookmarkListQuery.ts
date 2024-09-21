@@ -22,7 +22,7 @@ export const getBookmarkTemplateQuery = async (input: BookmarksInput) => {
     query: GetBookmarkTemplateQuery,
     context: {
       fetchOptions: {
-        cache: "no-cache",
+        cache: "no-store",
       },
     },
     variables: {

@@ -19,7 +19,7 @@ export const deleteArticleBookmarkMutation = async (
     mutation: DeleteArticleBookmarkMutation,
     context: {
       fetchOptions: {
-        cache: "no-cache",
+        cache: "no-store",
       },
     },
     variables: {

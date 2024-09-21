@@ -106,10 +106,16 @@ export class FavoriteArticleFoldersInput {
     keyword?: Nullable<string>;
     isFolderOnly?: Nullable<boolean>;
     isAllFetch?: Nullable<boolean>;
+    isFavoriteArticleAllFetch?: Nullable<boolean>;
     first?: Nullable<number>;
     after?: Nullable<string>;
     last?: Nullable<number>;
     before?: Nullable<string>;
+}
+
+export class FavoriteArticleFolderInput {
+    id: string;
+    isFolderOnly?: Nullable<boolean>;
 }
 
 export class FavoriteArticlesInput {
@@ -133,6 +139,8 @@ export abstract class IQuery {
     abstract bookmarks(input: BookmarksInput): BookmarkConnection | Promise<BookmarkConnection>;
 
     abstract favoriteArticleFolders(input?: Nullable<FavoriteArticleFoldersInput>): FavoriteArticleFolderConnection | Promise<FavoriteArticleFolderConnection>;
+
+    abstract favoriteArticleFolder(input: FavoriteArticleFolderInput): FavoriteArticleFolder | Promise<FavoriteArticleFolder>;
 
     abstract favoriteArticles(input?: Nullable<FavoriteArticlesInput>): FavoriteArticleConnection | Promise<FavoriteArticleConnection>;
 }
@@ -245,7 +253,7 @@ export class Category implements Node {
 
 export class FavoriteArticle implements Node {
     id: string;
-    articleId?: Nullable<string>;
+    articleId: string;
     platformId?: Nullable<string>;
     favoriteArticleFolderId: string;
     userId: string;
@@ -253,12 +261,12 @@ export class FavoriteArticle implements Node {
     description?: Nullable<string>;
     thumbnailUrl: string;
     articleUrl: string;
-    platformFaviconUrl: string;
     publishedAt?: Nullable<number>;
     authorName?: Nullable<string>;
     tags?: Nullable<string>;
     platformName: string;
     platformUrl: string;
+    platformFaviconUrl: string;
     isEng: boolean;
     isPrivate: boolean;
     isRead: boolean;

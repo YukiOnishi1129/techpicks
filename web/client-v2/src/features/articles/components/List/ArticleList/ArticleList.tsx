@@ -4,14 +4,10 @@ import { User } from "@supabase/supabase-js";
 import { FragmentOf, readFragment } from "gql.tada";
 import { useCallback, useRef, useState, useEffect } from "react";
 
-// import { FetchArticlesAPIResponse } from "@/features/articles/actions/article";
-
-// import { NotFoundList } from "@/components/layout/NotFoundList";
-
+import { NotFoundList } from "@/components/layout/NotFoundList";
 import { Loader } from "@/components/ui/loader";
 
 import { ArticleTabType } from "@/types/article";
-// import { FavoriteArticleFolderType } from "@/types/favoriteArticleFolder";
 import { LanguageStatus } from "@/types/language";
 
 import { getArticleListQuery } from "./actGetArticleListQuery";
@@ -117,8 +113,7 @@ export function ArticleList({
     <>
       {flatArticles.length === 0 ? (
         <div className="flex flex-col items-center justify-center ">
-          {/* <NotFoundList message="No articles found" /> */}
-          Not Found
+          <NotFoundList message="No articles found" />
         </div>
       ) : (
         <div className="m-auto">
