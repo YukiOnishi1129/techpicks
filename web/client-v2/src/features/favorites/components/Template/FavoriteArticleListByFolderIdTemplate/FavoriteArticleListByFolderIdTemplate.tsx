@@ -3,6 +3,8 @@ import { FC } from "react";
 
 import { BreadCrumbType, PageBreadcrumb } from "@/components/ui/breadcrumb";
 
+import { getFavoriteArticleListByFolderIdTemplateQuery } from "./actGetFavoriteArticleListByFolderIdTemplateQuery";
+
 type FavoriteArticleListByFolderIdTemplateProps = {
   user: User;
   id: string;
@@ -26,6 +28,14 @@ export const FavoriteArticleListByFolderIdTemplate: FC<
       href: `/favorite/article/${id}`,
     },
   ];
+
+  const { data, error } = await getFavoriteArticleListByFolderIdTemplateQuery({
+    folderId: id,
+  });
+
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
 
   return (
     <div>

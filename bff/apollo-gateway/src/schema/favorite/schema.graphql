@@ -11,12 +11,12 @@ type FavoriteArticle implements Node {
   description: String
   thumbnailUrl: String!
   articleUrl: String!
-  platformFaviconUrl: String!
   publishedAt: Int
   authorName: String
   tags: String
   platformName: String!
   platformUrl: String!
+  platformFaviconUrl: String!
   isEng: Boolean!
   isPrivate: Boolean!
   isRead: Boolean!
