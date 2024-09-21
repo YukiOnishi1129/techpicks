@@ -482,6 +482,62 @@ export namespace CreateFavoriteArticleRequest {
     }
 }
 
+export class CreateFavoriteArticleForUploadArticleRequest extends jspb.Message { 
+    getUserId(): string;
+    setUserId(value: string): CreateFavoriteArticleForUploadArticleRequest;
+    getArticleId(): string;
+    setArticleId(value: string): CreateFavoriteArticleForUploadArticleRequest;
+    getFavoriteArticleFolderId(): string;
+    setFavoriteArticleFolderId(value: string): CreateFavoriteArticleForUploadArticleRequest;
+    getTitle(): string;
+    setTitle(value: string): CreateFavoriteArticleForUploadArticleRequest;
+    getDescription(): string;
+    setDescription(value: string): CreateFavoriteArticleForUploadArticleRequest;
+    getThumbnailUrl(): string;
+    setThumbnailUrl(value: string): CreateFavoriteArticleForUploadArticleRequest;
+    getArticleUrl(): string;
+    setArticleUrl(value: string): CreateFavoriteArticleForUploadArticleRequest;
+    getPlatformName(): string;
+    setPlatformName(value: string): CreateFavoriteArticleForUploadArticleRequest;
+    getPlatformUrl(): string;
+    setPlatformUrl(value: string): CreateFavoriteArticleForUploadArticleRequest;
+    getPlatformFaviconUrl(): string;
+    setPlatformFaviconUrl(value: string): CreateFavoriteArticleForUploadArticleRequest;
+    getIsEng(): boolean;
+    setIsEng(value: boolean): CreateFavoriteArticleForUploadArticleRequest;
+    getIsPrivate(): boolean;
+    setIsPrivate(value: boolean): CreateFavoriteArticleForUploadArticleRequest;
+    getIsRead(): boolean;
+    setIsRead(value: boolean): CreateFavoriteArticleForUploadArticleRequest;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): CreateFavoriteArticleForUploadArticleRequest.AsObject;
+    static toObject(includeInstance: boolean, msg: CreateFavoriteArticleForUploadArticleRequest): CreateFavoriteArticleForUploadArticleRequest.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: CreateFavoriteArticleForUploadArticleRequest, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): CreateFavoriteArticleForUploadArticleRequest;
+    static deserializeBinaryFromReader(message: CreateFavoriteArticleForUploadArticleRequest, reader: jspb.BinaryReader): CreateFavoriteArticleForUploadArticleRequest;
+}
+
+export namespace CreateFavoriteArticleForUploadArticleRequest {
+    export type AsObject = {
+        userId: string,
+        articleId: string,
+        favoriteArticleFolderId: string,
+        title: string,
+        description: string,
+        thumbnailUrl: string,
+        articleUrl: string,
+        platformName: string,
+        platformUrl: string,
+        platformFaviconUrl: string,
+        isEng: boolean,
+        isPrivate: boolean,
+        isRead: boolean,
+    }
+}
+
 export class DeleteFavoriteArticleRequest extends jspb.Message { 
     getId(): string;
     setId(value: string): DeleteFavoriteArticleRequest;

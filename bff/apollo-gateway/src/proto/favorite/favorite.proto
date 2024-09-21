@@ -18,6 +18,7 @@ service FavoriteService {
 
     rpc GetFavoriteArticles(GetFavoriteArticlesRequest) returns (GetFavoriteArticlesResponse);
     rpc CreateFavoriteArticle(CreateFavoriteArticleRequest) returns (CreateFavoriteArticleResponse);
+    rpc CreateFavoriteArticleForUploadArticle(CreateFavoriteArticleForUploadArticleRequest) returns (CreateFavoriteArticleResponse);
     rpc DeleteFavoriteArticle(DeleteFavoriteArticleRequest) returns (google.protobuf.Empty);
     rpc DeleteFavoriteArticlesByArticleId(DeleteFavoriteArticleByArticleIdRequest) returns (google.protobuf.Empty);
 }
@@ -114,6 +115,22 @@ message CreateFavoriteArticleRequest {
     bool is_eng = 15;
     bool is_private = 16;
     bool is_read = 17;
+}
+
+message CreateFavoriteArticleForUploadArticleRequest {
+    string user_id = 1;
+    string article_id = 2;
+    string favorite_article_folder_id = 3;
+    string title = 4;
+    string description = 5;
+    string thumbnail_url = 6;
+    string article_url = 7;
+    string platform_name = 8;
+    string platform_url = 9;
+    string platform_favicon_url = 10;
+    bool is_eng = 11;
+    bool is_private = 12;
+    bool is_read = 13;
 }
 
 message DeleteFavoriteArticleRequest {
