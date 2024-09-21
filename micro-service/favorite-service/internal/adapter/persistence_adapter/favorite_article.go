@@ -66,7 +66,7 @@ func (fapa *favoriteArticlePersistenceAdapter) GetFavoriteAllFolderArticles(ctx 
 	q := []qm.QueryMod{
 		qm.Where("user_id = ?", req.GetUserId()),
 		qm.Load(qm.Rels(entity.FavoriteArticleRels.FavoriteArticleFolder)),
-		qm.GroupBy("article_id"),
+		qm.GroupBy("favorite_articles.article_id, favorite_articles.id"),
 		qm.OrderBy("created_at DESC"),
 		qm.Limit(limit),
 	}

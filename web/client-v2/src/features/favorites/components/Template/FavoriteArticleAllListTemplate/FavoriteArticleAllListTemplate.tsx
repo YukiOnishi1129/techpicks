@@ -3,6 +3,12 @@ import { FC } from "react";
 
 import { BreadCrumbType, PageBreadcrumb } from "@/components/ui/breadcrumb";
 
+import {
+  FavoriteAllFolderArticlesInput,
+  FavoriteArticleFoldersInput,
+} from "@/graphql/type";
+
+import { getFavoriteArticleFoldersAllListTemplateQuery } from "./actGetFavoriteArticleFoldersAllListTemplateQuery";
 import { FavoriteArticleKeywordSearchForm } from "../../Search";
 
 type FavoriteArticleAllListTemplateProps = {
@@ -27,6 +33,27 @@ export const FavoriteArticleAllListTemplate: FC<
       href: `/favorite/article`,
     },
   ];
+
+  const favoriteAllFolderArticlesInput: FavoriteAllFolderArticlesInput = {
+    keyword,
+  };
+
+  const favoriteArticleFoldersInput: FavoriteArticleFoldersInput = {
+    isAllFetch: true,
+    isFolderOnly: false,
+    isFavoriteArticleAllFetch: true,
+  };
+
+  const { data, error } = await getFavoriteArticleFoldersAllListTemplateQuery(
+    favoriteAllFolderArticlesInput,
+    favoriteArticleFoldersInput
+  );
+
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
+  console.log("🔥");
+  console.log(data);
 
   return (
     <div>

@@ -22,8 +22,8 @@ import {
   CreateFavoriteArticleRequest,
   DeleteFavoriteArticleByArticleIdRequest,
   DeleteFavoriteArticleRequest,
-  GetFavoriteAllFolderArticlesRequest,
   GetFavoriteArticlesRequest,
+  GetFavoriteAllFolderArticlesRequest,
 } from 'src/grpc/favorite/favorite_pb';
 import { convertTimestampToInt } from 'src/utils/timestamp';
 

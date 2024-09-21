@@ -327,6 +327,17 @@ export class FavoriteArticleEdge {
     node: FavoriteArticle;
 }
 
+export class FavoriteAllFolderArticleConnection {
+    edges: FavoriteAllFolderArticleEdge[];
+    pageInfo: PageInfo;
+}
+
+export class FavoriteAllFolderArticleEdge {
+    cursor: string;
+    node: FavoriteArticle;
+    favoriteArticleFolders: FavoriteArticleFolder[];
+}
+
 export class Feed implements Node {
     id: string;
     platform: Platform;
@@ -375,17 +386,6 @@ export class Profile implements Node {
     createdAt: number;
     updatedAt: number;
     deletedAt?: Nullable<number>;
-}
-
-export class FavoriteAllFolderArticleConnection {
-    edges: FavoriteAllFolderArticleEdge[];
-    pageInfo: PageInfo;
-}
-
-export class FavoriteAllFolderArticleEdge {
-    cursor: string;
-    node: FavoriteArticle;
-    favoriteArticleFolders: FavoriteArticleFolder[];
 }
 
 type Nullable<T> = T | null;
