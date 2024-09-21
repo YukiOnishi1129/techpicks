@@ -1,6 +1,18 @@
 import { graphql } from "gql.tada";
 
+import { FavoriteFolderFavoriteArticleCardWrapperFragment } from "../../Card/FavoriteArticleCardWrapper/FavoriteArticleCardWrapperFragment";
 import { FavoriteArticleListFragment } from "../../List/FavoriteArticleList/FavoriteArticleListFragment";
+
+export const FavoriteArticleFoldersByFolderIdTemplateFragment = graphql(`
+  fragment FavoriteArticleFoldersByFolderIdTemplateFragment on FavoriteArticleFolderConnection {
+    edges {
+      node {
+        id
+        title
+      }
+    }
+  }
+`);
 
 export const FavoriteArticleListByFolderIdTemplateFragment = graphql(
   `
@@ -8,11 +20,15 @@ export const FavoriteArticleListByFolderIdTemplateFragment = graphql(
       favoriteArticles(input: $favoriteArticlesInput) {
         ...FavoriteArticleListFragment
       }
-      favoriteArticleFolder(input: $folderInput) {
-        id
-        title
+      favoriteArticleFolders(input: $favoriteArticleFoldersInput) {
+        ...FavoriteArticleFoldersByFolderIdTemplateFragment
+        ...FavoriteFolderFavoriteArticleCardWrapperFragment
       }
     }
   `,
-  [FavoriteArticleListFragment]
+  [
+    FavoriteArticleListFragment,
+    FavoriteArticleFoldersByFolderIdTemplateFragment,
+    FavoriteFolderFavoriteArticleCardWrapperFragment,
+  ]
 );

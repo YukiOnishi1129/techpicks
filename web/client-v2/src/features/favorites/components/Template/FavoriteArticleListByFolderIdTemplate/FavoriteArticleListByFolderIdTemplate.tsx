@@ -5,12 +5,15 @@ import { FC } from "react";
 import { BreadCrumbType, PageBreadcrumb } from "@/components/ui/breadcrumb";
 
 import {
-  FavoriteArticleFolderInput,
+  FavoriteArticleFoldersInput,
   FavoriteArticlesInput,
 } from "@/graphql/type";
 
 import { getFavoriteArticleListByFolderIdTemplateQuery } from "./actGetFavoriteArticleListByFolderIdTemplateQuery";
-import { FavoriteArticleListByFolderIdTemplateFragment } from "./FavoriteArticleListByFolderIdTemplateFragment";
+import {
+  FavoriteArticleFoldersByFolderIdTemplateFragment,
+  FavoriteArticleListByFolderIdTemplateFragment,
+} from "./FavoriteArticleListByFolderIdTemplateFragment";
 
 type FavoriteArticleListByFolderIdTemplateProps = {
   user: User;
@@ -26,14 +29,14 @@ export const FavoriteArticleListByFolderIdTemplate: FC<
     keyword: keyword,
   };
 
-  const folderInput: FavoriteArticleFolderInput = {
-    id: id,
+  const favoriteArticleFoldersInput: FavoriteArticleFoldersInput = {
+    isAllFetch: true,
     isFolderOnly: true,
   };
 
   const { data, error } = await getFavoriteArticleListByFolderIdTemplateQuery(
     favoriteArticleInput,
-    folderInput
+    favoriteArticleFoldersInput
   );
 
   if (error) {
@@ -45,6 +48,19 @@ export const FavoriteArticleListByFolderIdTemplate: FC<
     data
   );
 
+  const foldersFragment = readFragment(
+    FavoriteArticleFoldersByFolderIdTemplateFragment,
+    fragment.favoriteArticleFolders
+  );
+
+  const targetFavoriteFolder = foldersFragment.edges.find(
+    (edge) => edge.node.id === id
+  );
+
+  if (!targetFavoriteFolder) {
+    return <div>Not Found</div>;
+  }
+
   const breadcrumbs: BreadCrumbType[] = [
     {
       title: "Home",
@@ -55,7 +71,7 @@ export const FavoriteArticleListByFolderIdTemplate: FC<
       href: "/favorite",
     },
     {
-      title: fragment.favoriteArticleFolder.title,
+      title: targetFavoriteFolder.node.title,
       href: `/favorite/article/${id}`,
     },
   ];
@@ -82,6 +98,14 @@ export const FavoriteArticleListByFolderIdTemplate: FC<
       </div>
 
       <div className="h-12 md:h-24" />
+
+      {/* <FavoriteArticleList
+        user={user}
+        data={fragment.favoriteArticles}
+        folderId={id}
+        keyword={keyword}
+        favoriteArticleFolders={fragment.favoriteArticleFolders}
+      /> */}
 
       {/* <FavoriteArticleList
         user={user}

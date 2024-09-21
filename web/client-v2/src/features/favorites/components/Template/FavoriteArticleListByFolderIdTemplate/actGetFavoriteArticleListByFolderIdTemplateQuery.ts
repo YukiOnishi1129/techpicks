@@ -5,8 +5,8 @@ import { graphql } from "gql.tada";
 import { getClient } from "@/lib/apollo/client";
 
 import {
-  FavoriteArticleFolderInput,
   FavoriteArticlesInput,
+  FavoriteArticleFoldersInput,
 } from "@/graphql/type";
 
 import { FavoriteArticleListByFolderIdTemplateFragment } from "./FavoriteArticleListByFolderIdTemplateFragment";
@@ -15,7 +15,7 @@ const GetFavoriteArticleListByFolderIdTemplateQuery = graphql(
   `
     query GetFavoriteArticleListByFolderIdTemplateQuery(
       $favoriteArticlesInput: FavoriteArticlesInput!
-      $folderInput: FavoriteArticleFolderInput!
+      $favoriteArticleFoldersInput: FavoriteArticleFoldersInput!
     ) {
       ...FavoriteArticleListByFolderIdTemplateFragment
     }
@@ -25,7 +25,7 @@ const GetFavoriteArticleListByFolderIdTemplateQuery = graphql(
 
 export const getFavoriteArticleListByFolderIdTemplateQuery = async (
   favoriteArticlesInput: FavoriteArticlesInput,
-  folderInput: FavoriteArticleFolderInput
+  favoriteArticleFoldersInput: FavoriteArticleFoldersInput
 ) => {
   const { data, error, loading } = await getClient().query({
     query: GetFavoriteArticleListByFolderIdTemplateQuery,
@@ -36,7 +36,7 @@ export const getFavoriteArticleListByFolderIdTemplateQuery = async (
     },
     variables: {
       favoriteArticlesInput,
-      folderInput,
+      favoriteArticleFoldersInput,
     },
     errorPolicy: "all",
   });
