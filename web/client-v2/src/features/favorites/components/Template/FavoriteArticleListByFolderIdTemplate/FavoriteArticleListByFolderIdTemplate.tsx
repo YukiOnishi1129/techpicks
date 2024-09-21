@@ -14,6 +14,7 @@ import {
   FavoriteArticleFoldersByFolderIdTemplateFragment,
   FavoriteArticleListByFolderIdTemplateFragment,
 } from "./FavoriteArticleListByFolderIdTemplateFragment";
+import { CreateFavoriteArticleDialog } from "../../Dialog";
 import { FavoriteArticleList } from "../../List/FavoriteArticleList/FavoriteArticleList";
 import { FavoriteArticleKeywordSearchForm } from "../../Search";
 
@@ -93,10 +94,10 @@ export const FavoriteArticleListByFolderIdTemplate: FC<
               keyword={keyword}
             />
           </div>
-          {/* <CreateFavoriteArticleDialog
+          <CreateFavoriteArticleDialog
             user={user}
             favoriteArticleFolderId={id}
-          /> */}
+          />
         </div>
       </div>
 
