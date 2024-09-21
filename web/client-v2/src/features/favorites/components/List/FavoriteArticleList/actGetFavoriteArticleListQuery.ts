@@ -1,3 +1,5 @@
+"use server";
+
 import { graphql } from "gql.tada";
 
 import { getClient } from "@/lib/apollo/client";

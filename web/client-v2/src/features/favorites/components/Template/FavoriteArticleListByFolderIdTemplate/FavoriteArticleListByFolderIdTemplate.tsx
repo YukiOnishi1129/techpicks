@@ -14,6 +14,7 @@ import {
   FavoriteArticleFoldersByFolderIdTemplateFragment,
   FavoriteArticleListByFolderIdTemplateFragment,
 } from "./FavoriteArticleListByFolderIdTemplateFragment";
+import { FavoriteArticleList } from "../../List/FavoriteArticleList/FavoriteArticleList";
 
 type FavoriteArticleListByFolderIdTemplateProps = {
   user: User;
@@ -99,13 +100,13 @@ export const FavoriteArticleListByFolderIdTemplate: FC<
 
       <div className="h-12 md:h-24" />
 
-      {/* <FavoriteArticleList
+      <FavoriteArticleList
         user={user}
         data={fragment.favoriteArticles}
         folderId={id}
         keyword={keyword}
         favoriteArticleFolders={fragment.favoriteArticleFolders}
-      /> */}
+      />
 
       {/* <FavoriteArticleList
         user={user}
