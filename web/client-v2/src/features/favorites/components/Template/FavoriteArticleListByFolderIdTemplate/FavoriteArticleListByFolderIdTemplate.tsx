@@ -45,9 +45,6 @@ export const FavoriteArticleListByFolderIdTemplate: FC<
     data
   );
 
-  console.log("🔥");
-  console.log(fragment);
-
   const breadcrumbs: BreadCrumbType[] = [
     {
       title: "Home",

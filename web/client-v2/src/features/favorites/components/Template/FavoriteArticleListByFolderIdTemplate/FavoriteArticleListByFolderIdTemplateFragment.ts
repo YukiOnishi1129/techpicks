@@ -1,40 +1,18 @@
 import { graphql } from "gql.tada";
 
-export const FavoriteArticleListByFolderIdTemplateFragment = graphql(`
-  fragment FavoriteArticleListByFolderIdTemplateFragment on Query {
-    favoriteArticles(input: $favoriteArticlesInput) {
-      edges {
-        node {
-          id
-          articleId
-          platformId
-          favoriteArticleFolderId
-          userId
-          title
-          description
-          thumbnailUrl
-          articleUrl
-          publishedAt
-          authorName
-          tags
-          platformName
-          platformUrl
-          platformFaviconUrl
-          isEng
-          isPrivate
-          isRead
-          createdAt
-          updatedAt
-        }
+import { FavoriteArticleListFragment } from "../../List/FavoriteArticleList/FavoriteArticleListFragment";
+
+export const FavoriteArticleListByFolderIdTemplateFragment = graphql(
+  `
+    fragment FavoriteArticleListByFolderIdTemplateFragment on Query {
+      favoriteArticles(input: $favoriteArticlesInput) {
+        ...FavoriteArticleListFragment
       }
-      pageInfo {
-        hasNextPage
-        endCursor
+      favoriteArticleFolder(input: $folderInput) {
+        id
+        title
       }
     }
-    favoriteArticleFolder(input: $folderInput) {
-      id
-      title
-    }
-  }
-`);
+  `,
+  [FavoriteArticleListFragment]
+);
