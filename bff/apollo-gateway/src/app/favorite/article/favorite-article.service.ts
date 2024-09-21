@@ -12,8 +12,10 @@ import {
   DeleteFavoriteArticleInput,
   FavoriteArticleEdge,
   DeleteFavoriteArticleByArticleIdInput,
+  CreateFavoriteArticleForUploadArticleInput,
 } from 'src/graphql/types/graphql';
 import {
+  CreateFavoriteArticleForUploadArticleRequest,
   CreateFavoriteArticleRequest,
   DeleteFavoriteArticleByArticleIdRequest,
   DeleteFavoriteArticleRequest,
@@ -144,6 +146,65 @@ export class FavoriteArticleService {
 
     return new Promise((resolve, reject) => {
       client.createFavoriteArticle(req, (err, res) => {
+        if (err) {
+          reject({
+            code: err?.code || 500,
+            message: err?.message || 'something went wrong',
+          });
+          return;
+        }
+
+        const resFavoriteArticle = res.toObject().favoriteArticle;
+
+        const favoriteArticle: FavoriteArticle = {
+          articleId: resFavoriteArticle.articleId,
+          articleUrl: resFavoriteArticle.articleUrl,
+          authorName: resFavoriteArticle?.authorName?.value,
+          createdAt: convertTimestampToInt(resFavoriteArticle.createdAt),
+          description: resFavoriteArticle.description,
+          favoriteArticleFolderId: resFavoriteArticle.favoriteArticleFolderId,
+          id: resFavoriteArticle.id,
+          isEng: resFavoriteArticle.isEng,
+          isPrivate: resFavoriteArticle.isPrivate,
+          isRead: resFavoriteArticle.isRead,
+          platformFaviconUrl: resFavoriteArticle.platformFaviconUrl,
+          platformId: resFavoriteArticle?.platformId?.value,
+          platformName: resFavoriteArticle.platformName,
+          platformUrl: resFavoriteArticle.platformUrl,
+          publishedAt: resFavoriteArticle?.publishedAt
+            ? convertTimestampToInt(resFavoriteArticle.publishedAt)
+            : undefined,
+          tags: resFavoriteArticle?.tags?.value,
+          thumbnailUrl: resFavoriteArticle.thumbnailUrl,
+          title: resFavoriteArticle.title,
+          updatedAt: convertTimestampToInt(resFavoriteArticle.updatedAt),
+          userId: resFavoriteArticle.userId,
+        };
+
+        resolve(favoriteArticle);
+      });
+    });
+  }
+
+  async createFavoriteArticleForUploadArticle(
+    userId: string,
+    input: CreateFavoriteArticleForUploadArticleInput,
+  ): Promise<FavoriteArticle> {
+    const req = new CreateFavoriteArticleForUploadArticleRequest();
+    req.setUserId(userId);
+    req.setFavoriteArticleFolderId(input.favoriteArticleFolderId);
+    req.setTitle(input.title);
+    req.setDescription(input.description);
+    req.setThumbnailUrl(input.thumbnailUrl);
+    req.setArticleUrl(input.articleUrl);
+    req.setPlatformName(input.platformName);
+    req.setPlatformUrl(input.platformUrl);
+    req.setPlatformFaviconUrl(input.platformFaviconUrl);
+
+    const client = this.grpcFavoriteClientService.getGrpcFavoriteService();
+
+    return new Promise((resolve, reject) => {
+      client.createFavoriteArticleForUploadArticle(req, (err, res) => {
         if (err) {
           reject({
             code: err?.code || 500,

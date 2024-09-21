@@ -4089,14 +4089,14 @@ proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest.protot
 proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest.toObject = function(includeInstance, msg) {
   var f, obj = {
     userId: jspb.Message.getFieldWithDefault(msg, 1, ""),
-    favoriteArticleFolderId: jspb.Message.getFieldWithDefault(msg, 4, ""),
-    title: jspb.Message.getFieldWithDefault(msg, 5, ""),
-    description: jspb.Message.getFieldWithDefault(msg, 6, ""),
-    thumbnailUrl: jspb.Message.getFieldWithDefault(msg, 7, ""),
-    articleUrl: jspb.Message.getFieldWithDefault(msg, 8, ""),
-    platformName: jspb.Message.getFieldWithDefault(msg, 9, ""),
-    platformUrl: jspb.Message.getFieldWithDefault(msg, 10, ""),
-    platformFaviconUrl: jspb.Message.getFieldWithDefault(msg, 11, "")
+    favoriteArticleFolderId: jspb.Message.getFieldWithDefault(msg, 2, ""),
+    title: jspb.Message.getFieldWithDefault(msg, 3, ""),
+    description: jspb.Message.getFieldWithDefault(msg, 4, ""),
+    thumbnailUrl: jspb.Message.getFieldWithDefault(msg, 5, ""),
+    articleUrl: jspb.Message.getFieldWithDefault(msg, 6, ""),
+    platformName: jspb.Message.getFieldWithDefault(msg, 7, ""),
+    platformUrl: jspb.Message.getFieldWithDefault(msg, 8, ""),
+    platformFaviconUrl: jspb.Message.getFieldWithDefault(msg, 9, "")
   };
 
   if (includeInstance) {
@@ -4137,35 +4137,35 @@ proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest.deseri
       var value = /** @type {string} */ (reader.readString());
       msg.setUserId(value);
       break;
-    case 4:
+    case 2:
       var value = /** @type {string} */ (reader.readString());
       msg.setFavoriteArticleFolderId(value);
       break;
-    case 5:
+    case 3:
       var value = /** @type {string} */ (reader.readString());
       msg.setTitle(value);
       break;
-    case 6:
+    case 4:
       var value = /** @type {string} */ (reader.readString());
       msg.setDescription(value);
       break;
-    case 7:
+    case 5:
       var value = /** @type {string} */ (reader.readString());
       msg.setThumbnailUrl(value);
       break;
-    case 8:
+    case 6:
       var value = /** @type {string} */ (reader.readString());
       msg.setArticleUrl(value);
       break;
-    case 9:
+    case 7:
       var value = /** @type {string} */ (reader.readString());
       msg.setPlatformName(value);
       break;
-    case 10:
+    case 8:
       var value = /** @type {string} */ (reader.readString());
       msg.setPlatformUrl(value);
       break;
-    case 11:
+    case 9:
       var value = /** @type {string} */ (reader.readString());
       msg.setPlatformFaviconUrl(value);
       break;
@@ -4208,56 +4208,56 @@ proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest.serial
   f = message.getFavoriteArticleFolderId();
   if (f.length > 0) {
     writer.writeString(
-      4,
+      2,
       f
     );
   }
   f = message.getTitle();
   if (f.length > 0) {
     writer.writeString(
-      5,
+      3,
       f
     );
   }
   f = message.getDescription();
   if (f.length > 0) {
     writer.writeString(
-      6,
+      4,
       f
     );
   }
   f = message.getThumbnailUrl();
   if (f.length > 0) {
     writer.writeString(
-      7,
+      5,
       f
     );
   }
   f = message.getArticleUrl();
   if (f.length > 0) {
     writer.writeString(
-      8,
+      6,
       f
     );
   }
   f = message.getPlatformName();
   if (f.length > 0) {
     writer.writeString(
-      9,
+      7,
       f
     );
   }
   f = message.getPlatformUrl();
   if (f.length > 0) {
     writer.writeString(
-      10,
+      8,
       f
     );
   }
   f = message.getPlatformFaviconUrl();
   if (f.length > 0) {
     writer.writeString(
-      11,
+      9,
       f
     );
   }
@@ -4283,11 +4283,11 @@ proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest.protot
 
 
 /**
- * optional string favorite_article_folder_id = 4;
+ * optional string favorite_article_folder_id = 2;
  * @return {string}
  */
 proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest.prototype.getFavoriteArticleFolderId = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 4, ""));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
 };
 
 
@@ -4296,16 +4296,16 @@ proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest.protot
  * @return {!proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest} returns this
  */
 proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest.prototype.setFavoriteArticleFolderId = function(value) {
-  return jspb.Message.setProto3StringField(this, 4, value);
+  return jspb.Message.setProto3StringField(this, 2, value);
 };
 
 
 /**
- * optional string title = 5;
+ * optional string title = 3;
  * @return {string}
  */
 proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest.prototype.getTitle = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 5, ""));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 3, ""));
 };
 
 
@@ -4314,16 +4314,16 @@ proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest.protot
  * @return {!proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest} returns this
  */
 proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest.prototype.setTitle = function(value) {
-  return jspb.Message.setProto3StringField(this, 5, value);
+  return jspb.Message.setProto3StringField(this, 3, value);
 };
 
 
 /**
- * optional string description = 6;
+ * optional string description = 4;
  * @return {string}
  */
 proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest.prototype.getDescription = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 6, ""));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 4, ""));
 };
 
 
@@ -4332,16 +4332,16 @@ proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest.protot
  * @return {!proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest} returns this
  */
 proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest.prototype.setDescription = function(value) {
-  return jspb.Message.setProto3StringField(this, 6, value);
+  return jspb.Message.setProto3StringField(this, 4, value);
 };
 
 
 /**
- * optional string thumbnail_url = 7;
+ * optional string thumbnail_url = 5;
  * @return {string}
  */
 proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest.prototype.getThumbnailUrl = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 7, ""));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 5, ""));
 };
 
 
@@ -4350,16 +4350,16 @@ proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest.protot
  * @return {!proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest} returns this
  */
 proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest.prototype.setThumbnailUrl = function(value) {
-  return jspb.Message.setProto3StringField(this, 7, value);
+  return jspb.Message.setProto3StringField(this, 5, value);
 };
 
 
 /**
- * optional string article_url = 8;
+ * optional string article_url = 6;
  * @return {string}
  */
 proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest.prototype.getArticleUrl = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 8, ""));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 6, ""));
 };
 
 
@@ -4368,16 +4368,16 @@ proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest.protot
  * @return {!proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest} returns this
  */
 proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest.prototype.setArticleUrl = function(value) {
-  return jspb.Message.setProto3StringField(this, 8, value);
+  return jspb.Message.setProto3StringField(this, 6, value);
 };
 
 
 /**
- * optional string platform_name = 9;
+ * optional string platform_name = 7;
  * @return {string}
  */
 proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest.prototype.getPlatformName = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 9, ""));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 7, ""));
 };
 
 
@@ -4386,16 +4386,16 @@ proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest.protot
  * @return {!proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest} returns this
  */
 proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest.prototype.setPlatformName = function(value) {
-  return jspb.Message.setProto3StringField(this, 9, value);
+  return jspb.Message.setProto3StringField(this, 7, value);
 };
 
 
 /**
- * optional string platform_url = 10;
+ * optional string platform_url = 8;
  * @return {string}
  */
 proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest.prototype.getPlatformUrl = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 10, ""));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 8, ""));
 };
 
 
@@ -4404,16 +4404,16 @@ proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest.protot
  * @return {!proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest} returns this
  */
 proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest.prototype.setPlatformUrl = function(value) {
-  return jspb.Message.setProto3StringField(this, 10, value);
+  return jspb.Message.setProto3StringField(this, 8, value);
 };
 
 
 /**
- * optional string platform_favicon_url = 11;
+ * optional string platform_favicon_url = 9;
  * @return {string}
  */
 proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest.prototype.getPlatformFaviconUrl = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 11, ""));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 9, ""));
 };
 
 
@@ -4422,7 +4422,7 @@ proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest.protot
  * @return {!proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest} returns this
  */
 proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest.prototype.setPlatformFaviconUrl = function(value) {
-  return jspb.Message.setProto3StringField(this, 11, value);
+  return jspb.Message.setProto3StringField(this, 9, value);
 };
 
 

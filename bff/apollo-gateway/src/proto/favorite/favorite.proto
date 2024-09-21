@@ -119,14 +119,14 @@ message CreateFavoriteArticleRequest {
 
 message CreateFavoriteArticleForUploadArticleRequest {
     string user_id = 1;
-    string favorite_article_folder_id = 4;
-    string title = 5;
-    string description = 6;
-    string thumbnail_url = 7;
-    string article_url = 8;
-    string platform_name = 9;
-    string platform_url = 10;
-    string platform_favicon_url = 11;
+    string favorite_article_folder_id = 2;
+    string title = 3;
+    string description = 4;
+    string thumbnail_url = 5;
+    string article_url = 6;
+    string platform_name = 7;
+    string platform_url = 8;
+    string platform_favicon_url = 9;
 }
 
 message DeleteFavoriteArticleRequest {

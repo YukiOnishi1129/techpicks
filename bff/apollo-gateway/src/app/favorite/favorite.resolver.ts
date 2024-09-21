@@ -14,6 +14,7 @@ import {
   FavoriteArticleConnection,
   FavoriteArticlesInput,
   DeleteFavoriteArticleByArticleIdInput,
+  CreateFavoriteArticleForUploadArticleInput,
 } from 'src/graphql/types/graphql';
 
 import { FavoriteArticleService } from './article/favorite-article.service';
@@ -111,6 +112,19 @@ export class FavoriteResolver {
   ): Promise<FavoriteArticle> {
     const userId = context.req.user.id;
     return await this.favoriteArticleService.createFavoriteArticle(
+      userId,
+      input,
+    );
+  }
+
+  @Mutation(() => FavoriteArticle)
+  @UseGuards(SupabaseAuthGuard)
+  async createFavoriteArticleForUploadArticle(
+    @Args('input') input: CreateFavoriteArticleForUploadArticleInput,
+    @Context() context: GraphQLContext,
+  ): Promise<FavoriteArticle> {
+    const userId = context.req.user.id;
+    return await this.favoriteArticleService.createFavoriteArticleForUploadArticle(
       userId,
       input,
     );
