@@ -8,11 +8,14 @@ import {
   CreateFavoriteArticleInput,
   FavoriteArticle,
   FavoriteArticleConnection,
+  FavoriteAllFolderArticleEdge,
   FavoriteArticlesInput,
   DeleteFavoriteArticleInput,
   FavoriteArticleEdge,
   DeleteFavoriteArticleByArticleIdInput,
   CreateFavoriteArticleForUploadArticleInput,
+  FavoriteAllFolderArticlesInput,
+  FavoriteAllFolderArticleConnection,
 } from 'src/graphql/types/graphql';
 import {
   CreateFavoriteArticleForUploadArticleRequest,
@@ -20,6 +23,7 @@ import {
   DeleteFavoriteArticleByArticleIdRequest,
   DeleteFavoriteArticleRequest,
   GetFavoriteArticlesRequest,
+  GetFavoriteAllFolderArticlesRequest,
 } from 'src/grpc/favorite/favorite_pb';
 import { convertTimestampToInt } from 'src/utils/timestamp';
 
@@ -95,6 +99,95 @@ export class FavoriteArticleService {
           );
 
         const favoriteArticleConnection: FavoriteArticleConnection = {
+          edges: favoriteArticleEdges,
+          pageInfo: {
+            endCursor: resFavoriteArticles.pageInfo.endCursor,
+            hasNextPage: resFavoriteArticles.pageInfo.hasNextPage,
+            hasPreviousPage: false,
+          },
+        };
+
+        resolve(favoriteArticleConnection);
+      });
+    });
+  }
+
+  async getFavoriteAllFolderArticles(
+    userId: string,
+    input: FavoriteAllFolderArticlesInput,
+  ): Promise<FavoriteAllFolderArticleConnection> {
+    const req = new GetFavoriteAllFolderArticlesRequest();
+    req.setUserId(userId);
+    if (input?.first) req.setLimit(new Int64Value().setValue(input.first));
+    if (input?.after) req.setCursor(new StringValue().setValue(input.after));
+    if (input?.keyword)
+      req.setKeyword(new StringValue().setValue(input.keyword));
+
+    const client = this.grpcFavoriteClientService.getGrpcFavoriteService();
+
+    return new Promise((resolve, reject) => {
+      client.getFavoriteAllFolderArticles(req, (err, res) => {
+        if (err) {
+          reject({
+            code: err?.code || 500,
+            message: err?.message || 'something went wrong',
+          });
+          return;
+        }
+
+        const resFavoriteArticles = res.toObject();
+
+        const favoriteArticleEdges: FavoriteAllFolderArticleEdge[] =
+          resFavoriteArticles.favoriteAllFolderArticleEdgeList.map(
+            (resFavoriteArticle) => {
+              const article = resFavoriteArticle.node;
+              return {
+                cursor: article.id,
+                favoriteArticleFolders:
+                  resFavoriteArticle.favoriteArticleFoldersList.length > 0
+                    ? resFavoriteArticle.favoriteArticleFoldersList.map(
+                        (folder) => {
+                          return {
+                            createdAt: convertTimestampToInt(folder.createdAt),
+                            description: folder.description,
+                            favoriteArticles: [],
+                            id: folder.id,
+                            title: folder.title,
+                            updatedAt: convertTimestampToInt(folder.updatedAt),
+                            userId: folder.userId,
+                          };
+                        },
+                      )
+                    : [],
+                node: {
+                  articleId: article.articleId,
+                  articleUrl: article.articleUrl,
+                  authorName: article?.authorName?.value,
+                  createdAt: convertTimestampToInt(article.createdAt),
+                  description: article.description,
+                  favoriteArticleFolderId: article.favoriteArticleFolderId,
+                  id: article.id,
+                  isEng: article.isEng,
+                  isPrivate: article.isPrivate,
+                  isRead: article.isRead,
+                  platformFaviconUrl: article.platformFaviconUrl,
+                  platformId: article?.platformId?.value,
+                  platformName: article.platformName,
+                  platformUrl: article.platformUrl,
+                  publishedAt: article?.publishedAt
+                    ? convertTimestampToInt(article.publishedAt)
+                    : undefined,
+                  tags: article?.tags?.value,
+                  thumbnailUrl: article.thumbnailUrl,
+                  title: article.title,
+                  updatedAt: convertTimestampToInt(article.updatedAt),
+                  userId: article.userId,
+                },
+              };
+            },
+          );
+
+        const favoriteArticleConnection: FavoriteAllFolderArticleConnection = {
           edges: favoriteArticleEdges,
           pageInfo: {
             endCursor: resFavoriteArticles.pageInfo.endCursor,

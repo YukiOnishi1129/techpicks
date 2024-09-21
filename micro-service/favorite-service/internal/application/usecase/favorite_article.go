@@ -50,6 +50,69 @@ func (fu *favoriteUseCase) GetFavoriteArticles(ctx context.Context, req *fpb.Get
 	}, nil
 }
 
+func (fu *favoriteUseCase) GetFavoriteAllFolderArticles(ctx context.Context, req *fpb.GetFavoriteAllFolderArticlesRequest) (*fpb.GetFavoriteAllFolderArticlesResponse, error) {
+	limit := 20
+	if req.GetLimit() != nil {
+		limit = int(req.GetLimit().GetValue())
+	}
+
+	fas, err := fu.favoriteArticlePersistenceAdapter.GetFavoriteAllFolderArticles(ctx, req, limit)
+	if err != nil {
+		return &fpb.GetFavoriteAllFolderArticlesResponse{}, err
+	}
+
+	resFas := make([]*fpb.FavoriteAllFolderArticleEdge, len(fas))
+	if len(fas) == 0 {
+		return &fpb.GetFavoriteAllFolderArticlesResponse{
+			FavoriteAllFolderArticleEdge: resFas,
+			PageInfo: &fpb.PageInfo{
+				HasNextPage: false,
+				EndCursor:   "",
+			},
+		}, nil
+	}
+
+	for i, fa := range fas {
+		resFa := &fpb.FavoriteAllFolderArticleEdge{
+			Cursor: fa.ID,
+			Node:   fu.convertPBFavoriteArticle(fa),
+		}
+		if fa.R != nil && fa.R.FavoriteArticleFolder != nil {
+			afas, err := fu.favoriteArticlePersistenceAdapter.GetFavoriteArticlesByArticleID(ctx, fa.ArticleID, fa.UserID)
+			if err != nil {
+				return &fpb.GetFavoriteAllFolderArticlesResponse{}, err
+			}
+			if len(afas) == 0 {
+				continue
+			}
+
+			resFaFs := make([]*fpb.FavoriteArticleFolder, len(afas))
+			for j, afa := range afas {
+				resFaFs[j] = &fpb.FavoriteArticleFolder{
+					Id:        afa.R.FavoriteArticleFolder.ID,
+					UserId:    afa.R.FavoriteArticleFolder.UserID,
+					Title:     afa.R.FavoriteArticleFolder.Title,
+					CreatedAt: timestamppb.New(afa.R.FavoriteArticleFolder.CreatedAt),
+					UpdatedAt: timestamppb.New(afa.R.FavoriteArticleFolder.UpdatedAt),
+				}
+				if afa.R.FavoriteArticleFolder.Description.Valid {
+					resFaFs[j].Description = afa.R.FavoriteArticleFolder.Description.String
+				}
+			}
+			resFa.FavoriteArticleFolders = resFaFs
+		}
+		resFas[i] = resFa
+	}
+
+	return &fpb.GetFavoriteAllFolderArticlesResponse{
+		FavoriteAllFolderArticleEdge: resFas,
+		PageInfo: &fpb.PageInfo{
+			HasNextPage: len(resFas) == limit,
+			EndCursor:   resFas[len(resFas)-1].Cursor,
+		},
+	}, nil
+}
+
 func (fu *favoriteUseCase) CreateFavoriteArticle(ctx context.Context, req *fpb.CreateFavoriteArticleRequest) (*fpb.CreateFavoriteArticleResponse, error) {
 	data, err := fu.favoriteArticlePersistenceAdapter.GetFavoriteArticleByArticleIDAndFavoriteArticleFolderID(ctx, req.GetArticleId(), req.GetFavoriteArticleFolderId(), req.GetUserId())
 	if err != nil {
@@ -179,5 +242,6 @@ func (fu *favoriteUseCase) convertPBFavoriteArticle(fa *entity.FavoriteArticle) 
 	if fa.Tags.Valid {
 		resFa.Tags = wrapperspb.String(fa.Tags.String)
 	}
+
 	return resFa
 }

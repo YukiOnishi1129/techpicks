@@ -56,3 +56,14 @@ type FavoriteArticleEdge {
   cursor: String!
   node: FavoriteArticle!
 }
+
+type FavoriteAllFolderArticleConnection {
+  edges: [FavoriteAllFolderArticleEdge!]!
+  pageInfo: PageInfo!
+}
+
+type FavoriteAllFolderArticleEdge {
+  cursor: String!
+  node: FavoriteArticle!
+  favoriteArticleFolders: [FavoriteArticleFolder!]!
+}

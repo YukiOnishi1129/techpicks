@@ -138,6 +138,14 @@ export class FavoriteArticlesInput {
     before?: Nullable<string>;
 }
 
+export class FavoriteAllFolderArticlesInput {
+    keyword?: Nullable<string>;
+    first?: Nullable<number>;
+    after?: Nullable<string>;
+    last?: Nullable<number>;
+    before?: Nullable<string>;
+}
+
 export interface Node {
     id: string;
 }
@@ -154,6 +162,8 @@ export abstract class IQuery {
     abstract favoriteArticleFolder(input: FavoriteArticleFolderInput): FavoriteArticleFolder | Promise<FavoriteArticleFolder>;
 
     abstract favoriteArticles(input?: Nullable<FavoriteArticlesInput>): FavoriteArticleConnection | Promise<FavoriteArticleConnection>;
+
+    abstract favoriteAllFolderArticles(input?: Nullable<FavoriteAllFolderArticlesInput>): FavoriteAllFolderArticleConnection | Promise<FavoriteAllFolderArticleConnection>;
 }
 
 export class Article implements Node {
@@ -315,6 +325,17 @@ export class FavoriteArticleConnection {
 export class FavoriteArticleEdge {
     cursor: string;
     node: FavoriteArticle;
+}
+
+export class FavoriteAllFolderArticleConnection {
+    edges: FavoriteAllFolderArticleEdge[];
+    pageInfo: PageInfo;
+}
+
+export class FavoriteAllFolderArticleEdge {
+    cursor: string;
+    node: FavoriteArticle;
+    favoriteArticleFolders: FavoriteArticleFolder[];
 }
 
 export class Feed implements Node {

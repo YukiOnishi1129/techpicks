@@ -6,6 +6,9 @@ type Query {
     input: FavoriteArticleFolderInput!
   ): FavoriteArticleFolder!
   favoriteArticles(input: FavoriteArticlesInput): FavoriteArticleConnection!
+  favoriteAllFolderArticles(
+    input: FavoriteAllFolderArticlesInput
+  ): FavoriteAllFolderArticleConnection!
 }
 
 input FavoriteArticleFoldersInput {
@@ -27,6 +30,14 @@ input FavoriteArticleFolderInput {
 input FavoriteArticlesInput {
   keyword: String
   folderId: ID
+  first: Int
+  after: String
+  last: Int
+  before: String
+}
+
+input FavoriteAllFolderArticlesInput {
+  keyword: String
   first: Int
   after: String
   last: Int

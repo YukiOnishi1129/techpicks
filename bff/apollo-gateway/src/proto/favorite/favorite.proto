@@ -17,6 +17,7 @@ service FavoriteService {
     rpc DeleteFavoriteArticleFolder(DeleteFavoriteArticleFolderRequest) returns (google.protobuf.Empty);
 
     rpc GetFavoriteArticles(GetFavoriteArticlesRequest) returns (GetFavoriteArticlesResponse);
+    rpc GetFavoriteAllFolderArticles(GetFavoriteAllFolderArticlesRequest) returns (GetFavoriteAllFolderArticlesResponse);
     rpc CreateFavoriteArticle(CreateFavoriteArticleRequest) returns (CreateFavoriteArticleResponse);
     rpc CreateFavoriteArticleForUploadArticle(CreateFavoriteArticleForUploadArticleRequest) returns (CreateFavoriteArticleResponse);
     rpc DeleteFavoriteArticle(DeleteFavoriteArticleRequest) returns (google.protobuf.Empty);
@@ -36,6 +37,18 @@ message GetFavoriteArticleFoldersRequest {
 
 message GetFavoriteArticleFoldersResponse {
     repeated FavoriteArticleFolderEdge favorite_article_folders_edge = 1;
+    PageInfo page_info = 2;
+}
+
+message GetFavoriteAllFolderArticlesRequest {
+    string user_id = 1;
+    google.protobuf.StringValue keyword = 2;
+    google.protobuf.StringValue cursor = 3;
+    google.protobuf.Int64Value limit = 4;
+}
+
+message GetFavoriteAllFolderArticlesResponse {
+    repeated FavoriteAllFolderArticleEdge favorite_all_folder_article_edge = 1;
     PageInfo page_info = 2;
 }
 
@@ -151,6 +164,11 @@ message FavoriteArticleEdge {
 }
 
 
+message FavoriteAllFolderArticleEdge {
+    FavoriteArticle node = 1;
+    string cursor = 2;
+    repeated FavoriteArticleFolder favorite_article_folders = 3;
+}
 
 message FavoriteArticle {
     string id = 1;
