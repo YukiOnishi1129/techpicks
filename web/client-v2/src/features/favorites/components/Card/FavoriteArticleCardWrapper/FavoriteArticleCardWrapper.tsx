@@ -18,6 +18,7 @@ import {
   FavoriteArticleCardWrapperFragment,
   FavoriteFolderFavoriteArticleCardWrapperFragment,
 } from "./FavoriteArticleCardWrapperFragment";
+import { RemoveFavoriteArticleAlertDialog } from "../../Dialog";
 import { CopyFavoriteArticleDropdownMenu } from "../../DropdownMenu/CopyFavoriteArticleDropdownMenu";
 import { FavoriteArticleCardItem } from "../FavoriteArticleCardItem";
 
@@ -139,8 +140,26 @@ export const FavoriteArticleCardWrapper: FC<
   );
 
   const handleCreateFavoriteArticleFolder = useCallback(
-    async (favoriteArticleFolderId: string) => {},
-    []
+    async (favoriteArticleFolderId: string, title: string) => {
+      await handleCreateFavoriteArticle(favoriteArticleFolderId);
+
+      setShowFavoriteArticleFolders((prev) => {
+        return {
+          ...prev,
+          edges: [
+            ...prev.edges,
+            {
+              node: {
+                id: favoriteArticleFolderId,
+                title: "",
+                favoriteArticles: [],
+              },
+            },
+          ],
+        };
+      });
+    },
+    [handleCreateFavoriteArticle]
   );
 
   const handleRemoveFavoriteArticle = useCallback(
@@ -250,11 +269,12 @@ export const FavoriteArticleCardWrapper: FC<
               />
             </div>
             <div>
-              {/* <RemoveFavoriteArticleAlertDialog
-                favoriteArticleId={favoriteArticle.id}
-                favoriteArticleTitle={favoriteArticle.title}
+              <RemoveFavoriteArticleAlertDialog
+                favoriteArticleId={fragment.id}
+                favoriteArticleTitle={fragment.title}
+                targetFavoriteArticleFolderId={fragment.favoriteArticleFolderId}
                 handleRemoveFavoriteArticle={handleRemoveFavoriteArticleCard}
-              /> */}
+              />
             </div>
           </div>
         </div>
