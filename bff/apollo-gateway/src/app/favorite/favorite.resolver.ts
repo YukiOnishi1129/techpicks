@@ -9,6 +9,7 @@ import {
   UpdateFavoriteArticleFolderInput,
   DeleteFavoriteArticleFolderInput,
   CreateFavoriteArticleInput,
+  FavoriteArticleFolderInput,
   DeleteFavoriteArticleInput,
   FavoriteArticleConnection,
   FavoriteArticlesInput,
@@ -35,6 +36,19 @@ export class FavoriteResolver {
   ): Promise<FavoriteArticleFolderConnection> {
     const userId = context.req.user.id;
     return await this.favoriteArticleFolderService.getFavoriteArticleFolders(
+      userId,
+      input,
+    );
+  }
+
+  @Query(() => FavoriteArticleFolder)
+  @UseGuards(SupabaseAuthGuard)
+  async favoriteArticleFolder(
+    @Args('input') input: FavoriteArticleFolderInput,
+    @Context() context: GraphQLContext,
+  ): Promise<FavoriteArticleFolder> {
+    const userId = context.req.user.id;
+    return await this.favoriteArticleFolderService.getFavoriteArticleFolder(
       userId,
       input,
     );

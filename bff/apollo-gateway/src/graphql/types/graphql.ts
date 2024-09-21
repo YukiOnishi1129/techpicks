@@ -112,6 +112,11 @@ export class FavoriteArticleFoldersInput {
     before?: Nullable<string>;
 }
 
+export class FavoriteArticleFolderInput {
+    id: string;
+    isFolderOnly?: Nullable<boolean>;
+}
+
 export class FavoriteArticlesInput {
     keyword?: Nullable<string>;
     folderId?: Nullable<string>;
@@ -119,11 +124,6 @@ export class FavoriteArticlesInput {
     after?: Nullable<string>;
     last?: Nullable<number>;
     before?: Nullable<string>;
-}
-
-export class FavoriteArticleFolderInput {
-    id: string;
-    isFolderOnly?: Nullable<boolean>;
 }
 
 export interface Node {
@@ -139,9 +139,9 @@ export abstract class IQuery {
 
     abstract favoriteArticleFolders(input?: Nullable<FavoriteArticleFoldersInput>): FavoriteArticleFolderConnection | Promise<FavoriteArticleFolderConnection>;
 
-    abstract favoriteArticles(input?: Nullable<FavoriteArticlesInput>): FavoriteArticleConnection | Promise<FavoriteArticleConnection>;
-
     abstract favoriteArticleFolder(input: FavoriteArticleFolderInput): FavoriteArticleFolder | Promise<FavoriteArticleFolder>;
+
+    abstract favoriteArticles(input?: Nullable<FavoriteArticlesInput>): FavoriteArticleConnection | Promise<FavoriteArticleConnection>;
 }
 
 export class Article implements Node {
@@ -260,12 +260,12 @@ export class FavoriteArticle implements Node {
     description?: Nullable<string>;
     thumbnailUrl: string;
     articleUrl: string;
-    platformFaviconUrl: string;
     publishedAt?: Nullable<number>;
     authorName?: Nullable<string>;
     tags?: Nullable<string>;
     platformName: string;
     platformUrl: string;
+    platformFaviconUrl: string;
     isEng: boolean;
     isPrivate: boolean;
     isRead: boolean;
