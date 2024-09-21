@@ -101,7 +101,7 @@ export const FavoriteArticleListByFolderIdTemplate: FC<
         </div>
       </div>
 
-      <div className="h-12 md:h-24" />
+      <div className="h-12 md:h-28" />
 
       <FavoriteArticleList
         user={user}
