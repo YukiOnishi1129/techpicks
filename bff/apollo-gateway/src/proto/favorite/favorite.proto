@@ -11,7 +11,7 @@ import "google/protobuf/wrappers.proto";
 service FavoriteService {
     rpc GetFavoriteArticleFolders(GetFavoriteArticleFoldersRequest) returns (GetFavoriteArticleFoldersResponse);
     rpc GetFavoriteArticleFoldersByArticleId(GetFavoriteArticleFoldersByArticleIdRequest) returns (GetFavoriteArticleFoldersResponse);
-    rpc GetFavoriteArticleFolder(GetFavoriteArticleFolderRequest) returns (GetFavoriteArticleFolderResponse);
+    rpc GetFavoriteArticleFolderById(GetFavoriteArticleFolderByIdRequest) returns (GetFavoriteArticleFolderResponse);
     rpc CreateFavoriteArticleFolder(CreateFavoriteArticleFolderRequest) returns (CreateFavoriteArticleFolderResponse);
     rpc UpdateFavoriteArticleFolder(UpdateFavoriteArticleFolderRequest) returns (UpdateFavoriteArticleFolderResponse);
     rpc DeleteFavoriteArticleFolder(DeleteFavoriteArticleFolderRequest) returns (google.protobuf.Empty);
@@ -41,7 +41,7 @@ message GetFavoriteArticleFolderResponse {
     FavoriteArticleFolder favorite_article_folder = 1;
 }
 
-message GetFavoriteArticleFolderRequest {
+message GetFavoriteArticleFolderByIdRequest {
     string id = 1;
     string user_id = 2;
     google.protobuf.BoolValue is_folder_only = 3;

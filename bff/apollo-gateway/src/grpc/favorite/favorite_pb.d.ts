@@ -116,28 +116,28 @@ export namespace GetFavoriteArticleFolderResponse {
     }
 }
 
-export class GetFavoriteArticleFolderRequest extends jspb.Message { 
+export class GetFavoriteArticleFolderByIdRequest extends jspb.Message { 
     getId(): string;
-    setId(value: string): GetFavoriteArticleFolderRequest;
+    setId(value: string): GetFavoriteArticleFolderByIdRequest;
     getUserId(): string;
-    setUserId(value: string): GetFavoriteArticleFolderRequest;
+    setUserId(value: string): GetFavoriteArticleFolderByIdRequest;
 
     hasIsFolderOnly(): boolean;
     clearIsFolderOnly(): void;
     getIsFolderOnly(): google_protobuf_wrappers_pb.BoolValue | undefined;
-    setIsFolderOnly(value?: google_protobuf_wrappers_pb.BoolValue): GetFavoriteArticleFolderRequest;
+    setIsFolderOnly(value?: google_protobuf_wrappers_pb.BoolValue): GetFavoriteArticleFolderByIdRequest;
 
     serializeBinary(): Uint8Array;
-    toObject(includeInstance?: boolean): GetFavoriteArticleFolderRequest.AsObject;
-    static toObject(includeInstance: boolean, msg: GetFavoriteArticleFolderRequest): GetFavoriteArticleFolderRequest.AsObject;
+    toObject(includeInstance?: boolean): GetFavoriteArticleFolderByIdRequest.AsObject;
+    static toObject(includeInstance: boolean, msg: GetFavoriteArticleFolderByIdRequest): GetFavoriteArticleFolderByIdRequest.AsObject;
     static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
     static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
-    static serializeBinaryToWriter(message: GetFavoriteArticleFolderRequest, writer: jspb.BinaryWriter): void;
-    static deserializeBinary(bytes: Uint8Array): GetFavoriteArticleFolderRequest;
-    static deserializeBinaryFromReader(message: GetFavoriteArticleFolderRequest, reader: jspb.BinaryReader): GetFavoriteArticleFolderRequest;
+    static serializeBinaryToWriter(message: GetFavoriteArticleFolderByIdRequest, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): GetFavoriteArticleFolderByIdRequest;
+    static deserializeBinaryFromReader(message: GetFavoriteArticleFolderByIdRequest, reader: jspb.BinaryReader): GetFavoriteArticleFolderByIdRequest;
 }
 
-export namespace GetFavoriteArticleFolderRequest {
+export namespace GetFavoriteArticleFolderByIdRequest {
     export type AsObject = {
         id: string,
         userId: string,

@@ -120,6 +120,24 @@ func (fu *favoriteUseCase) GetFavoriteArticleFoldersByArticleId(ctx context.Cont
 	}, nil
 }
 
+func (fu *favoriteUseCase) GetFavoriteArticleFolderByID(ctx context.Context, req *fpb.GetFavoriteArticleFolderByIdRequest) (*fpb.GetFavoriteArticleFolderResponse, error) {
+	isFolderOnly := false
+	if req.GetIsFolderOnly() != nil {
+		isFolderOnly = req.GetIsFolderOnly().GetValue()
+	}
+	f, err := fu.favoriteArticleFolderPersistenceAdapter.GetFavoriteArticleFolderByID(ctx, req.GetId(), req.GetUserId(), &isFolderOnly)
+	if err != nil {
+		return &fpb.GetFavoriteArticleFolderResponse{}, err
+	}
+	if f.ID == "" {
+		return &fpb.GetFavoriteArticleFolderResponse{}, errors.New("favorite article folder not found")
+	}
+
+	return &fpb.GetFavoriteArticleFolderResponse{
+		FavoriteArticleFolder: fu.convertPBFavoriteArticleFolder(ctx, &f, nil, &isFolderOnly),
+	}, nil
+}
+
 func (fu *favoriteUseCase) CreateFavoriteArticleFolder(ctx context.Context, req *fpb.CreateFavoriteArticleFolderRequest) (*fpb.CreateFavoriteArticleFolderResponse, error) {
 	f, err := fu.favoriteArticleFolderPersistenceAdapter.CreateFavoriteArticleFolder(ctx, req)
 	if err != nil {
