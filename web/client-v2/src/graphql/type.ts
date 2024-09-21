@@ -198,7 +198,7 @@ export type DeleteFavoriteArticleInput = {
 /** Favorite Article schema */
 export type FavoriteArticle = Node & {
   __typename?: 'FavoriteArticle';
-  articleId?: Maybe<Scalars['String']['output']>;
+  articleId: Scalars['String']['output'];
   articleUrl: Scalars['String']['output'];
   authorName?: Maybe<Scalars['String']['output']>;
   createdAt: Scalars['Int']['output'];
@@ -589,17 +589,17 @@ export type UpdateFavoriteArticleFolderMutationMutationVariables = Exact<{
 
 export type UpdateFavoriteArticleFolderMutationMutation = { __typename?: 'Mutation', updateFavoriteArticleFolder: { __typename?: 'FavoriteArticleFolder', id: string } };
 
-export type FavoriteArticleCardItemFragmentFragment = { __typename?: 'FavoriteArticle', id: string, articleId?: string | null, platformId?: string | null, favoriteArticleFolderId: string, userId: string, title: string, description?: string | null, thumbnailUrl: string, articleUrl: string, publishedAt?: number | null, authorName?: string | null, tags?: string | null, platformName: string, platformUrl: string, platformFaviconUrl: string, isEng: boolean, isPrivate: boolean, isRead: boolean, createdAt: number, updatedAt: number };
+export type FavoriteArticleCardItemFragmentFragment = { __typename?: 'FavoriteArticle', id: string, articleId: string, platformId?: string | null, favoriteArticleFolderId: string, userId: string, title: string, description?: string | null, thumbnailUrl: string, articleUrl: string, publishedAt?: number | null, authorName?: string | null, tags?: string | null, platformName: string, platformUrl: string, platformFaviconUrl: string, isEng: boolean, isPrivate: boolean, isRead: boolean, createdAt: number, updatedAt: number };
 
-export type FavoriteArticleCardWrapperFragmentFragment = { __typename?: 'FavoriteArticle', id: string, articleId?: string | null, platformId?: string | null, favoriteArticleFolderId: string, userId: string, title: string, description?: string | null, thumbnailUrl: string, articleUrl: string, publishedAt?: number | null, authorName?: string | null, tags?: string | null, platformName: string, platformUrl: string, platformFaviconUrl: string, isEng: boolean, isPrivate: boolean, isRead: boolean, createdAt: number, updatedAt: number };
+export type FavoriteArticleCardWrapperFragmentFragment = { __typename?: 'FavoriteArticle', id: string, articleId: string, platformId?: string | null, favoriteArticleFolderId: string, userId: string, title: string, description?: string | null, thumbnailUrl: string, articleUrl: string, publishedAt?: number | null, authorName?: string | null, tags?: string | null, platformName: string, platformUrl: string, platformFaviconUrl: string, isEng: boolean, isPrivate: boolean, isRead: boolean, createdAt: number, updatedAt: number };
 
-export type FavoriteFolderFavoriteArticleCardWrapperFragmentFragment = { __typename?: 'FavoriteArticleFolderConnection', edges: Array<{ __typename?: 'FavoriteArticleFolderEdge', node: { __typename?: 'FavoriteArticleFolder', id: string, title: string } }> };
+export type FavoriteFolderFavoriteArticleCardWrapperFragmentFragment = { __typename?: 'FavoriteArticleFolderConnection', edges: Array<{ __typename?: 'FavoriteArticleFolderEdge', node: { __typename?: 'FavoriteArticleFolder', id: string, title: string, favoriteArticles: Array<{ __typename?: 'FavoriteArticle', id: string, articleId: string }> } }> };
 
 export type FavoriteArticleFolderCardFragmentFragment = { __typename?: 'FavoriteArticleFolder', id: string, title: string, description?: string | null, favoriteArticles: Array<{ __typename?: 'FavoriteArticle', id: string, title: string, articleUrl: string, thumbnailUrl: string, createdAt: number }> };
 
-export type CopyTargetFavoriteArticleFolderItemFragmentFragment = { __typename?: 'FavoriteArticleFolder', id: string, title: string };
+export type CopyTargetFavoriteArticleFolderItemFragmentFragment = { __typename?: 'FavoriteArticleFolder', id: string, title: string, favoriteArticles: Array<{ __typename?: 'FavoriteArticle', id: string, articleId: string }> };
 
-export type CopyFavoriteArticleDropdownMenuContentFragmentFragment = { __typename?: 'FavoriteArticleFolderConnection', edges: Array<{ __typename?: 'FavoriteArticleFolderEdge', node: { __typename?: 'FavoriteArticleFolder', id: string, title: string } }> };
+export type CopyFavoriteArticleDropdownMenuContentFragmentFragment = { __typename?: 'FavoriteArticleFolderConnection', edges: Array<{ __typename?: 'FavoriteArticleFolderEdge', node: { __typename?: 'FavoriteArticleFolder', id: string, title: string, favoriteArticles: Array<{ __typename?: 'FavoriteArticle', id: string, articleId: string }> } }> };
 
 export type FollowTargetFavoriteArticleFolderItemFragmentFragment = { __typename?: 'FavoriteArticleFolder', id: string, title: string };
 
@@ -614,14 +614,14 @@ export type GetFavoriteArticleFolderListQueryQueryVariables = Exact<{
 
 export type GetFavoriteArticleFolderListQueryQuery = { __typename?: 'Query', favoriteArticleFolders: { __typename?: 'FavoriteArticleFolderConnection', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null }, edges: Array<{ __typename?: 'FavoriteArticleFolderEdge', node: { __typename?: 'FavoriteArticleFolder', id: string, title: string, description?: string | null, favoriteArticles: Array<{ __typename?: 'FavoriteArticle', id: string, title: string, articleUrl: string, thumbnailUrl: string, createdAt: number }> } }> } };
 
-export type FavoriteArticleListFragmentFragment = { __typename?: 'FavoriteArticleConnection', edges: Array<{ __typename?: 'FavoriteArticleEdge', node: { __typename?: 'FavoriteArticle', id: string, articleId?: string | null, platformId?: string | null, favoriteArticleFolderId: string, userId: string, title: string, description?: string | null, thumbnailUrl: string, articleUrl: string, publishedAt?: number | null, authorName?: string | null, tags?: string | null, platformName: string, platformUrl: string, platformFaviconUrl: string, isEng: boolean, isPrivate: boolean, isRead: boolean, createdAt: number, updatedAt: number } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null } };
+export type FavoriteArticleListFragmentFragment = { __typename?: 'FavoriteArticleConnection', edges: Array<{ __typename?: 'FavoriteArticleEdge', node: { __typename?: 'FavoriteArticle', id: string, articleId: string, platformId?: string | null, favoriteArticleFolderId: string, userId: string, title: string, description?: string | null, thumbnailUrl: string, articleUrl: string, publishedAt?: number | null, authorName?: string | null, tags?: string | null, platformName: string, platformUrl: string, platformFaviconUrl: string, isEng: boolean, isPrivate: boolean, isRead: boolean, createdAt: number, updatedAt: number } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null } };
 
 export type GetFavoriteArticleListQueryQueryVariables = Exact<{
   input: FavoriteArticlesInput;
 }>;
 
 
-export type GetFavoriteArticleListQueryQuery = { __typename?: 'Query', favoriteArticles: { __typename?: 'FavoriteArticleConnection', edges: Array<{ __typename?: 'FavoriteArticleEdge', node: { __typename?: 'FavoriteArticle', id: string, articleId?: string | null, platformId?: string | null, favoriteArticleFolderId: string, userId: string, title: string, description?: string | null, thumbnailUrl: string, articleUrl: string, publishedAt?: number | null, authorName?: string | null, tags?: string | null, platformName: string, platformUrl: string, platformFaviconUrl: string, isEng: boolean, isPrivate: boolean, isRead: boolean, createdAt: number, updatedAt: number } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null } } };
+export type GetFavoriteArticleListQueryQuery = { __typename?: 'Query', favoriteArticles: { __typename?: 'FavoriteArticleConnection', edges: Array<{ __typename?: 'FavoriteArticleEdge', node: { __typename?: 'FavoriteArticle', id: string, articleId: string, platformId?: string | null, favoriteArticleFolderId: string, userId: string, title: string, description?: string | null, thumbnailUrl: string, articleUrl: string, publishedAt?: number | null, authorName?: string | null, tags?: string | null, platformName: string, platformUrl: string, platformFaviconUrl: string, isEng: boolean, isPrivate: boolean, isRead: boolean, createdAt: number, updatedAt: number } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null } } };
 
 export type FavoriteArticleFolderListTemplateFragmentFragment = { __typename?: 'Query', favoriteArticleFolders: { __typename?: 'FavoriteArticleFolderConnection', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null }, edges: Array<{ __typename?: 'FavoriteArticleFolderEdge', node: { __typename?: 'FavoriteArticleFolder', id: string, title: string, description?: string | null, favoriteArticles: Array<{ __typename?: 'FavoriteArticle', id: string, title: string, articleUrl: string, thumbnailUrl: string, createdAt: number }> } }> } };
 
@@ -634,7 +634,7 @@ export type GetFavoriteArticleFolderListTemplateQueryQuery = { __typename?: 'Que
 
 export type FavoriteArticleFoldersByFolderIdTemplateFragmentFragment = { __typename?: 'FavoriteArticleFolderConnection', edges: Array<{ __typename?: 'FavoriteArticleFolderEdge', node: { __typename?: 'FavoriteArticleFolder', id: string, title: string } }> };
 
-export type FavoriteArticleListByFolderIdTemplateFragmentFragment = { __typename?: 'Query', favoriteArticles: { __typename?: 'FavoriteArticleConnection', edges: Array<{ __typename?: 'FavoriteArticleEdge', node: { __typename?: 'FavoriteArticle', id: string, articleId?: string | null, platformId?: string | null, favoriteArticleFolderId: string, userId: string, title: string, description?: string | null, thumbnailUrl: string, articleUrl: string, publishedAt?: number | null, authorName?: string | null, tags?: string | null, platformName: string, platformUrl: string, platformFaviconUrl: string, isEng: boolean, isPrivate: boolean, isRead: boolean, createdAt: number, updatedAt: number } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null } }, favoriteArticleFolders: { __typename?: 'FavoriteArticleFolderConnection', edges: Array<{ __typename?: 'FavoriteArticleFolderEdge', node: { __typename?: 'FavoriteArticleFolder', id: string, title: string } }> } };
+export type FavoriteArticleListByFolderIdTemplateFragmentFragment = { __typename?: 'Query', favoriteArticles: { __typename?: 'FavoriteArticleConnection', edges: Array<{ __typename?: 'FavoriteArticleEdge', node: { __typename?: 'FavoriteArticle', id: string, articleId: string, platformId?: string | null, favoriteArticleFolderId: string, userId: string, title: string, description?: string | null, thumbnailUrl: string, articleUrl: string, publishedAt?: number | null, authorName?: string | null, tags?: string | null, platformName: string, platformUrl: string, platformFaviconUrl: string, isEng: boolean, isPrivate: boolean, isRead: boolean, createdAt: number, updatedAt: number } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null } }, favoriteArticleFolders: { __typename?: 'FavoriteArticleFolderConnection', edges: Array<{ __typename?: 'FavoriteArticleFolderEdge', node: { __typename?: 'FavoriteArticleFolder', id: string, title: string, favoriteArticles: Array<{ __typename?: 'FavoriteArticle', id: string, articleId: string }> } }> } };
 
 export type GetFavoriteArticleListByFolderIdTemplateQueryQueryVariables = Exact<{
   favoriteArticlesInput: FavoriteArticlesInput;
@@ -642,7 +642,7 @@ export type GetFavoriteArticleListByFolderIdTemplateQueryQueryVariables = Exact<
 }>;
 
 
-export type GetFavoriteArticleListByFolderIdTemplateQueryQuery = { __typename?: 'Query', favoriteArticles: { __typename?: 'FavoriteArticleConnection', edges: Array<{ __typename?: 'FavoriteArticleEdge', node: { __typename?: 'FavoriteArticle', id: string, articleId?: string | null, platformId?: string | null, favoriteArticleFolderId: string, userId: string, title: string, description?: string | null, thumbnailUrl: string, articleUrl: string, publishedAt?: number | null, authorName?: string | null, tags?: string | null, platformName: string, platformUrl: string, platformFaviconUrl: string, isEng: boolean, isPrivate: boolean, isRead: boolean, createdAt: number, updatedAt: number } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null } }, favoriteArticleFolders: { __typename?: 'FavoriteArticleFolderConnection', edges: Array<{ __typename?: 'FavoriteArticleFolderEdge', node: { __typename?: 'FavoriteArticleFolder', id: string, title: string } }> } };
+export type GetFavoriteArticleListByFolderIdTemplateQueryQuery = { __typename?: 'Query', favoriteArticles: { __typename?: 'FavoriteArticleConnection', edges: Array<{ __typename?: 'FavoriteArticleEdge', node: { __typename?: 'FavoriteArticle', id: string, articleId: string, platformId?: string | null, favoriteArticleFolderId: string, userId: string, title: string, description?: string | null, thumbnailUrl: string, articleUrl: string, publishedAt?: number | null, authorName?: string | null, tags?: string | null, platformName: string, platformUrl: string, platformFaviconUrl: string, isEng: boolean, isPrivate: boolean, isRead: boolean, createdAt: number, updatedAt: number } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null } }, favoriteArticleFolders: { __typename?: 'FavoriteArticleFolderConnection', edges: Array<{ __typename?: 'FavoriteArticleFolderEdge', node: { __typename?: 'FavoriteArticleFolder', id: string, title: string, favoriteArticles: Array<{ __typename?: 'FavoriteArticle', id: string, articleId: string }> } }> } };
 
 export type OgpPreviewContentFragmentFragment = { __typename?: 'ArticleOGP', title: string, description?: string | null, thumbnailUrl: string, articleUrl: string, siteName: string, faviconUrl: string };
 
@@ -1011,6 +1011,10 @@ export const CopyTargetFavoriteArticleFolderItemFragmentFragmentDoc = gql`
     fragment CopyTargetFavoriteArticleFolderItemFragment on FavoriteArticleFolder {
   id
   title
+  favoriteArticles {
+    id
+    articleId
+  }
 }
     `;
 export const CopyFavoriteArticleDropdownMenuContentFragmentFragmentDoc = gql`

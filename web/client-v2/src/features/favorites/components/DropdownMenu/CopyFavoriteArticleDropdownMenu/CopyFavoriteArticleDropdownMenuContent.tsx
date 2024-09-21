@@ -6,8 +6,6 @@ import { FC, useMemo } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { z } from "zod";
 
-// import { CreateFavoriteArticleFolderDialog } from "@/features/favoriteArticleFolders/components/Dialog";
-
 import {
   DropdownMenuSeparator,
   DropdownMenuContent,
@@ -19,16 +17,13 @@ import { CopyFavoriteArticleDropdownMenuContentFragment } from "./CopyFavoriteAr
 import { CopyTargetFavoriteArticleFolderItem } from "./CopyTargetFavoriteArticleFolderItem";
 import { CreateFavoriteArticleFolderDialog } from "../../Dialog";
 
-// import { FavoriteArticleFolderType } from "@/types/favoriteArticleFolder";
-
-// import { CopyTargetFavoriteArticleFolderList } from "./CopyTargetFavoriteArticleFolderList";
-
 const formSchema = z.object({
   keyword: z.string(),
 });
 
 type CopyFavoriteArticleDropdownMenuContentProps = {
   data: FragmentOf<typeof CopyFavoriteArticleDropdownMenuContentFragment>;
+  articleId: string;
   targetFavoriteArticleId: string;
   targetFavoriteFolderId: string;
   handleCreateFavoriteArticle: (
@@ -47,6 +42,7 @@ export const CopyFavoriteArticleDropdownMenuContent: FC<
   CopyFavoriteArticleDropdownMenuContentProps
 > = ({
   data,
+  articleId,
   targetFavoriteArticleId,
   targetFavoriteFolderId,
   handleCreateFavoriteArticle,
@@ -88,15 +84,15 @@ export const CopyFavoriteArticleDropdownMenuContent: FC<
         )}
       />
       <DropdownMenuSeparator />
-      <div className="max-h-[200px] overflow-y-auto">
+      <div className="max-h-[200px] overflow-y-auto overflow-x-hidden">
         {showFavoriteArticleFolders.map((folder) => {
           if (folder.node.id === targetFavoriteFolderId) return;
           return (
             <CopyTargetFavoriteArticleFolderItem
               key={folder.node.id}
               data={folder.node}
+              articleId={articleId}
               targetFavoriteArticleId={targetFavoriteArticleId}
-              targetFavoriteFolderId={targetFavoriteFolderId}
               handleCreateFavoriteArticle={handleCreateFavoriteArticle}
               handleRemoveFavoriteArticle={handleRemoveFavoriteArticle}
             />

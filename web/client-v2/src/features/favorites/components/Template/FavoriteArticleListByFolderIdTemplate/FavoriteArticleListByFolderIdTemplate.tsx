@@ -32,7 +32,7 @@ export const FavoriteArticleListByFolderIdTemplate: FC<
 
   const favoriteArticleFoldersInput: FavoriteArticleFoldersInput = {
     isAllFetch: true,
-    isFolderOnly: true,
+    isFolderOnly: false,
   };
 
   const { data, error } = await getFavoriteArticleListByFolderIdTemplateQuery(

@@ -127,6 +127,7 @@ export const FavoriteArticleCardWrapper: FC<
             <div className="mr-4">
               <CopyFavoriteArticleDropdownMenu
                 data={showFavoriteArticleFolders}
+                articleId={fragment.articleId}
                 targetFavoriteArticleId={fragment.id}
                 targetFavoriteFolderId={fragment.favoriteArticleFolderId}
                 handleCreateFavoriteArticle={handleCreateFavoriteArticle}
@@ -147,16 +148,6 @@ export const FavoriteArticleCardWrapper: FC<
         </div>
 
         <FavoriteArticleCardItem data={fragment} />
-
-        {/* <FavoriteArticleDetailSheet
-          favoriteArticle={favoriteArticle}
-          otherFavoriteArticleFolders={showOtherFavoriteArticleFolders}
-          handleCreateFavoriteArticle={handleCreateFavoriteArticle}
-          handleRemoveFavoriteArticle={handleRemoveFavoriteArticleCard}
-          handleCreateFavoriteArticleFolder={handleCreateFavoriteArticleFolder}
-        >
-          <FavoriteArticleCardItem favoriteArticle={favoriteArticle} />
-        </FavoriteArticleDetailSheet> */}
       </div>
     </div>
   );

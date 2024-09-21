@@ -3,7 +3,7 @@ Favorite Article schema
 """
 type FavoriteArticle implements Node {
   id: ID!
-  articleId: String
+  articleId: String!
   platformId: String
   favoriteArticleFolderId: String!
   userId: String!

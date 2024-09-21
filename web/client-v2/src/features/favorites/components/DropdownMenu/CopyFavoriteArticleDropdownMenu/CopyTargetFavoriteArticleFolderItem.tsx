@@ -10,8 +10,8 @@ import { CopyTargetFavoriteArticleFolderItemFragment } from "./CopyFavoriteArtic
 
 type CopyTargetFavoriteArticleFolderItemProps = {
   data: FragmentOf<typeof CopyTargetFavoriteArticleFolderItemFragment>;
+  articleId: string;
   targetFavoriteArticleId: string;
-  targetFavoriteFolderId: string;
   handleCreateFavoriteArticle: (
     targetFavoriteArticleFolderId: string
   ) => Promise<string | undefined>;
@@ -25,8 +25,8 @@ export const CopyTargetFavoriteArticleFolderItem: FC<
   CopyTargetFavoriteArticleFolderItemProps
 > = ({
   data,
+  articleId,
   targetFavoriteArticleId,
-  targetFavoriteFolderId,
   handleCreateFavoriteArticle,
   handleRemoveFavoriteArticle,
 }) => {
@@ -36,8 +36,11 @@ export const CopyTargetFavoriteArticleFolderItem: FC<
   );
 
   const isFollowed = useMemo(
-    () => fragment.id === targetFavoriteFolderId,
-    [targetFavoriteFolderId, fragment]
+    () =>
+      fragment.favoriteArticles.some(
+        (favoriteArticle) => favoriteArticle.articleId === articleId
+      ),
+    [articleId, fragment]
   );
 
   return (

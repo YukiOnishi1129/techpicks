@@ -252,7 +252,7 @@ export class Category implements Node {
 
 export class FavoriteArticle implements Node {
     id: string;
-    articleId?: Nullable<string>;
+    articleId: string;
     platformId?: Nullable<string>;
     favoriteArticleFolderId: string;
     userId: string;
