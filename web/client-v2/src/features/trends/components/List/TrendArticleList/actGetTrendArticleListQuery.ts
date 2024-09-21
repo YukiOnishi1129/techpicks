@@ -24,7 +24,7 @@ export const getTrendArticleListQuery = async (input: ArticlesInput) => {
     query: GetTrendArticleListQuery,
     context: {
       fetchOptions: {
-        cache: "no-cache",
+        cache: "no-store",
       },
     },
     variables: {

@@ -17,7 +17,7 @@ export const deleteBookmarkMutation = async (input: DeleteBookmarkInput) => {
     mutation: DeleteBookmarkMutation,
     context: {
       fetchOptions: {
-        cache: "no-cache",
+        cache: "no-store",
       },
     },
     variables: {

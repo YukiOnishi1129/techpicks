@@ -23,7 +23,7 @@ export const createBookmarkForUploadArticleMutation = async (
     mutation: CreateBookmarkForUploadArticleMutation,
     context: {
       fetchOptions: {
-        cache: "no-cache",
+        cache: "no-store",
       },
     },
     variables: {

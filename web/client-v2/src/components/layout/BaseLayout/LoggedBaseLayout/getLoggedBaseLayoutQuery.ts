@@ -26,7 +26,7 @@ export const getLoggedBaseLayoutQuery = async (
     query: LoggedBaseLayoutQuery,
     context: {
       fetchOptions: {
-        cache: "no-cache",
+        cache: "no-store",
       },
     },
     variables: {

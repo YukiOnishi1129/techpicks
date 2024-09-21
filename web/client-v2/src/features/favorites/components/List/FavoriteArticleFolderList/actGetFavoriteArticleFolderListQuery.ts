@@ -28,7 +28,7 @@ export const getFavoriteArticleFolderListQuery = async (
     query: GetFavoriteArticleFolderListQuery,
     context: {
       fetchOptions: {
-        cache: "no-cache",
+        cache: "no-store",
       },
     },
     variables: {

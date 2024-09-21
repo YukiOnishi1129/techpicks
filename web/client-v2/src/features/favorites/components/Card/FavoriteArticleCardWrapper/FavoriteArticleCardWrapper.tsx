@@ -3,8 +3,8 @@ import { User } from "@supabase/supabase-js";
 import { FragmentOf, readFragment } from "gql.tada";
 import { FC, useCallback, useState } from "react";
 
-import { logoutToLoginPage } from "@/features/auth/actions/auth";
 import { createFavoriteArticleMutation } from "@/features/favorites/actions/actCreateFavoriteArticleMutaion";
+import { deleteFavoriteArticleMutation } from "@/features/favorites/actions/actDeleteFavoriteArticleMutation";
 
 import { ShareLinks } from "@/components/ui/share";
 
@@ -141,18 +141,11 @@ export const FavoriteArticleCardWrapper: FC<
   );
 
   const handleRemoveFavoriteArticle = useCallback(
-    async (favoriteArticleId: string, favoriteArticleFolderId?: string) => {
-      if (!user) {
-        failToast({
-          description: "Please login to unfollow the article",
-        });
-        await logoutToLoginPage();
-        return;
-      }
-
-      // check count favoriteArticle by favoriteArticleId
-
+    async (favoriteArticleId: string) => {
       // delete favoriteArticle
+      const { data, error } = await deleteFavoriteArticleMutation({
+        id: favoriteArticleId,
+      });
 
       return "id";
     },
@@ -201,7 +194,6 @@ export const FavoriteArticleCardWrapper: FC<
               <CopyFavoriteArticleDropdownMenu
                 data={showFavoriteArticleFolders}
                 articleId={fragment.articleId}
-                targetFavoriteArticleId={fragment.id}
                 targetFavoriteFolderId={fragment.favoriteArticleFolderId}
                 handleCreateFavoriteArticle={handleCreateFavoriteArticle}
                 handleRemoveFavoriteArticle={handleRemoveFavoriteArticle}

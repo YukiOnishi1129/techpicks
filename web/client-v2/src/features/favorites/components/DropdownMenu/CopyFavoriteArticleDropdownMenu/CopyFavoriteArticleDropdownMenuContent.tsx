@@ -24,14 +24,12 @@ const formSchema = z.object({
 type CopyFavoriteArticleDropdownMenuContentProps = {
   data: FragmentOf<typeof CopyFavoriteArticleDropdownMenuContentFragment>;
   articleId: string;
-  targetFavoriteArticleId: string;
   targetFavoriteFolderId: string;
   handleCreateFavoriteArticle: (
     targetFavoriteArticleFolderId: string
   ) => Promise<string | undefined>;
   handleRemoveFavoriteArticle: (
-    favoriteArticleId: string,
-    favoriteArticleFolderId?: string
+    favoriteArticleId: string
   ) => Promise<string | undefined>;
   handleCreateFavoriteArticleFolder: (
     favoriteArticleFolderId: string
@@ -43,7 +41,6 @@ export const CopyFavoriteArticleDropdownMenuContent: FC<
 > = ({
   data,
   articleId,
-  targetFavoriteArticleId,
   targetFavoriteFolderId,
   handleCreateFavoriteArticle,
   handleRemoveFavoriteArticle,
@@ -92,7 +89,6 @@ export const CopyFavoriteArticleDropdownMenuContent: FC<
               key={folder.node.id}
               data={folder.node}
               articleId={articleId}
-              targetFavoriteArticleId={targetFavoriteArticleId}
               handleCreateFavoriteArticle={handleCreateFavoriteArticle}
               handleRemoveFavoriteArticle={handleRemoveFavoriteArticle}
             />

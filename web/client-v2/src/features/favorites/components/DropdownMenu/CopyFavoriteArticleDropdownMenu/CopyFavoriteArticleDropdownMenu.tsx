@@ -22,14 +22,12 @@ import { CopyFavoriteArticleDropdownMenuContentFragment } from "./CopyFavoriteAr
 type CopyFavoriteArticleDropdownMenuProps = {
   data: FragmentOf<typeof CopyFavoriteArticleDropdownMenuContentFragment>;
   articleId: string;
-  targetFavoriteArticleId: string;
   targetFavoriteFolderId: string;
   handleCreateFavoriteArticle: (
     targetFavoriteArticleFolderId: string
   ) => Promise<string | undefined>;
   handleRemoveFavoriteArticle: (
-    favoriteArticleId: string,
-    favoriteArticleFolderId?: string
+    favoriteArticleId: string
   ) => Promise<string | undefined>;
   handleCreateFavoriteArticleFolder: (
     favoriteArticleFolderId: string
@@ -41,7 +39,6 @@ export const CopyFavoriteArticleDropdownMenu: FC<
 > = ({
   data,
   articleId,
-  targetFavoriteArticleId,
   targetFavoriteFolderId,
   handleCreateFavoriteArticle,
   handleRemoveFavoriteArticle,
@@ -70,7 +67,6 @@ export const CopyFavoriteArticleDropdownMenu: FC<
       <CopyFavoriteArticleDropdownMenuContent
         data={data}
         articleId={articleId}
-        targetFavoriteArticleId={targetFavoriteArticleId}
         targetFavoriteFolderId={targetFavoriteFolderId}
         handleCreateFavoriteArticle={handleCreateFavoriteArticle}
         handleRemoveFavoriteArticle={handleRemoveFavoriteArticle}

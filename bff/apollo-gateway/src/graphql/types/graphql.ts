@@ -106,11 +106,11 @@ export class FavoriteArticleFoldersInput {
     keyword?: Nullable<string>;
     isFolderOnly?: Nullable<boolean>;
     isAllFetch?: Nullable<boolean>;
+    isFavoriteArticleAllFetch?: Nullable<boolean>;
     first?: Nullable<number>;
     after?: Nullable<string>;
     last?: Nullable<number>;
     before?: Nullable<string>;
-    isFavoriteArticleAllFetch?: Nullable<boolean>;
 }
 
 export class FavoriteArticleFolderInput {

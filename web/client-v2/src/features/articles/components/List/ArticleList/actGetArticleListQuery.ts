@@ -24,7 +24,7 @@ export const getArticleListQuery = async (input: ArticlesInput) => {
     query: GetArticleListQuery,
     context: {
       fetchOptions: {
-        cache: "no-cache",
+        cache: "no-store",
       },
     },
     variables: {

@@ -26,7 +26,7 @@ export const getFavoriteArticleListQuery = async (
     query: GetFavoriteArticleListQuery,
     context: {
       fetchOptions: {
-        cache: "no-cache",
+        cache: "no-store",
       },
     },
     variables: {

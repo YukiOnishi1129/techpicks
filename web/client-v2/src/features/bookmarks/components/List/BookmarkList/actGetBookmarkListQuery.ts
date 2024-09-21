@@ -24,7 +24,7 @@ export const getBookmarkListQuery = async (input: BookmarksInput) => {
     query: GetBookmarkListQuery,
     context: {
       fetchOptions: {
-        cache: "no-cache",
+        cache: "no-store",
       },
     },
     variables: {

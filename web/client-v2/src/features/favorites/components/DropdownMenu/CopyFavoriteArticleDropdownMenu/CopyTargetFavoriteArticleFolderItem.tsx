@@ -11,13 +11,11 @@ import { CopyTargetFavoriteArticleFolderItemFragment } from "./CopyFavoriteArtic
 type CopyTargetFavoriteArticleFolderItemProps = {
   data: FragmentOf<typeof CopyTargetFavoriteArticleFolderItemFragment>;
   articleId: string;
-  targetFavoriteArticleId: string;
   handleCreateFavoriteArticle: (
     targetFavoriteArticleFolderId: string
   ) => Promise<string | undefined>;
   handleRemoveFavoriteArticle: (
-    favoriteArticleId: string,
-    favoriteArticleFolderId?: string
+    favoriteArticleId: string
   ) => Promise<string | undefined>;
 };
 
@@ -26,7 +24,6 @@ export const CopyTargetFavoriteArticleFolderItem: FC<
 > = ({
   data,
   articleId,
-  targetFavoriteArticleId,
   handleCreateFavoriteArticle,
   handleRemoveFavoriteArticle,
 }) => {
@@ -43,6 +40,13 @@ export const CopyTargetFavoriteArticleFolderItem: FC<
     [articleId, fragment]
   );
 
+  const targetFavoriteArticleId = useMemo(() => {
+    const targetFavoriteArticle = fragment.favoriteArticles.find(
+      (favoriteArticle) => favoriteArticle.articleId === articleId
+    );
+    return targetFavoriteArticle?.id;
+  }, [articleId, fragment.favoriteArticles]);
+
   return (
     <div>
       <div className="flex items-center justify-between">
@@ -53,7 +57,7 @@ export const CopyTargetFavoriteArticleFolderItem: FC<
             size="sm"
             className="group relative border-emerald-500 bg-emerald-500 font-bold text-white hover:border-red-600 hover:text-red-600"
             onClick={() =>
-              handleRemoveFavoriteArticle(targetFavoriteArticleId, fragment.id)
+              handleRemoveFavoriteArticle(targetFavoriteArticleId || "")
             }
           >
             <span className="w-full group-hover:invisible">{"COPIED"}</span>
