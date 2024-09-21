@@ -6,11 +6,14 @@ import (
 	"time"
 
 	fpb "github.com/YukiOnishi1129/techpicks/micro-service/favorite-service/grpc/favorite"
+	externaladapter "github.com/YukiOnishi1129/techpicks/micro-service/favorite-service/internal/adapter/external_adapter"
 	persistenceadapter "github.com/YukiOnishi1129/techpicks/micro-service/favorite-service/internal/adapter/persistence_adapter"
 	"github.com/YukiOnishi1129/techpicks/micro-service/favorite-service/internal/domain/entity"
+	"github.com/YukiOnishi1129/techpicks/micro-service/favorite-service/internal/infrustructure/external"
 	"github.com/YukiOnishi1129/techpicks/micro-service/favorite-service/internal/infrustructure/persistence"
 	"github.com/YukiOnishi1129/techpicks/micro-service/favorite-service/internal/util/testutil"
 	"github.com/YukiOnishi1129/techpicks/micro-service/favorite-service/internal/util/testutil/mock"
+	"github.com/golang/mock/gomock"
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
 	"github.com/google/uuid"
@@ -1308,13 +1311,20 @@ func Test_UseCase_GetFavoriteArticleFolders(t *testing.T) {
 
 			db := pgContainer.DB
 
+			ctrl := gomock.NewController(t)
+			defer ctrl.Finish()
+
+			mockContentClient := mock.NewMockContentServiceClient(ctrl)
+
 			testFavoriteArticleFolderRepository := persistence.NewFavoriteArticleFolderPersistence(db)
 			testFavoriteArticleRepository := persistence.NewFavoriteArticlePersistence(db)
+			testContentExternal := external.NewContentExternal(mockContentClient)
 
 			testFavoriteArticleFolderPersistenceAdapter := persistenceadapter.NewFavoriteArticleFolderPersistenceAdapter(testFavoriteArticleFolderRepository)
 			testFavoriteArticlePersistenceAdapter := persistenceadapter.NewFavoriteArticlePersistenceAdapter(testFavoriteArticleRepository)
+			testContentExternalAdapter := externaladapter.NewContentExternalAdapter(testContentExternal)
 
-			testFavoriteUsecase := NewFavoriteUseCase(testFavoriteArticleFolderPersistenceAdapter, testFavoriteArticlePersistenceAdapter)
+			testFavoriteUsecase := NewFavoriteUseCase(testFavoriteArticleFolderPersistenceAdapter, testFavoriteArticlePersistenceAdapter, testContentExternalAdapter)
 
 			if tt.recordFavoriteArticleFolders != nil {
 				for _, v := range tt.recordFavoriteArticleFolders {
@@ -1588,13 +1598,20 @@ func Test_UseCase_CreateFavoriteArticleFolder(t *testing.T) {
 
 			db := pgContainer.DB
 
+			ctrl := gomock.NewController(t)
+			defer ctrl.Finish()
+
+			mockContentClient := mock.NewMockContentServiceClient(ctrl)
+
 			testFavoriteArticleFolderRepository := persistence.NewFavoriteArticleFolderPersistence(db)
 			testFavoriteArticleRepository := persistence.NewFavoriteArticlePersistence(db)
+			testContentExternal := external.NewContentExternal(mockContentClient)
 
 			testFavoriteArticleFolderPersistenceAdapter := persistenceadapter.NewFavoriteArticleFolderPersistenceAdapter(testFavoriteArticleFolderRepository)
 			testFavoriteArticlePersistenceAdapter := persistenceadapter.NewFavoriteArticlePersistenceAdapter(testFavoriteArticleRepository)
+			testContentExternalAdapter := externaladapter.NewContentExternalAdapter(testContentExternal)
 
-			testFavoriteUsecase := NewFavoriteUseCase(testFavoriteArticleFolderPersistenceAdapter, testFavoriteArticlePersistenceAdapter)
+			testFavoriteUsecase := NewFavoriteUseCase(testFavoriteArticleFolderPersistenceAdapter, testFavoriteArticlePersistenceAdapter, testContentExternalAdapter)
 
 			if tt.recordFavoriteArticleFolders != nil {
 				for _, v := range tt.recordFavoriteArticleFolders {
@@ -1956,13 +1973,20 @@ func Test_UseCase_UpdateFavoriteArticleFolder(t *testing.T) {
 
 			db := pgContainer.DB
 
+			ctrl := gomock.NewController(t)
+			defer ctrl.Finish()
+
+			mockContentClient := mock.NewMockContentServiceClient(ctrl)
+
 			testFavoriteArticleFolderRepository := persistence.NewFavoriteArticleFolderPersistence(db)
 			testFavoriteArticleRepository := persistence.NewFavoriteArticlePersistence(db)
+			testContentExternal := external.NewContentExternal(mockContentClient)
 
 			testFavoriteArticleFolderPersistenceAdapter := persistenceadapter.NewFavoriteArticleFolderPersistenceAdapter(testFavoriteArticleFolderRepository)
 			testFavoriteArticlePersistenceAdapter := persistenceadapter.NewFavoriteArticlePersistenceAdapter(testFavoriteArticleRepository)
+			testContentExternalAdapter := externaladapter.NewContentExternalAdapter(testContentExternal)
 
-			testFavoriteUsecase := NewFavoriteUseCase(testFavoriteArticleFolderPersistenceAdapter, testFavoriteArticlePersistenceAdapter)
+			testFavoriteUsecase := NewFavoriteUseCase(testFavoriteArticleFolderPersistenceAdapter, testFavoriteArticlePersistenceAdapter, testContentExternalAdapter)
 
 			if tt.recordFavoriteArticleFolders != nil {
 				for _, v := range tt.recordFavoriteArticleFolders {
@@ -2550,13 +2574,20 @@ func Test_UseCase_DeleteFavoriteArticleFolder(t *testing.T) {
 
 			db := pgContainer.DB
 
+			ctrl := gomock.NewController(t)
+			defer ctrl.Finish()
+
+			mockContentClient := mock.NewMockContentServiceClient(ctrl)
+
 			testFavoriteArticleFolderRepository := persistence.NewFavoriteArticleFolderPersistence(db)
 			testFavoriteArticleRepository := persistence.NewFavoriteArticlePersistence(db)
+			testContentExternal := external.NewContentExternal(mockContentClient)
 
 			testFavoriteArticleFolderPersistenceAdapter := persistenceadapter.NewFavoriteArticleFolderPersistenceAdapter(testFavoriteArticleFolderRepository)
 			testFavoriteArticlePersistenceAdapter := persistenceadapter.NewFavoriteArticlePersistenceAdapter(testFavoriteArticleRepository)
+			testContentExternalAdapter := externaladapter.NewContentExternalAdapter(testContentExternal)
 
-			testFavoriteUsecase := NewFavoriteUseCase(testFavoriteArticleFolderPersistenceAdapter, testFavoriteArticlePersistenceAdapter)
+			testFavoriteUsecase := NewFavoriteUseCase(testFavoriteArticleFolderPersistenceAdapter, testFavoriteArticlePersistenceAdapter, testContentExternalAdapter)
 
 			if tt.recordFavoriteArticleFolders != nil {
 				for _, v := range tt.recordFavoriteArticleFolders {

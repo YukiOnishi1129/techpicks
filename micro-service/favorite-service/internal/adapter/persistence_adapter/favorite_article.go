@@ -3,6 +3,7 @@ package persistenceadapter
 import (
 	"context"
 
+	cpb "github.com/YukiOnishi1129/techpicks/micro-service/favorite-service/grpc/content"
 	fpb "github.com/YukiOnishi1129/techpicks/micro-service/favorite-service/grpc/favorite"
 	"github.com/YukiOnishi1129/techpicks/micro-service/favorite-service/internal/domain/entity"
 	"github.com/YukiOnishi1129/techpicks/micro-service/favorite-service/internal/domain/repository"
@@ -17,7 +18,9 @@ type FavoriteArticlePersistenceAdapter interface {
 	GetFavoriteArticleByArticleIDAndFavoriteArticleFolderID(ctx context.Context, articleID, favoriteArticleFolderID, userID string) (entity.FavoriteArticle, error)
 	GetFavoriteArticlesByFavoriteArticleFolderID(ctx context.Context, fafID, userID string, limit *int, isAllFetch *bool) (entity.FavoriteArticleSlice, error)
 	GetFavoriteArticleByID(ctx context.Context, id string, userID string) (entity.FavoriteArticle, error)
+	GetFavoriteArticleByArticleURL(ctx context.Context, articleURL, favoriteArticleFolderID, userID string) (entity.FavoriteArticle, error)
 	CreateFavoriteArticle(ctx context.Context, req *fpb.CreateFavoriteArticleRequest) (entity.FavoriteArticle, error)
+	CreateFavoriteArticleForUploadArticle(ctx context.Context, req *fpb.CreateFavoriteArticleForUploadArticleRequest, article *cpb.Article) (entity.FavoriteArticle, error)
 	DeleteFavoriteArticle(ctx context.Context, fa entity.FavoriteArticle) error
 	MultiDeleteFavoriteArticles(ctx context.Context, fa entity.FavoriteArticleSlice) error
 }
@@ -102,7 +105,7 @@ func (fapa *favoriteArticlePersistenceAdapter) GetFavoriteArticlesByFavoriteArti
 		qm.OrderBy("created_at DESC"),
 	}
 
-	if isFavoriteArticleAllFetch == nil || isFavoriteArticleAllFetch != nil && !*isFavoriteArticleAllFetch {
+	if isFavoriteArticleAllFetch == nil || !*isFavoriteArticleAllFetch {
 		paramLimit := 1
 		if limit != nil {
 			paramLimit = int(*limit)
@@ -115,6 +118,19 @@ func (fapa *favoriteArticlePersistenceAdapter) GetFavoriteArticlesByFavoriteArti
 		return nil, err
 	}
 	return favoriteArticles, nil
+}
+
+func (fapa *favoriteArticlePersistenceAdapter) GetFavoriteArticleByArticleURL(ctx context.Context, articleURL, favoriteArticleFolderID, userID string) (entity.FavoriteArticle, error) {
+	q := []qm.QueryMod{
+		qm.Where("article_url = ?", articleURL),
+		qm.Where("user_id = ?", userID),
+		qm.Where("favorite_article_folder_id = ?", favoriteArticleFolderID),
+	}
+	fa, err := fapa.favoriteArticleRepository.GetFavoriteArticle(ctx, q)
+	if err != nil {
+		return entity.FavoriteArticle{}, err
+	}
+	return fa, nil
 }
 
 func (fapa *favoriteArticlePersistenceAdapter) CreateFavoriteArticle(ctx context.Context, req *fpb.CreateFavoriteArticleRequest) (entity.FavoriteArticle, error) {
@@ -148,6 +164,53 @@ func (fapa *favoriteArticlePersistenceAdapter) CreateFavoriteArticle(ctx context
 	}
 	if req.GetTags() != nil {
 		fa.Tags = null.String{String: req.GetTags().GetValue(), Valid: true}
+	}
+
+	if _, err := fapa.favoriteArticleRepository.CreateFavoriteArticle(ctx, fa); err != nil {
+		return entity.FavoriteArticle{}, err
+	}
+	return fa, nil
+}
+
+func (fapa *favoriteArticlePersistenceAdapter) CreateFavoriteArticleForUploadArticle(ctx context.Context, req *fpb.CreateFavoriteArticleForUploadArticleRequest, article *cpb.Article) (entity.FavoriteArticle, error) {
+	favoriteArticleID, _ := uuid.NewRandom()
+	fa := entity.FavoriteArticle{
+		ID:                      favoriteArticleID.String(),
+		UserID:                  req.GetUserId(),
+		FavoriteArticleFolderID: req.GetFavoriteArticleFolderId(),
+		ArticleID:               article.GetId(),
+		Title:                   article.GetTitle(),
+		Description:             article.GetDescription(),
+		ArticleURL:              article.GetArticleUrl(),
+		ThumbnailURL:            article.GetThumbnailUrl(),
+		IsEng:                   article.GetIsEng(),
+		IsPrivate:               article.GetIsPrivate(),
+		IsRead:                  false,
+	}
+
+	if article.GetPublishedAt() != nil {
+		fa.PublishedAt.Time = article.GetPublishedAt().AsTime()
+		fa.PublishedAt.Valid = true
+	}
+
+	if article.GetPlatform() != nil {
+		fa.PlatformID.String = article.GetPlatform().GetId()
+		fa.PlatformID.Valid = true
+		fa.PlatformName = article.GetPlatform().GetName()
+		fa.PlatformURL = article.GetPlatform().GetSiteUrl()
+		fa.PlatformFaviconURL = article.GetPlatform().GetFaviconUrl()
+	} else {
+		fa.PlatformName = req.GetPlatformName()
+		fa.PlatformURL = req.GetPlatformUrl()
+		fa.PlatformFaviconURL = req.GetPlatformFaviconUrl()
+	}
+
+	if article.GetAuthorName() != nil {
+		fa.AuthorName = null.String{String: article.GetAuthorName().GetValue(), Valid: true}
+	}
+
+	if article.GetTags() != nil {
+		fa.Tags = null.String{String: article.GetTags().GetValue(), Valid: true}
 	}
 
 	if _, err := fapa.favoriteArticleRepository.CreateFavoriteArticle(ctx, fa); err != nil {

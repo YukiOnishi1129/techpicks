@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 
+	cpb "github.com/YukiOnishi1129/techpicks/micro-service/favorite-service/grpc/content"
 	fpb "github.com/YukiOnishi1129/techpicks/micro-service/favorite-service/grpc/favorite"
 	"github.com/YukiOnishi1129/techpicks/micro-service/favorite-service/internal/domain/entity"
 	"google.golang.org/protobuf/types/known/emptypb"
@@ -58,6 +59,46 @@ func (fu *favoriteUseCase) CreateFavoriteArticle(ctx context.Context, req *fpb.C
 		return &fpb.CreateFavoriteArticleResponse{}, errors.New("favorite article already exists")
 	}
 	cfa, err := fu.favoriteArticlePersistenceAdapter.CreateFavoriteArticle(ctx, req)
+	if err != nil {
+		return &fpb.CreateFavoriteArticleResponse{}, err
+	}
+
+	fa, err := fu.favoriteArticlePersistenceAdapter.GetFavoriteArticleByID(ctx, cfa.ID, cfa.UserID)
+	if err != nil {
+		return &fpb.CreateFavoriteArticleResponse{}, err
+	}
+
+	return &fpb.CreateFavoriteArticleResponse{
+		FavoriteArticle: fu.convertPBFavoriteArticle(&fa),
+	}, nil
+}
+
+func (fu *favoriteUseCase) CreateFavoriteArticleForUploadArticle(ctx context.Context, req *fpb.CreateFavoriteArticleForUploadArticleRequest) (*fpb.CreateFavoriteArticleResponse, error) {
+	data, err := fu.favoriteArticlePersistenceAdapter.GetFavoriteArticleByArticleURL(ctx, req.GetArticleUrl(), req.GetFavoriteArticleFolderId(), req.GetUserId())
+	if err != nil {
+		return &fpb.CreateFavoriteArticleResponse{}, err
+	}
+	if data.ID != "" {
+		return &fpb.CreateFavoriteArticleResponse{}, errors.New("favorite article already exists")
+	}
+
+	// create article
+	article, err := fu.contentExternalAdapter.CreateUploadArticle(ctx, &cpb.CreateUploadArticleRequest{
+		UserId:             req.GetUserId(),
+		Title:              req.GetTitle(),
+		Description:        req.GetDescription(),
+		ArticleUrl:         req.GetArticleUrl(),
+		ThumbnailUrl:       req.GetThumbnailUrl(),
+		PlatformName:       req.GetPlatformName(),
+		PlatformUrl:        req.GetPlatformUrl(),
+		PlatformFaviconUrl: req.GetPlatformFaviconUrl(),
+	})
+	if err != nil {
+		return &fpb.CreateFavoriteArticleResponse{}, err
+	}
+
+	// create favorite article
+	cfa, err := fu.favoriteArticlePersistenceAdapter.CreateFavoriteArticleForUploadArticle(ctx, req, article.Article)
 	if err != nil {
 		return &fpb.CreateFavoriteArticleResponse{}, err
 	}

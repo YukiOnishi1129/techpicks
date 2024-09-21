@@ -93,6 +93,17 @@ export class CreateFavoriteArticleInput {
     isRead: boolean;
 }
 
+export class CreateFavoriteArticleForUploadArticleInput {
+    favoriteArticleFolderId: string;
+    title: string;
+    description?: Nullable<string>;
+    thumbnailUrl: string;
+    articleUrl: string;
+    platformName: string;
+    platformUrl: string;
+    platformFaviconUrl: string;
+}
+
 export class DeleteFavoriteArticleInput {
     id: string;
 }
@@ -208,6 +219,8 @@ export abstract class IMutation {
     abstract deleteFavoriteArticleFolder(input: DeleteFavoriteArticleFolderInput): boolean | Promise<boolean>;
 
     abstract createFavoriteArticle(input: CreateFavoriteArticleInput): FavoriteArticle | Promise<FavoriteArticle>;
+
+    abstract createFavoriteArticleForUploadArticle(input: CreateFavoriteArticleForUploadArticleInput): FavoriteArticle | Promise<FavoriteArticle>;
 
     abstract deleteFavoriteArticle(input: DeleteFavoriteArticleInput): boolean | Promise<boolean>;
 

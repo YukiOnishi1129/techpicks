@@ -4089,18 +4089,14 @@ proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest.protot
 proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest.toObject = function(includeInstance, msg) {
   var f, obj = {
     userId: jspb.Message.getFieldWithDefault(msg, 1, ""),
-    articleId: jspb.Message.getFieldWithDefault(msg, 2, ""),
-    favoriteArticleFolderId: jspb.Message.getFieldWithDefault(msg, 3, ""),
-    title: jspb.Message.getFieldWithDefault(msg, 4, ""),
-    description: jspb.Message.getFieldWithDefault(msg, 5, ""),
-    thumbnailUrl: jspb.Message.getFieldWithDefault(msg, 6, ""),
-    articleUrl: jspb.Message.getFieldWithDefault(msg, 7, ""),
-    platformName: jspb.Message.getFieldWithDefault(msg, 8, ""),
-    platformUrl: jspb.Message.getFieldWithDefault(msg, 9, ""),
-    platformFaviconUrl: jspb.Message.getFieldWithDefault(msg, 10, ""),
-    isEng: jspb.Message.getBooleanFieldWithDefault(msg, 11, false),
-    isPrivate: jspb.Message.getBooleanFieldWithDefault(msg, 12, false),
-    isRead: jspb.Message.getBooleanFieldWithDefault(msg, 13, false)
+    favoriteArticleFolderId: jspb.Message.getFieldWithDefault(msg, 2, ""),
+    title: jspb.Message.getFieldWithDefault(msg, 3, ""),
+    description: jspb.Message.getFieldWithDefault(msg, 4, ""),
+    thumbnailUrl: jspb.Message.getFieldWithDefault(msg, 5, ""),
+    articleUrl: jspb.Message.getFieldWithDefault(msg, 6, ""),
+    platformName: jspb.Message.getFieldWithDefault(msg, 7, ""),
+    platformUrl: jspb.Message.getFieldWithDefault(msg, 8, ""),
+    platformFaviconUrl: jspb.Message.getFieldWithDefault(msg, 9, "")
   };
 
   if (includeInstance) {
@@ -4143,51 +4139,35 @@ proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest.deseri
       break;
     case 2:
       var value = /** @type {string} */ (reader.readString());
-      msg.setArticleId(value);
+      msg.setFavoriteArticleFolderId(value);
       break;
     case 3:
       var value = /** @type {string} */ (reader.readString());
-      msg.setFavoriteArticleFolderId(value);
+      msg.setTitle(value);
       break;
     case 4:
       var value = /** @type {string} */ (reader.readString());
-      msg.setTitle(value);
+      msg.setDescription(value);
       break;
     case 5:
       var value = /** @type {string} */ (reader.readString());
-      msg.setDescription(value);
+      msg.setThumbnailUrl(value);
       break;
     case 6:
       var value = /** @type {string} */ (reader.readString());
-      msg.setThumbnailUrl(value);
+      msg.setArticleUrl(value);
       break;
     case 7:
       var value = /** @type {string} */ (reader.readString());
-      msg.setArticleUrl(value);
+      msg.setPlatformName(value);
       break;
     case 8:
       var value = /** @type {string} */ (reader.readString());
-      msg.setPlatformName(value);
+      msg.setPlatformUrl(value);
       break;
     case 9:
       var value = /** @type {string} */ (reader.readString());
-      msg.setPlatformUrl(value);
-      break;
-    case 10:
-      var value = /** @type {string} */ (reader.readString());
       msg.setPlatformFaviconUrl(value);
-      break;
-    case 11:
-      var value = /** @type {boolean} */ (reader.readBool());
-      msg.setIsEng(value);
-      break;
-    case 12:
-      var value = /** @type {boolean} */ (reader.readBool());
-      msg.setIsPrivate(value);
-      break;
-    case 13:
-      var value = /** @type {boolean} */ (reader.readBool());
-      msg.setIsRead(value);
       break;
     default:
       reader.skipField();
@@ -4225,87 +4205,59 @@ proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest.serial
       f
     );
   }
-  f = message.getArticleId();
+  f = message.getFavoriteArticleFolderId();
   if (f.length > 0) {
     writer.writeString(
       2,
       f
     );
   }
-  f = message.getFavoriteArticleFolderId();
+  f = message.getTitle();
   if (f.length > 0) {
     writer.writeString(
       3,
       f
     );
   }
-  f = message.getTitle();
+  f = message.getDescription();
   if (f.length > 0) {
     writer.writeString(
       4,
       f
     );
   }
-  f = message.getDescription();
+  f = message.getThumbnailUrl();
   if (f.length > 0) {
     writer.writeString(
       5,
       f
     );
   }
-  f = message.getThumbnailUrl();
+  f = message.getArticleUrl();
   if (f.length > 0) {
     writer.writeString(
       6,
       f
     );
   }
-  f = message.getArticleUrl();
+  f = message.getPlatformName();
   if (f.length > 0) {
     writer.writeString(
       7,
       f
     );
   }
-  f = message.getPlatformName();
+  f = message.getPlatformUrl();
   if (f.length > 0) {
     writer.writeString(
       8,
       f
     );
   }
-  f = message.getPlatformUrl();
-  if (f.length > 0) {
-    writer.writeString(
-      9,
-      f
-    );
-  }
   f = message.getPlatformFaviconUrl();
   if (f.length > 0) {
     writer.writeString(
-      10,
-      f
-    );
-  }
-  f = message.getIsEng();
-  if (f) {
-    writer.writeBool(
-      11,
-      f
-    );
-  }
-  f = message.getIsPrivate();
-  if (f) {
-    writer.writeBool(
-      12,
-      f
-    );
-  }
-  f = message.getIsRead();
-  if (f) {
-    writer.writeBool(
-      13,
+      9,
       f
     );
   }
@@ -4331,10 +4283,10 @@ proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest.protot
 
 
 /**
- * optional string article_id = 2;
+ * optional string favorite_article_folder_id = 2;
  * @return {string}
  */
-proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest.prototype.getArticleId = function() {
+proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest.prototype.getFavoriteArticleFolderId = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
 };
 
@@ -4343,16 +4295,16 @@ proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest.protot
  * @param {string} value
  * @return {!proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest} returns this
  */
-proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest.prototype.setArticleId = function(value) {
+proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest.prototype.setFavoriteArticleFolderId = function(value) {
   return jspb.Message.setProto3StringField(this, 2, value);
 };
 
 
 /**
- * optional string favorite_article_folder_id = 3;
+ * optional string title = 3;
  * @return {string}
  */
-proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest.prototype.getFavoriteArticleFolderId = function() {
+proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest.prototype.getTitle = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 3, ""));
 };
 
@@ -4361,16 +4313,16 @@ proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest.protot
  * @param {string} value
  * @return {!proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest} returns this
  */
-proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest.prototype.setFavoriteArticleFolderId = function(value) {
+proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest.prototype.setTitle = function(value) {
   return jspb.Message.setProto3StringField(this, 3, value);
 };
 
 
 /**
- * optional string title = 4;
+ * optional string description = 4;
  * @return {string}
  */
-proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest.prototype.getTitle = function() {
+proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest.prototype.getDescription = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 4, ""));
 };
 
@@ -4379,16 +4331,16 @@ proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest.protot
  * @param {string} value
  * @return {!proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest} returns this
  */
-proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest.prototype.setTitle = function(value) {
+proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest.prototype.setDescription = function(value) {
   return jspb.Message.setProto3StringField(this, 4, value);
 };
 
 
 /**
- * optional string description = 5;
+ * optional string thumbnail_url = 5;
  * @return {string}
  */
-proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest.prototype.getDescription = function() {
+proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest.prototype.getThumbnailUrl = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 5, ""));
 };
 
@@ -4397,16 +4349,16 @@ proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest.protot
  * @param {string} value
  * @return {!proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest} returns this
  */
-proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest.prototype.setDescription = function(value) {
+proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest.prototype.setThumbnailUrl = function(value) {
   return jspb.Message.setProto3StringField(this, 5, value);
 };
 
 
 /**
- * optional string thumbnail_url = 6;
+ * optional string article_url = 6;
  * @return {string}
  */
-proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest.prototype.getThumbnailUrl = function() {
+proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest.prototype.getArticleUrl = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 6, ""));
 };
 
@@ -4415,16 +4367,16 @@ proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest.protot
  * @param {string} value
  * @return {!proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest} returns this
  */
-proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest.prototype.setThumbnailUrl = function(value) {
+proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest.prototype.setArticleUrl = function(value) {
   return jspb.Message.setProto3StringField(this, 6, value);
 };
 
 
 /**
- * optional string article_url = 7;
+ * optional string platform_name = 7;
  * @return {string}
  */
-proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest.prototype.getArticleUrl = function() {
+proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest.prototype.getPlatformName = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 7, ""));
 };
 
@@ -4433,16 +4385,16 @@ proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest.protot
  * @param {string} value
  * @return {!proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest} returns this
  */
-proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest.prototype.setArticleUrl = function(value) {
+proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest.prototype.setPlatformName = function(value) {
   return jspb.Message.setProto3StringField(this, 7, value);
 };
 
 
 /**
- * optional string platform_name = 8;
+ * optional string platform_url = 8;
  * @return {string}
  */
-proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest.prototype.getPlatformName = function() {
+proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest.prototype.getPlatformUrl = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 8, ""));
 };
 
@@ -4451,16 +4403,16 @@ proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest.protot
  * @param {string} value
  * @return {!proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest} returns this
  */
-proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest.prototype.setPlatformName = function(value) {
+proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest.prototype.setPlatformUrl = function(value) {
   return jspb.Message.setProto3StringField(this, 8, value);
 };
 
 
 /**
- * optional string platform_url = 9;
+ * optional string platform_favicon_url = 9;
  * @return {string}
  */
-proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest.prototype.getPlatformUrl = function() {
+proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest.prototype.getPlatformFaviconUrl = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 9, ""));
 };
 
@@ -4469,80 +4421,8 @@ proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest.protot
  * @param {string} value
  * @return {!proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest} returns this
  */
-proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest.prototype.setPlatformUrl = function(value) {
-  return jspb.Message.setProto3StringField(this, 9, value);
-};
-
-
-/**
- * optional string platform_favicon_url = 10;
- * @return {string}
- */
-proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest.prototype.getPlatformFaviconUrl = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 10, ""));
-};
-
-
-/**
- * @param {string} value
- * @return {!proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest} returns this
- */
 proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest.prototype.setPlatformFaviconUrl = function(value) {
-  return jspb.Message.setProto3StringField(this, 10, value);
-};
-
-
-/**
- * optional bool is_eng = 11;
- * @return {boolean}
- */
-proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest.prototype.getIsEng = function() {
-  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 11, false));
-};
-
-
-/**
- * @param {boolean} value
- * @return {!proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest} returns this
- */
-proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest.prototype.setIsEng = function(value) {
-  return jspb.Message.setProto3BooleanField(this, 11, value);
-};
-
-
-/**
- * optional bool is_private = 12;
- * @return {boolean}
- */
-proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest.prototype.getIsPrivate = function() {
-  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 12, false));
-};
-
-
-/**
- * @param {boolean} value
- * @return {!proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest} returns this
- */
-proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest.prototype.setIsPrivate = function(value) {
-  return jspb.Message.setProto3BooleanField(this, 12, value);
-};
-
-
-/**
- * optional bool is_read = 13;
- * @return {boolean}
- */
-proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest.prototype.getIsRead = function() {
-  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 13, false));
-};
-
-
-/**
- * @param {boolean} value
- * @return {!proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest} returns this
- */
-proto.checkpicks.favorite.v1.CreateFavoriteArticleForUploadArticleRequest.prototype.setIsRead = function(value) {
-  return jspb.Message.setProto3BooleanField(this, 13, value);
+  return jspb.Message.setProto3StringField(this, 9, value);
 };
 
 
