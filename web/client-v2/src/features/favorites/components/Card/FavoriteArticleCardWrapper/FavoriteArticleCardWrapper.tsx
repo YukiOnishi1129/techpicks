@@ -4,7 +4,6 @@ import { FragmentOf, readFragment } from "gql.tada";
 import { FC, useCallback, useState } from "react";
 
 import { logoutToLoginPage } from "@/features/auth/actions/auth";
-// import { fetchFavoriteArticleFolderByIdAPI } from "@/features/favoriteArticleFolders/actions/favoriteArticleFolders";
 
 import { ShareLinks } from "@/components/ui/share";
 
@@ -16,23 +15,8 @@ import {
   FavoriteArticleCardWrapperFragment,
   FavoriteFolderFavoriteArticleCardWrapperFragment,
 } from "./FavoriteArticleCardWrapperFragment";
+import { CopyFavoriteArticleDropdownMenu } from "../../DropdownMenu/CopyFavoriteArticleDropdownMenu";
 import { FavoriteArticleCardItem } from "../FavoriteArticleCardItem";
-
-// import { FavoriteArticleType } from "@/types/favoriteArticle";
-// import { FavoriteArticleFolderType } from "@/types/favoriteArticleFolder";
-
-// import { FavoriteArticleCardItem } from "./FavoriteArticleCardItem";
-// import {
-//   fetchFavoriteArticleAPI,
-//   fetchFavoriteArticleCountByFavoriteArticleFolderIdAndArticleIdAndArticleUrlAPI,
-// } from "../../actions/favoriteArticle";
-// import {
-//   createFavoriteArticle,
-//   deleteFavoriteArticle,
-// } from "../../repository/favoriteArticle";
-// import { RemoveFavoriteArticleAlertDialog } from "../Dialog";
-// import { CopyFavoriteArticleDropdownMenu } from "../DropdownMenu";
-// import { FavoriteArticleDetailSheet } from "../Sheet";
 
 type FavoriteArticleCardWrapperProps = {
   data: FragmentOf<typeof FavoriteArticleCardWrapperFragment>;
@@ -141,15 +125,16 @@ export const FavoriteArticleCardWrapper: FC<
               />
             </div>
             <div className="mr-4">
-              {/* <CopyFavoriteArticleDropdownMenu
-                articleId={favoriteArticle.articleId || ""}
-                favoriteArticleFolders={showOtherFavoriteArticleFolders}
+              <CopyFavoriteArticleDropdownMenu
+                data={showFavoriteArticleFolders}
+                targetFavoriteArticleId={fragment.id}
+                targetFavoriteFolderId={fragment.favoriteArticleFolderId}
                 handleCreateFavoriteArticle={handleCreateFavoriteArticle}
                 handleRemoveFavoriteArticle={handleRemoveFavoriteArticle}
                 handleCreateFavoriteArticleFolder={
                   handleCreateFavoriteArticleFolder
                 }
-              /> */}
+              />
             </div>
             <div>
               {/* <RemoveFavoriteArticleAlertDialog
