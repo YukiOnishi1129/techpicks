@@ -140,8 +140,26 @@ export const FavoriteArticleCardWrapper: FC<
   );
 
   const handleCreateFavoriteArticleFolder = useCallback(
-    async (favoriteArticleFolderId: string) => {},
-    []
+    async (favoriteArticleFolderId: string, title: string) => {
+      await handleCreateFavoriteArticle(favoriteArticleFolderId);
+
+      setShowFavoriteArticleFolders((prev) => {
+        return {
+          ...prev,
+          edges: [
+            ...prev.edges,
+            {
+              node: {
+                id: favoriteArticleFolderId,
+                title: "",
+                favoriteArticles: [],
+              },
+            },
+          ],
+        };
+      });
+    },
+    [handleCreateFavoriteArticle]
   );
 
   const handleRemoveFavoriteArticle = useCallback(

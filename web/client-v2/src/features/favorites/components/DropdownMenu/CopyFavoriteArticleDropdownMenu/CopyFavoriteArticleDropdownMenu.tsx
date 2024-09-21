@@ -31,7 +31,8 @@ type CopyFavoriteArticleDropdownMenuProps = {
     targetFavoriteArticleFolderId: string
   ) => Promise<string | undefined>;
   handleCreateFavoriteArticleFolder: (
-    favoriteArticleFolderId: string
+    favoriteArticleFolderId: string,
+    title: string
   ) => Promise<void>;
 };
 
