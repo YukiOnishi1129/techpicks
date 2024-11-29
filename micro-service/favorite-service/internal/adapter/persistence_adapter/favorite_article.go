@@ -2,7 +2,7 @@ package persistenceadapter
 
 import (
 	"context"
-	"time"
+	"fmt"
 
 	cpb "github.com/YukiOnishi1129/techpicks/micro-service/favorite-service/grpc/content"
 	fpb "github.com/YukiOnishi1129/techpicks/micro-service/favorite-service/grpc/favorite"
@@ -64,48 +64,34 @@ func (fapa *favoriteArticlePersistenceAdapter) GetFavoriteArticles(ctx context.C
 }
 
 func (fapa *favoriteArticlePersistenceAdapter) GetFavoriteAllFolderArticles(ctx context.Context, req *fpb.GetFavoriteAllFolderArticlesRequest, limit int) (entity.FavoriteArticleSlice, error) {
-	query := `
-        SELECT DISTINCT ON (fa.article_id)
-            fa.id, fa.article_id, fa.favorite_article_folder_id, fa.user_id, fa.is_read, fa.created_at, fa.updated_at,
-            faf.id AS folder_id, faf.title AS folder_title, faf.description AS folder_description, faf.created_at AS folder_created_at, faf.updated_at AS folder_updated_at
-        FROM favorite_articles fa
-        INNER JOIN favorite_article_folders faf ON fa.favorite_article_folder_id = faf.id
-        WHERE fa.user_id = $1
-        AND ($2 = '' OR fa.id > $2)
-        ORDER BY fa.article_id, fa.created_at DESC
-        LIMIT $3
-    `
-	userId := req.GetUserId()
-	cursor := req.GetCursor()
-	rows, err := fapa.favoriteArticleRepository.QueryRows(ctx, query, userId, cursor, limit+1)
-    if err != nil {
-        return nil, err
-    }
-    defer rows.Close()
+	limit = 20
+	if req.GetLimit().GetValue() != 0 {
+		limit = int(req.GetLimit().GetValue())
+	}
+	q := []qm.QueryMod{
+		qm.Where("user_id = ?", req.GetUserId()),
+		qm.Load(qm.Rels(entity.FavoriteArticleRels.FavoriteArticleFolder)),
+		qm.OrderBy("created_at DESC"),
+		qm.OrderBy("article_id"),
+		qm.Limit(limit),
+	}
 
-	var favoriteArticles []*entity.FavoriteArticle
-    for rows.Next() {
-        var fa entity.FavoriteArticle
-		var folderID string
-        var folderTitle string
-		var folderDescription null.String
-		var folderCreatedAt time.Time
-		var folderUpdatedAt time.Time
-        err := rows.Scan(
-            &fa.ID, &fa.ArticleID, &fa.FavoriteArticleFolderID, &fa.UserID, &fa.IsRead, &fa.CreatedAt, &fa.UpdatedAt,
-            &folderID, &folderTitle, &folderDescription, &folderCreatedAt, &folderUpdatedAt,
-        )
-        if err != nil {
-            return nil, err
-        }
-        fa.R.FavoriteArticleFolder.ID = folderID
-        fa.R.FavoriteArticleFolder.Title = folderTitle
-		fa.R.FavoriteArticleFolder.Description = folderDescription
-		fa.R.FavoriteArticleFolder.CreatedAt = folderCreatedAt
-		fa.R.FavoriteArticleFolder.UpdatedAt = folderUpdatedAt
-		fa.R.FavoriteArticleFolder.UserID = userId
-        favoriteArticles = append(favoriteArticles, &fa)
-    }
+	if req.GetCursor().GetValue() != "" {
+		q = append(q, qm.Where("created_at < (SELECT created_at FROM favorite_articles WHERE id = ?)", req.GetCursor().GetValue()))
+	}
+
+	if req.GetKeyword().GetValue() != "" {
+		q = append(q, qm.Expr(
+			qm.And("title LIKE ?", "%"+req.GetKeyword().GetValue()+"%"),
+			qm.Or("description LIKE ?", "%"+req.GetKeyword().GetValue()+"%"),
+		))
+	}
+
+	favoriteArticles, err := fapa.favoriteArticleRepository.GetFavoriteArticles(ctx, q)
+	if err != nil {
+		fmt.Printf("Error executing query: %v\n", err)
+		return nil, err
+	}
 
 	return favoriteArticles, nil
 }

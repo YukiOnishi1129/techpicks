@@ -52,8 +52,6 @@ export const FavoriteArticleAllListTemplate: FC<
   if (error) {
     return <div>Error: {error.message}</div>;
   }
-  console.log("🔥");
-  console.log(data);
 
   return (
     <div>
@@ -73,7 +71,7 @@ export const FavoriteArticleAllListTemplate: FC<
 
       {/* <FavoriteArticleList
         user={user}
-        data={fragment.favoriteArticles}
+        data={data}
         folderId={id}
         keyword={keyword}
         favoriteArticleFolders={fragment.favoriteArticleFolders}
