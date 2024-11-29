@@ -3,6 +3,7 @@ package usecase
 import (
 	"context"
 	"errors"
+	"sort"
 
 	cpb "github.com/YukiOnishi1129/techpicks/micro-service/favorite-service/grpc/content"
 	fpb "github.com/YukiOnishi1129/techpicks/micro-service/favorite-service/grpc/favorite"
@@ -50,81 +51,93 @@ func (fu *favoriteUseCase) GetFavoriteArticles(ctx context.Context, req *fpb.Get
 	}, nil
 }
 
-
 func (fu *favoriteUseCase) GetFavoriteAllFolderArticles(ctx context.Context, req *fpb.GetFavoriteAllFolderArticlesRequest) (*fpb.GetFavoriteAllFolderArticlesResponse, error) {
 	limit := 20
 	if req.GetLimit() != nil {
 		limit = int(req.GetLimit().GetValue())
 	}
 
+	isEndSearch := false
+
 	resFas := make([]*fpb.FavoriteAllFolderArticleEdge, 0)
 
-	fas, err := fu.favoriteArticlePersistenceAdapter.GetFavoriteAllFolderArticles(ctx, req, limit)
-	if err != nil {
-		return &fpb.GetFavoriteAllFolderArticlesResponse{}, err
+	endCursor := ""
+	if req.GetCursor().GetValue() != "" {
+		endCursor = req.GetCursor().GetValue()
 	}
 
-	newArticleIDs := make(map[string]struct{})
-
-	for _, fa := range fas {
-		if fa.R == nil || fa.R != nil && fa.R.FavoriteArticleFolder == nil {
-			continue
-		}
-		if _, exists := newArticleIDs[fa.ArticleID]; exists {
-			continue 
-		}
-
-		if req.GetCursor().GetValue() != "" {
-			count, err := fu.favoriteArticlePersistenceAdapter.CountPreviousFavoriteArticleByArticleID(ctx, fa.ID, fa.ArticleID, req.GetUserId() )
-			if err != nil {
-				return &fpb.GetFavoriteAllFolderArticlesResponse{}, err
-			}
-			if count != 0{
-				continue
-			}
-		}
-
-		afas, err := fu.favoriteArticlePersistenceAdapter.GetFavoriteArticlesByArticleID(ctx, fa.ArticleID, fa.UserID)
+	for !isEndSearch {
+		fas, err := fu.favoriteArticlePersistenceAdapter.GetFavoriteArticlesOrderByArticleID(ctx, req, endCursor, limit)
 		if err != nil {
 			return &fpb.GetFavoriteAllFolderArticlesResponse{}, err
 		}
-		if len(afas) == 0 {
-			continue
-		}
 
-		newArticleIDs[fa.ArticleID] = struct{}{}
-
-		resFaFs := make([]*fpb.FavoriteArticleFolder, len(afas))
-
-		for j, afa := range afas {
-			resFaFs[j] = &fpb.FavoriteArticleFolder{
-				Id:        afa.R.FavoriteArticleFolder.ID,
-				UserId:    afa.R.FavoriteArticleFolder.UserID,
-				Title:     afa.R.FavoriteArticleFolder.Title,
-				CreatedAt: timestamppb.New(afa.R.FavoriteArticleFolder.CreatedAt),
-				UpdatedAt: timestamppb.New(afa.R.FavoriteArticleFolder.UpdatedAt),
-			}
-			if afa.R.FavoriteArticleFolder.Description.Valid {
-				resFaFs[j].Description = afa.R.FavoriteArticleFolder.Description.String
-			}
-		}
-
-
-		resFa := &fpb.FavoriteAllFolderArticleEdge{
-			Cursor: fa.ID,
-			Node:   fu.convertPBFavoriteArticle(fa),
-			FavoriteArticleFolders: resFaFs,
-		}
-		resFas = append(resFas, resFa)
-
-		if len(resFas) >= limit {
+		if len(fas) == 0 {
+			isEndSearch = true
 			break
+		}
+
+		newArticleIDs := make(map[string]struct{})
+
+		for _, fa := range fas {
+			endCursor = fa.ID
+			if _, exists := newArticleIDs[fa.ArticleID]; exists {
+				continue
+			}
+
+			count, err := fu.favoriteArticlePersistenceAdapter.CountPreviousFavoriteArticleByArticleID(ctx, fa.ID, fa.ArticleID, fa.UserID)
+			if err != nil {
+				return &fpb.GetFavoriteAllFolderArticlesResponse{}, err
+			}
+			if count != 0 {
+				continue
+			}
+
+			afas, err := fu.favoriteArticlePersistenceAdapter.GetFavoriteArticlesByArticleID(ctx, fa.ArticleID, fa.UserID)
+			if err != nil {
+				return &fpb.GetFavoriteAllFolderArticlesResponse{}, err
+			}
+			if len(afas) == 0 {
+				continue
+			}
+
+			newArticleIDs[fa.ArticleID] = struct{}{}
+
+			resFaFs := make([]*fpb.FavoriteArticleFolder, len(afas))
+
+			sort.Slice(afas, func(i, j int) bool {
+				return afas[i].R.FavoriteArticleFolder.CreatedAt.Before(afas[j].R.FavoriteArticleFolder.CreatedAt)
+			})
+
+			for j, afa := range afas {
+				resFaFs[j] = &fpb.FavoriteArticleFolder{
+					Id:        afa.R.FavoriteArticleFolder.ID,
+					UserId:    afa.R.FavoriteArticleFolder.UserID,
+					Title:     afa.R.FavoriteArticleFolder.Title,
+					CreatedAt: timestamppb.New(afa.R.FavoriteArticleFolder.CreatedAt),
+					UpdatedAt: timestamppb.New(afa.R.FavoriteArticleFolder.UpdatedAt),
+				}
+				if afa.R.FavoriteArticleFolder.Description.Valid {
+					resFaFs[j].Description = afa.R.FavoriteArticleFolder.Description.String
+				}
+			}
+
+			resFa := &fpb.FavoriteAllFolderArticleEdge{
+				Cursor:                 fa.ID,
+				Node:                   fu.convertPBFavoriteArticle(fa),
+				FavoriteArticleFolders: resFaFs,
+			}
+			resFas = append(resFas, resFa)
+
+			if len(resFas) == limit {
+				isEndSearch = true
+				break
+			}
 		}
 	}
 
-	endCursor :=""
-	if len(resFas) > 0 {
-		endCursor = resFas[len(resFas)-1].Cursor
+	if len(resFas) == 0 {
+		endCursor = ""
 	}
 
 	return &fpb.GetFavoriteAllFolderArticlesResponse{
@@ -268,6 +281,3 @@ func (fu *favoriteUseCase) convertPBFavoriteArticle(fa *entity.FavoriteArticle) 
 
 	return resFa
 }
-
-
-

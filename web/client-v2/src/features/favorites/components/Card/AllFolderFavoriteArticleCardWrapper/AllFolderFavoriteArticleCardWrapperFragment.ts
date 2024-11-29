@@ -10,6 +10,8 @@ export const AllFolderFavoriteArticleCardWrapperFragment = graphql(
         title
         articleUrl
         thumbnailUrl
+        platformId
+        platformUrl
         platformName
         platformFaviconUrl
       }

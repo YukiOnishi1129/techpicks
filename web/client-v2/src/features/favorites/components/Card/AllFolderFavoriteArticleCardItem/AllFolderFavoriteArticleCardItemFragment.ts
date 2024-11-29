@@ -5,6 +5,7 @@ export const AllFolderFavoriteArticleCardItemFragment = graphql(`
     node {
       id
       title
+      articleUrl
       thumbnailUrl
       createdAt
     }

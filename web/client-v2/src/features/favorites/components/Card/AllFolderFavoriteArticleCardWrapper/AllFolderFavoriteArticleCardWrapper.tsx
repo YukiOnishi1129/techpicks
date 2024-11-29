@@ -3,6 +3,7 @@ import { User } from "@supabase/supabase-js";
 import { FragmentOf, readFragment } from "gql.tada";
 import { FC } from "react";
 
+import { IconTitleLink } from "@/components/ui/link/IconTitleLink";
 import { ShareLinks } from "@/components/ui/share";
 
 import { useCheckImageExist } from "@/hooks/useCheckImageExist";
@@ -38,23 +39,16 @@ export const AllFolderFavoriteArticleCardWrapper: FC<
   return (
     <div
       key={fragment.node.id}
-      className="mb-4 rounded-2xl border-2 bg-primary-foreground px-4 pb-4 md:px-2 md:pb-2"
+      className="rounded-2xl border-2 bg-primary-foreground px-4 pb-4 md:px-2"
     >
-      <div>
-        <div className="mb-4 flex h-16 justify-between border-b-2 py-4 md:ml-6">
-          <div className="flex">
-            <div>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                className="mr-2 inline-block size-[36px]"
-                src={faviconImageUrl}
-                alt=""
-              />
-              <span className="hidden font-bold md:inline-block">
-                {fragment.node.platformName}
-              </span>
-            </div>
-          </div>
+      <div className="grid gap-4">
+        <div className="flex h-16 justify-between border-b-2 md:ml-6">
+          <IconTitleLink
+            url={fragment.node.platformUrl}
+            iconImageUrl={fragment.node.platformFaviconUrl}
+            title={fragment.node.platformName}
+            target="_blank"
+          />
 
           <div className="flex items-center justify-center p-4">
             <div className="mr-4">
@@ -86,7 +80,9 @@ export const AllFolderFavoriteArticleCardWrapper: FC<
           </div>
         </div>
 
-        <AllFolderFavoriteArticleCardItem data={fragment} />
+        <div>
+          <AllFolderFavoriteArticleCardItem data={fragment} />
+        </div>
       </div>
     </div>
   );
