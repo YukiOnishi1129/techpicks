@@ -3,6 +3,7 @@ package usecase
 import (
 	"context"
 	"errors"
+	"sort"
 
 	cpb "github.com/YukiOnishi1129/techpicks/micro-service/favorite-service/grpc/content"
 	fpb "github.com/YukiOnishi1129/techpicks/micro-service/favorite-service/grpc/favorite"
@@ -66,7 +67,7 @@ func (fu *favoriteUseCase) GetFavoriteAllFolderArticles(ctx context.Context, req
 	}
 
 	for !isEndSearch {
-		fas, err := fu.favoriteArticlePersistenceAdapter.GetFavoriteAllFolderArticles(ctx, req, endCursor, limit)
+		fas, err := fu.favoriteArticlePersistenceAdapter.GetFavoriteArticlesOrderByArticleID(ctx, req, endCursor, limit)
 		if err != nil {
 			return &fpb.GetFavoriteAllFolderArticlesResponse{}, err
 		}
@@ -80,9 +81,6 @@ func (fu *favoriteUseCase) GetFavoriteAllFolderArticles(ctx context.Context, req
 
 		for _, fa := range fas {
 			endCursor = fa.ID
-			if fa.R == nil || fa.R != nil && fa.R.FavoriteArticleFolder == nil {
-				continue
-			}
 			if _, exists := newArticleIDs[fa.ArticleID]; exists {
 				continue
 			}
@@ -106,6 +104,10 @@ func (fu *favoriteUseCase) GetFavoriteAllFolderArticles(ctx context.Context, req
 			newArticleIDs[fa.ArticleID] = struct{}{}
 
 			resFaFs := make([]*fpb.FavoriteArticleFolder, len(afas))
+
+			sort.Slice(afas, func(i, j int) bool {
+				return afas[i].R.FavoriteArticleFolder.CreatedAt.Before(afas[j].R.FavoriteArticleFolder.CreatedAt)
+			})
 
 			for j, afa := range afas {
 				resFaFs[j] = &fpb.FavoriteArticleFolder{
