@@ -3,6 +3,8 @@ import { FragmentOf, readFragment } from "gql.tada";
 import Link from "next/link";
 import { FC } from "react";
 
+import { Skeleton } from "@/components/ui/skeleton";
+
 import { useCheckImageExist } from "@/hooks/useCheckImageExist";
 
 import { showDiffDateToCurrentDate } from "@/lib/date";
@@ -19,18 +21,22 @@ export const AllFolderFavoriteArticleCardItem: FC<Props> = ({ data }) => {
 
   return (
     <div className="relative w-full rounded">
-      <div className="justify-around gap-4 md:flex">
-        <div className="md:flex md:w-[30%] md:justify-center">
-          <h3 className="mb-4 line-clamp-3 block text-left text-lg font-bold tracking-wide md:hidden md:w-full md:text-xl">
+      <div className="grid justify-around gap-4 md:flex">
+        <div className="grid gap-2 md:flex md:w-[30%] md:justify-center">
+          <h3 className="line-clamp-3 block text-left text-lg font-bold tracking-wide md:hidden md:w-full md:text-xl">
             {fragment.node.title}
           </h3>
           <div className="flex w-full justify-center md:h-36 md:w-48">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              className="h-full rounded-lg border-2 object-cover object-center shadow-md md:h-full"
-              src={imageUrl}
-              alt=""
-            />
+            {imageUrl ? (
+              /* eslint-disable-next-line @next/next/no-img-element */
+              <img
+                className="h-full rounded-lg border-2 object-cover object-center shadow-md md:h-full"
+                src={imageUrl}
+                alt=""
+              />
+            ) : (
+              <Skeleton className="h-full rounded-lg border-2 object-cover object-center shadow-md md:h-full" />
+            )}
           </div>
         </div>
 
@@ -39,7 +45,7 @@ export const AllFolderFavoriteArticleCardItem: FC<Props> = ({ data }) => {
             {fragment.node.title}
           </h3>
 
-          <p className="flex text-sm">
+          <p className="text-sm">
             {`register: ${showDiffDateToCurrentDate(fragment.node.createdAt)}`}
           </p>
 
