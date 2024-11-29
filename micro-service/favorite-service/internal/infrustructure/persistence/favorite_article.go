@@ -55,6 +55,14 @@ func (fap *favoriteArticlePersistence) GetFavoriteArticleByID(ctx context.Contex
 	return *favoriteArticle, nil
 }
 
+func (fap *favoriteArticlePersistence) CountFavoriteArticles(ctx context.Context, q []qm.QueryMod) (int64, error) {
+	count, err := entity.FavoriteArticles(q...).Count(ctx, fap.db)
+	if err != nil {
+		return 0, err
+	}
+	return count, nil
+}
+
 func (fap *favoriteArticlePersistence) CreateFavoriteArticle(ctx context.Context, fa entity.FavoriteArticle) (entity.FavoriteArticle, error) {
 	if err := fa.Insert(ctx, fap.db, boil.Infer()); err != nil {
 		return entity.FavoriteArticle{}, err

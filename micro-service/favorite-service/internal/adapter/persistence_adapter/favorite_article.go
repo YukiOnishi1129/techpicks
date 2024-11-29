@@ -21,6 +21,8 @@ type FavoriteArticlePersistenceAdapter interface {
 	GetFavoriteArticlesByFavoriteArticleFolderID(ctx context.Context, fafID, userID string, limit *int, isAllFetch *bool) (entity.FavoriteArticleSlice, error)
 	GetFavoriteArticleByID(ctx context.Context, id string, userID string) (entity.FavoriteArticle, error)
 	GetFavoriteArticleByArticleURL(ctx context.Context, articleURL, favoriteArticleFolderID, userID string) (entity.FavoriteArticle, error)
+	CountPreviousFavoriteArticleByArticleID(ctx context.Context, id,articleID, userID string) (int64, error)
+
 	CreateFavoriteArticle(ctx context.Context, req *fpb.CreateFavoriteArticleRequest) (entity.FavoriteArticle, error)
 	CreateFavoriteArticleForUploadArticle(ctx context.Context, req *fpb.CreateFavoriteArticleForUploadArticleRequest, article *cpb.Article) (entity.FavoriteArticle, error)
 	DeleteFavoriteArticle(ctx context.Context, fa entity.FavoriteArticle) error
@@ -64,10 +66,6 @@ func (fapa *favoriteArticlePersistenceAdapter) GetFavoriteArticles(ctx context.C
 }
 
 func (fapa *favoriteArticlePersistenceAdapter) GetFavoriteAllFolderArticles(ctx context.Context, req *fpb.GetFavoriteAllFolderArticlesRequest, limit int) (entity.FavoriteArticleSlice, error) {
-	limit = 20
-	if req.GetLimit().GetValue() != 0 {
-		limit = int(req.GetLimit().GetValue())
-	}
 	q := []qm.QueryMod{
 		qm.Where("user_id = ?", req.GetUserId()),
 		qm.Load(qm.Rels(entity.FavoriteArticleRels.FavoriteArticleFolder)),
@@ -108,6 +106,8 @@ func (fapa *favoriteArticlePersistenceAdapter) GetFavoriteArticlesByArticleID(ct
 	}
 	return fa, nil
 }
+
+
 
 func (fapa *favoriteArticlePersistenceAdapter) GetFavoriteArticleByArticleIDAndFavoriteArticleFolderID(ctx context.Context, articleID, favoriteArticleFolderID, userID string) (entity.FavoriteArticle, error) {
 	q := []qm.QueryMod{
@@ -167,6 +167,20 @@ func (fapa *favoriteArticlePersistenceAdapter) GetFavoriteArticleByArticleURL(ct
 		return entity.FavoriteArticle{}, err
 	}
 	return fa, nil
+}
+
+
+func (fapa *favoriteArticlePersistenceAdapter) CountPreviousFavoriteArticleByArticleID(ctx context.Context, id, articleID, userID string) (int64, error) {
+	q := []qm.QueryMod{
+		qm.Where("article_id = ?", articleID),
+		qm.Where("user_id = ?", userID),
+		qm.Where("created_at > (SELECT created_at FROM favorite_articles WHERE id = ?)",id),
+	}
+	count, err := fapa.favoriteArticleRepository.CountFavoriteArticles(ctx, q)	
+	if err != nil {
+		return 0, err
+	}
+	return count, nil
 }
 
 func (fapa *favoriteArticlePersistenceAdapter) CreateFavoriteArticle(ctx context.Context, req *fpb.CreateFavoriteArticleRequest) (entity.FavoriteArticle, error) {
