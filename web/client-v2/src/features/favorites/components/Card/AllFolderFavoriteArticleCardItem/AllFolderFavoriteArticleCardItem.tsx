@@ -3,8 +3,8 @@ import { FragmentOf, readFragment } from "gql.tada";
 import NextLink from "next/link";
 import { FC } from "react";
 
+import { ZoomableImage } from "@/components/ui/image";
 import { Link } from "@/components/ui/link";
-import { Skeleton } from "@/components/ui/skeleton";
 
 import { useCheckImageExist } from "@/hooks/useCheckImageExist";
 
@@ -32,18 +32,10 @@ export const AllFolderFavoriteArticleCardItem: FC<Props> = ({ data }) => {
             target={"_blank"}
             className="flex w-full justify-center md:h-36 md:w-48"
           >
-            {imageUrl ? (
-              <div className="inline-block overflow-hidden rounded-lg">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  className="h-full cursor-pointer rounded-lg border-2 object-cover object-center shadow-md transition-transform duration-300 ease-in-out hover:scale-110 md:h-full"
-                  src={imageUrl}
-                  alt=""
-                />
-              </div>
-            ) : (
-              <Skeleton className="h-full rounded-lg border-2 object-cover object-center shadow-md md:h-full" />
-            )}
+            <ZoomableImage
+              imageUrl={imageUrl || ""}
+              alt={fragment.node.title}
+            />
           </Link>
         </div>
 
@@ -62,7 +54,7 @@ export const AllFolderFavoriteArticleCardItem: FC<Props> = ({ data }) => {
                 href={`/favorite/article/${folder.id}`}
                 target="_blank"
                 key={folder.id}
-                className="text-sm text-orange-400 hover:text-orange-500"
+                className="text-sm text-orange-400  hover:text-orange-700"
               >
                 {`# ${folder.title}`}
               </NextLink>
