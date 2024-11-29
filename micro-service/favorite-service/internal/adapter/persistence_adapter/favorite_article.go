@@ -2,6 +2,7 @@ package persistenceadapter
 
 import (
 	"context"
+	"fmt"
 
 	cpb "github.com/YukiOnishi1129/techpicks/micro-service/favorite-service/grpc/content"
 	fpb "github.com/YukiOnishi1129/techpicks/micro-service/favorite-service/grpc/favorite"
@@ -14,6 +15,7 @@ import (
 
 type FavoriteArticlePersistenceAdapter interface {
 	GetFavoriteArticles(ctx context.Context, req *fpb.GetFavoriteArticlesRequest, limit int) (entity.FavoriteArticleSlice, error)
+	GetFavoriteAllFolderArticles(ctx context.Context, req *fpb.GetFavoriteAllFolderArticlesRequest, limit int) (entity.FavoriteArticleSlice, error)
 	GetFavoriteArticlesByArticleID(ctx context.Context, articleID, userID string) (entity.FavoriteArticleSlice, error)
 	GetFavoriteArticleByArticleIDAndFavoriteArticleFolderID(ctx context.Context, articleID, favoriteArticleFolderID, userID string) (entity.FavoriteArticle, error)
 	GetFavoriteArticlesByFavoriteArticleFolderID(ctx context.Context, fafID, userID string, limit *int, isAllFetch *bool) (entity.FavoriteArticleSlice, error)
@@ -61,10 +63,44 @@ func (fapa *favoriteArticlePersistenceAdapter) GetFavoriteArticles(ctx context.C
 	return favoriteArticles, nil
 }
 
+func (fapa *favoriteArticlePersistenceAdapter) GetFavoriteAllFolderArticles(ctx context.Context, req *fpb.GetFavoriteAllFolderArticlesRequest, limit int) (entity.FavoriteArticleSlice, error) {
+	limit = 20
+	if req.GetLimit().GetValue() != 0 {
+		limit = int(req.GetLimit().GetValue())
+	}
+	q := []qm.QueryMod{
+		qm.Where("user_id = ?", req.GetUserId()),
+		qm.Load(qm.Rels(entity.FavoriteArticleRels.FavoriteArticleFolder)),
+		qm.OrderBy("created_at DESC"),
+		qm.OrderBy("article_id"),
+		qm.Limit(limit),
+	}
+
+	if req.GetCursor().GetValue() != "" {
+		q = append(q, qm.Where("created_at < (SELECT created_at FROM favorite_articles WHERE id = ?)", req.GetCursor().GetValue()))
+	}
+
+	if req.GetKeyword().GetValue() != "" {
+		q = append(q, qm.Expr(
+			qm.And("title LIKE ?", "%"+req.GetKeyword().GetValue()+"%"),
+			qm.Or("description LIKE ?", "%"+req.GetKeyword().GetValue()+"%"),
+		))
+	}
+
+	favoriteArticles, err := fapa.favoriteArticleRepository.GetFavoriteArticles(ctx, q)
+	if err != nil {
+		fmt.Printf("Error executing query: %v\n", err)
+		return nil, err
+	}
+
+	return favoriteArticles, nil
+}
+
 func (fapa *favoriteArticlePersistenceAdapter) GetFavoriteArticlesByArticleID(ctx context.Context, articleID, userID string) (entity.FavoriteArticleSlice, error) {
 	q := []qm.QueryMod{
 		qm.Where("article_id = ?", articleID),
 		qm.Where("user_id = ?", userID),
+		qm.Load(qm.Rels(entity.FavoriteArticleRels.FavoriteArticleFolder)),
 	}
 	fa, err := fapa.favoriteArticleRepository.GetFavoriteArticles(ctx, q)
 	if err != nil {

@@ -95,6 +95,28 @@ function deserialize_checkpicks_favorite_v1_DeleteFavoriteArticleRequest(buffer_
   return favorite_favorite_pb.DeleteFavoriteArticleRequest.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
+function serialize_checkpicks_favorite_v1_GetFavoriteAllFolderArticlesRequest(arg) {
+  if (!(arg instanceof favorite_favorite_pb.GetFavoriteAllFolderArticlesRequest)) {
+    throw new Error('Expected argument of type checkpicks.favorite.v1.GetFavoriteAllFolderArticlesRequest');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_checkpicks_favorite_v1_GetFavoriteAllFolderArticlesRequest(buffer_arg) {
+  return favorite_favorite_pb.GetFavoriteAllFolderArticlesRequest.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
+function serialize_checkpicks_favorite_v1_GetFavoriteAllFolderArticlesResponse(arg) {
+  if (!(arg instanceof favorite_favorite_pb.GetFavoriteAllFolderArticlesResponse)) {
+    throw new Error('Expected argument of type checkpicks.favorite.v1.GetFavoriteAllFolderArticlesResponse');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_checkpicks_favorite_v1_GetFavoriteAllFolderArticlesResponse(buffer_arg) {
+  return favorite_favorite_pb.GetFavoriteAllFolderArticlesResponse.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
 function serialize_checkpicks_favorite_v1_GetFavoriteArticleFolderByIdRequest(arg) {
   if (!(arg instanceof favorite_favorite_pb.GetFavoriteArticleFolderByIdRequest)) {
     throw new Error('Expected argument of type checkpicks.favorite.v1.GetFavoriteArticleFolderByIdRequest');
@@ -283,6 +305,17 @@ var FavoriteServiceService = exports.FavoriteServiceService = {
     requestDeserialize: deserialize_checkpicks_favorite_v1_GetFavoriteArticlesRequest,
     responseSerialize: serialize_checkpicks_favorite_v1_GetFavoriteArticlesResponse,
     responseDeserialize: deserialize_checkpicks_favorite_v1_GetFavoriteArticlesResponse,
+  },
+  getFavoriteAllFolderArticles: {
+    path: '/checkpicks.favorite.v1.FavoriteService/GetFavoriteAllFolderArticles',
+    requestStream: false,
+    responseStream: false,
+    requestType: favorite_favorite_pb.GetFavoriteAllFolderArticlesRequest,
+    responseType: favorite_favorite_pb.GetFavoriteAllFolderArticlesResponse,
+    requestSerialize: serialize_checkpicks_favorite_v1_GetFavoriteAllFolderArticlesRequest,
+    requestDeserialize: deserialize_checkpicks_favorite_v1_GetFavoriteAllFolderArticlesRequest,
+    responseSerialize: serialize_checkpicks_favorite_v1_GetFavoriteAllFolderArticlesResponse,
+    responseDeserialize: deserialize_checkpicks_favorite_v1_GetFavoriteAllFolderArticlesResponse,
   },
   createFavoriteArticle: {
     path: '/checkpicks.favorite.v1.FavoriteService/CreateFavoriteArticle',

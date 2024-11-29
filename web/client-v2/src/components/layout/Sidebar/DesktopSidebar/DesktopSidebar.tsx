@@ -124,6 +124,13 @@ export function DesktopSidebar({ data }: DesktopSidebarProps) {
                 className="flex cursor-pointer items-center space-x-2 rounded-md p-2 hover:bg-secondary"
               >
                 <MdFeed />
+                <span className="pl-2">Folders</span>
+              </Link>
+              <Link
+                href="/favorite/article"
+                className="flex cursor-pointer items-center space-x-2 rounded-md p-2 hover:bg-secondary"
+              >
+                <MdFeed />
                 <span className="pl-2">All</span>
               </Link>
               {fragment.favoriteArticleFolders.edges.map((edge, i) => (

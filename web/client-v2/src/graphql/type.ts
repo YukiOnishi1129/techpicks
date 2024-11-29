@@ -220,6 +220,27 @@ export type DeleteFavoriteArticleInput = {
   id: Scalars["ID"]["input"];
 };
 
+export type FavoriteAllFolderArticleConnection = {
+  __typename?: "FavoriteAllFolderArticleConnection";
+  edges: Array<FavoriteAllFolderArticleEdge>;
+  pageInfo: PageInfo;
+};
+
+export type FavoriteAllFolderArticleEdge = {
+  __typename?: "FavoriteAllFolderArticleEdge";
+  cursor: Scalars["String"]["output"];
+  favoriteArticleFolders: Array<FavoriteArticleFolder>;
+  node: FavoriteArticle;
+};
+
+export type FavoriteAllFolderArticlesInput = {
+  after?: InputMaybe<Scalars["String"]["input"]>;
+  before?: InputMaybe<Scalars["String"]["input"]>;
+  first?: InputMaybe<Scalars["Int"]["input"]>;
+  keyword?: InputMaybe<Scalars["String"]["input"]>;
+  last?: InputMaybe<Scalars["Int"]["input"]>;
+};
+
 /** Favorite Article schema */
 export type FavoriteArticle = Node & {
   __typename?: "FavoriteArticle";
@@ -437,6 +458,7 @@ export type Query = {
   articles: ArticleConnection;
   /** Get bookmarks */
   bookmarks: BookmarkConnection;
+  favoriteAllFolderArticles: FavoriteAllFolderArticleConnection;
   favoriteArticleFolder: FavoriteArticleFolder;
   favoriteArticleFolders: FavoriteArticleFolderConnection;
   favoriteArticles: FavoriteArticleConnection;
@@ -452,6 +474,10 @@ export type QueryArticlesArgs = {
 
 export type QueryBookmarksArgs = {
   input: BookmarksInput;
+};
+
+export type QueryFavoriteAllFolderArticlesArgs = {
+  input?: InputMaybe<FavoriteAllFolderArticlesInput>;
 };
 
 export type QueryFavoriteArticleFolderArgs = {
@@ -1153,6 +1179,71 @@ export type UpdateFavoriteArticleFolderMutationMutation = {
   };
 };
 
+export type AllFolderFavoriteArticleCardItemFragmentFragment = {
+  __typename?: "FavoriteAllFolderArticleEdge";
+  node: {
+    __typename?: "FavoriteArticle";
+    id: string;
+    articleId: string;
+    platformId?: string | null;
+    favoriteArticleFolderId: string;
+    title: string;
+    thumbnailUrl: string;
+    articleUrl: string;
+    platformName: string;
+    platformUrl: string;
+    platformFaviconUrl: string;
+    isEng: boolean;
+    createdAt: number;
+  };
+  favoriteArticleFolders: Array<{
+    __typename?: "FavoriteArticleFolder";
+    id: string;
+    title: string;
+  }>;
+};
+
+export type AllFolderFavoriteArticleCardWrapperFragmentFragment = {
+  __typename?: "FavoriteAllFolderArticleEdge";
+  node: {
+    __typename?: "FavoriteArticle";
+    id: string;
+    articleId: string;
+    platformId?: string | null;
+    favoriteArticleFolderId: string;
+    title: string;
+    thumbnailUrl: string;
+    articleUrl: string;
+    platformName: string;
+    platformUrl: string;
+    platformFaviconUrl: string;
+    isEng: boolean;
+    createdAt: number;
+  };
+  favoriteArticleFolders: Array<{
+    __typename?: "FavoriteArticleFolder";
+    id: string;
+    title: string;
+  }>;
+};
+
+export type FavoriteFolderAllFolderArticleCardWrapperFragmentFragment = {
+  __typename?: "FavoriteArticleFolderConnection";
+  edges: Array<{
+    __typename?: "FavoriteArticleFolderEdge";
+    node: {
+      __typename?: "FavoriteArticleFolder";
+      id: string;
+      title: string;
+      favoriteArticles: Array<{
+        __typename?: "FavoriteArticle";
+        id: string;
+        articleId: string;
+      }>;
+    };
+  }>;
+};
+
 export type FavoriteArticleCardItemFragmentFragment = {
   __typename?: "FavoriteArticle";
   id: string;
@@ -1307,6 +1398,77 @@ export type FollowFavoriteArticleDropdownMenuContentFragmentFragment = {
   }>;
 };
 
+export type AllFolderFavoriteArticleListFragmentFragment = {
+  __typename?: "FavoriteAllFolderArticleConnection";
+  edges: Array<{
+    __typename?: "FavoriteAllFolderArticleEdge";
+    node: {
+      __typename?: "FavoriteArticle";
+      id: string;
+      articleId: string;
+      platformId?: string | null;
+      favoriteArticleFolderId: string;
+      title: string;
+      thumbnailUrl: string;
+      articleUrl: string;
+      platformName: string;
+      platformUrl: string;
+      platformFaviconUrl: string;
+      isEng: boolean;
+      createdAt: number;
+    };
+    favoriteArticleFolders: Array<{
+      __typename?: "FavoriteArticleFolder";
+      id: string;
+      title: string;
+    }>;
+  }>;
+  pageInfo: {
+    __typename?: "PageInfo";
+    hasNextPage: boolean;
+    endCursor?: string | null;
+  };
+};
+
+export type GetAllFolderFavoriteArticleListQueryQueryVariables = Exact<{
+  input: FavoriteAllFolderArticlesInput;
+}>;
+
+export type GetAllFolderFavoriteArticleListQueryQuery = {
+  __typename?: "Query";
+  favoriteAllFolderArticles: {
+    __typename?: "FavoriteAllFolderArticleConnection";
+    edges: Array<{
+      __typename?: "FavoriteAllFolderArticleEdge";
+      node: {
+        __typename?: "FavoriteArticle";
+        id: string;
+        articleId: string;
+        platformId?: string | null;
+        favoriteArticleFolderId: string;
+        title: string;
+        thumbnailUrl: string;
+        articleUrl: string;
+        platformName: string;
+        platformUrl: string;
+        platformFaviconUrl: string;
+        isEng: boolean;
+        createdAt: number;
+      };
+      favoriteArticleFolders: Array<{
+        __typename?: "FavoriteArticleFolder";
+        id: string;
+        title: string;
+      }>;
+    }>;
+    pageInfo: {
+      __typename?: "PageInfo";
+      hasNextPage: boolean;
+      endCursor?: string | null;
+    };
+  };
+};
+
 export type FavoriteArticleFolderListFragmentFragment = {
   __typename?: "FavoriteArticleFolderConnection";
   pageInfo: {
@@ -1444,6 +1606,113 @@ export type GetFavoriteArticleListQueryQuery = {
       hasNextPage: boolean;
       endCursor?: string | null;
     };
+  };
+};
+
+export type AllFolderFavoriteArticleListTemplateFragmentFragment = {
+  __typename?: "Query";
+  favoriteAllFolderArticles: {
+    __typename?: "FavoriteAllFolderArticleConnection";
+    edges: Array<{
+      __typename?: "FavoriteAllFolderArticleEdge";
+      node: {
+        __typename?: "FavoriteArticle";
+        id: string;
+        articleId: string;
+        platformId?: string | null;
+        favoriteArticleFolderId: string;
+        title: string;
+        thumbnailUrl: string;
+        articleUrl: string;
+        platformName: string;
+        platformUrl: string;
+        platformFaviconUrl: string;
+        isEng: boolean;
+        createdAt: number;
+      };
+      favoriteArticleFolders: Array<{
+        __typename?: "FavoriteArticleFolder";
+        id: string;
+        title: string;
+      }>;
+    }>;
+    pageInfo: {
+      __typename?: "PageInfo";
+      hasNextPage: boolean;
+      endCursor?: string | null;
+    };
+  };
+  favoriteArticleFolders: {
+    __typename?: "FavoriteArticleFolderConnection";
+    edges: Array<{
+      __typename?: "FavoriteArticleFolderEdge";
+      node: {
+        __typename?: "FavoriteArticleFolder";
+        id: string;
+        title: string;
+        favoriteArticles: Array<{
+          __typename?: "FavoriteArticle";
+          id: string;
+          articleId: string;
+        }>;
+      };
+    }>;
+  };
+};
+
+export type GetAllFolderFavoriteArticleListTemplateQueryQueryVariables = Exact<{
+  favoriteAllFolderArticlesInput: FavoriteAllFolderArticlesInput;
+  favoriteArticleFoldersInput: FavoriteArticleFoldersInput;
+}>;
+
+export type GetAllFolderFavoriteArticleListTemplateQueryQuery = {
+  __typename?: "Query";
+  favoriteAllFolderArticles: {
+    __typename?: "FavoriteAllFolderArticleConnection";
+    edges: Array<{
+      __typename?: "FavoriteAllFolderArticleEdge";
+      node: {
+        __typename?: "FavoriteArticle";
+        id: string;
+        articleId: string;
+        platformId?: string | null;
+        favoriteArticleFolderId: string;
+        title: string;
+        thumbnailUrl: string;
+        articleUrl: string;
+        platformName: string;
+        platformUrl: string;
+        platformFaviconUrl: string;
+        isEng: boolean;
+        createdAt: number;
+      };
+      favoriteArticleFolders: Array<{
+        __typename?: "FavoriteArticleFolder";
+        id: string;
+        title: string;
+      }>;
+    }>;
+    pageInfo: {
+      __typename?: "PageInfo";
+      hasNextPage: boolean;
+      endCursor?: string | null;
+    };
+  };
+  favoriteArticleFolders: {
+    __typename?: "FavoriteArticleFolderConnection";
+    edges: Array<{
+      __typename?: "FavoriteArticleFolderEdge";
+      node: {
+        __typename?: "FavoriteArticleFolder";
+        id: string;
+        title: string;
+        favoriteArticles: Array<{
+          __typename?: "FavoriteArticle";
+          id: string;
+          articleId: string;
+        }>;
+      };
+    }>;
   };
 };
 
@@ -2173,6 +2442,75 @@ export const CreateFavoriteArticleDialogContentFragmentFragmentDoc = gql`
     }
   }
   ${OgpPreviewContentFragmentFragmentDoc}
+`;
+export const AllFolderFavoriteArticleCardItemFragmentFragmentDoc = gql`
+  fragment AllFolderFavoriteArticleCardItemFragment on FavoriteAllFolderArticleEdge {
+    node {
+      id
+      articleId
+      platformId
+      favoriteArticleFolderId
+      title
+      thumbnailUrl
+      articleUrl
+      platformName
+      platformUrl
+      platformFaviconUrl
+      isEng
+      createdAt
+    }
+    favoriteArticleFolders {
+      id
+      title
+    }
+  }
+`;
+export const AllFolderFavoriteArticleCardWrapperFragmentFragmentDoc = gql`
+  fragment AllFolderFavoriteArticleCardWrapperFragment on FavoriteAllFolderArticleEdge {
+    ...AllFolderFavoriteArticleCardItemFragment
+  }
+  ${AllFolderFavoriteArticleCardItemFragmentFragmentDoc}
+`;
+export const AllFolderFavoriteArticleListFragmentFragmentDoc = gql`
+  fragment AllFolderFavoriteArticleListFragment on FavoriteAllFolderArticleConnection {
+    edges {
+      node {
+        id
+      }
+      ...AllFolderFavoriteArticleCardWrapperFragment
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+  ${AllFolderFavoriteArticleCardWrapperFragmentFragmentDoc}
+`;
+export const FavoriteFolderAllFolderArticleCardWrapperFragmentFragmentDoc = gql`
+  fragment FavoriteFolderAllFolderArticleCardWrapperFragment on FavoriteArticleFolderConnection {
+    edges {
+      node {
+        id
+        title
+        favoriteArticles {
+          id
+          articleId
+        }
+      }
+    }
+  }
+`;
+export const AllFolderFavoriteArticleListTemplateFragmentFragmentDoc = gql`
+  fragment AllFolderFavoriteArticleListTemplateFragment on Query {
+    favoriteAllFolderArticles(input: $favoriteAllFolderArticlesInput) {
+      ...AllFolderFavoriteArticleListFragment
+    }
+    favoriteArticleFolders(input: $favoriteArticleFoldersInput) {
+      ...FavoriteFolderAllFolderArticleCardWrapperFragment
+    }
+  }
+  ${AllFolderFavoriteArticleListFragmentFragmentDoc}
+  ${FavoriteFolderAllFolderArticleCardWrapperFragmentFragmentDoc}
 `;
 export const FavoriteArticleFolderCardFragmentFragmentDoc = gql`
   fragment FavoriteArticleFolderCardFragment on FavoriteArticleFolder {
@@ -3450,6 +3788,88 @@ export type GetCreateFavoriteArticleDialogOgpQueryQueryResult =
     GetCreateFavoriteArticleDialogOgpQueryQuery,
     GetCreateFavoriteArticleDialogOgpQueryQueryVariables
   >;
+export const GetAllFolderFavoriteArticleListQueryDocument = gql`
+  query GetAllFolderFavoriteArticleListQuery(
+    $input: FavoriteAllFolderArticlesInput!
+  ) {
+    favoriteAllFolderArticles(input: $input) {
+      ...AllFolderFavoriteArticleListFragment
+    }
+  }
+  ${AllFolderFavoriteArticleListFragmentFragmentDoc}
+`;
+
+/**
+ * __useGetAllFolderFavoriteArticleListQueryQuery__
+ *
+ * To run a query within a React component, call `useGetAllFolderFavoriteArticleListQueryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAllFolderFavoriteArticleListQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAllFolderFavoriteArticleListQueryQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useGetAllFolderFavoriteArticleListQueryQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetAllFolderFavoriteArticleListQueryQuery,
+    GetAllFolderFavoriteArticleListQueryQueryVariables
+  > &
+    (
+      | {
+          variables: GetAllFolderFavoriteArticleListQueryQueryVariables;
+          skip?: boolean;
+        }
+      | { skip: boolean }
+    )
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetAllFolderFavoriteArticleListQueryQuery,
+    GetAllFolderFavoriteArticleListQueryQueryVariables
+  >(GetAllFolderFavoriteArticleListQueryDocument, options);
+}
+export function useGetAllFolderFavoriteArticleListQueryLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetAllFolderFavoriteArticleListQueryQuery,
+    GetAllFolderFavoriteArticleListQueryQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetAllFolderFavoriteArticleListQueryQuery,
+    GetAllFolderFavoriteArticleListQueryQueryVariables
+  >(GetAllFolderFavoriteArticleListQueryDocument, options);
+}
+export function useGetAllFolderFavoriteArticleListQuerySuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    GetAllFolderFavoriteArticleListQueryQuery,
+    GetAllFolderFavoriteArticleListQueryQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    GetAllFolderFavoriteArticleListQueryQuery,
+    GetAllFolderFavoriteArticleListQueryQueryVariables
+  >(GetAllFolderFavoriteArticleListQueryDocument, options);
+}
+export type GetAllFolderFavoriteArticleListQueryQueryHookResult = ReturnType<
+  typeof useGetAllFolderFavoriteArticleListQueryQuery
+>;
+export type GetAllFolderFavoriteArticleListQueryLazyQueryHookResult =
+  ReturnType<typeof useGetAllFolderFavoriteArticleListQueryLazyQuery>;
+export type GetAllFolderFavoriteArticleListQuerySuspenseQueryHookResult =
+  ReturnType<typeof useGetAllFolderFavoriteArticleListQuerySuspenseQuery>;
+export type GetAllFolderFavoriteArticleListQueryQueryResult =
+  Apollo.QueryResult<
+    GetAllFolderFavoriteArticleListQueryQuery,
+    GetAllFolderFavoriteArticleListQueryQueryVariables
+  >;
 export const GetFavoriteArticleFolderListQueryDocument = gql`
   query GetFavoriteArticleFolderListQuery(
     $input: FavoriteArticleFoldersInput!
@@ -3610,6 +4030,89 @@ export type GetFavoriteArticleListQueryQueryResult = Apollo.QueryResult<
   GetFavoriteArticleListQueryQuery,
   GetFavoriteArticleListQueryQueryVariables
 >;
+export const GetAllFolderFavoriteArticleListTemplateQueryDocument = gql`
+  query GetAllFolderFavoriteArticleListTemplateQuery(
+    $favoriteAllFolderArticlesInput: FavoriteAllFolderArticlesInput!
+    $favoriteArticleFoldersInput: FavoriteArticleFoldersInput!
+  ) {
+    ...AllFolderFavoriteArticleListTemplateFragment
+  }
+  ${AllFolderFavoriteArticleListTemplateFragmentFragmentDoc}
+`;
+
+/**
+ * __useGetAllFolderFavoriteArticleListTemplateQueryQuery__
+ *
+ * To run a query within a React component, call `useGetAllFolderFavoriteArticleListTemplateQueryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAllFolderFavoriteArticleListTemplateQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAllFolderFavoriteArticleListTemplateQueryQuery({
+ *   variables: {
+ *      favoriteAllFolderArticlesInput: // value for 'favoriteAllFolderArticlesInput'
+ *      favoriteArticleFoldersInput: // value for 'favoriteArticleFoldersInput'
+ *   },
+ * });
+ */
+export function useGetAllFolderFavoriteArticleListTemplateQueryQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetAllFolderFavoriteArticleListTemplateQueryQuery,
+    GetAllFolderFavoriteArticleListTemplateQueryQueryVariables
+  > &
+    (
+      | {
+          variables: GetAllFolderFavoriteArticleListTemplateQueryQueryVariables;
+          skip?: boolean;
+        }
+      | { skip: boolean }
+    )
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetAllFolderFavoriteArticleListTemplateQueryQuery,
+    GetAllFolderFavoriteArticleListTemplateQueryQueryVariables
+  >(GetAllFolderFavoriteArticleListTemplateQueryDocument, options);
+}
+export function useGetAllFolderFavoriteArticleListTemplateQueryLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetAllFolderFavoriteArticleListTemplateQueryQuery,
+    GetAllFolderFavoriteArticleListTemplateQueryQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetAllFolderFavoriteArticleListTemplateQueryQuery,
+    GetAllFolderFavoriteArticleListTemplateQueryQueryVariables
+  >(GetAllFolderFavoriteArticleListTemplateQueryDocument, options);
+}
+export function useGetAllFolderFavoriteArticleListTemplateQuerySuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    GetAllFolderFavoriteArticleListTemplateQueryQuery,
+    GetAllFolderFavoriteArticleListTemplateQueryQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    GetAllFolderFavoriteArticleListTemplateQueryQuery,
+    GetAllFolderFavoriteArticleListTemplateQueryQueryVariables
+  >(GetAllFolderFavoriteArticleListTemplateQueryDocument, options);
+}
+export type GetAllFolderFavoriteArticleListTemplateQueryQueryHookResult =
+  ReturnType<typeof useGetAllFolderFavoriteArticleListTemplateQueryQuery>;
+export type GetAllFolderFavoriteArticleListTemplateQueryLazyQueryHookResult =
+  ReturnType<typeof useGetAllFolderFavoriteArticleListTemplateQueryLazyQuery>;
+export type GetAllFolderFavoriteArticleListTemplateQuerySuspenseQueryHookResult =
+  ReturnType<
+    typeof useGetAllFolderFavoriteArticleListTemplateQuerySuspenseQuery
+  >;
+export type GetAllFolderFavoriteArticleListTemplateQueryQueryResult =
+  Apollo.QueryResult<
+    GetAllFolderFavoriteArticleListTemplateQueryQuery,
+    GetAllFolderFavoriteArticleListTemplateQueryQueryVariables
+  >;
 export const GetFavoriteArticleFolderListTemplateQueryDocument = gql`
   query GetFavoriteArticleFolderListTemplateQuery(
     $input: FavoriteArticleFoldersInput!

@@ -111,17 +111,6 @@ export const FavoriteArticleListByFolderIdTemplate: FC<
         favoriteArticleFolders={fragment.favoriteArticleFolders}
       />
 
-      {/* <FavoriteArticleList
-        user={user}
-        favoriteArticleFolderId={id}
-        initialFavoriteArticles={resFavoriteArticles.data.favoriteArticles}
-        otherFavoriteArticleFolders={otherFavoriteArticleFolders}
-        keyword={keyword}
-        fetchFavoriteArticles={
-          fetchFavoriteArticlesByFavoriteArticleFolderIdAPI
-        }
-      /> */}
-
       {/* <div className="fixed bottom-20 right-4 z-50 md:hidden">
         <FavoriteArticleKeyWordSearchDialog
           keyword={keyword}
