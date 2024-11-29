@@ -82,6 +82,113 @@ export namespace GetArticlesResponse {
     }
 }
 
+export class CreateArticleResponse extends jspb.Message { 
+
+    hasArticle(): boolean;
+    clearArticle(): void;
+    getArticle(): Article | undefined;
+    setArticle(value?: Article): CreateArticleResponse;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): CreateArticleResponse.AsObject;
+    static toObject(includeInstance: boolean, msg: CreateArticleResponse): CreateArticleResponse.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: CreateArticleResponse, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): CreateArticleResponse;
+    static deserializeBinaryFromReader(message: CreateArticleResponse, reader: jspb.BinaryReader): CreateArticleResponse;
+}
+
+export namespace CreateArticleResponse {
+    export type AsObject = {
+        article?: Article.AsObject,
+    }
+}
+
+export class CreateUploadArticleRequest extends jspb.Message { 
+    getUserId(): string;
+    setUserId(value: string): CreateUploadArticleRequest;
+    getTitle(): string;
+    setTitle(value: string): CreateUploadArticleRequest;
+    getDescription(): string;
+    setDescription(value: string): CreateUploadArticleRequest;
+    getArticleUrl(): string;
+    setArticleUrl(value: string): CreateUploadArticleRequest;
+    getThumbnailUrl(): string;
+    setThumbnailUrl(value: string): CreateUploadArticleRequest;
+    getPlatformName(): string;
+    setPlatformName(value: string): CreateUploadArticleRequest;
+    getPlatformUrl(): string;
+    setPlatformUrl(value: string): CreateUploadArticleRequest;
+    getPlatformFaviconUrl(): string;
+    setPlatformFaviconUrl(value: string): CreateUploadArticleRequest;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): CreateUploadArticleRequest.AsObject;
+    static toObject(includeInstance: boolean, msg: CreateUploadArticleRequest): CreateUploadArticleRequest.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: CreateUploadArticleRequest, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): CreateUploadArticleRequest;
+    static deserializeBinaryFromReader(message: CreateUploadArticleRequest, reader: jspb.BinaryReader): CreateUploadArticleRequest;
+}
+
+export namespace CreateUploadArticleRequest {
+    export type AsObject = {
+        userId: string,
+        title: string,
+        description: string,
+        articleUrl: string,
+        thumbnailUrl: string,
+        platformName: string,
+        platformUrl: string,
+        platformFaviconUrl: string,
+    }
+}
+
+export class GetArticleOGPResponse extends jspb.Message { 
+
+    hasOgp(): boolean;
+    clearOgp(): void;
+    getOgp(): OGP | undefined;
+    setOgp(value?: OGP): GetArticleOGPResponse;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): GetArticleOGPResponse.AsObject;
+    static toObject(includeInstance: boolean, msg: GetArticleOGPResponse): GetArticleOGPResponse.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: GetArticleOGPResponse, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): GetArticleOGPResponse;
+    static deserializeBinaryFromReader(message: GetArticleOGPResponse, reader: jspb.BinaryReader): GetArticleOGPResponse;
+}
+
+export namespace GetArticleOGPResponse {
+    export type AsObject = {
+        ogp?: OGP.AsObject,
+    }
+}
+
+export class GetArticleOGPRequest extends jspb.Message { 
+    getArticleUrl(): string;
+    setArticleUrl(value: string): GetArticleOGPRequest;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): GetArticleOGPRequest.AsObject;
+    static toObject(includeInstance: boolean, msg: GetArticleOGPRequest): GetArticleOGPRequest.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: GetArticleOGPRequest, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): GetArticleOGPRequest;
+    static deserializeBinaryFromReader(message: GetArticleOGPRequest, reader: jspb.BinaryReader): GetArticleOGPRequest;
+}
+
+export namespace GetArticleOGPRequest {
+    export type AsObject = {
+        articleUrl: string,
+    }
+}
+
 export class PageInfo extends jspb.Message { 
     getEndCursor(): string;
     setEndCursor(value: string): PageInfo;
@@ -401,5 +508,46 @@ export namespace ArticleEdge {
     export type AsObject = {
         article?: Article.AsObject,
         cursor: string,
+    }
+}
+
+export class OGP extends jspb.Message { 
+    getTitle(): string;
+    setTitle(value: string): OGP;
+
+    hasDescription(): boolean;
+    clearDescription(): void;
+    getDescription(): google_protobuf_wrappers_pb.StringValue | undefined;
+    setDescription(value?: google_protobuf_wrappers_pb.StringValue): OGP;
+    getArticleUrl(): string;
+    setArticleUrl(value: string): OGP;
+    getSiteUrl(): string;
+    setSiteUrl(value: string): OGP;
+    getSiteName(): string;
+    setSiteName(value: string): OGP;
+    getThumbnailUrl(): string;
+    setThumbnailUrl(value: string): OGP;
+    getFaviconUrl(): string;
+    setFaviconUrl(value: string): OGP;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): OGP.AsObject;
+    static toObject(includeInstance: boolean, msg: OGP): OGP.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: OGP, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): OGP;
+    static deserializeBinaryFromReader(message: OGP, reader: jspb.BinaryReader): OGP;
+}
+
+export namespace OGP {
+    export type AsObject = {
+        title: string,
+        description?: google_protobuf_wrappers_pb.StringValue.AsObject,
+        articleUrl: string,
+        siteUrl: string,
+        siteName: string,
+        thumbnailUrl: string,
+        faviconUrl: string,
     }
 }

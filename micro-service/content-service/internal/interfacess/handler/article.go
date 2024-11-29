@@ -4,21 +4,18 @@ import (
 	"context"
 
 	cpb "github.com/YukiOnishi1129/techpicks/micro-service/content-service/grpc/content"
-	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/application/usecase"
 )
 
-type articleHandler struct {
-	articleUseCase usecase.ArticleUseCase
-}
-
-func NewArticleHandler(au usecase.ArticleUseCase) cpb.ArticleServiceServer {
-	return &articleHandler{
-		articleUseCase: au,
+func (ch *contentHandler) GetArticles(ctx context.Context, req *cpb.GetArticlesRequest) (*cpb.GetArticlesResponse, error) {
+	res, err := ch.contentUseCase.GetArticles(ctx, req)
+	if err != nil {
+		return nil, err
 	}
+	return res, nil
 }
 
-func (ah *articleHandler) GetArticles(ctx context.Context, req *cpb.GetArticlesRequest) (*cpb.GetArticlesResponse, error) {
-	res, err := ah.articleUseCase.GetArticles(ctx, req)
+func (ch *contentHandler) CreateUploadArticle(ctx context.Context, req *cpb.CreateUploadArticleRequest) (*cpb.CreateArticleResponse, error) {
+	res, err := ch.contentUseCase.CreateUploadArticle(ctx, req)
 	if err != nil {
 		return nil, err
 	}

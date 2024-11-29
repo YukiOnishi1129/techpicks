@@ -1,6 +1,8 @@
 package main
 
 import (
+	"crypto/tls"
+	"crypto/x509"
 	"fmt"
 	"log"
 	"net"
@@ -9,21 +11,26 @@ import (
 
 	bpb "github.com/YukiOnishi1129/techpicks/micro-service/content-service/grpc/bookmark"
 	cpb "github.com/YukiOnishi1129/techpicks/micro-service/content-service/grpc/content"
+	fpb "github.com/YukiOnishi1129/techpicks/micro-service/content-service/grpc/favorite"
+	externaladapter "github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/adapter/external_adapter"
+	persistenceadapter "github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/adapter/persistence_adapter"
 	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/application/usecase"
 	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/config/database"
-	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/infrastructure/adapter"
 	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/infrastructure/external"
 	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/infrastructure/persistence"
 	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/interfacess/handler"
 	"github.com/joho/godotenv"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/reflection"
 )
 
 func main() {
 	log.Printf("Start content service")
-	if os.Getenv("GO_ENV") != "production" && os.Getenv("GO_ENV") != "staging" {
+
+	isDev := os.Getenv("GO_ENV") != "production" && os.Getenv("GO_ENV") != "staging"
+	if isDev {
 		err := godotenv.Load()
 		if err != nil {
 			log.Fatalf("Error loading .env file")
@@ -38,9 +45,24 @@ func main() {
 		return
 	}
 
+	systemRoots, err := x509.SystemCertPool()
+	if err != nil {
+		fmt.Println("failed to read system root certificate pool")
+	}
+	grpcCredential := credentials.NewTLS(&tls.Config{
+		RootCAs: systemRoots,
+	})
+	if isDev {
+		grpcCredential = insecure.NewCredentials()
+	}
+
 	// create grpc client
 	// bookmark client
-	bConn, err := grpc.NewClient(fmt.Sprintf("%s:%s", os.Getenv("BOOKMARK_SERVICE_CONTAINER_NAME"), os.Getenv("BOOKMARK_SERVICE_CONTAINER_PORT")), grpc.WithTransportCredentials(insecure.NewCredentials()))
+	brpcURL := os.Getenv("BOOKMARK_SERVICE_CONTAINER_NAME")
+	if isDev {
+		brpcURL = fmt.Sprintf("%s:%s", os.Getenv("BOOKMARK_SERVICE_CONTAINER_NAME"), os.Getenv("BOOKMARK_SERVICE_CONTAINER_PORT"))
+	}
+	bConn, err := grpc.NewClient(brpcURL, grpc.WithTransportCredentials(grpcCredential))
 	if err != nil {
 		log.Fatal("Error connecting to bookmark service")
 		return
@@ -48,21 +70,39 @@ func main() {
 	defer bConn.Close()
 	bClient := bpb.NewBookmarkServiceClient(bConn)
 
+	// favorite client
+	farpcURL := os.Getenv("FAVORITE_SERVICE_CONTAINER_NAME")
+	if isDev {
+		farpcURL = fmt.Sprintf("%s:%s", os.Getenv("FAVORITE_SERVICE_CONTAINER_NAME"), os.Getenv("FAVORITE_SERVICE_CONTAINER_PORT"))
+	}
+	faConn, err := grpc.NewClient(farpcURL, grpc.WithTransportCredentials(grpcCredential))
+	if err != nil {
+		log.Fatal("Error connecting to favorite service")
+		return
+	}
+	defer faConn.Close()
+	faClient := fpb.NewFavoriteServiceClient(faConn)
+
 	// infrastructure layer
-	// repository layer
+	// persistence layer
 	aps := persistence.NewArticlePersistence(db)
 	// external layer
 	bex := external.NewBookmarkExternal(bClient)
+	faex := external.NewFavoriteExternal(faClient)
 
 	// adapter layer
-	aad := adapter.NewArticleAdapter(aps)
+	// persistence adapter
+	apa := persistenceadapter.NewArticlePersistenceAdapter(aps)
+	// external adapter
+	bea := externaladapter.NewBookmarkExternalAdapter(bex)
+	faea := externaladapter.NewFavoriteExternalAdapter(faex)
 
 	// application layer
 	// usecase layer
-	auc := usecase.NewArticleUseCase(aad, bex)
+	cuc := usecase.NewContentUseCase(apa, bea, faea)
 
 	// interface layer
-	ahd := handler.NewArticleHandler(auc)
+	chd := handler.NewContentHandler(cuc)
 
 	// crate a listener on TCP port 3001
 	port := os.Getenv("CONTENT_SERVICE_CONTAINER_PORT")
@@ -80,7 +120,7 @@ func main() {
 	s := grpc.NewServer()
 
 	// register the greeting service with the gRPC server
-	cpb.RegisterArticleServiceServer(s, ahd)
+	cpb.RegisterContentServiceServer(s, chd)
 
 	// register reflection service on gRPC server
 	reflection.Register(s)

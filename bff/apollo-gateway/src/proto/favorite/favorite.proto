@@ -4,19 +4,170 @@ option go_package = "github.com/YukiOnishi1129/techpicks/favorite";
 
 package checkpicks.favorite.v1;
 
+import "google/protobuf/empty.proto";
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/wrappers.proto";
 
 service FavoriteService {
-    rpc GetFavoriteArticleFolderByArticleId(GetFavoriteArticleFolderByArticleIdRequest) returns (GetFavoriteArticleFolderResponse);
+    rpc GetFavoriteArticleFolders(GetFavoriteArticleFoldersRequest) returns (GetFavoriteArticleFoldersResponse);
+    rpc GetFavoriteArticleFoldersByArticleId(GetFavoriteArticleFoldersByArticleIdRequest) returns (GetFavoriteArticleFoldersResponse);
+    rpc GetFavoriteArticleFolderById(GetFavoriteArticleFolderByIdRequest) returns (GetFavoriteArticleFolderResponse);
+    rpc CreateFavoriteArticleFolder(CreateFavoriteArticleFolderRequest) returns (CreateFavoriteArticleFolderResponse);
+    rpc UpdateFavoriteArticleFolder(UpdateFavoriteArticleFolderRequest) returns (UpdateFavoriteArticleFolderResponse);
+    rpc DeleteFavoriteArticleFolder(DeleteFavoriteArticleFolderRequest) returns (google.protobuf.Empty);
+
+    rpc GetFavoriteArticles(GetFavoriteArticlesRequest) returns (GetFavoriteArticlesResponse);
+    rpc GetFavoriteAllFolderArticles(GetFavoriteAllFolderArticlesRequest) returns (GetFavoriteAllFolderArticlesResponse);
+    rpc CreateFavoriteArticle(CreateFavoriteArticleRequest) returns (CreateFavoriteArticleResponse);
+    rpc CreateFavoriteArticleForUploadArticle(CreateFavoriteArticleForUploadArticleRequest) returns (CreateFavoriteArticleResponse);
+    rpc DeleteFavoriteArticle(DeleteFavoriteArticleRequest) returns (google.protobuf.Empty);
+    rpc DeleteFavoriteArticlesByArticleId(DeleteFavoriteArticleByArticleIdRequest) returns (google.protobuf.Empty);
+}
+
+message GetFavoriteArticleFoldersRequest {
+    string user_id = 1;
+    google.protobuf.StringValue keyword = 2;
+    google.protobuf.StringValue cursor = 3;
+    google.protobuf.Int64Value limit = 4;
+    google.protobuf.Int64Value favorite_article_limit = 5;
+    google.protobuf.BoolValue is_folder_only = 6;
+    google.protobuf.BoolValue is_all_fetch = 7;
+    google.protobuf.BoolValue is_favorite_article_all_fetch = 8;
+}
+
+message GetFavoriteArticleFoldersResponse {
+    repeated FavoriteArticleFolderEdge favorite_article_folders_edge = 1;
+    PageInfo page_info = 2;
+}
+
+message GetFavoriteAllFolderArticlesRequest {
+    string user_id = 1;
+    google.protobuf.StringValue keyword = 2;
+    google.protobuf.StringValue cursor = 3;
+    google.protobuf.Int64Value limit = 4;
+}
+
+message GetFavoriteAllFolderArticlesResponse {
+    repeated FavoriteAllFolderArticleEdge favorite_all_folder_article_edge = 1;
+    PageInfo page_info = 2;
 }
 
 message GetFavoriteArticleFolderResponse {
     FavoriteArticleFolder favorite_article_folder = 1;
 }
 
-message GetFavoriteArticleFolderByArticleIdRequest {
+message GetFavoriteArticleFolderByIdRequest {
+    string id = 1;
+    string user_id = 2;
+    google.protobuf.BoolValue is_folder_only = 3;
+}
+
+message GetFavoriteArticleFoldersByArticleIdRequest {
     string article_id = 1;
+    string user_id = 2;
+}
+
+message CreateFavoriteArticleFolderResponse {
+    FavoriteArticleFolder favorite_article_folder = 1;
+}
+
+message CreateFavoriteArticleFolderRequest {
+    string user_id = 1;
+    string title = 2;
+    google.protobuf.StringValue description = 3;
+}
+
+message UpdateFavoriteArticleFolderResponse {
+    FavoriteArticleFolder favorite_article_folder = 1;
+}
+
+message UpdateFavoriteArticleFolderRequest {
+    string id = 1;
+    string user_id = 2;
+    string title = 3;
+    google.protobuf.StringValue description = 4;
+}
+
+message DeleteFavoriteArticleFolderRequest {
+    string id = 1;
+    string user_id = 2;
+}
+
+message GetFavoriteArticlesResponse {
+    repeated FavoriteArticleEdge favorite_articles_edge = 1;
+    PageInfo page_info = 2;
+}
+
+message GetFavoriteArticlesRequest {
+    string user_id = 1;
+    google.protobuf.StringValue keyword = 2;
+    google.protobuf.StringValue cursor = 3;
+    google.protobuf.Int64Value limit = 4;
+    google.protobuf.StringValue favorite_article_folder_id = 5;
+}
+
+message CreateFavoriteArticleResponse {
+    FavoriteArticle favorite_article = 1;
+}
+
+message CreateFavoriteArticleRequest {
+    string user_id = 1;
+    string article_id = 2;
+    string favorite_article_folder_id = 3;
+    google.protobuf.StringValue platform_id = 4;
+    string title = 5;
+    google.protobuf.StringValue description = 6;
+    string thumbnail_url = 7;
+    string article_url = 8;
+    google.protobuf.Timestamp published_at = 9;
+    google.protobuf.StringValue author_name = 10;
+    google.protobuf.StringValue tags = 11;
+    string platform_name = 12;
+    string platform_url = 13;
+    string platform_favicon_url = 14;
+    bool is_eng = 15;
+    bool is_private = 16;
+    bool is_read = 17;
+}
+
+message CreateFavoriteArticleForUploadArticleRequest {
+    string user_id = 1;
+    string favorite_article_folder_id = 2;
+    string title = 3;
+    string description = 4;
+    string thumbnail_url = 5;
+    string article_url = 6;
+    string platform_name = 7;
+    string platform_url = 8;
+    string platform_favicon_url = 9;
+}
+
+message DeleteFavoriteArticleRequest {
+    string id = 1;
+    string user_id = 2;
+}
+
+message DeleteFavoriteArticleByArticleIdRequest {
+    string article_id = 1;
+    string user_id = 2;
+    string favorite_article_folder_id = 3;
+}
+
+message FavoriteArticleFolderEdge {
+    FavoriteArticleFolder node = 1;
+    string cursor = 2;
+}
+
+message FavoriteArticleEdge {
+    FavoriteArticle node = 1;
+    string cursor = 2;
+}
+
+
+message FavoriteAllFolderArticleEdge {
+    FavoriteArticle node = 1;
+    string cursor = 2;
+    repeated FavoriteArticleFolder favorite_article_folders = 3;
 }
 
 message FavoriteArticle {
@@ -26,19 +177,20 @@ message FavoriteArticle {
     string favorite_article_folder_id = 4;
     string user_id = 5;
     string title = 6;
-    string thumbnail_url = 7;
-    string article_url = 8;
-    string platform_favicon_url = 9;
+    string description = 7;
+    string thumbnail_url = 8;
+    string article_url = 9;
     google.protobuf.Timestamp published_at = 10;
     google.protobuf.StringValue author_name = 11;
     google.protobuf.StringValue tags = 12;
     string platform_name = 13;
     string platform_url = 14;
-    bool is_eng = 15;
-    bool is_private = 16;
-    bool is_read = 17;
-    google.protobuf.Timestamp created_at = 18;
-    google.protobuf.Timestamp updated_at = 19;
+    string platform_favicon_url = 15;
+    bool is_eng = 16;
+    bool is_private = 17;
+    bool is_read = 18;
+    google.protobuf.Timestamp created_at = 19;
+    google.protobuf.Timestamp updated_at = 20;
 }
 
 message FavoriteArticleFolder {
@@ -48,4 +200,10 @@ message FavoriteArticleFolder {
     string description = 4;
     google.protobuf.Timestamp created_at = 5;
     google.protobuf.Timestamp updated_at = 6;
+    repeated FavoriteArticle favorite_articles = 7;
 }
+
+message PageInfo {
+    string end_cursor = 1;
+    bool has_next_page = 2;
+  }

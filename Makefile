@@ -22,6 +22,10 @@ content-ssh:
 bookmark-ssh:
 	docker exec -it $(BOOKMARK_SERVICE_CONTAINER_NAME) sh
 
+## favorite service container
+favorite-ssh:
+	docker exec -it $(FAVORITE_SERVICE_CONTAINER_NAME) sh
+
 # supabase
 supabase-start:
 	supabase start

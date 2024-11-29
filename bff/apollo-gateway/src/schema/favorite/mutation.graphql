@@ -1,0 +1,74 @@
+type Mutation {
+  createFavoriteArticleFolder(
+    input: CreateFavoriteArticleFolderInput!
+  ): FavoriteArticleFolder!
+  updateFavoriteArticleFolder(
+    input: UpdateFavoriteArticleFolderInput!
+  ): FavoriteArticleFolder!
+  deleteFavoriteArticleFolder(
+    input: DeleteFavoriteArticleFolderInput!
+  ): Boolean!
+
+  createFavoriteArticle(input: CreateFavoriteArticleInput!): FavoriteArticle!
+  createFavoriteArticleForUploadArticle(
+    input: CreateFavoriteArticleForUploadArticleInput!
+  ): FavoriteArticle!
+  deleteFavoriteArticle(input: DeleteFavoriteArticleInput!): Boolean!
+  deleteFavoriteArticleByArticleId(
+    input: DeleteFavoriteArticleByArticleIdInput!
+  ): Boolean!
+}
+
+input CreateFavoriteArticleFolderInput {
+  title: String!
+  description: String
+}
+
+input UpdateFavoriteArticleFolderInput {
+  id: ID!
+  title: String!
+  description: String
+}
+
+input DeleteFavoriteArticleFolderInput {
+  id: ID!
+}
+
+input CreateFavoriteArticleInput {
+  articleId: ID!
+  favoriteArticleFolderId: ID!
+  platformId: ID
+  title: String!
+  description: String
+  thumbnailUrl: String!
+  articleUrl: String!
+  publishedAt: Int
+  authorName: String
+  tags: String
+  platformName: String!
+  platformUrl: String!
+  platformFaviconUrl: String!
+  isEng: Boolean!
+  isPrivate: Boolean!
+  isRead: Boolean!
+}
+
+input CreateFavoriteArticleForUploadArticleInput {
+  favoriteArticleFolderId: ID!
+  title: String!
+  description: String
+  thumbnailUrl: String!
+  articleUrl: String!
+  platformName: String!
+  platformUrl: String!
+  platformFaviconUrl: String!
+}
+
+input DeleteFavoriteArticleInput {
+  id: ID!
+}
+
+input DeleteFavoriteArticleByArticleIdInput {
+  articleId: ID!
+  favoriteArticleFolderId: ID!
+}

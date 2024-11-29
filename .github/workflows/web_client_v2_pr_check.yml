@@ -41,12 +41,8 @@ jobs:
       - name: Lint
         run: npm run lint
       
-    #   - name: Test
-    #     run: npm run test
+      - name: Test
+        run: npm run test
 
-    # stagingにbff, grpcをデプロイした後にコメントアウトを外す
-    # ビルド時にAPIにアクセスしようとするため、APIがデプロイされていないとエラーになる
-    #   - name: Build
-    #     run: npm run build
-        # env:
-          # GOOGLE_CREDENTIALS_JSON: ${{ secrets.GOOGLE_CREDENTIALS_JSON }}
+      - name: Build
+        run: npm run build

@@ -21,6 +21,14 @@
       "path": "./bff/apollo-gateway"
     },
     {
+      "name": "🌷 GraphQL Schema",
+      "path": "./bff/apollo-gateway/src/schema/"
+    },
+    {
+      "name": "📀 Protocol Buffers",
+      "path": "./bff/apollo-gateway/src/proto/"
+    },
+    {
       "name": "📔 Content-service",
       "path": "./micro-service/content-service/"
     },

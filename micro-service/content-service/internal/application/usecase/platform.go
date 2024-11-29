@@ -6,7 +6,7 @@ import (
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
-func (au *articleUseCase) convertPBPlatform(p entity.Platform) *cpb.Platform {
+func (cu *contentUseCase) convertPBPlatform(p entity.Platform) *cpb.Platform {
 	platform := cpb.Platform{
 		Id:               p.ID,
 		Name:             p.Name,

@@ -5,43 +5,27 @@ import (
 
 	bpb "github.com/YukiOnishi1129/techpicks/micro-service/content-service/grpc/bookmark"
 	cpb "github.com/YukiOnishi1129/techpicks/micro-service/content-service/grpc/content"
+	fpb "github.com/YukiOnishi1129/techpicks/micro-service/content-service/grpc/favorite"
 	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/domain/entity"
-	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/infrastructure/adapter"
-	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/infrastructure/external"
+	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/util"
 	"google.golang.org/protobuf/types/known/timestamppb"
 	"google.golang.org/protobuf/types/known/wrapperspb"
 )
 
-type ArticleUseCase interface {
-	GetArticles(ctx context.Context, req *cpb.GetArticlesRequest) (*cpb.GetArticlesResponse, error)
-}
-
-type articleUseCase struct {
-	articleAdapter   adapter.ArticleAdapter
-	bookmarkExternal external.BookmarkExternal
-}
-
-func NewArticleUseCase(aa adapter.ArticleAdapter, be external.BookmarkExternal) ArticleUseCase {
-	return &articleUseCase{
-		articleAdapter:   aa,
-		bookmarkExternal: be,
-	}
-}
-
-func (au *articleUseCase) GetArticles(ctx context.Context, req *cpb.GetArticlesRequest) (*cpb.GetArticlesResponse, error) {
-	articles, err := au.articleAdapter.GetArticles(ctx, req)
+func (cu *contentUseCase) GetArticles(ctx context.Context, req *cpb.GetArticlesRequest) (*cpb.GetArticlesResponse, error) {
+	articles, err := cu.articlePersistenceAdapter.GetArticles(ctx, req)
 	if err != nil {
 		return nil, err
 	}
 
 	edges := make([]*cpb.ArticleEdge, len(articles))
 	for i, article := range articles {
-		res := au.convertPBArticle(*article)
+		res := cu.convertPBArticle(*article)
 
 		farFeeds := make([]*cpb.Feed, len(article.R.FeedArticleRelations))
 
 		for j, far := range article.R.FeedArticleRelations {
-			farFeeds[j] = au.convertPBFeed(*far.R.Feed)
+			farFeeds[j] = cu.convertPBFeed(*far.R.Feed)
 		}
 		res.Feeds = farFeeds
 		if len(article.R.TrendArticles) > 0 {
@@ -49,20 +33,35 @@ func (au *articleUseCase) GetArticles(ctx context.Context, req *cpb.GetArticlesR
 			res.IsTrend = true
 		}
 
-		if req.UserId != nil {
-			resBookmark, err := au.bookmarkExternal.GetBookmarkByArticleID(ctx, &bpb.GetBookmarkByArticleIDRequest{
+		if req.GetUserId() != nil {
+			resBookmark, err := cu.bookmarkExternalAdapter.GetBookmarkByArticleID(ctx, &bpb.GetBookmarkByArticleIDRequest{
 				ArticleId: article.ID,
-				UserId:    req.UserId.GetValue(),
+				UserId:    req.GetUserId().GetValue(),
 			})
 			if err != nil {
 				return nil, err
 			}
-			if resBookmark.Bookmark.GetId() != "" {
+			if resBookmark.GetBookmark().GetId() != "" {
 				res.BookmarkId = wrapperspb.String(resBookmark.Bookmark.GetId())
 				res.IsBookmarked = true
 			}
-			// TODO: favorite
-			println(req.UserId.GetValue())
+
+			resFavoriteFolders, err := cu.favoriteExternalAdapter.GetFavoriteArticleFoldersByArticleID(ctx, &fpb.GetFavoriteArticleFoldersByArticleIdRequest{
+				ArticleId: article.ID,
+				UserId:    req.GetUserId().GetValue(),
+			})
+			if err != nil {
+				return nil, err
+			}
+
+			if len(resFavoriteFolders.GetFavoriteArticleFoldersEdge()) > 0 {
+				resFavIds := make([]string, len(resFavoriteFolders.GetFavoriteArticleFoldersEdge()))
+				for i, f := range resFavoriteFolders.GetFavoriteArticleFoldersEdge() {
+					resFavIds[i] = f.GetNode().GetId()
+				}
+				res.FavoriteArticleFolderIds = resFavIds
+				res.IsFollowing = true
+			}
 		}
 
 		edges[i] = &cpb.ArticleEdge{
@@ -90,7 +89,7 @@ func (au *articleUseCase) GetArticles(ctx context.Context, req *cpb.GetArticlesR
 	}, nil
 }
 
-func (au *articleUseCase) convertPBArticle(a entity.Article) *cpb.Article {
+func (cu *contentUseCase) convertPBArticle(a entity.Article) *cpb.Article {
 	article := &cpb.Article{
 		Id:           a.ID,
 		Title:        a.Title,
@@ -111,6 +110,47 @@ func (au *articleUseCase) convertPBArticle(a entity.Article) *cpb.Article {
 	if a.Tags.Valid {
 		article.Tags = wrapperspb.String(a.Tags.String)
 	}
-	article.Platform = au.convertPBPlatform(*a.R.Platform)
+	if a.R != nil && a.R.Platform != nil {
+		article.Platform = cu.convertPBPlatform(*a.R.Platform)
+	}
 	return article
+}
+
+func (cu *contentUseCase) CreateUploadArticle(ctx context.Context, req *cpb.CreateUploadArticleRequest) (*cpb.CreateArticleResponse, error) {
+	// check public article
+	res, err := cu.articlePersistenceAdapter.GetArticlesByArticleURLAndPlatformURL(ctx, req.GetArticleUrl(), req.GetPlatformUrl())
+	if err != nil {
+		return nil, err
+	}
+	if len(res) > 0 {
+		return &cpb.CreateArticleResponse{
+			Article: cu.convertPBArticle(*res[0]),
+		}, nil
+	}
+
+	// check private article
+	res, err = cu.articlePersistenceAdapter.GetPrivateArticlesByArticleURL(ctx, req.GetArticleUrl())
+	if err != nil {
+		return nil, err
+	}
+	if len(res) > 0 {
+		return &cpb.CreateArticleResponse{
+			Article: cu.convertPBArticle(*res[0]),
+		}, nil
+	}
+
+	isEng := !util.JapaneseTextCheck(req.GetTitle()) && !util.JapaneseTextCheck(req.GetDescription())
+	createdArticle, err := cu.articlePersistenceAdapter.CreateUploadArticle(ctx, req, isEng)
+	if err != nil {
+		return nil, err
+	}
+
+	article, err := cu.articlePersistenceAdapter.GetArticleRelationPlatform(ctx, createdArticle.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	return &cpb.CreateArticleResponse{
+		Article: cu.convertPBArticle(article),
+	}, nil
 }

@@ -7,7 +7,7 @@ import (
 	"google.golang.org/protobuf/types/known/wrapperspb"
 )
 
-func (au *articleUseCase) convertPBFeed(f entity.Feed) *cpb.Feed {
+func (cu *contentUseCase) convertPBFeed(f entity.Feed) *cpb.Feed {
 	feed := &cpb.Feed{
 		Id:                f.ID,
 		Name:              f.Name,
@@ -25,7 +25,7 @@ func (au *articleUseCase) convertPBFeed(f entity.Feed) *cpb.Feed {
 	if f.DeletedAt.Valid {
 		feed.DeletedAt = timestamppb.New(f.DeletedAt.Time)
 	}
-	feed.Platform = au.convertPBPlatform(*f.R.Platform)
-	feed.Category = au.convertPBCategory(*f.R.Category)
+	feed.Platform = cu.convertPBPlatform(*f.R.Platform)
+	feed.Category = cu.convertPBCategory(*f.R.Category)
 	return feed
 }

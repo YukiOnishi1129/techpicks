@@ -4,23 +4,23 @@ import { User } from "@supabase/supabase-js";
 import { FragmentOf, readFragment } from "gql.tada";
 import { useCallback, useRef, useState, useEffect } from "react";
 
-// import { FetchArticlesAPIResponse } from "@/features/articles/actions/article";
-
-// import { NotFoundList } from "@/components/layout/NotFoundList";
+import { NotFoundList } from "@/components/layout/NotFoundList";
 import { Loader } from "@/components/ui/loader";
 
 import { ArticleTabType } from "@/types/article";
-// import { FavoriteArticleFolderType } from "@/types/favoriteArticleFolder";
 import { LanguageStatus } from "@/types/language";
 
+import { getArticleListQuery } from "./actGetArticleListQuery";
 import { ArticleListFragment } from "./ArticleListFragment";
-import { getArticleListQuery } from "../../../actions/getArticleListQuery";
+import { FavoriteFolderArticleCardWrapperFragment } from "../../Card";
 import { ArticleCardWrapper } from "../../Card/ArticleCardWrapper/ArticleCardWrapper";
 
 type ArticleListProps = {
-  user?: User;
+  user: User;
   data: FragmentOf<typeof ArticleListFragment>;
-  // favoriteArticleFolders: Array<FavoriteArticleFolderType>;
+  favoriteArticleFolders: FragmentOf<
+    typeof FavoriteFolderArticleCardWrapperFragment
+  >;
   languageStatus: LanguageStatus;
   keyword?: string;
   feedIdList: Array<string>;
@@ -31,6 +31,7 @@ type ArticleListProps = {
 export function ArticleList({
   user,
   data,
+  favoriteArticleFolders,
   languageStatus,
   keyword,
   feedIdList,
@@ -45,10 +46,12 @@ export function ArticleList({
   const [hashMore, setHashMore] = useState(true);
   const [offset, setOffset] = useState(1);
   const [endCursor, setEndCursor] = useState(fragment.pageInfo.endCursor);
+  const [isNextPage, setIsNextPage] = useState(true);
 
   const flatArticles = edges ? edges.flatMap((edge) => edge.node) : [];
 
   const loadMore = useCallback(async () => {
+    if (!isNextPage) return;
     const { data: res, error } = await getArticleListQuery({
       first: 20,
       after: endCursor,
@@ -62,12 +65,13 @@ export function ArticleList({
       const endCursor = newArticles.pageInfo?.endCursor || null;
       setEndCursor(endCursor);
     }
+    if (!newArticles.pageInfo.hasNextPage) setIsNextPage(false);
 
     if (newArticles.edges.length > 0) {
       setEdges((prev) => [...prev, ...newArticles.edges]);
       setHashMore(newArticles.edges.length > 0);
     }
-  }, [languageStatus, tab, endCursor]);
+  }, [languageStatus, tab, endCursor, isNextPage]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -109,18 +113,22 @@ export function ArticleList({
     <>
       {flatArticles.length === 0 ? (
         <div className="flex flex-col items-center justify-center ">
-          {/* <NotFoundList message="No articles found" /> */}
-          Not Found
+          <NotFoundList message="No articles found" />
         </div>
       ) : (
         <div className="m-auto">
           {flatArticles.map((article) => (
             <div key={article.id} className="mb-4">
-              <ArticleCardWrapper data={article} user={user} tab={tab} />
+              <ArticleCardWrapper
+                data={article}
+                favoriteArticleFolders={favoriteArticleFolders}
+                user={user}
+                tab={tab}
+              />
             </div>
           ))}
           <div ref={observerTarget}>
-            {hashMore && (
+            {hashMore && isNextPage && (
               <div className="flex justify-center py-4">
                 <Loader />
               </div>

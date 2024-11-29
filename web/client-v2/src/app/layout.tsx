@@ -2,7 +2,8 @@ import { clsx } from "clsx";
 import { Inter } from "next/font/google";
 
 import { BaseLayout } from "@/components/layout/BaseLayout";
-import { ApolloProvider, ThemeProvider } from "@/components/provider";
+import { ThemeProvider } from "@/components/provider";
+import { Toaster } from "@/components/ui/sonner";
 
 import type { Metadata } from "next";
 
@@ -30,9 +31,8 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <ApolloProvider>
-            <BaseLayout>{children}</BaseLayout>
-          </ApolloProvider>
+          <BaseLayout>{children}</BaseLayout>
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>

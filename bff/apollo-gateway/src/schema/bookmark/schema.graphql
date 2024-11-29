@@ -3,7 +3,6 @@ Bookmark schema
 """
 type Bookmark implements Node {
   id: ID!
-  feed: Feed!
   title: String!
   description: String!
   articleUrl: String!
@@ -18,4 +17,14 @@ type Bookmark implements Node {
   isRead: Boolean!
   createdAt: Int!
   updatedAt: Int!
+}
+
+type BookmarkConnection {
+  edges: [BookmarkEdge!]!
+  pageInfo: PageInfo!
+}
+
+type BookmarkEdge {
+  cursor: String!
+  node: Bookmark!
 }

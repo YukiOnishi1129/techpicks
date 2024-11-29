@@ -8,21 +8,21 @@ import { FeedNameBadge } from "@/components/ui/badge";
 
 import { useCheckImageExist } from "@/hooks/useCheckImageExist";
 
+import { showDiffDateToCurrentDate } from "@/lib/date";
+
 import { ArticleTabType } from "@/types/article";
 
 import { ArticleCardItemFragment } from "./ArticleCardItemFragment";
 
 type ArticleCardItemProps = {
   data: FragmentOf<typeof ArticleCardItemFragment>;
-  user: User | undefined;
+  user: User;
   tab: ArticleTabType;
 };
 
 export const ArticleCardItem: FC<ArticleCardItemProps> = ({ data }) => {
   const fragment = readFragment(ArticleCardItemFragment, data);
   const imageUrl = useCheckImageExist(fragment.thumbnailUrl);
-
-  fragment.feeds;
 
   return (
     <div className="relative w-full cursor-pointer rounded">
@@ -46,11 +46,11 @@ export const ArticleCardItem: FC<ArticleCardItemProps> = ({ data }) => {
             {fragment.title}
           </h3>
 
-          {/* {article?.publishedAt && (
+          {fragment?.publishedAt && (
             <p className="flex pt-2 text-sm">
-              {showDiffDateToCurrentDate(article.publishedAt)}
+              {showDiffDateToCurrentDate(fragment.publishedAt)}
             </p>
-          )} */}
+          )}
 
           <div className="flex w-full flex-wrap items-center justify-start pt-2 md:w-4/5">
             {fragment?.feeds &&
