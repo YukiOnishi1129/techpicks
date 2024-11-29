@@ -3,6 +3,7 @@ package persistence
 import (
 	"context"
 	"database/sql"
+	"fmt"
 
 	"github.com/YukiOnishi1129/techpicks/micro-service/favorite-service/internal/domain/entity"
 	"github.com/YukiOnishi1129/techpicks/micro-service/favorite-service/internal/domain/repository"
@@ -81,4 +82,12 @@ func (fap *favoriteArticlePersistence) MultiDeleteFavoriteArticles(ctx context.C
 	}
 
 	return tx.Commit()
+}
+
+func (fr *favoriteArticlePersistence) QueryRows(ctx context.Context, query string, args ...interface{}) (*sql.Rows, error) {
+    rows, err := fr.db.QueryContext(ctx, query, args...)
+    if err != nil {
+        return nil, fmt.Errorf("failed to execute query: %w", err)
+    }
+    return rows, nil
 }
