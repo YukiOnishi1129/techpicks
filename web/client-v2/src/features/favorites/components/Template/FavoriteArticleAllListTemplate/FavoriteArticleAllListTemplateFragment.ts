@@ -1,7 +1,7 @@
 import { graphql } from "gql.tada";
 
-import { FavoriteFolderFavoriteArticleCardWrapperFragment } from "../../Card/FavoriteArticleCardWrapper/FavoriteArticleCardWrapperFragment";
-import { FavoriteArticleAllListFragment } from "../../List/FavoriteArticleAllList/FavoriteArticleAllListFragment";
+import { FavoriteFolderAllFolderArticleCardWrapperFragment } from "../../Card";
+import { AllFolderFavoriteArticleListFragment } from "../../List";
 
 export const FavoriteArticleFoldersAllListTemplateFragment = graphql(`
   fragment FavoriteArticleFoldersAllListTemplateFragment on FavoriteArticleFolderConnection {
@@ -18,17 +18,17 @@ export const FavoriteArticleAllListTemplateFragment = graphql(
   `
     fragment FavoriteArticleAllListTemplateFragment on Query {
       favoriteAllFolderArticles(input: $favoriteAllFolderArticlesInput) {
-        ...FavoriteArticleAllListFragment
+        ...AllFolderFavoriteArticleListFragment
       }
       favoriteArticleFolders(input: $favoriteArticleFoldersInput) {
         ...FavoriteArticleFoldersAllListTemplateFragment
-        ...FavoriteFolderFavoriteArticleCardWrapperFragment
+        ...FavoriteFolderAllFolderArticleCardWrapperFragment
       }
     }
   `,
   [
-    FavoriteArticleAllListFragment,
+    AllFolderFavoriteArticleListFragment,
     FavoriteArticleFoldersAllListTemplateFragment,
-    FavoriteFolderFavoriteArticleCardWrapperFragment,
+    FavoriteFolderAllFolderArticleCardWrapperFragment,
   ]
 );

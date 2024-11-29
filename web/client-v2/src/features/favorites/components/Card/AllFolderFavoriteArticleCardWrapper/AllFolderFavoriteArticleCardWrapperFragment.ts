@@ -1,6 +1,6 @@
 import { graphql } from "gql.tada";
 
-import { AllFolderFavoriteArticleCardItemFragment } from "../AllFolderFavoriteArticleCardItem/AllFolderFavoriteArticleCardItemFragment";
+import { AllFolderFavoriteArticleCardItemFragment } from "../AllFolderFavoriteArticleCardItem";
 
 export const AllFolderFavoriteArticleCardWrapperFragment = graphql(
   `

@@ -1,4 +1,5 @@
 import { User } from "@supabase/supabase-js";
+import { readFragment } from "gql.tada";
 import { FC } from "react";
 
 import { BreadCrumbType, PageBreadcrumb } from "@/components/ui/breadcrumb";
@@ -9,6 +10,8 @@ import {
 } from "@/graphql/type";
 
 import { getFavoriteArticleFoldersAllListTemplateQuery } from "./actGetFavoriteArticleFoldersAllListTemplateQuery";
+import { FavoriteArticleAllListTemplateFragment } from "./FavoriteArticleAllListTemplateFragment";
+import { AllFolderFavoriteArticleList } from "../../List";
 import { FavoriteArticleKeywordSearchForm } from "../../Search";
 
 type FavoriteArticleAllListTemplateProps = {
@@ -53,6 +56,8 @@ export const FavoriteArticleAllListTemplate: FC<
     return <div>Error: {error.message}</div>;
   }
 
+  const fragment = readFragment(FavoriteArticleAllListTemplateFragment, data);
+
   return (
     <div>
       <div className="fixed z-10  w-[90%] bg-card md:block md:w-[70%] md:justify-between md:px-4">
@@ -68,6 +73,12 @@ export const FavoriteArticleAllListTemplate: FC<
       </div>
 
       <div className="h-12 md:h-28" />
+
+      <AllFolderFavoriteArticleList
+        data={fragment.favoriteAllFolderArticles}
+        favoriteArticleFolders={fragment.favoriteArticleFolders}
+        keyword={keyword}
+      />
 
       {/* <FavoriteArticleList
         user={user}
