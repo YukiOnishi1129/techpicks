@@ -73,7 +73,6 @@ func (fu *favoriteUseCase) GetFavoriteAllFolderArticles(ctx context.Context, req
 		}
 
 		if len(fas) == 0 {
-			isEndSearch = true
 			break
 		}
 
