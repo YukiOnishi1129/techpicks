@@ -1,8 +1,9 @@
 "use client";
 import { FragmentOf, readFragment } from "gql.tada";
-import Link from "next/link";
+import NextLink from "next/link";
 import { FC } from "react";
 
+import { Link } from "@/components/ui/link";
 import { Skeleton } from "@/components/ui/skeleton";
 
 import { useCheckImageExist } from "@/hooks/useCheckImageExist";
@@ -26,18 +27,24 @@ export const AllFolderFavoriteArticleCardItem: FC<Props> = ({ data }) => {
           <h3 className="line-clamp-3 block text-left text-lg font-bold tracking-wide md:hidden md:w-full md:text-xl">
             {fragment.node.title}
           </h3>
-          <div className="flex w-full justify-center md:h-36 md:w-48">
+          <Link
+            url={fragment.node.articleUrl}
+            target={"_blank"}
+            className="flex w-full justify-center md:h-36 md:w-48"
+          >
             {imageUrl ? (
-              /* eslint-disable-next-line @next/next/no-img-element */
-              <img
-                className="h-full rounded-lg border-2 object-cover object-center shadow-md md:h-full"
-                src={imageUrl}
-                alt=""
-              />
+              <div className="inline-block overflow-hidden rounded-lg">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  className="h-full cursor-pointer rounded-lg border-2 object-cover object-center shadow-md transition-transform duration-300 ease-in-out hover:scale-110 md:h-full"
+                  src={imageUrl}
+                  alt=""
+                />
+              </div>
             ) : (
               <Skeleton className="h-full rounded-lg border-2 object-cover object-center shadow-md md:h-full" />
             )}
-          </div>
+          </Link>
         </div>
 
         <div className="grid gap-2 md:w-[65%]">
@@ -51,14 +58,14 @@ export const AllFolderFavoriteArticleCardItem: FC<Props> = ({ data }) => {
 
           <div className="flex flex-wrap gap-2">
             {fragment.favoriteArticleFolders.map((folder) => (
-              <Link
+              <NextLink
                 href={`/favorite/article/${folder.id}`}
                 target="_blank"
                 key={folder.id}
                 className="text-sm text-orange-400 hover:text-orange-500"
               >
                 {`# ${folder.title}`}
-              </Link>
+              </NextLink>
             ))}
           </div>
         </div>
