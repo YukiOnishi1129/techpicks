@@ -1,5 +1,5 @@
 "use client";
-
+import { User } from "@supabase/supabase-js";
 import { FragmentOf, readFragment } from "gql.tada";
 import { FC, useCallback, useEffect, useRef, useState } from "react";
 
@@ -12,6 +12,7 @@ import { AllFolderFavoriteArticleCardWrapper } from "../../Card";
 import { FavoriteFolderAllFolderArticleCardWrapperFragment } from "../../Card/AllFolderFavoriteArticleCardWrapper/AllFolderFavoriteArticleCardWrapperFragment";
 
 type AllFolderFavoriteArticleListFragmentProps = {
+  user: User;
   data: FragmentOf<typeof AllFolderFavoriteArticleListFragment>;
   favoriteArticleFolders: FragmentOf<
     typeof FavoriteFolderAllFolderArticleCardWrapperFragment
@@ -21,7 +22,7 @@ type AllFolderFavoriteArticleListFragmentProps = {
 
 export const AllFolderFavoriteArticleList: FC<
   AllFolderFavoriteArticleListFragmentProps
-> = ({ data, favoriteArticleFolders, keyword }) => {
+> = ({ user, data, favoriteArticleFolders, keyword }) => {
   const observerTarget = useRef(null);
 
   const fragment = readFragment(AllFolderFavoriteArticleListFragment, data);
@@ -108,7 +109,7 @@ export const AllFolderFavoriteArticleList: FC<
               <AllFolderFavoriteArticleCardWrapper
                 data={article}
                 favoriteArticleFolders={favoriteArticleFolders}
-                // user={user}
+                user={user}
                 // favoriteArticleFolderId={folderId}
               />
             </div>

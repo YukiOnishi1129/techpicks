@@ -78,6 +78,7 @@ export const AllFolderFavoriteArticleListTemplate: FC<
       <div className="h-12 md:h-28" />
 
       <AllFolderFavoriteArticleList
+        user={user}
         data={fragment.favoriteAllFolderArticles}
         favoriteArticleFolders={fragment.favoriteArticleFolders}
         keyword={keyword}

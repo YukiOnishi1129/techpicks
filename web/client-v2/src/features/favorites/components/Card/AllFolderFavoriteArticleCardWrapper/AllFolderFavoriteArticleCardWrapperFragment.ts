@@ -5,6 +5,14 @@ import { AllFolderFavoriteArticleCardItemFragment } from "../AllFolderFavoriteAr
 export const AllFolderFavoriteArticleCardWrapperFragment = graphql(
   `
     fragment AllFolderFavoriteArticleCardWrapperFragment on FavoriteAllFolderArticleEdge {
+      node {
+        id
+        title
+        articleUrl
+        thumbnailUrl
+        platformName
+        platformFaviconUrl
+      }
       ...AllFolderFavoriteArticleCardItemFragment
     }
   `,
