@@ -17,7 +17,7 @@ export const AllFolderFavoriteArticleCardItem: FC<Props> = ({ data }) => {
   const imageUrl = useCheckImageExist(fragment.node.thumbnailUrl);
 
   return (
-    <div className="relative w-full cursor-pointer rounded">
+    <div className="relative w-full rounded">
       <div className="justify-around md:flex">
         <div className="md:flex md:w-[30%] md:justify-center">
           <h3 className="mb-4 line-clamp-3 block text-left text-lg font-bold tracking-wide md:hidden md:w-full md:text-xl">
@@ -37,6 +37,14 @@ export const AllFolderFavoriteArticleCardItem: FC<Props> = ({ data }) => {
           <h3 className="line-clamp-3 hidden pt-2 text-left text-lg font-bold tracking-wide md:block md:w-full md:text-xl">
             {fragment.node.title}
           </h3>
+
+          <div>
+            {fragment.favoriteArticleFolders.map((folder) => (
+              <p key={folder.id} className="pt-2 text-sm text-orange-400">
+                # {folder.title}
+              </p>
+            ))}
+          </div>
 
           <p className="flex pt-2 text-sm">
             {`register: ${showDiffDateToCurrentDate(fragment.node.createdAt)}`}

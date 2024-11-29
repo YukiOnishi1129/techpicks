@@ -8,5 +8,9 @@ export const AllFolderFavoriteArticleCardItemFragment = graphql(`
       thumbnailUrl
       createdAt
     }
+    favoriteArticleFolders {
+      id
+      title
+    }
   }
 `);
