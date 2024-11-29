@@ -11,7 +11,7 @@
     "lint": "next lint",
     "lint:fix": "eslint --ext .js,.jsx,.ts,.tsx --fix .",
     "format": "npx prettier --write .",
-    "gen:gql": "graphql-codegen --config codegen.ts && npx gql.tada generate-output"
+    "gen:gql": "graphql-codegen --config codegen.ts && npx gql.tada generate-output && npm run lint:fix"
   },
   "dependencies": {
     "@apollo/client": "^3.11.5",
