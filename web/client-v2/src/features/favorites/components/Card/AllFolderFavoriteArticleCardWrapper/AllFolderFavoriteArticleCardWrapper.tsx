@@ -40,8 +40,8 @@ export const AllFolderFavoriteArticleCardWrapper: FC<
       key={fragment.node.id}
       className="mb-4 rounded-2xl border-2 bg-primary-foreground px-4 pb-4 md:px-2 md:pb-2"
     >
-      <div>
-        <div className="mb-4 flex h-16 justify-between border-b-2 py-4 md:ml-6">
+      <div className="grid gap-4">
+        <div className="flex h-16 justify-between border-b-2 py-4 md:ml-6">
           <div className="flex">
             <div>
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -86,7 +86,9 @@ export const AllFolderFavoriteArticleCardWrapper: FC<
           </div>
         </div>
 
-        <AllFolderFavoriteArticleCardItem data={fragment} />
+        <div>
+          <AllFolderFavoriteArticleCardItem data={fragment} />
+        </div>
       </div>
     </div>
   );
