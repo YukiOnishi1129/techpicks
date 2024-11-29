@@ -15,8 +15,8 @@ export const useCheckImageExist = (src?: string) => {
       image.onload = function () {
         resolve(image);
       };
-      image.onerror = function (error) {
-        reject(error);
+      image.onerror = function () {
+        reject(NO_IMAGE_URL);
       };
     });
   };
