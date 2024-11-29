@@ -40,7 +40,9 @@ export const FavoriteArticleKeywordSearchForm: FC<
     }
     await serverRevalidatePage(pathname);
     router.replace(
-      `/favorite/article/${favoriteArticleFolderId}?${keywordPath}`
+      favoriteArticleFolderId
+        ? `/favorite/article/${favoriteArticleFolderId}?${keywordPath}`
+        : `/favorite/article?${keywordPath}`
     );
   };
 

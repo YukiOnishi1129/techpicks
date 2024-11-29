@@ -59,7 +59,6 @@ func (fu *favoriteUseCase) GetFavoriteAllFolderArticles(ctx context.Context, req
 
 	resFas := make([]*fpb.FavoriteAllFolderArticleEdge, 0)
 
-
 	fas, err := fu.favoriteArticlePersistenceAdapter.GetFavoriteAllFolderArticles(ctx, req, limit)
 	if err != nil {
 		return &fpb.GetFavoriteAllFolderArticlesResponse{}, err
@@ -123,11 +122,16 @@ func (fu *favoriteUseCase) GetFavoriteAllFolderArticles(ctx context.Context, req
 		}
 	}
 
+	endCursor :=""
+	if len(resFas) > 0 {
+		endCursor = resFas[len(resFas)-1].Cursor
+	}
+
 	return &fpb.GetFavoriteAllFolderArticlesResponse{
 		FavoriteAllFolderArticleEdge: resFas,
 		PageInfo: &fpb.PageInfo{
 			HasNextPage: len(resFas) == limit,
-			EndCursor:   resFas[len(resFas)-1].Cursor,
+			EndCursor:   endCursor,
 		},
 	}, nil
 }
