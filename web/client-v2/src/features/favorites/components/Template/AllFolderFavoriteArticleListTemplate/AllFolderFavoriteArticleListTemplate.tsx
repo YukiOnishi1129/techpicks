@@ -9,8 +9,8 @@ import {
   FavoriteArticleFoldersInput,
 } from "@/graphql/type";
 
-import { getFavoriteArticleFoldersAllListTemplateQuery } from "./actGetFavoriteArticleFoldersAllListTemplateQuery";
-import { FavoriteArticleAllListTemplateFragment } from "./FavoriteArticleAllListTemplateFragment";
+import { getAllFolderFavoriteArticleListTemplateQuery } from "./actGetAllFolderFavoriteArticleListTemplateQuery";
+import { AllFolderFavoriteArticleListTemplateFragment } from "./AllFolderFavoriteArticleListTemplateFragment";
 import { AllFolderFavoriteArticleList } from "../../List";
 import { FavoriteArticleKeywordSearchForm } from "../../Search";
 
@@ -19,7 +19,7 @@ type FavoriteArticleAllListTemplateProps = {
   keyword?: string;
 };
 
-export const FavoriteArticleAllListTemplate: FC<
+export const AllFolderFavoriteArticleListTemplate: FC<
   FavoriteArticleAllListTemplateProps
 > = async ({ user, keyword }) => {
   const breadcrumbs: BreadCrumbType[] = [
@@ -47,7 +47,7 @@ export const FavoriteArticleAllListTemplate: FC<
     isFavoriteArticleAllFetch: true,
   };
 
-  const { data, error } = await getFavoriteArticleFoldersAllListTemplateQuery(
+  const { data, error } = await getAllFolderFavoriteArticleListTemplateQuery(
     favoriteAllFolderArticlesInput,
     favoriteArticleFoldersInput
   );
@@ -56,7 +56,10 @@ export const FavoriteArticleAllListTemplate: FC<
     return <div>Error: {error.message}</div>;
   }
 
-  const fragment = readFragment(FavoriteArticleAllListTemplateFragment, data);
+  const fragment = readFragment(
+    AllFolderFavoriteArticleListTemplateFragment,
+    data
+  );
 
   return (
     <div>
@@ -79,14 +82,6 @@ export const FavoriteArticleAllListTemplate: FC<
         favoriteArticleFolders={fragment.favoriteArticleFolders}
         keyword={keyword}
       />
-
-      {/* <FavoriteArticleList
-        user={user}
-        data={data}
-        folderId={id}
-        keyword={keyword}
-        favoriteArticleFolders={fragment.favoriteArticleFolders}
-      /> */}
 
       {/* <div className="fixed bottom-20 right-4 z-50 md:hidden">
         <FavoriteArticleKeyWordSearchDialog

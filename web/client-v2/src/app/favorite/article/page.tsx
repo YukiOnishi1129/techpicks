@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
 import { getUser } from "@/features/auth/actions/user";
-import { FavoriteArticleAllListTemplate } from "@/features/favorites/components";
+import { AllFolderFavoriteArticleListTemplate } from "@/features/favorites/components";
 
 import { ScreenLoader } from "@/components/layout/ScreenLoader";
 
@@ -24,7 +24,7 @@ export default async function FavoriteArticleAllListPage({
 
   return (
     <Suspense fallback={<ScreenLoader />}>
-      <FavoriteArticleAllListTemplate user={user} keyword={keyword} />
+      <AllFolderFavoriteArticleListTemplate user={user} keyword={keyword} />
     </Suspense>
   );
 }

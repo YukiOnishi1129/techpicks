@@ -9,26 +9,26 @@ import {
   FavoriteArticleFoldersInput,
 } from "@/graphql/type";
 
-import { FavoriteArticleAllListTemplateFragment } from "./FavoriteArticleAllListTemplateFragment";
+import { AllFolderFavoriteArticleListTemplateFragment } from "./AllFolderFavoriteArticleListTemplateFragment";
 
-const GetFavoriteArticleFoldersAllListTemplateQuery = graphql(
+const GetAllFolderFavoriteArticleListTemplateQuery = graphql(
   `
-    query GetFavoriteArticleFoldersAllListTemplateQuery(
+    query GetAllFolderFavoriteArticleListTemplateQuery(
       $favoriteAllFolderArticlesInput: FavoriteAllFolderArticlesInput!
       $favoriteArticleFoldersInput: FavoriteArticleFoldersInput!
     ) {
-      ...FavoriteArticleAllListTemplateFragment
+      ...AllFolderFavoriteArticleListTemplateFragment
     }
   `,
-  [FavoriteArticleAllListTemplateFragment]
+  [AllFolderFavoriteArticleListTemplateFragment]
 );
 
-export const getFavoriteArticleFoldersAllListTemplateQuery = async (
+export const getAllFolderFavoriteArticleListTemplateQuery = async (
   favoriteAllFolderArticlesInput: FavoriteAllFolderArticlesInput,
   favoriteArticleFoldersInput: FavoriteArticleFoldersInput
 ) => {
   const { data, error, loading } = await getClient().query({
-    query: GetFavoriteArticleFoldersAllListTemplateQuery,
+    query: GetAllFolderFavoriteArticleListTemplateQuery,
     context: {
       fetchOptions: {
         cache: "no-store",
