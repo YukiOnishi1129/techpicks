@@ -8,6 +8,7 @@ import { createFavoriteArticleMutation } from "@/features/favorites/actions/actC
 import { deleteFavoriteArticleByArticleIdMutation } from "@/features/favorites/actions/actDeleteFavoriteArticleByArticleIdMutation";
 import { FollowFavoriteArticleDropdownMenu } from "@/features/favorites/components/DropdownMenu";
 
+import { IconTitleLink } from "@/components/ui/link";
 import { ShareLinks } from "@/components/ui/share";
 
 import { useStatusToast } from "@/hooks/useStatusToast";
@@ -209,10 +210,10 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
   return (
     <div
       key={showArticle.id}
-      className="mb-4 rounded-2xl border-2 bg-primary-foreground px-4 pb-4 md:px-2 md:pb-2"
+      className="rounded-2xl border-2 bg-primary-foreground px-4 pb-4 md:px-2"
     >
-      <div>
-        <div className="mb-4 flex h-16 justify-between border-b-2 py-4 md:ml-6">
+      <div className="grid gap-4">
+        <div className="flex h-16 justify-between border-b-2 py-4 md:px-6">
           <>
             <div className="flex">
               {tab === TREND_TAB && (
@@ -225,17 +226,12 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
               )}
 
               {tab !== TREND_TAB ? (
-                <div>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    className="mr-2 inline-block size-[36px] bg-white"
-                    src={showArticle.platform?.faviconUrl || ""}
-                    alt=""
-                  />
-                  <span className="hidden font-bold md:inline-block">
-                    {showArticle.platform?.name || ""}
-                  </span>
-                </div>
+                <IconTitleLink
+                  url={showArticle.platform?.siteUrl || ""}
+                  iconImageUrl={showArticle.platform?.faviconUrl || ""}
+                  title={showArticle.platform?.name || ""}
+                  target="_blank"
+                />
               ) : (
                 <div>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -248,8 +244,8 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
               )}
             </div>
 
-            <div className="flex items-center justify-center">
-              <div className="mr-4">
+            <div className="flex items-center justify-center gap-4">
+              <div>
                 <ShareLinks
                   shareTitle={showArticle.title}
                   shareUrl={showArticle.articleUrl}
@@ -268,7 +264,7 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
                     handleAddBookmark={handleAddBookmark}
                   />
                 )}
-                <div className="mx-4  mt-2">
+                <div className="mt-2">
                   {!isPending && (
                     <FollowFavoriteArticleDropdownMenu
                       data={showFavoriteFolders}
@@ -289,7 +285,9 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
           </>
         </div>
 
-        <ArticleCardItem data={showArticle} user={user} tab={tab} />
+        <div>
+          <ArticleCardItem data={showArticle} user={user} tab={tab} />
+        </div>
       </div>
     </div>
   );

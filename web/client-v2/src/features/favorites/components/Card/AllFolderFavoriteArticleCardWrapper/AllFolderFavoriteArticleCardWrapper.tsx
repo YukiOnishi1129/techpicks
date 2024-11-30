@@ -6,8 +6,6 @@ import { FC } from "react";
 import { IconTitleLink } from "@/components/ui/link/IconTitleLink";
 import { ShareLinks } from "@/components/ui/share";
 
-import { useCheckImageExist } from "@/hooks/useCheckImageExist";
-
 import {
   AllFolderFavoriteArticleCardWrapperFragment,
   FavoriteFolderAllFolderArticleCardWrapperFragment,
@@ -33,8 +31,6 @@ export const AllFolderFavoriteArticleCardWrapper: FC<
     FavoriteFolderAllFolderArticleCardWrapperFragment,
     favoriteArticleFolders
   );
-
-  const faviconImageUrl = useCheckImageExist(fragment.node.platformFaviconUrl);
 
   return (
     <div
