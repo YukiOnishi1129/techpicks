@@ -116,16 +116,15 @@ export function ArticleList({
           <NotFoundList message="No articles found" />
         </div>
       ) : (
-        <div className="m-auto">
+        <div className="m-auto grid gap-4">
           {flatArticles.map((article) => (
-            <div key={article.id} className="mb-4">
-              <ArticleCardWrapper
-                data={article}
-                favoriteArticleFolders={favoriteArticleFolders}
-                user={user}
-                tab={tab}
-              />
-            </div>
+            <ArticleCardWrapper
+              key={article.id}
+              data={article}
+              favoriteArticleFolders={favoriteArticleFolders}
+              user={user}
+              tab={tab}
+            />
           ))}
           <div ref={observerTarget}>
             {hashMore && isNextPage && (

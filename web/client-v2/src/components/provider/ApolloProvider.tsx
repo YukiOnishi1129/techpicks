@@ -11,7 +11,8 @@ import {
 import { getSession } from "@/features/auth/actions/auth";
 
 function makeClient() {
-  const graphqlUrl = process.env.BFF_API_URL || "http://localhost:3000";
+  const graphqlUrl =
+    process.env.NEXT_PUBLIC_BFF_API_URL || "http://localhost:3000";
   const httpLink = new HttpLink({
     uri: `${graphqlUrl}/graphql`,
     fetchOptions: { cache: "no-store" },
