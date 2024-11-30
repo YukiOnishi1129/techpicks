@@ -1,4 +1,5 @@
 "use client";
+import { useApolloClient } from "@apollo/client";
 import { User } from "@supabase/supabase-js";
 import { clsx } from "clsx";
 import { FragmentOf, readFragment } from "gql.tada";
@@ -43,6 +44,7 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
   user,
   tab,
 }: ArticleCardWrapperProps) => {
+  const client = useApolloClient();
   const { successToast, failToast } = useStatusToast();
   const [isPending, startTransition] = useTransition();
   const fragment = readFragment(ArticleCardWrapperFragment, data);
@@ -50,6 +52,7 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
     FavoriteFolderArticleCardWrapperFragment,
     favoriteArticleFolders
   );
+
   const [isFollowing, setIsFollowing] = useState<boolean>(
     fragment.isFollowing || false
   );

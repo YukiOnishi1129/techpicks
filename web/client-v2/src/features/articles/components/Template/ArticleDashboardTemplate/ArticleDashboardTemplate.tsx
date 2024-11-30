@@ -62,7 +62,7 @@ export const ArticleDashboardTemplate: FC<
 
   return (
     <div>
-      <div className="fixed z-10  w-[90%] items-end justify-end bg-card md:flex md:w-[70%] md:justify-between md:px-4">
+      <div className="fixed z-10 w-[90%] items-end justify-end bg-card md:flex md:w-[70%] md:justify-between md:px-4">
         <h1 className="my-4 hidden text-2xl font-bold md:block">{title}</h1>
         <div className="h-2 w-full md:hidden" />
         <div className="h-16 w-full md:hidden">
@@ -71,7 +71,7 @@ export const ArticleDashboardTemplate: FC<
       </div>
       <div className=" h-16" />
       <Tabs defaultValue={convertTab(languageStatus)}>
-        <TabsList className="fixed  z-10  mt-[-4px] w-[90%] pt-[4px] md:mt-[-10px] md:w-[70%] md:py-[10px]">
+        <TabsList className="fixed z-10 mt-[-4px] w-[90%] pt-[4px] md:mt-[-10px] md:w-[70%] md:py-[10px]">
           <TabsTrigger className="w-1/2" value={TAB_LIST.ENGLISH}>
             <Image
               className="inline-block"
@@ -101,7 +101,6 @@ export const ArticleDashboardTemplate: FC<
             favoriteArticleFolders={fragment.favoriteArticleFolders}
             user={user}
             languageStatus={2}
-            feedIdList={[]}
             tab={tab}
           />
         </TabsContent>
@@ -111,7 +110,6 @@ export const ArticleDashboardTemplate: FC<
             favoriteArticleFolders={fragment.favoriteArticleFolders}
             user={user}
             languageStatus={1}
-            feedIdList={[]}
             tab={tab}
           />
         </TabsContent>
