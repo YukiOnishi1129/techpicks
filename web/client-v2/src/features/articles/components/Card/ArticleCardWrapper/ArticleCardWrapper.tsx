@@ -1,12 +1,13 @@
 "use client";
 
+import { useMutation } from "@apollo/client";
 import { User } from "@supabase/supabase-js";
 import { clsx } from "clsx";
-import { FragmentOf, readFragment } from "gql.tada";
+import { FragmentOf, graphql, readFragment } from "gql.tada";
 import { FC, useCallback, useState, useTransition } from "react";
 
-import { createFavoriteArticleMutation } from "@/features/favorites/actions/actCreateFavoriteArticleMutaion";
-import { deleteFavoriteArticleByArticleIdMutation } from "@/features/favorites/actions/actDeleteFavoriteArticleByArticleIdMutation";
+import { logoutToLoginPage } from "@/features/auth/actions/auth";
+import { getUser } from "@/features/auth/actions/user";
 import { FollowFavoriteArticleDropdownMenu } from "@/features/favorites/components/DropdownMenu";
 
 import { IconTitleLink } from "@/components/ui/link";
@@ -16,8 +17,6 @@ import { useStatusToast } from "@/hooks/useStatusToast";
 
 import { ArticleTabType } from "@/types/article";
 
-import { CreateFavoriteArticleInput } from "@/graphql/type";
-
 import style from "./ArticleCardWrapper.module.css";
 import {
   ArticleCardWrapperFragment,
@@ -26,6 +25,23 @@ import {
 import { useArticleBookmark } from "../../../hooks/useArticleBookmark";
 import { AddBookmarkTooltip, DeleteBookmarkTooltip } from "../../ToolTip";
 import { ArticleCardItem } from "../ArticleCardItem";
+
+const CreateFavoriteArticleMutation = graphql(`
+  mutation CreateFavoriteArticleMutation($input: CreateFavoriteArticleInput!) {
+    createFavoriteArticle(input: $input) {
+      id
+      favoriteArticleFolderId
+    }
+  }
+`);
+
+const DeleteFavoriteArticleByArticleIdMutation = graphql(`
+  mutation DeleteFavoriteArticleByArticleIdMutation(
+    $input: DeleteFavoriteArticleByArticleIdInput!
+  ) {
+    deleteFavoriteArticleByArticleId(input: $input)
+  }
+`);
 
 type ArticleCardWrapperProps = {
   data: FragmentOf<typeof ArticleCardWrapperFragment>;
@@ -55,44 +71,74 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
   const { handleCreateBookmark, handleDeleteBookmark } =
     useArticleBookmark(fragment);
 
-  const [isFollowing, setIsFollowing] = useState<boolean>(
-    fragment.isFollowing || false
+  const [createFavoriteArticleMutation] = useMutation(
+    CreateFavoriteArticleMutation
   );
-  const [showArticle, setShowArticle] = useState(fragment);
+
+  const [deleteFavoriteArticleByArticleIdMutation] = useMutation(
+    DeleteFavoriteArticleByArticleIdMutation
+  );
+
   const [showFavoriteFolders, setShowFavoriteFolders] = useState(
     fragmentFavoriteFolder
   );
 
   const handleCreateFavoriteArticle = useCallback(
     async (favoriteArticleFolderId: string) => {
-      const input: CreateFavoriteArticleInput = {
-        articleId: showArticle.id,
-        favoriteArticleFolderId,
-        platformId: showArticle.platform?.id,
-        title: showArticle.title,
-        description: showArticle?.description,
-        articleUrl: showArticle.articleUrl,
-        publishedAt: showArticle.publishedAt,
-        authorName: showArticle.authorName,
-        tags: showArticle.tags,
-        thumbnailUrl: showArticle.thumbnailUrl,
-        platformName: showArticle.platform?.name || "",
-        platformUrl: showArticle.platform?.siteUrl || "",
-        platformFaviconUrl: showArticle.platform?.faviconUrl || "",
-        isEng: showArticle.isEng,
-        isRead: false,
-        isPrivate: showArticle.isPrivate,
-      };
+      const user = await getUser();
+      if (!user) {
+        failToast({
+          description: "Fail: Please login to add favorite article",
+        });
+        await logoutToLoginPage();
+        return;
+      }
 
-      const { data, error } = await createFavoriteArticleMutation(input);
+      const { data, errors } = await createFavoriteArticleMutation({
+        variables: {
+          input: {
+            articleId: fragment.id,
+            favoriteArticleFolderId,
+            platformId: fragment.platform?.id,
+            title: fragment.title,
+            description: fragment?.description,
+            articleUrl: fragment.articleUrl,
+            publishedAt: fragment.publishedAt,
+            authorName: fragment.authorName,
+            tags: fragment.tags,
+            thumbnailUrl: fragment.thumbnailUrl,
+            platformName: fragment.platform?.name || "",
+            platformUrl: fragment.platform?.siteUrl || "",
+            platformFaviconUrl: fragment.platform?.faviconUrl || "",
+            isEng: fragment.isEng,
+            isRead: false,
+            isPrivate: fragment.isPrivate,
+          },
+        },
+        update: (cache, { data }) => {
+          if (data?.createFavoriteArticle) {
+            const newFavoriteArticle = data.createFavoriteArticle;
+            cache.modify({
+              id: cache.identify(fragment),
+              fields: {
+                isFollowing: () => true,
+                favoriteArticleFolderIds: () => [
+                  ...fragment.favoriteArticleFolderIds,
+                  newFavoriteArticle.favoriteArticleFolderId,
+                ],
+              },
+            });
+          }
+        },
+      });
 
-      if (error || !data?.createFavoriteArticle) {
-        if (error && error.length > 0) {
+      if (errors) {
+        if (errors.length > 0) {
           // TODO: Modify the error message response on the BFF side
           const errMsg =
-            error[0].message.indexOf("favorite article already exists") != -1
+            errors[0].message.indexOf("favorite article already exists") != -1
               ? "favorite article already exists"
-              : error[0].message;
+              : errors[0].message;
           failToast({
             description: errMsg,
           });
@@ -104,68 +150,68 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
         return;
       }
 
-      if (!isFollowing) setIsFollowing(true);
-      setShowArticle((prev) => {
-        return {
-          ...prev,
-          favoriteArticleFolderIds: [
-            ...prev.favoriteArticleFolderIds,
-            data.createFavoriteArticle.favoriteArticleFolderId,
-          ],
-        };
-      });
-
       successToast({
-        description: "Follow the article",
+        description: `Follow the article title:【 ${fragment.title} 】`,
       });
 
-      return data.createFavoriteArticle.id;
+      return data?.createFavoriteArticle.id;
     },
-    [successToast, failToast, showArticle, isFollowing, ,]
+    [successToast, failToast, fragment, createFavoriteArticleMutation]
   );
 
   const handleRemoveFavoriteArticle = useCallback(
     async (favoriteArticleFolderId: string, favoriteArticleId?: string) => {
-      const { data, error } = await deleteFavoriteArticleByArticleIdMutation({
-        articleId: showArticle.id,
-        favoriteArticleFolderId,
+      const user = await getUser();
+      if (!user) {
+        failToast({
+          description: "Fail: Please login to unfollow favorite article",
+        });
+        await logoutToLoginPage();
+        return;
+      }
+      const deletedTitle = fragment.title;
+      const { errors } = await deleteFavoriteArticleByArticleIdMutation({
+        variables: {
+          input: {
+            articleId: fragment.id,
+            favoriteArticleFolderId,
+          },
+        },
+        update: (cache) => {
+          const newFavoriteArticleFolderIds =
+            fragment.favoriteArticleFolderIds?.filter(
+              (id) => id !== favoriteArticleFolderId
+            );
+          cache.modify({
+            id: cache.identify(fragment),
+            fields: {
+              isFollowing: () => newFavoriteArticleFolderIds.length > 0,
+              favoriteArticleFolderIds: () => newFavoriteArticleFolderIds,
+            },
+          });
+        },
       });
 
-      if (error || !data?.deleteFavoriteArticleByArticleId) {
-        if (error || !data?.deleteFavoriteArticleByArticleId) {
-          if (error && error.length > 0) {
-            // TODO: Modify the error message response on the BFF side
-            const errMsg =
-              error[0].message.indexOf("favorite article not found") != -1
-                ? "favorite article not found"
-                : error[0].message;
-            failToast({
-              description: errMsg,
-            });
-            return;
-          }
+      if (errors) {
+        if (errors.length > 0) {
+          // TODO: Modify the error message response on the BFF side
+          const errMsg =
+            errors[0].message.indexOf("favorite article not found") != -1
+              ? "favorite article not found"
+              : errors[0].message;
           failToast({
-            description: "Fail: Something went wrong",
+            description: errMsg,
           });
           return;
         }
+        failToast({
+          description: "Fail: Something went wrong",
+        });
+        return;
       }
 
-      if (isFollowing)
-        setIsFollowing(
-          showArticle.favoriteArticleFolderIds.filter(
-            (id) => id !== favoriteArticleFolderId
-          ).length > 0
-        );
-      setShowArticle((prev) => ({
-        ...prev,
-        favoriteArticleFolderIds: prev.favoriteArticleFolderIds?.filter(
-          (id) => id !== favoriteArticleFolderId
-        ),
-      }));
-
       successToast({
-        description: "Unfollow the article",
+        description: `Unfollow the article title: 【 ${deletedTitle} 】`,
       });
 
       return favoriteArticleId;
@@ -173,9 +219,8 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
     [
       successToast,
       failToast,
-      isFollowing,
-      showArticle.id,
-      showArticle.favoriteArticleFolderIds,
+      fragment,
+      deleteFavoriteArticleByArticleIdMutation,
     ]
   );
 
@@ -269,7 +314,7 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
                   {!isPending && (
                     <FollowFavoriteArticleDropdownMenu
                       data={showFavoriteFolders}
-                      isFollowing={isFollowing}
+                      isFollowing={fragment.isFollowing}
                       followedFolderIds={
                         fragment.favoriteArticleFolderIds || []
                       }
