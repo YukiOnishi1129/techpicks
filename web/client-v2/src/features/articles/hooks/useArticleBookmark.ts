@@ -7,7 +7,23 @@ import { getUser } from "@/features/auth/actions/user";
 
 import { useStatusToast } from "@/hooks/useStatusToast";
 
-import { ArticleCardItemFragment } from "../ArticleCardItem";
+export const UseArticleBookmarkFragment = graphql(`
+  fragment UseArticleBookmarkFragment on Article {
+    id
+    platform {
+      id
+      name
+      siteUrl
+      faviconUrl
+    }
+    title
+    description
+    articleUrl
+    publishedAt
+    thumbnailUrl
+    isEng
+  }
+`);
 
 const CreateArticleBookmarkMutation = graphql(`
   mutation CreateBookmarkMutation($input: CreateBookmarkInput!) {
@@ -24,9 +40,9 @@ const DeleteArticleBookmarkMutation = graphql(`
 `);
 
 export const useArticleBookmark = (
-  data: FragmentOf<typeof ArticleCardItemFragment>
+  data: FragmentOf<typeof UseArticleBookmarkFragment>
 ) => {
-  const fragment = readFragment(ArticleCardItemFragment, data);
+  const fragment = readFragment(UseArticleBookmarkFragment, data);
   const { successToast, failToast } = useStatusToast();
 
   const [createArticleBookmarkMutation] = useMutation(

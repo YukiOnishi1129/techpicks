@@ -554,6 +554,8 @@ export type GetArticleDashboardTemplateQueryQueryVariables = Exact<{
 
 export type GetArticleDashboardTemplateQueryQuery = { __typename?: 'Query', favoriteArticleFolders: { __typename?: 'FavoriteArticleFolderConnection', edges: Array<{ __typename?: 'FavoriteArticleFolderEdge', node: { __typename?: 'FavoriteArticleFolder', id: string, title: string } }> }, articles: { __typename?: 'ArticleConnection', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null }, edges: Array<{ __typename?: 'ArticleEdge', node: { __typename: 'Article', id: string, title: string, articleUrl: string, publishedAt?: number | null, thumbnailUrl: string, isEng: boolean, isPrivate: boolean, isBookmarked: boolean, bookmarkId?: string | null, likeCount?: number | null, description: string, authorName?: string | null, tags?: string | null, isFollowing: boolean, favoriteArticleFolderIds: Array<string>, platform?: { __typename?: 'Platform', id: string, name: string, siteUrl: string, faviconUrl: string } | null, feeds?: Array<{ __typename?: 'Feed', id: string, name: string }> | null } }> } };
 
+export type UseArticleBookmarkFragmentFragment = { __typename?: 'Article', id: string, title: string, description: string, articleUrl: string, publishedAt?: number | null, thumbnailUrl: string, isEng: boolean, platform?: { __typename?: 'Platform', id: string, name: string, siteUrl: string, faviconUrl: string } | null };
+
 export type CreateBookmarkForUploadArticleMutationMutationVariables = Exact<{
   input: CreateBookmarkForUploadArticleInput;
 }>;
@@ -798,6 +800,23 @@ export const ArticleCardItemFragmentFragmentDoc = gql`
   }
 }
     `;
+export const UseArticleBookmarkFragmentFragmentDoc = gql`
+    fragment UseArticleBookmarkFragment on Article {
+  id
+  platform {
+    id
+    name
+    siteUrl
+    faviconUrl
+  }
+  title
+  description
+  articleUrl
+  publishedAt
+  thumbnailUrl
+  isEng
+}
+    `;
 export const ArticleCardWrapperFragmentFragmentDoc = gql`
     fragment ArticleCardWrapperFragment on Article {
   __typename
@@ -823,8 +842,10 @@ export const ArticleCardWrapperFragmentFragmentDoc = gql`
   isFollowing
   favoriteArticleFolderIds
   ...ArticleCardItemFragment
+  ...UseArticleBookmarkFragment
 }
-    ${ArticleCardItemFragmentFragmentDoc}`;
+    ${ArticleCardItemFragmentFragmentDoc}
+${UseArticleBookmarkFragmentFragmentDoc}`;
 export const ArticleListFragmentFragmentDoc = gql`
     fragment ArticleListFragment on ArticleConnection {
   pageInfo {

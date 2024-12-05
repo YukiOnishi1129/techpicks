@@ -2,6 +2,7 @@ import { graphql } from "gql.tada";
 
 import { FollowFavoriteArticleDropdownMenuContentFragment } from "@/features/favorites/components/DropdownMenu/FollowFavoriteArticleDropdownMenu/FollowFavoriteArticleDropdownMenuFragment";
 
+import { UseArticleBookmarkFragment } from "../../../hooks/useArticleBookmark";
 import { ArticleCardItemFragment } from "../ArticleCardItem";
 
 export const ArticleCardWrapperFragment = graphql(
@@ -30,9 +31,10 @@ export const ArticleCardWrapperFragment = graphql(
       isFollowing
       favoriteArticleFolderIds
       ...ArticleCardItemFragment
+      ...UseArticleBookmarkFragment
     }
   `,
-  [ArticleCardItemFragment]
+  [ArticleCardItemFragment, UseArticleBookmarkFragment]
 );
 
 export const FavoriteFolderArticleCardWrapperFragment = graphql(
