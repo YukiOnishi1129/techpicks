@@ -12,7 +12,7 @@ import { LanguageStatus } from "@/types/language";
 
 import { GetArticleListQuery } from "./GetArticleListQuery";
 import { ArticleCardWrapper } from "../../Card/ArticleCardWrapper/ArticleCardWrapper";
-import { GetArticleDashboardTemplateQuery } from "../../Template/ArticleDashboardTemplate";
+import { GetArticleDashboardTemplateQuery } from "../../Template/ArticleDashboardTemplate/GetArticleDashboardTemplateQuery";
 
 type ArticleListProps = {
   user: User;
