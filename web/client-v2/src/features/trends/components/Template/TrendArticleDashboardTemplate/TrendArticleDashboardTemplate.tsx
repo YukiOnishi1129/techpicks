@@ -2,6 +2,7 @@ import { User } from "@supabase/supabase-js";
 import Image from "next/image";
 import { FC, Suspense } from "react";
 
+import { ScreenLoader } from "@/components/layout/ScreenLoader";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { PreloadQuery } from "@/lib/apollo/client";
@@ -89,7 +90,7 @@ export const TrendArticleDashboardTemplate: FC<
               favoriteArticleFoldersInput,
             }}
           >
-            <Suspense fallback={<div>Loading...</div>}>
+            <Suspense fallback={<ScreenLoader />}>
               <TrendArticleList user={user} languageStatus={2} tab={tab} />
             </Suspense>
           </PreloadQuery>
@@ -102,7 +103,7 @@ export const TrendArticleDashboardTemplate: FC<
               favoriteArticleFoldersInput,
             }}
           >
-            <Suspense fallback={<div>Loading...</div>}>
+            <Suspense fallback={<ScreenLoader />}>
               <TrendArticleList user={user} languageStatus={1} tab={tab} />
             </Suspense>
           </PreloadQuery>

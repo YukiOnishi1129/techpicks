@@ -4,6 +4,7 @@ import { FC, Suspense } from "react";
 
 import { ArticleList } from "@/features/articles/components/List/ArticleList";
 
+import { ScreenLoader } from "@/components/layout/ScreenLoader";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { PreloadQuery } from "@/lib/apollo/client";
@@ -92,7 +93,7 @@ export const ArticleDashboardTemplate: FC<
               favoriteArticleFoldersInput,
             }}
           >
-            <Suspense fallback={<div>Loading...</div>}>
+            <Suspense fallback={<ScreenLoader />}>
               <ArticleList user={user} languageStatus={2} tab={tab} />
             </Suspense>
           </PreloadQuery>
@@ -105,7 +106,7 @@ export const ArticleDashboardTemplate: FC<
               favoriteArticleFoldersInput,
             }}
           >
-            <Suspense fallback={<div>Loading...</div>}>
+            <Suspense fallback={<ScreenLoader />}>
               <ArticleList user={user} languageStatus={1} tab={tab} />
             </Suspense>
           </PreloadQuery>
