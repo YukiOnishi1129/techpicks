@@ -1,8 +1,7 @@
 "use client";
 
-import { useApolloClient, useQuery } from "@apollo/client";
+import { useSuspenseQuery, useQuery } from "@apollo/client";
 import { User } from "@supabase/supabase-js";
-import { FragmentOf, readFragment } from "gql.tada";
 import { useCallback, useRef, useState, useEffect } from "react";
 
 import { NotFoundList } from "@/components/layout/NotFoundList";
@@ -11,44 +10,41 @@ import { Loader } from "@/components/ui/loader";
 import { ArticleTabType } from "@/types/article";
 import { LanguageStatus } from "@/types/language";
 
-import { ArticleListFragment } from "./ArticleListFragment";
 import { GetArticleListQuery } from "./GetArticleListQuery";
-import { FavoriteFolderArticleCardWrapperFragment } from "../../Card";
 import { ArticleCardWrapper } from "../../Card/ArticleCardWrapper/ArticleCardWrapper";
+import { GetArticleDashboardTemplateQuery } from "../../Template/ArticleDashboardTemplate";
 
 type ArticleListProps = {
   user: User;
-  data: FragmentOf<typeof ArticleListFragment>;
-  favoriteArticleFolders: FragmentOf<
-    typeof FavoriteFolderArticleCardWrapperFragment
-  >;
   languageStatus: LanguageStatus;
   tab: ArticleTabType;
 };
 
-export function ArticleList({
-  user,
-  data,
-  favoriteArticleFolders,
-  languageStatus,
-  tab,
-}: ArticleListProps) {
-  const client = useApolloClient();
+export function ArticleList({ user, languageStatus, tab }: ArticleListProps) {
   const observerTarget = useRef(null);
 
-  const fragment = readFragment(ArticleListFragment, data);
-
-  client.cache.writeQuery({
-    query: GetArticleListQuery,
-    data: {
-      articles: data,
-    },
-  });
+  const { data: resSuspenseData, error } = useSuspenseQuery(
+    GetArticleDashboardTemplateQuery,
+    {
+      variables: {
+        input: {
+          first: 20,
+          after: null,
+          languageStatus,
+          tab,
+        },
+        favoriteArticleFoldersInput: {
+          isAllFetch: true,
+          isFolderOnly: true,
+        },
+      },
+    }
+  );
 
   const {
     data: res,
     fetchMore,
-    error,
+    error: onlyFetchArticlesError,
   } = useQuery(GetArticleListQuery, {
     variables: {
       input: {
@@ -60,12 +56,13 @@ export function ArticleList({
     },
     fetchPolicy: "cache-first",
     nextFetchPolicy: "network-only",
-    notifyOnNetworkStatusChange: true,
   });
 
   const [hashMore, setHashMore] = useState(true);
   const [offset, setOffset] = useState(1);
-  const [endCursor, setEndCursor] = useState(fragment.pageInfo.endCursor);
+  const [endCursor, setEndCursor] = useState(
+    res?.articles.pageInfo?.endCursor || null
+  );
   const [isNextPage, setIsNextPage] = useState(true);
 
   const loadMore = useCallback(async () => {
@@ -140,6 +137,10 @@ export function ArticleList({
     return <div>{error.message}</div>;
   }
 
+  if (onlyFetchArticlesError) {
+    return <div>{onlyFetchArticlesError.message}</div>;
+  }
+
   return (
     <>
       {res?.articles?.edges.length === 0 ? (
@@ -152,7 +153,7 @@ export function ArticleList({
             <ArticleCardWrapper
               key={edge.node.id}
               data={edge.node}
-              favoriteArticleFolders={favoriteArticleFolders}
+              favoriteArticleFolders={resSuspenseData.favoriteArticleFolders}
               user={user}
               tab={tab}
             />

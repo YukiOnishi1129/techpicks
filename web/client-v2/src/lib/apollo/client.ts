@@ -43,7 +43,7 @@ const authLink = setContext(async (_, { headers }) => {
   };
 });
 
-export const { getClient } = registerApolloClient(() => {
+export const { getClient, PreloadQuery } = registerApolloClient(() => {
   return new ApolloClient({
     cache: new InMemoryCache(),
     link: ApolloLink.from([errorLink, authLink, httpLink]),

@@ -1,8 +1,8 @@
 "use client";
-import { useApolloClient } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import { User } from "@supabase/supabase-js";
 import { clsx } from "clsx";
-import { FragmentOf, readFragment } from "gql.tada";
+import { FragmentOf, graphql, readFragment } from "gql.tada";
 import { FC, useCallback, useState, useTransition } from "react";
 
 import { createFavoriteArticleMutation } from "@/features/favorites/actions/actCreateFavoriteArticleMutaion";
@@ -23,9 +23,22 @@ import {
   ArticleCardWrapperFragment,
   FavoriteFolderArticleCardWrapperFragment,
 } from "./ArticleCardWrapperFragment";
-import { useArticleBookmark } from "./useArticleBookmark";
 import { AddBookmarkTooltip, DeleteBookmarkTooltip } from "../../ToolTip";
 import { ArticleCardItem } from "../ArticleCardItem";
+
+const CreateArticleBookmarkMutation = graphql(`
+  mutation CreateBookmarkMutation($input: CreateBookmarkInput!) {
+    createBookmark(createBookmarkInput: $input) {
+      id
+    }
+  }
+`);
+
+const DeleteArticleBookmarkMutation = graphql(`
+  mutation DeleteBookmarkMutation($input: DeleteBookmarkInput!) {
+    deleteBookmark(deleteBookmarkInput: $input)
+  }
+`);
 
 type ArticleCardWrapperProps = {
   data: FragmentOf<typeof ArticleCardWrapperFragment>;
@@ -44,13 +57,20 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
   user,
   tab,
 }: ArticleCardWrapperProps) => {
-  const client = useApolloClient();
   const { successToast, failToast } = useStatusToast();
   const [isPending, startTransition] = useTransition();
   const fragment = readFragment(ArticleCardWrapperFragment, data);
   const fragmentFavoriteFolder = readFragment(
     FavoriteFolderArticleCardWrapperFragment,
     favoriteArticleFolders
+  );
+
+  const [createArticleBookmarkMutation] = useMutation(
+    CreateArticleBookmarkMutation
+  );
+
+  const [deleteArticleBookmarkMutation] = useMutation(
+    DeleteArticleBookmarkMutation
   );
 
   const [isFollowing, setIsFollowing] = useState<boolean>(
@@ -61,8 +81,59 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
     fragmentFavoriteFolder
   );
 
-  const { bookmarkId, handleAddBookmark, handleRemoveBookmark } =
-    useArticleBookmark(showArticle);
+  const handleCreateBookmark = useCallback(async () => {
+    await createArticleBookmarkMutation({
+      variables: {
+        input: {
+          articleId: fragment.id,
+          userId: user.id,
+          platformId: fragment.platform?.id,
+          title: fragment.title,
+          description: fragment.description,
+          articleUrl: fragment.articleUrl,
+          thumbnailUrl: fragment.thumbnailUrl,
+          publishedAt: fragment.publishedAt,
+          platformName: fragment.platform?.name || "",
+          platformUrl: fragment.platform?.siteUrl || "",
+          platformFaviconUrl: fragment.platform?.faviconUrl || "",
+          isEng: fragment.isEng,
+          isRead: false,
+        },
+      },
+      update: (cache, { data }) => {
+        cache.modify({
+          id: cache.identify(fragment),
+          fields: {
+            isBookmarked: () => true,
+            bookmarkId: () => data?.createBookmark.id,
+          },
+        });
+      },
+    });
+  }, [createArticleBookmarkMutation, fragment, user.id]);
+
+  const handleDeleteBookmark = useCallback(
+    async (bookmarkId: string) => {
+      await deleteArticleBookmarkMutation({
+        variables: {
+          input: {
+            bookmarkId,
+            userId: user.id,
+          },
+        },
+        update: (cache) => {
+          cache.modify({
+            id: cache.identify(fragment),
+            fields: {
+              isBookmarked: () => false,
+              bookmarkId: () => null,
+            },
+          });
+        },
+      });
+    },
+    [deleteArticleBookmarkMutation, fragment, user.id]
+  );
 
   const handleCreateFavoriteArticle = useCallback(
     async (favoriteArticleFolderId: string) => {
@@ -210,9 +281,15 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
     [handleCreateFavoriteArticle, failToast]
   );
 
+  // useEffect(() => {
+  //   console.log("❤️‍🔥");
+  //   console.log(fragment.title);
+  //   console.log(fragment?.bookmarkId);
+  // }, [fragment?.bookmarkId, fragment.title]);
+
   return (
     <div
-      key={showArticle.id}
+      key={fragment.id}
       className="rounded-2xl border-2 bg-primary-foreground px-4 pb-4 md:px-2"
     >
       <div className="grid gap-4">
@@ -223,16 +300,16 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
                 <div
                   className={clsx(style["like-count"], "mr-4 text-rose-600")}
                 >
-                  <span className="text-4xl font-bold">{`${showArticle.likeCount}`}</span>
+                  <span className="text-4xl font-bold">{`${fragment.likeCount}`}</span>
                   <span className="ml-2 font-bold">{"likes"}</span>
                 </div>
               )}
 
               {tab !== TREND_TAB ? (
                 <IconTitleLink
-                  url={showArticle.platform?.siteUrl || ""}
-                  iconImageUrl={showArticle.platform?.faviconUrl || ""}
-                  title={showArticle.platform?.name || ""}
+                  url={fragment.platform?.siteUrl || ""}
+                  iconImageUrl={fragment.platform?.faviconUrl || ""}
+                  title={fragment.platform?.name || ""}
                   target="_blank"
                 />
               ) : (
@@ -240,7 +317,7 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     className="mr-2 hidden size-[36px] bg-white md:inline-block"
-                    src={showArticle.platform?.faviconUrl || ""}
+                    src={fragment.platform?.faviconUrl || ""}
                     alt=""
                   />
                 </div>
@@ -250,21 +327,20 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
             <div className="flex items-center justify-center gap-4">
               <div>
                 <ShareLinks
-                  shareTitle={showArticle.title}
-                  shareUrl={showArticle.articleUrl}
+                  shareTitle={fragment.title}
+                  shareUrl={fragment.articleUrl}
                 />
               </div>
 
               <>
-                {bookmarkId ? (
+                {fragment?.bookmarkId ? (
                   <DeleteBookmarkTooltip
-                    bookmarkId={bookmarkId}
-                    handleRemoveBookmark={handleRemoveBookmark}
+                    bookmarkId={fragment?.bookmarkId || ""}
+                    handleRemoveBookmark={handleDeleteBookmark}
                   />
                 ) : (
                   <AddBookmarkTooltip
-                    articleId={showArticle.id}
-                    handleAddBookmark={handleAddBookmark}
+                    handleAddBookmark={handleCreateBookmark}
                   />
                 )}
                 <div className="mt-2">
@@ -273,7 +349,7 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
                       data={showFavoriteFolders}
                       isFollowing={isFollowing}
                       followedFolderIds={
-                        showArticle.favoriteArticleFolderIds || []
+                        fragment.favoriteArticleFolderIds || []
                       }
                       handleCreateFavoriteArticle={handleCreateFavoriteArticle}
                       handleRemoveFavoriteArticle={handleRemoveFavoriteArticle}
@@ -289,7 +365,7 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
         </div>
 
         <div>
-          <ArticleCardItem data={showArticle} user={user} tab={tab} />
+          <ArticleCardItem data={fragment} user={user} tab={tab} />
         </div>
       </div>
     </div>

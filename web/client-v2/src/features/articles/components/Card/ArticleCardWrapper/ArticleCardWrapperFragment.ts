@@ -7,6 +7,7 @@ import { ArticleCardItemFragment } from "../ArticleCardItem";
 export const ArticleCardWrapperFragment = graphql(
   `
     fragment ArticleCardWrapperFragment on Article {
+      __typename
       id
       platform {
         id

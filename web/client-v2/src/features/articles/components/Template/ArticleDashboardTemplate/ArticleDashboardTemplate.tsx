@@ -1,18 +1,19 @@
 import { User } from "@supabase/supabase-js";
-import { readFragment } from "gql.tada";
 import Image from "next/image";
-import { FC } from "react";
+import { FC, Suspense } from "react";
+
+import { ArticleList } from "@/features/articles/components/List/ArticleList";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
+import { PreloadQuery } from "@/lib/apollo/client";
 
 import { LanguageStatus } from "@/types/language";
 
 import { ENGLISH_IMAGE, JAPANESE_IMAGE } from "@/constant/image";
 import { ArticlesInput, FavoriteArticleFoldersInput } from "@/graphql/type";
 
-import { getArticleDashboardTemplateQuery } from "./actGetArticleDashboardTemplateQuery";
-import { ArticleDashboardTemplateFragment } from "./ArticleDashboardTemplateFragment";
-import { ArticleList } from "../../List";
+import { GetArticleDashboardTemplateQuery } from "./GetArticleDashboardTemplateQuery";
 
 type ArticleDashboardTemplateProps = {
   user: User;
@@ -47,18 +48,6 @@ export const ArticleDashboardTemplate: FC<
     isAllFetch: true,
     isFolderOnly: true,
   };
-
-  const { data, error } = await getArticleDashboardTemplateQuery(
-    enInput,
-    jpInput,
-    favoriteArticleFoldersInput
-  );
-
-  if (error) {
-    return <div>{error.message}</div>;
-  }
-
-  const fragment = readFragment(ArticleDashboardTemplateFragment, data);
 
   return (
     <div>
@@ -96,22 +85,30 @@ export const ArticleDashboardTemplate: FC<
 
         <div className="h-[40px]" />
         <TabsContent value={TAB_LIST.ENGLISH}>
-          <ArticleList
-            data={fragment.enArticles}
-            favoriteArticleFolders={fragment.favoriteArticleFolders}
-            user={user}
-            languageStatus={2}
-            tab={tab}
-          />
+          <PreloadQuery
+            query={GetArticleDashboardTemplateQuery}
+            variables={{
+              input: enInput,
+              favoriteArticleFoldersInput,
+            }}
+          >
+            <Suspense fallback={<div>Loading...</div>}>
+              <ArticleList user={user} languageStatus={2} tab={tab} />
+            </Suspense>
+          </PreloadQuery>
         </TabsContent>
         <TabsContent value={TAB_LIST.JAPANESE}>
-          <ArticleList
-            data={fragment.jpArticles}
-            favoriteArticleFolders={fragment.favoriteArticleFolders}
-            user={user}
-            languageStatus={1}
-            tab={tab}
-          />
+          <PreloadQuery
+            query={GetArticleDashboardTemplateQuery}
+            variables={{
+              input: jpInput,
+              favoriteArticleFoldersInput,
+            }}
+          >
+            <Suspense fallback={<div>Loading...</div>}>
+              <ArticleList user={user} languageStatus={1} tab={tab} />
+            </Suspense>
+          </PreloadQuery>
         </TabsContent>
       </Tabs>
     </div>
