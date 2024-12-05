@@ -732,8 +732,6 @@ export type GetFavoriteArticleListByFolderIdTemplateQueryQuery = { __typename?: 
 
 export type OgpPreviewContentFragmentFragment = { __typename?: 'ArticleOGP', title: string, description?: string | null, thumbnailUrl: string, articleUrl: string, siteName: string, faviconUrl: string };
 
-export type TrendArticleListFragmentFragment = { __typename?: 'ArticleConnection', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null }, edges: Array<{ __typename?: 'ArticleEdge', node: { __typename: 'Article', id: string, title: string, articleUrl: string, publishedAt?: number | null, thumbnailUrl: string, isEng: boolean, isPrivate: boolean, isBookmarked: boolean, bookmarkId?: string | null, likeCount?: number | null, description: string, authorName?: string | null, tags?: string | null, isFollowing: boolean, favoriteArticleFolderIds: Array<string>, platform?: { __typename?: 'Platform', id: string, name: string, siteUrl: string, faviconUrl: string } | null, feeds?: Array<{ __typename?: 'Feed', id: string, name: string }> | null } }> };
-
 export type GetTrendArticleListQueryQueryVariables = Exact<{
   input: ArticlesInput;
 }>;
@@ -741,16 +739,17 @@ export type GetTrendArticleListQueryQueryVariables = Exact<{
 
 export type GetTrendArticleListQueryQuery = { __typename?: 'Query', articles: { __typename?: 'ArticleConnection', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null }, edges: Array<{ __typename?: 'ArticleEdge', node: { __typename: 'Article', id: string, title: string, articleUrl: string, publishedAt?: number | null, thumbnailUrl: string, isEng: boolean, isPrivate: boolean, isBookmarked: boolean, bookmarkId?: string | null, likeCount?: number | null, description: string, authorName?: string | null, tags?: string | null, isFollowing: boolean, favoriteArticleFolderIds: Array<string>, platform?: { __typename?: 'Platform', id: string, name: string, siteUrl: string, faviconUrl: string } | null, feeds?: Array<{ __typename?: 'Feed', id: string, name: string }> | null } }> } };
 
-export type TrendArticleDashboardTemplateFragmentFragment = { __typename?: 'Query', enArticles: { __typename?: 'ArticleConnection', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null }, edges: Array<{ __typename?: 'ArticleEdge', node: { __typename: 'Article', id: string, title: string, articleUrl: string, publishedAt?: number | null, thumbnailUrl: string, isEng: boolean, isPrivate: boolean, isBookmarked: boolean, bookmarkId?: string | null, likeCount?: number | null, description: string, authorName?: string | null, tags?: string | null, isFollowing: boolean, favoriteArticleFolderIds: Array<string>, platform?: { __typename?: 'Platform', id: string, name: string, siteUrl: string, faviconUrl: string } | null, feeds?: Array<{ __typename?: 'Feed', id: string, name: string }> | null } }> }, jpArticles: { __typename?: 'ArticleConnection', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null }, edges: Array<{ __typename?: 'ArticleEdge', node: { __typename: 'Article', id: string, title: string, articleUrl: string, publishedAt?: number | null, thumbnailUrl: string, isEng: boolean, isPrivate: boolean, isBookmarked: boolean, bookmarkId?: string | null, likeCount?: number | null, description: string, authorName?: string | null, tags?: string | null, isFollowing: boolean, favoriteArticleFolderIds: Array<string>, platform?: { __typename?: 'Platform', id: string, name: string, siteUrl: string, faviconUrl: string } | null, feeds?: Array<{ __typename?: 'Feed', id: string, name: string }> | null } }> }, favoriteArticleFolders: { __typename?: 'FavoriteArticleFolderConnection', edges: Array<{ __typename?: 'FavoriteArticleFolderEdge', node: { __typename?: 'FavoriteArticleFolder', id: string, title: string } }> } };
+export type TrendArticleListFragmentFragment = { __typename?: 'ArticleConnection', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null }, edges: Array<{ __typename?: 'ArticleEdge', node: { __typename: 'Article', id: string, title: string, articleUrl: string, publishedAt?: number | null, thumbnailUrl: string, isEng: boolean, isPrivate: boolean, isBookmarked: boolean, bookmarkId?: string | null, likeCount?: number | null, description: string, authorName?: string | null, tags?: string | null, isFollowing: boolean, favoriteArticleFolderIds: Array<string>, platform?: { __typename?: 'Platform', id: string, name: string, siteUrl: string, faviconUrl: string } | null, feeds?: Array<{ __typename?: 'Feed', id: string, name: string }> | null } }> };
 
 export type GetTrendArticleDashboardTemplateQueryQueryVariables = Exact<{
-  enInput: ArticlesInput;
-  jpInput: ArticlesInput;
+  input: ArticlesInput;
   favoriteArticleFoldersInput: FavoriteArticleFoldersInput;
 }>;
 
 
-export type GetTrendArticleDashboardTemplateQueryQuery = { __typename?: 'Query', enArticles: { __typename?: 'ArticleConnection', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null }, edges: Array<{ __typename?: 'ArticleEdge', node: { __typename: 'Article', id: string, title: string, articleUrl: string, publishedAt?: number | null, thumbnailUrl: string, isEng: boolean, isPrivate: boolean, isBookmarked: boolean, bookmarkId?: string | null, likeCount?: number | null, description: string, authorName?: string | null, tags?: string | null, isFollowing: boolean, favoriteArticleFolderIds: Array<string>, platform?: { __typename?: 'Platform', id: string, name: string, siteUrl: string, faviconUrl: string } | null, feeds?: Array<{ __typename?: 'Feed', id: string, name: string }> | null } }> }, jpArticles: { __typename?: 'ArticleConnection', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null }, edges: Array<{ __typename?: 'ArticleEdge', node: { __typename: 'Article', id: string, title: string, articleUrl: string, publishedAt?: number | null, thumbnailUrl: string, isEng: boolean, isPrivate: boolean, isBookmarked: boolean, bookmarkId?: string | null, likeCount?: number | null, description: string, authorName?: string | null, tags?: string | null, isFollowing: boolean, favoriteArticleFolderIds: Array<string>, platform?: { __typename?: 'Platform', id: string, name: string, siteUrl: string, faviconUrl: string } | null, feeds?: Array<{ __typename?: 'Feed', id: string, name: string }> | null } }> }, favoriteArticleFolders: { __typename?: 'FavoriteArticleFolderConnection', edges: Array<{ __typename?: 'FavoriteArticleFolderEdge', node: { __typename?: 'FavoriteArticleFolder', id: string, title: string } }> } };
+export type GetTrendArticleDashboardTemplateQueryQuery = { __typename?: 'Query', favoriteArticleFolders: { __typename?: 'FavoriteArticleFolderConnection', edges: Array<{ __typename?: 'FavoriteArticleFolderEdge', node: { __typename?: 'FavoriteArticleFolder', id: string, title: string } }> }, articles: { __typename?: 'ArticleConnection', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null }, edges: Array<{ __typename?: 'ArticleEdge', node: { __typename: 'Article', id: string, title: string, articleUrl: string, publishedAt?: number | null, thumbnailUrl: string, isEng: boolean, isPrivate: boolean, isBookmarked: boolean, bookmarkId?: string | null, likeCount?: number | null, description: string, authorName?: string | null, tags?: string | null, isFollowing: boolean, favoriteArticleFolderIds: Array<string>, platform?: { __typename?: 'Platform', id: string, name: string, siteUrl: string, faviconUrl: string } | null, feeds?: Array<{ __typename?: 'Feed', id: string, name: string }> | null } }> } };
+
+export type TrendArticleDashboardTemplateFragmentFragment = { __typename?: 'Query', articles: { __typename?: 'ArticleConnection', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null }, edges: Array<{ __typename?: 'ArticleEdge', node: { __typename: 'Article', id: string, title: string, articleUrl: string, publishedAt?: number | null, thumbnailUrl: string, isEng: boolean, isPrivate: boolean, isBookmarked: boolean, bookmarkId?: string | null, likeCount?: number | null, description: string, authorName?: string | null, tags?: string | null, isFollowing: boolean, favoriteArticleFolderIds: Array<string>, platform?: { __typename?: 'Platform', id: string, name: string, siteUrl: string, faviconUrl: string } | null, feeds?: Array<{ __typename?: 'Feed', id: string, name: string }> | null } }> }, favoriteArticleFolders: { __typename?: 'FavoriteArticleFolderConnection', edges: Array<{ __typename?: 'FavoriteArticleFolderEdge', node: { __typename?: 'FavoriteArticleFolder', id: string, title: string } }> } };
 
 export const FavoriteArticleFolderLinkFragmentFragmentDoc = gql`
     fragment FavoriteArticleFolderLinkFragment on FavoriteArticleFolder {
@@ -1268,10 +1267,7 @@ export const TrendArticleListFragmentFragmentDoc = gql`
     ${ArticleCardWrapperFragmentFragmentDoc}`;
 export const TrendArticleDashboardTemplateFragmentFragmentDoc = gql`
     fragment TrendArticleDashboardTemplateFragment on Query {
-  enArticles: articles(articlesInput: $enInput) {
-    ...TrendArticleListFragment
-  }
-  jpArticles: articles(articlesInput: $jpInput) {
+  articles: articles(articlesInput: $input) {
     ...TrendArticleListFragment
   }
   favoriteArticleFolders(input: $favoriteArticleFoldersInput) {
@@ -2131,10 +2127,23 @@ export type GetFavoriteArticleListByFolderIdTemplateQueryQueryResult = Apollo.Qu
 export const GetTrendArticleListQueryDocument = gql`
     query GetTrendArticleListQuery($input: ArticlesInput!) {
   articles(articlesInput: $input) {
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      startCursor
+      endCursor
+    }
+    edges {
+      node {
+        id
+        ...ArticleCardWrapperFragment
+      }
+    }
     ...TrendArticleListFragment
   }
 }
-    ${TrendArticleListFragmentFragmentDoc}`;
+    ${ArticleCardWrapperFragmentFragmentDoc}
+${TrendArticleListFragmentFragmentDoc}`;
 
 /**
  * __useGetTrendArticleListQueryQuery__
@@ -2169,10 +2178,14 @@ export type GetTrendArticleListQueryLazyQueryHookResult = ReturnType<typeof useG
 export type GetTrendArticleListQuerySuspenseQueryHookResult = ReturnType<typeof useGetTrendArticleListQuerySuspenseQuery>;
 export type GetTrendArticleListQueryQueryResult = Apollo.QueryResult<GetTrendArticleListQueryQuery, GetTrendArticleListQueryQueryVariables>;
 export const GetTrendArticleDashboardTemplateQueryDocument = gql`
-    query GetTrendArticleDashboardTemplateQuery($enInput: ArticlesInput!, $jpInput: ArticlesInput!, $favoriteArticleFoldersInput: FavoriteArticleFoldersInput!) {
+    query GetTrendArticleDashboardTemplateQuery($input: ArticlesInput!, $favoriteArticleFoldersInput: FavoriteArticleFoldersInput!) {
+  favoriteArticleFolders(input: $favoriteArticleFoldersInput) {
+    ...FavoriteFolderArticleCardWrapperFragment
+  }
   ...TrendArticleDashboardTemplateFragment
 }
-    ${TrendArticleDashboardTemplateFragmentFragmentDoc}`;
+    ${FavoriteFolderArticleCardWrapperFragmentFragmentDoc}
+${TrendArticleDashboardTemplateFragmentFragmentDoc}`;
 
 /**
  * __useGetTrendArticleDashboardTemplateQueryQuery__
@@ -2186,8 +2199,7 @@ export const GetTrendArticleDashboardTemplateQueryDocument = gql`
  * @example
  * const { data, loading, error } = useGetTrendArticleDashboardTemplateQueryQuery({
  *   variables: {
- *      enInput: // value for 'enInput'
- *      jpInput: // value for 'jpInput'
+ *      input: // value for 'input'
  *      favoriteArticleFoldersInput: // value for 'favoriteArticleFoldersInput'
  *   },
  * });
