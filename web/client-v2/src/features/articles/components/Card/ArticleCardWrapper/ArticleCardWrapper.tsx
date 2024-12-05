@@ -1,13 +1,10 @@
 "use client";
 
-import { useMutation } from "@apollo/client";
 import { User } from "@supabase/supabase-js";
 import { clsx } from "clsx";
-import { FragmentOf, graphql, readFragment } from "gql.tada";
+import { FragmentOf, readFragment } from "gql.tada";
 import { FC, useCallback, useState, useTransition } from "react";
 
-import { logoutToLoginPage } from "@/features/auth/actions/auth";
-import { getUser } from "@/features/auth/actions/user";
 import { createFavoriteArticleMutation } from "@/features/favorites/actions/actCreateFavoriteArticleMutaion";
 import { deleteFavoriteArticleByArticleIdMutation } from "@/features/favorites/actions/actDeleteFavoriteArticleByArticleIdMutation";
 import { FollowFavoriteArticleDropdownMenu } from "@/features/favorites/components/DropdownMenu";
@@ -26,22 +23,9 @@ import {
   ArticleCardWrapperFragment,
   FavoriteFolderArticleCardWrapperFragment,
 } from "./ArticleCardWrapperFragment";
+import { useArticleBookmark } from "./useArticleBookmark";
 import { AddBookmarkTooltip, DeleteBookmarkTooltip } from "../../ToolTip";
 import { ArticleCardItem } from "../ArticleCardItem";
-
-const CreateArticleBookmarkMutation = graphql(`
-  mutation CreateBookmarkMutation($input: CreateBookmarkInput!) {
-    createBookmark(createBookmarkInput: $input) {
-      id
-    }
-  }
-`);
-
-const DeleteArticleBookmarkMutation = graphql(`
-  mutation DeleteBookmarkMutation($input: DeleteBookmarkInput!) {
-    deleteBookmark(deleteBookmarkInput: $input)
-  }
-`);
 
 type ArticleCardWrapperProps = {
   data: FragmentOf<typeof ArticleCardWrapperFragment>;
@@ -68,13 +52,8 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
     favoriteArticleFolders
   );
 
-  const [createArticleBookmarkMutation] = useMutation(
-    CreateArticleBookmarkMutation
-  );
-
-  const [deleteArticleBookmarkMutation] = useMutation(
-    DeleteArticleBookmarkMutation
-  );
+  const { handleCreateBookmark, handleDeleteBookmark } =
+    useArticleBookmark(fragment);
 
   const [isFollowing, setIsFollowing] = useState<boolean>(
     fragment.isFollowing || false
@@ -82,112 +61,6 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
   const [showArticle, setShowArticle] = useState(fragment);
   const [showFavoriteFolders, setShowFavoriteFolders] = useState(
     fragmentFavoriteFolder
-  );
-
-  const handleCreateBookmark = useCallback(async () => {
-    const user = await getUser();
-    if (!user) {
-      failToast({
-        description: "Fail: Please login to bookmark this article",
-      });
-      await logoutToLoginPage();
-      return;
-    }
-
-    const { errors } = await createArticleBookmarkMutation({
-      variables: {
-        input: {
-          articleId: fragment.id,
-          userId: user.id,
-          platformId: fragment.platform?.id,
-          title: fragment.title,
-          description: fragment.description,
-          articleUrl: fragment.articleUrl,
-          thumbnailUrl: fragment.thumbnailUrl,
-          publishedAt: fragment.publishedAt,
-          platformName: fragment.platform?.name || "",
-          platformUrl: fragment.platform?.siteUrl || "",
-          platformFaviconUrl: fragment.platform?.faviconUrl || "",
-          isEng: fragment.isEng,
-          isRead: false,
-        },
-      },
-      update: (cache, { data }) => {
-        cache.modify({
-          id: cache.identify(fragment),
-          fields: {
-            isBookmarked: () => true,
-            bookmarkId: () => data?.createBookmark.id,
-          },
-        });
-      },
-    });
-
-    if (errors) {
-      if (errors.length > 0) {
-        failToast({
-          description: errors[0].message,
-        });
-        return;
-      }
-      failToast({
-        description: "Fail: Something went wrong",
-      });
-      return;
-    }
-
-    successToast({
-      description: `Add bookmark title 【 ${fragment.title} 】`,
-    });
-  }, [createArticleBookmarkMutation, fragment, successToast, failToast]);
-
-  const handleDeleteBookmark = useCallback(
-    async (bookmarkId: string) => {
-      const user = await getUser();
-      if (!user) {
-        failToast({
-          description: "Fail: Please login to remove bookmark",
-        });
-        await logoutToLoginPage();
-        return;
-      }
-
-      const { errors } = await deleteArticleBookmarkMutation({
-        variables: {
-          input: {
-            bookmarkId,
-            userId: user.id,
-          },
-        },
-        update: (cache) => {
-          cache.modify({
-            id: cache.identify(fragment),
-            fields: {
-              isBookmarked: () => false,
-              bookmarkId: () => null,
-            },
-          });
-        },
-      });
-
-      if (errors) {
-        if (errors.length > 0) {
-          failToast({
-            description: errors[0].message,
-          });
-          return;
-        }
-        failToast({
-          description: "Fail: Something went wrong",
-        });
-        return;
-      }
-
-      successToast({
-        description: `Remove bookmark title 【 ${fragment.title} 】`,
-      });
-    },
-    [deleteArticleBookmarkMutation, fragment, failToast, successToast]
   );
 
   const handleCreateFavoriteArticle = useCallback(
@@ -335,12 +208,6 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
     },
     [handleCreateFavoriteArticle, failToast]
   );
-
-  // useEffect(() => {
-  //   console.log("❤️‍🔥");
-  //   console.log(fragment.title);
-  //   console.log(fragment?.bookmarkId);
-  // }, [fragment?.bookmarkId, fragment.title]);
 
   return (
     <div
