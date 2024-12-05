@@ -1,17 +1,17 @@
 import { User } from "@supabase/supabase-js";
-import { readFragment } from "gql.tada";
 import Image from "next/image";
-import { FC } from "react";
+import { FC, Suspense } from "react";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
+import { PreloadQuery } from "@/lib/apollo/client";
 
 import { LanguageStatus } from "@/types/language";
 
 import { ENGLISH_IMAGE, JAPANESE_IMAGE } from "@/constant/image";
 import { ArticlesInput, FavoriteArticleFoldersInput } from "@/graphql/type";
 
-import { getTrendArticleDashboardTemplateQuery } from "./actGetTrendArticleDashboardTemplateQuery";
-import { TrendArticleDashboardTemplateFragment } from "./TrendArticleDashboardTemplateFragment";
+import { GetTrendArticleDashboardTemplateQuery } from "./GetTrendArticleDashboardTemplateQuery";
 import { TrendArticleList } from "../../List";
 
 type TrendArticleDashboardTemplateProps = {
@@ -45,17 +45,6 @@ export const TrendArticleDashboardTemplate: FC<
     isAllFetch: true,
     isFolderOnly: true,
   };
-  const { data, error } = await getTrendArticleDashboardTemplateQuery(
-    enInput,
-    jpInput,
-    favoriteArticleFoldersInput
-  );
-
-  const fragment = readFragment(TrendArticleDashboardTemplateFragment, data);
-
-  if (error) {
-    return <div>{error.message}</div>;
-  }
 
   return (
     <div>
@@ -93,24 +82,30 @@ export const TrendArticleDashboardTemplate: FC<
 
         <div className="h-[40px]" />
         <TabsContent value={TAB_LIST.ENGLISH}>
-          <TrendArticleList
-            data={fragment.enArticles}
-            favoriteArticleFolders={fragment.favoriteArticleFolders}
-            user={user}
-            languageStatus={2}
-            feedIdList={[]}
-            tab={tab}
-          />
+          <PreloadQuery
+            query={GetTrendArticleDashboardTemplateQuery}
+            variables={{
+              input: enInput,
+              favoriteArticleFoldersInput,
+            }}
+          >
+            <Suspense fallback={<div>Loading...</div>}>
+              <TrendArticleList user={user} languageStatus={2} tab={tab} />
+            </Suspense>
+          </PreloadQuery>
         </TabsContent>
         <TabsContent value={TAB_LIST.JAPANESE}>
-          <TrendArticleList
-            data={fragment.jpArticles}
-            favoriteArticleFolders={fragment.favoriteArticleFolders}
-            user={user}
-            languageStatus={1}
-            feedIdList={[]}
-            tab={tab}
-          />
+          <PreloadQuery
+            query={GetTrendArticleDashboardTemplateQuery}
+            variables={{
+              input: jpInput,
+              favoriteArticleFoldersInput,
+            }}
+          >
+            <Suspense fallback={<div>Loading...</div>}>
+              <TrendArticleList user={user} languageStatus={1} tab={tab} />
+            </Suspense>
+          </PreloadQuery>
         </TabsContent>
       </Tabs>
     </div>
