@@ -1,10 +1,11 @@
 import { User } from "@supabase/supabase-js";
-import { readFragment } from "gql.tada";
+import { Suspense } from "react";
 
-import { BookmarksInput } from "@/graphql/type";
+import { PreloadQuery } from "@/lib/apollo/client";
 
-import { getBookmarkTemplateQuery } from "./actGetBookmarkListQuery";
-import { BookmarkTemplateFragment } from "./BookmarkTemplateFragment";
+import { BookmarksInput, FavoriteArticleFoldersInput } from "@/graphql/type";
+
+import { BookmarkTemplateQuery } from "./BookmarkTemplateQuery";
 import { CreateBookmarkDialog } from "../../Dialog";
 import { BookmarkList } from "../../List";
 import { BookmarkArticleKeywordSearchInput } from "../../Search";
@@ -22,13 +23,11 @@ export const BookmarkTemplate = async ({
     userId: user.id,
     keyword: keyword,
   };
-  const { data, error } = await getBookmarkTemplateQuery(input);
 
-  if (error) {
-    throw new Error(error.message);
-  }
-
-  const fragment = readFragment(BookmarkTemplateFragment, data);
+  const favoriteArticleFoldersInput: FavoriteArticleFoldersInput = {
+    isAllFetch: true,
+    isFolderOnly: true,
+  };
 
   return (
     <div>
@@ -43,7 +42,14 @@ export const BookmarkTemplate = async ({
       </div>
       <div className="h-4 md:h-16" />
 
-      <BookmarkList data={fragment.bookmarks} user={user} />
+      <PreloadQuery
+        query={BookmarkTemplateQuery}
+        variables={{ input, favoriteArticleFoldersInput }}
+      >
+        <Suspense fallback={null}>
+          <BookmarkList user={user} />
+        </Suspense>
+      </PreloadQuery>
 
       <div className="fixed bottom-20 right-4 z-50  md:hidden">
         {/* <BookmarkSearchKeywordDialogFloatButton keyword={keyword} /> */}

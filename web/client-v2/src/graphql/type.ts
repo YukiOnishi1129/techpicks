@@ -577,6 +577,8 @@ export type BookmarkCardItemFragmentFragment = { __typename?: 'Bookmark', id: st
 
 export type BookmarkCardWrapperFragmentFragment = { __typename?: 'Bookmark', id: string, title: string, description: string, articleUrl: string, thumbnailUrl: string, publishedAt?: number | null, articleId: string, platformId?: string | null, platformName: string, platformUrl: string, platformFaviconUrl: string, isEng: boolean, isRead: boolean, createdAt: number, updatedAt: number };
 
+export type FavoriteFolderBookmarkCardWrapperFragmentFragment = { __typename?: 'FavoriteArticleFolderConnection', edges: Array<{ __typename?: 'FavoriteArticleFolderEdge', node: { __typename?: 'FavoriteArticleFolder', id: string, title: string } }> };
+
 export type CreateBookmarkDialogContentFragmentFragment = { __typename?: 'Query', articleOpg: { __typename?: 'ArticleOGP', title: string, description?: string | null, thumbnailUrl: string, articleUrl: string, siteUrl: string, siteName: string, faviconUrl: string } };
 
 export type GetCreateBookmarkDialogArticleOgpQueryQueryVariables = Exact<{
@@ -586,23 +588,20 @@ export type GetCreateBookmarkDialogArticleOgpQueryQueryVariables = Exact<{
 
 export type GetCreateBookmarkDialogArticleOgpQueryQuery = { __typename?: 'Query', articleOpg: { __typename?: 'ArticleOGP', title: string, description?: string | null, thumbnailUrl: string, articleUrl: string, siteUrl: string, siteName: string, faviconUrl: string } };
 
-export type BookmarkListFragmentFragment = { __typename?: 'BookmarkConnection', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null }, edges: Array<{ __typename?: 'BookmarkEdge', node: { __typename?: 'Bookmark', id: string, title: string, description: string, articleUrl: string, thumbnailUrl: string, publishedAt?: number | null, articleId: string, platformId?: string | null, platformName: string, platformUrl: string, platformFaviconUrl: string, isEng: boolean, isRead: boolean, createdAt: number, updatedAt: number } }> };
-
-export type GetBookmarkListQueryQueryVariables = Exact<{
+export type BookmarkListQueryQueryVariables = Exact<{
   input: BookmarksInput;
 }>;
 
 
-export type GetBookmarkListQueryQuery = { __typename?: 'Query', bookmarks: { __typename?: 'BookmarkConnection', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null }, edges: Array<{ __typename?: 'BookmarkEdge', node: { __typename?: 'Bookmark', id: string, title: string, description: string, articleUrl: string, thumbnailUrl: string, publishedAt?: number | null, articleId: string, platformId?: string | null, platformName: string, platformUrl: string, platformFaviconUrl: string, isEng: boolean, isRead: boolean, createdAt: number, updatedAt: number } }> } };
+export type BookmarkListQueryQuery = { __typename?: 'Query', bookmarks: { __typename?: 'BookmarkConnection', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null }, edges: Array<{ __typename?: 'BookmarkEdge', node: { __typename?: 'Bookmark', id: string, title: string, description: string, articleUrl: string, thumbnailUrl: string, publishedAt?: number | null, articleId: string, platformId?: string | null, platformName: string, platformUrl: string, platformFaviconUrl: string, isEng: boolean, isRead: boolean, createdAt: number, updatedAt: number } }> } };
 
-export type BookmarkTemplateFragmentFragment = { __typename?: 'Query', bookmarks: { __typename?: 'BookmarkConnection', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null }, edges: Array<{ __typename?: 'BookmarkEdge', node: { __typename?: 'Bookmark', id: string, title: string, description: string, articleUrl: string, thumbnailUrl: string, publishedAt?: number | null, articleId: string, platformId?: string | null, platformName: string, platformUrl: string, platformFaviconUrl: string, isEng: boolean, isRead: boolean, createdAt: number, updatedAt: number } }> } };
-
-export type GetBookmarkTemplateQueryQueryVariables = Exact<{
+export type BookmarkTemplateQueryQueryVariables = Exact<{
   input: BookmarksInput;
+  favoriteArticleFoldersInput: FavoriteArticleFoldersInput;
 }>;
 
 
-export type GetBookmarkTemplateQueryQuery = { __typename?: 'Query', bookmarks: { __typename?: 'BookmarkConnection', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null }, edges: Array<{ __typename?: 'BookmarkEdge', node: { __typename?: 'Bookmark', id: string, title: string, description: string, articleUrl: string, thumbnailUrl: string, publishedAt?: number | null, articleId: string, platformId?: string | null, platformName: string, platformUrl: string, platformFaviconUrl: string, isEng: boolean, isRead: boolean, createdAt: number, updatedAt: number } }> } };
+export type BookmarkTemplateQueryQuery = { __typename?: 'Query', bookmarks: { __typename?: 'BookmarkConnection', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null }, edges: Array<{ __typename?: 'BookmarkEdge', node: { __typename?: 'Bookmark', id: string, title: string, description: string, articleUrl: string, thumbnailUrl: string, publishedAt?: number | null, articleId: string, platformId?: string | null, platformName: string, platformUrl: string, platformFaviconUrl: string, isEng: boolean, isRead: boolean, createdAt: number, updatedAt: number } }> }, favoriteArticleFolders: { __typename?: 'FavoriteArticleFolderConnection', edges: Array<{ __typename?: 'FavoriteArticleFolderEdge', node: { __typename?: 'FavoriteArticleFolder', id: string, title: string } }> } };
 
 export type CreateFavoriteArticleFolderMutationMutationVariables = Exact<{
   input: CreateFavoriteArticleFolderInput;
@@ -888,30 +887,6 @@ export const FavoriteFolderArticleCardWrapperFragmentFragmentDoc = gql`
 }
     ${FollowFavoriteArticleDropdownMenuContentFragmentFragmentDoc}
 ${FavoriteFolderUseFavoriteArticleFragmentFragmentDoc}`;
-export const OgpPreviewContentFragmentFragmentDoc = gql`
-    fragment OGPPreviewContentFragment on ArticleOGP {
-  title
-  description
-  thumbnailUrl
-  articleUrl
-  siteName
-  faviconUrl
-}
-    `;
-export const CreateBookmarkDialogContentFragmentFragmentDoc = gql`
-    fragment CreateBookmarkDialogContentFragment on Query {
-  articleOpg(articleUrl: $url) {
-    title
-    description
-    thumbnailUrl
-    articleUrl
-    siteUrl
-    siteName
-    faviconUrl
-    ...OGPPreviewContentFragment
-  }
-}
-    ${OgpPreviewContentFragmentFragmentDoc}`;
 export const BookmarkCardItemFragmentFragmentDoc = gql`
     fragment BookmarkCardItemFragment on Bookmark {
   id
@@ -940,43 +915,41 @@ export const BookmarkCardWrapperFragmentFragmentDoc = gql`
   ...BookmarkCardItemFragment
 }
     ${BookmarkCardItemFragmentFragmentDoc}`;
-export const BookmarkListFragmentFragmentDoc = gql`
-    fragment BookmarkListFragment on BookmarkConnection {
-  pageInfo {
-    hasNextPage
-    hasPreviousPage
-    startCursor
-    endCursor
-  }
+export const FavoriteFolderBookmarkCardWrapperFragmentFragmentDoc = gql`
+    fragment FavoriteFolderBookmarkCardWrapperFragment on FavoriteArticleFolderConnection {
   edges {
     node {
       id
       title
-      description
-      articleUrl
-      thumbnailUrl
-      publishedAt
-      articleId
-      platformId
-      platformName
-      platformUrl
-      platformFaviconUrl
-      isEng
-      isRead
-      createdAt
-      updatedAt
-      ...BookmarkCardWrapperFragment
     }
   }
+  ...FollowFavoriteArticleDropdownMenuContentFragment
 }
-    ${BookmarkCardWrapperFragmentFragmentDoc}`;
-export const BookmarkTemplateFragmentFragmentDoc = gql`
-    fragment BookmarkTemplateFragment on Query {
-  bookmarks(input: $input) {
-    ...BookmarkListFragment
+    ${FollowFavoriteArticleDropdownMenuContentFragmentFragmentDoc}`;
+export const OgpPreviewContentFragmentFragmentDoc = gql`
+    fragment OGPPreviewContentFragment on ArticleOGP {
+  title
+  description
+  thumbnailUrl
+  articleUrl
+  siteName
+  faviconUrl
+}
+    `;
+export const CreateBookmarkDialogContentFragmentFragmentDoc = gql`
+    fragment CreateBookmarkDialogContentFragment on Query {
+  articleOpg(articleUrl: $url) {
+    title
+    description
+    thumbnailUrl
+    articleUrl
+    siteUrl
+    siteName
+    faviconUrl
+    ...OGPPreviewContentFragment
   }
 }
-    ${BookmarkListFragmentFragmentDoc}`;
+    ${OgpPreviewContentFragmentFragmentDoc}`;
 export const CreateFavoriteArticleDialogContentFragmentFragmentDoc = gql`
     fragment CreateFavoriteArticleDialogContentFragment on Query {
   articleOpg(articleUrl: $url) {
@@ -1569,84 +1542,113 @@ export type GetCreateBookmarkDialogArticleOgpQueryQueryHookResult = ReturnType<t
 export type GetCreateBookmarkDialogArticleOgpQueryLazyQueryHookResult = ReturnType<typeof useGetCreateBookmarkDialogArticleOgpQueryLazyQuery>;
 export type GetCreateBookmarkDialogArticleOgpQuerySuspenseQueryHookResult = ReturnType<typeof useGetCreateBookmarkDialogArticleOgpQuerySuspenseQuery>;
 export type GetCreateBookmarkDialogArticleOgpQueryQueryResult = Apollo.QueryResult<GetCreateBookmarkDialogArticleOgpQueryQuery, GetCreateBookmarkDialogArticleOgpQueryQueryVariables>;
-export const GetBookmarkListQueryDocument = gql`
-    query GetBookmarkListQuery($input: BookmarksInput!) {
+export const BookmarkListQueryDocument = gql`
+    query BookmarkListQuery($input: BookmarksInput!) {
   bookmarks(input: $input) {
-    ...BookmarkListFragment
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      startCursor
+      endCursor
+    }
+    edges {
+      node {
+        id
+        ...BookmarkCardWrapperFragment
+      }
+    }
   }
 }
-    ${BookmarkListFragmentFragmentDoc}`;
+    ${BookmarkCardWrapperFragmentFragmentDoc}`;
 
 /**
- * __useGetBookmarkListQueryQuery__
+ * __useBookmarkListQueryQuery__
  *
- * To run a query within a React component, call `useGetBookmarkListQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetBookmarkListQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useBookmarkListQueryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useBookmarkListQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetBookmarkListQueryQuery({
+ * const { data, loading, error } = useBookmarkListQueryQuery({
  *   variables: {
  *      input: // value for 'input'
  *   },
  * });
  */
-export function useGetBookmarkListQueryQuery(baseOptions: Apollo.QueryHookOptions<GetBookmarkListQueryQuery, GetBookmarkListQueryQueryVariables> & ({ variables: GetBookmarkListQueryQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+export function useBookmarkListQueryQuery(baseOptions: Apollo.QueryHookOptions<BookmarkListQueryQuery, BookmarkListQueryQueryVariables> & ({ variables: BookmarkListQueryQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetBookmarkListQueryQuery, GetBookmarkListQueryQueryVariables>(GetBookmarkListQueryDocument, options);
+        return Apollo.useQuery<BookmarkListQueryQuery, BookmarkListQueryQueryVariables>(BookmarkListQueryDocument, options);
       }
-export function useGetBookmarkListQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetBookmarkListQueryQuery, GetBookmarkListQueryQueryVariables>) {
+export function useBookmarkListQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<BookmarkListQueryQuery, BookmarkListQueryQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetBookmarkListQueryQuery, GetBookmarkListQueryQueryVariables>(GetBookmarkListQueryDocument, options);
+          return Apollo.useLazyQuery<BookmarkListQueryQuery, BookmarkListQueryQueryVariables>(BookmarkListQueryDocument, options);
         }
-export function useGetBookmarkListQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetBookmarkListQueryQuery, GetBookmarkListQueryQueryVariables>) {
+export function useBookmarkListQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<BookmarkListQueryQuery, BookmarkListQueryQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<GetBookmarkListQueryQuery, GetBookmarkListQueryQueryVariables>(GetBookmarkListQueryDocument, options);
+          return Apollo.useSuspenseQuery<BookmarkListQueryQuery, BookmarkListQueryQueryVariables>(BookmarkListQueryDocument, options);
         }
-export type GetBookmarkListQueryQueryHookResult = ReturnType<typeof useGetBookmarkListQueryQuery>;
-export type GetBookmarkListQueryLazyQueryHookResult = ReturnType<typeof useGetBookmarkListQueryLazyQuery>;
-export type GetBookmarkListQuerySuspenseQueryHookResult = ReturnType<typeof useGetBookmarkListQuerySuspenseQuery>;
-export type GetBookmarkListQueryQueryResult = Apollo.QueryResult<GetBookmarkListQueryQuery, GetBookmarkListQueryQueryVariables>;
-export const GetBookmarkTemplateQueryDocument = gql`
-    query GetBookmarkTemplateQuery($input: BookmarksInput!) {
-  ...BookmarkTemplateFragment
+export type BookmarkListQueryQueryHookResult = ReturnType<typeof useBookmarkListQueryQuery>;
+export type BookmarkListQueryLazyQueryHookResult = ReturnType<typeof useBookmarkListQueryLazyQuery>;
+export type BookmarkListQuerySuspenseQueryHookResult = ReturnType<typeof useBookmarkListQuerySuspenseQuery>;
+export type BookmarkListQueryQueryResult = Apollo.QueryResult<BookmarkListQueryQuery, BookmarkListQueryQueryVariables>;
+export const BookmarkTemplateQueryDocument = gql`
+    query BookmarkTemplateQuery($input: BookmarksInput!, $favoriteArticleFoldersInput: FavoriteArticleFoldersInput!) {
+  bookmarks(input: $input) {
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      startCursor
+      endCursor
+    }
+    edges {
+      node {
+        id
+        ...BookmarkCardWrapperFragment
+      }
+    }
+  }
+  favoriteArticleFolders(input: $favoriteArticleFoldersInput) {
+    ...FavoriteFolderBookmarkCardWrapperFragment
+  }
 }
-    ${BookmarkTemplateFragmentFragmentDoc}`;
+    ${BookmarkCardWrapperFragmentFragmentDoc}
+${FavoriteFolderBookmarkCardWrapperFragmentFragmentDoc}`;
 
 /**
- * __useGetBookmarkTemplateQueryQuery__
+ * __useBookmarkTemplateQueryQuery__
  *
- * To run a query within a React component, call `useGetBookmarkTemplateQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetBookmarkTemplateQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useBookmarkTemplateQueryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useBookmarkTemplateQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetBookmarkTemplateQueryQuery({
+ * const { data, loading, error } = useBookmarkTemplateQueryQuery({
  *   variables: {
  *      input: // value for 'input'
+ *      favoriteArticleFoldersInput: // value for 'favoriteArticleFoldersInput'
  *   },
  * });
  */
-export function useGetBookmarkTemplateQueryQuery(baseOptions: Apollo.QueryHookOptions<GetBookmarkTemplateQueryQuery, GetBookmarkTemplateQueryQueryVariables> & ({ variables: GetBookmarkTemplateQueryQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+export function useBookmarkTemplateQueryQuery(baseOptions: Apollo.QueryHookOptions<BookmarkTemplateQueryQuery, BookmarkTemplateQueryQueryVariables> & ({ variables: BookmarkTemplateQueryQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetBookmarkTemplateQueryQuery, GetBookmarkTemplateQueryQueryVariables>(GetBookmarkTemplateQueryDocument, options);
+        return Apollo.useQuery<BookmarkTemplateQueryQuery, BookmarkTemplateQueryQueryVariables>(BookmarkTemplateQueryDocument, options);
       }
-export function useGetBookmarkTemplateQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetBookmarkTemplateQueryQuery, GetBookmarkTemplateQueryQueryVariables>) {
+export function useBookmarkTemplateQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<BookmarkTemplateQueryQuery, BookmarkTemplateQueryQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetBookmarkTemplateQueryQuery, GetBookmarkTemplateQueryQueryVariables>(GetBookmarkTemplateQueryDocument, options);
+          return Apollo.useLazyQuery<BookmarkTemplateQueryQuery, BookmarkTemplateQueryQueryVariables>(BookmarkTemplateQueryDocument, options);
         }
-export function useGetBookmarkTemplateQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetBookmarkTemplateQueryQuery, GetBookmarkTemplateQueryQueryVariables>) {
+export function useBookmarkTemplateQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<BookmarkTemplateQueryQuery, BookmarkTemplateQueryQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<GetBookmarkTemplateQueryQuery, GetBookmarkTemplateQueryQueryVariables>(GetBookmarkTemplateQueryDocument, options);
+          return Apollo.useSuspenseQuery<BookmarkTemplateQueryQuery, BookmarkTemplateQueryQueryVariables>(BookmarkTemplateQueryDocument, options);
         }
-export type GetBookmarkTemplateQueryQueryHookResult = ReturnType<typeof useGetBookmarkTemplateQueryQuery>;
-export type GetBookmarkTemplateQueryLazyQueryHookResult = ReturnType<typeof useGetBookmarkTemplateQueryLazyQuery>;
-export type GetBookmarkTemplateQuerySuspenseQueryHookResult = ReturnType<typeof useGetBookmarkTemplateQuerySuspenseQuery>;
-export type GetBookmarkTemplateQueryQueryResult = Apollo.QueryResult<GetBookmarkTemplateQueryQuery, GetBookmarkTemplateQueryQueryVariables>;
+export type BookmarkTemplateQueryQueryHookResult = ReturnType<typeof useBookmarkTemplateQueryQuery>;
+export type BookmarkTemplateQueryLazyQueryHookResult = ReturnType<typeof useBookmarkTemplateQueryLazyQuery>;
+export type BookmarkTemplateQuerySuspenseQueryHookResult = ReturnType<typeof useBookmarkTemplateQuerySuspenseQuery>;
+export type BookmarkTemplateQueryQueryResult = Apollo.QueryResult<BookmarkTemplateQueryQuery, BookmarkTemplateQueryQueryVariables>;
 export const CreateFavoriteArticleFolderMutationDocument = gql`
     mutation CreateFavoriteArticleFolderMutation($input: CreateFavoriteArticleFolderInput!) {
   createFavoriteArticleFolder(input: $input) {

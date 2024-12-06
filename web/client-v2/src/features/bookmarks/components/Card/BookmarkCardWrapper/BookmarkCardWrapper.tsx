@@ -1,33 +1,39 @@
 "use client";
 import { User } from "@supabase/supabase-js";
 import { FragmentOf, readFragment } from "gql.tada";
-import { FC, useState } from "react";
+import { FC } from "react";
 
 import { ShareLinks } from "@/components/ui/share";
 
-import { useStatusToast } from "@/hooks/useStatusToast";
-
-import { BookmarkCardWrapperFragment } from "./BookmarkCardWrapperFragment";
+import {
+  BookmarkCardWrapperFragment,
+  FavoriteFolderBookmarkCardWrapperFragment,
+} from "./BookmarkCardWrapperFragment";
 import { DeleteBookmarkAlertDialog } from "../../Dialog";
 import { BookmarkCardItem } from "../BookmarkCardItem";
 
 type BookmarkCardWrapperProps = {
   data: FragmentOf<typeof BookmarkCardWrapperFragment>;
+  favoriteArticleFolders: FragmentOf<
+    typeof FavoriteFolderBookmarkCardWrapperFragment
+  >;
   user: User;
 };
 
 export const BookmarkCardWrapper: FC<BookmarkCardWrapperProps> = ({
   data,
+  favoriteArticleFolders,
   user,
 }) => {
-  const { successToast, failToast } = useStatusToast();
   const fragment = readFragment(BookmarkCardWrapperFragment, data);
-
-  const [showBookmark, setShowBookmark] = useState(fragment);
+  const fragmentFavoriteFolder = readFragment(
+    FavoriteFolderBookmarkCardWrapperFragment,
+    favoriteArticleFolders
+  );
 
   return (
     <div
-      key={showBookmark.id}
+      key={fragment.id}
       className="mb-4 rounded-2xl border-2 px-4 pb-4 md:px-2 md:pb-2"
     >
       <div>
@@ -37,11 +43,11 @@ export const BookmarkCardWrapper: FC<BookmarkCardWrapperProps> = ({
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 className="mr-2 inline-block size-[36px]"
-                src={showBookmark.platformFaviconUrl}
+                src={fragment.platformFaviconUrl}
                 alt=""
               />
               <span className="hidden font-bold md:inline-block">
-                {showBookmark.platformName}
+                {fragment.platformName}
               </span>
             </div>
           </div>
@@ -49,13 +55,13 @@ export const BookmarkCardWrapper: FC<BookmarkCardWrapperProps> = ({
           <div className="flex items-center justify-center p-4">
             <div className="mr-4">
               <ShareLinks
-                shareTitle={showBookmark.title}
-                shareUrl={showBookmark.articleUrl}
+                shareTitle={fragment.title}
+                shareUrl={fragment.articleUrl}
               />
             </div>
             <DeleteBookmarkAlertDialog
-              bookmarkId={showBookmark.id}
-              bookmarkTitle={showBookmark.title}
+              bookmarkId={fragment.id}
+              bookmarkTitle={fragment.title}
             />
             <div className="ml-4">
               {/* <FollowFavoriteArticleDropdownMenu
@@ -72,7 +78,7 @@ export const BookmarkCardWrapper: FC<BookmarkCardWrapperProps> = ({
           </div>
         </div>
 
-        <BookmarkCardItem data={showBookmark} />
+        <BookmarkCardItem data={fragment} />
       </div>
     </div>
   );
