@@ -7,6 +7,8 @@ import {
   ApolloClient,
   InMemoryCache,
 } from "@apollo/experimental-nextjs-app-support";
+import { useEffect, useState } from "react";
+import { BeatLoader } from "react-spinners";
 
 import { getSession } from "@/features/auth/actions/auth";
 
@@ -38,8 +40,23 @@ function makeClient() {
 }
 
 export function ApolloProvider({ children }: React.PropsWithChildren) {
+  const [client, setClient] = useState<ApolloClient<unknown> | null>(null);
+
+  useEffect(() => {
+    const clientInstance = makeClient();
+    setClient(clientInstance);
+  }, []);
+
+  if (!client) {
+    return (
+      <div className="flex h-screen w-full items-center justify-center">
+        <BeatLoader color="#36d7b7" className="inline-block" />
+      </div>
+    );
+  }
+
   return (
-    <ApolloNextAppProvider makeClient={makeClient}>
+    <ApolloNextAppProvider makeClient={() => client}>
       {children}
     </ApolloNextAppProvider>
   );
