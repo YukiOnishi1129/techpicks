@@ -20,6 +20,8 @@ export const BookmarkTemplate = async ({
   keyword,
 }: BookmarkTemplateProps) => {
   const input: BookmarksInput = {
+    first: 20,
+    after: null,
     userId: user.id,
     keyword: keyword,
   };

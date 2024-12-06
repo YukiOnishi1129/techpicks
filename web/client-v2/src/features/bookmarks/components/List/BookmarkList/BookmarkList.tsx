@@ -29,6 +29,8 @@ export const BookmarkList: FC<BookmarkListProps> = ({
     {
       variables: {
         input: {
+          first: 20,
+          after: null,
           userId: user.id,
           keyword,
         },
@@ -48,6 +50,7 @@ export const BookmarkList: FC<BookmarkListProps> = ({
     variables: {
       input: {
         first: 20,
+        after: null,
         userId: user.id,
         keyword,
       },
