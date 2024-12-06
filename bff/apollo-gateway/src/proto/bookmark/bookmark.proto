@@ -92,10 +92,12 @@ message Bookmark {
     string platform_name = 10;
     string platform_url = 11;
     string platform_favicon_url = 12;
-    bool is_eng = 13;
-    bool is_read = 14;
-    google.protobuf.Timestamp created_at = 15;
-    google.protobuf.Timestamp updated_at = 16;
+    bool is_following = 13;
+    repeated string favorite_article_folder_ids = 14;
+    bool is_eng = 15;
+    bool is_read = 16;
+    google.protobuf.Timestamp created_at = 17;
+    google.protobuf.Timestamp updated_at = 18;
 }
 
 message BookmarkEdge {

@@ -238,7 +238,7 @@ if (goog.DEBUG && !COMPILED) {
  * @constructor
  */
 proto.checkpicks.bookmark.v1.Bookmark = function(opt_data) {
-  jspb.Message.initialize(this, opt_data, 0, -1, null, null);
+  jspb.Message.initialize(this, opt_data, 0, -1, proto.checkpicks.bookmark.v1.Bookmark.repeatedFields_, null);
 };
 goog.inherits(proto.checkpicks.bookmark.v1.Bookmark, jspb.Message);
 if (goog.DEBUG && !COMPILED) {
@@ -2376,6 +2376,13 @@ proto.checkpicks.bookmark.v1.DeleteBookmarkRequest.prototype.setUserId = functio
 
 
 
+/**
+ * List of repeated fields within this message type.
+ * @private {!Array<number>}
+ * @const
+ */
+proto.checkpicks.bookmark.v1.Bookmark.repeatedFields_ = [14];
+
 
 
 if (jspb.Message.GENERATE_TO_OBJECT) {
@@ -2419,8 +2426,10 @@ proto.checkpicks.bookmark.v1.Bookmark.toObject = function(includeInstance, msg) 
     platformName: jspb.Message.getFieldWithDefault(msg, 10, ""),
     platformUrl: jspb.Message.getFieldWithDefault(msg, 11, ""),
     platformFaviconUrl: jspb.Message.getFieldWithDefault(msg, 12, ""),
-    isEng: jspb.Message.getBooleanFieldWithDefault(msg, 13, false),
-    isRead: jspb.Message.getBooleanFieldWithDefault(msg, 14, false),
+    isFollowing: jspb.Message.getBooleanFieldWithDefault(msg, 13, false),
+    favoriteArticleFolderIdsList: (f = jspb.Message.getRepeatedField(msg, 14)) == null ? undefined : f,
+    isEng: jspb.Message.getBooleanFieldWithDefault(msg, 15, false),
+    isRead: jspb.Message.getBooleanFieldWithDefault(msg, 16, false),
     createdAt: (f = msg.getCreatedAt()) && google_protobuf_timestamp_pb.Timestamp.toObject(includeInstance, f),
     updatedAt: (f = msg.getUpdatedAt()) && google_protobuf_timestamp_pb.Timestamp.toObject(includeInstance, f)
   };
@@ -2511,18 +2520,26 @@ proto.checkpicks.bookmark.v1.Bookmark.deserializeBinaryFromReader = function(msg
       break;
     case 13:
       var value = /** @type {boolean} */ (reader.readBool());
-      msg.setIsEng(value);
+      msg.setIsFollowing(value);
       break;
     case 14:
+      var value = /** @type {string} */ (reader.readString());
+      msg.addFavoriteArticleFolderIds(value);
+      break;
+    case 15:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setIsEng(value);
+      break;
+    case 16:
       var value = /** @type {boolean} */ (reader.readBool());
       msg.setIsRead(value);
       break;
-    case 15:
+    case 17:
       var value = new google_protobuf_timestamp_pb.Timestamp;
       reader.readMessage(value,google_protobuf_timestamp_pb.Timestamp.deserializeBinaryFromReader);
       msg.setCreatedAt(value);
       break;
-    case 16:
+    case 18:
       var value = new google_protobuf_timestamp_pb.Timestamp;
       reader.readMessage(value,google_protobuf_timestamp_pb.Timestamp.deserializeBinaryFromReader);
       msg.setUpdatedAt(value);
@@ -2642,24 +2659,38 @@ proto.checkpicks.bookmark.v1.Bookmark.serializeBinaryToWriter = function(message
       f
     );
   }
-  f = message.getIsEng();
+  f = message.getIsFollowing();
   if (f) {
     writer.writeBool(
       13,
       f
     );
   }
+  f = message.getFavoriteArticleFolderIdsList();
+  if (f.length > 0) {
+    writer.writeRepeatedString(
+      14,
+      f
+    );
+  }
+  f = message.getIsEng();
+  if (f) {
+    writer.writeBool(
+      15,
+      f
+    );
+  }
   f = message.getIsRead();
   if (f) {
     writer.writeBool(
-      14,
+      16,
       f
     );
   }
   f = message.getCreatedAt();
   if (f != null) {
     writer.writeMessage(
-      15,
+      17,
       f,
       google_protobuf_timestamp_pb.Timestamp.serializeBinaryToWriter
     );
@@ -2667,7 +2698,7 @@ proto.checkpicks.bookmark.v1.Bookmark.serializeBinaryToWriter = function(message
   f = message.getUpdatedAt();
   if (f != null) {
     writer.writeMessage(
-      16,
+      18,
       f,
       google_protobuf_timestamp_pb.Timestamp.serializeBinaryToWriter
     );
@@ -2930,10 +2961,10 @@ proto.checkpicks.bookmark.v1.Bookmark.prototype.setPlatformFaviconUrl = function
 
 
 /**
- * optional bool is_eng = 13;
+ * optional bool is_following = 13;
  * @return {boolean}
  */
-proto.checkpicks.bookmark.v1.Bookmark.prototype.getIsEng = function() {
+proto.checkpicks.bookmark.v1.Bookmark.prototype.getIsFollowing = function() {
   return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 13, false));
 };
 
@@ -2942,17 +2973,72 @@ proto.checkpicks.bookmark.v1.Bookmark.prototype.getIsEng = function() {
  * @param {boolean} value
  * @return {!proto.checkpicks.bookmark.v1.Bookmark} returns this
  */
-proto.checkpicks.bookmark.v1.Bookmark.prototype.setIsEng = function(value) {
+proto.checkpicks.bookmark.v1.Bookmark.prototype.setIsFollowing = function(value) {
   return jspb.Message.setProto3BooleanField(this, 13, value);
 };
 
 
 /**
- * optional bool is_read = 14;
+ * repeated string favorite_article_folder_ids = 14;
+ * @return {!Array<string>}
+ */
+proto.checkpicks.bookmark.v1.Bookmark.prototype.getFavoriteArticleFolderIdsList = function() {
+  return /** @type {!Array<string>} */ (jspb.Message.getRepeatedField(this, 14));
+};
+
+
+/**
+ * @param {!Array<string>} value
+ * @return {!proto.checkpicks.bookmark.v1.Bookmark} returns this
+ */
+proto.checkpicks.bookmark.v1.Bookmark.prototype.setFavoriteArticleFolderIdsList = function(value) {
+  return jspb.Message.setField(this, 14, value || []);
+};
+
+
+/**
+ * @param {string} value
+ * @param {number=} opt_index
+ * @return {!proto.checkpicks.bookmark.v1.Bookmark} returns this
+ */
+proto.checkpicks.bookmark.v1.Bookmark.prototype.addFavoriteArticleFolderIds = function(value, opt_index) {
+  return jspb.Message.addToRepeatedField(this, 14, value, opt_index);
+};
+
+
+/**
+ * Clears the list making it empty but non-null.
+ * @return {!proto.checkpicks.bookmark.v1.Bookmark} returns this
+ */
+proto.checkpicks.bookmark.v1.Bookmark.prototype.clearFavoriteArticleFolderIdsList = function() {
+  return this.setFavoriteArticleFolderIdsList([]);
+};
+
+
+/**
+ * optional bool is_eng = 15;
+ * @return {boolean}
+ */
+proto.checkpicks.bookmark.v1.Bookmark.prototype.getIsEng = function() {
+  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 15, false));
+};
+
+
+/**
+ * @param {boolean} value
+ * @return {!proto.checkpicks.bookmark.v1.Bookmark} returns this
+ */
+proto.checkpicks.bookmark.v1.Bookmark.prototype.setIsEng = function(value) {
+  return jspb.Message.setProto3BooleanField(this, 15, value);
+};
+
+
+/**
+ * optional bool is_read = 16;
  * @return {boolean}
  */
 proto.checkpicks.bookmark.v1.Bookmark.prototype.getIsRead = function() {
-  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 14, false));
+  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 16, false));
 };
 
 
@@ -2961,17 +3047,17 @@ proto.checkpicks.bookmark.v1.Bookmark.prototype.getIsRead = function() {
  * @return {!proto.checkpicks.bookmark.v1.Bookmark} returns this
  */
 proto.checkpicks.bookmark.v1.Bookmark.prototype.setIsRead = function(value) {
-  return jspb.Message.setProto3BooleanField(this, 14, value);
+  return jspb.Message.setProto3BooleanField(this, 16, value);
 };
 
 
 /**
- * optional google.protobuf.Timestamp created_at = 15;
+ * optional google.protobuf.Timestamp created_at = 17;
  * @return {?proto.google.protobuf.Timestamp}
  */
 proto.checkpicks.bookmark.v1.Bookmark.prototype.getCreatedAt = function() {
   return /** @type{?proto.google.protobuf.Timestamp} */ (
-    jspb.Message.getWrapperField(this, google_protobuf_timestamp_pb.Timestamp, 15));
+    jspb.Message.getWrapperField(this, google_protobuf_timestamp_pb.Timestamp, 17));
 };
 
 
@@ -2980,7 +3066,7 @@ proto.checkpicks.bookmark.v1.Bookmark.prototype.getCreatedAt = function() {
  * @return {!proto.checkpicks.bookmark.v1.Bookmark} returns this
 */
 proto.checkpicks.bookmark.v1.Bookmark.prototype.setCreatedAt = function(value) {
-  return jspb.Message.setWrapperField(this, 15, value);
+  return jspb.Message.setWrapperField(this, 17, value);
 };
 
 
@@ -2998,17 +3084,17 @@ proto.checkpicks.bookmark.v1.Bookmark.prototype.clearCreatedAt = function() {
  * @return {boolean}
  */
 proto.checkpicks.bookmark.v1.Bookmark.prototype.hasCreatedAt = function() {
-  return jspb.Message.getField(this, 15) != null;
+  return jspb.Message.getField(this, 17) != null;
 };
 
 
 /**
- * optional google.protobuf.Timestamp updated_at = 16;
+ * optional google.protobuf.Timestamp updated_at = 18;
  * @return {?proto.google.protobuf.Timestamp}
  */
 proto.checkpicks.bookmark.v1.Bookmark.prototype.getUpdatedAt = function() {
   return /** @type{?proto.google.protobuf.Timestamp} */ (
-    jspb.Message.getWrapperField(this, google_protobuf_timestamp_pb.Timestamp, 16));
+    jspb.Message.getWrapperField(this, google_protobuf_timestamp_pb.Timestamp, 18));
 };
 
 
@@ -3017,7 +3103,7 @@ proto.checkpicks.bookmark.v1.Bookmark.prototype.getUpdatedAt = function() {
  * @return {!proto.checkpicks.bookmark.v1.Bookmark} returns this
 */
 proto.checkpicks.bookmark.v1.Bookmark.prototype.setUpdatedAt = function(value) {
-  return jspb.Message.setWrapperField(this, 16, value);
+  return jspb.Message.setWrapperField(this, 18, value);
 };
 
 
@@ -3035,7 +3121,7 @@ proto.checkpicks.bookmark.v1.Bookmark.prototype.clearUpdatedAt = function() {
  * @return {boolean}
  */
 proto.checkpicks.bookmark.v1.Bookmark.prototype.hasUpdatedAt = function() {
-  return jspb.Message.getField(this, 16) != null;
+  return jspb.Message.getField(this, 18) != null;
 };
 
 
