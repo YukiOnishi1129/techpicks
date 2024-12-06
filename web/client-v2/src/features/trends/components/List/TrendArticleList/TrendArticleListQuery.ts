@@ -2,11 +2,9 @@ import { graphql } from "gql.tada";
 
 import { ArticleCardWrapperFragment } from "@/features/articles/components/Card";
 
-import { TrendArticleListFragment } from "./TrendArticleListFragment";
-
-export const GetTrendArticleListQuery = graphql(
+export const TrendArticleListQuery = graphql(
   `
-    query GetTrendArticleListQuery($input: ArticlesInput!) {
+    query TrendArticleListQuery($input: ArticlesInput!) {
       articles(articlesInput: $input) {
         pageInfo {
           hasNextPage
@@ -20,9 +18,8 @@ export const GetTrendArticleListQuery = graphql(
             ...ArticleCardWrapperFragment
           }
         }
-        ...TrendArticleListFragment
       }
     }
   `,
-  [TrendArticleListFragment, ArticleCardWrapperFragment]
+  [ArticleCardWrapperFragment]
 );

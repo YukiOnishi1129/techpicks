@@ -730,24 +730,20 @@ export type GetFavoriteArticleListByFolderIdTemplateQueryQuery = { __typename?: 
 
 export type OgpPreviewContentFragmentFragment = { __typename?: 'ArticleOGP', title: string, description?: string | null, thumbnailUrl: string, articleUrl: string, siteName: string, faviconUrl: string };
 
-export type GetTrendArticleListQueryQueryVariables = Exact<{
+export type TrendArticleListQueryQueryVariables = Exact<{
   input: ArticlesInput;
 }>;
 
 
-export type GetTrendArticleListQueryQuery = { __typename?: 'Query', articles: { __typename?: 'ArticleConnection', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null }, edges: Array<{ __typename?: 'ArticleEdge', node: { __typename: 'Article', id: string, title: string, articleUrl: string, publishedAt?: number | null, thumbnailUrl: string, isEng: boolean, isPrivate: boolean, isBookmarked: boolean, bookmarkId?: string | null, likeCount?: number | null, description: string, authorName?: string | null, tags?: string | null, isFollowing: boolean, favoriteArticleFolderIds: Array<string>, platform?: { __typename?: 'Platform', id: string, name: string, siteUrl: string, faviconUrl: string } | null, feeds?: Array<{ __typename?: 'Feed', id: string, name: string }> | null } }> } };
+export type TrendArticleListQueryQuery = { __typename?: 'Query', articles: { __typename?: 'ArticleConnection', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null }, edges: Array<{ __typename?: 'ArticleEdge', node: { __typename: 'Article', id: string, title: string, description: string, articleUrl: string, publishedAt?: number | null, authorName?: string | null, tags?: string | null, thumbnailUrl: string, isEng: boolean, isPrivate: boolean, isBookmarked: boolean, bookmarkId?: string | null, likeCount?: number | null, isFollowing: boolean, favoriteArticleFolderIds: Array<string>, platform?: { __typename?: 'Platform', id: string, name: string, siteUrl: string, faviconUrl: string } | null, feeds?: Array<{ __typename?: 'Feed', id: string, name: string }> | null } }> } };
 
-export type TrendArticleListFragmentFragment = { __typename?: 'ArticleConnection', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null }, edges: Array<{ __typename?: 'ArticleEdge', node: { __typename: 'Article', id: string, title: string, articleUrl: string, publishedAt?: number | null, thumbnailUrl: string, isEng: boolean, isPrivate: boolean, isBookmarked: boolean, bookmarkId?: string | null, likeCount?: number | null, description: string, authorName?: string | null, tags?: string | null, isFollowing: boolean, favoriteArticleFolderIds: Array<string>, platform?: { __typename?: 'Platform', id: string, name: string, siteUrl: string, faviconUrl: string } | null, feeds?: Array<{ __typename?: 'Feed', id: string, name: string }> | null } }> };
-
-export type GetTrendArticleDashboardTemplateQueryQueryVariables = Exact<{
+export type TrendArticleDashboardTemplateQueryQueryVariables = Exact<{
   input: ArticlesInput;
   favoriteArticleFoldersInput: FavoriteArticleFoldersInput;
 }>;
 
 
-export type GetTrendArticleDashboardTemplateQueryQuery = { __typename?: 'Query', favoriteArticleFolders: { __typename?: 'FavoriteArticleFolderConnection', edges: Array<{ __typename?: 'FavoriteArticleFolderEdge', node: { __typename?: 'FavoriteArticleFolder', id: string, title: string } }> }, articles: { __typename?: 'ArticleConnection', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null }, edges: Array<{ __typename?: 'ArticleEdge', node: { __typename: 'Article', id: string, title: string, articleUrl: string, publishedAt?: number | null, thumbnailUrl: string, isEng: boolean, isPrivate: boolean, isBookmarked: boolean, bookmarkId?: string | null, likeCount?: number | null, description: string, authorName?: string | null, tags?: string | null, isFollowing: boolean, favoriteArticleFolderIds: Array<string>, platform?: { __typename?: 'Platform', id: string, name: string, siteUrl: string, faviconUrl: string } | null, feeds?: Array<{ __typename?: 'Feed', id: string, name: string }> | null } }> } };
-
-export type TrendArticleDashboardTemplateFragmentFragment = { __typename?: 'Query', articles: { __typename?: 'ArticleConnection', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null }, edges: Array<{ __typename?: 'ArticleEdge', node: { __typename: 'Article', id: string, title: string, articleUrl: string, publishedAt?: number | null, thumbnailUrl: string, isEng: boolean, isPrivate: boolean, isBookmarked: boolean, bookmarkId?: string | null, likeCount?: number | null, description: string, authorName?: string | null, tags?: string | null, isFollowing: boolean, favoriteArticleFolderIds: Array<string>, platform?: { __typename?: 'Platform', id: string, name: string, siteUrl: string, faviconUrl: string } | null, feeds?: Array<{ __typename?: 'Feed', id: string, name: string }> | null } }> }, favoriteArticleFolders: { __typename?: 'FavoriteArticleFolderConnection', edges: Array<{ __typename?: 'FavoriteArticleFolderEdge', node: { __typename?: 'FavoriteArticleFolder', id: string, title: string } }> } };
+export type TrendArticleDashboardTemplateQueryQuery = { __typename?: 'Query', articles: { __typename?: 'ArticleConnection', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null }, edges: Array<{ __typename?: 'ArticleEdge', node: { __typename: 'Article', id: string, title: string, description: string, articleUrl: string, publishedAt?: number | null, authorName?: string | null, tags?: string | null, thumbnailUrl: string, isEng: boolean, isPrivate: boolean, isBookmarked: boolean, bookmarkId?: string | null, likeCount?: number | null, isFollowing: boolean, favoriteArticleFolderIds: Array<string>, platform?: { __typename?: 'Platform', id: string, name: string, siteUrl: string, faviconUrl: string } | null, feeds?: Array<{ __typename?: 'Feed', id: string, name: string }> | null } }> }, favoriteArticleFolders: { __typename?: 'FavoriteArticleFolderConnection', edges: Array<{ __typename?: 'FavoriteArticleFolderEdge', node: { __typename?: 'FavoriteArticleFolder', id: string, title: string } }> } };
 
 export const FavoriteArticleFolderLinkFragmentFragmentDoc = gql`
     fragment FavoriteArticleFolderLinkFragment on FavoriteArticleFolder {
@@ -755,6 +751,143 @@ export const FavoriteArticleFolderLinkFragmentFragmentDoc = gql`
   title
 }
     `;
+export const ArticleCardItemFragmentFragmentDoc = gql`
+    fragment ArticleCardItemFragment on Article {
+  id
+  platform {
+    id
+    name
+    siteUrl
+    faviconUrl
+  }
+  title
+  description
+  articleUrl
+  publishedAt
+  thumbnailUrl
+  isEng
+  isPrivate
+  isBookmarked
+  bookmarkId
+  likeCount
+  feeds {
+    id
+    name
+  }
+}
+    `;
+export const UseBookmarkMutationFragmentFragmentDoc = gql`
+    fragment UseBookmarkMutationFragment on Article {
+  id
+  platform {
+    id
+    name
+    siteUrl
+    faviconUrl
+  }
+  title
+  description
+  articleUrl
+  publishedAt
+  thumbnailUrl
+  isEng
+}
+    `;
+export const ArticleUseFavoriteArticleFragmentFragmentDoc = gql`
+    fragment ArticleUseFavoriteArticleFragment on Article {
+  __typename
+  id
+  platform {
+    id
+    name
+    siteUrl
+    faviconUrl
+  }
+  title
+  description
+  articleUrl
+  publishedAt
+  authorName
+  tags
+  thumbnailUrl
+  isEng
+  isPrivate
+  isBookmarked
+  bookmarkId
+  likeCount
+  isFollowing
+  favoriteArticleFolderIds
+}
+    `;
+export const ArticleCardWrapperFragmentFragmentDoc = gql`
+    fragment ArticleCardWrapperFragment on Article {
+  __typename
+  id
+  platform {
+    id
+    name
+    siteUrl
+    faviconUrl
+  }
+  title
+  description
+  articleUrl
+  publishedAt
+  authorName
+  tags
+  thumbnailUrl
+  isEng
+  isPrivate
+  isBookmarked
+  bookmarkId
+  likeCount
+  isFollowing
+  favoriteArticleFolderIds
+  ...ArticleCardItemFragment
+  ...UseBookmarkMutationFragment
+  ...ArticleUseFavoriteArticleFragment
+}
+    ${ArticleCardItemFragmentFragmentDoc}
+${UseBookmarkMutationFragmentFragmentDoc}
+${ArticleUseFavoriteArticleFragmentFragmentDoc}`;
+export const FollowTargetFavoriteArticleFolderItemFragmentFragmentDoc = gql`
+    fragment FollowTargetFavoriteArticleFolderItemFragment on FavoriteArticleFolder {
+  id
+  title
+}
+    `;
+export const FollowFavoriteArticleDropdownMenuContentFragmentFragmentDoc = gql`
+    fragment FollowFavoriteArticleDropdownMenuContentFragment on FavoriteArticleFolderConnection {
+  edges {
+    node {
+      ...FollowTargetFavoriteArticleFolderItemFragment
+    }
+  }
+}
+    ${FollowTargetFavoriteArticleFolderItemFragmentFragmentDoc}`;
+export const FavoriteFolderUseFavoriteArticleFragmentFragmentDoc = gql`
+    fragment FavoriteFolderUseFavoriteArticleFragment on FavoriteArticleFolderConnection {
+  edges {
+    node {
+      id
+      title
+    }
+  }
+}
+    `;
+export const FavoriteFolderArticleCardWrapperFragmentFragmentDoc = gql`
+    fragment FavoriteFolderArticleCardWrapperFragment on FavoriteArticleFolderConnection {
+  edges {
+    node {
+      id
+      title
+    }
+  }
+  ...FollowFavoriteArticleDropdownMenuContentFragment
+  ...FavoriteFolderUseFavoriteArticleFragment
+}
+    ${FollowFavoriteArticleDropdownMenuContentFragmentFragmentDoc}
+${FavoriteFolderUseFavoriteArticleFragmentFragmentDoc}`;
 export const OgpPreviewContentFragmentFragmentDoc = gql`
     fragment OGPPreviewContentFragment on ArticleOGP {
   title
@@ -1085,184 +1218,6 @@ export const FavoriteArticleListByFolderIdTemplateFragmentFragmentDoc = gql`
     ${FavoriteArticleListFragmentFragmentDoc}
 ${FavoriteArticleFoldersByFolderIdTemplateFragmentFragmentDoc}
 ${FavoriteFolderFavoriteArticleCardWrapperFragmentFragmentDoc}`;
-export const ArticleCardItemFragmentFragmentDoc = gql`
-    fragment ArticleCardItemFragment on Article {
-  id
-  platform {
-    id
-    name
-    siteUrl
-    faviconUrl
-  }
-  title
-  description
-  articleUrl
-  publishedAt
-  thumbnailUrl
-  isEng
-  isPrivate
-  isBookmarked
-  bookmarkId
-  likeCount
-  feeds {
-    id
-    name
-  }
-}
-    `;
-export const UseBookmarkMutationFragmentFragmentDoc = gql`
-    fragment UseBookmarkMutationFragment on Article {
-  id
-  platform {
-    id
-    name
-    siteUrl
-    faviconUrl
-  }
-  title
-  description
-  articleUrl
-  publishedAt
-  thumbnailUrl
-  isEng
-}
-    `;
-export const ArticleUseFavoriteArticleFragmentFragmentDoc = gql`
-    fragment ArticleUseFavoriteArticleFragment on Article {
-  __typename
-  id
-  platform {
-    id
-    name
-    siteUrl
-    faviconUrl
-  }
-  title
-  description
-  articleUrl
-  publishedAt
-  authorName
-  tags
-  thumbnailUrl
-  isEng
-  isPrivate
-  isBookmarked
-  bookmarkId
-  likeCount
-  isFollowing
-  favoriteArticleFolderIds
-}
-    `;
-export const ArticleCardWrapperFragmentFragmentDoc = gql`
-    fragment ArticleCardWrapperFragment on Article {
-  __typename
-  id
-  platform {
-    id
-    name
-    siteUrl
-    faviconUrl
-  }
-  title
-  description
-  articleUrl
-  publishedAt
-  authorName
-  tags
-  thumbnailUrl
-  isEng
-  isPrivate
-  isBookmarked
-  bookmarkId
-  likeCount
-  isFollowing
-  favoriteArticleFolderIds
-  ...ArticleCardItemFragment
-  ...UseBookmarkMutationFragment
-  ...ArticleUseFavoriteArticleFragment
-}
-    ${ArticleCardItemFragmentFragmentDoc}
-${UseBookmarkMutationFragmentFragmentDoc}
-${ArticleUseFavoriteArticleFragmentFragmentDoc}`;
-export const TrendArticleListFragmentFragmentDoc = gql`
-    fragment TrendArticleListFragment on ArticleConnection {
-  pageInfo {
-    hasNextPage
-    hasPreviousPage
-    startCursor
-    endCursor
-  }
-  edges {
-    node {
-      id
-      platform {
-        id
-        name
-        faviconUrl
-      }
-      title
-      articleUrl
-      publishedAt
-      thumbnailUrl
-      isEng
-      isPrivate
-      isBookmarked
-      bookmarkId
-      likeCount
-      ...ArticleCardWrapperFragment
-    }
-  }
-}
-    ${ArticleCardWrapperFragmentFragmentDoc}`;
-export const FollowTargetFavoriteArticleFolderItemFragmentFragmentDoc = gql`
-    fragment FollowTargetFavoriteArticleFolderItemFragment on FavoriteArticleFolder {
-  id
-  title
-}
-    `;
-export const FollowFavoriteArticleDropdownMenuContentFragmentFragmentDoc = gql`
-    fragment FollowFavoriteArticleDropdownMenuContentFragment on FavoriteArticleFolderConnection {
-  edges {
-    node {
-      ...FollowTargetFavoriteArticleFolderItemFragment
-    }
-  }
-}
-    ${FollowTargetFavoriteArticleFolderItemFragmentFragmentDoc}`;
-export const FavoriteFolderUseFavoriteArticleFragmentFragmentDoc = gql`
-    fragment FavoriteFolderUseFavoriteArticleFragment on FavoriteArticleFolderConnection {
-  edges {
-    node {
-      id
-      title
-    }
-  }
-}
-    `;
-export const FavoriteFolderArticleCardWrapperFragmentFragmentDoc = gql`
-    fragment FavoriteFolderArticleCardWrapperFragment on FavoriteArticleFolderConnection {
-  edges {
-    node {
-      id
-      title
-    }
-  }
-  ...FollowFavoriteArticleDropdownMenuContentFragment
-  ...FavoriteFolderUseFavoriteArticleFragment
-}
-    ${FollowFavoriteArticleDropdownMenuContentFragmentFragmentDoc}
-${FavoriteFolderUseFavoriteArticleFragmentFragmentDoc}`;
-export const TrendArticleDashboardTemplateFragmentFragmentDoc = gql`
-    fragment TrendArticleDashboardTemplateFragment on Query {
-  articles: articles(articlesInput: $input) {
-    ...TrendArticleListFragment
-  }
-  favoriteArticleFolders(input: $favoriteArticleFoldersInput) {
-    ...FavoriteFolderArticleCardWrapperFragment
-  }
-}
-    ${TrendArticleListFragmentFragmentDoc}
-${FavoriteFolderArticleCardWrapperFragmentFragmentDoc}`;
 export const GetLoggedBaseLayoutQueryDocument = gql`
     query GetLoggedBaseLayoutQuery($input: FavoriteArticleFoldersInput!) {
   favoriteArticleFolders(input: $input) {
@@ -2128,8 +2083,8 @@ export type GetFavoriteArticleListByFolderIdTemplateQueryQueryHookResult = Retur
 export type GetFavoriteArticleListByFolderIdTemplateQueryLazyQueryHookResult = ReturnType<typeof useGetFavoriteArticleListByFolderIdTemplateQueryLazyQuery>;
 export type GetFavoriteArticleListByFolderIdTemplateQuerySuspenseQueryHookResult = ReturnType<typeof useGetFavoriteArticleListByFolderIdTemplateQuerySuspenseQuery>;
 export type GetFavoriteArticleListByFolderIdTemplateQueryQueryResult = Apollo.QueryResult<GetFavoriteArticleListByFolderIdTemplateQueryQuery, GetFavoriteArticleListByFolderIdTemplateQueryQueryVariables>;
-export const GetTrendArticleListQueryDocument = gql`
-    query GetTrendArticleListQuery($input: ArticlesInput!) {
+export const TrendArticleListQueryDocument = gql`
+    query TrendArticleListQuery($input: ArticlesInput!) {
   articles(articlesInput: $input) {
     pageInfo {
       hasNextPage
@@ -2143,84 +2098,95 @@ export const GetTrendArticleListQueryDocument = gql`
         ...ArticleCardWrapperFragment
       }
     }
-    ...TrendArticleListFragment
   }
 }
-    ${ArticleCardWrapperFragmentFragmentDoc}
-${TrendArticleListFragmentFragmentDoc}`;
+    ${ArticleCardWrapperFragmentFragmentDoc}`;
 
 /**
- * __useGetTrendArticleListQueryQuery__
+ * __useTrendArticleListQueryQuery__
  *
- * To run a query within a React component, call `useGetTrendArticleListQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetTrendArticleListQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useTrendArticleListQueryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useTrendArticleListQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetTrendArticleListQueryQuery({
+ * const { data, loading, error } = useTrendArticleListQueryQuery({
  *   variables: {
  *      input: // value for 'input'
  *   },
  * });
  */
-export function useGetTrendArticleListQueryQuery(baseOptions: Apollo.QueryHookOptions<GetTrendArticleListQueryQuery, GetTrendArticleListQueryQueryVariables> & ({ variables: GetTrendArticleListQueryQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+export function useTrendArticleListQueryQuery(baseOptions: Apollo.QueryHookOptions<TrendArticleListQueryQuery, TrendArticleListQueryQueryVariables> & ({ variables: TrendArticleListQueryQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetTrendArticleListQueryQuery, GetTrendArticleListQueryQueryVariables>(GetTrendArticleListQueryDocument, options);
+        return Apollo.useQuery<TrendArticleListQueryQuery, TrendArticleListQueryQueryVariables>(TrendArticleListQueryDocument, options);
       }
-export function useGetTrendArticleListQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetTrendArticleListQueryQuery, GetTrendArticleListQueryQueryVariables>) {
+export function useTrendArticleListQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TrendArticleListQueryQuery, TrendArticleListQueryQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetTrendArticleListQueryQuery, GetTrendArticleListQueryQueryVariables>(GetTrendArticleListQueryDocument, options);
+          return Apollo.useLazyQuery<TrendArticleListQueryQuery, TrendArticleListQueryQueryVariables>(TrendArticleListQueryDocument, options);
         }
-export function useGetTrendArticleListQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetTrendArticleListQueryQuery, GetTrendArticleListQueryQueryVariables>) {
+export function useTrendArticleListQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<TrendArticleListQueryQuery, TrendArticleListQueryQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<GetTrendArticleListQueryQuery, GetTrendArticleListQueryQueryVariables>(GetTrendArticleListQueryDocument, options);
+          return Apollo.useSuspenseQuery<TrendArticleListQueryQuery, TrendArticleListQueryQueryVariables>(TrendArticleListQueryDocument, options);
         }
-export type GetTrendArticleListQueryQueryHookResult = ReturnType<typeof useGetTrendArticleListQueryQuery>;
-export type GetTrendArticleListQueryLazyQueryHookResult = ReturnType<typeof useGetTrendArticleListQueryLazyQuery>;
-export type GetTrendArticleListQuerySuspenseQueryHookResult = ReturnType<typeof useGetTrendArticleListQuerySuspenseQuery>;
-export type GetTrendArticleListQueryQueryResult = Apollo.QueryResult<GetTrendArticleListQueryQuery, GetTrendArticleListQueryQueryVariables>;
-export const GetTrendArticleDashboardTemplateQueryDocument = gql`
-    query GetTrendArticleDashboardTemplateQuery($input: ArticlesInput!, $favoriteArticleFoldersInput: FavoriteArticleFoldersInput!) {
+export type TrendArticleListQueryQueryHookResult = ReturnType<typeof useTrendArticleListQueryQuery>;
+export type TrendArticleListQueryLazyQueryHookResult = ReturnType<typeof useTrendArticleListQueryLazyQuery>;
+export type TrendArticleListQuerySuspenseQueryHookResult = ReturnType<typeof useTrendArticleListQuerySuspenseQuery>;
+export type TrendArticleListQueryQueryResult = Apollo.QueryResult<TrendArticleListQueryQuery, TrendArticleListQueryQueryVariables>;
+export const TrendArticleDashboardTemplateQueryDocument = gql`
+    query TrendArticleDashboardTemplateQuery($input: ArticlesInput!, $favoriteArticleFoldersInput: FavoriteArticleFoldersInput!) {
+  articles(articlesInput: $input) {
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      startCursor
+      endCursor
+    }
+    edges {
+      node {
+        id
+        ...ArticleCardWrapperFragment
+      }
+    }
+  }
   favoriteArticleFolders(input: $favoriteArticleFoldersInput) {
     ...FavoriteFolderArticleCardWrapperFragment
   }
-  ...TrendArticleDashboardTemplateFragment
 }
-    ${FavoriteFolderArticleCardWrapperFragmentFragmentDoc}
-${TrendArticleDashboardTemplateFragmentFragmentDoc}`;
+    ${ArticleCardWrapperFragmentFragmentDoc}
+${FavoriteFolderArticleCardWrapperFragmentFragmentDoc}`;
 
 /**
- * __useGetTrendArticleDashboardTemplateQueryQuery__
+ * __useTrendArticleDashboardTemplateQueryQuery__
  *
- * To run a query within a React component, call `useGetTrendArticleDashboardTemplateQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetTrendArticleDashboardTemplateQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useTrendArticleDashboardTemplateQueryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useTrendArticleDashboardTemplateQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetTrendArticleDashboardTemplateQueryQuery({
+ * const { data, loading, error } = useTrendArticleDashboardTemplateQueryQuery({
  *   variables: {
  *      input: // value for 'input'
  *      favoriteArticleFoldersInput: // value for 'favoriteArticleFoldersInput'
  *   },
  * });
  */
-export function useGetTrendArticleDashboardTemplateQueryQuery(baseOptions: Apollo.QueryHookOptions<GetTrendArticleDashboardTemplateQueryQuery, GetTrendArticleDashboardTemplateQueryQueryVariables> & ({ variables: GetTrendArticleDashboardTemplateQueryQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+export function useTrendArticleDashboardTemplateQueryQuery(baseOptions: Apollo.QueryHookOptions<TrendArticleDashboardTemplateQueryQuery, TrendArticleDashboardTemplateQueryQueryVariables> & ({ variables: TrendArticleDashboardTemplateQueryQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetTrendArticleDashboardTemplateQueryQuery, GetTrendArticleDashboardTemplateQueryQueryVariables>(GetTrendArticleDashboardTemplateQueryDocument, options);
+        return Apollo.useQuery<TrendArticleDashboardTemplateQueryQuery, TrendArticleDashboardTemplateQueryQueryVariables>(TrendArticleDashboardTemplateQueryDocument, options);
       }
-export function useGetTrendArticleDashboardTemplateQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetTrendArticleDashboardTemplateQueryQuery, GetTrendArticleDashboardTemplateQueryQueryVariables>) {
+export function useTrendArticleDashboardTemplateQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TrendArticleDashboardTemplateQueryQuery, TrendArticleDashboardTemplateQueryQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetTrendArticleDashboardTemplateQueryQuery, GetTrendArticleDashboardTemplateQueryQueryVariables>(GetTrendArticleDashboardTemplateQueryDocument, options);
+          return Apollo.useLazyQuery<TrendArticleDashboardTemplateQueryQuery, TrendArticleDashboardTemplateQueryQueryVariables>(TrendArticleDashboardTemplateQueryDocument, options);
         }
-export function useGetTrendArticleDashboardTemplateQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetTrendArticleDashboardTemplateQueryQuery, GetTrendArticleDashboardTemplateQueryQueryVariables>) {
+export function useTrendArticleDashboardTemplateQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<TrendArticleDashboardTemplateQueryQuery, TrendArticleDashboardTemplateQueryQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<GetTrendArticleDashboardTemplateQueryQuery, GetTrendArticleDashboardTemplateQueryQueryVariables>(GetTrendArticleDashboardTemplateQueryDocument, options);
+          return Apollo.useSuspenseQuery<TrendArticleDashboardTemplateQueryQuery, TrendArticleDashboardTemplateQueryQueryVariables>(TrendArticleDashboardTemplateQueryDocument, options);
         }
-export type GetTrendArticleDashboardTemplateQueryQueryHookResult = ReturnType<typeof useGetTrendArticleDashboardTemplateQueryQuery>;
-export type GetTrendArticleDashboardTemplateQueryLazyQueryHookResult = ReturnType<typeof useGetTrendArticleDashboardTemplateQueryLazyQuery>;
-export type GetTrendArticleDashboardTemplateQuerySuspenseQueryHookResult = ReturnType<typeof useGetTrendArticleDashboardTemplateQuerySuspenseQuery>;
-export type GetTrendArticleDashboardTemplateQueryQueryResult = Apollo.QueryResult<GetTrendArticleDashboardTemplateQueryQuery, GetTrendArticleDashboardTemplateQueryQueryVariables>;
+export type TrendArticleDashboardTemplateQueryQueryHookResult = ReturnType<typeof useTrendArticleDashboardTemplateQueryQuery>;
+export type TrendArticleDashboardTemplateQueryLazyQueryHookResult = ReturnType<typeof useTrendArticleDashboardTemplateQueryLazyQuery>;
+export type TrendArticleDashboardTemplateQuerySuspenseQueryHookResult = ReturnType<typeof useTrendArticleDashboardTemplateQuerySuspenseQuery>;
+export type TrendArticleDashboardTemplateQueryQueryResult = Apollo.QueryResult<TrendArticleDashboardTemplateQueryQuery, TrendArticleDashboardTemplateQueryQueryVariables>;

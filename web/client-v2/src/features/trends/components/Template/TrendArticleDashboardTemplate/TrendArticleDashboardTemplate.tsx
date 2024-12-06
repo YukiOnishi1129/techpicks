@@ -12,7 +12,7 @@ import { LanguageStatus } from "@/types/language";
 import { ENGLISH_IMAGE, JAPANESE_IMAGE } from "@/constant/image";
 import { ArticlesInput, FavoriteArticleFoldersInput } from "@/graphql/type";
 
-import { GetTrendArticleDashboardTemplateQuery } from "./GetTrendArticleDashboardTemplateQuery";
+import { TrendArticleDashboardTemplateQuery } from "./TrendArticleDashboardTemplateQuery";
 import { TrendArticleList } from "../../List";
 
 type TrendArticleDashboardTemplateProps = {
@@ -84,7 +84,7 @@ export const TrendArticleDashboardTemplate: FC<
         <div className="h-[40px]" />
         <TabsContent value={TAB_LIST.ENGLISH}>
           <PreloadQuery
-            query={GetTrendArticleDashboardTemplateQuery}
+            query={TrendArticleDashboardTemplateQuery}
             variables={{
               input: enInput,
               favoriteArticleFoldersInput,
@@ -97,7 +97,7 @@ export const TrendArticleDashboardTemplate: FC<
         </TabsContent>
         <TabsContent value={TAB_LIST.JAPANESE}>
           <PreloadQuery
-            query={GetTrendArticleDashboardTemplateQuery}
+            query={TrendArticleDashboardTemplateQuery}
             variables={{
               input: jpInput,
               favoriteArticleFoldersInput,
