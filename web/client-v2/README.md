@@ -1,6 +1,6 @@
 # Web Client Application v2
 
-## Tech stacks
+## Tech stacksa
 
 - [React](https://react.dev/) with [Next.js](https://nextjs.org/) (v14, app router)
 - [Apollo Client](https://www.apollographql.com/docs/react/)
