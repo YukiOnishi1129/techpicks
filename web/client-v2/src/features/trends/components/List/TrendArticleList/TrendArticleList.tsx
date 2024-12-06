@@ -1,79 +1,107 @@
 "use client";
 
+import { useQuery, useSuspenseQuery } from "@apollo/client";
 import { User } from "@supabase/supabase-js";
-import { FragmentOf, readFragment } from "gql.tada";
 import { useCallback, useRef, useState, useEffect } from "react";
 
-import {
-  ArticleCardWrapper,
-  FavoriteFolderArticleCardWrapperFragment,
-} from "@/features/articles/components/Card";
+import { ArticleCardWrapper } from "@/features/articles/components/Card";
 
 import { Loader } from "@/components/ui/loader";
 
 import { ArticleTabType } from "@/types/article";
 import { LanguageStatus } from "@/types/language";
 
-import { getTrendArticleListQuery } from "./actGetTrendArticleListQuery";
-import { TrendArticleListFragment } from "./TrendArticleListFragment";
+import { GetTrendArticleListQuery } from "./GetTrendArticleListQuery";
+import { GetTrendArticleDashboardTemplateQuery } from "../../Template/TrendArticleDashboardTemplate/GetTrendArticleDashboardTemplateQuery";
 
 type TrendArticleListProps = {
   user: User;
-  data: FragmentOf<typeof TrendArticleListFragment>;
-  favoriteArticleFolders: FragmentOf<
-    typeof FavoriteFolderArticleCardWrapperFragment
-  >;
   languageStatus: LanguageStatus;
-  keyword?: string;
-  feedIdList: Array<string>;
   tab: ArticleTabType;
-  after?: string | null;
 };
 
 export function TrendArticleList({
   user,
-  data,
-  favoriteArticleFolders,
   languageStatus,
-  keyword,
-  feedIdList,
   tab,
-  after,
 }: TrendArticleListProps) {
   const observerTarget = useRef(null);
 
-  const fragment = readFragment(TrendArticleListFragment, data);
+  const { data: resSuspenseData, error } = useSuspenseQuery(
+    GetTrendArticleDashboardTemplateQuery,
+    {
+      variables: {
+        input: {
+          first: 20,
+          after: null,
+          languageStatus,
+          tab,
+        },
+        favoriteArticleFoldersInput: {
+          isAllFetch: true,
+          isFolderOnly: true,
+        },
+      },
+    }
+  );
 
-  const [edges, setEdges] = useState(fragment.edges);
+  const {
+    data: res,
+    fetchMore,
+    error: onlyFetchArticlesError,
+  } = useQuery(GetTrendArticleListQuery, {
+    variables: {
+      input: {
+        first: 20,
+        after: null,
+        languageStatus,
+        tab,
+      },
+    },
+    fetchPolicy: "cache-first",
+    nextFetchPolicy: "network-only",
+  });
+
   const [hashMore, setHashMore] = useState(true);
   const [offset, setOffset] = useState(1);
-  const [endCursor, setEndCursor] = useState(fragment.pageInfo.endCursor);
+  const [endCursor, setEndCursor] = useState(
+    res?.articles.pageInfo?.endCursor || null
+  );
   const [isNextPage, setIsNextPage] = useState(true);
-
-  const flatArticles = edges ? edges.flatMap((edge) => edge.node) : [];
 
   const loadMore = useCallback(async () => {
     if (!isNextPage) return;
-    const { data: res, error } = await getTrendArticleListQuery({
-      first: 20,
-      after: endCursor,
-      languageStatus,
-      tab,
+    const { data: resData, error: resError } = await fetchMore({
+      variables: {
+        input: {
+          first: 20,
+          after: endCursor,
+          languageStatus,
+          tab,
+        },
+      },
+      updateQuery: (prev, { fetchMoreResult }) => {
+        if (!fetchMoreResult) return prev;
+        return {
+          ...prev,
+          articles: {
+            ...prev.articles,
+            edges: [...prev.articles.edges, ...fetchMoreResult.articles.edges],
+            pageInfo: fetchMoreResult.articles.pageInfo,
+          },
+        };
+      },
     });
-    if (error) return;
+    if (resError) return;
 
-    const newArticles = readFragment(TrendArticleListFragment, res.articles);
-    if (newArticles.pageInfo.hasNextPage) {
-      const endCursor = newArticles.pageInfo?.endCursor || null;
+    if (resData.articles.pageInfo.hasNextPage) {
+      const endCursor = resData.articles.pageInfo?.endCursor || null;
       setEndCursor(endCursor);
     }
-    if (!newArticles.pageInfo.hasNextPage) setIsNextPage(false);
+    if (!resData.articles.pageInfo.hasNextPage) setIsNextPage(false);
 
-    if (newArticles.edges.length > 0) {
-      setEdges((prev) => [...prev, ...newArticles.edges]);
-      setHashMore(newArticles.edges.length > 0);
-    }
-  }, [languageStatus, tab, endCursor, isNextPage]);
+    setHashMore(resData.articles.edges.length > 0);
+  }, [languageStatus, tab, endCursor, isNextPage, fetchMore]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -102,29 +130,33 @@ export function TrendArticleList({
   }, [hashMore]);
 
   useEffect(() => {
-    setEdges(fragment.edges);
-  }, [fragment.edges]);
-
-  useEffect(() => {
     if (offset > 1) {
       loadMore();
     }
   }, [offset, hashMore]); // eslint-disable-line
 
+  if (error) {
+    return <div>{error.message}</div>;
+  }
+
+  if (onlyFetchArticlesError) {
+    return <div>{onlyFetchArticlesError.message}</div>;
+  }
+
   return (
     <>
-      {flatArticles.length === 0 ? (
+      {res?.articles?.edges.length === 0 ? (
         <div className="flex flex-col items-center justify-center ">
           {/* <NotFoundList message="No articles found" /> */}
           Not Found
         </div>
       ) : (
         <div className="m-auto">
-          {flatArticles.map((article) => (
-            <div key={article.id} className="mb-4">
+          {res?.articles?.edges?.map((edge) => (
+            <div key={edge.node.id} className="mb-4">
               <ArticleCardWrapper
-                data={article}
-                favoriteArticleFolders={favoriteArticleFolders}
+                data={edge.node}
+                favoriteArticleFolders={resSuspenseData.favoriteArticleFolders}
                 user={user}
                 tab={tab}
               />

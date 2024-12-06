@@ -1,16 +1,18 @@
 import { User } from "@supabase/supabase-js";
-import { FC, ReactNode } from "react";
+import { FC, ReactNode, Suspense } from "react";
 
 // import { fetchFavoriteArticleFoldersAPI } from "@/features/favoriteArticleFolders/actions/favoriteArticleFolders";
 // import { fetchMyFeedFoldersAPI } from "@/features/myFeedFolders/actions/myFeedFolder";
 
 import { Header } from "@/components/layout/Header";
 
-import { getLoggedBaseLayoutQuery } from "./getLoggedBaseLayoutQuery";
+import { PreloadQuery } from "@/lib/apollo/client";
+
+import { LoggedBaseLayoutQuery } from "./LoggedBaseLayoutQuery";
+import { ScreenLoader } from "../../ScreenLoader";
 import { DesktopSidebar } from "../../Sidebar";
 
 // import { LoggedBottomNavigationMenu } from "../BottomNavigationMenu";
-// import { DesktopSidebar } from "../Sidebar";
 
 type LoggedBaseLayoutProps = {
   user: User;
@@ -21,14 +23,6 @@ export const LoggedBaseLayout: FC<LoggedBaseLayoutProps> = async ({
   user,
   children,
 }) => {
-  const { data, error } = await getLoggedBaseLayoutQuery({
-    isAllFetch: true,
-    isFolderOnly: true,
-  });
-
-  if (error) {
-    return <div>Error: {error.message}</div>;
-  }
   //   const myFeedFolderRes = await fetchMyFeedFoldersAPI({});
   //   const favoriteArticleFolderRes = await fetchFavoriteArticleFoldersAPI({});
   return (
@@ -40,7 +34,19 @@ export const LoggedBaseLayout: FC<LoggedBaseLayoutProps> = async ({
       <div className="h-12 md:h-16" />
       <main className="md:flex">
         <div className="invisible fixed h-lvh w-[200px] md:visible">
-          <DesktopSidebar data={data} />
+          <PreloadQuery
+            query={LoggedBaseLayoutQuery}
+            variables={{
+              input: {
+                isAllFetch: true,
+                isFolderOnly: true,
+              },
+            }}
+          >
+            <Suspense fallback={<ScreenLoader />}>
+              <DesktopSidebar />
+            </Suspense>
+          </PreloadQuery>
         </div>
         <div className="invisible mr-[10px] w-[200px] md:visible" />
 

@@ -1,15 +1,15 @@
 "use client";
 
+import { useMutation } from "@apollo/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ReloadIcon } from "@radix-ui/react-icons";
-import { usePathname } from "next/navigation";
+import { graphql } from "gql.tada";
 import { useCallback, FC, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { logoutToLoginPage } from "@/features/auth/actions/auth";
 import { getUser } from "@/features/auth/actions/user";
-import { createFavoriteArticleFolderMutation } from "@/features/favorites/actions/actCreateFavoriteArticleFolderMutation";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -30,7 +30,18 @@ import { Input } from "@/components/ui/input";
 
 import { useStatusToast } from "@/hooks/useStatusToast";
 
-import { serverRevalidatePage } from "@/actions/actServerRevalidatePage";
+import { FollowTargetFavoriteArticleFolderItemFragment } from "../../DropdownMenu/FollowFavoriteArticleDropdownMenu/FollowFavoriteArticleDropdownMenuFragment";
+
+const CreateFavoriteArticleFolderMutation = graphql(`
+  mutation CreateFavoriteArticleFolderMutation(
+    $input: CreateFavoriteArticleFolderInput!
+  ) {
+    createFavoriteArticleFolder(input: $input) {
+      id
+      title
+    }
+  }
+`);
 
 const FormSchema = z.object({
   title: z
@@ -55,7 +66,10 @@ export const CreateFavoriteArticleFolderDialogContent: FC<
 > = ({ handleCloseDialog, handleCreateFavoriteArticleFolder }) => {
   const { successToast, failToast } = useStatusToast();
   const [isPending, startTransition] = useTransition();
-  const pathname = usePathname();
+
+  const [createFavoriteArticleFolderMutation] = useMutation(
+    CreateFavoriteArticleFolderMutation
+  );
 
   const form = useForm<z.infer<typeof FormSchema>>({
     mode: "onChange",
@@ -82,17 +96,44 @@ export const CreateFavoriteArticleFolderDialogContent: FC<
           return;
         }
 
-        const { data: folderData, error } =
+        const { data: folderData, errors } =
           await createFavoriteArticleFolderMutation({
-            title: data.title,
-            description: data.description,
+            variables: {
+              input: {
+                title: data.title,
+                description: data.description,
+              },
+            },
+            update: (cache, { data }) => {
+              if (!data) return;
+              cache.modify({
+                fields: {
+                  favoriteArticleFolders(existingFolders = []) {
+                    const newFolderRef = cache.writeFragment({
+                      data: data.createFavoriteArticleFolder,
+                      fragment: FollowTargetFavoriteArticleFolderItemFragment,
+                    });
+                    return {
+                      __typename: "FavoriteArticleFolderConnection",
+                      edges: [
+                        ...existingFolders.edges,
+                        {
+                          __typename: "FavoriteArticleFolderEdge",
+                          node: newFolderRef,
+                        },
+                      ],
+                    };
+                  },
+                },
+              });
+            },
           });
 
         let errMsg = "";
-        if (error) {
+        if (errors) {
           errMsg = "Fail: Something went wrong";
-          if (error.length > 0) {
-            errMsg = error[0].message;
+          if (errors.length > 0) {
+            errMsg = errors[0].message;
           }
         }
 
@@ -115,12 +156,10 @@ export const CreateFavoriteArticleFolderDialogContent: FC<
             folderData.createFavoriteArticleFolder.id,
             data.title
           );
-          await serverRevalidatePage(pathname);
           resetDialog();
           handleCloseDialog();
           return;
         }
-        await serverRevalidatePage(pathname);
         resetDialog();
         handleCloseDialog();
       });
@@ -129,9 +168,9 @@ export const CreateFavoriteArticleFolderDialogContent: FC<
       failToast,
       handleCloseDialog,
       resetDialog,
-      pathname,
       successToast,
       handleCreateFavoriteArticleFolder,
+      createFavoriteArticleFolderMutation,
     ]
   );
 

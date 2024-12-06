@@ -1,4 +1,5 @@
 "use client";
+import { clsx } from "clsx";
 import { FragmentOf, readFragment } from "gql.tada";
 import NextLink from "next/link";
 import { FC } from "react";
@@ -10,6 +11,7 @@ import { useCheckImageExist } from "@/hooks/useCheckImageExist";
 
 import { showDiffDateToCurrentDate } from "@/lib/date";
 
+import styles from "./AllFolderFavoriteArticleCardItem.module.css";
 import { AllFolderFavoriteArticleCardItemFragment } from "./AllFolderFavoriteArticleCardItemFragment";
 
 type Props = {
@@ -48,13 +50,18 @@ export const AllFolderFavoriteArticleCardItem: FC<Props> = ({ data }) => {
             {`register: ${showDiffDateToCurrentDate(fragment.node.createdAt)}`}
           </p>
 
-          <div className="flex flex-wrap gap-2">
+          <div
+            className={clsx(
+              "flex flex-row items-center gap-2 overflow-x-auto",
+              styles["hide-scrollbar"]
+            )}
+          >
             {fragment.favoriteArticleFolders.map((folder) => (
               <NextLink
                 href={`/favorite/article/${folder.id}`}
                 target="_blank"
                 key={folder.id}
-                className="text-sm text-orange-400  hover:text-orange-700"
+                className="shrink-0 snap-start text-sm text-orange-400  hover:text-orange-700"
               >
                 {`# ${folder.title}`}
               </NextLink>

@@ -10,12 +10,10 @@ import {
 } from "@/components/ui/tooltip";
 
 type AddBookmarkTooltipProps = {
-  articleId: string;
-  handleAddBookmark: (articleId: string) => Promise<void>;
+  handleAddBookmark: () => Promise<void>;
 };
 
 export const AddBookmarkTooltip: FC<AddBookmarkTooltipProps> = ({
-  articleId,
   handleAddBookmark,
 }) => {
   return (
@@ -23,7 +21,7 @@ export const AddBookmarkTooltip: FC<AddBookmarkTooltipProps> = ({
       <Tooltip>
         <TooltipTrigger
           className="cursor-pointer rounded "
-          onClick={() => handleAddBookmark(articleId)}
+          onClick={handleAddBookmark}
         >
           <IconContext.Provider value={{ className: "hover:text-rose-600" }}>
             <MdOutlineBookmarkAdd className="inline-block " size={36} />

@@ -1,10 +1,10 @@
 import { graphql } from "gql.tada";
 
-import { FavoriteArticleFolderLinkFragment } from "../FavoriteArticleFolderLink/FavoriteArticleFolderLinkFragment";
+import { FavoriteArticleFolderLinkFragment } from "../../Sidebar/FavoriteArticleFolderLink/FavoriteArticleFolderLinkFragment";
 
-export const DeskTopSidebarFragment = graphql(
+export const LoggedBaseLayoutQuery = graphql(
   `
-    fragment DeskTopSidebarFragment on Query {
+    query GetLoggedBaseLayoutQuery($input: FavoriteArticleFoldersInput!) {
       favoriteArticleFolders(input: $input) {
         edges {
           node {

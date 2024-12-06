@@ -4,10 +4,15 @@ on:
   push:
     branches:
       - "main"
-      - "develop"
-      - "feature/*"
-      - "feat/*"
-      - "YL-*"
+      # - "develop"
+      # - "feature/*"
+      # - "feat/*"
+      # - "YL-*"
+    paths:
+      - "web/client-v2/**"
+      - ".github/workflows/web_client_v2_pr_check.yml"
+  pull_request:
+    types: [opened, synchronize]
     paths:
       - "web/client-v2/**"
       - ".github/workflows/web_client_v2_pr_check.yml"
@@ -40,7 +45,7 @@ jobs:
 
       - name: Lint
         run: npm run lint
-      
+
       - name: Test
         run: npm run test
 

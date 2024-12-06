@@ -9,7 +9,7 @@ import {
 
 import { getSession } from "@/features/auth/actions/auth";
 
-const graphqlUrl = process.env.BFF_API_URL || "http://localhost:3000";
+const graphqlUrl = process.env.BFF_API_URL || "";
 
 const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors) {
@@ -43,7 +43,7 @@ const authLink = setContext(async (_, { headers }) => {
   };
 });
 
-export const { getClient } = registerApolloClient(() => {
+export const { getClient, PreloadQuery } = registerApolloClient(() => {
   return new ApolloClient({
     cache: new InMemoryCache(),
     link: ApolloLink.from([errorLink, authLink, httpLink]),

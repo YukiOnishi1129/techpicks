@@ -4,10 +4,15 @@ on:
   push:
     branches:
       - "main"
-      - "develop"
-      - "feature/*"
-      - "feat/*"
-      - "YL-*"
+      # - "develop"
+      # - "feature/*"
+      # - "feat/*"
+      # - "YL-*"
+    paths:
+      - "mobile/rn-client/**"
+      - ".github/workflows/mobile_rn_client_pr_check.yml"
+  pull_request:
+    types: [opened, synchronize]
     paths:
       - "mobile/rn-client/**"
       - ".github/workflows/mobile_rn_client_pr_check.yml"

@@ -6,6 +6,7 @@ services:
       dockerfile: ./bff/apollo-gateway/Dockerfile.dev
     environment:
       - PORT=${BFF_CONTAINER_PORT}
+      - BFF_CORS_ORIGIN=${BFF_CORS_ORIGIN}
       - SUPABASE_URL=${BFF_SUPABASE_URL}
       - SUPABASE_ANON_KEY=${SUPABASE_ANON_KEY}
       - CONTENT_SERVICE_CONTAINER_NAME=${CONTENT_SERVICE_CONTAINER_NAME}
