@@ -8,11 +8,17 @@ steps:
     args:
       - "-c"
       - |
-        echo "BFF_API_URL=${_BFF_API_URL}" >> .env
-        echo "NEXT_PUBLIC_BFF_API_URL=${_NEXT_PUBLIC_BFF_API_URL}" >> .env
-        echo "NEXT_PUBLIC_SUPABASE_URL=${_NEXT_PUBLIC_SUPABASE_URL}" >> .env
-        echo "NEXT_PUBLIC_SUPABASE_ANON_KEY=${_NEXT_PUBLIC_SUPABASE_ANON_KEY}" >> .env
-        docker build -t $_REGION-docker.pkg.dev/$PROJECT_ID/$_IMAGE -f web/client-v2/Dockerfile .
+        docker build \
+        --build-arg NEXT_PUBLIC_BFF_API_URL=$$NEXT_PUBLIC_BFF_API_URL \
+        --build-arg NEXT_PUBLIC_SUPABASE_URL=$$NEXT_PUBLIC_SUPABASE_URL \
+        --build-arg NEXT_PUBLIC_SUPABASE_ANON_KEY=$$NEXT_PUBLIC_SUPABASE_ANON_KEY \
+        -t $_REGION-docker.pkg.dev/$PROJECT_ID/$_IMAGE -f web/client-v2/Dockerfile .
+    secretEnv:
+      [
+        "NEXT_PUBLIC_BFF_API_URL",
+        "NEXT_PUBLIC_SUPABASE_URL",
+        "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+      ]
 
   # Push the container image to Artifact Registry
   - name: "gcr.io/cloud-builders/docker"
@@ -32,3 +38,11 @@ steps:
       ]
 images:
   - $_REGION-docker.pkg.dev/$PROJECT_ID/$_IMAGE
+availableSecrets:
+  secretManager:
+    - versionName: projects/PROJECT_ID/secrets/NEXT_PUBLIC_BFF_API_URL/versions/latest
+      env: "NEXT_PUBLIC_BFF_API_URL"
+    - versionName: projects/PROJECT_ID/secrets/NEXT_PUBLIC_SUPABASE_URL/versions/latest
+      env: "NEXT_PUBLIC_SUPABASE_URL"
+    - versionName: projects/PROJECT_ID/secrets/NEXT_PUBLIC_SUPABASE_ANON_KEY/versions/latest
+      env: "NEXT_PUBLIC_SUPABASE_ANON_KEY"
