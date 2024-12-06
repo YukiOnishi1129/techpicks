@@ -1,5 +1,9 @@
 import { graphql } from "gql.tada";
 
+import {
+  ArticleUseFavoriteArticleFragment,
+  FavoriteFolderUseFavoriteArticleFragment,
+} from "@/features/articles/hooks/useFavoriteArticleMutation";
 import { FollowFavoriteArticleDropdownMenuContentFragment } from "@/features/favorites/components/DropdownMenu/FollowFavoriteArticleDropdownMenu/FollowFavoriteArticleDropdownMenuFragment";
 
 import { UseArticleBookmarkFragment } from "../../../hooks/useArticleBookmark";
@@ -32,9 +36,14 @@ export const ArticleCardWrapperFragment = graphql(
       favoriteArticleFolderIds
       ...ArticleCardItemFragment
       ...UseArticleBookmarkFragment
+      ...ArticleUseFavoriteArticleFragment
     }
   `,
-  [ArticleCardItemFragment, UseArticleBookmarkFragment]
+  [
+    ArticleCardItemFragment,
+    UseArticleBookmarkFragment,
+    ArticleUseFavoriteArticleFragment,
+  ]
 );
 
 export const FavoriteFolderArticleCardWrapperFragment = graphql(
@@ -47,7 +56,11 @@ export const FavoriteFolderArticleCardWrapperFragment = graphql(
         }
       }
       ...FollowFavoriteArticleDropdownMenuContentFragment
+      ...FavoriteFolderUseFavoriteArticleFragment
     }
   `,
-  [FollowFavoriteArticleDropdownMenuContentFragment]
+  [
+    FollowFavoriteArticleDropdownMenuContentFragment,
+    FavoriteFolderUseFavoriteArticleFragment,
+  ]
 );

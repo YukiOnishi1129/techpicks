@@ -149,9 +149,9 @@ export function ArticleList({ user, languageStatus, tab }: ArticleListProps) {
         </div>
       ) : (
         <div className="m-auto grid gap-4">
-          {res?.articles?.edges?.map((edge) => (
+          {res?.articles?.edges?.map((edge, i) => (
             <ArticleCardWrapper
-              key={edge.node.id}
+              key={`${i}-${edge.node.id}`}
               data={edge.node}
               favoriteArticleFolders={resSuspenseData.favoriteArticleFolders}
               user={user}
