@@ -143,11 +143,11 @@ export const BookmarkList: FC<BookmarkListProps> = ({
   return (
     <>
       {res?.bookmarks.edges.length === 0 ? (
-        <div className="flex flex-col items-center justify-center ">
+        <div className="flex flex-col items-center justify-center">
           <NotFoundList message="No bookmarks found" />
         </div>
       ) : (
-        <div className="m-auto">
+        <div className="m-auto grid gap-4">
           {res?.bookmarks.edges?.map((edge, i) => (
             <BookmarkCardWrapper
               key={`${i}-${edge.node.id}`}

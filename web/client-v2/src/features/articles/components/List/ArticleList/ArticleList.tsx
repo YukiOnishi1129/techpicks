@@ -144,7 +144,7 @@ export function ArticleList({ user, languageStatus, tab }: ArticleListProps) {
   return (
     <>
       {res?.articles?.edges.length === 0 ? (
-        <div className="flex flex-col items-center justify-center ">
+        <div className="flex flex-col items-center justify-center">
           <NotFoundList message="No articles found" />
         </div>
       ) : (
