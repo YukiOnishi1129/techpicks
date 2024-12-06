@@ -3,6 +3,7 @@ Bookmark schema
 """
 type Bookmark implements Node {
   id: ID!
+  favoriteArticleFolderIds: [String!]!
   title: String!
   description: String!
   articleUrl: String!
@@ -15,6 +16,7 @@ type Bookmark implements Node {
   platformFaviconUrl: String!
   isEng: Boolean!
   isRead: Boolean!
+  isFollowing: Boolean!
   createdAt: Int!
   updatedAt: Int!
 }
