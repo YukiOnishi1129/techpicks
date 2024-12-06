@@ -13,7 +13,6 @@ import { ScreenLoader } from "../../ScreenLoader";
 import { DesktopSidebar } from "../../Sidebar";
 
 // import { LoggedBottomNavigationMenu } from "../BottomNavigationMenu";
-// import { DesktopSidebar } from "../Sidebar";
 
 type LoggedBaseLayoutProps = {
   user: User;
@@ -24,14 +23,6 @@ export const LoggedBaseLayout: FC<LoggedBaseLayoutProps> = async ({
   user,
   children,
 }) => {
-  // const { data, error } = await getLoggedBaseLayoutQuery({
-  //   isAllFetch: true,
-  //   isFolderOnly: true,
-  // });
-
-  // if (error) {
-  //   return <div>Error: {error.message}</div>;
-  // }
   //   const myFeedFolderRes = await fetchMyFeedFoldersAPI({});
   //   const favoriteArticleFolderRes = await fetchFavoriteArticleFoldersAPI({});
   return (
