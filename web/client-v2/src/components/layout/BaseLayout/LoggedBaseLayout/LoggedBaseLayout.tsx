@@ -6,10 +6,11 @@ import { FC, ReactNode, Suspense } from "react";
 
 import { Header } from "@/components/layout/Header";
 
-import { DesktopSidebar } from "../../Sidebar";
 import { PreloadQuery } from "@/lib/apollo/client";
-import { ScreenLoader } from "../../ScreenLoader";
+
 import { GetLoggedBaseLayoutQuery } from "./GetLoggedBaseLayoutQuery";
+import { ScreenLoader } from "../../ScreenLoader";
+import { DesktopSidebar } from "../../Sidebar";
 
 // import { LoggedBottomNavigationMenu } from "../BottomNavigationMenu";
 // import { DesktopSidebar } from "../Sidebar";

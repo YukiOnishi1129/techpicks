@@ -502,34 +502,30 @@ export type UpdateFavoriteArticleFolderInput = {
   title: Scalars['String']['input'];
 };
 
-export type LoggedBaseLayoutFragmentFragment = { __typename?: 'Query', favoriteArticleFolders: { __typename?: 'FavoriteArticleFolderConnection', edges: Array<{ __typename?: 'FavoriteArticleFolderEdge', node: { __typename?: 'FavoriteArticleFolder', id: string, title: string } }> } };
-
-export type LoggedBaseLayoutQueryQueryVariables = Exact<{
+export type GetLoggedBaseLayoutQueryQueryVariables = Exact<{
   input: FavoriteArticleFoldersInput;
 }>;
 
 
-export type LoggedBaseLayoutQueryQuery = { __typename?: 'Query', favoriteArticleFolders: { __typename?: 'FavoriteArticleFolderConnection', edges: Array<{ __typename?: 'FavoriteArticleFolderEdge', node: { __typename?: 'FavoriteArticleFolder', id: string, title: string } }> } };
-
-export type DeskTopSidebarFragmentFragment = { __typename?: 'Query', favoriteArticleFolders: { __typename?: 'FavoriteArticleFolderConnection', edges: Array<{ __typename?: 'FavoriteArticleFolderEdge', node: { __typename?: 'FavoriteArticleFolder', id: string, title: string } }> } };
+export type GetLoggedBaseLayoutQueryQuery = { __typename?: 'Query', favoriteArticleFolders: { __typename?: 'FavoriteArticleFolderConnection', edges: Array<{ __typename?: 'FavoriteArticleFolderEdge', node: { __typename?: 'FavoriteArticleFolder', id: string, title: string } }> } };
 
 export type FavoriteArticleFolderLinkFragmentFragment = { __typename?: 'FavoriteArticleFolder', id: string, title: string };
 
-export type CreateBookmarkMutationMutationVariables = Exact<{
-  input: CreateBookmarkInput;
-}>;
-
-
-export type CreateBookmarkMutationMutation = { __typename?: 'Mutation', createBookmark: { __typename?: 'Bookmark', id: string } };
-
-export type DeleteBookmarkMutationMutationVariables = Exact<{
-  input: DeleteBookmarkInput;
-}>;
-
-
-export type DeleteBookmarkMutationMutation = { __typename?: 'Mutation', deleteBookmark: boolean };
-
 export type ArticleCardItemFragmentFragment = { __typename?: 'Article', id: string, title: string, description: string, articleUrl: string, publishedAt?: number | null, thumbnailUrl: string, isEng: boolean, isPrivate: boolean, isBookmarked: boolean, bookmarkId?: string | null, likeCount?: number | null, platform?: { __typename?: 'Platform', id: string, name: string, siteUrl: string, faviconUrl: string } | null, feeds?: Array<{ __typename?: 'Feed', id: string, name: string }> | null };
+
+export type CreateFavoriteArticleMutationMutationVariables = Exact<{
+  input: CreateFavoriteArticleInput;
+}>;
+
+
+export type CreateFavoriteArticleMutationMutation = { __typename?: 'Mutation', createFavoriteArticle: { __typename?: 'FavoriteArticle', id: string, favoriteArticleFolderId: string } };
+
+export type DeleteFavoriteArticleByArticleIdMutationMutationVariables = Exact<{
+  input: DeleteFavoriteArticleByArticleIdInput;
+}>;
+
+
+export type DeleteFavoriteArticleByArticleIdMutationMutation = { __typename?: 'Mutation', deleteFavoriteArticleByArticleId: boolean };
 
 export type ArticleCardWrapperFragmentFragment = { __typename: 'Article', id: string, title: string, description: string, articleUrl: string, publishedAt?: number | null, authorName?: string | null, tags?: string | null, thumbnailUrl: string, isEng: boolean, isPrivate: boolean, isBookmarked: boolean, bookmarkId?: string | null, likeCount?: number | null, isFollowing: boolean, favoriteArticleFolderIds: Array<string>, platform?: { __typename?: 'Platform', id: string, name: string, siteUrl: string, faviconUrl: string } | null, feeds?: Array<{ __typename?: 'Feed', id: string, name: string }> | null };
 
@@ -555,6 +551,20 @@ export type GetArticleDashboardTemplateQueryQueryVariables = Exact<{
 export type GetArticleDashboardTemplateQueryQuery = { __typename?: 'Query', favoriteArticleFolders: { __typename?: 'FavoriteArticleFolderConnection', edges: Array<{ __typename?: 'FavoriteArticleFolderEdge', node: { __typename?: 'FavoriteArticleFolder', id: string, title: string } }> }, articles: { __typename?: 'ArticleConnection', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null }, edges: Array<{ __typename?: 'ArticleEdge', node: { __typename: 'Article', id: string, title: string, articleUrl: string, publishedAt?: number | null, thumbnailUrl: string, isEng: boolean, isPrivate: boolean, isBookmarked: boolean, bookmarkId?: string | null, likeCount?: number | null, description: string, authorName?: string | null, tags?: string | null, isFollowing: boolean, favoriteArticleFolderIds: Array<string>, platform?: { __typename?: 'Platform', id: string, name: string, siteUrl: string, faviconUrl: string } | null, feeds?: Array<{ __typename?: 'Feed', id: string, name: string }> | null } }> } };
 
 export type UseArticleBookmarkFragmentFragment = { __typename?: 'Article', id: string, title: string, description: string, articleUrl: string, publishedAt?: number | null, thumbnailUrl: string, isEng: boolean, platform?: { __typename?: 'Platform', id: string, name: string, siteUrl: string, faviconUrl: string } | null };
+
+export type CreateBookmarkMutationMutationVariables = Exact<{
+  input: CreateBookmarkInput;
+}>;
+
+
+export type CreateBookmarkMutationMutation = { __typename?: 'Mutation', createBookmark: { __typename?: 'Bookmark', id: string } };
+
+export type DeleteBookmarkMutationMutationVariables = Exact<{
+  input: DeleteBookmarkInput;
+}>;
+
+
+export type DeleteBookmarkMutationMutation = { __typename?: 'Mutation', deleteBookmark: boolean };
 
 export type CreateBookmarkForUploadArticleMutationMutationVariables = Exact<{
   input: CreateBookmarkForUploadArticleInput;
@@ -607,20 +617,6 @@ export type CreateFavoriteArticleForUploadArticleMutationMutationVariables = Exa
 
 
 export type CreateFavoriteArticleForUploadArticleMutationMutation = { __typename?: 'Mutation', createFavoriteArticleForUploadArticle: { __typename?: 'FavoriteArticle', id: string } };
-
-export type CreateFavoriteArticleMutationMutationVariables = Exact<{
-  input: CreateFavoriteArticleInput;
-}>;
-
-
-export type CreateFavoriteArticleMutationMutation = { __typename?: 'Mutation', createFavoriteArticle: { __typename?: 'FavoriteArticle', id: string, favoriteArticleFolderId: string } };
-
-export type DeleteFavoriteArticleByArticleIdMutationMutationVariables = Exact<{
-  input: DeleteFavoriteArticleByArticleIdInput;
-}>;
-
-
-export type DeleteFavoriteArticleByArticleIdMutationMutation = { __typename?: 'Mutation', deleteFavoriteArticleByArticleId: boolean };
 
 export type DeleteFavoriteArticleFolderMutationMutationVariables = Exact<{
   input: DeleteFavoriteArticleFolderInput;
@@ -759,22 +755,6 @@ export const FavoriteArticleFolderLinkFragmentFragmentDoc = gql`
   title
 }
     `;
-export const DeskTopSidebarFragmentFragmentDoc = gql`
-    fragment DeskTopSidebarFragment on Query {
-  favoriteArticleFolders(input: $input) {
-    edges {
-      node {
-        ...FavoriteArticleFolderLinkFragment
-      }
-    }
-  }
-}
-    ${FavoriteArticleFolderLinkFragmentFragmentDoc}`;
-export const LoggedBaseLayoutFragmentFragmentDoc = gql`
-    fragment LoggedBaseLayoutFragment on Query {
-  ...DeskTopSidebarFragment
-}
-    ${DeskTopSidebarFragmentFragmentDoc}`;
 export const ArticleCardItemFragmentFragmentDoc = gql`
     fragment ArticleCardItemFragment on Article {
   id
@@ -1297,108 +1277,115 @@ export const TrendArticleDashboardTemplateFragmentFragmentDoc = gql`
 }
     ${TrendArticleListFragmentFragmentDoc}
 ${FavoriteFolderArticleCardWrapperFragmentFragmentDoc}`;
-export const LoggedBaseLayoutQueryDocument = gql`
-    query LoggedBaseLayoutQuery($input: FavoriteArticleFoldersInput!) {
-  ...LoggedBaseLayoutFragment
+export const GetLoggedBaseLayoutQueryDocument = gql`
+    query GetLoggedBaseLayoutQuery($input: FavoriteArticleFoldersInput!) {
+  favoriteArticleFolders(input: $input) {
+    edges {
+      node {
+        ...FavoriteArticleFolderLinkFragment
+      }
+    }
+  }
 }
-    ${LoggedBaseLayoutFragmentFragmentDoc}`;
+    ${FavoriteArticleFolderLinkFragmentFragmentDoc}`;
 
 /**
- * __useLoggedBaseLayoutQueryQuery__
+ * __useGetLoggedBaseLayoutQueryQuery__
  *
- * To run a query within a React component, call `useLoggedBaseLayoutQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useLoggedBaseLayoutQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetLoggedBaseLayoutQueryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetLoggedBaseLayoutQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useLoggedBaseLayoutQueryQuery({
+ * const { data, loading, error } = useGetLoggedBaseLayoutQueryQuery({
  *   variables: {
  *      input: // value for 'input'
  *   },
  * });
  */
-export function useLoggedBaseLayoutQueryQuery(baseOptions: Apollo.QueryHookOptions<LoggedBaseLayoutQueryQuery, LoggedBaseLayoutQueryQueryVariables> & ({ variables: LoggedBaseLayoutQueryQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+export function useGetLoggedBaseLayoutQueryQuery(baseOptions: Apollo.QueryHookOptions<GetLoggedBaseLayoutQueryQuery, GetLoggedBaseLayoutQueryQueryVariables> & ({ variables: GetLoggedBaseLayoutQueryQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<LoggedBaseLayoutQueryQuery, LoggedBaseLayoutQueryQueryVariables>(LoggedBaseLayoutQueryDocument, options);
+        return Apollo.useQuery<GetLoggedBaseLayoutQueryQuery, GetLoggedBaseLayoutQueryQueryVariables>(GetLoggedBaseLayoutQueryDocument, options);
       }
-export function useLoggedBaseLayoutQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<LoggedBaseLayoutQueryQuery, LoggedBaseLayoutQueryQueryVariables>) {
+export function useGetLoggedBaseLayoutQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetLoggedBaseLayoutQueryQuery, GetLoggedBaseLayoutQueryQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<LoggedBaseLayoutQueryQuery, LoggedBaseLayoutQueryQueryVariables>(LoggedBaseLayoutQueryDocument, options);
+          return Apollo.useLazyQuery<GetLoggedBaseLayoutQueryQuery, GetLoggedBaseLayoutQueryQueryVariables>(GetLoggedBaseLayoutQueryDocument, options);
         }
-export function useLoggedBaseLayoutQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<LoggedBaseLayoutQueryQuery, LoggedBaseLayoutQueryQueryVariables>) {
+export function useGetLoggedBaseLayoutQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetLoggedBaseLayoutQueryQuery, GetLoggedBaseLayoutQueryQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<LoggedBaseLayoutQueryQuery, LoggedBaseLayoutQueryQueryVariables>(LoggedBaseLayoutQueryDocument, options);
+          return Apollo.useSuspenseQuery<GetLoggedBaseLayoutQueryQuery, GetLoggedBaseLayoutQueryQueryVariables>(GetLoggedBaseLayoutQueryDocument, options);
         }
-export type LoggedBaseLayoutQueryQueryHookResult = ReturnType<typeof useLoggedBaseLayoutQueryQuery>;
-export type LoggedBaseLayoutQueryLazyQueryHookResult = ReturnType<typeof useLoggedBaseLayoutQueryLazyQuery>;
-export type LoggedBaseLayoutQuerySuspenseQueryHookResult = ReturnType<typeof useLoggedBaseLayoutQuerySuspenseQuery>;
-export type LoggedBaseLayoutQueryQueryResult = Apollo.QueryResult<LoggedBaseLayoutQueryQuery, LoggedBaseLayoutQueryQueryVariables>;
-export const CreateBookmarkMutationDocument = gql`
-    mutation CreateBookmarkMutation($input: CreateBookmarkInput!) {
-  createBookmark(createBookmarkInput: $input) {
+export type GetLoggedBaseLayoutQueryQueryHookResult = ReturnType<typeof useGetLoggedBaseLayoutQueryQuery>;
+export type GetLoggedBaseLayoutQueryLazyQueryHookResult = ReturnType<typeof useGetLoggedBaseLayoutQueryLazyQuery>;
+export type GetLoggedBaseLayoutQuerySuspenseQueryHookResult = ReturnType<typeof useGetLoggedBaseLayoutQuerySuspenseQuery>;
+export type GetLoggedBaseLayoutQueryQueryResult = Apollo.QueryResult<GetLoggedBaseLayoutQueryQuery, GetLoggedBaseLayoutQueryQueryVariables>;
+export const CreateFavoriteArticleMutationDocument = gql`
+    mutation CreateFavoriteArticleMutation($input: CreateFavoriteArticleInput!) {
+  createFavoriteArticle(input: $input) {
     id
+    favoriteArticleFolderId
   }
 }
     `;
-export type CreateBookmarkMutationMutationFn = Apollo.MutationFunction<CreateBookmarkMutationMutation, CreateBookmarkMutationMutationVariables>;
+export type CreateFavoriteArticleMutationMutationFn = Apollo.MutationFunction<CreateFavoriteArticleMutationMutation, CreateFavoriteArticleMutationMutationVariables>;
 
 /**
- * __useCreateBookmarkMutationMutation__
+ * __useCreateFavoriteArticleMutationMutation__
  *
- * To run a mutation, you first call `useCreateBookmarkMutationMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateBookmarkMutationMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useCreateFavoriteArticleMutationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateFavoriteArticleMutationMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [createBookmarkMutationMutation, { data, loading, error }] = useCreateBookmarkMutationMutation({
+ * const [createFavoriteArticleMutationMutation, { data, loading, error }] = useCreateFavoriteArticleMutationMutation({
  *   variables: {
  *      input: // value for 'input'
  *   },
  * });
  */
-export function useCreateBookmarkMutationMutation(baseOptions?: Apollo.MutationHookOptions<CreateBookmarkMutationMutation, CreateBookmarkMutationMutationVariables>) {
+export function useCreateFavoriteArticleMutationMutation(baseOptions?: Apollo.MutationHookOptions<CreateFavoriteArticleMutationMutation, CreateFavoriteArticleMutationMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CreateBookmarkMutationMutation, CreateBookmarkMutationMutationVariables>(CreateBookmarkMutationDocument, options);
+        return Apollo.useMutation<CreateFavoriteArticleMutationMutation, CreateFavoriteArticleMutationMutationVariables>(CreateFavoriteArticleMutationDocument, options);
       }
-export type CreateBookmarkMutationMutationHookResult = ReturnType<typeof useCreateBookmarkMutationMutation>;
-export type CreateBookmarkMutationMutationResult = Apollo.MutationResult<CreateBookmarkMutationMutation>;
-export type CreateBookmarkMutationMutationOptions = Apollo.BaseMutationOptions<CreateBookmarkMutationMutation, CreateBookmarkMutationMutationVariables>;
-export const DeleteBookmarkMutationDocument = gql`
-    mutation DeleteBookmarkMutation($input: DeleteBookmarkInput!) {
-  deleteBookmark(deleteBookmarkInput: $input)
+export type CreateFavoriteArticleMutationMutationHookResult = ReturnType<typeof useCreateFavoriteArticleMutationMutation>;
+export type CreateFavoriteArticleMutationMutationResult = Apollo.MutationResult<CreateFavoriteArticleMutationMutation>;
+export type CreateFavoriteArticleMutationMutationOptions = Apollo.BaseMutationOptions<CreateFavoriteArticleMutationMutation, CreateFavoriteArticleMutationMutationVariables>;
+export const DeleteFavoriteArticleByArticleIdMutationDocument = gql`
+    mutation DeleteFavoriteArticleByArticleIdMutation($input: DeleteFavoriteArticleByArticleIdInput!) {
+  deleteFavoriteArticleByArticleId(input: $input)
 }
     `;
-export type DeleteBookmarkMutationMutationFn = Apollo.MutationFunction<DeleteBookmarkMutationMutation, DeleteBookmarkMutationMutationVariables>;
+export type DeleteFavoriteArticleByArticleIdMutationMutationFn = Apollo.MutationFunction<DeleteFavoriteArticleByArticleIdMutationMutation, DeleteFavoriteArticleByArticleIdMutationMutationVariables>;
 
 /**
- * __useDeleteBookmarkMutationMutation__
+ * __useDeleteFavoriteArticleByArticleIdMutationMutation__
  *
- * To run a mutation, you first call `useDeleteBookmarkMutationMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeleteBookmarkMutationMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useDeleteFavoriteArticleByArticleIdMutationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteFavoriteArticleByArticleIdMutationMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [deleteBookmarkMutationMutation, { data, loading, error }] = useDeleteBookmarkMutationMutation({
+ * const [deleteFavoriteArticleByArticleIdMutationMutation, { data, loading, error }] = useDeleteFavoriteArticleByArticleIdMutationMutation({
  *   variables: {
  *      input: // value for 'input'
  *   },
  * });
  */
-export function useDeleteBookmarkMutationMutation(baseOptions?: Apollo.MutationHookOptions<DeleteBookmarkMutationMutation, DeleteBookmarkMutationMutationVariables>) {
+export function useDeleteFavoriteArticleByArticleIdMutationMutation(baseOptions?: Apollo.MutationHookOptions<DeleteFavoriteArticleByArticleIdMutationMutation, DeleteFavoriteArticleByArticleIdMutationMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<DeleteBookmarkMutationMutation, DeleteBookmarkMutationMutationVariables>(DeleteBookmarkMutationDocument, options);
+        return Apollo.useMutation<DeleteFavoriteArticleByArticleIdMutationMutation, DeleteFavoriteArticleByArticleIdMutationMutationVariables>(DeleteFavoriteArticleByArticleIdMutationDocument, options);
       }
-export type DeleteBookmarkMutationMutationHookResult = ReturnType<typeof useDeleteBookmarkMutationMutation>;
-export type DeleteBookmarkMutationMutationResult = Apollo.MutationResult<DeleteBookmarkMutationMutation>;
-export type DeleteBookmarkMutationMutationOptions = Apollo.BaseMutationOptions<DeleteBookmarkMutationMutation, DeleteBookmarkMutationMutationVariables>;
+export type DeleteFavoriteArticleByArticleIdMutationMutationHookResult = ReturnType<typeof useDeleteFavoriteArticleByArticleIdMutationMutation>;
+export type DeleteFavoriteArticleByArticleIdMutationMutationResult = Apollo.MutationResult<DeleteFavoriteArticleByArticleIdMutationMutation>;
+export type DeleteFavoriteArticleByArticleIdMutationMutationOptions = Apollo.BaseMutationOptions<DeleteFavoriteArticleByArticleIdMutationMutation, DeleteFavoriteArticleByArticleIdMutationMutationVariables>;
 export const GetArticleListQueryDocument = gql`
     query GetArticleListQuery($input: ArticlesInput!) {
   articles(articlesInput: $input) {
@@ -1495,6 +1482,70 @@ export type GetArticleDashboardTemplateQueryQueryHookResult = ReturnType<typeof 
 export type GetArticleDashboardTemplateQueryLazyQueryHookResult = ReturnType<typeof useGetArticleDashboardTemplateQueryLazyQuery>;
 export type GetArticleDashboardTemplateQuerySuspenseQueryHookResult = ReturnType<typeof useGetArticleDashboardTemplateQuerySuspenseQuery>;
 export type GetArticleDashboardTemplateQueryQueryResult = Apollo.QueryResult<GetArticleDashboardTemplateQueryQuery, GetArticleDashboardTemplateQueryQueryVariables>;
+export const CreateBookmarkMutationDocument = gql`
+    mutation CreateBookmarkMutation($input: CreateBookmarkInput!) {
+  createBookmark(createBookmarkInput: $input) {
+    id
+  }
+}
+    `;
+export type CreateBookmarkMutationMutationFn = Apollo.MutationFunction<CreateBookmarkMutationMutation, CreateBookmarkMutationMutationVariables>;
+
+/**
+ * __useCreateBookmarkMutationMutation__
+ *
+ * To run a mutation, you first call `useCreateBookmarkMutationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateBookmarkMutationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createBookmarkMutationMutation, { data, loading, error }] = useCreateBookmarkMutationMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateBookmarkMutationMutation(baseOptions?: Apollo.MutationHookOptions<CreateBookmarkMutationMutation, CreateBookmarkMutationMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateBookmarkMutationMutation, CreateBookmarkMutationMutationVariables>(CreateBookmarkMutationDocument, options);
+      }
+export type CreateBookmarkMutationMutationHookResult = ReturnType<typeof useCreateBookmarkMutationMutation>;
+export type CreateBookmarkMutationMutationResult = Apollo.MutationResult<CreateBookmarkMutationMutation>;
+export type CreateBookmarkMutationMutationOptions = Apollo.BaseMutationOptions<CreateBookmarkMutationMutation, CreateBookmarkMutationMutationVariables>;
+export const DeleteBookmarkMutationDocument = gql`
+    mutation DeleteBookmarkMutation($input: DeleteBookmarkInput!) {
+  deleteBookmark(deleteBookmarkInput: $input)
+}
+    `;
+export type DeleteBookmarkMutationMutationFn = Apollo.MutationFunction<DeleteBookmarkMutationMutation, DeleteBookmarkMutationMutationVariables>;
+
+/**
+ * __useDeleteBookmarkMutationMutation__
+ *
+ * To run a mutation, you first call `useDeleteBookmarkMutationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteBookmarkMutationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteBookmarkMutationMutation, { data, loading, error }] = useDeleteBookmarkMutationMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useDeleteBookmarkMutationMutation(baseOptions?: Apollo.MutationHookOptions<DeleteBookmarkMutationMutation, DeleteBookmarkMutationMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteBookmarkMutationMutation, DeleteBookmarkMutationMutationVariables>(DeleteBookmarkMutationDocument, options);
+      }
+export type DeleteBookmarkMutationMutationHookResult = ReturnType<typeof useDeleteBookmarkMutationMutation>;
+export type DeleteBookmarkMutationMutationResult = Apollo.MutationResult<DeleteBookmarkMutationMutation>;
+export type DeleteBookmarkMutationMutationOptions = Apollo.BaseMutationOptions<DeleteBookmarkMutationMutation, DeleteBookmarkMutationMutationVariables>;
 export const CreateBookmarkForUploadArticleMutationDocument = gql`
     mutation CreateBookmarkForUploadArticleMutation($input: CreateBookmarkForUploadArticleInput!) {
   createBookmarkForUploadArticle(input: $input) {
@@ -1711,71 +1762,6 @@ export function useCreateFavoriteArticleForUploadArticleMutationMutation(baseOpt
 export type CreateFavoriteArticleForUploadArticleMutationMutationHookResult = ReturnType<typeof useCreateFavoriteArticleForUploadArticleMutationMutation>;
 export type CreateFavoriteArticleForUploadArticleMutationMutationResult = Apollo.MutationResult<CreateFavoriteArticleForUploadArticleMutationMutation>;
 export type CreateFavoriteArticleForUploadArticleMutationMutationOptions = Apollo.BaseMutationOptions<CreateFavoriteArticleForUploadArticleMutationMutation, CreateFavoriteArticleForUploadArticleMutationMutationVariables>;
-export const CreateFavoriteArticleMutationDocument = gql`
-    mutation CreateFavoriteArticleMutation($input: CreateFavoriteArticleInput!) {
-  createFavoriteArticle(input: $input) {
-    id
-    favoriteArticleFolderId
-  }
-}
-    `;
-export type CreateFavoriteArticleMutationMutationFn = Apollo.MutationFunction<CreateFavoriteArticleMutationMutation, CreateFavoriteArticleMutationMutationVariables>;
-
-/**
- * __useCreateFavoriteArticleMutationMutation__
- *
- * To run a mutation, you first call `useCreateFavoriteArticleMutationMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateFavoriteArticleMutationMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createFavoriteArticleMutationMutation, { data, loading, error }] = useCreateFavoriteArticleMutationMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useCreateFavoriteArticleMutationMutation(baseOptions?: Apollo.MutationHookOptions<CreateFavoriteArticleMutationMutation, CreateFavoriteArticleMutationMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CreateFavoriteArticleMutationMutation, CreateFavoriteArticleMutationMutationVariables>(CreateFavoriteArticleMutationDocument, options);
-      }
-export type CreateFavoriteArticleMutationMutationHookResult = ReturnType<typeof useCreateFavoriteArticleMutationMutation>;
-export type CreateFavoriteArticleMutationMutationResult = Apollo.MutationResult<CreateFavoriteArticleMutationMutation>;
-export type CreateFavoriteArticleMutationMutationOptions = Apollo.BaseMutationOptions<CreateFavoriteArticleMutationMutation, CreateFavoriteArticleMutationMutationVariables>;
-export const DeleteFavoriteArticleByArticleIdMutationDocument = gql`
-    mutation DeleteFavoriteArticleByArticleIdMutation($input: DeleteFavoriteArticleByArticleIdInput!) {
-  deleteFavoriteArticleByArticleId(input: $input)
-}
-    `;
-export type DeleteFavoriteArticleByArticleIdMutationMutationFn = Apollo.MutationFunction<DeleteFavoriteArticleByArticleIdMutationMutation, DeleteFavoriteArticleByArticleIdMutationMutationVariables>;
-
-/**
- * __useDeleteFavoriteArticleByArticleIdMutationMutation__
- *
- * To run a mutation, you first call `useDeleteFavoriteArticleByArticleIdMutationMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeleteFavoriteArticleByArticleIdMutationMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [deleteFavoriteArticleByArticleIdMutationMutation, { data, loading, error }] = useDeleteFavoriteArticleByArticleIdMutationMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useDeleteFavoriteArticleByArticleIdMutationMutation(baseOptions?: Apollo.MutationHookOptions<DeleteFavoriteArticleByArticleIdMutationMutation, DeleteFavoriteArticleByArticleIdMutationMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<DeleteFavoriteArticleByArticleIdMutationMutation, DeleteFavoriteArticleByArticleIdMutationMutationVariables>(DeleteFavoriteArticleByArticleIdMutationDocument, options);
-      }
-export type DeleteFavoriteArticleByArticleIdMutationMutationHookResult = ReturnType<typeof useDeleteFavoriteArticleByArticleIdMutationMutation>;
-export type DeleteFavoriteArticleByArticleIdMutationMutationResult = Apollo.MutationResult<DeleteFavoriteArticleByArticleIdMutationMutation>;
-export type DeleteFavoriteArticleByArticleIdMutationMutationOptions = Apollo.BaseMutationOptions<DeleteFavoriteArticleByArticleIdMutationMutation, DeleteFavoriteArticleByArticleIdMutationMutationVariables>;
 export const DeleteFavoriteArticleFolderMutationDocument = gql`
     mutation DeleteFavoriteArticleFolderMutation($input: DeleteFavoriteArticleFolderInput!) {
   deleteFavoriteArticleFolder(input: $input)
