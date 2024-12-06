@@ -7,10 +7,7 @@ import { TrendArticleListFragment } from "../../List";
 export const TrendArticleDashboardTemplateFragment = graphql(
   `
     fragment TrendArticleDashboardTemplateFragment on Query {
-      enArticles: articles(articlesInput: $enInput) {
-        ...TrendArticleListFragment
-      }
-      jpArticles: articles(articlesInput: $jpInput) {
+      articles: articles(articlesInput: $input) {
         ...TrendArticleListFragment
       }
       favoriteArticleFolders(input: $favoriteArticleFoldersInput) {

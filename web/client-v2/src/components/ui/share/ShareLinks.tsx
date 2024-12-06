@@ -22,18 +22,17 @@ export const ShareLinks: FC<ShareLinksProps> = ({
     console.log(`Invalid URL at ShareLinks components: ${shareUrl}`);
   }
   return (
-    <div className="flex items-center justify-center">
-      <div className="mr-4">
-        {newUrl && <ReadPostTooltip postUrl={newUrl} size={postIconSize} />}
-        {!newUrl && <span>{shareUrl}</span>}
-      </div>
-      <div>
-        <XShareTooltip
-          shareTitle={shareTitle}
-          shareUrl={shareUrl}
-          size={xIconSize}
-        />
-      </div>
+    <div className="flex items-center justify-center gap-4">
+      {newUrl ? (
+        <ReadPostTooltip postUrl={newUrl} size={postIconSize} />
+      ) : (
+        <span>{shareUrl}</span>
+      )}
+      <XShareTooltip
+        shareTitle={shareTitle}
+        shareUrl={shareUrl}
+        size={xIconSize}
+      />
     </div>
   );
 };

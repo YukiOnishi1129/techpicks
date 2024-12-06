@@ -1,10 +1,7 @@
 import { redirect } from "next/navigation";
-import { Suspense } from "react";
 
 import { getUser } from "@/features/auth/actions/user";
 import { TrendArticleDashboardTemplate } from "@/features/trends/components/Template";
-
-import { ScreenLoader } from "@/components/layout/ScreenLoader";
 
 type PageProps = {
   params: { slug: string };
@@ -17,9 +14,5 @@ export default async function DashboardTrendPage({ searchParams }: PageProps) {
     redirect("/login");
   }
 
-  return (
-    <Suspense fallback={<ScreenLoader />}>
-      <TrendArticleDashboardTemplate user={user} />
-    </Suspense>
-  );
+  return <TrendArticleDashboardTemplate user={user} />;
 }

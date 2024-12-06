@@ -4,10 +4,16 @@ on:
   push:
     branches: 
       - "main"
-      - "develop"
-      - "feature/*"
-      - "feat/*"
-      - "YL-*"
+      # - "develop"
+      # - "feature/*"
+      # - "feat/*"
+      # - "YL-*"
+    paths:
+      - "micro-service/user-service/**"
+      - ".github/workflows/user_service_pr_check.yml"
+
+  pull_request:
+    types: [opened, synchronize]
     paths:
       - "micro-service/user-service/**"
       - ".github/workflows/user_service_pr_check.yml"

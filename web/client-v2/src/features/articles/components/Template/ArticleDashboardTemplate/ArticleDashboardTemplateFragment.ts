@@ -1,15 +1,27 @@
 import { graphql } from "gql.tada";
 
-import { FavoriteFolderArticleCardWrapperFragment } from "../../Card";
+import {
+  ArticleCardWrapperFragment,
+  FavoriteFolderArticleCardWrapperFragment,
+} from "../../Card";
 import { ArticleListFragment } from "../../List";
 
 export const ArticleDashboardTemplateFragment = graphql(
   `
     fragment ArticleDashboardTemplateFragment on Query {
-      enArticles: articles(articlesInput: $enInput) {
-        ...ArticleListFragment
-      }
-      jpArticles: articles(articlesInput: $jpInput) {
+      articles: articles(articlesInput: $input) {
+        pageInfo {
+          hasNextPage
+          hasPreviousPage
+          startCursor
+          endCursor
+        }
+        edges {
+          node {
+            id
+            ...ArticleCardWrapperFragment
+          }
+        }
         ...ArticleListFragment
       }
       favoriteArticleFolders(input: $favoriteArticleFoldersInput) {
@@ -17,5 +29,9 @@ export const ArticleDashboardTemplateFragment = graphql(
       }
     }
   `,
-  [ArticleListFragment, FavoriteFolderArticleCardWrapperFragment]
+  [
+    ArticleListFragment,
+    ArticleCardWrapperFragment,
+    FavoriteFolderArticleCardWrapperFragment,
+  ]
 );

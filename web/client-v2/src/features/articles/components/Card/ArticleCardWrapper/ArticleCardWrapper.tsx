@@ -1,29 +1,47 @@
 "use client";
+
+import { useMutation } from "@apollo/client";
 import { User } from "@supabase/supabase-js";
 import { clsx } from "clsx";
-import { FragmentOf, readFragment } from "gql.tada";
-import { FC, useCallback, useState, useTransition } from "react";
+import { FragmentOf, graphql, readFragment } from "gql.tada";
+import { FC, useCallback, useTransition } from "react";
 
-import { createFavoriteArticleMutation } from "@/features/favorites/actions/actCreateFavoriteArticleMutaion";
-import { deleteFavoriteArticleByArticleIdMutation } from "@/features/favorites/actions/actDeleteFavoriteArticleByArticleIdMutation";
+import { logoutToLoginPage } from "@/features/auth/actions/auth";
+import { getUser } from "@/features/auth/actions/user";
 import { FollowFavoriteArticleDropdownMenu } from "@/features/favorites/components/DropdownMenu";
 
+import { IconTitleLink } from "@/components/ui/link";
 import { ShareLinks } from "@/components/ui/share";
 
 import { useStatusToast } from "@/hooks/useStatusToast";
 
 import { ArticleTabType } from "@/types/article";
 
-import { CreateFavoriteArticleInput } from "@/graphql/type";
-
 import style from "./ArticleCardWrapper.module.css";
 import {
   ArticleCardWrapperFragment,
   FavoriteFolderArticleCardWrapperFragment,
 } from "./ArticleCardWrapperFragment";
-import { useArticleBookmark } from "./useArticleBookmark";
+import { useArticleBookmark } from "../../../hooks/useArticleBookmark";
 import { AddBookmarkTooltip, DeleteBookmarkTooltip } from "../../ToolTip";
 import { ArticleCardItem } from "../ArticleCardItem";
+
+const CreateFavoriteArticleMutation = graphql(`
+  mutation CreateFavoriteArticleMutation($input: CreateFavoriteArticleInput!) {
+    createFavoriteArticle(input: $input) {
+      id
+      favoriteArticleFolderId
+    }
+  }
+`);
+
+const DeleteFavoriteArticleByArticleIdMutation = graphql(`
+  mutation DeleteFavoriteArticleByArticleIdMutation(
+    $input: DeleteFavoriteArticleByArticleIdInput!
+  ) {
+    deleteFavoriteArticleByArticleId(input: $input)
+  }
+`);
 
 type ArticleCardWrapperProps = {
   data: FragmentOf<typeof ArticleCardWrapperFragment>;
@@ -49,47 +67,90 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
     FavoriteFolderArticleCardWrapperFragment,
     favoriteArticleFolders
   );
-  const [isFollowing, setIsFollowing] = useState<boolean>(
-    fragment.isFollowing || false
-  );
-  const [showArticle, setShowArticle] = useState(fragment);
-  const [showFavoriteFolders, setShowFavoriteFolders] = useState(
-    fragmentFavoriteFolder
+
+  const { handleCreateBookmark, handleDeleteBookmark } =
+    useArticleBookmark(fragment);
+
+  const [createFavoriteArticleMutation] = useMutation(
+    CreateFavoriteArticleMutation
   );
 
-  const { bookmarkId, handleAddBookmark, handleRemoveBookmark } =
-    useArticleBookmark(showArticle);
+  const [deleteFavoriteArticleByArticleIdMutation] = useMutation(
+    DeleteFavoriteArticleByArticleIdMutation
+  );
 
   const handleCreateFavoriteArticle = useCallback(
-    async (favoriteArticleFolderId: string) => {
-      const input: CreateFavoriteArticleInput = {
-        articleId: showArticle.id,
-        favoriteArticleFolderId,
-        platformId: showArticle.platform?.id,
-        title: showArticle.title,
-        description: showArticle?.description,
-        articleUrl: showArticle.articleUrl,
-        publishedAt: showArticle.publishedAt,
-        authorName: showArticle.authorName,
-        tags: showArticle.tags,
-        thumbnailUrl: showArticle.thumbnailUrl,
-        platformName: showArticle.platform?.name || "",
-        platformUrl: showArticle.platform?.siteUrl || "",
-        platformFaviconUrl: showArticle.platform?.faviconUrl || "",
-        isEng: showArticle.isEng,
-        isRead: false,
-        isPrivate: showArticle.isPrivate,
-      };
+    async (favoriteArticleFolderId: string, isCreatedFolder?: boolean) => {
+      const user = await getUser();
+      if (!user) {
+        failToast({
+          description: "Fail: Please login to add favorite article",
+        });
+        await logoutToLoginPage();
+        return;
+      }
 
-      const { data, error } = await createFavoriteArticleMutation(input);
+      const { data, errors } = await createFavoriteArticleMutation({
+        variables: {
+          input: {
+            articleId: fragment.id,
+            favoriteArticleFolderId,
+            platformId: fragment.platform?.id,
+            title: fragment.title,
+            description: fragment?.description,
+            articleUrl: fragment.articleUrl,
+            publishedAt: fragment.publishedAt,
+            authorName: fragment.authorName,
+            tags: fragment.tags,
+            thumbnailUrl: fragment.thumbnailUrl,
+            platformName: fragment.platform?.name || "",
+            platformUrl: fragment.platform?.siteUrl || "",
+            platformFaviconUrl: fragment.platform?.faviconUrl || "",
+            isEng: fragment.isEng,
+            isRead: false,
+            isPrivate: fragment.isPrivate,
+          },
+        },
+        update: (cache, { data }) => {
+          if (data?.createFavoriteArticle) {
+            const newFavoriteArticle = data.createFavoriteArticle;
+            cache.modify({
+              id: cache.identify(fragment),
+              fields: {
+                isFollowing: () => true,
+                favoriteArticleFolderIds: () => [
+                  ...fragment.favoriteArticleFolderIds,
+                  newFavoriteArticle.favoriteArticleFolderId,
+                ],
+              },
+            });
+            if (isCreatedFolder) {
+              cache.modify({
+                id: cache.identify(fragmentFavoriteFolder),
+                fields: {
+                  edges: () => [
+                    ...fragmentFavoriteFolder.edges,
+                    {
+                      node: {
+                        id: newFavoriteArticle.favoriteArticleFolderId,
+                        title: fragment.title,
+                      },
+                    },
+                  ],
+                },
+              });
+            }
+          }
+        },
+      });
 
-      if (error || !data?.createFavoriteArticle) {
-        if (error && error.length > 0) {
+      if (errors) {
+        if (errors.length > 0) {
           // TODO: Modify the error message response on the BFF side
           const errMsg =
-            error[0].message.indexOf("favorite article already exists") != -1
+            errors[0].message.indexOf("favorite article already exists") != -1
               ? "favorite article already exists"
-              : error[0].message;
+              : errors[0].message;
           failToast({
             description: errMsg,
           });
@@ -101,68 +162,74 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
         return;
       }
 
-      if (!isFollowing) setIsFollowing(true);
-      setShowArticle((prev) => {
-        return {
-          ...prev,
-          favoriteArticleFolderIds: [
-            ...prev.favoriteArticleFolderIds,
-            data.createFavoriteArticle.favoriteArticleFolderId,
-          ],
-        };
-      });
-
       successToast({
-        description: "Follow the article",
+        description: `Follow the article title:【 ${fragment.title} 】`,
       });
 
-      return data.createFavoriteArticle.id;
+      return data?.createFavoriteArticle.id;
     },
-    [successToast, failToast, showArticle, isFollowing, ,]
+    [
+      successToast,
+      failToast,
+      fragment,
+      createFavoriteArticleMutation,
+      fragmentFavoriteFolder,
+    ]
   );
 
   const handleRemoveFavoriteArticle = useCallback(
     async (favoriteArticleFolderId: string, favoriteArticleId?: string) => {
-      const { data, error } = await deleteFavoriteArticleByArticleIdMutation({
-        articleId: showArticle.id,
-        favoriteArticleFolderId,
+      const user = await getUser();
+      if (!user) {
+        failToast({
+          description: "Fail: Please login to unfollow favorite article",
+        });
+        await logoutToLoginPage();
+        return;
+      }
+      const deletedTitle = fragment.title;
+      const { errors } = await deleteFavoriteArticleByArticleIdMutation({
+        variables: {
+          input: {
+            articleId: fragment.id,
+            favoriteArticleFolderId,
+          },
+        },
+        update: (cache) => {
+          const newFavoriteArticleFolderIds =
+            fragment.favoriteArticleFolderIds?.filter(
+              (id) => id !== favoriteArticleFolderId
+            );
+          cache.modify({
+            id: cache.identify(fragment),
+            fields: {
+              isFollowing: () => newFavoriteArticleFolderIds.length > 0,
+              favoriteArticleFolderIds: () => newFavoriteArticleFolderIds,
+            },
+          });
+        },
       });
 
-      if (error || !data?.deleteFavoriteArticleByArticleId) {
-        if (error || !data?.deleteFavoriteArticleByArticleId) {
-          if (error && error.length > 0) {
-            // TODO: Modify the error message response on the BFF side
-            const errMsg =
-              error[0].message.indexOf("favorite article not found") != -1
-                ? "favorite article not found"
-                : error[0].message;
-            failToast({
-              description: errMsg,
-            });
-            return;
-          }
+      if (errors) {
+        if (errors.length > 0) {
+          // TODO: Modify the error message response on the BFF side
+          const errMsg =
+            errors[0].message.indexOf("favorite article not found") != -1
+              ? "favorite article not found"
+              : errors[0].message;
           failToast({
-            description: "Fail: Something went wrong",
+            description: errMsg,
           });
           return;
         }
+        failToast({
+          description: "Fail: Something went wrong",
+        });
+        return;
       }
 
-      if (isFollowing)
-        setIsFollowing(
-          showArticle.favoriteArticleFolderIds.filter(
-            (id) => id !== favoriteArticleFolderId
-          ).length > 0
-        );
-      setShowArticle((prev) => ({
-        ...prev,
-        favoriteArticleFolderIds: prev.favoriteArticleFolderIds?.filter(
-          (id) => id !== favoriteArticleFolderId
-        ),
-      }));
-
       successToast({
-        description: "Unfollow the article",
+        description: `Unfollow the article title: 【 ${deletedTitle} 】`,
       });
 
       return favoriteArticleId;
@@ -170,37 +237,24 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
     [
       successToast,
       failToast,
-      isFollowing,
-      showArticle.id,
-      showArticle.favoriteArticleFolderIds,
+      fragment,
+      deleteFavoriteArticleByArticleIdMutation,
     ]
   );
 
   const handleCreateFavoriteArticleFolder = useCallback(
     async (favoriteArticleFolderId: string, title: string) => {
       startTransition(async () => {
-        const id = await handleCreateFavoriteArticle(favoriteArticleFolderId);
+        const id = await handleCreateFavoriteArticle(
+          favoriteArticleFolderId,
+          true
+        );
         if (!id) {
           failToast({
             description: "Fail: Something went wrong",
           });
           return;
         }
-
-        setShowFavoriteFolders((prev) => {
-          return {
-            ...prev,
-            favoriteArticleFolders: [
-              ...prev.edges,
-              {
-                node: {
-                  id,
-                  title,
-                },
-              },
-            ],
-          };
-        });
       });
     },
     [handleCreateFavoriteArticle, failToast]
@@ -208,73 +262,67 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
 
   return (
     <div
-      key={showArticle.id}
-      className="mb-4 rounded-2xl border-2 bg-primary-foreground px-4 pb-4 md:px-2 md:pb-2"
+      key={fragment.id}
+      className="rounded-2xl border-2 bg-primary-foreground px-4 pb-4 md:px-2"
     >
-      <div>
-        <div className="mb-4 flex h-16 justify-between border-b-2 py-4 md:ml-6">
+      <div className="grid gap-4">
+        <div className="flex h-16 justify-between border-b-2 py-4 md:px-6">
           <>
             <div className="flex">
               {tab === TREND_TAB && (
                 <div
                   className={clsx(style["like-count"], "mr-4 text-rose-600")}
                 >
-                  <span className="text-4xl font-bold">{`${showArticle.likeCount}`}</span>
+                  <span className="text-4xl font-bold">{`${fragment.likeCount}`}</span>
                   <span className="ml-2 font-bold">{"likes"}</span>
                 </div>
               )}
 
               {tab !== TREND_TAB ? (
-                <div>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    className="mr-2 inline-block size-[36px] bg-white"
-                    src={showArticle.platform?.faviconUrl || ""}
-                    alt=""
-                  />
-                  <span className="hidden font-bold md:inline-block">
-                    {showArticle.platform?.name || ""}
-                  </span>
-                </div>
+                <IconTitleLink
+                  url={fragment.platform?.siteUrl || ""}
+                  iconImageUrl={fragment.platform?.faviconUrl || ""}
+                  title={fragment.platform?.name || ""}
+                  target="_blank"
+                />
               ) : (
                 <div>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     className="mr-2 hidden size-[36px] bg-white md:inline-block"
-                    src={showArticle.platform?.faviconUrl || ""}
+                    src={fragment.platform?.faviconUrl || ""}
                     alt=""
                   />
                 </div>
               )}
             </div>
 
-            <div className="flex items-center justify-center">
-              <div className="mr-4">
+            <div className="flex items-center justify-center gap-4">
+              <div>
                 <ShareLinks
-                  shareTitle={showArticle.title}
-                  shareUrl={showArticle.articleUrl}
+                  shareTitle={fragment.title}
+                  shareUrl={fragment.articleUrl}
                 />
               </div>
 
               <>
-                {bookmarkId ? (
+                {fragment?.bookmarkId ? (
                   <DeleteBookmarkTooltip
-                    bookmarkId={bookmarkId}
-                    handleRemoveBookmark={handleRemoveBookmark}
+                    bookmarkId={fragment?.bookmarkId || ""}
+                    handleRemoveBookmark={handleDeleteBookmark}
                   />
                 ) : (
                   <AddBookmarkTooltip
-                    articleId={showArticle.id}
-                    handleAddBookmark={handleAddBookmark}
+                    handleAddBookmark={handleCreateBookmark}
                   />
                 )}
-                <div className="mx-4  mt-2">
+                <div className="mt-2">
                   {!isPending && (
                     <FollowFavoriteArticleDropdownMenu
-                      data={showFavoriteFolders}
-                      isFollowing={isFollowing}
+                      data={fragmentFavoriteFolder}
+                      isFollowing={fragment.isFollowing}
                       followedFolderIds={
-                        showArticle.favoriteArticleFolderIds || []
+                        fragment.favoriteArticleFolderIds || []
                       }
                       handleCreateFavoriteArticle={handleCreateFavoriteArticle}
                       handleRemoveFavoriteArticle={handleRemoveFavoriteArticle}
@@ -289,7 +337,9 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
           </>
         </div>
 
-        <ArticleCardItem data={showArticle} user={user} tab={tab} />
+        <div>
+          <ArticleCardItem data={fragment} user={user} tab={tab} />
+        </div>
       </div>
     </div>
   );

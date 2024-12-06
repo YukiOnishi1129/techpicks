@@ -12,7 +12,6 @@ export const TrendArticleListFragment = graphql(
         endCursor
       }
       edges {
-        # cursor
         node {
           id
           platform {
