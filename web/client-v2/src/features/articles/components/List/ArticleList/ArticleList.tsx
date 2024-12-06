@@ -10,7 +10,7 @@ import { Loader } from "@/components/ui/loader";
 import { ArticleTabType } from "@/types/article";
 import { LanguageStatus } from "@/types/language";
 
-import { GetArticleListQuery } from "./GetArticleListQuery";
+import { ArticleListQuery } from "./ArticleListQuery";
 import { ArticleCardWrapper } from "../../Card/ArticleCardWrapper/ArticleCardWrapper";
 import { GetArticleDashboardTemplateQuery } from "../../Template/ArticleDashboardTemplate/GetArticleDashboardTemplateQuery";
 
@@ -45,7 +45,7 @@ export function ArticleList({ user, languageStatus, tab }: ArticleListProps) {
     data: res,
     fetchMore,
     error: onlyFetchArticlesError,
-  } = useQuery(GetArticleListQuery, {
+  } = useQuery(ArticleListQuery, {
     variables: {
       input: {
         first: 20,

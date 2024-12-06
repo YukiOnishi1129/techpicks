@@ -4,7 +4,6 @@ import {
   ArticleCardWrapperFragment,
   FavoriteFolderArticleCardWrapperFragment,
 } from "../../Card";
-import { ArticleListFragment } from "../../List";
 
 export const ArticleDashboardTemplateFragment = graphql(
   `
@@ -22,16 +21,11 @@ export const ArticleDashboardTemplateFragment = graphql(
             ...ArticleCardWrapperFragment
           }
         }
-        ...ArticleListFragment
       }
       favoriteArticleFolders(input: $favoriteArticleFoldersInput) {
         ...FavoriteFolderArticleCardWrapperFragment
       }
     }
   `,
-  [
-    ArticleListFragment,
-    ArticleCardWrapperFragment,
-    FavoriteFolderArticleCardWrapperFragment,
-  ]
+  [ArticleCardWrapperFragment, FavoriteFolderArticleCardWrapperFragment]
 );
