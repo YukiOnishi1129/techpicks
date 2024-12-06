@@ -1,19 +1,17 @@
 import { graphql } from "gql.tada";
 
-import { ArticleDashboardTemplateFragment } from "./ArticleDashboardTemplateFragment";
 import { FavoriteFolderArticleCardWrapperFragment } from "../../Card";
 
-export const GetArticleDashboardTemplateQuery = graphql(
+export const ArticleDashboardTemplateQuery = graphql(
   `
-    query GetArticleDashboardTemplateQuery(
+    query ArticleDashboardTemplateQuery(
       $input: ArticlesInput!
       $favoriteArticleFoldersInput: FavoriteArticleFoldersInput!
     ) {
       favoriteArticleFolders(input: $favoriteArticleFoldersInput) {
         ...FavoriteFolderArticleCardWrapperFragment
       }
-      ...ArticleDashboardTemplateFragment
     }
   `,
-  [ArticleDashboardTemplateFragment, FavoriteFolderArticleCardWrapperFragment]
+  [FavoriteFolderArticleCardWrapperFragment]
 );

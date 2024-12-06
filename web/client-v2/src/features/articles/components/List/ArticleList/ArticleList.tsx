@@ -12,7 +12,7 @@ import { LanguageStatus } from "@/types/language";
 
 import { ArticleListQuery } from "./ArticleListQuery";
 import { ArticleCardWrapper } from "../../Card/ArticleCardWrapper/ArticleCardWrapper";
-import { GetArticleDashboardTemplateQuery } from "../../Template/ArticleDashboardTemplate/GetArticleDashboardTemplateQuery";
+import { ArticleDashboardTemplateQuery } from "../../Template/ArticleDashboardTemplate/ArticleDashboardTemplateQuery";
 
 type ArticleListProps = {
   user: User;
@@ -24,7 +24,7 @@ export function ArticleList({ user, languageStatus, tab }: ArticleListProps) {
   const observerTarget = useRef(null);
 
   const { data: resSuspenseData, error } = useSuspenseQuery(
-    GetArticleDashboardTemplateQuery,
+    ArticleDashboardTemplateQuery,
     {
       variables: {
         input: {
