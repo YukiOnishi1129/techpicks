@@ -1,17 +1,17 @@
 import { graphql } from "gql.tada";
 
 import {
-  ArticleCardWrapperFragment,
-  FavoriteFolderArticleCardWrapperFragment,
+  BookmarkCardWrapperFragment,
+  FavoriteFolderBookmarkCardWrapperFragment,
 } from "../../Card";
 
-export const ArticleDashboardTemplateQuery = graphql(
+export const BookmarkTemplateQuery = graphql(
   `
-    query ArticleDashboardTemplateQuery(
-      $input: ArticlesInput!
+    query BookmarkTemplateQuery(
+      $input: BookmarksInput!
       $favoriteArticleFoldersInput: FavoriteArticleFoldersInput!
     ) {
-      articles(articlesInput: $input) {
+      bookmarks(input: $input) {
         pageInfo {
           hasNextPage
           hasPreviousPage
@@ -21,14 +21,14 @@ export const ArticleDashboardTemplateQuery = graphql(
         edges {
           node {
             id
-            ...ArticleCardWrapperFragment
+            ...BookmarkCardWrapperFragment
           }
         }
       }
       favoriteArticleFolders(input: $favoriteArticleFoldersInput) {
-        ...FavoriteFolderArticleCardWrapperFragment
+        ...FavoriteFolderBookmarkCardWrapperFragment
       }
     }
   `,
-  [ArticleCardWrapperFragment, FavoriteFolderArticleCardWrapperFragment]
+  [BookmarkCardWrapperFragment, FavoriteFolderBookmarkCardWrapperFragment]
 );

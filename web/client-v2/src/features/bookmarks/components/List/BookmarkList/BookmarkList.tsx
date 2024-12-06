@@ -1,17 +1,17 @@
 "use client";
 
+import { useQuery, useSuspenseQuery } from "@apollo/client";
 import { User } from "@supabase/supabase-js";
-import { FragmentOf, readFragment } from "gql.tada";
 import { FC, useCallback, useEffect, useRef, useState } from "react";
 
+import { NotFoundList } from "@/components/layout/NotFoundList";
 import { Loader } from "@/components/ui/loader";
 
-import { getBookmarkListQuery } from "./actGetBookmarkListQuery";
-import { BookmarkListFragment } from "./BookmarkListFragment";
+import { BookmarkListQuery } from "./BookmarkListQuery";
 import { BookmarkCardWrapper } from "../../Card";
+import { BookmarkTemplateQuery } from "../../Template/BookmarkTemplate/BookmarkTemplateQuery";
 
 type BookmarkListProps = {
-  data: FragmentOf<typeof BookmarkListFragment>;
   user: User;
   keyword?: string;
   after?: string | null;
@@ -19,40 +19,90 @@ type BookmarkListProps = {
 
 export const BookmarkList: FC<BookmarkListProps> = ({
   user,
-  data,
   keyword,
   after,
 }) => {
   const observerTarget = useRef(null);
-  const fragment = readFragment(BookmarkListFragment, data);
-  const [edges, setEdges] = useState(fragment.edges);
+
+  const { data: resSuspenseData, error } = useSuspenseQuery(
+    BookmarkTemplateQuery,
+    {
+      variables: {
+        input: {
+          first: 20,
+          after: null,
+          userId: user.id,
+          keyword,
+        },
+        favoriteArticleFoldersInput: {
+          isAllFetch: true,
+          isFolderOnly: true,
+        },
+      },
+    }
+  );
+
+  const {
+    data: res,
+    fetchMore,
+    error: onlyFetchBookmarksError,
+  } = useQuery(BookmarkListQuery, {
+    variables: {
+      input: {
+        first: 20,
+        after: null,
+        userId: user.id,
+        keyword,
+      },
+    },
+    fetchPolicy: "cache-first",
+    nextFetchPolicy: "network-only",
+  });
+
   const [hashMore, setHashMore] = useState(true);
   const [offset, setOffset] = useState(1);
-  const [endCursor, setEndCursor] = useState(fragment.pageInfo.endCursor);
+  const [endCursor, setEndCursor] = useState(
+    res?.bookmarks?.pageInfo?.endCursor || null
+  );
   const [isNextPage, setIsNextPage] = useState(true);
-
-  const flatBookmarks = edges ? edges.flatMap((edge) => edge.node) : [];
 
   const loadMore = useCallback(async () => {
     if (!isNextPage) return;
-    const { data: res, error } = await getBookmarkListQuery({
-      userId: user.id,
-      first: 20,
-      after: endCursor,
-      keyword,
-    });
-    if (error) return;
-    const newBookmarks = readFragment(BookmarkListFragment, res.bookmarks);
-    if (newBookmarks.pageInfo.hasNextPage) {
-      setEndCursor(newBookmarks.pageInfo.endCursor);
-    }
-    if (!newBookmarks.pageInfo.hasNextPage) setIsNextPage(false);
 
-    if (newBookmarks.edges.length > 0) {
-      setEdges((prev) => [...prev, ...newBookmarks.edges]);
-      setHashMore(newBookmarks.edges.length > 0);
+    const { data: resData, error: resError } = await fetchMore({
+      variables: {
+        input: {
+          first: 20,
+          userId: user.id,
+          keyword,
+          after: endCursor,
+        },
+      },
+      updateQuery: (prev, { fetchMoreResult }) => {
+        if (!fetchMoreResult) return prev;
+        return {
+          ...prev,
+          bookmarks: {
+            ...prev.bookmarks,
+            edges: [
+              ...prev.bookmarks.edges,
+              ...fetchMoreResult.bookmarks.edges,
+            ],
+            pageInfo: fetchMoreResult.bookmarks.pageInfo,
+          },
+        };
+      },
+    });
+    if (resError) return;
+
+    if (resData.bookmarks.pageInfo.hasNextPage) {
+      const endCursor = resData.bookmarks.pageInfo?.endCursor || null;
+      setEndCursor(endCursor);
     }
-  }, [keyword, user.id, endCursor, isNextPage]);
+    if (!resData.bookmarks.pageInfo.hasNextPage) setIsNextPage(false);
+
+    setHashMore(resData.bookmarks.edges.length > 0);
+  }, [keyword, user.id, endCursor, isNextPage, fetchMore]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -81,28 +131,33 @@ export const BookmarkList: FC<BookmarkListProps> = ({
   }, [hashMore]);
 
   useEffect(() => {
-    setEdges(fragment.edges);
-  }, [fragment.edges]);
-
-  useEffect(() => {
     if (offset > 1) {
       loadMore();
     }
   }, [offset, hashMore]); // eslint-disable-line
 
+  if (error) {
+    return <div>{error.message}</div>;
+  }
+  if (onlyFetchBookmarksError) {
+    return <div>{onlyFetchBookmarksError.message}</div>;
+  }
+
   return (
     <>
-      {flatBookmarks.length === 0 ? (
-        <div className="flex flex-col items-center justify-center ">
-          {/* <NotFoundList message="No articles found" /> */}
-          Not Found
+      {res?.bookmarks.edges.length === 0 ? (
+        <div className="flex flex-col items-center justify-center">
+          <NotFoundList message="No bookmarks found" />
         </div>
       ) : (
-        <div className="m-auto">
-          {flatBookmarks.map((bookmark) => (
-            <div key={bookmark.id} className="mb-4">
-              <BookmarkCardWrapper data={bookmark} user={user} />
-            </div>
+        <div className="m-auto grid gap-4">
+          {res?.bookmarks.edges?.map((edge, i) => (
+            <BookmarkCardWrapper
+              key={`${i}-${edge.node.id}`}
+              data={edge.node}
+              favoriteArticleFolders={resSuspenseData.favoriteArticleFolders}
+              user={user}
+            />
           ))}
           <div ref={observerTarget}>
             {hashMore && isNextPage && (

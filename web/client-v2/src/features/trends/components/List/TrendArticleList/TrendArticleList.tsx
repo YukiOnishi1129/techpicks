@@ -11,8 +11,8 @@ import { Loader } from "@/components/ui/loader";
 import { ArticleTabType } from "@/types/article";
 import { LanguageStatus } from "@/types/language";
 
-import { GetTrendArticleListQuery } from "./GetTrendArticleListQuery";
-import { GetTrendArticleDashboardTemplateQuery } from "../../Template/TrendArticleDashboardTemplate/GetTrendArticleDashboardTemplateQuery";
+import { TrendArticleListQuery } from "./TrendArticleListQuery";
+import { TrendArticleDashboardTemplateQuery } from "../../Template/TrendArticleDashboardTemplate/TrendArticleDashboardTemplateQuery";
 
 type TrendArticleListProps = {
   user: User;
@@ -28,7 +28,7 @@ export function TrendArticleList({
   const observerTarget = useRef(null);
 
   const { data: resSuspenseData, error } = useSuspenseQuery(
-    GetTrendArticleDashboardTemplateQuery,
+    TrendArticleDashboardTemplateQuery,
     {
       variables: {
         input: {
@@ -49,7 +49,7 @@ export function TrendArticleList({
     data: res,
     fetchMore,
     error: onlyFetchArticlesError,
-  } = useQuery(GetTrendArticleListQuery, {
+  } = useQuery(TrendArticleListQuery, {
     variables: {
       input: {
         first: 20,

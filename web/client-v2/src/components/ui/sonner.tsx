@@ -10,6 +10,7 @@ const Toaster = ({ ...props }: ToasterProps) => {
 
   return (
     <Sonner
+      position="top-right"
       theme={theme as ToasterProps["theme"]}
       // eslint-disable-next-line tailwindcss/no-custom-classname
       className="toaster group"

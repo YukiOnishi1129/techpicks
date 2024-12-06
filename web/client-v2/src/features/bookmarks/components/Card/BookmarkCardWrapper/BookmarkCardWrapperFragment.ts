@@ -1,5 +1,7 @@
 import { graphql } from "gql.tada";
 
+import { FollowFavoriteArticleDropdownMenuContentFragment } from "@/features/favorites/components/DropdownMenu/FollowFavoriteArticleDropdownMenu/FollowFavoriteArticleDropdownMenuFragment";
+
 import { BookmarkCardItemFragment } from "../BookmarkCardItem";
 
 export const BookmarkCardWrapperFragment = graphql(
@@ -24,4 +26,19 @@ export const BookmarkCardWrapperFragment = graphql(
     }
   `,
   [BookmarkCardItemFragment]
+);
+
+export const FavoriteFolderBookmarkCardWrapperFragment = graphql(
+  `
+    fragment FavoriteFolderBookmarkCardWrapperFragment on FavoriteArticleFolderConnection {
+      edges {
+        node {
+          id
+          title
+        }
+      }
+      ...FollowFavoriteArticleDropdownMenuContentFragment
+    }
+  `,
+  [FollowFavoriteArticleDropdownMenuContentFragment]
 );

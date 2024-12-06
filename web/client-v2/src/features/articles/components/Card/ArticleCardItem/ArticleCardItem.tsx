@@ -29,7 +29,7 @@ export const ArticleCardItem: FC<ArticleCardItemProps> = ({ data }) => {
   const imageUrl = useCheckImageExist(fragment.thumbnailUrl);
 
   return (
-    <div className="relative w-full rounded">
+    <div className="relative w-full rounded md:px-4">
       <div className="justify-around gap-4 md:flex">
         <div className="grid gap-2 md:flex md:w-[30%] md:justify-center">
           <h3 className="line-clamp-3 block text-left text-lg font-bold tracking-wide md:hidden md:w-full md:text-xl">
@@ -41,7 +41,10 @@ export const ArticleCardItem: FC<ArticleCardItemProps> = ({ data }) => {
             target={"_blank"}
             className="flex w-full justify-center md:h-36 md:w-48"
           >
-            <ZoomableImage imageUrl={imageUrl || ""} alt={fragment.title} />
+            <ZoomableImage
+              imageUrl={fragment.thumbnailUrl}
+              alt={fragment.title}
+            />
           </Link>
         </div>
 

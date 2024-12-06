@@ -61,10 +61,10 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
   return (
     <div
       key={fragment.id}
-      className="rounded-2xl border-2 bg-primary-foreground px-4 pb-4 md:px-2"
+      className="rounded-2xl border bg-primary-foreground px-4 pb-4 md:px-2"
     >
       <div className="grid gap-4">
-        <div className="flex h-16 justify-between border-b-2 py-4 md:px-6">
+        <div className="flex h-16 justify-between border-b py-4 md:px-6">
           <>
             <div className="flex">
               {tab === TREND_TAB && (

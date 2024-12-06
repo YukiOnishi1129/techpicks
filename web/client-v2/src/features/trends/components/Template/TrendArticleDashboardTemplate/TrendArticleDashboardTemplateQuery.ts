@@ -3,11 +3,11 @@ import { graphql } from "gql.tada";
 import {
   ArticleCardWrapperFragment,
   FavoriteFolderArticleCardWrapperFragment,
-} from "../../Card";
+} from "@/features/articles/components/Card";
 
-export const ArticleDashboardTemplateQuery = graphql(
+export const TrendArticleDashboardTemplateQuery = graphql(
   `
-    query ArticleDashboardTemplateQuery(
+    query TrendArticleDashboardTemplateQuery(
       $input: ArticlesInput!
       $favoriteArticleFoldersInput: FavoriteArticleFoldersInput!
     ) {
