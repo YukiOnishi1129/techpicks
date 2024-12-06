@@ -73,7 +73,8 @@ export const FollowFavoriteArticleDropdownMenuContent: FC<
         FollowTargetFavoriteArticleFolderItemFragment,
         favoriteArticleFolder.node
       );
-      return nodeFragment.title.includes(searchKeyword);
+      const regexp = new RegExp(searchKeyword, "i");
+      return nodeFragment.title.match(regexp);
     });
   }, [searchKeyword, fragment.edges]);
 
