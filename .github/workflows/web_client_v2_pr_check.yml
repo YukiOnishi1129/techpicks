@@ -4,10 +4,10 @@ on:
   push:
     branches:
       - "main"
-      - "develop"
-      - "feature/*"
-      - "feat/*"
-      - "YL-*"
+      # - "develop"
+      # - "feature/*"
+      # - "feat/*"
+      # - "YL-*"
     paths:
       - "web/client-v2/**"
       - ".github/workflows/web_client_v2_pr_check.yml"
