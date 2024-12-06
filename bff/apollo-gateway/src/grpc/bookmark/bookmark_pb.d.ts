@@ -318,6 +318,12 @@ export class Bookmark extends jspb.Message {
     setPlatformUrl(value: string): Bookmark;
     getPlatformFaviconUrl(): string;
     setPlatformFaviconUrl(value: string): Bookmark;
+    getIsFollowing(): boolean;
+    setIsFollowing(value: boolean): Bookmark;
+    clearFavoriteArticleFolderIdsList(): void;
+    getFavoriteArticleFolderIdsList(): Array<string>;
+    setFavoriteArticleFolderIdsList(value: Array<string>): Bookmark;
+    addFavoriteArticleFolderIds(value: string, index?: number): string;
     getIsEng(): boolean;
     setIsEng(value: boolean): Bookmark;
     getIsRead(): boolean;
@@ -357,6 +363,8 @@ export namespace Bookmark {
         platformName: string,
         platformUrl: string,
         platformFaviconUrl: string,
+        isFollowing: boolean,
+        favoriteArticleFolderIdsList: Array<string>,
         isEng: boolean,
         isRead: boolean,
         createdAt?: google_protobuf_timestamp_pb.Timestamp.AsObject,
