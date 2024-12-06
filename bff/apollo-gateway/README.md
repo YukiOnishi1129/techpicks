@@ -1,3 +1,3 @@
 # Apollo Gateway
 
-Apollo gateway is GraphQL server.
+Apollo gateway is GraphQL server.a
