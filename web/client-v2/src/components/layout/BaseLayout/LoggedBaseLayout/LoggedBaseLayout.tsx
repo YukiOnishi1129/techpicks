@@ -1,13 +1,15 @@
 import { User } from "@supabase/supabase-js";
-import { FC, ReactNode } from "react";
+import { FC, ReactNode, Suspense } from "react";
 
 // import { fetchFavoriteArticleFoldersAPI } from "@/features/favoriteArticleFolders/actions/favoriteArticleFolders";
 // import { fetchMyFeedFoldersAPI } from "@/features/myFeedFolders/actions/myFeedFolder";
 
 import { Header } from "@/components/layout/Header";
 
-import { getLoggedBaseLayoutQuery } from "./getLoggedBaseLayoutQuery";
 import { DesktopSidebar } from "../../Sidebar";
+import { PreloadQuery } from "@/lib/apollo/client";
+import { ScreenLoader } from "../../ScreenLoader";
+import { GetLoggedBaseLayoutQuery } from "./GetLoggedBaseLayoutQuery";
 
 // import { LoggedBottomNavigationMenu } from "../BottomNavigationMenu";
 // import { DesktopSidebar } from "../Sidebar";
@@ -21,14 +23,14 @@ export const LoggedBaseLayout: FC<LoggedBaseLayoutProps> = async ({
   user,
   children,
 }) => {
-  const { data, error } = await getLoggedBaseLayoutQuery({
-    isAllFetch: true,
-    isFolderOnly: true,
-  });
+  // const { data, error } = await getLoggedBaseLayoutQuery({
+  //   isAllFetch: true,
+  //   isFolderOnly: true,
+  // });
 
-  if (error) {
-    return <div>Error: {error.message}</div>;
-  }
+  // if (error) {
+  //   return <div>Error: {error.message}</div>;
+  // }
   //   const myFeedFolderRes = await fetchMyFeedFoldersAPI({});
   //   const favoriteArticleFolderRes = await fetchFavoriteArticleFoldersAPI({});
   return (
@@ -40,7 +42,19 @@ export const LoggedBaseLayout: FC<LoggedBaseLayoutProps> = async ({
       <div className="h-12 md:h-16" />
       <main className="md:flex">
         <div className="invisible fixed h-lvh w-[200px] md:visible">
-          <DesktopSidebar data={data} />
+          <PreloadQuery
+            query={GetLoggedBaseLayoutQuery}
+            variables={{
+              input: {
+                isAllFetch: true,
+                isFolderOnly: true,
+              },
+            }}
+          >
+            <Suspense fallback={<ScreenLoader />}>
+              <DesktopSidebar />
+            </Suspense>
+          </PreloadQuery>
         </div>
         <div className="invisible mr-[10px] w-[200px] md:visible" />
 

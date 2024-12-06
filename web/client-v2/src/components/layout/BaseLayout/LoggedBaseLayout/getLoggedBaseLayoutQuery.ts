@@ -1,41 +1,18 @@
-"use server";
+import { graphql } from "gql.tada";
 
-"use server";
+import { FavoriteArticleFolderLinkFragment } from "../../Sidebar/FavoriteArticleFolderLink/FavoriteArticleFolderLinkFragment";
 
-import { graphql, readFragment } from "gql.tada";
-
-import { getClient } from "@/lib/apollo/client";
-
-import { FavoriteArticleFoldersInput } from "@/graphql/type";
-
-import { LoggedBaseLayoutFragment } from "./LoggedBaseLayoutFragment";
-
-const LoggedBaseLayoutQuery = graphql(
+export const GetLoggedBaseLayoutQuery = graphql(
   `
-    query LoggedBaseLayoutQuery($input: FavoriteArticleFoldersInput!) {
-      ...LoggedBaseLayoutFragment
+    query GetLoggedBaseLayoutQuery($input: FavoriteArticleFoldersInput!) {
+      favoriteArticleFolders(input: $input) {
+        edges {
+          node {
+            ...FavoriteArticleFolderLinkFragment
+          }
+        }
+      }
     }
   `,
-  [LoggedBaseLayoutFragment]
+  [FavoriteArticleFolderLinkFragment]
 );
-
-export const getLoggedBaseLayoutQuery = async (
-  input: FavoriteArticleFoldersInput
-) => {
-  const { data, error, loading } = await getClient().query({
-    query: LoggedBaseLayoutQuery,
-    context: {
-      fetchOptions: {
-        cache: "no-store",
-      },
-    },
-    variables: {
-      input,
-    },
-    errorPolicy: "all",
-  });
-
-  const newData = readFragment(LoggedBaseLayoutFragment, data);
-
-  return { data: newData, error, loading };
-};

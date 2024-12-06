@@ -1,3 +1,4 @@
+"use client";
 import { FragmentOf, readFragment } from "gql.tada";
 import Link from "next/link";
 import { CgWebsite } from "react-icons/cg";
@@ -18,17 +19,28 @@ import {
 // import { FavoriteArticleFolderLinks } from "./FavoriteArticleFolderLinks";
 import { CreateFavoriteArticleFolderDialog } from "@/features/favorites/components/Dialog";
 
-import { DeskTopSidebarFragment } from "./DesktopSidebarFragment";
 import { FavoriteArticleFolderLink } from "../FavoriteArticleFolderLink";
 import { LogoutLink } from "../LogoutLink";
+import { useSuspenseQuery } from "@apollo/client";
+import { GetLoggedBaseLayoutQuery } from "../../BaseLayout/LoggedBaseLayout/GetLoggedBaseLayoutQuery";
 // import { MyFeedFolderLinks } from "./MyFeedFolderLinks";
 
-type DesktopSidebarProps = {
-  data: FragmentOf<typeof DeskTopSidebarFragment>;
-};
+export function DesktopSidebar() {
+  const { data: resSuspenseData, error } = useSuspenseQuery(
+    GetLoggedBaseLayoutQuery,
+    {
+      variables: {
+        input: {
+          isAllFetch: true,
+          isFolderOnly: true,
+        },
+      },
+    }
+  );
 
-export function DesktopSidebar({ data }: DesktopSidebarProps) {
-  const fragment = readFragment(DeskTopSidebarFragment, data);
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
 
   return (
     <div className="h-lvh w-full overflow-y-auto border-r-2 pb-12">
@@ -133,12 +145,13 @@ export function DesktopSidebar({ data }: DesktopSidebarProps) {
                 <MdFeed />
                 <span className="pl-2">All</span>
               </Link>
-              {fragment.favoriteArticleFolders.edges.map((edge, i) => (
+              {resSuspenseData.favoriteArticleFolders.edges.map((edge, i) => (
                 <FavoriteArticleFolderLink
                   key={`sidebar-favorite-link-${i}`}
                   data={edge.node}
                 />
               ))}
+
               <div className="ml-4">
                 <CreateFavoriteArticleFolderDialog
                   buttonVariant="ghost"
