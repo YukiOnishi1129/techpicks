@@ -11,6 +11,11 @@ on:
     paths:
       - "bff/apollo-gateway/**"
       - ".github/workflows/bff_apollo_gateway_pr_check.yml"
+  pull_request:
+    types: [opened, synchronize]
+    paths:
+      - "bff/apollo-gateway/**"
+      - ".github/workflows/bff_apollo_gateway_pr_check.yml"
 
 jobs:
   build:
@@ -40,10 +45,9 @@ jobs:
 
       - name: Lint
         run: npm run lint
-      
-    #   - name: Test
-    #     run: npm run test
+
+      #   - name: Test
+      #     run: npm run test
 
       - name: Build
         run: npm run build
-       
