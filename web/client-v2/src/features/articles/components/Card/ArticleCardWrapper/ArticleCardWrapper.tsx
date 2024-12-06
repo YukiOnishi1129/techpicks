@@ -4,7 +4,7 @@ import { useMutation } from "@apollo/client";
 import { User } from "@supabase/supabase-js";
 import { clsx } from "clsx";
 import { FragmentOf, graphql, readFragment } from "gql.tada";
-import { FC, useCallback, useState, useTransition } from "react";
+import { FC, useCallback, useTransition } from "react";
 
 import { logoutToLoginPage } from "@/features/auth/actions/auth";
 import { getUser } from "@/features/auth/actions/user";
@@ -79,12 +79,8 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
     DeleteFavoriteArticleByArticleIdMutation
   );
 
-  const [showFavoriteFolders, setShowFavoriteFolders] = useState(
-    fragmentFavoriteFolder
-  );
-
   const handleCreateFavoriteArticle = useCallback(
-    async (favoriteArticleFolderId: string) => {
+    async (favoriteArticleFolderId: string, isCreatedFolder?: boolean) => {
       const user = await getUser();
       if (!user) {
         failToast({
@@ -128,6 +124,22 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
                 ],
               },
             });
+            if (isCreatedFolder) {
+              cache.modify({
+                id: cache.identify(fragmentFavoriteFolder),
+                fields: {
+                  edges: () => [
+                    ...fragmentFavoriteFolder.edges,
+                    {
+                      node: {
+                        id: newFavoriteArticle.favoriteArticleFolderId,
+                        title: fragment.title,
+                      },
+                    },
+                  ],
+                },
+              });
+            }
           }
         },
       });
@@ -156,7 +168,13 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
 
       return data?.createFavoriteArticle.id;
     },
-    [successToast, failToast, fragment, createFavoriteArticleMutation]
+    [
+      successToast,
+      failToast,
+      fragment,
+      createFavoriteArticleMutation,
+      fragmentFavoriteFolder,
+    ]
   );
 
   const handleRemoveFavoriteArticle = useCallback(
@@ -227,28 +245,16 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
   const handleCreateFavoriteArticleFolder = useCallback(
     async (favoriteArticleFolderId: string, title: string) => {
       startTransition(async () => {
-        const id = await handleCreateFavoriteArticle(favoriteArticleFolderId);
+        const id = await handleCreateFavoriteArticle(
+          favoriteArticleFolderId,
+          true
+        );
         if (!id) {
           failToast({
             description: "Fail: Something went wrong",
           });
           return;
         }
-
-        setShowFavoriteFolders((prev) => {
-          return {
-            ...prev,
-            favoriteArticleFolders: [
-              ...prev.edges,
-              {
-                node: {
-                  id,
-                  title,
-                },
-              },
-            ],
-          };
-        });
       });
     },
     [handleCreateFavoriteArticle, failToast]
@@ -313,7 +319,7 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
                 <div className="mt-2">
                   {!isPending && (
                     <FollowFavoriteArticleDropdownMenu
-                      data={showFavoriteFolders}
+                      data={fragmentFavoriteFolder}
                       isFollowing={fragment.isFollowing}
                       followedFolderIds={
                         fragment.favoriteArticleFolderIds || []
