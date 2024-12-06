@@ -532,7 +532,7 @@ export type ArticleDashboardTemplateQueryQueryVariables = Exact<{
 
 export type ArticleDashboardTemplateQueryQuery = { __typename?: 'Query', favoriteArticleFolders: { __typename?: 'FavoriteArticleFolderConnection', edges: Array<{ __typename?: 'FavoriteArticleFolderEdge', node: { __typename?: 'FavoriteArticleFolder', id: string, title: string } }> } };
 
-export type UseArticleBookmarkFragmentFragment = { __typename?: 'Article', id: string, title: string, description: string, articleUrl: string, publishedAt?: number | null, thumbnailUrl: string, isEng: boolean, platform?: { __typename?: 'Platform', id: string, name: string, siteUrl: string, faviconUrl: string } | null };
+export type UseBookmarkMutationFragmentFragment = { __typename?: 'Article', id: string, title: string, description: string, articleUrl: string, publishedAt?: number | null, thumbnailUrl: string, isEng: boolean, platform?: { __typename?: 'Platform', id: string, name: string, siteUrl: string, faviconUrl: string } | null };
 
 export type CreateBookmarkMutationMutationVariables = Exact<{
   input: CreateBookmarkInput;
@@ -1110,8 +1110,8 @@ export const ArticleCardItemFragmentFragmentDoc = gql`
   }
 }
     `;
-export const UseArticleBookmarkFragmentFragmentDoc = gql`
-    fragment UseArticleBookmarkFragment on Article {
+export const UseBookmarkMutationFragmentFragmentDoc = gql`
+    fragment UseBookmarkMutationFragment on Article {
   id
   platform {
     id
@@ -1178,11 +1178,11 @@ export const ArticleCardWrapperFragmentFragmentDoc = gql`
   isFollowing
   favoriteArticleFolderIds
   ...ArticleCardItemFragment
-  ...UseArticleBookmarkFragment
+  ...UseBookmarkMutationFragment
   ...ArticleUseFavoriteArticleFragment
 }
     ${ArticleCardItemFragmentFragmentDoc}
-${UseArticleBookmarkFragmentFragmentDoc}
+${UseBookmarkMutationFragmentFragmentDoc}
 ${ArticleUseFavoriteArticleFragmentFragmentDoc}`;
 export const TrendArticleListFragmentFragmentDoc = gql`
     fragment TrendArticleListFragment on ArticleConnection {

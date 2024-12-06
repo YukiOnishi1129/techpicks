@@ -5,12 +5,12 @@ import { clsx } from "clsx";
 import { FragmentOf, readFragment } from "gql.tada";
 import { FC } from "react";
 
+import { useBookmarkMutation } from "@/features/articles/hooks/useBookmarkMutation";
 import { useFavoriteArticleMutation } from "@/features/articles/hooks/useFavoriteArticleMutation";
 import { FollowFavoriteArticleDropdownMenu } from "@/features/favorites/components/DropdownMenu";
 
 import { IconTitleLink } from "@/components/ui/link";
 import { ShareLinks } from "@/components/ui/share";
-
 
 import { ArticleTabType } from "@/types/article";
 
@@ -19,10 +19,8 @@ import {
   ArticleCardWrapperFragment,
   FavoriteFolderArticleCardWrapperFragment,
 } from "./ArticleCardWrapperFragment";
-import { useArticleBookmark } from "../../../hooks/useArticleBookmark";
 import { AddBookmarkTooltip, DeleteBookmarkTooltip } from "../../ToolTip";
 import { ArticleCardItem } from "../ArticleCardItem";
-
 
 type ArticleCardWrapperProps = {
   data: FragmentOf<typeof ArticleCardWrapperFragment>;
@@ -47,8 +45,9 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
     favoriteArticleFolders
   );
 
-  const { handleCreateBookmark, handleDeleteBookmark } =
-    useArticleBookmark(fragment);
+  const { handleCreateBookmark, handleDeleteBookmark } = useBookmarkMutation({
+    data: fragment,
+  });
 
   const {
     handleCreateFavoriteArticle,
