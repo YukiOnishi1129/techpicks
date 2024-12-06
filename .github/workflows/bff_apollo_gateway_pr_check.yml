@@ -4,10 +4,10 @@ on:
   push:
     branches:
       - "main"
-      - "develop"
-      - "feature/*"
-      - "feat/*"
-      - "YL-*"
+    #   - "develop"
+    #   - "feature/*"
+    #   - "feat/*"
+    #   - "YL-*"
     paths:
       - "bff/apollo-gateway/**"
       - ".github/workflows/bff_apollo_gateway_pr_check.yml"

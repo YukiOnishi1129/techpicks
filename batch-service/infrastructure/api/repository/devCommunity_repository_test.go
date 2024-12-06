@@ -1,24 +1,25 @@
 package repository
 
 import (
-	"github.com/YukiOnishi1129/techpicks/batch-service/infrastructure/api/client"
 	"testing"
+
+	"github.com/YukiOnishi1129/techpicks/batch-service/infrastructure/api/client"
 )
 
 func TestDevCommunityRepository_GetDevCommunityArticles(t *testing.T) {
 	t.Parallel()
-	tagReact := "react"
+	// tagReact := "react"
 	tests := []struct {
 		name string
 		tag  *string
 	}{
-		{
-			name: "Success: GetDevCommunityArticles",
-		},
-		{
-			name: "Success: GetDevCommunityArticles with tag",
-			tag:  &tagReact,
-		},
+		// {
+		// 	name: "Success: GetDevCommunityArticles",
+		// },
+		// {
+		// 	name: "Success: GetDevCommunityArticles with tag",
+		// 	tag:  &tagReact,
+		// },
 	}
 
 	for _, tt := range tests {

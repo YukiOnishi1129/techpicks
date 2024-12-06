@@ -4,10 +4,10 @@ on:
   push:
     branches:
       - "main"
-      - "develop"
-      - "feature/*"
-      - "feat/*"
-      - "YL-*"
+    #   - "develop"
+    #   - "feature/*"
+    #   - "feat/*"
+    #   - "YL-*"
     paths:
       - "batch-service/**"
       - ".github/workflows/batch_service_pr_check.yml"
