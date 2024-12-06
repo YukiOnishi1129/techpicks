@@ -19,7 +19,7 @@ import {
 // import { FavoriteArticleFolderLinks } from "./FavoriteArticleFolderLinks";
 import { CreateFavoriteArticleFolderDialog } from "@/features/favorites/components/Dialog";
 
-import { GetLoggedBaseLayoutQuery } from "@/components/layout/BaseLayout/LoggedBaseLayout/GetLoggedBaseLayoutQuery";
+import { LoggedBaseLayoutQuery } from "@/components/layout/BaseLayout/LoggedBaseLayout/LoggedBaseLayoutQuery";
 
 import { FavoriteArticleFolderLink } from "../FavoriteArticleFolderLink";
 import { LogoutLink } from "../LogoutLink";
@@ -27,7 +27,7 @@ import { LogoutLink } from "../LogoutLink";
 
 export function DesktopSidebar() {
   const { data: resSuspenseData, error } = useSuspenseQuery(
-    GetLoggedBaseLayoutQuery,
+    LoggedBaseLayoutQuery,
     {
       variables: {
         input: {

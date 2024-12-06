@@ -10,9 +10,9 @@ import { Loader } from "@/components/ui/loader";
 import { ArticleTabType } from "@/types/article";
 import { LanguageStatus } from "@/types/language";
 
-import { GetArticleListQuery } from "./GetArticleListQuery";
+import { ArticleListQuery } from "./ArticleListQuery";
 import { ArticleCardWrapper } from "../../Card/ArticleCardWrapper/ArticleCardWrapper";
-import { GetArticleDashboardTemplateQuery } from "../../Template/ArticleDashboardTemplate/GetArticleDashboardTemplateQuery";
+import { ArticleDashboardTemplateQuery } from "../../Template/ArticleDashboardTemplate/ArticleDashboardTemplateQuery";
 
 type ArticleListProps = {
   user: User;
@@ -24,7 +24,7 @@ export function ArticleList({ user, languageStatus, tab }: ArticleListProps) {
   const observerTarget = useRef(null);
 
   const { data: resSuspenseData, error } = useSuspenseQuery(
-    GetArticleDashboardTemplateQuery,
+    ArticleDashboardTemplateQuery,
     {
       variables: {
         input: {
@@ -45,7 +45,7 @@ export function ArticleList({ user, languageStatus, tab }: ArticleListProps) {
     data: res,
     fetchMore,
     error: onlyFetchArticlesError,
-  } = useQuery(GetArticleListQuery, {
+  } = useQuery(ArticleListQuery, {
     variables: {
       input: {
         first: 20,
@@ -149,9 +149,9 @@ export function ArticleList({ user, languageStatus, tab }: ArticleListProps) {
         </div>
       ) : (
         <div className="m-auto grid gap-4">
-          {res?.articles?.edges?.map((edge) => (
+          {res?.articles?.edges?.map((edge, i) => (
             <ArticleCardWrapper
-              key={edge.node.id}
+              key={`${i}-${edge.node.id}`}
               data={edge.node}
               favoriteArticleFolders={resSuspenseData.favoriteArticleFolders}
               user={user}

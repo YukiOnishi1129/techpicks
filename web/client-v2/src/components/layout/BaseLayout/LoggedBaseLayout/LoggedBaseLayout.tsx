@@ -8,7 +8,7 @@ import { Header } from "@/components/layout/Header";
 
 import { PreloadQuery } from "@/lib/apollo/client";
 
-import { GetLoggedBaseLayoutQuery } from "./GetLoggedBaseLayoutQuery";
+import { LoggedBaseLayoutQuery } from "./LoggedBaseLayoutQuery";
 import { ScreenLoader } from "../../ScreenLoader";
 import { DesktopSidebar } from "../../Sidebar";
 
@@ -35,7 +35,7 @@ export const LoggedBaseLayout: FC<LoggedBaseLayoutProps> = async ({
       <main className="md:flex">
         <div className="invisible fixed h-lvh w-[200px] md:visible">
           <PreloadQuery
-            query={GetLoggedBaseLayoutQuery}
+            query={LoggedBaseLayoutQuery}
             variables={{
               input: {
                 isAllFetch: true,

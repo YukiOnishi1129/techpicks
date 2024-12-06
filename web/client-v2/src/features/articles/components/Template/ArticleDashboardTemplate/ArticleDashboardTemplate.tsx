@@ -14,7 +14,7 @@ import { LanguageStatus } from "@/types/language";
 import { ENGLISH_IMAGE, JAPANESE_IMAGE } from "@/constant/image";
 import { ArticlesInput, FavoriteArticleFoldersInput } from "@/graphql/type";
 
-import { GetArticleDashboardTemplateQuery } from "./GetArticleDashboardTemplateQuery";
+import { ArticleDashboardTemplateQuery } from "./ArticleDashboardTemplateQuery";
 
 type ArticleDashboardTemplateProps = {
   user: User;
@@ -87,7 +87,7 @@ export const ArticleDashboardTemplate: FC<
         <div className="h-[40px]" />
         <TabsContent value={TAB_LIST.ENGLISH}>
           <PreloadQuery
-            query={GetArticleDashboardTemplateQuery}
+            query={ArticleDashboardTemplateQuery}
             variables={{
               input: enInput,
               favoriteArticleFoldersInput,
@@ -100,7 +100,7 @@ export const ArticleDashboardTemplate: FC<
         </TabsContent>
         <TabsContent value={TAB_LIST.JAPANESE}>
           <PreloadQuery
-            query={GetArticleDashboardTemplateQuery}
+            query={ArticleDashboardTemplateQuery}
             variables={{
               input: jpInput,
               favoriteArticleFoldersInput,

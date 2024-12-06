@@ -1,11 +1,10 @@
 import { graphql } from "gql.tada";
 
-import { ArticleListFragment } from "./ArticleListFragment";
 import { ArticleCardWrapperFragment } from "../../Card";
 
-export const GetArticleListQuery = graphql(
+export const ArticleListQuery = graphql(
   `
-    query GetArticleListQuery($input: ArticlesInput!) {
+    query ArticleListQuery($input: ArticlesInput!) {
       articles(articlesInput: $input) {
         pageInfo {
           hasNextPage
@@ -19,9 +18,8 @@ export const GetArticleListQuery = graphql(
             ...ArticleCardWrapperFragment
           }
         }
-        ...ArticleListFragment
       }
     }
   `,
-  [ArticleListFragment, ArticleCardWrapperFragment]
+  [ArticleCardWrapperFragment]
 );

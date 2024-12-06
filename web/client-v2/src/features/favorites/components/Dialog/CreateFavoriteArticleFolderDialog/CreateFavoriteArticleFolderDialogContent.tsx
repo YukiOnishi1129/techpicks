@@ -156,12 +156,10 @@ export const CreateFavoriteArticleFolderDialogContent: FC<
             folderData.createFavoriteArticleFolder.id,
             data.title
           );
-          // await serverRevalidatePage(pathname);
           resetDialog();
           handleCloseDialog();
           return;
         }
-        // await serverRevalidatePage(pathname);
         resetDialog();
         handleCloseDialog();
       });

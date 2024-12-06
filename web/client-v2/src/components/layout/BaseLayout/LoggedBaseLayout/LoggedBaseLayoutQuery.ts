@@ -2,7 +2,7 @@ import { graphql } from "gql.tada";
 
 import { FavoriteArticleFolderLinkFragment } from "../../Sidebar/FavoriteArticleFolderLink/FavoriteArticleFolderLinkFragment";
 
-export const GetLoggedBaseLayoutQuery = graphql(
+export const LoggedBaseLayoutQuery = graphql(
   `
     query GetLoggedBaseLayoutQuery($input: FavoriteArticleFoldersInput!) {
       favoriteArticleFolders(input: $input) {

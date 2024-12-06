@@ -1,8 +1,12 @@
 import { graphql } from "gql.tada";
 
+import { UseBookmarkMutationFragment } from "@/features/articles/hooks/useBookmarkMutation";
+import {
+  ArticleUseFavoriteArticleFragment,
+  FavoriteFolderUseFavoriteArticleFragment,
+} from "@/features/articles/hooks/useFavoriteArticleMutation";
 import { FollowFavoriteArticleDropdownMenuContentFragment } from "@/features/favorites/components/DropdownMenu/FollowFavoriteArticleDropdownMenu/FollowFavoriteArticleDropdownMenuFragment";
 
-import { UseArticleBookmarkFragment } from "../../../hooks/useArticleBookmark";
 import { ArticleCardItemFragment } from "../ArticleCardItem";
 
 export const ArticleCardWrapperFragment = graphql(
@@ -31,10 +35,15 @@ export const ArticleCardWrapperFragment = graphql(
       isFollowing
       favoriteArticleFolderIds
       ...ArticleCardItemFragment
-      ...UseArticleBookmarkFragment
+      ...UseBookmarkMutationFragment
+      ...ArticleUseFavoriteArticleFragment
     }
   `,
-  [ArticleCardItemFragment, UseArticleBookmarkFragment]
+  [
+    ArticleCardItemFragment,
+    UseBookmarkMutationFragment,
+    ArticleUseFavoriteArticleFragment,
+  ]
 );
 
 export const FavoriteFolderArticleCardWrapperFragment = graphql(
@@ -47,7 +56,11 @@ export const FavoriteFolderArticleCardWrapperFragment = graphql(
         }
       }
       ...FollowFavoriteArticleDropdownMenuContentFragment
+      ...FavoriteFolderUseFavoriteArticleFragment
     }
   `,
-  [FollowFavoriteArticleDropdownMenuContentFragment]
+  [
+    FollowFavoriteArticleDropdownMenuContentFragment,
+    FavoriteFolderUseFavoriteArticleFragment,
+  ]
 );
