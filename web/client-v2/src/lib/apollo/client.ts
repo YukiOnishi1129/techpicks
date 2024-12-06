@@ -9,7 +9,7 @@ import {
 
 import { getSession } from "@/features/auth/actions/auth";
 
-const graphqlUrl = process.env.BFF_API_URL || "http://localhost:3000";
+const graphqlUrl = process.env.BFF_API_URL || "";
 
 const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors) {

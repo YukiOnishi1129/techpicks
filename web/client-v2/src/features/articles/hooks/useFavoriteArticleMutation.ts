@@ -73,6 +73,8 @@ export const useFavoriteArticleMutation = ({
   data,
   favoriteArticleFolders,
 }: UseFavoriteArticleMutationParam) => {
+  console.log("❤️‍🔥");
+  console.log(process.env.NEXT_PUBLIC_BFF_API_URL);
   const { successToast, failToast } = useStatusToast();
   const fragment = readFragment(ArticleUseFavoriteArticleFragment, data);
   const fragmentFavoriteFolder = readFragment(
