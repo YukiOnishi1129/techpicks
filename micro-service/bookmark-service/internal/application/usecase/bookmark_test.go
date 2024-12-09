@@ -257,14 +257,18 @@ func Test_UseCase_GetBookmarkByArticleID(t *testing.T) {
 			defer ctrl.Finish()
 
 			mockContentClient := mock.NewMockContentServiceClient(ctrl)
+			mockFavoriteClient := mock.NewMockFavoriteServiceClient(ctrl)
 
 			testBookmarkRepository := persistence.NewBookmarkPersistence(db)
 			testContentExternal := external.NewContentExternal(mockContentClient)
+			testFavoriteExternal := external.NewFavoriteExternal(mockFavoriteClient)
 
 			testBookmarkPersistenceAdapter := persistenceadapter.NewBookmarkPersistenceAdapter(testBookmarkRepository)
 			testContentExternalAdapter := externaladapter.NewContentExternalAdapter(testContentExternal)
+			testFavoriteExternalAdapter := externaladapter.NewFavoriteExternalAdapter(testFavoriteExternal)
 
-			testBookmarkUseCase := NewBookmarkUseCase(testBookmarkPersistenceAdapter, testContentExternalAdapter)
+
+			testBookmarkUseCase := NewBookmarkUseCase(testBookmarkPersistenceAdapter, testContentExternalAdapter,testFavoriteExternalAdapter)
 
 			if tt.recordBookmarks != nil {
 				for _, v := range tt.recordBookmarks {
@@ -496,14 +500,17 @@ func Test_UseCase_CreateBookmark(t *testing.T) {
 			defer ctrl.Finish()
 
 			mockContentClient := mock.NewMockContentServiceClient(ctrl)
+			mockFavoriteClient := mock.NewMockFavoriteServiceClient(ctrl)
 
 			testBookmarkRepository := persistence.NewBookmarkPersistence(db)
 			testContentExternal := external.NewContentExternal(mockContentClient)
+			testFavoriteExternal := external.NewFavoriteExternal(mockFavoriteClient)
 
 			testBookmarkPersistenceAdapter := persistenceadapter.NewBookmarkPersistenceAdapter(testBookmarkRepository)
 			testContentExternalAdapter := externaladapter.NewContentExternalAdapter(testContentExternal)
+			testFavoriteExternalAdapter := externaladapter.NewFavoriteExternalAdapter(testFavoriteExternal)
 
-			testBookmarkUseCase := NewBookmarkUseCase(testBookmarkPersistenceAdapter, testContentExternalAdapter)
+			testBookmarkUseCase := NewBookmarkUseCase(testBookmarkPersistenceAdapter, testContentExternalAdapter,testFavoriteExternalAdapter)
 			if tt.recordBookmarks != nil {
 				for _, v := range tt.recordBookmarks {
 					err = v.Insert(ctx, db, boil.Infer())
@@ -799,6 +806,7 @@ func Test_UseCase_CreateBookmarkForUploadArticle(t *testing.T) {
 			defer ctrl.Finish()
 
 			mockContentClient := mock.NewMockContentServiceClient(ctrl)
+			mockFavoriteClient := mock.NewMockFavoriteServiceClient(ctrl)
 
 			if tt.mockCreateUploadArticleResponse != nil {
 				mockContentClient.EXPECT().CreateUploadArticle(gomock.Any(), gomock.Any()).Return(tt.mockCreateUploadArticleResponse, nil)
@@ -806,11 +814,13 @@ func Test_UseCase_CreateBookmarkForUploadArticle(t *testing.T) {
 
 			testBookmarkRepository := persistence.NewBookmarkPersistence(db)
 			testContentExternal := external.NewContentExternal(mockContentClient)
+			testFavoriteExternal := external.NewFavoriteExternal(mockFavoriteClient)
 
 			testBookmarkPersistenceAdapter := persistenceadapter.NewBookmarkPersistenceAdapter(testBookmarkRepository)
 			testContentExternalAdapter := externaladapter.NewContentExternalAdapter(testContentExternal)
+			testFavoriteExternalAdapter := externaladapter.NewFavoriteExternalAdapter(testFavoriteExternal)
 
-			testBookmarkUseCase := NewBookmarkUseCase(testBookmarkPersistenceAdapter, testContentExternalAdapter)
+			testBookmarkUseCase := NewBookmarkUseCase(testBookmarkPersistenceAdapter, testContentExternalAdapter,testFavoriteExternalAdapter)
 			if tt.recordBookmarks != nil {
 				for _, v := range tt.recordBookmarks {
 					err = v.Insert(ctx, db, boil.Infer())
@@ -981,14 +991,17 @@ func Test_UseCase_DeleteBookmark(t *testing.T) {
 			defer ctrl.Finish()
 
 			mockContentClient := mock.NewMockContentServiceClient(ctrl)
+			mockFavoriteClient := mock.NewMockFavoriteServiceClient(ctrl)
 
 			testBookmarkRepository := persistence.NewBookmarkPersistence(db)
 			testContentExternal := external.NewContentExternal(mockContentClient)
+			testFavoriteExternal := external.NewFavoriteExternal(mockFavoriteClient)
 
 			testBookmarkPersistenceAdapter := persistenceadapter.NewBookmarkPersistenceAdapter(testBookmarkRepository)
 			testContentExternalAdapter := externaladapter.NewContentExternalAdapter(testContentExternal)
+			testFavoriteExternalAdapter := externaladapter.NewFavoriteExternalAdapter(testFavoriteExternal)
 
-			testBookmarkUseCase := NewBookmarkUseCase(testBookmarkPersistenceAdapter, testContentExternalAdapter)
+			testBookmarkUseCase := NewBookmarkUseCase(testBookmarkPersistenceAdapter, testContentExternalAdapter, testFavoriteExternalAdapter)
 
 			if tt.recordBookmarks != nil {
 				for _, v := range tt.recordBookmarks {
