@@ -2,7 +2,7 @@
 import { FC } from "react";
 import { FcBookmark } from "react-icons/fc";
 
-import { useDeleteBookmarkMutation } from "@/features/bookmarks/hooks/useDeleteBookmarkMutation";
+import { useDeleteBookmark } from "@/features/bookmarks/hooks/useDeleteBookmark";
 
 import {
   AlertDialog,
@@ -22,8 +22,6 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-// import { useBookmark } from "../../hooks/useBookmark";
-
 type DeleteBookmarkAlertDialogProps = {
   bookmarkTitle: string;
   bookmarkId: string;
@@ -33,7 +31,7 @@ export const DeleteBookmarkAlertDialog: FC<DeleteBookmarkAlertDialogProps> = ({
   bookmarkId,
   bookmarkTitle,
 }) => {
-  const { handleRemoveBookmark } = useDeleteBookmarkMutation();
+  const { handleRemoveBookmark } = useDeleteBookmark();
   return (
     <AlertDialog>
       <TooltipProvider>
