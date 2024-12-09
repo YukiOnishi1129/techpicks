@@ -160,20 +160,22 @@ func Test_UseCase_GetBookmarkByArticleID(t *testing.T) {
 			},
 			want: &bpb.GetBookmarkResponse{
 				Bookmark: &bpb.Bookmark{
-					Id:                 bookmarkID.String(),
-					ArticleId:          articleID1,
-					UserId:             userID1,
-					PlatformId:         &wrapperspb.StringValue{Value: platformID1},
-					Title:              "title_1",
-					Description:        "description_1",
-					ArticleUrl:         "article_url_1",
-					ThumbnailUrl:       "thumbnail_url_1",
-					PublishedAt:        &timestamppb.Timestamp{Seconds: publishedAt},
-					PlatformName:       "platform_name_1",
-					PlatformUrl:        "platform_url_1",
-					PlatformFaviconUrl: "platform_favicon_url_1",
-					IsEng:              true,
-					IsRead:             false,
+					Id:                       bookmarkID.String(),
+					ArticleId:                articleID1,
+					UserId:                   userID1,
+					PlatformId:               &wrapperspb.StringValue{Value: platformID1},
+					FavoriteArticleFolderIds: []string{},
+					Title:                    "title_1",
+					Description:              "description_1",
+					ArticleUrl:               "article_url_1",
+					ThumbnailUrl:             "thumbnail_url_1",
+					PublishedAt:              &timestamppb.Timestamp{Seconds: publishedAt},
+					PlatformName:             "platform_name_1",
+					PlatformUrl:              "platform_url_1",
+					PlatformFaviconUrl:       "platform_favicon_url_1",
+					IsEng:                    true,
+					IsRead:                   false,
+					IsFollowing:              false,
 				},
 			},
 		},
@@ -267,8 +269,7 @@ func Test_UseCase_GetBookmarkByArticleID(t *testing.T) {
 			testContentExternalAdapter := externaladapter.NewContentExternalAdapter(testContentExternal)
 			testFavoriteExternalAdapter := externaladapter.NewFavoriteExternalAdapter(testFavoriteExternal)
 
-
-			testBookmarkUseCase := NewBookmarkUseCase(testBookmarkPersistenceAdapter, testContentExternalAdapter,testFavoriteExternalAdapter)
+			testBookmarkUseCase := NewBookmarkUseCase(testBookmarkPersistenceAdapter, testContentExternalAdapter, testFavoriteExternalAdapter)
 
 			if tt.recordBookmarks != nil {
 				for _, v := range tt.recordBookmarks {
@@ -346,16 +347,18 @@ func Test_UseCase_CreateBookmark(t *testing.T) {
 				PlatformId: &wrapperspb.StringValue{
 					Value: platformID1,
 				},
-				Title:              "title",
-				Description:        "description",
-				ArticleUrl:         "article_url",
-				ThumbnailUrl:       "thumbnail_url",
-				PublishedAt:        &timestamppb.Timestamp{Seconds: publishedAt},
-				PlatformName:       "platform_name_1",
-				PlatformUrl:        "platform_url_1",
-				PlatformFaviconUrl: "platform_favicon_url_1",
-				IsEng:              true,
-				IsRead:             false,
+				FavoriteArticleFolderIds: []string{},
+				Title:                    "title",
+				Description:              "description",
+				ArticleUrl:               "article_url",
+				ThumbnailUrl:             "thumbnail_url",
+				PublishedAt:              &timestamppb.Timestamp{Seconds: publishedAt},
+				PlatformName:             "platform_name_1",
+				PlatformUrl:              "platform_url_1",
+				PlatformFaviconUrl:       "platform_favicon_url_1",
+				IsEng:                    true,
+				IsRead:                   false,
+				IsFollowing:              false,
 			},
 			wantBookmarkRecord: entity.Bookmark{
 				ArticleID: articleID1,
@@ -392,17 +395,19 @@ func Test_UseCase_CreateBookmark(t *testing.T) {
 				IsRead:             false,
 			},
 			want: &bpb.Bookmark{
-				ArticleId:          articleID1,
-				UserId:             userID1,
-				Title:              "title",
-				Description:        "description",
-				ArticleUrl:         "article_url",
-				ThumbnailUrl:       "thumbnail_url",
-				PlatformName:       "platform_name_1",
-				PlatformUrl:        "platform_url_1",
-				PlatformFaviconUrl: "platform_favicon_url_1",
-				IsEng:              true,
-				IsRead:             false,
+				ArticleId:                articleID1,
+				UserId:                   userID1,
+				FavoriteArticleFolderIds: []string{},
+				Title:                    "title",
+				Description:              "description",
+				ArticleUrl:               "article_url",
+				ThumbnailUrl:             "thumbnail_url",
+				PlatformName:             "platform_name_1",
+				PlatformUrl:              "platform_url_1",
+				PlatformFaviconUrl:       "platform_favicon_url_1",
+				IsEng:                    true,
+				IsRead:                   false,
+				IsFollowing:              false,
 			},
 			wantBookmarkRecord: entity.Bookmark{
 				ArticleID:          articleID1,
@@ -510,7 +515,7 @@ func Test_UseCase_CreateBookmark(t *testing.T) {
 			testContentExternalAdapter := externaladapter.NewContentExternalAdapter(testContentExternal)
 			testFavoriteExternalAdapter := externaladapter.NewFavoriteExternalAdapter(testFavoriteExternal)
 
-			testBookmarkUseCase := NewBookmarkUseCase(testBookmarkPersistenceAdapter, testContentExternalAdapter,testFavoriteExternalAdapter)
+			testBookmarkUseCase := NewBookmarkUseCase(testBookmarkPersistenceAdapter, testContentExternalAdapter, testFavoriteExternalAdapter)
 			if tt.recordBookmarks != nil {
 				for _, v := range tt.recordBookmarks {
 					err = v.Insert(ctx, db, boil.Infer())
@@ -633,16 +638,18 @@ func Test_UseCase_CreateBookmarkForUploadArticle(t *testing.T) {
 				PlatformId: &wrapperspb.StringValue{
 					Value: platformID1,
 				},
-				Title:              "title_1",
-				Description:        "description_1",
-				ArticleUrl:         "https://test.com/article1",
-				ThumbnailUrl:       "thumbnail_url_1",
-				PublishedAt:        &timestamppb.Timestamp{Seconds: publishedAt},
-				PlatformName:       "platform_name_1",
-				PlatformUrl:        "platform_url_1",
-				PlatformFaviconUrl: "platform_favicon_url_1",
-				IsEng:              true,
-				IsRead:             false,
+				FavoriteArticleFolderIds: []string{},
+				Title:                    "title_1",
+				Description:              "description_1",
+				ArticleUrl:               "https://test.com/article1",
+				ThumbnailUrl:             "thumbnail_url_1",
+				PublishedAt:              &timestamppb.Timestamp{Seconds: publishedAt},
+				PlatformName:             "platform_name_1",
+				PlatformUrl:              "platform_url_1",
+				PlatformFaviconUrl:       "platform_favicon_url_1",
+				IsEng:                    true,
+				IsRead:                   false,
+				IsFollowing:              false,
 			},
 			wantBookmarkRecord: entity.Bookmark{
 				ArticleID: articleID1,
@@ -707,17 +714,19 @@ func Test_UseCase_CreateBookmarkForUploadArticle(t *testing.T) {
 				},
 			},
 			want: &bpb.Bookmark{
-				ArticleId:          articleID1,
-				UserId:             userID1,
-				Title:              "title_1",
-				Description:        "description_1",
-				ArticleUrl:         "https://test.com/article1",
-				ThumbnailUrl:       "thumbnail_url_1",
-				PlatformName:       "upload_platform_name_1",
-				PlatformUrl:        "upload_platform_url_1",
-				PlatformFaviconUrl: "upload_platform_favicon_url_1",
-				IsEng:              true,
-				IsRead:             false,
+				ArticleId:                articleID1,
+				UserId:                   userID1,
+				FavoriteArticleFolderIds: []string{},
+				Title:                    "title_1",
+				Description:              "description_1",
+				ArticleUrl:               "https://test.com/article1",
+				ThumbnailUrl:             "thumbnail_url_1",
+				PlatformName:             "upload_platform_name_1",
+				PlatformUrl:              "upload_platform_url_1",
+				PlatformFaviconUrl:       "upload_platform_favicon_url_1",
+				IsEng:                    true,
+				IsRead:                   false,
+				IsFollowing:              false,
 			},
 			wantBookmarkRecord: entity.Bookmark{
 				ArticleID:          articleID1,
@@ -820,7 +829,7 @@ func Test_UseCase_CreateBookmarkForUploadArticle(t *testing.T) {
 			testContentExternalAdapter := externaladapter.NewContentExternalAdapter(testContentExternal)
 			testFavoriteExternalAdapter := externaladapter.NewFavoriteExternalAdapter(testFavoriteExternal)
 
-			testBookmarkUseCase := NewBookmarkUseCase(testBookmarkPersistenceAdapter, testContentExternalAdapter,testFavoriteExternalAdapter)
+			testBookmarkUseCase := NewBookmarkUseCase(testBookmarkPersistenceAdapter, testContentExternalAdapter, testFavoriteExternalAdapter)
 			if tt.recordBookmarks != nil {
 				for _, v := range tt.recordBookmarks {
 					err = v.Insert(ctx, db, boil.Infer())
