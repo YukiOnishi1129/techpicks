@@ -1,6 +1,6 @@
 import { graphql } from "gql.tada";
 
-import { UseBookmarkMutationFragment } from "@/features/articles/hooks/useBookmarkMutation";
+import { UseArticleManageBookmarkFragment } from "@/features/articles/hooks/useArticleManageBookmark";
 import {
   ArticleUseFavoriteArticleFragment,
   FavoriteFolderUseFavoriteArticleFragment,
@@ -35,13 +35,13 @@ export const ArticleCardWrapperFragment = graphql(
       isFollowing
       favoriteArticleFolderIds
       ...ArticleCardItemFragment
-      ...UseBookmarkMutationFragment
+      ...UseArticleManageBookmarkFragment
       ...ArticleUseFavoriteArticleFragment
     }
   `,
   [
     ArticleCardItemFragment,
-    UseBookmarkMutationFragment,
+    UseArticleManageBookmarkFragment,
     ArticleUseFavoriteArticleFragment,
   ]
 );

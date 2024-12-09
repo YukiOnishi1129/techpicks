@@ -534,7 +534,7 @@ export type ArticleDashboardTemplateQueryQueryVariables = Exact<{
 
 export type ArticleDashboardTemplateQueryQuery = { __typename?: 'Query', articles: { __typename?: 'ArticleConnection', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null }, edges: Array<{ __typename?: 'ArticleEdge', node: { __typename: 'Article', id: string, title: string, description: string, articleUrl: string, publishedAt?: number | null, authorName?: string | null, tags?: string | null, thumbnailUrl: string, isEng: boolean, isPrivate: boolean, isBookmarked: boolean, bookmarkId?: string | null, likeCount?: number | null, isFollowing: boolean, favoriteArticleFolderIds: Array<string>, platform?: { __typename?: 'Platform', id: string, name: string, siteUrl: string, faviconUrl: string } | null, feeds?: Array<{ __typename?: 'Feed', id: string, name: string }> | null } }> }, favoriteArticleFolders: { __typename?: 'FavoriteArticleFolderConnection', edges: Array<{ __typename?: 'FavoriteArticleFolderEdge', node: { __typename?: 'FavoriteArticleFolder', id: string, title: string } }> } };
 
-export type UseBookmarkMutationFragmentFragment = { __typename?: 'Article', id: string, title: string, description: string, articleUrl: string, publishedAt?: number | null, thumbnailUrl: string, isEng: boolean, platform?: { __typename?: 'Platform', id: string, name: string, siteUrl: string, faviconUrl: string } | null };
+export type UseArticleManageBookmarkFragmentFragment = { __typename?: 'Article', id: string, title: string, description: string, articleUrl: string, publishedAt?: number | null, thumbnailUrl: string, isEng: boolean, platform?: { __typename?: 'Platform', id: string, name: string, siteUrl: string, faviconUrl: string } | null };
 
 export type CreateBookmarkMutationMutationVariables = Exact<{
   input: CreateBookmarkInput;
@@ -781,8 +781,8 @@ export const ArticleCardItemFragmentFragmentDoc = gql`
   }
 }
     `;
-export const UseBookmarkMutationFragmentFragmentDoc = gql`
-    fragment UseBookmarkMutationFragment on Article {
+export const UseArticleManageBookmarkFragmentFragmentDoc = gql`
+    fragment UseArticleManageBookmarkFragment on Article {
   id
   platform {
     id
@@ -849,11 +849,11 @@ export const ArticleCardWrapperFragmentFragmentDoc = gql`
   isFollowing
   favoriteArticleFolderIds
   ...ArticleCardItemFragment
-  ...UseBookmarkMutationFragment
+  ...UseArticleManageBookmarkFragment
   ...ArticleUseFavoriteArticleFragment
 }
     ${ArticleCardItemFragmentFragmentDoc}
-${UseBookmarkMutationFragmentFragmentDoc}
+${UseArticleManageBookmarkFragmentFragmentDoc}
 ${ArticleUseFavoriteArticleFragmentFragmentDoc}`;
 export const FollowTargetFavoriteArticleFolderItemFragmentFragmentDoc = gql`
     fragment FollowTargetFavoriteArticleFolderItemFragment on FavoriteArticleFolder {

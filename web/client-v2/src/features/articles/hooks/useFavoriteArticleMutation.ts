@@ -4,8 +4,8 @@ import { useCallback } from "react";
 
 import { logoutToLoginPage } from "@/features/auth/actions/auth";
 import { getUser } from "@/features/auth/actions/user";
-import { CreateFavoriteArticleMutation } from "@/features/favorites/fragments/CreateFavoriteArticleMutation";
-import { DeleteFavoriteArticleByArticleIdMutation } from "@/features/favorites/fragments/DeleteFavoriteArticleByArticleIdMutation";
+import { CreateFavoriteArticleMutation } from "@/features/favorites/mutations/CreateFavoriteArticleMutation";
+import { DeleteFavoriteArticleByArticleIdMutation } from "@/features/favorites/mutations/DeleteFavoriteArticleByArticleIdMutation";
 
 import { useStatusToast } from "@/hooks/useStatusToast";
 
