@@ -118,8 +118,6 @@ export const CreateBookmarkDialogContent: FC<
       );
       if (!fragment) return;
 
-      fragment.articleOpg.title;
-
       const { data, error } = await createBookmarkForUploadArticleMutation({
         title: fragment.articleOpg.title,
         description: fragment?.articleOpg?.description || "",

@@ -163,7 +163,6 @@ export class BookmarkService {
       req.setDescription(input.description);
       req.setArticleUrl(input.articleUrl);
       req.setThumbnailUrl(input.thumbnailUrl);
-      req.setThumbnailUrl(input.thumbnailUrl);
       req.setPlatformName(input.platformName);
       req.setPlatformUrl(input.platformUrl);
       req.setPlatformFaviconUrl(input.platformFaviconUrl);
