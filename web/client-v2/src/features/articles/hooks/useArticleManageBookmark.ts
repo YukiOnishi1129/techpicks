@@ -4,6 +4,8 @@ import { useCallback } from "react";
 
 import { logoutToLoginPage } from "@/features/auth/actions/auth";
 import { getUser } from "@/features/auth/actions/user";
+import { CreateBookmarkMutation } from "@/features/bookmarks/mutations/CreateBookmarkMutation";
+import { DeleteBookmarkMutation } from "@/features/bookmarks/mutations/DeleteBookmarkMutation";
 
 import { useStatusToast } from "@/hooks/useStatusToast";
 
@@ -25,20 +27,6 @@ export const UseArticleManageBookmarkFragment = graphql(`
   }
 `);
 
-const CreateArticleBookmarkMutation = graphql(`
-  mutation CreateBookmarkMutation($input: CreateBookmarkInput!) {
-    createBookmark(createBookmarkInput: $input) {
-      id
-    }
-  }
-`);
-
-const DeleteArticleBookmarkMutation = graphql(`
-  mutation DeleteBookmarkMutation($input: DeleteBookmarkInput!) {
-    deleteBookmark(deleteBookmarkInput: $input)
-  }
-`);
-
 type UseArticleManageBookmarkParam = {
   data: FragmentOf<typeof UseArticleManageBookmarkFragment>;
 };
@@ -49,13 +37,9 @@ export const useArticleManageBookmark = ({
   const fragment = readFragment(UseArticleManageBookmarkFragment, data);
   const { successToast, failToast } = useStatusToast();
 
-  const [createArticleBookmarkMutation] = useMutation(
-    CreateArticleBookmarkMutation
-  );
+  const [createArticleBookmarkMutation] = useMutation(CreateBookmarkMutation);
 
-  const [deleteArticleBookmarkMutation] = useMutation(
-    DeleteArticleBookmarkMutation
-  );
+  const [deleteArticleBookmarkMutation] = useMutation(DeleteBookmarkMutation);
 
   const handleCreateBookmark = useCallback(async () => {
     const user = await getUser();
