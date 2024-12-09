@@ -1,9 +1,8 @@
 "use client";
-import { usePathname } from "next/navigation";
 import { FC } from "react";
 import { FcBookmark } from "react-icons/fc";
 
-import { useBookmarkMutation } from "@/features/bookmarks/hooks/useBookmarkMutation";
+import { useDeleteBookmarkMutation } from "@/features/bookmarks/hooks/useDeleteBookmarkMutation";
 
 import {
   AlertDialog,
@@ -34,8 +33,7 @@ export const DeleteBookmarkAlertDialog: FC<DeleteBookmarkAlertDialogProps> = ({
   bookmarkId,
   bookmarkTitle,
 }) => {
-  const pathname = usePathname();
-  const { handleRemoveBookmark } = useBookmarkMutation();
+  const { handleRemoveBookmark } = useDeleteBookmarkMutation();
   return (
     <AlertDialog>
       <TooltipProvider>

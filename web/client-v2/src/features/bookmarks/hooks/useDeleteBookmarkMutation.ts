@@ -13,7 +13,7 @@ const DeleteBookmarkMutation = graphql(`
   }
 `);
 
-export const useBookmarkMutation = () => {
+export const useDeleteBookmarkMutation = () => {
   const { successToast, failToast } = useStatusToast();
 
   const [deleteBookmarkMutation] = useMutation(DeleteBookmarkMutation);

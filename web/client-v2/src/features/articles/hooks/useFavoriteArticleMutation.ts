@@ -4,6 +4,8 @@ import { useCallback } from "react";
 
 import { logoutToLoginPage } from "@/features/auth/actions/auth";
 import { getUser } from "@/features/auth/actions/user";
+import { CreateFavoriteArticleMutation } from "@/features/favorites/fragments/CreateFavoriteArticleMutation";
+import { DeleteFavoriteArticleByArticleIdMutation } from "@/features/favorites/fragments/DeleteFavoriteArticleByArticleIdMutation";
 
 import { useStatusToast } from "@/hooks/useStatusToast";
 
@@ -42,23 +44,6 @@ export const FavoriteFolderUseFavoriteArticleFragment = graphql(`
         title
       }
     }
-  }
-`);
-
-const CreateFavoriteArticleMutation = graphql(`
-  mutation CreateFavoriteArticleMutation($input: CreateFavoriteArticleInput!) {
-    createFavoriteArticle(input: $input) {
-      id
-      favoriteArticleFolderId
-    }
-  }
-`);
-
-const DeleteFavoriteArticleByArticleIdMutation = graphql(`
-  mutation DeleteFavoriteArticleByArticleIdMutation(
-    $input: DeleteFavoriteArticleByArticleIdInput!
-  ) {
-    deleteFavoriteArticleByArticleId(input: $input)
   }
 `);
 
