@@ -22,6 +22,8 @@ export const BookmarkCardWrapperFragment = graphql(
       isRead
       createdAt
       updatedAt
+      isFollowing
+      favoriteArticleFolderIds
       ...BookmarkCardItemFragment
     }
   `,

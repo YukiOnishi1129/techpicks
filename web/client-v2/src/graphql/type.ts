@@ -83,8 +83,10 @@ export type Bookmark = Node & {
   articleUrl: Scalars['String']['output'];
   createdAt: Scalars['Int']['output'];
   description: Scalars['String']['output'];
+  favoriteArticleFolderIds: Array<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
   isEng: Scalars['Boolean']['output'];
+  isFollowing: Scalars['Boolean']['output'];
   isRead: Scalars['Boolean']['output'];
   platformFaviconUrl: Scalars['String']['output'];
   platformId?: Maybe<Scalars['String']['output']>;
@@ -573,9 +575,9 @@ export type CreateBookmarkForUploadArticleMutationMutationVariables = Exact<{
 
 export type CreateBookmarkForUploadArticleMutationMutation = { __typename?: 'Mutation', createBookmarkForUploadArticle: { __typename?: 'Bookmark', id: string } };
 
-export type BookmarkCardItemFragmentFragment = { __typename?: 'Bookmark', id: string, title: string, thumbnailUrl: string, createdAt: number };
+export type BookmarkCardItemFragmentFragment = { __typename?: 'Bookmark', id: string, title: string, articleUrl: string, thumbnailUrl: string, createdAt: number };
 
-export type BookmarkCardWrapperFragmentFragment = { __typename?: 'Bookmark', id: string, title: string, description: string, articleUrl: string, thumbnailUrl: string, publishedAt?: number | null, articleId: string, platformId?: string | null, platformName: string, platformUrl: string, platformFaviconUrl: string, isEng: boolean, isRead: boolean, createdAt: number, updatedAt: number };
+export type BookmarkCardWrapperFragmentFragment = { __typename?: 'Bookmark', id: string, title: string, description: string, articleUrl: string, thumbnailUrl: string, publishedAt?: number | null, articleId: string, platformId?: string | null, platformName: string, platformUrl: string, platformFaviconUrl: string, isEng: boolean, isRead: boolean, createdAt: number, updatedAt: number, isFollowing: boolean, favoriteArticleFolderIds: Array<string> };
 
 export type FavoriteFolderBookmarkCardWrapperFragmentFragment = { __typename?: 'FavoriteArticleFolderConnection', edges: Array<{ __typename?: 'FavoriteArticleFolderEdge', node: { __typename?: 'FavoriteArticleFolder', id: string, title: string } }> };
 
@@ -593,7 +595,7 @@ export type BookmarkListQueryQueryVariables = Exact<{
 }>;
 
 
-export type BookmarkListQueryQuery = { __typename?: 'Query', bookmarks: { __typename?: 'BookmarkConnection', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null }, edges: Array<{ __typename?: 'BookmarkEdge', node: { __typename?: 'Bookmark', id: string, title: string, description: string, articleUrl: string, thumbnailUrl: string, publishedAt?: number | null, articleId: string, platformId?: string | null, platformName: string, platformUrl: string, platformFaviconUrl: string, isEng: boolean, isRead: boolean, createdAt: number, updatedAt: number } }> } };
+export type BookmarkListQueryQuery = { __typename?: 'Query', bookmarks: { __typename?: 'BookmarkConnection', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null }, edges: Array<{ __typename?: 'BookmarkEdge', node: { __typename?: 'Bookmark', id: string, title: string, description: string, articleUrl: string, thumbnailUrl: string, publishedAt?: number | null, articleId: string, platformId?: string | null, platformName: string, platformUrl: string, platformFaviconUrl: string, isEng: boolean, isRead: boolean, createdAt: number, updatedAt: number, isFollowing: boolean, favoriteArticleFolderIds: Array<string> } }> } };
 
 export type BookmarkTemplateQueryQueryVariables = Exact<{
   input: BookmarksInput;
@@ -601,7 +603,7 @@ export type BookmarkTemplateQueryQueryVariables = Exact<{
 }>;
 
 
-export type BookmarkTemplateQueryQuery = { __typename?: 'Query', bookmarks: { __typename?: 'BookmarkConnection', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null }, edges: Array<{ __typename?: 'BookmarkEdge', node: { __typename?: 'Bookmark', id: string, title: string, description: string, articleUrl: string, thumbnailUrl: string, publishedAt?: number | null, articleId: string, platformId?: string | null, platformName: string, platformUrl: string, platformFaviconUrl: string, isEng: boolean, isRead: boolean, createdAt: number, updatedAt: number } }> }, favoriteArticleFolders: { __typename?: 'FavoriteArticleFolderConnection', edges: Array<{ __typename?: 'FavoriteArticleFolderEdge', node: { __typename?: 'FavoriteArticleFolder', id: string, title: string } }> } };
+export type BookmarkTemplateQueryQuery = { __typename?: 'Query', bookmarks: { __typename?: 'BookmarkConnection', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null }, edges: Array<{ __typename?: 'BookmarkEdge', node: { __typename?: 'Bookmark', id: string, title: string, description: string, articleUrl: string, thumbnailUrl: string, publishedAt?: number | null, articleId: string, platformId?: string | null, platformName: string, platformUrl: string, platformFaviconUrl: string, isEng: boolean, isRead: boolean, createdAt: number, updatedAt: number, isFollowing: boolean, favoriteArticleFolderIds: Array<string> } }> }, favoriteArticleFolders: { __typename?: 'FavoriteArticleFolderConnection', edges: Array<{ __typename?: 'FavoriteArticleFolderEdge', node: { __typename?: 'FavoriteArticleFolder', id: string, title: string } }> } };
 
 export type CreateFavoriteArticleFolderMutationMutationVariables = Exact<{
   input: CreateFavoriteArticleFolderInput;
@@ -891,6 +893,7 @@ export const BookmarkCardItemFragmentFragmentDoc = gql`
     fragment BookmarkCardItemFragment on Bookmark {
   id
   title
+  articleUrl
   thumbnailUrl
   createdAt
 }
@@ -912,6 +915,8 @@ export const BookmarkCardWrapperFragmentFragmentDoc = gql`
   isRead
   createdAt
   updatedAt
+  isFollowing
+  favoriteArticleFolderIds
   ...BookmarkCardItemFragment
 }
     ${BookmarkCardItemFragmentFragmentDoc}`;

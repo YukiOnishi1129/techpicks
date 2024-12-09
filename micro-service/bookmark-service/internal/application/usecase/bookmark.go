@@ -6,6 +6,7 @@ import (
 
 	bpb "github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/grpc/bookmark"
 	cpb "github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/grpc/content"
+	fpb "github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/grpc/favorite"
 	externaladapter "github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/internal/adapter/external_adapter"
 	persistenceadapter "github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/internal/adapter/persistence_adapter"
 	"github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/internal/domain/entity"
@@ -25,12 +26,14 @@ type BookmarkUseCase interface {
 type bookmarkUseCase struct {
 	bookmarkPersistenceAdapter persistenceadapter.BookmarkPersistenceAdapter
 	contentExternalAdapter     externaladapter.ContentExternalAdapter
+	favoriteExternalAdapter    externaladapter.FavoriteExternalAdapter
 }
 
-func NewBookmarkUseCase(bpa persistenceadapter.BookmarkPersistenceAdapter, cea externaladapter.ContentExternalAdapter) BookmarkUseCase {
+func NewBookmarkUseCase(bpa persistenceadapter.BookmarkPersistenceAdapter, cea externaladapter.ContentExternalAdapter, fea externaladapter.FavoriteExternalAdapter) BookmarkUseCase {
 	return &bookmarkUseCase{
 		bookmarkPersistenceAdapter: bpa,
 		contentExternalAdapter:     cea,
+		favoriteExternalAdapter:    fea,
 	}
 }
 
@@ -42,9 +45,29 @@ func (bu *bookmarkUseCase) GetBookmarks(ctx context.Context, req *bpb.GetBookmar
 
 	edges := make([]*bpb.BookmarkEdge, len(bookmarks))
 	for i, b := range bookmarks {
+		resB := bu.convertPBBookmark(*b)
+
+		resFavoriteFolders, err := bu.favoriteExternalAdapter.GetFavoriteArticleFoldersByArticleID(ctx, &fpb.GetFavoriteArticleFoldersByArticleIdRequest{
+			ArticleId: b.ArticleID,
+			UserId:    req.GetUserId(),
+		})
+
+		if err != nil {
+			return nil, err
+		}
+
+		if len(resFavoriteFolders.GetFavoriteArticleFoldersEdge()) > 0 {
+			resFavIds := make([]string, len(resFavoriteFolders.GetFavoriteArticleFoldersEdge()))
+			for i, f := range resFavoriteFolders.GetFavoriteArticleFoldersEdge() {
+				resFavIds[i] = f.GetNode().GetId()
+			}
+			resB.FavoriteArticleFolderIds = resFavIds
+			resB.IsFollowing = true
+		}
+
 		edges[i] = &bpb.BookmarkEdge{
 			Cursor:   b.ID,
-			Bookmark: bu.convertPBBookmark(*b),
+			Bookmark: resB,
 		}
 	}
 
@@ -83,20 +106,22 @@ func (bu *bookmarkUseCase) convertPBBookmark(b entity.Bookmark) *bpb.Bookmark {
 	}
 
 	resBookmark := &bpb.Bookmark{
-		Id:                 b.ID,
-		ArticleId:          b.ArticleID,
-		UserId:             b.UserID,
-		Title:              b.Title,
-		Description:        b.Description,
-		ArticleUrl:         b.ArticleURL,
-		ThumbnailUrl:       b.ThumbnailURL,
-		PlatformName:       b.PlatformName,
-		PlatformUrl:        b.PlatformURL,
-		PlatformFaviconUrl: b.PlatformFaviconURL,
-		IsEng:              b.IsEng,
-		IsRead:             b.IsRead,
-		CreatedAt:          timestamppb.New(b.CreatedAt),
-		UpdatedAt:          timestamppb.New(b.UpdatedAt),
+		Id:                       b.ID,
+		ArticleId:                b.ArticleID,
+		UserId:                   b.UserID,
+		Title:                    b.Title,
+		Description:              b.Description,
+		ArticleUrl:               b.ArticleURL,
+		ThumbnailUrl:             b.ThumbnailURL,
+		PlatformName:             b.PlatformName,
+		PlatformUrl:              b.PlatformURL,
+		PlatformFaviconUrl:       b.PlatformFaviconURL,
+		IsEng:                    b.IsEng,
+		IsRead:                   b.IsRead,
+		IsFollowing:              false,
+		FavoriteArticleFolderIds: []string{},
+		CreatedAt:                timestamppb.New(b.CreatedAt),
+		UpdatedAt:                timestamppb.New(b.UpdatedAt),
 	}
 	if b.PlatformID.Valid {
 		resBookmark.PlatformId = wrapperspb.String(b.PlatformID.String)

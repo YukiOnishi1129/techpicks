@@ -59,10 +59,13 @@ export class BookmarkService {
                     articleUrl: edge.bookmark.articleUrl,
                     createdAt: convertTimestampToInt(edge.bookmark.createdAt),
                     description: edge.bookmark.description,
-                    favoriteArticleFolderIds: [],
+                    favoriteArticleFolderIds: edge.bookmark
+                      ?.favoriteArticleFolderIdsList
+                      ? edge.bookmark?.favoriteArticleFolderIdsList
+                      : [],
                     id: edge.bookmark.id,
                     isEng: edge.bookmark.isEng,
-                    isFollowing: false,
+                    isFollowing: edge.bookmark.isFollowing,
                     isRead: edge.bookmark.isRead,
                     platformFaviconUrl: edge.bookmark.platformFaviconUrl,
                     platformId: edge.bookmark?.platformId?.value,
@@ -125,10 +128,12 @@ export class BookmarkService {
           articleUrl: resBookmark.articleUrl,
           createdAt: convertTimestampToInt(resBookmark.createdAt),
           description: resBookmark.description,
-          favoriteArticleFolderIds: [],
+          favoriteArticleFolderIds: resBookmark?.favoriteArticleFolderIdsList
+            ? resBookmark?.favoriteArticleFolderIdsList
+            : [],
           id: resBookmark.id,
           isEng: resBookmark.isEng,
-          isFollowing: false,
+          isFollowing: resBookmark.isFollowing,
           isRead: resBookmark.isRead,
           platformFaviconUrl: resBookmark.platformFaviconUrl,
           platformId: resBookmark?.platformId?.value,
@@ -158,7 +163,6 @@ export class BookmarkService {
       req.setDescription(input.description);
       req.setArticleUrl(input.articleUrl);
       req.setThumbnailUrl(input.thumbnailUrl);
-      req.setThumbnailUrl(input.thumbnailUrl);
       req.setPlatformName(input.platformName);
       req.setPlatformUrl(input.platformUrl);
       req.setPlatformFaviconUrl(input.platformFaviconUrl);
@@ -179,10 +183,12 @@ export class BookmarkService {
           articleUrl: resBookmark.articleUrl,
           createdAt: convertTimestampToInt(resBookmark.createdAt),
           description: resBookmark.description,
-          favoriteArticleFolderIds: [],
+          favoriteArticleFolderIds: resBookmark?.favoriteArticleFolderIdsList
+            ? resBookmark?.favoriteArticleFolderIdsList
+            : [],
           id: resBookmark.id,
           isEng: resBookmark.isEng,
-          isFollowing: false,
+          isFollowing: resBookmark.isFollowing,
           isRead: resBookmark.isRead,
           platformFaviconUrl: resBookmark.platformFaviconUrl,
           platformId: resBookmark?.platformId?.value,

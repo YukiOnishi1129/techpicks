@@ -1,10 +1,7 @@
 import { redirect } from "next/navigation";
-import { Suspense } from "react";
 
 import { getUser } from "@/features/auth/actions/user";
 import { BookmarkTemplate } from "@/features/bookmarks/components/Template";
-
-import { ScreenLoader } from "@/components/layout/ScreenLoader";
 
 type PageProps = {
   params: { slug: string };
@@ -22,9 +19,5 @@ export default async function BookmarkPage({ searchParams }: PageProps) {
       ? searchParams["keyword"]
       : undefined;
 
-  return (
-    <Suspense fallback={<ScreenLoader />}>
-      <BookmarkTemplate user={user} keyword={keyword} />
-    </Suspense>
-  );
+  return <BookmarkTemplate user={user} keyword={keyword} />;
 }
