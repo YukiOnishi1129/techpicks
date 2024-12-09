@@ -6,7 +6,7 @@ import { FragmentOf, readFragment } from "gql.tada";
 import { FC } from "react";
 
 import { useArticleManageBookmark } from "@/features/articles/hooks/useArticleManageBookmark";
-import { useFavoriteArticleMutation } from "@/features/articles/hooks/useFavoriteArticleMutation";
+import { useArticleManageFavoriteArticle } from "@/features/articles/hooks/useArticleManageFavoriteArticle";
 import { FollowFavoriteArticleDropdownMenu } from "@/features/favorites/components/DropdownMenu";
 
 import { IconTitleLink } from "@/components/ui/link";
@@ -54,7 +54,7 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
     handleCreateFavoriteArticle,
     handleRemoveFavoriteArticle,
     handleCreateFavoriteArticleFolder,
-  } = useFavoriteArticleMutation({
+  } = useArticleManageFavoriteArticle({
     data: fragment,
     favoriteArticleFolders: fragmentFavoriteFolder,
   });

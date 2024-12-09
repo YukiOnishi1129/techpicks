@@ -1,7 +1,5 @@
 import { FragmentOf, graphql, readFragment } from "gql.tada";
 
-import { FavoriteFolderUseFavoriteArticleFragment } from "@/features/articles/hooks/useFavoriteArticleMutation";
-
 import { useStatusToast } from "@/hooks/useStatusToast";
 
 export const UseBookmarkMangeFavoriteArticleMutation = graphql(`
@@ -40,7 +38,7 @@ export const FavoriteFolderUseBookmarkManageFavoriteArticleFragment = graphql(`
 type UseBookmarkMutationParam = {
   data: FragmentOf<typeof UseBookmarkMangeFavoriteArticleMutation>;
   favoriteArticleFolders: FragmentOf<
-    typeof FavoriteFolderUseFavoriteArticleFragment
+    typeof FavoriteFolderUseBookmarkManageFavoriteArticleFragment
   >;
 };
 
@@ -51,7 +49,7 @@ export const useFavoriteArticleMutation = ({
   const { successToast, failToast } = useStatusToast();
   const fragment = readFragment(UseBookmarkMangeFavoriteArticleMutation, data);
   const fragmentFavoriteFolder = readFragment(
-    FavoriteFolderUseFavoriteArticleFragment,
+    FavoriteFolderUseBookmarkManageFavoriteArticleFragment,
     favoriteArticleFolders
   );
 };

@@ -550,9 +550,9 @@ export type DeleteBookmarkMutationMutationVariables = Exact<{
 
 export type DeleteBookmarkMutationMutation = { __typename?: 'Mutation', deleteBookmark: boolean };
 
-export type ArticleUseFavoriteArticleFragmentFragment = { __typename: 'Article', id: string, title: string, description: string, articleUrl: string, publishedAt?: number | null, authorName?: string | null, tags?: string | null, thumbnailUrl: string, isEng: boolean, isPrivate: boolean, isBookmarked: boolean, bookmarkId?: string | null, likeCount?: number | null, isFollowing: boolean, favoriteArticleFolderIds: Array<string>, platform?: { __typename?: 'Platform', id: string, name: string, siteUrl: string, faviconUrl: string } | null };
+export type UseArticleManageFavoriteArticleFragmentFragment = { __typename: 'Article', id: string, title: string, description: string, articleUrl: string, publishedAt?: number | null, authorName?: string | null, tags?: string | null, thumbnailUrl: string, isEng: boolean, isPrivate: boolean, isBookmarked: boolean, bookmarkId?: string | null, likeCount?: number | null, isFollowing: boolean, favoriteArticleFolderIds: Array<string>, platform?: { __typename?: 'Platform', id: string, name: string, siteUrl: string, faviconUrl: string } | null };
 
-export type FavoriteFolderUseFavoriteArticleFragmentFragment = { __typename?: 'FavoriteArticleFolderConnection', edges: Array<{ __typename?: 'FavoriteArticleFolderEdge', node: { __typename?: 'FavoriteArticleFolder', id: string, title: string } }> };
+export type FavoriteFolderUseArticleManageFavoriteArticleFragmentFragment = { __typename?: 'FavoriteArticleFolderConnection', edges: Array<{ __typename?: 'FavoriteArticleFolderEdge', node: { __typename?: 'FavoriteArticleFolder', id: string, title: string } }> };
 
 export type CreateBookmarkForUploadArticleMutationMutationVariables = Exact<{
   input: CreateBookmarkForUploadArticleInput;
@@ -798,8 +798,8 @@ export const UseArticleManageBookmarkFragmentFragmentDoc = gql`
   isEng
 }
     `;
-export const ArticleUseFavoriteArticleFragmentFragmentDoc = gql`
-    fragment ArticleUseFavoriteArticleFragment on Article {
+export const UseArticleManageFavoriteArticleFragmentFragmentDoc = gql`
+    fragment UseArticleManageFavoriteArticleFragment on Article {
   __typename
   id
   platform {
@@ -850,11 +850,11 @@ export const ArticleCardWrapperFragmentFragmentDoc = gql`
   favoriteArticleFolderIds
   ...ArticleCardItemFragment
   ...UseArticleManageBookmarkFragment
-  ...ArticleUseFavoriteArticleFragment
+  ...UseArticleManageFavoriteArticleFragment
 }
     ${ArticleCardItemFragmentFragmentDoc}
 ${UseArticleManageBookmarkFragmentFragmentDoc}
-${ArticleUseFavoriteArticleFragmentFragmentDoc}`;
+${UseArticleManageFavoriteArticleFragmentFragmentDoc}`;
 export const FollowTargetFavoriteArticleFolderItemFragmentFragmentDoc = gql`
     fragment FollowTargetFavoriteArticleFolderItemFragment on FavoriteArticleFolder {
   id
@@ -870,8 +870,8 @@ export const FollowFavoriteArticleDropdownMenuContentFragmentFragmentDoc = gql`
   }
 }
     ${FollowTargetFavoriteArticleFolderItemFragmentFragmentDoc}`;
-export const FavoriteFolderUseFavoriteArticleFragmentFragmentDoc = gql`
-    fragment FavoriteFolderUseFavoriteArticleFragment on FavoriteArticleFolderConnection {
+export const FavoriteFolderUseArticleManageFavoriteArticleFragmentFragmentDoc = gql`
+    fragment FavoriteFolderUseArticleManageFavoriteArticleFragment on FavoriteArticleFolderConnection {
   edges {
     node {
       id
@@ -889,10 +889,10 @@ export const FavoriteFolderArticleCardWrapperFragmentFragmentDoc = gql`
     }
   }
   ...FollowFavoriteArticleDropdownMenuContentFragment
-  ...FavoriteFolderUseFavoriteArticleFragment
+  ...FavoriteFolderUseArticleManageFavoriteArticleFragment
 }
     ${FollowFavoriteArticleDropdownMenuContentFragmentFragmentDoc}
-${FavoriteFolderUseFavoriteArticleFragmentFragmentDoc}`;
+${FavoriteFolderUseArticleManageFavoriteArticleFragmentFragmentDoc}`;
 export const BookmarkCardItemFragmentFragmentDoc = gql`
     fragment BookmarkCardItemFragment on Bookmark {
   id

@@ -9,8 +9,8 @@ import { DeleteFavoriteArticleByArticleIdMutation } from "@/features/favorites/m
 
 import { useStatusToast } from "@/hooks/useStatusToast";
 
-export const ArticleUseFavoriteArticleFragment = graphql(`
-  fragment ArticleUseFavoriteArticleFragment on Article {
+export const UseArticleManageFavoriteArticleFragment = graphql(`
+  fragment UseArticleManageFavoriteArticleFragment on Article {
     __typename
     id
     platform {
@@ -36,8 +36,8 @@ export const ArticleUseFavoriteArticleFragment = graphql(`
   }
 `);
 
-export const FavoriteFolderUseFavoriteArticleFragment = graphql(`
-  fragment FavoriteFolderUseFavoriteArticleFragment on FavoriteArticleFolderConnection {
+export const FavoriteFolderUseArticleManageFavoriteArticleFragment = graphql(`
+  fragment FavoriteFolderUseArticleManageFavoriteArticleFragment on FavoriteArticleFolderConnection {
     edges {
       node {
         id
@@ -47,21 +47,21 @@ export const FavoriteFolderUseFavoriteArticleFragment = graphql(`
   }
 `);
 
-type UseFavoriteArticleMutationParam = {
-  data: FragmentOf<typeof ArticleUseFavoriteArticleFragment>;
+type UseArticleManageFavoriteArticleParam = {
+  data: FragmentOf<typeof UseArticleManageFavoriteArticleFragment>;
   favoriteArticleFolders: FragmentOf<
-    typeof FavoriteFolderUseFavoriteArticleFragment
+    typeof FavoriteFolderUseArticleManageFavoriteArticleFragment
   >;
 };
 
-export const useFavoriteArticleMutation = ({
+export const useArticleManageFavoriteArticle = ({
   data,
   favoriteArticleFolders,
-}: UseFavoriteArticleMutationParam) => {
+}: UseArticleManageFavoriteArticleParam) => {
   const { successToast, failToast } = useStatusToast();
-  const fragment = readFragment(ArticleUseFavoriteArticleFragment, data);
+  const fragment = readFragment(UseArticleManageFavoriteArticleFragment, data);
   const fragmentFavoriteFolder = readFragment(
-    FavoriteFolderUseFavoriteArticleFragment,
+    FavoriteFolderUseArticleManageFavoriteArticleFragment,
     favoriteArticleFolders
   );
   const [createFavoriteArticleMutation] = useMutation(
