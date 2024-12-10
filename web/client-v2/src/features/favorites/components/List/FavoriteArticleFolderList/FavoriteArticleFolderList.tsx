@@ -1,17 +1,12 @@
 "use client";
-import { useMutation, useQuery, useSuspenseQuery } from "@apollo/client";
+import { useQuery, useSuspenseQuery } from "@apollo/client";
 import { User } from "@supabase/supabase-js";
-import { usePathname } from "next/navigation";
 import { FC, useCallback, useEffect, useRef, useState } from "react";
 
-import { logoutToLoginPage } from "@/features/auth/actions/auth";
-import { DeleteFavoriteArticleFolderMutation } from "@/features/favorites/mutations/DeleteFavoriteArticleFolderMutation";
-import { UpdateFavoriteArticleFolderMutation } from "@/features/favorites/mutations/UpdateFavoriteArticleFolderMutation";
+import { useManageFavoriteFolder } from "@/features/favorites/hooks/useManageFavoriteFolder";
 
 import { NotFoundList } from "@/components/layout/NotFoundList";
 import { Loader } from "@/components/ui/loader";
-
-import { useStatusToast } from "@/hooks/useStatusToast";
 
 import { FavoriteArticleFolderListQuery } from "./FavoriteArticleFolderListQuery";
 import { FavoriteArticleFolderCard } from "../../Card";
@@ -27,8 +22,6 @@ export const FavoriteArticleFolderList: FC<FavoriteArticleFolderListProps> = ({
   keyword,
 }) => {
   const observerTarget = useRef(null);
-  const { successToast, failToast } = useStatusToast();
-  const pathname = usePathname();
 
   const { error } = useSuspenseQuery(FavoriteArticleFolderListTemplateQuery, {
     variables: {
@@ -56,14 +49,6 @@ export const FavoriteArticleFolderList: FC<FavoriteArticleFolderListProps> = ({
     nextFetchPolicy: "network-only",
   });
 
-  const [updateFavoriteArticleFolderMutation] = useMutation(
-    UpdateFavoriteArticleFolderMutation
-  );
-
-  const [deleteFavoriteArticleFolderMutation] = useMutation(
-    DeleteFavoriteArticleFolderMutation
-  );
-
   const [hashMore, setHashMore] = useState(true);
   const [offset, setOffset] = useState(1);
   const [endCursor, setEndCursor] = useState(
@@ -71,113 +56,10 @@ export const FavoriteArticleFolderList: FC<FavoriteArticleFolderListProps> = ({
   );
   const [isNextPage, setIsNextPage] = useState(true);
 
-  const handleUpdateFavoriteArticleFolder = useCallback(
-    async ({
-      id,
-      title,
-      description,
-    }: {
-      id: string;
-      title: string;
-      description?: string;
-    }) => {
-      if (!user) {
-        failToast({
-          description: "Please login to edit a favorite folder",
-        });
-        await logoutToLoginPage();
-        return;
-      }
-      const { errors } = await updateFavoriteArticleFolderMutation({
-        variables: {
-          input: {
-            id,
-            title,
-            description,
-          },
-        },
-        update: (cache, data) => {
-          if (data.data?.updateFavoriteArticleFolder) {
-            cache.modify({
-              id: cache.identify(data.data.updateFavoriteArticleFolder),
-              fields: {
-                title() {
-                  return title;
-                },
-                description() {
-                  return description;
-                },
-              },
-            });
-          }
-        },
-      });
-
-      let errMsg = "";
-      if (errors) {
-        errMsg = "Fail: Something went wrong";
-        if (errors.length > 0) {
-          errMsg = errors[0].message;
-        }
-      }
-
-      if (errMsg !== "") {
-        failToast({
-          description: errMsg,
-        });
-        return;
-      }
-
-      successToast({
-        description: `Updated favorite article folder: "${title}"`,
-      });
-    },
-    [user, successToast, failToast, updateFavoriteArticleFolderMutation]
-  );
-
-  const handleDeleteFavoriteArticleFolder = useCallback(
-    async (id: string, title: string) => {
-      // 1. login check
-      if (!user) {
-        failToast({
-          description: "Please login to delete a favorite folder",
-        });
-        await logoutToLoginPage();
-        return;
-      }
-
-      const { errors } = await deleteFavoriteArticleFolderMutation({
-        variables: {
-          input: {
-            id,
-          },
-        },
-        update: (cache) => {
-          cache.evict({ id: `FavoriteArticleFolder:${id}` });
-        },
-      });
-
-      let errMsg = "";
-      if (errors) {
-        errMsg = "Fail: Something went wrong";
-        if (errors.length > 0) {
-          errMsg = errors[0].message;
-        }
-      }
-
-      if (errMsg !== "") {
-        failToast({
-          description: errMsg,
-        });
-        return;
-      }
-
-      successToast({
-        description: `Deleted favorite article folder: "${title}"`,
-      });
-    },
-    [user, successToast, failToast, deleteFavoriteArticleFolderMutation]
-  );
+  const {
+    handleUpdateFavoriteArticleFolder,
+    handleDeleteFavoriteArticleFolder,
+  } = useManageFavoriteFolder();
 
   const loadMore = useCallback(async () => {
     if (!isNextPage) return;
