@@ -48,7 +48,7 @@ export const FavoriteArticleFolderListTemplate: FC<
         }}
       >
         <Suspense fallback={<ScreenLoader />}>
-          <FavoriteArticleFolderList user={user} />
+          <FavoriteArticleFolderList user={user} keyword={keyword} />
         </Suspense>
       </PreloadQuery>
 
