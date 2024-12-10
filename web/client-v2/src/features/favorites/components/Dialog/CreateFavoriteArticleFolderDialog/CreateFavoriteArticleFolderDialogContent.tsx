@@ -54,8 +54,8 @@ const FormSchema = z.object({
 });
 
 type CreateMyFeedFolderDialogContentProps = {
-  handleCloseDialog: () => void;
-  handleCreateFavoriteArticleFolder?: (
+  onCloseDialog: () => void;
+  onCreateFavoriteArticleFolder?: (
     favoriteArticleFolderId: string,
     title: string
   ) => Promise<void>;
@@ -63,7 +63,7 @@ type CreateMyFeedFolderDialogContentProps = {
 
 export const CreateFavoriteArticleFolderDialogContent: FC<
   CreateMyFeedFolderDialogContentProps
-> = ({ handleCloseDialog, handleCreateFavoriteArticleFolder }) => {
+> = ({ onCloseDialog, onCreateFavoriteArticleFolder }) => {
   const { successToast, failToast } = useStatusToast();
   const [isPending, startTransition] = useTransition();
 
@@ -150,26 +150,26 @@ export const CreateFavoriteArticleFolderDialogContent: FC<
         successToast({
           description: "Successfully created favorite article folder",
         });
-        if (handleCreateFavoriteArticleFolder !== undefined) {
+        if (onCreateFavoriteArticleFolder !== undefined) {
           if (!folderData?.createFavoriteArticleFolder.id) return;
-          await handleCreateFavoriteArticleFolder(
+          await onCreateFavoriteArticleFolder(
             folderData.createFavoriteArticleFolder.id,
             data.title
           );
           resetDialog();
-          handleCloseDialog();
+          onCloseDialog();
           return;
         }
         resetDialog();
-        handleCloseDialog();
+        onCloseDialog();
       });
     },
     [
       failToast,
-      handleCloseDialog,
+      onCloseDialog,
       resetDialog,
       successToast,
-      handleCreateFavoriteArticleFolder,
+      onCreateFavoriteArticleFolder,
       createFavoriteArticleFolderMutation,
     ]
   );
