@@ -3,13 +3,13 @@
 import { useMutation } from "@apollo/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ReloadIcon } from "@radix-ui/react-icons";
-import { graphql } from "gql.tada";
 import { useCallback, FC, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { logoutToLoginPage } from "@/features/auth/actions/auth";
 import { getUser } from "@/features/auth/actions/user";
+import { CreateFavoriteArticleFolderMutation } from "@/features/favorites/mutations/CreateFavoriteArticleFolderMutation";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -32,17 +32,6 @@ import { useStatusToast } from "@/hooks/useStatusToast";
 
 import { FollowTargetFavoriteArticleFolderItemFragment } from "../../DropdownMenu/FollowFavoriteArticleDropdownMenu/FollowFavoriteArticleDropdownMenuFragment";
 
-const CreateFavoriteArticleFolderMutation = graphql(`
-  mutation CreateFavoriteArticleFolderMutation(
-    $input: CreateFavoriteArticleFolderInput!
-  ) {
-    createFavoriteArticleFolder(input: $input) {
-      id
-      title
-    }
-  }
-`);
-
 const FormSchema = z.object({
   title: z
     .string({
@@ -54,8 +43,8 @@ const FormSchema = z.object({
 });
 
 type CreateMyFeedFolderDialogContentProps = {
-  handleCloseDialog: () => void;
-  handleCreateFavoriteArticleFolder?: (
+  onCloseDialog: () => void;
+  onCreateFavoriteArticleFolder?: (
     favoriteArticleFolderId: string,
     title: string
   ) => Promise<void>;
@@ -63,7 +52,7 @@ type CreateMyFeedFolderDialogContentProps = {
 
 export const CreateFavoriteArticleFolderDialogContent: FC<
   CreateMyFeedFolderDialogContentProps
-> = ({ handleCloseDialog, handleCreateFavoriteArticleFolder }) => {
+> = ({ onCloseDialog, onCreateFavoriteArticleFolder }) => {
   const { successToast, failToast } = useStatusToast();
   const [isPending, startTransition] = useTransition();
 
@@ -150,26 +139,26 @@ export const CreateFavoriteArticleFolderDialogContent: FC<
         successToast({
           description: "Successfully created favorite article folder",
         });
-        if (handleCreateFavoriteArticleFolder !== undefined) {
+        if (onCreateFavoriteArticleFolder !== undefined) {
           if (!folderData?.createFavoriteArticleFolder.id) return;
-          await handleCreateFavoriteArticleFolder(
+          await onCreateFavoriteArticleFolder(
             folderData.createFavoriteArticleFolder.id,
             data.title
           );
           resetDialog();
-          handleCloseDialog();
+          onCloseDialog();
           return;
         }
         resetDialog();
-        handleCloseDialog();
+        onCloseDialog();
       });
     },
     [
       failToast,
-      handleCloseDialog,
+      onCloseDialog,
       resetDialog,
       successToast,
-      handleCreateFavoriteArticleFolder,
+      onCreateFavoriteArticleFolder,
       createFavoriteArticleFolderMutation,
     ]
   );
