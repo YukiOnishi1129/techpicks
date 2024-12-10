@@ -14,14 +14,9 @@ import { BookmarkTemplateQuery } from "../../Template/BookmarkTemplate/BookmarkT
 type BookmarkListProps = {
   user: User;
   keyword?: string;
-  after?: string | null;
 };
 
-export const BookmarkList: FC<BookmarkListProps> = ({
-  user,
-  keyword,
-  after,
-}) => {
+export const BookmarkList: FC<BookmarkListProps> = ({ user, keyword }) => {
   const observerTarget = useRef(null);
 
   const { data: resSuspenseData, error } = useSuspenseQuery(
@@ -156,7 +151,6 @@ export const BookmarkList: FC<BookmarkListProps> = ({
               key={`${i}-${edge.node.id}`}
               data={edge.node}
               favoriteArticleFolders={resSuspenseData.favoriteArticleFolders}
-              user={user}
             />
           ))}
           <div ref={observerTarget}>
