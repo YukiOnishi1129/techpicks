@@ -3,13 +3,13 @@
 import { useMutation } from "@apollo/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ReloadIcon } from "@radix-ui/react-icons";
-import { graphql } from "gql.tada";
 import { useCallback, FC, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { logoutToLoginPage } from "@/features/auth/actions/auth";
 import { getUser } from "@/features/auth/actions/user";
+import { CreateFavoriteArticleFolderMutation } from "@/features/favorites/mutations/CreateFavoriteArticleFolderMutation";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -31,17 +31,6 @@ import { Input } from "@/components/ui/input";
 import { useStatusToast } from "@/hooks/useStatusToast";
 
 import { FollowTargetFavoriteArticleFolderItemFragment } from "../../DropdownMenu/FollowFavoriteArticleDropdownMenu/FollowFavoriteArticleDropdownMenuFragment";
-
-const CreateFavoriteArticleFolderMutation = graphql(`
-  mutation CreateFavoriteArticleFolderMutation(
-    $input: CreateFavoriteArticleFolderInput!
-  ) {
-    createFavoriteArticleFolder(input: $input) {
-      id
-      title
-    }
-  }
-`);
 
 const FormSchema = z.object({
   title: z
