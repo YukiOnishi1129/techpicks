@@ -1,6 +1,5 @@
 "use client";
 import { useQuery, useSuspenseQuery } from "@apollo/client";
-import { User } from "@supabase/supabase-js";
 import { FC, useCallback, useEffect, useRef, useState } from "react";
 
 import { useManageFavoriteFolder } from "@/features/favorites/hooks/useManageFavoriteFolder";
@@ -13,12 +12,10 @@ import { FavoriteArticleFolderCard } from "../../Card";
 import { FavoriteArticleFolderListTemplateQuery } from "../../Template/FavoriteArticleFolderListTemplate/FavoriteArticleFolderListTemplateQuery";
 
 type FavoriteArticleFolderListProps = {
-  user?: User;
   keyword?: string;
 };
 
 export const FavoriteArticleFolderList: FC<FavoriteArticleFolderListProps> = ({
-  user,
   keyword,
 }) => {
   const observerTarget = useRef(null);

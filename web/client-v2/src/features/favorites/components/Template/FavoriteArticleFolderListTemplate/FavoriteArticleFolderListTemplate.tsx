@@ -1,4 +1,3 @@
-import { User } from "@supabase/supabase-js";
 import { FC, Suspense } from "react";
 import { FaHeart } from "react-icons/fa";
 
@@ -12,21 +11,20 @@ import { FavoriteArticleFolderList } from "../../List";
 import { FavoriteArticleFolderKeywordSearchForm } from "../../Search";
 
 type FavoriteArticleFolderListTemplateProps = {
-  user: User;
   keyword?: string;
 };
 
 export const FavoriteArticleFolderListTemplate: FC<
   FavoriteArticleFolderListTemplateProps
-> = async ({ user, keyword }) => {
+> = async ({ keyword }) => {
   return (
     <div>
-      <div className="fixed z-10 hidden w-[90%] bg-card md:block md:w-[70%] md:px-4">
-        <h1 className="mt-4 flex items-center text-2xl font-bold">
-          <FaHeart className="mr-4" color="red" />
+      <div className="fixed z-10 hidden w-[90%] gap-2 bg-card md:block md:w-[70%] md:px-4">
+        <h1 className="mt-4 flex items-center gap-4 text-2xl font-bold">
+          <FaHeart color="red" />
           <span>Favorite Folders</span>
         </h1>
-        <div className="mt-2 flex w-full items-center justify-between">
+        <div className="flex w-full items-center justify-between">
           <div className="w-4/5 pr-4">
             <FavoriteArticleFolderKeywordSearchForm keyword={keyword} />
           </div>
@@ -48,7 +46,7 @@ export const FavoriteArticleFolderListTemplate: FC<
         }}
       >
         <Suspense fallback={<ScreenLoader />}>
-          <FavoriteArticleFolderList user={user} keyword={keyword} />
+          <FavoriteArticleFolderList keyword={keyword} />
         </Suspense>
       </PreloadQuery>
 
