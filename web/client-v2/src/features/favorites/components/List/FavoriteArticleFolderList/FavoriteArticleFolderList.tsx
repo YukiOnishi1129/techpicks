@@ -1,12 +1,12 @@
 "use client";
-import { useQuery, useSuspenseQuery } from "@apollo/client";
+import { useMutation, useQuery, useSuspenseQuery } from "@apollo/client";
 import { User } from "@supabase/supabase-js";
 import { usePathname } from "next/navigation";
 import { FC, useCallback, useEffect, useRef, useState } from "react";
 
 import { logoutToLoginPage } from "@/features/auth/actions/auth";
 import { deleteFavoriteArticleFolderMutation } from "@/features/favorites/actions/actDeleteFavoriteArticleFolderMutation";
-import { updateFavoriteArticleFolderMutation } from "@/features/favorites/actions/actUpdateFavoriteArticleFolderMutation";
+import { UpdateFavoriteArticleFolderMutation } from "@/features/favorites/mutations/UpdateFavoriteArticleFolderMutation";
 
 import { NotFoundList } from "@/components/layout/NotFoundList";
 import { Loader } from "@/components/ui/loader";
@@ -58,6 +58,10 @@ export const FavoriteArticleFolderList: FC<FavoriteArticleFolderListProps> = ({
     nextFetchPolicy: "network-only",
   });
 
+  const [updateFavoriteArticleFolderMutation] = useMutation(
+    UpdateFavoriteArticleFolderMutation
+  );
+
   const [hashMore, setHashMore] = useState(true);
   const [offset, setOffset] = useState(1);
   const [endCursor, setEndCursor] = useState(
@@ -82,23 +86,39 @@ export const FavoriteArticleFolderList: FC<FavoriteArticleFolderListProps> = ({
         await logoutToLoginPage();
         return;
       }
-      const { data: updateData, error } =
+      const { data: updateData, errors } =
         await updateFavoriteArticleFolderMutation({
-          id,
-          title,
-          description,
+          variables: {
+            input: {
+              id,
+              title,
+              description,
+            },
+          },
+          update: (cache, data) => {
+            if (data.data?.updateFavoriteArticleFolder) {
+              cache.modify({
+                id: cache.identify(data.data.updateFavoriteArticleFolder),
+                fields: {
+                  title() {
+                    return title;
+                  },
+                  description() {
+                    return description;
+                  },
+                },
+              });
+            }
+          },
         });
 
       let errMsg = "";
-      if (error) {
+      if (errors) {
         errMsg = "Fail: Something went wrong";
-        if (error.length > 0) {
-          errMsg = error[0].message;
+        if (errors.length > 0) {
+          errMsg = errors[0].message;
         }
       }
-
-      if (!updateData?.updateFavoriteArticleFolder?.id)
-        errMsg = "Fail: Something went wrong";
 
       if (errMsg !== "") {
         failToast({
@@ -108,12 +128,10 @@ export const FavoriteArticleFolderList: FC<FavoriteArticleFolderListProps> = ({
       }
 
       successToast({
-        description: "Successfully updated favorite article folder",
+        description: `Updated favorite article folder: "${title}"`,
       });
-
-      await serverRevalidatePage(pathname);
     },
-    [user, successToast, failToast, pathname]
+    [user, successToast, failToast, updateFavoriteArticleFolderMutation]
   );
 
   const handleDeleteFavoriteArticleFolder = useCallback(
