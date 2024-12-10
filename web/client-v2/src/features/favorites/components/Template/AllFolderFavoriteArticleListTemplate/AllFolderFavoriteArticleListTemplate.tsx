@@ -1,16 +1,17 @@
 import { User } from "@supabase/supabase-js";
-import { readFragment } from "gql.tada";
-import { FC } from "react";
+import { FC, Suspense } from "react";
 
+import { ScreenLoader } from "@/components/layout/ScreenLoader";
 import { BreadCrumbType, PageBreadcrumb } from "@/components/ui/breadcrumb";
+
+import { PreloadQuery } from "@/lib/apollo/client";
 
 import {
   FavoriteAllFolderArticlesInput,
   FavoriteArticleFoldersInput,
 } from "@/graphql/type";
 
-import { getAllFolderFavoriteArticleListTemplateQuery } from "./actGetAllFolderFavoriteArticleListTemplateQuery";
-import { AllFolderFavoriteArticleListTemplateFragment } from "./AllFolderFavoriteArticleListTemplateFragment";
+import { AllFolderFavoriteArticleListTemplateQuery } from "./AllFolderFavoriteArticleListTemplateQuery";
 import { AllFolderFavoriteArticleList } from "../../List";
 import { FavoriteArticleKeywordSearchForm } from "../../Search";
 
@@ -38,7 +39,9 @@ export const AllFolderFavoriteArticleListTemplate: FC<
   ];
 
   const favoriteAllFolderArticlesInput: FavoriteAllFolderArticlesInput = {
-    keyword,
+    first: 20,
+    after: null,
+    keyword: keyword,
   };
 
   const favoriteArticleFoldersInput: FavoriteArticleFoldersInput = {
@@ -46,20 +49,6 @@ export const AllFolderFavoriteArticleListTemplate: FC<
     isFolderOnly: false,
     isFavoriteArticleAllFetch: true,
   };
-
-  const { data, error } = await getAllFolderFavoriteArticleListTemplateQuery(
-    favoriteAllFolderArticlesInput,
-    favoriteArticleFoldersInput
-  );
-
-  if (error) {
-    return <div>Error: {error.message}</div>;
-  }
-
-  const fragment = readFragment(
-    AllFolderFavoriteArticleListTemplateFragment,
-    data
-  );
 
   return (
     <div>
@@ -77,12 +66,17 @@ export const AllFolderFavoriteArticleListTemplate: FC<
 
       <div className="h-12 md:h-28" />
 
-      <AllFolderFavoriteArticleList
-        user={user}
-        data={fragment.favoriteAllFolderArticles}
-        favoriteArticleFolders={fragment.favoriteArticleFolders}
-        keyword={keyword}
-      />
+      <PreloadQuery
+        query={AllFolderFavoriteArticleListTemplateQuery}
+        variables={{
+          favoriteAllFolderArticlesInput,
+          favoriteArticleFoldersInput,
+        }}
+      >
+        <Suspense fallback={<ScreenLoader />}>
+          <AllFolderFavoriteArticleList keyword={keyword} />
+        </Suspense>
+      </PreloadQuery>
 
       {/* <div className="fixed bottom-20 right-4 z-50 md:hidden">
         <FavoriteArticleKeyWordSearchDialog
