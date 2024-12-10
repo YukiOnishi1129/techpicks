@@ -5,15 +5,13 @@ import { usePathname } from "next/navigation";
 import { FC, useCallback, useEffect, useRef, useState } from "react";
 
 import { logoutToLoginPage } from "@/features/auth/actions/auth";
-import { deleteFavoriteArticleFolderMutation } from "@/features/favorites/actions/actDeleteFavoriteArticleFolderMutation";
+import { DeleteFavoriteArticleFolderMutation } from "@/features/favorites/mutations/DeleteFavoriteArticleFolderMutation";
 import { UpdateFavoriteArticleFolderMutation } from "@/features/favorites/mutations/UpdateFavoriteArticleFolderMutation";
 
 import { NotFoundList } from "@/components/layout/NotFoundList";
 import { Loader } from "@/components/ui/loader";
 
 import { useStatusToast } from "@/hooks/useStatusToast";
-
-import { serverRevalidatePage } from "@/actions/actServerRevalidatePage";
 
 import { FavoriteArticleFolderListQuery } from "./FavoriteArticleFolderListQuery";
 import { FavoriteArticleFolderCard } from "../../Card";
@@ -62,6 +60,10 @@ export const FavoriteArticleFolderList: FC<FavoriteArticleFolderListProps> = ({
     UpdateFavoriteArticleFolderMutation
   );
 
+  const [deleteFavoriteArticleFolderMutation] = useMutation(
+    DeleteFavoriteArticleFolderMutation
+  );
+
   const [hashMore, setHashMore] = useState(true);
   const [offset, setOffset] = useState(1);
   const [endCursor, setEndCursor] = useState(
@@ -86,31 +88,30 @@ export const FavoriteArticleFolderList: FC<FavoriteArticleFolderListProps> = ({
         await logoutToLoginPage();
         return;
       }
-      const { data: updateData, errors } =
-        await updateFavoriteArticleFolderMutation({
-          variables: {
-            input: {
-              id,
-              title,
-              description,
-            },
+      const { errors } = await updateFavoriteArticleFolderMutation({
+        variables: {
+          input: {
+            id,
+            title,
+            description,
           },
-          update: (cache, data) => {
-            if (data.data?.updateFavoriteArticleFolder) {
-              cache.modify({
-                id: cache.identify(data.data.updateFavoriteArticleFolder),
-                fields: {
-                  title() {
-                    return title;
-                  },
-                  description() {
-                    return description;
-                  },
+        },
+        update: (cache, data) => {
+          if (data.data?.updateFavoriteArticleFolder) {
+            cache.modify({
+              id: cache.identify(data.data.updateFavoriteArticleFolder),
+              fields: {
+                title() {
+                  return title;
                 },
-              });
-            }
-          },
-        });
+                description() {
+                  return description;
+                },
+              },
+            });
+          }
+        },
+      });
 
       let errMsg = "";
       if (errors) {
@@ -135,7 +136,7 @@ export const FavoriteArticleFolderList: FC<FavoriteArticleFolderListProps> = ({
   );
 
   const handleDeleteFavoriteArticleFolder = useCallback(
-    async (id: string) => {
+    async (id: string, title: string) => {
       // 1. login check
       if (!user) {
         failToast({
@@ -145,19 +146,24 @@ export const FavoriteArticleFolderList: FC<FavoriteArticleFolderListProps> = ({
         return;
       }
 
-      const { data: deleteData, error } =
-        await deleteFavoriteArticleFolderMutation({ id });
+      const { errors } = await deleteFavoriteArticleFolderMutation({
+        variables: {
+          input: {
+            id,
+          },
+        },
+        update: (cache) => {
+          cache.evict({ id: `FavoriteArticleFolder:${id}` });
+        },
+      });
 
       let errMsg = "";
-      if (error) {
+      if (errors) {
         errMsg = "Fail: Something went wrong";
-        if (error.length > 0) {
-          errMsg = error[0].message;
+        if (errors.length > 0) {
+          errMsg = errors[0].message;
         }
       }
-
-      if (!deleteData?.deleteFavoriteArticleFolder)
-        errMsg = "Fail: Something went wrong";
 
       if (errMsg !== "") {
         failToast({
@@ -167,12 +173,10 @@ export const FavoriteArticleFolderList: FC<FavoriteArticleFolderListProps> = ({
       }
 
       successToast({
-        description: "Successfully deleted favorite article folder",
+        description: `Deleted favorite article folder: "${title}"`,
       });
-
-      await serverRevalidatePage(pathname);
     },
-    [user, successToast, failToast, pathname]
+    [user, successToast, failToast, deleteFavoriteArticleFolderMutation]
   );
 
   const loadMore = useCallback(async () => {

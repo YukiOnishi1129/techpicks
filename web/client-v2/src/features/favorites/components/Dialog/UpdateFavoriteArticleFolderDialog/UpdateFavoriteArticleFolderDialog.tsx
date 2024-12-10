@@ -19,7 +19,10 @@ type UpdateFavoriteArticleFolderDialogProps = {
     title: string;
     description?: string;
   }) => Promise<void>;
-  handleDeleteFavoriteArticleFolder: (id: string) => Promise<void>;
+  handleDeleteFavoriteArticleFolder: (
+    id: string,
+    title: string
+  ) => Promise<void>;
 };
 
 export const UpdateFavoriteArticleFolderDialog: FC<
