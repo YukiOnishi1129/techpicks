@@ -1,5 +1,4 @@
 "use client";
-import { User } from "@supabase/supabase-js";
 import { FragmentOf, readFragment } from "gql.tada";
 import { FC } from "react";
 
@@ -13,7 +12,6 @@ import {
 import { AllFolderFavoriteArticleCardItem } from "../AllFolderFavoriteArticleCardItem";
 
 type AllFolderFavoriteArticleCardWrapperProps = {
-  user: User;
   data: FragmentOf<typeof AllFolderFavoriteArticleCardWrapperFragment>;
   favoriteArticleFolders: FragmentOf<
     typeof FavoriteFolderAllFolderArticleCardWrapperFragment
@@ -22,7 +20,7 @@ type AllFolderFavoriteArticleCardWrapperProps = {
 
 export const AllFolderFavoriteArticleCardWrapper: FC<
   AllFolderFavoriteArticleCardWrapperProps
-> = ({ user, data, favoriteArticleFolders }) => {
+> = ({ data, favoriteArticleFolders }) => {
   const fragment = readFragment(
     AllFolderFavoriteArticleCardWrapperFragment,
     data
@@ -35,10 +33,10 @@ export const AllFolderFavoriteArticleCardWrapper: FC<
   return (
     <div
       key={fragment.node.id}
-      className="rounded-2xl border-2 bg-primary-foreground px-4 pb-4 md:px-2"
+      className="rounded-2xl border bg-primary-foreground px-4 pb-4 md:px-2"
     >
       <div className="grid gap-4">
-        <div className="flex h-16 justify-between border-b-2 md:ml-6">
+        <div className="flex h-16 justify-between border-b md:ml-6">
           <IconTitleLink
             url={fragment.node.platformUrl}
             iconImageUrl={fragment.node.platformFaviconUrl}
@@ -46,15 +44,12 @@ export const AllFolderFavoriteArticleCardWrapper: FC<
             target="_blank"
           />
 
-          <div className="flex items-center justify-center p-4">
-            <div className="mr-4">
-              <ShareLinks
-                shareTitle={fragment.node.title}
-                shareUrl={fragment.node.articleUrl}
-              />
-            </div>
-            <div className="mr-4">
-              {/* <CopyFavoriteArticleDropdownMenu
+          <div className="flex items-center justify-center gap-4 p-4">
+            <ShareLinks
+              shareTitle={fragment.node.title}
+              shareUrl={fragment.node.articleUrl}
+            />
+            {/* <CopyFavoriteArticleDropdownMenu
                 data={showFavoriteArticleFolders}
                 articleId={fragment.articleId}
                 targetFavoriteFolderId={fragment.favoriteArticleFolderId}
@@ -64,15 +59,6 @@ export const AllFolderFavoriteArticleCardWrapper: FC<
                   handleCreateFavoriteArticleFolder
                 }
               /> */}
-            </div>
-            <div>
-              {/* <RemoveFavoriteArticleAlertDialog
-                favoriteArticleId={fragment.id}
-                favoriteArticleTitle={fragment.title}
-                targetFavoriteArticleFolderId={fragment.favoriteArticleFolderId}
-                handleRemoveFavoriteArticle={handleRemoveFavoriteArticleCard}
-              /> */}
-            </div>
           </div>
         </div>
 
