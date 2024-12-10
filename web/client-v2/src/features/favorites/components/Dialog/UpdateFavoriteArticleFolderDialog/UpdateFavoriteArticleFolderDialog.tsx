@@ -53,7 +53,7 @@ export const UpdateFavoriteArticleFolderDialog: FC<
           description={description}
           onUpdateFavoriteArticleFolder={onUpdateFavoriteArticleFolder}
           onDeleteFavoriteArticleFolder={onDeleteFavoriteArticleFolder}
-          handleClose={handleClose}
+          onClose={handleClose}
         />
       )}
     </Dialog>

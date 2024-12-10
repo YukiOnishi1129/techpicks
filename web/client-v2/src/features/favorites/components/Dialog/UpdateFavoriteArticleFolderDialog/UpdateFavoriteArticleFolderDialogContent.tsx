@@ -48,7 +48,7 @@ type UpdateFavoriteArticleFolderDialogContentProps = {
     description?: string;
   }) => Promise<void>;
   onDeleteFavoriteArticleFolder: (id: string, title: string) => Promise<void>;
-  handleClose: () => void;
+  onClose: () => void;
 };
 
 export const UpdateFavoriteArticleFolderDialogContent: FC<
@@ -57,7 +57,7 @@ export const UpdateFavoriteArticleFolderDialogContent: FC<
   favoriteArticleFolderId,
   title,
   description,
-  handleClose,
+  onClose,
   onUpdateFavoriteArticleFolder,
   onDeleteFavoriteArticleFolder,
 }) => {
@@ -79,18 +79,13 @@ export const UpdateFavoriteArticleFolderDialogContent: FC<
       title: values.title,
       description: inputDescription,
     });
-    handleClose();
+    onClose();
   };
 
   const onDelete = useCallback(async () => {
     await onDeleteFavoriteArticleFolder(favoriteArticleFolderId, title);
-    handleClose();
-  }, [
-    favoriteArticleFolderId,
-    onDeleteFavoriteArticleFolder,
-    handleClose,
-    title,
-  ]);
+    onClose();
+  }, [favoriteArticleFolderId, onDeleteFavoriteArticleFolder, onClose, title]);
 
   return (
     <DialogContent onCloseAutoFocus={resetDialog}>
