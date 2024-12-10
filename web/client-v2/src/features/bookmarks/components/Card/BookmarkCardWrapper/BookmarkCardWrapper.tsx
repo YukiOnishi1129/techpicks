@@ -66,18 +66,16 @@ export const BookmarkCardWrapper: FC<BookmarkCardWrapperProps> = ({
               bookmarkId={fragment.id}
               bookmarkTitle={fragment.title}
             />
-            <div className="ml-4">
-              <FollowFavoriteArticleDropdownMenu
-                isFollowing={fragment.isFollowing}
-                data={fragmentFavoriteFolder}
-                followedFolderIds={fragment?.favoriteArticleFolderIds || []}
-                handleCreateFavoriteArticle={handleCreateFavoriteArticle}
-                handleRemoveFavoriteArticle={handleRemoveFavoriteArticle}
-                handleCreateFavoriteArticleFolder={
-                  handleCreateFavoriteArticleFolder
-                }
-              />
-            </div>
+            <FollowFavoriteArticleDropdownMenu
+              isFollowing={fragment.isFollowing}
+              data={fragmentFavoriteFolder}
+              followedFolderIds={fragment?.favoriteArticleFolderIds || []}
+              handleCreateFavoriteArticle={handleCreateFavoriteArticle}
+              handleRemoveFavoriteArticle={handleRemoveFavoriteArticle}
+              handleCreateFavoriteArticleFolder={
+                handleCreateFavoriteArticleFolder
+              }
+            />
           </div>
         </div>
 
