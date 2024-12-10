@@ -151,10 +151,10 @@ export const FavoriteArticleFolderList: FC<FavoriteArticleFolderListProps> = ({
               <FavoriteArticleFolderCard
                 key={`favorite-folder-${edge.node.id}-${i}`}
                 data={edge.node}
-                handleUpdateFavoriteArticleFolder={
+                onUpdateFavoriteArticleFolder={
                   handleUpdateFavoriteArticleFolder
                 }
-                handleDeleteFavoriteArticleFolder={
+                onDeleteFavoriteArticleFolder={
                   handleDeleteFavoriteArticleFolder
                 }
               />

@@ -38,7 +38,7 @@ type UpdateFavoriteArticleFolderDialogContentProps = {
   favoriteArticleFolderId: string;
   title: string;
   description?: string;
-  handleUpdateFavoriteArticleFolder: ({
+  onUpdateFavoriteArticleFolder: ({
     id,
     title,
     description,
@@ -47,10 +47,7 @@ type UpdateFavoriteArticleFolderDialogContentProps = {
     title: string;
     description?: string;
   }) => Promise<void>;
-  handleDeleteFavoriteArticleFolder: (
-    id: string,
-    title: string
-  ) => Promise<void>;
+  onDeleteFavoriteArticleFolder: (id: string, title: string) => Promise<void>;
   handleClose: () => void;
 };
 
@@ -61,8 +58,8 @@ export const UpdateFavoriteArticleFolderDialogContent: FC<
   title,
   description,
   handleClose,
-  handleUpdateFavoriteArticleFolder,
-  handleDeleteFavoriteArticleFolder,
+  onUpdateFavoriteArticleFolder,
+  onDeleteFavoriteArticleFolder,
 }) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -77,7 +74,7 @@ export const UpdateFavoriteArticleFolderDialogContent: FC<
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     const inputDescription = values.description ?? "";
-    await handleUpdateFavoriteArticleFolder({
+    await onUpdateFavoriteArticleFolder({
       id: favoriteArticleFolderId,
       title: values.title,
       description: inputDescription,
@@ -86,11 +83,11 @@ export const UpdateFavoriteArticleFolderDialogContent: FC<
   };
 
   const onDelete = useCallback(async () => {
-    await handleDeleteFavoriteArticleFolder(favoriteArticleFolderId, title);
+    await onDeleteFavoriteArticleFolder(favoriteArticleFolderId, title);
     handleClose();
   }, [
     favoriteArticleFolderId,
-    handleDeleteFavoriteArticleFolder,
+    onDeleteFavoriteArticleFolder,
     handleClose,
     title,
   ]);
