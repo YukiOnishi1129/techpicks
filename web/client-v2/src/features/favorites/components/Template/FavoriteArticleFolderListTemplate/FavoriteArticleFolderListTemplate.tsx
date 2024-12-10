@@ -1,10 +1,12 @@
 import { User } from "@supabase/supabase-js";
-import { readFragment } from "gql.tada";
-import { FC } from "react";
+import { FC, Suspense } from "react";
 import { FaHeart } from "react-icons/fa";
 
-import { getFavoriteArticleFolderListTemplateQuery } from "./actGetFavoriteArticleFolderListTemplateQuery";
-import { FavoriteArticleFolderListTemplateFragment } from "./FavoriteArticleFolderListTemplateFragment";
+import { ScreenLoader } from "@/components/layout/ScreenLoader";
+
+import { PreloadQuery } from "@/lib/apollo/client";
+
+import { FavoriteArticleFolderListTemplateQuery } from "./FavoriteArticleFolderListTemplateQuery";
 import { CreateFavoriteArticleFolderDialog } from "../../Dialog";
 import { FavoriteArticleFolderList } from "../../List";
 import { FavoriteArticleFolderKeywordSearchForm } from "../../Search";
@@ -17,11 +19,6 @@ type FavoriteArticleFolderListTemplateProps = {
 export const FavoriteArticleFolderListTemplate: FC<
   FavoriteArticleFolderListTemplateProps
 > = async ({ user, keyword }) => {
-  const { data } = await getFavoriteArticleFolderListTemplateQuery({ keyword });
-  const fragment = readFragment(
-    FavoriteArticleFolderListTemplateFragment,
-    data
-  );
   return (
     <div>
       <div className="fixed z-10 hidden w-[90%] bg-card md:block md:w-[70%] md:px-4">
@@ -40,10 +37,20 @@ export const FavoriteArticleFolderListTemplate: FC<
       </div>
       <div className="h-4 md:h-[120px]" />
 
-      <FavoriteArticleFolderList
-        data={fragment.favoriteArticleFolders}
-        user={user}
-      />
+      <PreloadQuery
+        query={FavoriteArticleFolderListTemplateQuery}
+        variables={{
+          input: {
+            first: 9,
+            after: null,
+            keyword: keyword,
+          },
+        }}
+      >
+        <Suspense fallback={<ScreenLoader />}>
+          <FavoriteArticleFolderList user={user} />
+        </Suspense>
+      </PreloadQuery>
 
       {/* <div className="fixed bottom-20 right-4 z-50 md:hidden">
         <FavoriteArticleFolderKeyWordSearchDialog keyword={keyword} />
