@@ -1,5 +1,4 @@
 import { useMutation } from "@apollo/client";
-import { graphql } from "gql.tada";
 import { useCallback } from "react";
 
 import { logoutToLoginPage } from "@/features/auth/actions/auth";
@@ -7,13 +6,9 @@ import { getUser } from "@/features/auth/actions/user";
 
 import { useStatusToast } from "@/hooks/useStatusToast";
 
-const DeleteBookmarkMutation = graphql(`
-  mutation DeleteBookmarkMutation($input: DeleteBookmarkInput!) {
-    deleteBookmark(deleteBookmarkInput: $input)
-  }
-`);
+import { DeleteBookmarkMutation } from "../mutations/DeleteBookmarkMutation";
 
-export const useBookmarkMutation = () => {
+export const useDeleteBookmark = () => {
   const { successToast, failToast } = useStatusToast();
 
   const [deleteBookmarkMutation] = useMutation(DeleteBookmarkMutation);

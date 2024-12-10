@@ -1,5 +1,9 @@
 import { graphql } from "gql.tada";
 
+import {
+  FavoriteFolderUseBookmarkManageFavoriteArticleFragment,
+  UseBookmarkMangeFavoriteArticle,
+} from "@/features/bookmarks/hooks/useBookmarkManageFavoriteArticle";
 import { FollowFavoriteArticleDropdownMenuContentFragment } from "@/features/favorites/components/DropdownMenu/FollowFavoriteArticleDropdownMenu/FollowFavoriteArticleDropdownMenuFragment";
 
 import { BookmarkCardItemFragment } from "../BookmarkCardItem";
@@ -25,9 +29,10 @@ export const BookmarkCardWrapperFragment = graphql(
       isFollowing
       favoriteArticleFolderIds
       ...BookmarkCardItemFragment
+      ...UseBookmarkMangeFavoriteArticle
     }
   `,
-  [BookmarkCardItemFragment]
+  [BookmarkCardItemFragment, UseBookmarkMangeFavoriteArticle]
 );
 
 export const FavoriteFolderBookmarkCardWrapperFragment = graphql(
@@ -40,7 +45,11 @@ export const FavoriteFolderBookmarkCardWrapperFragment = graphql(
         }
       }
       ...FollowFavoriteArticleDropdownMenuContentFragment
+      ...FavoriteFolderUseBookmarkManageFavoriteArticleFragment
     }
   `,
-  [FollowFavoriteArticleDropdownMenuContentFragment]
+  [
+    FollowFavoriteArticleDropdownMenuContentFragment,
+    FavoriteFolderUseBookmarkManageFavoriteArticleFragment,
+  ]
 );

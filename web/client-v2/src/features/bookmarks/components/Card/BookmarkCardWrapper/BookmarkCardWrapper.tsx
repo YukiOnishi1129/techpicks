@@ -1,7 +1,9 @@
 "use client";
-import { User } from "@supabase/supabase-js";
 import { FragmentOf, readFragment } from "gql.tada";
 import { FC } from "react";
+
+import { useBookmarkManageFavoriteArticle } from "@/features/bookmarks/hooks/useBookmarkManageFavoriteArticle";
+import { FollowFavoriteArticleDropdownMenu } from "@/features/favorites/components/DropdownMenu";
 
 import { IconTitleLink } from "@/components/ui/link";
 import { ShareLinks } from "@/components/ui/share";
@@ -18,19 +20,26 @@ type BookmarkCardWrapperProps = {
   favoriteArticleFolders: FragmentOf<
     typeof FavoriteFolderBookmarkCardWrapperFragment
   >;
-  user: User;
 };
 
 export const BookmarkCardWrapper: FC<BookmarkCardWrapperProps> = ({
   data,
   favoriteArticleFolders,
-  user,
 }) => {
   const fragment = readFragment(BookmarkCardWrapperFragment, data);
   const fragmentFavoriteFolder = readFragment(
     FavoriteFolderBookmarkCardWrapperFragment,
     favoriteArticleFolders
   );
+
+  const {
+    handleCreateFavoriteArticle,
+    handleRemoveFavoriteArticle,
+    handleCreateFavoriteArticleFolder,
+  } = useBookmarkManageFavoriteArticle({
+    data: fragment,
+    favoriteArticleFolders: fragmentFavoriteFolder,
+  });
 
   return (
     <div
@@ -57,18 +66,16 @@ export const BookmarkCardWrapper: FC<BookmarkCardWrapperProps> = ({
               bookmarkId={fragment.id}
               bookmarkTitle={fragment.title}
             />
-            <div className="ml-4">
-              {/* <FollowFavoriteArticleDropdownMenu
-                isFollowing={isFollowing}
-                articleId={showBookmark.articleId || ""}
-                favoriteArticleFolders={showFavoriteArticleFolders}
-                handleCreateFavoriteArticle={handleCreateFavoriteArticle}
-                handleRemoveFavoriteArticle={handleRemoveFavoriteArticle}
-                handleCreateFavoriteArticleFolder={
-                  handleCreateFavoriteArticleFolder
-                }
-              /> */}
-            </div>
+            <FollowFavoriteArticleDropdownMenu
+              isFollowing={fragment.isFollowing}
+              data={fragmentFavoriteFolder}
+              followedFolderIds={fragment?.favoriteArticleFolderIds || []}
+              handleCreateFavoriteArticle={handleCreateFavoriteArticle}
+              handleRemoveFavoriteArticle={handleRemoveFavoriteArticle}
+              handleCreateFavoriteArticleFolder={
+                handleCreateFavoriteArticleFolder
+              }
+            />
           </div>
         </div>
 
