@@ -11,6 +11,7 @@ import (
 
 	bpb "github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/grpc/bookmark"
 	cpb "github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/grpc/content"
+	fpb "github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/grpc/favorite"
 	externaladapter "github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/internal/adapter/external_adapter"
 	persistenceadapter "github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/internal/adapter/persistence_adapter"
 	"github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/internal/application/usecase"
@@ -69,21 +70,36 @@ func main() {
 	defer cConn.Close()
 	cClient := cpb.NewContentServiceClient(cConn)
 
+	// favorite client
+	farpcURL := os.Getenv("FAVORITE_SERVICE_CONTAINER_NAME")
+	if isDev {
+		farpcURL = fmt.Sprintf("%s:%s", os.Getenv("FAVORITE_SERVICE_CONTAINER_NAME"), os.Getenv("FAVORITE_SERVICE_CONTAINER_PORT"))
+	}
+	faConn, err := grpc.NewClient(farpcURL, grpc.WithTransportCredentials(grpcCredential))
+	if err != nil {
+		log.Fatal("Error connecting to favorite service")
+		return
+	}
+	defer faConn.Close()
+	faClient := fpb.NewFavoriteServiceClient(faConn)
+
 	// infrastructure layer
 	// persistence layer
 	bps := persistence.NewBookmarkPersistence(db)
 	// external layer
 	cex := external.NewContentExternal(cClient)
+	fex := external.NewFavoriteExternal(faClient)
 
 	// adapter layer
 	// persistence adapter
 	bpa := persistenceadapter.NewBookmarkPersistenceAdapter(bps)
 	// external adapter
 	cea := externaladapter.NewContentExternalAdapter(cex)
+	fea := externaladapter.NewFavoriteExternalAdapter(fex)
 
 	// application layer
 	// usecase layer
-	buc := usecase.NewBookmarkUseCase(bpa, cea)
+	buc := usecase.NewBookmarkUseCase(bpa, cea,fea)
 
 	// interface layer
 	bhd := handler.NewBookmarkHandler(buc)

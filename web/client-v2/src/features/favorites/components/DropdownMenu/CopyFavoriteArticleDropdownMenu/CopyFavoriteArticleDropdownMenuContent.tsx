@@ -63,8 +63,9 @@ export const CopyFavoriteArticleDropdownMenuContent: FC<
 
   const showFavoriteArticleFolders = useMemo(() => {
     if (!searchKeyword) return fragment.edges;
+    const regexp = new RegExp(searchKeyword, "i");
     return fragment.edges.filter((favoriteArticleFolder) =>
-      favoriteArticleFolder.node.title.includes(searchKeyword)
+      favoriteArticleFolder.node.title.match(regexp)
     );
   }, [fragment, searchKeyword]);
 

@@ -1,64 +1,100 @@
 "use client";
-import { User } from "@supabase/supabase-js";
-import { FragmentOf, readFragment } from "gql.tada";
+import { useQuery, useSuspenseQuery } from "@apollo/client";
 import { FC, useCallback, useEffect, useRef, useState } from "react";
 
 import { NotFoundList } from "@/components/layout/NotFoundList";
 import { Loader } from "@/components/ui/loader";
 
-import { getAllFolderFavoriteArticleListQuery } from "./actGetAllFolderFavoriteArticleListQuery";
-import { AllFolderFavoriteArticleListFragment } from "./AllFolderFavoriteArticleListFragment";
+import { AllFolderFavoriteArticleListQuery } from "./AllFolderFavoriteArticleListQuery";
 import { AllFolderFavoriteArticleCardWrapper } from "../../Card";
-import { FavoriteFolderAllFolderArticleCardWrapperFragment } from "../../Card/AllFolderFavoriteArticleCardWrapper/AllFolderFavoriteArticleCardWrapperFragment";
+import { AllFolderFavoriteArticleListTemplateQuery } from "../../Template/AllFolderFavoriteArticleListTemplate/AllFolderFavoriteArticleListTemplateQuery";
 
 type AllFolderFavoriteArticleListFragmentProps = {
-  user: User;
-  data: FragmentOf<typeof AllFolderFavoriteArticleListFragment>;
-  favoriteArticleFolders: FragmentOf<
-    typeof FavoriteFolderAllFolderArticleCardWrapperFragment
-  >;
   keyword?: string;
 };
 
 export const AllFolderFavoriteArticleList: FC<
   AllFolderFavoriteArticleListFragmentProps
-> = ({ user, data, favoriteArticleFolders, keyword }) => {
+> = ({ keyword }) => {
   const observerTarget = useRef(null);
 
-  const fragment = readFragment(AllFolderFavoriteArticleListFragment, data);
+  const { data: resSuspenseData, error } = useSuspenseQuery(
+    AllFolderFavoriteArticleListTemplateQuery,
+    {
+      variables: {
+        favoriteAllFolderArticlesInput: {
+          first: 20,
+          after: null,
+          keyword: keyword,
+        },
+        favoriteArticleFoldersInput: {
+          isAllFetch: true,
+          isFolderOnly: false,
+          isFavoriteArticleAllFetch: true,
+        },
+      },
+    }
+  );
 
-  const [edges, setEdges] = useState(fragment.edges);
+  const {
+    data: res,
+    fetchMore,
+    error: onlyFetchArticlesError,
+  } = useQuery(AllFolderFavoriteArticleListQuery, {
+    variables: {
+      input: {
+        first: 20,
+        after: null,
+        keyword: keyword,
+      },
+    },
+    fetchPolicy: "cache-first",
+    nextFetchPolicy: "network-only",
+  });
+
   const [hashMore, setHashMore] = useState(true);
   const [offset, setOffset] = useState(1);
-  const [endCursor, setEndCursor] = useState(fragment.pageInfo.endCursor);
+  const [endCursor, setEndCursor] = useState(
+    res?.favoriteAllFolderArticles?.pageInfo?.endCursor || null
+  );
   const [isNextPage, setIsNextPage] = useState(true);
-
-  const flatArticles = edges ? edges.flatMap((edge) => edge) : [];
 
   const loadMore = useCallback(async () => {
     if (!isNextPage) return;
-    const { data: res, error } = await getAllFolderFavoriteArticleListQuery({
-      first: 20,
-      after: endCursor,
-      keyword,
+    const { data: resData, error: resError } = await fetchMore({
+      variables: {
+        input: {
+          first: 20,
+          after: endCursor,
+          keyword,
+        },
+      },
+      updateQuery: (prev, { fetchMoreResult }) => {
+        if (!fetchMoreResult) return prev;
+        return {
+          favoriteAllFolderArticles: {
+            ...prev.favoriteAllFolderArticles,
+            edges: [
+              ...prev.favoriteAllFolderArticles.edges,
+              ...fetchMoreResult.favoriteAllFolderArticles.edges,
+            ],
+            pageInfo: fetchMoreResult.favoriteAllFolderArticles.pageInfo,
+          },
+        };
+      },
     });
-    if (error) return;
+    if (resError) return;
 
-    const newArticles = readFragment(
-      AllFolderFavoriteArticleListFragment,
-      res.favoriteAllFolderArticles
-    );
-    if (newArticles.pageInfo.hasNextPage) {
-      const endCursor = newArticles.pageInfo?.endCursor || null;
+    if (resData.favoriteAllFolderArticles.pageInfo.hasNextPage) {
+      const endCursor =
+        resData.favoriteAllFolderArticles.pageInfo.endCursor || null;
       setEndCursor(endCursor);
     }
-    if (!newArticles.pageInfo.hasNextPage) setIsNextPage(false);
+    if (!resData.favoriteAllFolderArticles.pageInfo.hasNextPage)
+      setIsNextPage(false);
 
-    if (newArticles.edges.length > 0) {
-      setEdges((prev) => [...prev, ...newArticles.edges]);
-      setHashMore(newArticles.edges.length > 0);
-    }
-  }, [endCursor, isNextPage, keyword]);
+    setHashMore(resData.favoriteAllFolderArticles.edges.length > 0);
+  }, [endCursor, isNextPage, keyword, fetchMore]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -87,32 +123,33 @@ export const AllFolderFavoriteArticleList: FC<
   }, [hashMore]);
 
   useEffect(() => {
-    setEdges(fragment.edges);
-  }, [fragment.edges]);
-
-  useEffect(() => {
     if (offset > 1) {
       loadMore();
     }
   }, [offset, hashMore]); // eslint-disable-line
 
+  if (error) {
+    return <div>Error</div>;
+  }
+
+  if (onlyFetchArticlesError) {
+    return <div>Error</div>;
+  }
+
   return (
     <>
-      {flatArticles.length === 0 ? (
+      {res?.favoriteAllFolderArticles.edges.length === 0 ? (
         <div className="flex flex-col items-center justify-center ">
           <NotFoundList message="No articles found" />
         </div>
       ) : (
-        <div className="m-auto">
-          {flatArticles.map((article) => (
-            <div key={article.node.id} className="mb-4">
-              <AllFolderFavoriteArticleCardWrapper
-                data={article}
-                favoriteArticleFolders={favoriteArticleFolders}
-                user={user}
-                // favoriteArticleFolderId={folderId}
-              />
-            </div>
+        <div className="m-auto grid gap-4">
+          {res?.favoriteAllFolderArticles.edges.map((edge, i) => (
+            <AllFolderFavoriteArticleCardWrapper
+              key={`${i}-${edge.node.id}`}
+              data={edge}
+              favoriteArticleFolders={resSuspenseData.favoriteArticleFolders}
+            />
           ))}
           <div ref={observerTarget}>
             {hashMore && isNextPage && (

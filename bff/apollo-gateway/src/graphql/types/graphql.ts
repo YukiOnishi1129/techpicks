@@ -239,6 +239,7 @@ export abstract class IMutation {
 
 export class Bookmark implements Node {
     id: string;
+    favoriteArticleFolderIds: string[];
     title: string;
     description: string;
     articleUrl: string;
@@ -251,6 +252,7 @@ export class Bookmark implements Node {
     platformFaviconUrl: string;
     isEng: boolean;
     isRead: boolean;
+    isFollowing: boolean;
     createdAt: number;
     updatedAt: number;
 }

@@ -13,7 +13,7 @@ import { UpdateFavoriteArticleFolderDialog } from "../../Dialog";
 
 type FavoriteArticleFolderCardProps = {
   data: FragmentOf<typeof FavoriteArticleFolderCardFragment>;
-  handleUpdateFavoriteArticleFolder: ({
+  onUpdateFavoriteArticleFolder: ({
     id,
     title,
     description,
@@ -22,13 +22,13 @@ type FavoriteArticleFolderCardProps = {
     title: string;
     description?: string;
   }) => Promise<void>;
-  handleDeleteFavoriteArticleFolder: (id: string) => Promise<void>;
+  onDeleteFavoriteArticleFolder: (id: string, title: string) => Promise<void>;
 };
 
 export const FavoriteArticleFolderCard: FC<FavoriteArticleFolderCardProps> = ({
   data,
-  handleUpdateFavoriteArticleFolder,
-  handleDeleteFavoriteArticleFolder,
+  onUpdateFavoriteArticleFolder,
+  onDeleteFavoriteArticleFolder,
 }) => {
   const fragment = readFragment(FavoriteArticleFolderCardFragment, data);
 
@@ -52,12 +52,8 @@ export const FavoriteArticleFolderCard: FC<FavoriteArticleFolderCardProps> = ({
             favoriteArticleFolderId={fragment.id}
             title={fragment.title}
             description={fragment.description || ""}
-            handleUpdateFavoriteArticleFolder={
-              handleUpdateFavoriteArticleFolder
-            }
-            handleDeleteFavoriteArticleFolder={
-              handleDeleteFavoriteArticleFolder
-            }
+            onUpdateFavoriteArticleFolder={onUpdateFavoriteArticleFolder}
+            onDeleteFavoriteArticleFolder={onDeleteFavoriteArticleFolder}
           />
         </div>
 

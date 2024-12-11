@@ -5,8 +5,8 @@ import { clsx } from "clsx";
 import { FragmentOf, readFragment } from "gql.tada";
 import { FC } from "react";
 
-import { useBookmarkMutation } from "@/features/articles/hooks/useBookmarkMutation";
-import { useFavoriteArticleMutation } from "@/features/articles/hooks/useFavoriteArticleMutation";
+import { useArticleManageBookmark } from "@/features/articles/hooks/useArticleManageBookmark";
+import { useArticleManageFavoriteArticle } from "@/features/articles/hooks/useArticleManageFavoriteArticle";
 import { FollowFavoriteArticleDropdownMenu } from "@/features/favorites/components/DropdownMenu";
 
 import { IconTitleLink } from "@/components/ui/link";
@@ -45,15 +45,16 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
     favoriteArticleFolders
   );
 
-  const { handleCreateBookmark, handleDeleteBookmark } = useBookmarkMutation({
-    data: fragment,
-  });
+  const { handleCreateBookmark, handleDeleteBookmark } =
+    useArticleManageBookmark({
+      data: fragment,
+    });
 
   const {
     handleCreateFavoriteArticle,
     handleRemoveFavoriteArticle,
     handleCreateFavoriteArticleFolder,
-  } = useFavoriteArticleMutation({
+  } = useArticleManageFavoriteArticle({
     data: fragment,
     favoriteArticleFolders: fragmentFavoriteFolder,
   });
@@ -61,10 +62,10 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
   return (
     <div
       key={fragment.id}
-      className="rounded-2xl border-2 bg-primary-foreground px-4 pb-4 md:px-2"
+      className="rounded-2xl border bg-primary-foreground px-4 pb-4 md:px-2"
     >
       <div className="grid gap-4">
-        <div className="flex h-16 justify-between border-b-2 py-4 md:px-6">
+        <div className="flex h-16 justify-between border-b py-4 md:px-6">
           <>
             <div className="flex">
               {tab === TREND_TAB && (

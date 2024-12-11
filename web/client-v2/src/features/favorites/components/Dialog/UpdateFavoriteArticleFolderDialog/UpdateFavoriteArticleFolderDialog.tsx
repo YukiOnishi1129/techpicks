@@ -10,7 +10,7 @@ type UpdateFavoriteArticleFolderDialogProps = {
   favoriteArticleFolderId: string;
   title: string;
   description?: string;
-  handleUpdateFavoriteArticleFolder: ({
+  onUpdateFavoriteArticleFolder: ({
     id,
     title,
     description,
@@ -19,7 +19,7 @@ type UpdateFavoriteArticleFolderDialogProps = {
     title: string;
     description?: string;
   }) => Promise<void>;
-  handleDeleteFavoriteArticleFolder: (id: string) => Promise<void>;
+  onDeleteFavoriteArticleFolder: (id: string, title: string) => Promise<void>;
 };
 
 export const UpdateFavoriteArticleFolderDialog: FC<
@@ -28,8 +28,8 @@ export const UpdateFavoriteArticleFolderDialog: FC<
   favoriteArticleFolderId,
   title,
   description,
-  handleUpdateFavoriteArticleFolder,
-  handleDeleteFavoriteArticleFolder,
+  onUpdateFavoriteArticleFolder,
+  onDeleteFavoriteArticleFolder,
 }) => {
   const [open, setOpen] = useState(false);
   const handleClose = useCallback(() => {
@@ -51,9 +51,9 @@ export const UpdateFavoriteArticleFolderDialog: FC<
           favoriteArticleFolderId={favoriteArticleFolderId}
           title={title}
           description={description}
-          handleUpdateFavoriteArticleFolder={handleUpdateFavoriteArticleFolder}
-          handleDeleteFavoriteArticleFolder={handleDeleteFavoriteArticleFolder}
-          handleClose={handleClose}
+          onUpdateFavoriteArticleFolder={onUpdateFavoriteArticleFolder}
+          onDeleteFavoriteArticleFolder={onDeleteFavoriteArticleFolder}
+          onClose={handleClose}
         />
       )}
     </Dialog>

@@ -3,6 +3,7 @@ package usecase
 import (
 	"context"
 	"errors"
+	"fmt"
 	"net/http"
 	"net/url"
 	"time"
@@ -56,7 +57,7 @@ func (cu *contentUseCase) GetArticleOGP(ctx context.Context, articleURL string) 
 			Title:        cu.sanitizeToUTF8(ogp.Title),
 			Description:  wrapperspb.String(cu.sanitizeToUTF8(ogp.Description)),
 			ArticleUrl:   cu.sanitizeToUTF8(articleURL),
-			SiteUrl:      cu.sanitizeToUTF8(parsedURL.Host),
+			SiteUrl:      cu.sanitizeToUTF8(fmt.Sprintf("%s://%s", parsedURL.Scheme, parsedURL.Host)),
 			SiteName:     cu.sanitizeToUTF8(ogp.SiteName),
 			ThumbnailUrl: cu.sanitizeToUTF8(thumbnailURL),
 			FaviconUrl:   cu.sanitizeToUTF8(ogp.Favicon),

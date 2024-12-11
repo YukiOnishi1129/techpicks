@@ -1,9 +1,8 @@
 "use client";
-import { usePathname } from "next/navigation";
 import { FC } from "react";
 import { FcBookmark } from "react-icons/fc";
 
-import { useBookmark } from "@/features/bookmarks/hooks/useBookmark";
+import { useDeleteBookmark } from "@/features/bookmarks/hooks/useDeleteBookmark";
 
 import {
   AlertDialog,
@@ -23,8 +22,6 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-// import { useBookmark } from "../../hooks/useBookmark";
-
 type DeleteBookmarkAlertDialogProps = {
   bookmarkTitle: string;
   bookmarkId: string;
@@ -34,8 +31,7 @@ export const DeleteBookmarkAlertDialog: FC<DeleteBookmarkAlertDialogProps> = ({
   bookmarkId,
   bookmarkTitle,
 }) => {
-  const pathname = usePathname();
-  const { handleRemoveBookmark } = useBookmark(pathname);
+  const { handleRemoveBookmark } = useDeleteBookmark();
   return (
     <AlertDialog>
       <TooltipProvider>
@@ -59,13 +55,15 @@ export const DeleteBookmarkAlertDialog: FC<DeleteBookmarkAlertDialogProps> = ({
             This action cannot be undone. This will permanently remove your data
             from our servers.
             <br></br>
-            Delete bookmark title is{" "}
-            <span className="font-bold text-white">{`「${bookmarkTitle}」`}</span>
+            The title of the bookmark to be deleted is{" "}
+            <span className="font-bold text-white">{`'${bookmarkTitle}'`}</span>
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>CANCEL</AlertDialogCancel>
-          <AlertDialogAction onClick={() => handleRemoveBookmark(bookmarkId)}>
+          <AlertDialogAction
+            onClick={() => handleRemoveBookmark(bookmarkId, bookmarkTitle)}
+          >
             DELETE
           </AlertDialogAction>
         </AlertDialogFooter>

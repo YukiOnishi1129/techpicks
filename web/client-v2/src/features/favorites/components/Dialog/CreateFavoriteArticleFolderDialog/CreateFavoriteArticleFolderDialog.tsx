@@ -42,8 +42,8 @@ export const CreateFavoriteArticleFolderDialog: FC<
       </DialogTrigger>
       {open && (
         <CreateFavoriteArticleFolderDialogContent
-          handleCloseDialog={handleCloseDialog}
-          handleCreateFavoriteArticleFolder={handleCreateFavoriteArticleFolder}
+          onCloseDialog={handleCloseDialog}
+          onCreateFavoriteArticleFolder={handleCreateFavoriteArticleFolder}
         />
       )}
     </Dialog>

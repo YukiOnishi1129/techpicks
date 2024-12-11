@@ -1,6 +1,9 @@
 import { graphql } from "gql.tada";
 
-import { FavoriteFolderArticleCardWrapperFragment } from "../../Card";
+import {
+  ArticleCardWrapperFragment,
+  FavoriteFolderArticleCardWrapperFragment,
+} from "../../Card";
 
 export const ArticleDashboardTemplateQuery = graphql(
   `
@@ -8,10 +11,24 @@ export const ArticleDashboardTemplateQuery = graphql(
       $input: ArticlesInput!
       $favoriteArticleFoldersInput: FavoriteArticleFoldersInput!
     ) {
+      articles(articlesInput: $input) {
+        pageInfo {
+          hasNextPage
+          hasPreviousPage
+          startCursor
+          endCursor
+        }
+        edges {
+          node {
+            id
+            ...ArticleCardWrapperFragment
+          }
+        }
+      }
       favoriteArticleFolders(input: $favoriteArticleFoldersInput) {
         ...FavoriteFolderArticleCardWrapperFragment
       }
     }
   `,
-  [FavoriteFolderArticleCardWrapperFragment]
+  [ArticleCardWrapperFragment, FavoriteFolderArticleCardWrapperFragment]
 );
