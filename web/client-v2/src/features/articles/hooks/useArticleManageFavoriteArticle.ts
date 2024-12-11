@@ -9,6 +9,8 @@ import { DeleteFavoriteArticleByArticleIdMutation } from "@/features/favorites/m
 
 import { useStatusToast } from "@/hooks/useStatusToast";
 
+import { serverRevalidatePage } from "@/actions/actServerRevalidatePage";
+
 export const UseArticleManageFavoriteArticleFragment = graphql(`
   fragment UseArticleManageFavoriteArticleFragment on Article {
     __typename
@@ -159,6 +161,11 @@ export const useArticleManageFavoriteArticle = ({
         description: `Follow the article title:'${fragment.title}'`,
       });
 
+      // Revalidate favorite article page
+      await serverRevalidatePage(`/favorite/article`);
+      await serverRevalidatePage(
+        `/favorite/article/${favoriteArticleFolderId}`
+      );
       return data?.createFavoriteArticle.id;
     },
     [
@@ -224,6 +231,12 @@ export const useArticleManageFavoriteArticle = ({
       successToast({
         description: `Unfollow the article title: '${deletedTitle}'`,
       });
+
+      // Revalidate favorite article page
+      await serverRevalidatePage(`/favorite/article`);
+      await serverRevalidatePage(
+        `/favorite/article/${favoriteArticleFolderId}`
+      );
 
       return favoriteArticleId;
     },

@@ -6,6 +6,8 @@ import { getUser } from "@/features/auth/actions/user";
 
 import { useStatusToast } from "@/hooks/useStatusToast";
 
+import { serverRevalidatePage } from "@/actions/actServerRevalidatePage";
+
 import { DeleteBookmarkMutation } from "../mutations/DeleteBookmarkMutation";
 
 export const useDeleteBookmark = () => {
@@ -56,6 +58,12 @@ export const useDeleteBookmark = () => {
       successToast({
         description: `Bookmark removed: 【 ${title} 】`,
       });
+
+      // Revalidate dashboard page
+      await serverRevalidatePage("/dashboard/trend");
+      await serverRevalidatePage("/dashboard/site");
+      await serverRevalidatePage("/dashboard/company");
+      await serverRevalidatePage("/dashboard/summary");
     },
     [successToast, failToast, deleteBookmarkMutation]
   );

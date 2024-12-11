@@ -9,6 +9,8 @@ import { DeleteBookmarkMutation } from "@/features/bookmarks/mutations/DeleteBoo
 
 import { useStatusToast } from "@/hooks/useStatusToast";
 
+import { serverRevalidatePage } from "@/actions/actServerRevalidatePage";
+
 export const UseArticleManageBookmarkFragment = graphql(`
   fragment UseArticleManageBookmarkFragment on Article {
     id
@@ -94,8 +96,11 @@ export const useArticleManageBookmark = ({
     }
 
     successToast({
-      description: `Add bookmark title 【 ${fragment.title} 】`,
+      description: `Added bookmark title '${fragment.title}'`,
     });
+
+    // Revalidate bookmarks page
+    await serverRevalidatePage("/bookmarks");
   }, [createArticleBookmarkMutation, fragment, successToast, failToast]);
 
   const handleDeleteBookmark = useCallback(
@@ -141,8 +146,11 @@ export const useArticleManageBookmark = ({
       }
 
       successToast({
-        description: `Remove bookmark title 【 ${fragment.title} 】`,
+        description: `Removed bookmark title '${fragment.title}'`,
       });
+
+      // Revalidate bookmarks page
+      await serverRevalidatePage("/bookmarks");
     },
     [deleteArticleBookmarkMutation, fragment, failToast, successToast]
   );

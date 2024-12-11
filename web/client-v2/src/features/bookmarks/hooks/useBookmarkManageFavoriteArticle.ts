@@ -9,6 +9,8 @@ import { DeleteFavoriteArticleByArticleIdMutation } from "@/features/favorites/m
 
 import { useStatusToast } from "@/hooks/useStatusToast";
 
+import { serverRevalidatePage } from "@/actions/actServerRevalidatePage";
+
 export const UseBookmarkMangeFavoriteArticle = graphql(`
   fragment UseBookmarkMangeFavoriteArticle on Bookmark {
     id
@@ -153,6 +155,18 @@ export const useBookmarkManageFavoriteArticle = ({
         description: `Follow the article title:【 ${fragment.title} 】`,
       });
 
+      // Revalidate dashboard page
+      await serverRevalidatePage("/dashboard/trend");
+      await serverRevalidatePage("/dashboard/site");
+      await serverRevalidatePage("/dashboard/company");
+      await serverRevalidatePage("/dashboard/summary");
+
+      // Revalidate favorite article page
+      await serverRevalidatePage(`/favorite/article`);
+      await serverRevalidatePage(
+        `/favorite/article/${favoriteArticleFolderId}`
+      );
+
       return data?.createFavoriteArticle.id;
     },
     [
@@ -218,6 +232,18 @@ export const useBookmarkManageFavoriteArticle = ({
       successToast({
         description: `Unfollow the article title: 【 ${deletedTitle} 】`,
       });
+
+      // Revalidate dashboard page
+      await serverRevalidatePage("/dashboard/trend");
+      await serverRevalidatePage("/dashboard/site");
+      await serverRevalidatePage("/dashboard/company");
+      await serverRevalidatePage("/dashboard/summary");
+
+      // Revalidate favorite article page
+      await serverRevalidatePage(`/favorite/article`);
+      await serverRevalidatePage(
+        `/favorite/article/${favoriteArticleFolderId}`
+      );
 
       return favoriteArticleId;
     },
