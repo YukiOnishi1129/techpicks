@@ -153,7 +153,6 @@ export function FavoriteArticleList({
               key={`${i}-${edge.node.id}`}
               data={edge.node}
               favoriteArticleFolders={resSuspenseData.favoriteArticleFolders}
-              favoriteArticleFolderId={folderId}
             />
           ))}
           <div ref={observerTarget}>
