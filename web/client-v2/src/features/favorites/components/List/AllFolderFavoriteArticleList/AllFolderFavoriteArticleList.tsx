@@ -48,6 +48,8 @@ export const AllFolderFavoriteArticleList: FC<
         keyword: keyword,
       },
     },
+    fetchPolicy: "cache-first",
+    nextFetchPolicy: "network-only",
   });
 
   const [hashMore, setHashMore] = useState(true);
