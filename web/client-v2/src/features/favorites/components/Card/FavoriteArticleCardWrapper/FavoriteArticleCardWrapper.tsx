@@ -20,7 +20,7 @@ import { DeleteFavoriteArticleByArticleIdMutation } from "@/features/favorites/m
 import { IconTitleLink } from "@/components/ui/link";
 import { logoutToLoginPage } from "@/features/auth/actions/auth";
 import { getUser } from "@/features/auth/actions/user";
-import { deleteFavoriteArticleByArticleIdMutation } from "@/features/favorites/actions/actDeleteFavoriteArticleByArticleIdMutation";
+import { serverRevalidatePage } from "@/actions/actServerRevalidatePage";
 
 type FavoriteArticleCardWrapperProps = {
   data: FragmentOf<typeof FavoriteArticleCardWrapperFragment>;
@@ -136,6 +136,11 @@ export const FavoriteArticleCardWrapper: FC<
         description: `Follow the article title: '${fragment.title}' into the folder ${folderTitle}`,
       });
 
+      // Revalidate the page to update the favorite article list
+      await serverRevalidatePage(
+        `/favorite/article/${targetFavoriteArticleFolderId}`
+      );
+
       return resData?.createFavoriteArticle.id;
     },
     [failToast, fragment, favoriteArticleFolderId, successToast]
@@ -201,6 +206,11 @@ export const FavoriteArticleCardWrapper: FC<
       successToast({
         description: `Unfollowed the article title '${fragment.title}' from the folder '${targetFolder?.node.title}'`,
       });
+
+      // Revalidate the page to update the favorite article list
+      await serverRevalidatePage(
+        `/favorite/article/${targetFavoriteArticleFolderId}`
+      );
 
       return favoriteArticleId;
     },
