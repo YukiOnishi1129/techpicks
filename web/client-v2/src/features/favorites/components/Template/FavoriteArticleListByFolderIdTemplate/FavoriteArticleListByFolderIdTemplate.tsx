@@ -1,19 +1,18 @@
 import { User } from "@supabase/supabase-js";
-import { readFragment } from "gql.tada";
-import { FC } from "react";
+import { FC, Suspense } from "react";
 
+import { ScreenLoader } from "@/components/layout/ScreenLoader";
 import { BreadCrumbType, PageBreadcrumb } from "@/components/ui/breadcrumb";
+
+import { PreloadQuery } from "@/lib/apollo/client";
 
 import {
   FavoriteArticleFoldersInput,
   FavoriteArticlesInput,
 } from "@/graphql/type";
 
-import { getFavoriteArticleListByFolderIdTemplateQuery } from "./actGetFavoriteArticleListByFolderIdTemplateQuery";
-import {
-  FavoriteArticleFoldersByFolderIdTemplateFragment,
-  FavoriteArticleListByFolderIdTemplateFragment,
-} from "./FavoriteArticleListByFolderIdTemplateFragment";
+import { getServerFavoriteArticleListByFolderIdTemplateQuery } from "./actGetServerFavoriteArticleListByFolderIdTemplateQuery";
+import { FavoriteArticleListByFolderIdTemplateQuery } from "./FavoriteArticleListByFolderIdTemplateQuery";
 import { CreateFavoriteArticleDialog } from "../../Dialog";
 import { FavoriteArticleList } from "../../List/FavoriteArticleList/FavoriteArticleList";
 import { FavoriteArticleKeywordSearchForm } from "../../Search";
@@ -27,7 +26,9 @@ type FavoriteArticleListByFolderIdTemplateProps = {
 export const FavoriteArticleListByFolderIdTemplate: FC<
   FavoriteArticleListByFolderIdTemplateProps
 > = async ({ user, id, keyword }) => {
-  const favoriteArticleInput: FavoriteArticlesInput = {
+  const input: FavoriteArticlesInput = {
+    first: 20,
+    after: null,
     folderId: id,
     keyword: keyword,
   };
@@ -38,30 +39,10 @@ export const FavoriteArticleListByFolderIdTemplate: FC<
     isFavoriteArticleAllFetch: true,
   };
 
-  const { data, error } = await getFavoriteArticleListByFolderIdTemplateQuery(
-    favoriteArticleInput,
-    favoriteArticleFoldersInput
-  );
+  const { data, error } =
+    await getServerFavoriteArticleListByFolderIdTemplateQuery(id);
 
   if (error) {
-    return <div>Error: {error.message}</div>;
-  }
-
-  const fragment = readFragment(
-    FavoriteArticleListByFolderIdTemplateFragment,
-    data
-  );
-
-  const foldersFragment = readFragment(
-    FavoriteArticleFoldersByFolderIdTemplateFragment,
-    fragment.favoriteArticleFolders
-  );
-
-  const targetFavoriteFolder = foldersFragment.edges.find(
-    (edge) => edge.node.id === id
-  );
-
-  if (!targetFavoriteFolder) {
     return <div>Not Found</div>;
   }
 
@@ -75,8 +56,8 @@ export const FavoriteArticleListByFolderIdTemplate: FC<
       href: "/favorite",
     },
     {
-      title: targetFavoriteFolder.node.title,
-      href: `/favorite/article/${id}`,
+      title: data.favoriteArticleFolder.title,
+      href: `/favorite/article/${data.favoriteArticleFolder.id}`,
     },
   ];
 
@@ -103,13 +84,17 @@ export const FavoriteArticleListByFolderIdTemplate: FC<
 
       <div className="h-12 md:h-28" />
 
-      <FavoriteArticleList
-        user={user}
-        data={fragment.favoriteArticles}
-        folderId={id}
-        keyword={keyword}
-        favoriteArticleFolders={fragment.favoriteArticleFolders}
-      />
+      <PreloadQuery
+        query={FavoriteArticleListByFolderIdTemplateQuery}
+        variables={{
+          input,
+          favoriteArticleFoldersInput,
+        }}
+      >
+        <Suspense fallback={<ScreenLoader />}>
+          <FavoriteArticleList folderId={id} keyword={keyword} />
+        </Suspense>
+      </PreloadQuery>
 
       {/* <div className="fixed bottom-20 right-4 z-50 md:hidden">
         <FavoriteArticleKeyWordSearchDialog
