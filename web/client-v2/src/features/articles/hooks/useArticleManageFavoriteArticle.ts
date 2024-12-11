@@ -156,7 +156,7 @@ export const useArticleManageFavoriteArticle = ({
       }
 
       successToast({
-        description: `Follow the article title:【 ${fragment.title} 】`,
+        description: `Follow the article title:'${fragment.title}'`,
       });
 
       return data?.createFavoriteArticle.id;
@@ -222,7 +222,7 @@ export const useArticleManageFavoriteArticle = ({
       }
 
       successToast({
-        description: `Unfollow the article title: 【 ${deletedTitle} 】`,
+        description: `Unfollow the article title: '${deletedTitle}'`,
       });
 
       return favoriteArticleId;
