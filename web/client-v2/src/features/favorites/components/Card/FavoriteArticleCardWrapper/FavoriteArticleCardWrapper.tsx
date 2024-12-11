@@ -1,12 +1,19 @@
 "use client";
+import { useMutation, type Reference, type StoreObject } from "@apollo/client";
 import { FragmentOf, readFragment } from "gql.tada";
 import { FC, useCallback } from "react";
 
-import { useMutation, type Reference, type StoreObject } from "@apollo/client";
+import { logoutToLoginPage } from "@/features/auth/actions/auth";
+import { getUser } from "@/features/auth/actions/user";
+import { CreateFavoriteArticleMutation } from "@/features/favorites/mutations/CreateFavoriteArticleMutation";
+import { DeleteFavoriteArticleByArticleIdMutation } from "@/features/favorites/mutations/DeleteFavoriteArticleByArticleIdMutation";
 
+import { IconTitleLink } from "@/components/ui/link";
 import { ShareLinks } from "@/components/ui/share";
 
 import { useStatusToast } from "@/hooks/useStatusToast";
+
+import { serverRevalidatePage } from "@/actions/actServerRevalidatePage";
 
 import {
   FavoriteArticleCardWrapperFragment,
@@ -15,12 +22,6 @@ import {
 import { RemoveFavoriteArticleAlertDialog } from "../../Dialog";
 import { CopyFavoriteArticleDropdownMenu } from "../../DropdownMenu/CopyFavoriteArticleDropdownMenu";
 import { FavoriteArticleCardItem } from "../FavoriteArticleCardItem";
-import { CreateFavoriteArticleMutation } from "@/features/favorites/mutations/CreateFavoriteArticleMutation";
-import { DeleteFavoriteArticleByArticleIdMutation } from "@/features/favorites/mutations/DeleteFavoriteArticleByArticleIdMutation";
-import { IconTitleLink } from "@/components/ui/link";
-import { logoutToLoginPage } from "@/features/auth/actions/auth";
-import { getUser } from "@/features/auth/actions/user";
-import { serverRevalidatePage } from "@/actions/actServerRevalidatePage";
 
 type FavoriteArticleCardWrapperProps = {
   data: FragmentOf<typeof FavoriteArticleCardWrapperFragment>;
@@ -143,14 +144,29 @@ export const FavoriteArticleCardWrapper: FC<
 
       return resData?.createFavoriteArticle.id;
     },
-    [failToast, fragment, favoriteArticleFolderId, successToast]
+    [
+      failToast,
+      fragment,
+      successToast,
+      fragmentFavoriteFolders,
+      createFavoriteArticleMutation,
+    ]
   );
 
   const handleCreateFavoriteArticleFolder = useCallback(
     async (favoriteArticleFolderId: string, title: string) => {
-      await handleCreateFavoriteArticle(favoriteArticleFolderId, true);
+      const id = await handleCreateFavoriteArticle(
+        favoriteArticleFolderId,
+        true
+      );
+      if (!id) {
+        failToast({
+          description: `Fail: Something went wrong, article: '${title}'`,
+        });
+        return;
+      }
     },
-    [handleCreateFavoriteArticle]
+    [handleCreateFavoriteArticle, failToast]
   );
 
   const handleRemoveFavoriteArticle = useCallback(
@@ -214,7 +230,13 @@ export const FavoriteArticleCardWrapper: FC<
 
       return favoriteArticleId;
     },
-    [failToast, successToast]
+    [
+      failToast,
+      successToast,
+      fragment,
+      fragmentFavoriteFolders,
+      deleteFavoriteArticleByArticleIdMutation,
+    ]
   );
 
   const handleRemoveFavoriteArticleCard = useCallback(
