@@ -1,0 +1,16 @@
+type Query {
+    """
+    Get feeds
+    """
+    feeds(feedsInput: FeedsInput!): FeedConnection!
+}
+
+input FeedsInput {
+    platformSiteType: Int
+    platformId: String
+    keyword: String
+    first: Int
+    after: String
+    last: Int
+    before: String
+}

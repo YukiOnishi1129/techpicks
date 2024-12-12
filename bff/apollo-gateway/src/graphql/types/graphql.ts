@@ -146,6 +146,16 @@ export class FavoriteAllFolderArticlesInput {
     before?: Nullable<string>;
 }
 
+export class FeedsInput {
+    platformSiteType?: Nullable<number>;
+    platformId?: Nullable<string>;
+    keyword?: Nullable<string>;
+    first?: Nullable<number>;
+    after?: Nullable<string>;
+    last?: Nullable<number>;
+    before?: Nullable<string>;
+}
+
 export interface Node {
     id: string;
 }
@@ -164,6 +174,8 @@ export abstract class IQuery {
     abstract favoriteArticles(input?: Nullable<FavoriteArticlesInput>): FavoriteArticleConnection | Promise<FavoriteArticleConnection>;
 
     abstract favoriteAllFolderArticles(input?: Nullable<FavoriteAllFolderArticlesInput>): FavoriteAllFolderArticleConnection | Promise<FavoriteAllFolderArticleConnection>;
+
+    abstract feeds(feedsInput: FeedsInput): FeedConnection | Promise<FeedConnection>;
 }
 
 export class Article implements Node {
@@ -344,6 +356,7 @@ export class Feed implements Node {
     id: string;
     platform: Platform;
     category: Category;
+    myFeedIds?: Nullable<string[]>;
     name: string;
     description: string;
     rssUrl: string;
@@ -354,6 +367,16 @@ export class Feed implements Node {
     createdAt: number;
     updatedAt: number;
     deletedAt?: Nullable<number>;
+}
+
+export class FeedConnection {
+    edges: FeedEdge[];
+    pageInfo: PageInfo;
+}
+
+export class FeedEdge {
+    cursor: string;
+    node: Feed;
 }
 
 export class MyFeedFolder implements Node {
