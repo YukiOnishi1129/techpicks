@@ -72,6 +72,28 @@ function deserialize_checkpicks_content_v1_GetArticlesResponse(buffer_arg) {
   return content_content_pb.GetArticlesResponse.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
+function serialize_checkpicks_content_v1_GetFeedsRequest(arg) {
+  if (!(arg instanceof content_content_pb.GetFeedsRequest)) {
+    throw new Error('Expected argument of type checkpicks.content.v1.GetFeedsRequest');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_checkpicks_content_v1_GetFeedsRequest(buffer_arg) {
+  return content_content_pb.GetFeedsRequest.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
+function serialize_checkpicks_content_v1_GetFeedsResponse(arg) {
+  if (!(arg instanceof content_content_pb.GetFeedsResponse)) {
+    throw new Error('Expected argument of type checkpicks.content.v1.GetFeedsResponse');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_checkpicks_content_v1_GetFeedsResponse(buffer_arg) {
+  return content_content_pb.GetFeedsResponse.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
 
 var ContentServiceService = exports.ContentServiceService = {
   getArticles: {
@@ -106,6 +128,17 @@ var ContentServiceService = exports.ContentServiceService = {
     requestDeserialize: deserialize_checkpicks_content_v1_GetArticleOGPRequest,
     responseSerialize: serialize_checkpicks_content_v1_GetArticleOGPResponse,
     responseDeserialize: deserialize_checkpicks_content_v1_GetArticleOGPResponse,
+  },
+  getFeeds: {
+    path: '/checkpicks.content.v1.ContentService/GetFeeds',
+    requestStream: false,
+    responseStream: false,
+    requestType: content_content_pb.GetFeedsRequest,
+    responseType: content_content_pb.GetFeedsResponse,
+    requestSerialize: serialize_checkpicks_content_v1_GetFeedsRequest,
+    requestDeserialize: deserialize_checkpicks_content_v1_GetFeedsRequest,
+    responseSerialize: serialize_checkpicks_content_v1_GetFeedsResponse,
+    responseDeserialize: deserialize_checkpicks_content_v1_GetFeedsResponse,
   },
 };
 

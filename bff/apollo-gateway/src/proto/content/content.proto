@@ -13,6 +13,8 @@ service ContentService {
   rpc CreateUploadArticle(CreateUploadArticleRequest) returns (CreateArticleResponse);
 
   rpc GetArticleOGP(GetArticleOGPRequest) returns (GetArticleOGPResponse);
+
+  rpc GetFeeds(GetFeedsRequest) returns (GetFeedsResponse);
 }
 
 
@@ -54,6 +56,19 @@ message GetArticleOGPRequest{
 }
 
 
+message GetFeedsResponse {
+  repeated FeedEdge feedEdge = 1;
+}
+
+message GetFeedsRequest {
+  google.protobuf.Int64Value platform_site_type = 1;
+  google.protobuf.StringValue platform_id = 2;
+  google.protobuf.StringValue keyword = 3;
+  string cursor = 4;
+  int64 limit = 5;
+}
+
+
 message PageInfo {
   string end_cursor = 1;
   bool has_next_page = 2;
@@ -63,16 +78,17 @@ message Feed {
   string id = 1;
   Platform platform = 2;
   Category category = 3;
-  string name = 4;
-  string description = 5;
-  string rssUrl = 6;
-  string siteUrl = 7;
-  string thumbnail_url = 8;
-  int64 trend_platform_type = 9;
-  google.protobuf.StringValue api_query_param = 10;
-  google.protobuf.Timestamp created_at = 11;
-  google.protobuf.Timestamp updated_at = 12;
-  google.protobuf.Timestamp deleted_at = 13;
+  repeated string my_feed_ids = 4;
+  string name = 5;
+  string description = 6;
+  string rssUrl = 7;
+  string siteUrl = 8;
+  string thumbnail_url = 9;
+  int64 trend_platform_type = 10;
+  google.protobuf.StringValue api_query_param = 11;
+  google.protobuf.Timestamp created_at = 12;
+  google.protobuf.Timestamp updated_at = 13;
+  google.protobuf.Timestamp deleted_at = 14;
 }
 
 
@@ -126,6 +142,10 @@ message ArticleEdge {
   string cursor = 2;
 }
 
+message FeedEdge {
+  Feed feed = 1;
+  string cursor = 2;
+}
 
 message OGP {
   string title = 1;
