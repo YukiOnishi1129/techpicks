@@ -38,3 +38,4 @@ user-service:
 batch-service:
 - changed-files:
   - any-glob-to-any-file: ['batch-service/*', 'batch-service/**/*']
+  
