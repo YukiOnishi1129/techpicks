@@ -1773,7 +1773,8 @@ proto.checkpicks.content.v1.GetFeedsResponse.prototype.toObject = function(opt_i
 proto.checkpicks.content.v1.GetFeedsResponse.toObject = function(includeInstance, msg) {
   var f, obj = {
     feededgeList: jspb.Message.toObjectList(msg.getFeededgeList(),
-    proto.checkpicks.content.v1.FeedEdge.toObject, includeInstance)
+    proto.checkpicks.content.v1.FeedEdge.toObject, includeInstance),
+    pageInfo: (f = msg.getPageInfo()) && proto.checkpicks.content.v1.PageInfo.toObject(includeInstance, f)
   };
 
   if (includeInstance) {
@@ -1815,6 +1816,11 @@ proto.checkpicks.content.v1.GetFeedsResponse.deserializeBinaryFromReader = funct
       reader.readMessage(value,proto.checkpicks.content.v1.FeedEdge.deserializeBinaryFromReader);
       msg.addFeededge(value);
       break;
+    case 2:
+      var value = new proto.checkpicks.content.v1.PageInfo;
+      reader.readMessage(value,proto.checkpicks.content.v1.PageInfo.deserializeBinaryFromReader);
+      msg.setPageInfo(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -1850,6 +1856,14 @@ proto.checkpicks.content.v1.GetFeedsResponse.serializeBinaryToWriter = function(
       1,
       f,
       proto.checkpicks.content.v1.FeedEdge.serializeBinaryToWriter
+    );
+  }
+  f = message.getPageInfo();
+  if (f != null) {
+    writer.writeMessage(
+      2,
+      f,
+      proto.checkpicks.content.v1.PageInfo.serializeBinaryToWriter
     );
   }
 };
@@ -1890,6 +1904,43 @@ proto.checkpicks.content.v1.GetFeedsResponse.prototype.addFeededge = function(op
  */
 proto.checkpicks.content.v1.GetFeedsResponse.prototype.clearFeededgeList = function() {
   return this.setFeededgeList([]);
+};
+
+
+/**
+ * optional PageInfo page_info = 2;
+ * @return {?proto.checkpicks.content.v1.PageInfo}
+ */
+proto.checkpicks.content.v1.GetFeedsResponse.prototype.getPageInfo = function() {
+  return /** @type{?proto.checkpicks.content.v1.PageInfo} */ (
+    jspb.Message.getWrapperField(this, proto.checkpicks.content.v1.PageInfo, 2));
+};
+
+
+/**
+ * @param {?proto.checkpicks.content.v1.PageInfo|undefined} value
+ * @return {!proto.checkpicks.content.v1.GetFeedsResponse} returns this
+*/
+proto.checkpicks.content.v1.GetFeedsResponse.prototype.setPageInfo = function(value) {
+  return jspb.Message.setWrapperField(this, 2, value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.checkpicks.content.v1.GetFeedsResponse} returns this
+ */
+proto.checkpicks.content.v1.GetFeedsResponse.prototype.clearPageInfo = function() {
+  return this.setPageInfo(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.checkpicks.content.v1.GetFeedsResponse.prototype.hasPageInfo = function() {
+  return jspb.Message.getField(this, 2) != null;
 };
 
 

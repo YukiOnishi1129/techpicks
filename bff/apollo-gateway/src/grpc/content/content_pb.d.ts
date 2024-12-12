@@ -195,6 +195,11 @@ export class GetFeedsResponse extends jspb.Message {
     setFeededgeList(value: Array<FeedEdge>): GetFeedsResponse;
     addFeededge(value?: FeedEdge, index?: number): FeedEdge;
 
+    hasPageInfo(): boolean;
+    clearPageInfo(): void;
+    getPageInfo(): PageInfo | undefined;
+    setPageInfo(value?: PageInfo): GetFeedsResponse;
+
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): GetFeedsResponse.AsObject;
     static toObject(includeInstance: boolean, msg: GetFeedsResponse): GetFeedsResponse.AsObject;
@@ -208,6 +213,7 @@ export class GetFeedsResponse extends jspb.Message {
 export namespace GetFeedsResponse {
     export type AsObject = {
         feededgeList: Array<FeedEdge.AsObject>,
+        pageInfo?: PageInfo.AsObject,
     }
 }
 

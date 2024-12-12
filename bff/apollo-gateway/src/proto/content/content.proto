@@ -58,6 +58,7 @@ message GetArticleOGPRequest{
 
 message GetFeedsResponse {
   repeated FeedEdge feedEdge = 1;
+  PageInfo page_info = 2;
 }
 
 message GetFeedsRequest {
