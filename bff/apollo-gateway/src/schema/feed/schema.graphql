@@ -5,6 +5,7 @@ type Feed implements Node {
   id: ID!
   platform: Platform!
   category: Category!
+  myFeedIds: [String!]
   name: String!
   description: String!
   rssUrl: String!
@@ -15,4 +16,14 @@ type Feed implements Node {
   createdAt: Int!
   updatedAt: Int!
   deletedAt: Int
+}
+
+type FeedConnection {
+  edges: [FeedEdge!]!
+  pageInfo: PageInfo!
+}
+
+type FeedEdge {
+  cursor: String!
+  node: Feed!
 }
