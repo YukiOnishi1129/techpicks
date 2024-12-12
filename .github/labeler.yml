@@ -1,41 +1,53 @@
 # @see https://github.com/actions/labeler
 root:
-- changed-files:
-  - any-glob-to-any-file: ['*']
+  - changed-files:
+      - any-glob-to-any-file: ["*"]
 
 web:
-- changed-files:
-  - any-glob-to-any-file: ['web/client-v2/*', 'web/client-v2/**/*']
+  - changed-files:
+      - any-glob-to-any-file: ["web/client-v2/**"]
 
 admin:
-- changed-files:
-  - any-glob-to-any-file: ['web/admin/*', 'web/admin/**/*']
+  - changed-files:
+      - any-glob-to-any-file: ["web/admin/*", "web/admin/**/*"]
 
 bff:
-- changed-files:
-  - any-glob-to-any-file: ['bff/apollo-gateway/*', 'bff/apollo-gateway/**/*']
+  - changed-files:
+      - any-glob-to-any-file:
+          ["bff/apollo-gateway/*", "bff/apollo-gateway/**/*"]
 
 content-service:
-- changed-files:
-  - any-glob-to-any-file: ['micro-service/content-service/*', 'micro-service/content-service/**/*']
+  - changed-files:
+      - any-glob-to-any-file:
+          [
+            "micro-service/content-service/*",
+            "micro-service/content-service/**/*",
+          ]
 
 bookmark-service:
-- changed-files:
-  - any-glob-to-any-file: ['micro-service/bookmark-service/*', 'micro-service/bookmark-service/**/*']
+  - changed-files:
+      - any-glob-to-any-file: ["micro-service/bookmark-service/**", "micro-service/bookmark-service/**/*"]
 
 my-feed-service:
-- changed-files:
-  - any-glob-to-any-file: ['micro-service/my-feed-service/*', 'micro-service/my-feed-service/**/*']
+  - changed-files:
+      - any-glob-to-any-file:
+          [
+            "micro-service/my-feed-service/*",
+            "micro-service/my-feed-service/**/*",
+          ]
 
 favorite-service:
-- changed-files:
-  - any-glob-to-any-file: ['micro-service/favorite-service/*', 'micro-service/favorite-service/**/*']
+  - changed-files:
+      - any-glob-to-any-file:
+          [
+            "micro-service/favorite-service/*",
+            "micro-service/favorite-service/**/*",
+          ]
 
 user-service:
-- changed-files:
-  - any-glob-to-any-file: ['micro-service/user-service/*', 'micro-service/user-service/**/*']
+  - changed-files:
+      - any-glob-to-any-file: ["micro-service/user-service/**"]
 
 batch-service:
-- changed-files:
-  - any-glob-to-any-file: ['batch-service/*', 'batch-service/**/*']
-  
+  - changed-files:
+      - any-glob-to-any-file: ["batch-service/*", "batch-service/**/*"]
