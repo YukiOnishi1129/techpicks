@@ -86,6 +86,7 @@ func main() {
 	// infrastructure layer
 	// persistence layer
 	aps := persistence.NewArticlePersistence(db)
+	fps := persistence.NewFeedPersistence(db)
 	// external layer
 	bex := external.NewBookmarkExternal(bClient)
 	faex := external.NewFavoriteExternal(faClient)
@@ -93,13 +94,14 @@ func main() {
 	// adapter layer
 	// persistence adapter
 	apa := persistenceadapter.NewArticlePersistenceAdapter(aps)
+	fpa := persistenceadapter.NewFeedPersistenceAdapter(fps)
 	// external adapter
 	bea := externaladapter.NewBookmarkExternalAdapter(bex)
 	faea := externaladapter.NewFavoriteExternalAdapter(faex)
 
 	// application layer
 	// usecase layer
-	cuc := usecase.NewContentUseCase(apa, bea, faea)
+	cuc := usecase.NewContentUseCase(apa, fpa, bea, faea)
 
 	// interface layer
 	chd := handler.NewContentHandler(cuc)

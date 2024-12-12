@@ -189,6 +189,78 @@ export namespace GetArticleOGPRequest {
     }
 }
 
+export class GetFeedsResponse extends jspb.Message { 
+    clearFeedEdgeList(): void;
+    getFeedEdgeList(): Array<FeedEdge>;
+    setFeedEdgeList(value: Array<FeedEdge>): GetFeedsResponse;
+    addFeedEdge(value?: FeedEdge, index?: number): FeedEdge;
+
+    hasPageInfo(): boolean;
+    clearPageInfo(): void;
+    getPageInfo(): PageInfo | undefined;
+    setPageInfo(value?: PageInfo): GetFeedsResponse;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): GetFeedsResponse.AsObject;
+    static toObject(includeInstance: boolean, msg: GetFeedsResponse): GetFeedsResponse.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: GetFeedsResponse, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): GetFeedsResponse;
+    static deserializeBinaryFromReader(message: GetFeedsResponse, reader: jspb.BinaryReader): GetFeedsResponse;
+}
+
+export namespace GetFeedsResponse {
+    export type AsObject = {
+        feedEdgeList: Array<FeedEdge.AsObject>,
+        pageInfo?: PageInfo.AsObject,
+    }
+}
+
+export class GetFeedsRequest extends jspb.Message { 
+    getUserId(): string;
+    setUserId(value: string): GetFeedsRequest;
+
+    hasPlatformSiteType(): boolean;
+    clearPlatformSiteType(): void;
+    getPlatformSiteType(): google_protobuf_wrappers_pb.Int64Value | undefined;
+    setPlatformSiteType(value?: google_protobuf_wrappers_pb.Int64Value): GetFeedsRequest;
+
+    hasPlatformId(): boolean;
+    clearPlatformId(): void;
+    getPlatformId(): google_protobuf_wrappers_pb.StringValue | undefined;
+    setPlatformId(value?: google_protobuf_wrappers_pb.StringValue): GetFeedsRequest;
+
+    hasKeyword(): boolean;
+    clearKeyword(): void;
+    getKeyword(): google_protobuf_wrappers_pb.StringValue | undefined;
+    setKeyword(value?: google_protobuf_wrappers_pb.StringValue): GetFeedsRequest;
+    getCursor(): string;
+    setCursor(value: string): GetFeedsRequest;
+    getLimit(): number;
+    setLimit(value: number): GetFeedsRequest;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): GetFeedsRequest.AsObject;
+    static toObject(includeInstance: boolean, msg: GetFeedsRequest): GetFeedsRequest.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: GetFeedsRequest, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): GetFeedsRequest;
+    static deserializeBinaryFromReader(message: GetFeedsRequest, reader: jspb.BinaryReader): GetFeedsRequest;
+}
+
+export namespace GetFeedsRequest {
+    export type AsObject = {
+        userId: string,
+        platformSiteType?: google_protobuf_wrappers_pb.Int64Value.AsObject,
+        platformId?: google_protobuf_wrappers_pb.StringValue.AsObject,
+        keyword?: google_protobuf_wrappers_pb.StringValue.AsObject,
+        cursor: string,
+        limit: number,
+    }
+}
+
 export class PageInfo extends jspb.Message { 
     getEndCursor(): string;
     setEndCursor(value: string): PageInfo;
@@ -225,14 +297,18 @@ export class Feed extends jspb.Message {
     clearCategory(): void;
     getCategory(): Category | undefined;
     setCategory(value?: Category): Feed;
+    clearMyFeedIdsList(): void;
+    getMyFeedIdsList(): Array<string>;
+    setMyFeedIdsList(value: Array<string>): Feed;
+    addMyFeedIds(value: string, index?: number): string;
     getName(): string;
     setName(value: string): Feed;
     getDescription(): string;
     setDescription(value: string): Feed;
-    getRssurl(): string;
-    setRssurl(value: string): Feed;
-    getSiteurl(): string;
-    setSiteurl(value: string): Feed;
+    getRssUrl(): string;
+    setRssUrl(value: string): Feed;
+    getSiteUrl(): string;
+    setSiteUrl(value: string): Feed;
     getThumbnailUrl(): string;
     setThumbnailUrl(value: string): Feed;
     getTrendPlatformType(): number;
@@ -273,10 +349,11 @@ export namespace Feed {
         id: string,
         platform?: Platform.AsObject,
         category?: Category.AsObject,
+        myFeedIdsList: Array<string>,
         name: string,
         description: string,
-        rssurl: string,
-        siteurl: string,
+        rssUrl: string,
+        siteUrl: string,
         thumbnailUrl: string,
         trendPlatformType: number,
         apiQueryParam?: google_protobuf_wrappers_pb.StringValue.AsObject,
@@ -507,6 +584,32 @@ export class ArticleEdge extends jspb.Message {
 export namespace ArticleEdge {
     export type AsObject = {
         article?: Article.AsObject,
+        cursor: string,
+    }
+}
+
+export class FeedEdge extends jspb.Message { 
+
+    hasFeed(): boolean;
+    clearFeed(): void;
+    getFeed(): Feed | undefined;
+    setFeed(value?: Feed): FeedEdge;
+    getCursor(): string;
+    setCursor(value: string): FeedEdge;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): FeedEdge.AsObject;
+    static toObject(includeInstance: boolean, msg: FeedEdge): FeedEdge.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: FeedEdge, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): FeedEdge;
+    static deserializeBinaryFromReader(message: FeedEdge, reader: jspb.BinaryReader): FeedEdge;
+}
+
+export namespace FeedEdge {
+    export type AsObject = {
+        feed?: Feed.AsObject,
         cursor: string,
     }
 }

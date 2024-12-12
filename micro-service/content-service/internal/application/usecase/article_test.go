@@ -274,14 +274,16 @@ func Test_UseCase_CreateUploadArticle(t *testing.T) {
 			}, nil).AnyTimes()
 
 			testArticleRepository := persistence.NewArticlePersistence(db)
+			testFeedRepository := persistence.NewFeedPersistence(db)
 			testBookmarkExternal := external.NewBookmarkExternal(mockBookmarkClient)
 			testFavoriteExternal := external.NewFavoriteExternal(mockFavoriteClient)
 
 			testArticlePersistenceAdapter := persistenceadapter.NewArticlePersistenceAdapter(testArticleRepository)
+			testFeedPersistenceAdapter := persistenceadapter.NewFeedPersistenceAdapter(testFeedRepository)
 			testBookmarkExternalAdapter := externaladapter.NewBookmarkExternalAdapter(testBookmarkExternal)
 			testFavoriteExternalAdapter := externaladapter.NewFavoriteExternalAdapter(testFavoriteExternal)
 
-			testContentUseCase := NewContentUseCase(testArticlePersistenceAdapter, testBookmarkExternalAdapter, testFavoriteExternalAdapter)
+			testContentUseCase := NewContentUseCase(testArticlePersistenceAdapter, testFeedPersistenceAdapter, testBookmarkExternalAdapter, testFavoriteExternalAdapter)
 
 			if tt.recordArticles != nil {
 				for _, v := range tt.recordArticles {

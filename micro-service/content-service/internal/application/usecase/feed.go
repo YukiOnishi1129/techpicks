@@ -1,11 +1,56 @@
 package usecase
 
 import (
+	"context"
+
 	cpb "github.com/YukiOnishi1129/techpicks/micro-service/content-service/grpc/content"
 	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/domain/entity"
 	"google.golang.org/protobuf/types/known/timestamppb"
 	"google.golang.org/protobuf/types/known/wrapperspb"
 )
+
+func (cu *contentUseCase) GetFeeds(ctx context.Context, req *cpb.GetFeedsRequest) (*cpb.GetFeedsResponse, error) {
+	limit := 10
+	if req.GetLimit() > 0 {
+		limit = int(req.GetLimit())
+	}
+
+	feeds, err := cu.feedPersistenceAdapter.GetFeeds(ctx, req, limit)
+	if err != nil {
+		return nil, err
+	}
+
+	edges := make([]*cpb.FeedEdge, len(feeds))
+
+	for i, feed := range feeds {
+		res := cu.convertPBFeed(*feed)
+		// TODO: fetch my feed data from connecting to my feed service
+		res.MyFeedIds = []string{}
+		edges[i] = &cpb.FeedEdge{
+			Cursor: feed.ID,
+			Feed:   res,
+		}
+	}
+
+	if len(edges) == 0 {
+		return &cpb.GetFeedsResponse{
+			FeedEdge: edges,
+			PageInfo: &cpb.PageInfo{
+				HasNextPage: false,
+				EndCursor:   "",
+			},
+		}, nil
+	}
+
+	res := &cpb.GetFeedsResponse{
+		FeedEdge: edges,
+		PageInfo: &cpb.PageInfo{
+			HasNextPage: len(edges) == limit,
+			EndCursor:   edges[len(edges)-1].Cursor,
+		},
+	}
+	return res, nil
+}
 
 func (cu *contentUseCase) convertPBFeed(f entity.Feed) *cpb.Feed {
 	feed := &cpb.Feed{
@@ -27,5 +72,6 @@ func (cu *contentUseCase) convertPBFeed(f entity.Feed) *cpb.Feed {
 	}
 	feed.Platform = cu.convertPBPlatform(*f.R.Platform)
 	feed.Category = cu.convertPBCategory(*f.R.Category)
+	feed.MyFeedIds = []string{}
 	return feed
 }
