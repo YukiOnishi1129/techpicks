@@ -57,16 +57,17 @@ message GetArticleOGPRequest{
 
 
 message GetFeedsResponse {
-  repeated FeedEdge feedEdge = 1;
+  repeated FeedEdge feed_edge = 1;
   PageInfo page_info = 2;
 }
 
 message GetFeedsRequest {
-  google.protobuf.Int64Value platform_site_type = 1;
-  google.protobuf.StringValue platform_id = 2;
-  google.protobuf.StringValue keyword = 3;
-  string cursor = 4;
-  int64 limit = 5;
+  string user_id = 1;
+  google.protobuf.Int64Value platform_site_type = 2;
+  google.protobuf.StringValue platform_id = 3;
+  google.protobuf.StringValue keyword = 4;
+  string cursor = 5;
+  int64 limit = 6;
 }
 
 
@@ -82,8 +83,8 @@ message Feed {
   repeated string my_feed_ids = 4;
   string name = 5;
   string description = 6;
-  string rssUrl = 7;
-  string siteUrl = 8;
+  string rss_url = 7;
+  string site_url = 8;
   string thumbnail_url = 9;
   int64 trend_platform_type = 10;
   google.protobuf.StringValue api_query_param = 11;

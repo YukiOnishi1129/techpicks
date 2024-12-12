@@ -190,10 +190,10 @@ export namespace GetArticleOGPRequest {
 }
 
 export class GetFeedsResponse extends jspb.Message { 
-    clearFeededgeList(): void;
-    getFeededgeList(): Array<FeedEdge>;
-    setFeededgeList(value: Array<FeedEdge>): GetFeedsResponse;
-    addFeededge(value?: FeedEdge, index?: number): FeedEdge;
+    clearFeedEdgeList(): void;
+    getFeedEdgeList(): Array<FeedEdge>;
+    setFeedEdgeList(value: Array<FeedEdge>): GetFeedsResponse;
+    addFeedEdge(value?: FeedEdge, index?: number): FeedEdge;
 
     hasPageInfo(): boolean;
     clearPageInfo(): void;
@@ -212,12 +212,14 @@ export class GetFeedsResponse extends jspb.Message {
 
 export namespace GetFeedsResponse {
     export type AsObject = {
-        feededgeList: Array<FeedEdge.AsObject>,
+        feedEdgeList: Array<FeedEdge.AsObject>,
         pageInfo?: PageInfo.AsObject,
     }
 }
 
 export class GetFeedsRequest extends jspb.Message { 
+    getUserId(): string;
+    setUserId(value: string): GetFeedsRequest;
 
     hasPlatformSiteType(): boolean;
     clearPlatformSiteType(): void;
@@ -250,6 +252,7 @@ export class GetFeedsRequest extends jspb.Message {
 
 export namespace GetFeedsRequest {
     export type AsObject = {
+        userId: string,
         platformSiteType?: google_protobuf_wrappers_pb.Int64Value.AsObject,
         platformId?: google_protobuf_wrappers_pb.StringValue.AsObject,
         keyword?: google_protobuf_wrappers_pb.StringValue.AsObject,
@@ -302,10 +305,10 @@ export class Feed extends jspb.Message {
     setName(value: string): Feed;
     getDescription(): string;
     setDescription(value: string): Feed;
-    getRssurl(): string;
-    setRssurl(value: string): Feed;
-    getSiteurl(): string;
-    setSiteurl(value: string): Feed;
+    getRssUrl(): string;
+    setRssUrl(value: string): Feed;
+    getSiteUrl(): string;
+    setSiteUrl(value: string): Feed;
     getThumbnailUrl(): string;
     setThumbnailUrl(value: string): Feed;
     getTrendPlatformType(): number;
@@ -349,8 +352,8 @@ export namespace Feed {
         myFeedIdsList: Array<string>,
         name: string,
         description: string,
-        rssurl: string,
-        siteurl: string,
+        rssUrl: string,
+        siteUrl: string,
         thumbnailUrl: string,
         trendPlatformType: number,
         apiQueryParam?: google_protobuf_wrappers_pb.StringValue.AsObject,

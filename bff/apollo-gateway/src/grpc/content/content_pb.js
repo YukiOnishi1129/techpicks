@@ -1772,7 +1772,7 @@ proto.checkpicks.content.v1.GetFeedsResponse.prototype.toObject = function(opt_i
  */
 proto.checkpicks.content.v1.GetFeedsResponse.toObject = function(includeInstance, msg) {
   var f, obj = {
-    feededgeList: jspb.Message.toObjectList(msg.getFeededgeList(),
+    feedEdgeList: jspb.Message.toObjectList(msg.getFeedEdgeList(),
     proto.checkpicks.content.v1.FeedEdge.toObject, includeInstance),
     pageInfo: (f = msg.getPageInfo()) && proto.checkpicks.content.v1.PageInfo.toObject(includeInstance, f)
   };
@@ -1814,7 +1814,7 @@ proto.checkpicks.content.v1.GetFeedsResponse.deserializeBinaryFromReader = funct
     case 1:
       var value = new proto.checkpicks.content.v1.FeedEdge;
       reader.readMessage(value,proto.checkpicks.content.v1.FeedEdge.deserializeBinaryFromReader);
-      msg.addFeededge(value);
+      msg.addFeedEdge(value);
       break;
     case 2:
       var value = new proto.checkpicks.content.v1.PageInfo;
@@ -1850,7 +1850,7 @@ proto.checkpicks.content.v1.GetFeedsResponse.prototype.serializeBinary = functio
  */
 proto.checkpicks.content.v1.GetFeedsResponse.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getFeededgeList();
+  f = message.getFeedEdgeList();
   if (f.length > 0) {
     writer.writeRepeatedMessage(
       1,
@@ -1870,10 +1870,10 @@ proto.checkpicks.content.v1.GetFeedsResponse.serializeBinaryToWriter = function(
 
 
 /**
- * repeated FeedEdge feedEdge = 1;
+ * repeated FeedEdge feed_edge = 1;
  * @return {!Array<!proto.checkpicks.content.v1.FeedEdge>}
  */
-proto.checkpicks.content.v1.GetFeedsResponse.prototype.getFeededgeList = function() {
+proto.checkpicks.content.v1.GetFeedsResponse.prototype.getFeedEdgeList = function() {
   return /** @type{!Array<!proto.checkpicks.content.v1.FeedEdge>} */ (
     jspb.Message.getRepeatedWrapperField(this, proto.checkpicks.content.v1.FeedEdge, 1));
 };
@@ -1883,7 +1883,7 @@ proto.checkpicks.content.v1.GetFeedsResponse.prototype.getFeededgeList = functio
  * @param {!Array<!proto.checkpicks.content.v1.FeedEdge>} value
  * @return {!proto.checkpicks.content.v1.GetFeedsResponse} returns this
 */
-proto.checkpicks.content.v1.GetFeedsResponse.prototype.setFeededgeList = function(value) {
+proto.checkpicks.content.v1.GetFeedsResponse.prototype.setFeedEdgeList = function(value) {
   return jspb.Message.setRepeatedWrapperField(this, 1, value);
 };
 
@@ -1893,7 +1893,7 @@ proto.checkpicks.content.v1.GetFeedsResponse.prototype.setFeededgeList = functio
  * @param {number=} opt_index
  * @return {!proto.checkpicks.content.v1.FeedEdge}
  */
-proto.checkpicks.content.v1.GetFeedsResponse.prototype.addFeededge = function(opt_value, opt_index) {
+proto.checkpicks.content.v1.GetFeedsResponse.prototype.addFeedEdge = function(opt_value, opt_index) {
   return jspb.Message.addToRepeatedWrapperField(this, 1, opt_value, proto.checkpicks.content.v1.FeedEdge, opt_index);
 };
 
@@ -1902,8 +1902,8 @@ proto.checkpicks.content.v1.GetFeedsResponse.prototype.addFeededge = function(op
  * Clears the list making it empty but non-null.
  * @return {!proto.checkpicks.content.v1.GetFeedsResponse} returns this
  */
-proto.checkpicks.content.v1.GetFeedsResponse.prototype.clearFeededgeList = function() {
-  return this.setFeededgeList([]);
+proto.checkpicks.content.v1.GetFeedsResponse.prototype.clearFeedEdgeList = function() {
+  return this.setFeedEdgeList([]);
 };
 
 
@@ -1976,11 +1976,12 @@ proto.checkpicks.content.v1.GetFeedsRequest.prototype.toObject = function(opt_in
  */
 proto.checkpicks.content.v1.GetFeedsRequest.toObject = function(includeInstance, msg) {
   var f, obj = {
+    userId: jspb.Message.getFieldWithDefault(msg, 1, ""),
     platformSiteType: (f = msg.getPlatformSiteType()) && google_protobuf_wrappers_pb.Int64Value.toObject(includeInstance, f),
     platformId: (f = msg.getPlatformId()) && google_protobuf_wrappers_pb.StringValue.toObject(includeInstance, f),
     keyword: (f = msg.getKeyword()) && google_protobuf_wrappers_pb.StringValue.toObject(includeInstance, f),
-    cursor: jspb.Message.getFieldWithDefault(msg, 4, ""),
-    limit: jspb.Message.getFieldWithDefault(msg, 5, 0)
+    cursor: jspb.Message.getFieldWithDefault(msg, 5, ""),
+    limit: jspb.Message.getFieldWithDefault(msg, 6, 0)
   };
 
   if (includeInstance) {
@@ -2018,25 +2019,29 @@ proto.checkpicks.content.v1.GetFeedsRequest.deserializeBinaryFromReader = functi
     var field = reader.getFieldNumber();
     switch (field) {
     case 1:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setUserId(value);
+      break;
+    case 2:
       var value = new google_protobuf_wrappers_pb.Int64Value;
       reader.readMessage(value,google_protobuf_wrappers_pb.Int64Value.deserializeBinaryFromReader);
       msg.setPlatformSiteType(value);
       break;
-    case 2:
+    case 3:
       var value = new google_protobuf_wrappers_pb.StringValue;
       reader.readMessage(value,google_protobuf_wrappers_pb.StringValue.deserializeBinaryFromReader);
       msg.setPlatformId(value);
       break;
-    case 3:
+    case 4:
       var value = new google_protobuf_wrappers_pb.StringValue;
       reader.readMessage(value,google_protobuf_wrappers_pb.StringValue.deserializeBinaryFromReader);
       msg.setKeyword(value);
       break;
-    case 4:
+    case 5:
       var value = /** @type {string} */ (reader.readString());
       msg.setCursor(value);
       break;
-    case 5:
+    case 6:
       var value = /** @type {number} */ (reader.readInt64());
       msg.setLimit(value);
       break;
@@ -2069,10 +2074,17 @@ proto.checkpicks.content.v1.GetFeedsRequest.prototype.serializeBinary = function
  */
 proto.checkpicks.content.v1.GetFeedsRequest.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
+  f = message.getUserId();
+  if (f.length > 0) {
+    writer.writeString(
+      1,
+      f
+    );
+  }
   f = message.getPlatformSiteType();
   if (f != null) {
     writer.writeMessage(
-      1,
+      2,
       f,
       google_protobuf_wrappers_pb.Int64Value.serializeBinaryToWriter
     );
@@ -2080,7 +2092,7 @@ proto.checkpicks.content.v1.GetFeedsRequest.serializeBinaryToWriter = function(m
   f = message.getPlatformId();
   if (f != null) {
     writer.writeMessage(
-      2,
+      3,
       f,
       google_protobuf_wrappers_pb.StringValue.serializeBinaryToWriter
     );
@@ -2088,7 +2100,7 @@ proto.checkpicks.content.v1.GetFeedsRequest.serializeBinaryToWriter = function(m
   f = message.getKeyword();
   if (f != null) {
     writer.writeMessage(
-      3,
+      4,
       f,
       google_protobuf_wrappers_pb.StringValue.serializeBinaryToWriter
     );
@@ -2096,14 +2108,14 @@ proto.checkpicks.content.v1.GetFeedsRequest.serializeBinaryToWriter = function(m
   f = message.getCursor();
   if (f.length > 0) {
     writer.writeString(
-      4,
+      5,
       f
     );
   }
   f = message.getLimit();
   if (f !== 0) {
     writer.writeInt64(
-      5,
+      6,
       f
     );
   }
@@ -2111,12 +2123,30 @@ proto.checkpicks.content.v1.GetFeedsRequest.serializeBinaryToWriter = function(m
 
 
 /**
- * optional google.protobuf.Int64Value platform_site_type = 1;
+ * optional string user_id = 1;
+ * @return {string}
+ */
+proto.checkpicks.content.v1.GetFeedsRequest.prototype.getUserId = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.checkpicks.content.v1.GetFeedsRequest} returns this
+ */
+proto.checkpicks.content.v1.GetFeedsRequest.prototype.setUserId = function(value) {
+  return jspb.Message.setProto3StringField(this, 1, value);
+};
+
+
+/**
+ * optional google.protobuf.Int64Value platform_site_type = 2;
  * @return {?proto.google.protobuf.Int64Value}
  */
 proto.checkpicks.content.v1.GetFeedsRequest.prototype.getPlatformSiteType = function() {
   return /** @type{?proto.google.protobuf.Int64Value} */ (
-    jspb.Message.getWrapperField(this, google_protobuf_wrappers_pb.Int64Value, 1));
+    jspb.Message.getWrapperField(this, google_protobuf_wrappers_pb.Int64Value, 2));
 };
 
 
@@ -2125,7 +2155,7 @@ proto.checkpicks.content.v1.GetFeedsRequest.prototype.getPlatformSiteType = func
  * @return {!proto.checkpicks.content.v1.GetFeedsRequest} returns this
 */
 proto.checkpicks.content.v1.GetFeedsRequest.prototype.setPlatformSiteType = function(value) {
-  return jspb.Message.setWrapperField(this, 1, value);
+  return jspb.Message.setWrapperField(this, 2, value);
 };
 
 
@@ -2143,17 +2173,17 @@ proto.checkpicks.content.v1.GetFeedsRequest.prototype.clearPlatformSiteType = fu
  * @return {boolean}
  */
 proto.checkpicks.content.v1.GetFeedsRequest.prototype.hasPlatformSiteType = function() {
-  return jspb.Message.getField(this, 1) != null;
+  return jspb.Message.getField(this, 2) != null;
 };
 
 
 /**
- * optional google.protobuf.StringValue platform_id = 2;
+ * optional google.protobuf.StringValue platform_id = 3;
  * @return {?proto.google.protobuf.StringValue}
  */
 proto.checkpicks.content.v1.GetFeedsRequest.prototype.getPlatformId = function() {
   return /** @type{?proto.google.protobuf.StringValue} */ (
-    jspb.Message.getWrapperField(this, google_protobuf_wrappers_pb.StringValue, 2));
+    jspb.Message.getWrapperField(this, google_protobuf_wrappers_pb.StringValue, 3));
 };
 
 
@@ -2162,7 +2192,7 @@ proto.checkpicks.content.v1.GetFeedsRequest.prototype.getPlatformId = function()
  * @return {!proto.checkpicks.content.v1.GetFeedsRequest} returns this
 */
 proto.checkpicks.content.v1.GetFeedsRequest.prototype.setPlatformId = function(value) {
-  return jspb.Message.setWrapperField(this, 2, value);
+  return jspb.Message.setWrapperField(this, 3, value);
 };
 
 
@@ -2180,17 +2210,17 @@ proto.checkpicks.content.v1.GetFeedsRequest.prototype.clearPlatformId = function
  * @return {boolean}
  */
 proto.checkpicks.content.v1.GetFeedsRequest.prototype.hasPlatformId = function() {
-  return jspb.Message.getField(this, 2) != null;
+  return jspb.Message.getField(this, 3) != null;
 };
 
 
 /**
- * optional google.protobuf.StringValue keyword = 3;
+ * optional google.protobuf.StringValue keyword = 4;
  * @return {?proto.google.protobuf.StringValue}
  */
 proto.checkpicks.content.v1.GetFeedsRequest.prototype.getKeyword = function() {
   return /** @type{?proto.google.protobuf.StringValue} */ (
-    jspb.Message.getWrapperField(this, google_protobuf_wrappers_pb.StringValue, 3));
+    jspb.Message.getWrapperField(this, google_protobuf_wrappers_pb.StringValue, 4));
 };
 
 
@@ -2199,7 +2229,7 @@ proto.checkpicks.content.v1.GetFeedsRequest.prototype.getKeyword = function() {
  * @return {!proto.checkpicks.content.v1.GetFeedsRequest} returns this
 */
 proto.checkpicks.content.v1.GetFeedsRequest.prototype.setKeyword = function(value) {
-  return jspb.Message.setWrapperField(this, 3, value);
+  return jspb.Message.setWrapperField(this, 4, value);
 };
 
 
@@ -2217,16 +2247,16 @@ proto.checkpicks.content.v1.GetFeedsRequest.prototype.clearKeyword = function() 
  * @return {boolean}
  */
 proto.checkpicks.content.v1.GetFeedsRequest.prototype.hasKeyword = function() {
-  return jspb.Message.getField(this, 3) != null;
+  return jspb.Message.getField(this, 4) != null;
 };
 
 
 /**
- * optional string cursor = 4;
+ * optional string cursor = 5;
  * @return {string}
  */
 proto.checkpicks.content.v1.GetFeedsRequest.prototype.getCursor = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 4, ""));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 5, ""));
 };
 
 
@@ -2235,16 +2265,16 @@ proto.checkpicks.content.v1.GetFeedsRequest.prototype.getCursor = function() {
  * @return {!proto.checkpicks.content.v1.GetFeedsRequest} returns this
  */
 proto.checkpicks.content.v1.GetFeedsRequest.prototype.setCursor = function(value) {
-  return jspb.Message.setProto3StringField(this, 4, value);
+  return jspb.Message.setProto3StringField(this, 5, value);
 };
 
 
 /**
- * optional int64 limit = 5;
+ * optional int64 limit = 6;
  * @return {number}
  */
 proto.checkpicks.content.v1.GetFeedsRequest.prototype.getLimit = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 5, 0));
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 6, 0));
 };
 
 
@@ -2253,7 +2283,7 @@ proto.checkpicks.content.v1.GetFeedsRequest.prototype.getLimit = function() {
  * @return {!proto.checkpicks.content.v1.GetFeedsRequest} returns this
  */
 proto.checkpicks.content.v1.GetFeedsRequest.prototype.setLimit = function(value) {
-  return jspb.Message.setProto3IntField(this, 5, value);
+  return jspb.Message.setProto3IntField(this, 6, value);
 };
 
 
@@ -2462,8 +2492,8 @@ proto.checkpicks.content.v1.Feed.toObject = function(includeInstance, msg) {
     myFeedIdsList: (f = jspb.Message.getRepeatedField(msg, 4)) == null ? undefined : f,
     name: jspb.Message.getFieldWithDefault(msg, 5, ""),
     description: jspb.Message.getFieldWithDefault(msg, 6, ""),
-    rssurl: jspb.Message.getFieldWithDefault(msg, 7, ""),
-    siteurl: jspb.Message.getFieldWithDefault(msg, 8, ""),
+    rssUrl: jspb.Message.getFieldWithDefault(msg, 7, ""),
+    siteUrl: jspb.Message.getFieldWithDefault(msg, 8, ""),
     thumbnailUrl: jspb.Message.getFieldWithDefault(msg, 9, ""),
     trendPlatformType: jspb.Message.getFieldWithDefault(msg, 10, 0),
     apiQueryParam: (f = msg.getApiQueryParam()) && google_protobuf_wrappers_pb.StringValue.toObject(includeInstance, f),
@@ -2534,11 +2564,11 @@ proto.checkpicks.content.v1.Feed.deserializeBinaryFromReader = function(msg, rea
       break;
     case 7:
       var value = /** @type {string} */ (reader.readString());
-      msg.setRssurl(value);
+      msg.setRssUrl(value);
       break;
     case 8:
       var value = /** @type {string} */ (reader.readString());
-      msg.setSiteurl(value);
+      msg.setSiteUrl(value);
       break;
     case 9:
       var value = /** @type {string} */ (reader.readString());
@@ -2641,14 +2671,14 @@ proto.checkpicks.content.v1.Feed.serializeBinaryToWriter = function(message, wri
       f
     );
   }
-  f = message.getRssurl();
+  f = message.getRssUrl();
   if (f.length > 0) {
     writer.writeString(
       7,
       f
     );
   }
-  f = message.getSiteurl();
+  f = message.getSiteUrl();
   if (f.length > 0) {
     writer.writeString(
       8,
@@ -2870,10 +2900,10 @@ proto.checkpicks.content.v1.Feed.prototype.setDescription = function(value) {
 
 
 /**
- * optional string rssUrl = 7;
+ * optional string rss_url = 7;
  * @return {string}
  */
-proto.checkpicks.content.v1.Feed.prototype.getRssurl = function() {
+proto.checkpicks.content.v1.Feed.prototype.getRssUrl = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 7, ""));
 };
 
@@ -2882,16 +2912,16 @@ proto.checkpicks.content.v1.Feed.prototype.getRssurl = function() {
  * @param {string} value
  * @return {!proto.checkpicks.content.v1.Feed} returns this
  */
-proto.checkpicks.content.v1.Feed.prototype.setRssurl = function(value) {
+proto.checkpicks.content.v1.Feed.prototype.setRssUrl = function(value) {
   return jspb.Message.setProto3StringField(this, 7, value);
 };
 
 
 /**
- * optional string siteUrl = 8;
+ * optional string site_url = 8;
  * @return {string}
  */
-proto.checkpicks.content.v1.Feed.prototype.getSiteurl = function() {
+proto.checkpicks.content.v1.Feed.prototype.getSiteUrl = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 8, ""));
 };
 
@@ -2900,7 +2930,7 @@ proto.checkpicks.content.v1.Feed.prototype.getSiteurl = function() {
  * @param {string} value
  * @return {!proto.checkpicks.content.v1.Feed} returns this
  */
-proto.checkpicks.content.v1.Feed.prototype.setSiteurl = function(value) {
+proto.checkpicks.content.v1.Feed.prototype.setSiteUrl = function(value) {
   return jspb.Message.setProto3StringField(this, 8, value);
 };
 
