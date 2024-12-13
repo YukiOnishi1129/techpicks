@@ -25,8 +25,6 @@ func NewFeedPersistenceAdapter(feedRepository repository.FeedRepository) FeedPer
 
 func (fpa *feedPersistenceAdapter) GetFeeds(ctx context.Context, req *cpb.GetFeedsRequest, limit int) (entity.FeedSlice, error) {
 	q := []qm.QueryMod{
-		// qm.InnerJoin("platforms ON feeds.platform_id = platforms.id"),
-		// qm.InnerJoin("categories ON feeds.category_id = categories.id"),
 		qm.Where("feeds.deleted_at IS NULL"),
 		qm.Load(qm.Rels(entity.FeedRels.Platform)),
 		qm.Load(qm.Rels(entity.FeedRels.Category)),
@@ -35,7 +33,7 @@ func (fpa *feedPersistenceAdapter) GetFeeds(ctx context.Context, req *cpb.GetFee
 	}
 
 	if req.GetCursor() != "" {
-		q = append(q, qm.Where("feeds.created_at < (SELECT created_at FROM feeds WHERE id = ?)", req.GetCursor()))
+		q = append(q, qm.Where("feeds.created_at > (SELECT created_at FROM feeds WHERE id = ?)", req.GetCursor()))
 	}
 
 	if req.GetPlatformSiteType().GetValue() != 0 {

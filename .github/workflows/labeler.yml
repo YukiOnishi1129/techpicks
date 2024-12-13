@@ -1,14 +1,12 @@
-on:
-  pull_request:
-    types: [opened]
 name: Pull Request
+on:
+- pull_request
+
 jobs:
-  assignAuthor:
-    name: Assign author to PR
+  labeler:
+    permissions:
+      contents: read
+      pull-requests: write
     runs-on: ubuntu-latest
-    timeout-minutes: 10 # job全体
     steps:
-      - name: Label PR
-        uses: actions/labeler@main
-        with:
-          repo-token: '${{ secrets.GITHUB_TOKEN }}'
+    - uses: actions/labeler@v5

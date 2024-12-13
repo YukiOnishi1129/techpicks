@@ -325,6 +325,7 @@ export type Feed = Node & {
   deletedAt?: Maybe<Scalars['Int']['output']>;
   description: Scalars['String']['output'];
   id: Scalars['ID']['output'];
+  myFeedIds?: Maybe<Array<Scalars['String']['output']>>;
   name: Scalars['String']['output'];
   platform: Platform;
   rssUrl: Scalars['String']['output'];
@@ -332,6 +333,28 @@ export type Feed = Node & {
   thumbnailUrl: Scalars['String']['output'];
   trendPlatformType: Scalars['Int']['output'];
   updatedAt: Scalars['Int']['output'];
+};
+
+export type FeedConnection = {
+  __typename?: 'FeedConnection';
+  edges: Array<FeedEdge>;
+  pageInfo: PageInfo;
+};
+
+export type FeedEdge = {
+  __typename?: 'FeedEdge';
+  cursor: Scalars['String']['output'];
+  node: Feed;
+};
+
+export type FeedsInput = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  keyword?: InputMaybe<Scalars['String']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  platformId?: InputMaybe<Scalars['String']['input']>;
+  platformSiteType?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type Mutation = {
@@ -461,6 +484,8 @@ export type Query = {
   favoriteArticleFolder: FavoriteArticleFolder;
   favoriteArticleFolders: FavoriteArticleFolderConnection;
   favoriteArticles: FavoriteArticleConnection;
+  /** Get feeds */
+  feeds: FeedConnection;
 };
 
 
@@ -496,6 +521,11 @@ export type QueryFavoriteArticleFoldersArgs = {
 
 export type QueryFavoriteArticlesArgs = {
   input?: InputMaybe<FavoriteArticlesInput>;
+};
+
+
+export type QueryFeedsArgs = {
+  feedsInput: FeedsInput;
 };
 
 export type UpdateFavoriteArticleFolderInput = {
@@ -722,6 +752,24 @@ export type UpdateFavoriteArticleFolderMutationMutationVariables = Exact<{
 
 
 export type UpdateFavoriteArticleFolderMutationMutation = { __typename?: 'Mutation', updateFavoriteArticleFolder: { __typename?: 'FavoriteArticleFolder', id: string } };
+
+export type FeedCardItemFragmentFragment = { __typename?: 'Feed', id: string, name: string, description: string, siteUrl: string, thumbnailUrl: string, platform: { __typename?: 'Platform', id: string, faviconUrl: string } };
+
+export type FeedCardWrapperFragmentFragment = { __typename?: 'Feed', id: string, myFeedIds?: Array<string> | null, name: string, description: string, siteUrl: string, thumbnailUrl: string, platform: { __typename?: 'Platform', id: string, faviconUrl: string } };
+
+export type FeedListQueryQueryVariables = Exact<{
+  input: FeedsInput;
+}>;
+
+
+export type FeedListQueryQuery = { __typename?: 'Query', feeds: { __typename?: 'FeedConnection', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null }, edges: Array<{ __typename?: 'FeedEdge', node: { __typename?: 'Feed', id: string, myFeedIds?: Array<string> | null, name: string, description: string, siteUrl: string, thumbnailUrl: string, platform: { __typename?: 'Platform', id: string, faviconUrl: string } } }> } };
+
+export type FeedListTemplateQueryQueryVariables = Exact<{
+  input: FeedsInput;
+}>;
+
+
+export type FeedListTemplateQueryQuery = { __typename?: 'Query', feeds: { __typename?: 'FeedConnection', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null }, edges: Array<{ __typename?: 'FeedEdge', node: { __typename?: 'Feed', id: string, myFeedIds?: Array<string> | null, name: string, description: string, siteUrl: string, thumbnailUrl: string, platform: { __typename?: 'Platform', id: string, faviconUrl: string } } }> } };
 
 export type OgpPreviewContentFragmentFragment = { __typename?: 'ArticleOGP', title: string, description?: string | null, thumbnailUrl: string, articleUrl: string, siteName: string, faviconUrl: string };
 
@@ -1179,6 +1227,29 @@ export const CreateFavoriteArticleDialogContentFragmentFragmentDoc = gql`
   }
 }
     ${OgpPreviewContentFragmentFragmentDoc}`;
+export const FeedCardItemFragmentFragmentDoc = gql`
+    fragment FeedCardItemFragment on Feed {
+  id
+  platform {
+    id
+    faviconUrl
+  }
+  name
+  description
+  siteUrl
+  thumbnailUrl
+}
+    `;
+export const FeedCardWrapperFragmentFragmentDoc = gql`
+    fragment FeedCardWrapperFragment on Feed {
+  id
+  platform {
+    id
+  }
+  myFeedIds
+  ...FeedCardItemFragment
+}
+    ${FeedCardItemFragmentFragmentDoc}`;
 export const GetLoggedBaseLayoutQueryDocument = gql`
     query GetLoggedBaseLayoutQuery($input: FavoriteArticleFoldersInput!) {
   favoriteArticleFolders(input: $input) {
@@ -2155,6 +2226,104 @@ export function useUpdateFavoriteArticleFolderMutationMutation(baseOptions?: Apo
 export type UpdateFavoriteArticleFolderMutationMutationHookResult = ReturnType<typeof useUpdateFavoriteArticleFolderMutationMutation>;
 export type UpdateFavoriteArticleFolderMutationMutationResult = Apollo.MutationResult<UpdateFavoriteArticleFolderMutationMutation>;
 export type UpdateFavoriteArticleFolderMutationMutationOptions = Apollo.BaseMutationOptions<UpdateFavoriteArticleFolderMutationMutation, UpdateFavoriteArticleFolderMutationMutationVariables>;
+export const FeedListQueryDocument = gql`
+    query FeedListQuery($input: FeedsInput!) {
+  feeds(feedsInput: $input) {
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+    edges {
+      node {
+        id
+        ...FeedCardWrapperFragment
+      }
+    }
+  }
+}
+    ${FeedCardWrapperFragmentFragmentDoc}`;
+
+/**
+ * __useFeedListQueryQuery__
+ *
+ * To run a query within a React component, call `useFeedListQueryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFeedListQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFeedListQueryQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useFeedListQueryQuery(baseOptions: Apollo.QueryHookOptions<FeedListQueryQuery, FeedListQueryQueryVariables> & ({ variables: FeedListQueryQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FeedListQueryQuery, FeedListQueryQueryVariables>(FeedListQueryDocument, options);
+      }
+export function useFeedListQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FeedListQueryQuery, FeedListQueryQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FeedListQueryQuery, FeedListQueryQueryVariables>(FeedListQueryDocument, options);
+        }
+export function useFeedListQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<FeedListQueryQuery, FeedListQueryQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<FeedListQueryQuery, FeedListQueryQueryVariables>(FeedListQueryDocument, options);
+        }
+export type FeedListQueryQueryHookResult = ReturnType<typeof useFeedListQueryQuery>;
+export type FeedListQueryLazyQueryHookResult = ReturnType<typeof useFeedListQueryLazyQuery>;
+export type FeedListQuerySuspenseQueryHookResult = ReturnType<typeof useFeedListQuerySuspenseQuery>;
+export type FeedListQueryQueryResult = Apollo.QueryResult<FeedListQueryQuery, FeedListQueryQueryVariables>;
+export const FeedListTemplateQueryDocument = gql`
+    query FeedListTemplateQuery($input: FeedsInput!) {
+  feeds(feedsInput: $input) {
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+    edges {
+      node {
+        id
+        ...FeedCardWrapperFragment
+      }
+    }
+  }
+}
+    ${FeedCardWrapperFragmentFragmentDoc}`;
+
+/**
+ * __useFeedListTemplateQueryQuery__
+ *
+ * To run a query within a React component, call `useFeedListTemplateQueryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFeedListTemplateQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFeedListTemplateQueryQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useFeedListTemplateQueryQuery(baseOptions: Apollo.QueryHookOptions<FeedListTemplateQueryQuery, FeedListTemplateQueryQueryVariables> & ({ variables: FeedListTemplateQueryQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FeedListTemplateQueryQuery, FeedListTemplateQueryQueryVariables>(FeedListTemplateQueryDocument, options);
+      }
+export function useFeedListTemplateQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FeedListTemplateQueryQuery, FeedListTemplateQueryQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FeedListTemplateQueryQuery, FeedListTemplateQueryQueryVariables>(FeedListTemplateQueryDocument, options);
+        }
+export function useFeedListTemplateQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<FeedListTemplateQueryQuery, FeedListTemplateQueryQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<FeedListTemplateQueryQuery, FeedListTemplateQueryQueryVariables>(FeedListTemplateQueryDocument, options);
+        }
+export type FeedListTemplateQueryQueryHookResult = ReturnType<typeof useFeedListTemplateQueryQuery>;
+export type FeedListTemplateQueryLazyQueryHookResult = ReturnType<typeof useFeedListTemplateQueryLazyQuery>;
+export type FeedListTemplateQuerySuspenseQueryHookResult = ReturnType<typeof useFeedListTemplateQuerySuspenseQuery>;
+export type FeedListTemplateQueryQueryResult = Apollo.QueryResult<FeedListTemplateQueryQuery, FeedListTemplateQueryQueryVariables>;
 export const TrendArticleListQueryDocument = gql`
     query TrendArticleListQuery($input: ArticlesInput!) {
   articles(articlesInput: $input) {

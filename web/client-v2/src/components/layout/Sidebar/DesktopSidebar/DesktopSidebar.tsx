@@ -8,6 +8,7 @@ import {
   MdFeed,
   MdOutlineStarOutline,
   MdOutlineSummarize,
+  MdRssFeed,
 } from "react-icons/md";
 
 // import { CreateFavoriteArticleFolderDialog } from "@/features/favoriteArticleFolders/components/Dialog";
@@ -86,14 +87,14 @@ export function DesktopSidebar() {
               <FaRegBookmark />
               <span>Bookmarks</span>
             </Link>
-            {/* <Link
+            <Link
               href="/feed"
               className="flex cursor-pointer items-center space-x-2 rounded-md p-2 hover:bg-secondary"
             >
               <MdRssFeed />
               <span>Feeds</span>
             </Link>
-            <Link
+            {/* <Link
               href="/article/search"
               className="flex cursor-pointer items-center space-x-2 rounded-md p-2 hover:bg-secondary"
             >
