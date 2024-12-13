@@ -18,7 +18,7 @@ export const FeedCardItem: FC<FeedCardItemProps> = ({ data }) => {
   const faviconUrl = useCheckImageExist(fragment.platform.faviconUrl);
 
   return (
-    <div className="relative h-[450px] w-full cursor-pointer rounded px-4 py-2 md:h-[210px]">
+    <div className="relative h-[380px] w-full cursor-pointer rounded px-4 py-2 md:h-[210px]">
       <div className="mt-2 flex h-10 md:mt-0">
         <Link href={`/feed/${fragment.id}`}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -30,15 +30,18 @@ export const FeedCardItem: FC<FeedCardItemProps> = ({ data }) => {
         </Link>
       </div>
 
-      <div>
-        <div className="mt-0 md:mt-4">
-          <Link href={`/feed/${fragment.id}`}>
-            <h3 className="line-clamp-2 h-[48px] text-left text-lg font-bold tracking-wide md:h-full md:text-xl">
+      <div className="mt-0 md:mt-4">
+        <div className="grid gap-2">
+          <Link
+            href={`/feed/${fragment.id}`}
+            className="hover:text-emerald-600"
+          >
+            <h3 className="line-clamp-2 h-[56px] text-left text-lg font-bold tracking-wide md:h-full md:text-xl">
               {fragment.name}
             </h3>
           </Link>
 
-          <div className="mt-2 flex justify-center md:hidden md:w-[30%]">
+          <div className="flex justify-center md:hidden md:w-[30%]">
             <Link href={`/feed/${fragment.id}`}>
               <div className="max-h-[200px] w-full md:h-36 md:max-h-[70px] md:w-48">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -51,22 +54,12 @@ export const FeedCardItem: FC<FeedCardItemProps> = ({ data }) => {
             </Link>
           </div>
 
-          <div className="mt-2">
-            <Link href={`/feed/${fragment.id}`}>
-              <p className="line-clamp-3 h-[62px] text-sm">
-                {fragment.description}
-              </p>
-            </Link>
-          </div>
-        </div>
-
-        {/* <div className="absolute bottom-4 mt-2 h-[30px] pr-2 md:bottom-0">
-          {latestPublishedAt && (
-            <p className="text-xs">
-              latest: {showDiffDateToCurrentDate(latestPublishedAt)}
+          <Link href={`/feed/${fragment.id}`}>
+            <p className="line-clamp-3 text-sm leading-6">
+              {fragment.description}
             </p>
-          )}
-        </div> */}
+          </Link>
+        </div>
       </div>
     </div>
   );
