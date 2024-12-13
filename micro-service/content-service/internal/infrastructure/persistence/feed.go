@@ -31,3 +31,16 @@ func (fp *feedPersistence) GetFeeds(ctx context.Context, q []qm.QueryMod) (entit
 	// boil.DebugMode = false
 	return feeds, nil
 }
+
+func (fp *feedPersistence) GetFeed(ctx context.Context, q []qm.QueryMod) (entity.Feed, error) {
+	// boil.DebugMode = true
+	feed, err := entity.Feeds(q...).One(ctx, fp.db)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return entity.Feed{}, nil
+		}
+		return entity.Feed{}, err
+	}
+	// boil.DebugMode = false
+	return *feed, nil
+}
