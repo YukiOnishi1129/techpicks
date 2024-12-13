@@ -45,7 +45,6 @@ export class ContentResolver {
     @Context() context: GraphQLContext,
   ): Promise<FeedConnection> {
     const user = context.req.user;
-    console.log(user);
     return await this.feedService.getFeeds(user.id, feedsInput);
   }
 }
