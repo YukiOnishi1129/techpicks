@@ -8,6 +8,7 @@ import { PlatformSiteType } from "@/types/platform";
 
 import { FeedListTemplateQuery } from "./FeedListTemplateQuery";
 import { FeedList } from "../../List";
+import { FeedKeywordSearchForm } from "../../Search";
 
 type FeedListTemplateProps = {
   platformSiteType?: PlatformSiteType;
@@ -22,9 +23,11 @@ export const FeedListTemplate: FC<FeedListTemplateProps> = ({
 }) => {
   return (
     <>
-      <div className="fixed z-50 hidden w-[90%] gap-2 bg-card md:block md:w-[70%] md:px-4">
-        <h1 className="mt-4 text-2xl font-bold">Feed List</h1>
-        <div>{/* <FeedKeywordSearchInput keyword={keyword} /> */}</div>
+      <div className="fixed z-50 hidden w-[90%] gap-2 bg-card py-4 md:block md:w-[70%] md:p-4">
+        <h1 className="text-2xl font-bold">Feed List</h1>
+        <div>
+          <FeedKeywordSearchForm keyword={keyword} />
+        </div>
       </div>
 
       <div className="h-4 md:h-[120px]" />
