@@ -9,6 +9,7 @@ import { Loader } from "@/components/ui/loader";
 import { PlatformSiteType } from "@/types/platform";
 
 import { FeedListQuery } from "./FeedListQuery";
+import { FeedCardWrapper } from "../../Card";
 import { FeedListTemplateQuery } from "../../Template/FeedListTemplate/FeedListTemplateQuery";
 
 type FeedListProps = {
@@ -142,13 +143,11 @@ export const FeedList: FC<FeedListProps> = ({
   return (
     <>
       {res?.feeds?.edges.length === 0 ? (
-        <div className="flex flex-col items-center justify-center">
-          <NotFoundList message="No articles found" />
-        </div>
+        <NotFoundList message="No articles found" />
       ) : (
-        <div className="m-auto grid gap-4">
+        <div className="grid grid-cols-1 gap-x-2 gap-y-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-5">
           {res?.feeds?.edges?.map((edge, i) => (
-            <div key={`${i}-${edge.node.id}`}>{edge.node.name}</div>
+            <FeedCardWrapper key={`${i}-${edge.node.id}`} data={edge.node} />
           ))}
           <div ref={observerTarget}>
             {hashMore && isNextPage && (

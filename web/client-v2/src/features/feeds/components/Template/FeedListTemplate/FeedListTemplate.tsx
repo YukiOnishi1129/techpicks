@@ -7,7 +7,7 @@ import { PreloadQuery } from "@/lib/apollo/client";
 import { PlatformSiteType } from "@/types/platform";
 
 import { FeedListTemplateQuery } from "./FeedListTemplateQuery";
-import { FeedList } from "../../List/FeedList/FeedList";
+import { FeedList } from "../../List";
 
 type FeedListTemplateProps = {
   platformSiteType?: PlatformSiteType;

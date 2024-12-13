@@ -9,7 +9,6 @@ import { FC } from "react";
 import { ZoomableImage } from "@/components/ui/image";
 import { Link } from "@/components/ui/link";
 
-import { useCheckImageExist } from "@/hooks/useCheckImageExist";
 
 import { showDiffDateToCurrentDate } from "@/lib/date";
 
@@ -26,7 +25,6 @@ type ArticleCardItemProps = {
 
 export const ArticleCardItem: FC<ArticleCardItemProps> = ({ data }) => {
   const fragment = readFragment(ArticleCardItemFragment, data);
-  const imageUrl = useCheckImageExist(fragment.thumbnailUrl);
 
   return (
     <div className="relative w-full rounded md:px-4">

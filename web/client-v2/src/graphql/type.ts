@@ -753,19 +753,23 @@ export type UpdateFavoriteArticleFolderMutationMutationVariables = Exact<{
 
 export type UpdateFavoriteArticleFolderMutationMutation = { __typename?: 'Mutation', updateFavoriteArticleFolder: { __typename?: 'FavoriteArticleFolder', id: string } };
 
+export type FeedCardItemFragmentFragment = { __typename?: 'Feed', id: string, name: string, description: string, siteUrl: string, thumbnailUrl: string, platform: { __typename?: 'Platform', id: string, faviconUrl: string } };
+
+export type FeedCardWrapperFragmentFragment = { __typename?: 'Feed', id: string, myFeedIds?: Array<string> | null, name: string, description: string, siteUrl: string, thumbnailUrl: string, platform: { __typename?: 'Platform', id: string, faviconUrl: string } };
+
 export type FeedListQueryQueryVariables = Exact<{
   input: FeedsInput;
 }>;
 
 
-export type FeedListQueryQuery = { __typename?: 'Query', feeds: { __typename?: 'FeedConnection', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null }, edges: Array<{ __typename?: 'FeedEdge', node: { __typename?: 'Feed', id: string, name: string, description: string, createdAt: number } }> } };
+export type FeedListQueryQuery = { __typename?: 'Query', feeds: { __typename?: 'FeedConnection', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null }, edges: Array<{ __typename?: 'FeedEdge', node: { __typename?: 'Feed', id: string, myFeedIds?: Array<string> | null, name: string, description: string, siteUrl: string, thumbnailUrl: string, platform: { __typename?: 'Platform', id: string, faviconUrl: string } } }> } };
 
 export type FeedListTemplateQueryQueryVariables = Exact<{
   input: FeedsInput;
 }>;
 
 
-export type FeedListTemplateQueryQuery = { __typename?: 'Query', feeds: { __typename?: 'FeedConnection', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null }, edges: Array<{ __typename?: 'FeedEdge', node: { __typename?: 'Feed', id: string, name: string, description: string, createdAt: number } }> } };
+export type FeedListTemplateQueryQuery = { __typename?: 'Query', feeds: { __typename?: 'FeedConnection', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null }, edges: Array<{ __typename?: 'FeedEdge', node: { __typename?: 'Feed', id: string, myFeedIds?: Array<string> | null, name: string, description: string, siteUrl: string, thumbnailUrl: string, platform: { __typename?: 'Platform', id: string, faviconUrl: string } } }> } };
 
 export type OgpPreviewContentFragmentFragment = { __typename?: 'ArticleOGP', title: string, description?: string | null, thumbnailUrl: string, articleUrl: string, siteName: string, faviconUrl: string };
 
@@ -1223,6 +1227,29 @@ export const CreateFavoriteArticleDialogContentFragmentFragmentDoc = gql`
   }
 }
     ${OgpPreviewContentFragmentFragmentDoc}`;
+export const FeedCardItemFragmentFragmentDoc = gql`
+    fragment FeedCardItemFragment on Feed {
+  id
+  platform {
+    id
+    faviconUrl
+  }
+  name
+  description
+  siteUrl
+  thumbnailUrl
+}
+    `;
+export const FeedCardWrapperFragmentFragmentDoc = gql`
+    fragment FeedCardWrapperFragment on Feed {
+  id
+  platform {
+    id
+  }
+  myFeedIds
+  ...FeedCardItemFragment
+}
+    ${FeedCardItemFragmentFragmentDoc}`;
 export const GetLoggedBaseLayoutQueryDocument = gql`
     query GetLoggedBaseLayoutQuery($input: FavoriteArticleFoldersInput!) {
   favoriteArticleFolders(input: $input) {
@@ -2209,14 +2236,12 @@ export const FeedListQueryDocument = gql`
     edges {
       node {
         id
-        name
-        description
-        createdAt
+        ...FeedCardWrapperFragment
       }
     }
   }
 }
-    `;
+    ${FeedCardWrapperFragmentFragmentDoc}`;
 
 /**
  * __useFeedListQueryQuery__
@@ -2260,14 +2285,12 @@ export const FeedListTemplateQueryDocument = gql`
     edges {
       node {
         id
-        name
-        description
-        createdAt
+        ...FeedCardWrapperFragment
       }
     }
   }
 }
-    `;
+    ${FeedCardWrapperFragmentFragmentDoc}`;
 
 /**
  * __useFeedListTemplateQueryQuery__
