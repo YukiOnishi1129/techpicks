@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 
 import { getUser } from "@/features/auth/actions/user";
+import { FeedArticleListTemplate } from "@/features/feeds/components/Template";
 
 type FeedByIdPageProps = {
   params: { id: string };
@@ -16,9 +17,10 @@ export default async function FeedByIdPage({
     redirect("/login");
   }
   const { id } = params;
-  return (
-    <div>
-      <h1>{`feed ${id}`}</h1>
-    </div>
-  );
+  const keyword =
+    typeof searchParams["keyword"] === "string"
+      ? searchParams["keyword"]
+      : undefined;
+
+  return <FeedArticleListTemplate id={id} keyword={keyword} />;
 }

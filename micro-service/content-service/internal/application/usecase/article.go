@@ -13,7 +13,12 @@ import (
 )
 
 func (cu *contentUseCase) GetArticles(ctx context.Context, req *cpb.GetArticlesRequest) (*cpb.GetArticlesResponse, error) {
-	articles, err := cu.articlePersistenceAdapter.GetArticles(ctx, req)
+	limit := 20
+	if req.GetLimit() != 0 {
+		limit = int(req.GetLimit())
+	}
+
+	articles, err := cu.articlePersistenceAdapter.GetArticles(ctx, req, limit)
 	if err != nil {
 		return nil, err
 	}
@@ -83,7 +88,7 @@ func (cu *contentUseCase) GetArticles(ctx context.Context, req *cpb.GetArticlesR
 	return &cpb.GetArticlesResponse{
 		ArticlesEdge: edges,
 		PageInfo: &cpb.PageInfo{
-			HasNextPage: len(edges) == 20,
+			HasNextPage: len(edges) == limit,
 			EndCursor:   edges[len(edges)-1].Cursor,
 		},
 	}, nil

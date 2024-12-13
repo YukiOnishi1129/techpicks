@@ -1,6 +1,5 @@
 "use client";
 
-import { User } from "@supabase/supabase-js";
 import { clsx } from "clsx";
 import { FragmentOf, readFragment } from "gql.tada";
 import NextLink from "next/link";
@@ -9,18 +8,13 @@ import { FC } from "react";
 import { ZoomableImage } from "@/components/ui/image";
 import { Link } from "@/components/ui/link";
 
-
 import { showDiffDateToCurrentDate } from "@/lib/date";
-
-import { ArticleTabType } from "@/types/article";
 
 import styles from "./ArticleCardItem.module.css";
 import { ArticleCardItemFragment } from "./ArticleCardItemFragment";
 
 type ArticleCardItemProps = {
   data: FragmentOf<typeof ArticleCardItemFragment>;
-  user: User;
-  tab: ArticleTabType;
 };
 
 export const ArticleCardItem: FC<ArticleCardItemProps> = ({ data }) => {

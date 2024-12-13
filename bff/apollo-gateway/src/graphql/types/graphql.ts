@@ -156,6 +156,10 @@ export class FeedsInput {
     before?: Nullable<string>;
 }
 
+export class FeedInput {
+    id: string;
+}
+
 export interface Node {
     id: string;
 }
@@ -176,6 +180,8 @@ export abstract class IQuery {
     abstract favoriteAllFolderArticles(input?: Nullable<FavoriteAllFolderArticlesInput>): FavoriteAllFolderArticleConnection | Promise<FavoriteAllFolderArticleConnection>;
 
     abstract feeds(feedsInput: FeedsInput): FeedConnection | Promise<FeedConnection>;
+
+    abstract feed(feedInput?: Nullable<FeedInput>): Feed | Promise<Feed>;
 }
 
 export class Article implements Node {

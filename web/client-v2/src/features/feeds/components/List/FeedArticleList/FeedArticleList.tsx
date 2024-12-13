@@ -1,41 +1,32 @@
 "use client";
 
-import { useQuery, useSuspenseQuery } from "@apollo/client";
-import { User } from "@supabase/supabase-js";
+import { useSuspenseQuery, useQuery } from "@apollo/client";
 import { useCallback, useRef, useState, useEffect } from "react";
 
-import { ArticleCardWrapper } from "@/features/articles/components/Card";
+import { ArticleCardWrapper } from "@/features/articles/components/Card/ArticleCardWrapper/ArticleCardWrapper";
 
+import { NotFoundList } from "@/components/layout/NotFoundList";
 import { Loader } from "@/components/ui/loader";
 
-import { ArticleTabType } from "@/types/article";
-import { LanguageStatus } from "@/types/language";
+import { FeedArticleListQuery } from "./FeedArticleListQuery";
+import { FeedArticleListTemplateQuery } from "../../Template/FeedArticleListTemplate/FeedArticleListTemplateQuery";
 
-import { TrendArticleListQuery } from "./TrendArticleListQuery";
-import { TrendArticleDashboardTemplateQuery } from "../../Template/TrendArticleDashboardTemplate/TrendArticleDashboardTemplateQuery";
-
-type TrendArticleListProps = {
-  user: User;
-  languageStatus: LanguageStatus;
-  tab: ArticleTabType;
+type FeedArticleListProps = {
+  id: string;
+  keyword?: string;
 };
 
-export function TrendArticleList({
-  user,
-  languageStatus,
-  tab,
-}: TrendArticleListProps) {
+export function FeedArticleList({ id, keyword }: FeedArticleListProps) {
   const observerTarget = useRef(null);
 
   const { data: resSuspenseData, error } = useSuspenseQuery(
-    TrendArticleDashboardTemplateQuery,
+    FeedArticleListTemplateQuery,
     {
       variables: {
         input: {
           first: 20,
           after: null,
-          languageStatus,
-          tab,
+          feedIds: [id],
         },
         favoriteArticleFoldersInput: {
           isAllFetch: true,
@@ -49,13 +40,12 @@ export function TrendArticleList({
     data: res,
     fetchMore,
     error: onlyFetchArticlesError,
-  } = useQuery(TrendArticleListQuery, {
+  } = useQuery(FeedArticleListQuery, {
     variables: {
       input: {
         first: 20,
         after: null,
-        languageStatus,
-        tab,
+        feedIds: [id],
       },
     },
     fetchPolicy: "cache-first",
@@ -71,13 +61,13 @@ export function TrendArticleList({
 
   const loadMore = useCallback(async () => {
     if (!isNextPage) return;
+
     const { data: resData, error: resError } = await fetchMore({
       variables: {
         input: {
           first: 20,
           after: endCursor,
-          languageStatus,
-          tab,
+          feedIds: [id],
         },
       },
       updateQuery: (prev, { fetchMoreResult }) => {
@@ -92,16 +82,17 @@ export function TrendArticleList({
         };
       },
     });
+
     if (resError) return;
 
     if (resData.articles.pageInfo.hasNextPage) {
       const endCursor = resData.articles.pageInfo?.endCursor || null;
       setEndCursor(endCursor);
     }
-    if (!resData.articles.pageInfo.hasNextPage) setIsNextPage(false);
+    setIsNextPage(resData.articles.pageInfo.hasNextPage);
 
     setHashMore(resData.articles.edges.length > 0);
-  }, [languageStatus, tab, endCursor, isNextPage, fetchMore]);
+  }, [id, endCursor, isNextPage, fetchMore]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -146,20 +137,18 @@ export function TrendArticleList({
   return (
     <>
       {res?.articles?.edges.length === 0 ? (
-        <div className="flex flex-col items-center justify-center ">
-          {/* <NotFoundList message="No articles found" /> */}
-          Not Found
+        <div className="flex flex-col items-center justify-center">
+          <NotFoundList message="No articles found" />
         </div>
       ) : (
-        <div className="m-auto">
-          {res?.articles?.edges?.map((edge) => (
-            <div key={edge.node.id} className="mb-4">
-              <ArticleCardWrapper
-                data={edge.node}
-                favoriteArticleFolders={resSuspenseData.favoriteArticleFolders}
-                tab={tab}
-              />
-            </div>
+        <div className="m-auto grid gap-4">
+          {res?.articles?.edges?.map((edge, i) => (
+            <ArticleCardWrapper
+              key={`${i}-${edge.node.id}`}
+              data={edge.node}
+              favoriteArticleFolders={resSuspenseData.favoriteArticleFolders}
+              tab={"unknown"}
+            />
           ))}
           <div ref={observerTarget}>
             {hashMore && isNextPage && (

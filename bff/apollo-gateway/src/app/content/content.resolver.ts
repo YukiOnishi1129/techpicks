@@ -9,7 +9,9 @@ import {
   ArticleOGP,
   ArticlesInput,
   FeedConnection,
+  Feed,
   FeedsInput,
+  FeedInput,
 } from '../../graphql/types/graphql';
 import { SupabaseAuthGuard } from '../auth/auth.guard';
 
@@ -46,5 +48,15 @@ export class ContentResolver {
   ): Promise<FeedConnection> {
     const user = context.req.user;
     return await this.feedService.getFeeds(user.id, feedsInput);
+  }
+
+  @Query(() => Feed)
+  @UseGuards(SupabaseAuthGuard)
+  async feed(
+    @Args('feedInput') feedInput: FeedInput,
+    @Context() context: GraphQLContext,
+  ): Promise<Feed> {
+    const user = context.req.user;
+    return await this.feedService.getFeed(user.id, feedInput);
   }
 }
