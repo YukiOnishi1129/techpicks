@@ -9,7 +9,7 @@ import {
   Feed,
   FeedInput,
 } from 'src/graphql/types/graphql';
-import { GetFeedsRequest } from 'src/grpc/content/content_pb';
+import { GetFeedsRequest, GetFeedRequest } from 'src/grpc/content/content_pb';
 
 import { convertTimestampToInt } from '../../../utils/timestamp';
 import { GrpcContentClientService } from '../../grpc/grpc-content-client.service';
@@ -98,37 +98,55 @@ export class FeedService {
   }
 
   async getFeed(userId: string, input: FeedInput): Promise<Feed> {
-    console.log('getFeed', userId, input);
-    return new Promise((resolve) => {
-      resolve({
-        apiQueryParam: '',
-        category: {
-          createdAt: 0,
-          id: '',
-          name: '',
-          type: 0,
-          updatedAt: 0,
-        },
-        createdAt: 0,
-        description: '',
-        id: '',
-        myFeedIds: [],
-        name: '',
-        platform: {
-          createdAt: 0,
-          faviconUrl: '',
-          id: '',
-          isEng: false,
-          name: '',
-          platformSiteType: 0,
-          siteUrl: '',
-          updatedAt: 0,
-        },
-        rssUrl: '',
-        siteUrl: '',
-        thumbnailUrl: '',
-        trendPlatformType: 0,
-        updatedAt: 0,
+    const req = new GetFeedRequest();
+    req.setUserId(userId);
+    req.setFeedId(input.id);
+
+    return new Promise((resolve, reject) => {
+      const client = this.grpcContentClientService.getGrpcContentService();
+      client.getFeed(req, (err, res) => {
+        if (err) {
+          reject({
+            code: err?.code || 500,
+            message: err?.message || 'something went wrong',
+          });
+          return;
+        }
+
+        const resFeed = res.toObject().feed;
+
+        const feed: Feed = {
+          apiQueryParam: resFeed?.apiQueryParam?.value,
+          category: {
+            createdAt: convertTimestampToInt(resFeed.category.createdAt),
+            id: resFeed.category.id,
+            name: resFeed.category.name,
+            type: resFeed.category.type,
+            updatedAt: convertTimestampToInt(resFeed.category.updatedAt),
+          },
+          createdAt: convertTimestampToInt(resFeed.createdAt),
+          description: resFeed.description,
+          id: resFeed.id,
+          myFeedIds: resFeed.myFeedIdsList.map((myFeed) => myFeed),
+          name: resFeed.name,
+          platform: {
+            createdAt: convertTimestampToInt(resFeed.platform.createdAt),
+            faviconUrl: resFeed.platform.faviconUrl,
+            id: resFeed.platform.id,
+            isEng: resFeed.platform.isEng,
+            name: resFeed.platform.name,
+            platformSiteType: resFeed.platform.platformSiteType,
+            siteUrl: resFeed.platform.siteUrl,
+            updatedAt: convertTimestampToInt(resFeed.platform.updatedAt),
+          },
+          rssUrl: resFeed.rssUrl,
+          siteUrl: resFeed.siteUrl,
+          thumbnailUrl: resFeed.thumbnailUrl,
+          trendPlatformType: resFeed.trendPlatformType,
+          updatedAt: convertTimestampToInt(resFeed.updatedAt),
+        };
+
+        resolve(feed);
       });
     });
   }
