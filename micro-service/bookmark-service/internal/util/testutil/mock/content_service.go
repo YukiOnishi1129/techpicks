@@ -96,6 +96,26 @@ func (mr *MockContentServiceClientMockRecorder) GetArticles(ctx, in interface{},
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetArticles", reflect.TypeOf((*MockContentServiceClient)(nil).GetArticles), varargs...)
 }
 
+// GetFeed mocks base method.
+func (m *MockContentServiceClient) GetFeed(ctx context.Context, in *content.GetFeedRequest, opts ...grpc.CallOption) (*content.GetFeedResponse, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{ctx, in}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "GetFeed", varargs...)
+	ret0, _ := ret[0].(*content.GetFeedResponse)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetFeed indicates an expected call of GetFeed.
+func (mr *MockContentServiceClientMockRecorder) GetFeed(ctx, in interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{ctx, in}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetFeed", reflect.TypeOf((*MockContentServiceClient)(nil).GetFeed), varargs...)
+}
+
 // GetFeeds mocks base method.
 func (m *MockContentServiceClient) GetFeeds(ctx context.Context, in *content.GetFeedsRequest, opts ...grpc.CallOption) (*content.GetFeedsResponse, error) {
 	m.ctrl.T.Helper()
@@ -182,6 +202,21 @@ func (m *MockContentServiceServer) GetArticles(arg0 context.Context, arg1 *conte
 func (mr *MockContentServiceServerMockRecorder) GetArticles(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetArticles", reflect.TypeOf((*MockContentServiceServer)(nil).GetArticles), arg0, arg1)
+}
+
+// GetFeed mocks base method.
+func (m *MockContentServiceServer) GetFeed(arg0 context.Context, arg1 *content.GetFeedRequest) (*content.GetFeedResponse, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetFeed", arg0, arg1)
+	ret0, _ := ret[0].(*content.GetFeedResponse)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetFeed indicates an expected call of GetFeed.
+func (mr *MockContentServiceServerMockRecorder) GetFeed(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetFeed", reflect.TypeOf((*MockContentServiceServer)(nil).GetFeed), arg0, arg1)
 }
 
 // GetFeeds mocks base method.

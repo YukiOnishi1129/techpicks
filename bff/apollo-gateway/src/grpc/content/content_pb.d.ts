@@ -261,6 +261,52 @@ export namespace GetFeedsRequest {
     }
 }
 
+export class GetFeedResponse extends jspb.Message { 
+
+    hasFeed(): boolean;
+    clearFeed(): void;
+    getFeed(): Feed | undefined;
+    setFeed(value?: Feed): GetFeedResponse;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): GetFeedResponse.AsObject;
+    static toObject(includeInstance: boolean, msg: GetFeedResponse): GetFeedResponse.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: GetFeedResponse, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): GetFeedResponse;
+    static deserializeBinaryFromReader(message: GetFeedResponse, reader: jspb.BinaryReader): GetFeedResponse;
+}
+
+export namespace GetFeedResponse {
+    export type AsObject = {
+        feed?: Feed.AsObject,
+    }
+}
+
+export class GetFeedRequest extends jspb.Message { 
+    getFeedId(): string;
+    setFeedId(value: string): GetFeedRequest;
+    getUserId(): string;
+    setUserId(value: string): GetFeedRequest;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): GetFeedRequest.AsObject;
+    static toObject(includeInstance: boolean, msg: GetFeedRequest): GetFeedRequest.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: GetFeedRequest, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): GetFeedRequest;
+    static deserializeBinaryFromReader(message: GetFeedRequest, reader: jspb.BinaryReader): GetFeedRequest;
+}
+
+export namespace GetFeedRequest {
+    export type AsObject = {
+        feedId: string,
+        userId: string,
+    }
+}
+
 export class PageInfo extends jspb.Message { 
     getEndCursor(): string;
     setEndCursor(value: string): PageInfo;
