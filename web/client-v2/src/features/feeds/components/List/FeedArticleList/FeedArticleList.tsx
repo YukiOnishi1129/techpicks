@@ -1,37 +1,32 @@
 "use client";
 
 import { useSuspenseQuery, useQuery } from "@apollo/client";
-import { User } from "@supabase/supabase-js";
 import { useCallback, useRef, useState, useEffect } from "react";
+
+import { ArticleCardWrapper } from "@/features/articles/components/Card/ArticleCardWrapper/ArticleCardWrapper";
 
 import { NotFoundList } from "@/components/layout/NotFoundList";
 import { Loader } from "@/components/ui/loader";
 
-import { ArticleTabType } from "@/types/article";
-import { LanguageStatus } from "@/types/language";
+import { FeedArticleListQuery } from "./FeedArticleListQuery";
+import { FeedArticleListTemplateQuery } from "../../Template/FeedArticleListTemplate/FeedArticleListTemplateQuery";
 
-import { ArticleListQuery } from "./ArticleListQuery";
-import { ArticleCardWrapper } from "../../Card/ArticleCardWrapper/ArticleCardWrapper";
-import { ArticleDashboardTemplateQuery } from "../../Template/ArticleDashboardTemplate/ArticleDashboardTemplateQuery";
-
-type ArticleListProps = {
-  user: User;
-  languageStatus: LanguageStatus;
-  tab: ArticleTabType;
+type FeedArticleListProps = {
+  id: string;
+  keyword?: string;
 };
 
-export function ArticleList({ user, languageStatus, tab }: ArticleListProps) {
+export function FeedArticleList({ id, keyword }: FeedArticleListProps) {
   const observerTarget = useRef(null);
 
   const { data: resSuspenseData, error } = useSuspenseQuery(
-    ArticleDashboardTemplateQuery,
+    FeedArticleListTemplateQuery,
     {
       variables: {
         input: {
           first: 20,
           after: null,
-          languageStatus,
-          tab,
+          feedIds: [id],
         },
         favoriteArticleFoldersInput: {
           isAllFetch: true,
@@ -45,13 +40,12 @@ export function ArticleList({ user, languageStatus, tab }: ArticleListProps) {
     data: res,
     fetchMore,
     error: onlyFetchArticlesError,
-  } = useQuery(ArticleListQuery, {
+  } = useQuery(FeedArticleListQuery, {
     variables: {
       input: {
         first: 20,
         after: null,
-        languageStatus,
-        tab,
+        feedIds: [id],
       },
     },
     fetchPolicy: "cache-first",
@@ -73,8 +67,7 @@ export function ArticleList({ user, languageStatus, tab }: ArticleListProps) {
         input: {
           first: 20,
           after: endCursor,
-          languageStatus,
-          tab,
+          feedIds: [id],
         },
       },
       updateQuery: (prev, { fetchMoreResult }) => {
@@ -99,7 +92,7 @@ export function ArticleList({ user, languageStatus, tab }: ArticleListProps) {
     setIsNextPage(resData.articles.pageInfo.hasNextPage);
 
     setHashMore(resData.articles.edges.length > 0);
-  }, [languageStatus, tab, endCursor, isNextPage, fetchMore]);
+  }, [id, endCursor, isNextPage, fetchMore]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -154,7 +147,7 @@ export function ArticleList({ user, languageStatus, tab }: ArticleListProps) {
               key={`${i}-${edge.node.id}`}
               data={edge.node}
               favoriteArticleFolders={resSuspenseData.favoriteArticleFolders}
-              tab={tab}
+              tab={"unknown"}
             />
           ))}
           <div ref={observerTarget}>

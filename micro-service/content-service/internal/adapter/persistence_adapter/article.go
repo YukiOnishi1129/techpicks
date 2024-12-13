@@ -14,7 +14,7 @@ import (
 )
 
 type ArticlePersistenceAdapter interface {
-	GetArticles(ctx context.Context, req *cpb.GetArticlesRequest) (entity.ArticleSlice, error)
+	GetArticles(ctx context.Context, req *cpb.GetArticlesRequest, limit int) (entity.ArticleSlice, error)
 	GetArticlesByArticleURLAndPlatformURL(ctx context.Context, articleURL, platformURL string) (entity.ArticleSlice, error)
 	GetPrivateArticlesByArticleURL(ctx context.Context, articleURL string) (entity.ArticleSlice, error)
 	GetArticleRelationPlatform(ctx context.Context, articleID string) (entity.Article, error)
@@ -31,12 +31,7 @@ func NewArticlePersistenceAdapter(ar repository.ArticleRepository) ArticlePersis
 	}
 }
 
-func (apa *articlePersistenceAdapter) GetArticles(ctx context.Context, req *cpb.GetArticlesRequest) (entity.ArticleSlice, error) {
-	limit := 20
-	if req.GetLimit() != 0 {
-		limit = int(req.GetLimit())
-	}
-
+func (apa *articlePersistenceAdapter) GetArticles(ctx context.Context, req *cpb.GetArticlesRequest, limit int) (entity.ArticleSlice, error) {
 	q := []qm.QueryMod{
 		qm.InnerJoin("platforms ON articles.platform_id = platforms.id"),
 		qm.LeftOuterJoin("feed_article_relations ON articles.id = feed_article_relations.article_id"),
