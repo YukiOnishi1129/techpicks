@@ -72,6 +72,28 @@ function deserialize_checkpicks_content_v1_GetArticlesResponse(buffer_arg) {
   return content_content_pb.GetArticlesResponse.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
+function serialize_checkpicks_content_v1_GetFeedRequest(arg) {
+  if (!(arg instanceof content_content_pb.GetFeedRequest)) {
+    throw new Error('Expected argument of type checkpicks.content.v1.GetFeedRequest');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_checkpicks_content_v1_GetFeedRequest(buffer_arg) {
+  return content_content_pb.GetFeedRequest.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
+function serialize_checkpicks_content_v1_GetFeedResponse(arg) {
+  if (!(arg instanceof content_content_pb.GetFeedResponse)) {
+    throw new Error('Expected argument of type checkpicks.content.v1.GetFeedResponse');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_checkpicks_content_v1_GetFeedResponse(buffer_arg) {
+  return content_content_pb.GetFeedResponse.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
 function serialize_checkpicks_content_v1_GetFeedsRequest(arg) {
   if (!(arg instanceof content_content_pb.GetFeedsRequest)) {
     throw new Error('Expected argument of type checkpicks.content.v1.GetFeedsRequest');
@@ -139,6 +161,17 @@ var ContentServiceService = exports.ContentServiceService = {
     requestDeserialize: deserialize_checkpicks_content_v1_GetFeedsRequest,
     responseSerialize: serialize_checkpicks_content_v1_GetFeedsResponse,
     responseDeserialize: deserialize_checkpicks_content_v1_GetFeedsResponse,
+  },
+  getFeed: {
+    path: '/checkpicks.content.v1.ContentService/GetFeed',
+    requestStream: false,
+    responseStream: false,
+    requestType: content_content_pb.GetFeedRequest,
+    responseType: content_content_pb.GetFeedResponse,
+    requestSerialize: serialize_checkpicks_content_v1_GetFeedRequest,
+    requestDeserialize: deserialize_checkpicks_content_v1_GetFeedRequest,
+    responseSerialize: serialize_checkpicks_content_v1_GetFeedResponse,
+    responseDeserialize: deserialize_checkpicks_content_v1_GetFeedResponse,
   },
 };
 

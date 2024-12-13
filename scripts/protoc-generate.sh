@@ -114,3 +114,17 @@ mkdir "${OUT_DIR_BFF}"
 
 cd "${ROOT_DIR}/bff/apollo-gateway"
 npm run gen:proto > /dev/null 2>&1 || exit 1
+
+# Generate mock rpc client
+cd "${ROOT_DIR}/micro-service/content-service"
+make gen-client-mock source=grpc/bookmark/bookmark_grpc.pb.go output=bookmark_service.go > /dev/null 2>&1 || exit 1
+make gen-client-mock source=grpc/favorite/favorite_grpc.pb.go output=favorite_service.go > /dev/null 2>&1 || exit 1
+
+cd "${ROOT_DIR}/micro-service/bookmark-service"
+make gen-client-mock source=grpc/content/content_grpc.pb.go output=content_service.go > /dev/null 2>&1 || exit 1
+make gen-client-mock source=grpc/favorite/favorite_grpc.pb.go output=favorite_service.go > /dev/null 2>&1 || exit 1
+
+cd "${ROOT_DIR}/micro-service/favorite-service"
+make gen-client-mock source=grpc/content/content_grpc.pb.go output=content_service.go > /dev/null 2>&1 || exit 1
+make gen-client-mock source=grpc/bookmark/bookmark_grpc.pb.go output=bookmark_service.go > /dev/null 2>&1 || exit 1
+

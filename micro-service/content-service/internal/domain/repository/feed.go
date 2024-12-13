@@ -9,4 +9,5 @@ import (
 
 type FeedRepository interface {
 	GetFeeds(ctx context.Context, q []qm.QueryMod) (entity.FeedSlice, error)
+	GetFeed(ctx context.Context, q []qm.QueryMod) (entity.Feed, error)
 }

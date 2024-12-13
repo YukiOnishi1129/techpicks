@@ -11,6 +11,7 @@ import (
 
 type FeedPersistenceAdapter interface {
 	GetFeeds(ctx context.Context, req *cpb.GetFeedsRequest, limit int) (entity.FeedSlice, error)
+	GetFeed(ctx context.Context, req *cpb.GetFeedRequest) (entity.Feed, error)
 }
 
 type feedPersistenceAdapter struct {
@@ -64,4 +65,23 @@ func (fpa *feedPersistenceAdapter) GetFeeds(ctx context.Context, req *cpb.GetFee
 	}
 
 	return feeds, nil
+}
+
+func (fpa *feedPersistenceAdapter) GetFeed(ctx context.Context, req *cpb.GetFeedRequest) (entity.Feed, error) {
+	q := []qm.QueryMod{
+		qm.Where("deleted_at IS NULL"),
+		qm.Load(qm.Rels(entity.FeedRels.Platform)),
+		qm.Load(qm.Rels(entity.FeedRels.Category)),
+	}
+
+	if req.GetFeedId() != "" {
+		q = append(q, qm.Where("id = ?", req.GetFeedId()))
+	}
+
+	feed, err := fpa.feedRepository.GetFeed(ctx, q)
+	if err != nil {
+		return entity.Feed{}, err
+	}
+
+	return feed, nil
 }

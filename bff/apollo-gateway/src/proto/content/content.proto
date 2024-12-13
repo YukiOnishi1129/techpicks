@@ -15,6 +15,7 @@ service ContentService {
   rpc GetArticleOGP(GetArticleOGPRequest) returns (GetArticleOGPResponse);
 
   rpc GetFeeds(GetFeedsRequest) returns (GetFeedsResponse);
+  rpc GetFeed(GetFeedRequest) returns (GetFeedResponse);
 }
 
 
@@ -68,6 +69,15 @@ message GetFeedsRequest {
   google.protobuf.StringValue keyword = 4;
   string cursor = 5;
   int64 limit = 6;
+}
+
+message GetFeedResponse {
+  Feed feed = 1;
+}
+
+message GetFeedRequest {
+  string feed_id = 1;
+  string user_id = 2;
 }
 
 

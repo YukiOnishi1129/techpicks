@@ -789,6 +789,13 @@ export type FeedArticleListTemplateQueryQueryVariables = Exact<{
 
 export type FeedArticleListTemplateQueryQuery = { __typename?: 'Query', articles: { __typename?: 'ArticleConnection', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null }, edges: Array<{ __typename?: 'ArticleEdge', node: { __typename: 'Article', id: string, title: string, description: string, articleUrl: string, publishedAt?: number | null, authorName?: string | null, tags?: string | null, thumbnailUrl: string, isEng: boolean, isPrivate: boolean, isBookmarked: boolean, bookmarkId?: string | null, likeCount?: number | null, isFollowing: boolean, favoriteArticleFolderIds: Array<string>, platform?: { __typename?: 'Platform', id: string, name: string, siteUrl: string, faviconUrl: string } | null, feeds?: Array<{ __typename?: 'Feed', id: string, name: string }> | null } }> }, favoriteArticleFolders: { __typename?: 'FavoriteArticleFolderConnection', edges: Array<{ __typename?: 'FavoriteArticleFolderEdge', node: { __typename?: 'FavoriteArticleFolder', id: string, title: string } }> } };
 
+export type GetServerFeedArticleTemplateQueryQueryVariables = Exact<{
+  input: FeedInput;
+}>;
+
+
+export type GetServerFeedArticleTemplateQueryQuery = { __typename?: 'Query', feed: { __typename?: 'Feed', id: string, name: string } };
+
 export type FeedListTemplateQueryQueryVariables = Exact<{
   input: FeedsInput;
 }>;
@@ -2407,6 +2414,47 @@ export type FeedArticleListTemplateQueryQueryHookResult = ReturnType<typeof useF
 export type FeedArticleListTemplateQueryLazyQueryHookResult = ReturnType<typeof useFeedArticleListTemplateQueryLazyQuery>;
 export type FeedArticleListTemplateQuerySuspenseQueryHookResult = ReturnType<typeof useFeedArticleListTemplateQuerySuspenseQuery>;
 export type FeedArticleListTemplateQueryQueryResult = Apollo.QueryResult<FeedArticleListTemplateQueryQuery, FeedArticleListTemplateQueryQueryVariables>;
+export const GetServerFeedArticleTemplateQueryDocument = gql`
+    query GetServerFeedArticleTemplateQuery($input: FeedInput!) {
+  feed(feedInput: $input) {
+    id
+    name
+  }
+}
+    `;
+
+/**
+ * __useGetServerFeedArticleTemplateQueryQuery__
+ *
+ * To run a query within a React component, call `useGetServerFeedArticleTemplateQueryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetServerFeedArticleTemplateQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetServerFeedArticleTemplateQueryQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useGetServerFeedArticleTemplateQueryQuery(baseOptions: Apollo.QueryHookOptions<GetServerFeedArticleTemplateQueryQuery, GetServerFeedArticleTemplateQueryQueryVariables> & ({ variables: GetServerFeedArticleTemplateQueryQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetServerFeedArticleTemplateQueryQuery, GetServerFeedArticleTemplateQueryQueryVariables>(GetServerFeedArticleTemplateQueryDocument, options);
+      }
+export function useGetServerFeedArticleTemplateQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetServerFeedArticleTemplateQueryQuery, GetServerFeedArticleTemplateQueryQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetServerFeedArticleTemplateQueryQuery, GetServerFeedArticleTemplateQueryQueryVariables>(GetServerFeedArticleTemplateQueryDocument, options);
+        }
+export function useGetServerFeedArticleTemplateQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetServerFeedArticleTemplateQueryQuery, GetServerFeedArticleTemplateQueryQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetServerFeedArticleTemplateQueryQuery, GetServerFeedArticleTemplateQueryQueryVariables>(GetServerFeedArticleTemplateQueryDocument, options);
+        }
+export type GetServerFeedArticleTemplateQueryQueryHookResult = ReturnType<typeof useGetServerFeedArticleTemplateQueryQuery>;
+export type GetServerFeedArticleTemplateQueryLazyQueryHookResult = ReturnType<typeof useGetServerFeedArticleTemplateQueryLazyQuery>;
+export type GetServerFeedArticleTemplateQuerySuspenseQueryHookResult = ReturnType<typeof useGetServerFeedArticleTemplateQuerySuspenseQuery>;
+export type GetServerFeedArticleTemplateQueryQueryResult = Apollo.QueryResult<GetServerFeedArticleTemplateQueryQuery, GetServerFeedArticleTemplateQueryQueryVariables>;
 export const FeedListTemplateQueryDocument = gql`
     query FeedListTemplateQuery($input: FeedsInput!) {
   feeds(feedsInput: $input) {
