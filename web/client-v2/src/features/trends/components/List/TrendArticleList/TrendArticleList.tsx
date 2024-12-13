@@ -157,7 +157,6 @@ export function TrendArticleList({
               <ArticleCardWrapper
                 data={edge.node}
                 favoriteArticleFolders={resSuspenseData.favoriteArticleFolders}
-                user={user}
                 tab={tab}
               />
             </div>
