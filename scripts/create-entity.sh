@@ -23,8 +23,8 @@ sqlboiler psql \
 
 # my-feed-service
 sqlboiler psql \
-    -c micro-service/my-feed-service/database/sqlboiler.toml \
-    -o micro-service/my-feed-service/entity \
+    -c micro-service/my-feed-service/internal/config/database/sqlboiler.toml \
+    -o micro-service/my-feed-service/internal/domain/entity \
     -p entity \
     --no-tests --wipe
 
