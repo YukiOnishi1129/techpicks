@@ -5,6 +5,7 @@ import { BreadCrumbType, PageBreadcrumb } from "@/components/ui/breadcrumb";
 
 import { PreloadQuery } from "@/lib/apollo/client";
 
+import { getServerFeedArticleTemplateQuery } from "./actGetServerFeedArticleTemplateQuery";
 import { FeedArticleListTemplateQuery } from "./FeedArticleListTemplateQuery";
 import { FeedArticleList } from "../../List";
 
@@ -13,10 +14,14 @@ type FeedArticleListTemplateProps = {
   keyword?: string;
 };
 
-export const FeedArticleListTemplate: FC<FeedArticleListTemplateProps> = ({
-  id,
-  keyword,
-}) => {
+export const FeedArticleListTemplate: FC<
+  FeedArticleListTemplateProps
+> = async ({ id, keyword }) => {
+  const { data, error } = await getServerFeedArticleTemplateQuery(id);
+  if (error) {
+    return <div>Not Found</div>;
+  }
+
   const breadcrumbs: BreadCrumbType[] = [
     {
       title: "Home",
@@ -27,7 +32,7 @@ export const FeedArticleListTemplate: FC<FeedArticleListTemplateProps> = ({
       href: "/feed",
     },
     {
-      title: "",
+      title: data?.feed?.name || "",
       href: `/feed/${id}`,
     },
   ];
