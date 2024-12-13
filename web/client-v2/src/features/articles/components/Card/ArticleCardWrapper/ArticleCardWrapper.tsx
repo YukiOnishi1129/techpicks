@@ -1,6 +1,5 @@
 "use client";
 
-import { User } from "@supabase/supabase-js";
 import { clsx } from "clsx";
 import { FragmentOf, readFragment } from "gql.tada";
 import { FC } from "react";

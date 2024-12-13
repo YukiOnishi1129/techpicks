@@ -3,7 +3,12 @@ import {
   Int64Value,
   StringValue,
 } from 'google-protobuf/google/protobuf/wrappers_pb';
-import { FeedConnection, FeedsInput } from 'src/graphql/types/graphql';
+import {
+  FeedConnection,
+  FeedsInput,
+  Feed,
+  FeedInput,
+} from 'src/graphql/types/graphql';
 import { GetFeedsRequest } from 'src/grpc/content/content_pb';
 
 import { convertTimestampToInt } from '../../../utils/timestamp';
@@ -88,6 +93,42 @@ export class FeedService {
         };
 
         resolve(feeds);
+      });
+    });
+  }
+
+  async getFeed(userId: string, input: FeedInput): Promise<Feed> {
+    console.log('getFeed', userId, input);
+    return new Promise((resolve) => {
+      resolve({
+        apiQueryParam: '',
+        category: {
+          createdAt: 0,
+          id: '',
+          name: '',
+          type: 0,
+          updatedAt: 0,
+        },
+        createdAt: 0,
+        description: '',
+        id: '',
+        myFeedIds: [],
+        name: '',
+        platform: {
+          createdAt: 0,
+          faviconUrl: '',
+          id: '',
+          isEng: false,
+          name: '',
+          platformSiteType: 0,
+          siteUrl: '',
+          updatedAt: 0,
+        },
+        rssUrl: '',
+        siteUrl: '',
+        thumbnailUrl: '',
+        trendPlatformType: 0,
+        updatedAt: 0,
       });
     });
   }

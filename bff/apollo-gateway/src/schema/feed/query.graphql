@@ -3,6 +3,7 @@ type Query {
     Get feeds
     """
     feeds(feedsInput: FeedsInput!): FeedConnection!
+    feed(feedInput: FeedInput): Feed!
 }
 
 input FeedsInput {
@@ -13,4 +14,8 @@ input FeedsInput {
     after: String
     last: Int
     before: String
+}
+
+input FeedInput {
+    id: ID!
 }
