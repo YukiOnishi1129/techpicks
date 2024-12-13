@@ -1,6 +1,5 @@
 "use client";
 
-import { User } from "@supabase/supabase-js";
 import { clsx } from "clsx";
 import { FragmentOf, readFragment } from "gql.tada";
 import { FC } from "react";
@@ -27,7 +26,6 @@ type ArticleCardWrapperProps = {
   favoriteArticleFolders: FragmentOf<
     typeof FavoriteFolderArticleCardWrapperFragment
   >;
-  user: User;
   tab: ArticleTabType;
 };
 
@@ -36,7 +34,6 @@ const TREND_TAB = "trend";
 export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
   data,
   favoriteArticleFolders,
-  user,
   tab,
 }: ArticleCardWrapperProps) => {
   const fragment = readFragment(ArticleCardWrapperFragment, data);
@@ -133,7 +130,7 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
         </div>
 
         <div>
-          <ArticleCardItem data={fragment} user={user} tab={tab} />
+          <ArticleCardItem data={fragment} />
         </div>
       </div>
     </div>

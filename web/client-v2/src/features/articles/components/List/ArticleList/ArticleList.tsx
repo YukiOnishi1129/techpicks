@@ -154,7 +154,6 @@ export function ArticleList({ user, languageStatus, tab }: ArticleListProps) {
               key={`${i}-${edge.node.id}`}
               data={edge.node}
               favoriteArticleFolders={resSuspenseData.favoriteArticleFolders}
-              user={user}
               tab={tab}
             />
           ))}
