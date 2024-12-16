@@ -1,6 +1,6 @@
 module github.com/YukiOnishi1129/techpicks/micro-service/my-feed-service
 
-go 1.22.2
+go 1.23.4
 
 require (
 	github.com/friendsofgo/errors v0.9.2
