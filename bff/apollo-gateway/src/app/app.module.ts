@@ -5,6 +5,7 @@ import { BookmarkModule } from './bookmark/bookmark.module';
 import { ContentModule } from './content/content.module';
 import { FavoriteModule } from './favorite/favorite.module';
 import { GrpcClientModule } from './grpc/grpc-client.module';
+import { PersonalFeedModule } from './personal-feed/personal-feed.module';
 import { GraphQLServerModule } from '../graphql/graphql-server.module';
 
 @Module({
@@ -13,6 +14,7 @@ import { GraphQLServerModule } from '../graphql/graphql-server.module';
     GrpcClientModule,
     ContentModule,
     BookmarkModule,
+    PersonalFeedModule,
     FavoriteModule,
     ConfigModule.forRoot({
       cache: true,

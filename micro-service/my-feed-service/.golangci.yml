@@ -1,0 +1,13 @@
+linters-settings:
+  govet:
+    check-shadowing: true
+  golint:
+    min-confidence: 0.8
+linters:
+  enable:
+    - govet
+    - unused
+    # - gocritic
+    - staticcheck
+    - stylecheck
+    - errcheck

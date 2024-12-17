@@ -160,6 +160,18 @@ export class FeedInput {
     id: string;
 }
 
+export class MyFeedFoldersInput {
+    keyword?: Nullable<string>;
+    first?: Nullable<number>;
+    after?: Nullable<string>;
+    last?: Nullable<number>;
+    before?: Nullable<string>;
+}
+
+export class MyFeedFolderInput {
+    id: string;
+}
+
 export interface Node {
     id: string;
 }
@@ -182,6 +194,10 @@ export abstract class IQuery {
     abstract feeds(feedsInput: FeedsInput): FeedConnection | Promise<FeedConnection>;
 
     abstract feed(feedInput?: Nullable<FeedInput>): Feed | Promise<Feed>;
+
+    abstract myFeedFolders(myFeedFoldersInput: MyFeedFoldersInput): MyFeedFolderConnection | Promise<MyFeedFolderConnection>;
+
+    abstract myFeedFolder(myFeedFolderInput: MyFeedFolderInput): MyFeedFolder | Promise<MyFeedFolder>;
 }
 
 export class Article implements Node {
@@ -393,6 +409,16 @@ export class MyFeedFolder implements Node {
     feeds?: Nullable<Feed[]>;
     createdAt: number;
     updatedAt: number;
+}
+
+export class MyFeedFolderConnection {
+    edges: MyFeedFolderEdge[];
+    pageInfo: PageInfo;
+}
+
+export class MyFeedFolderEdge {
+    cursor: string;
+    node: MyFeedFolder;
 }
 
 export class Platform implements Node {
