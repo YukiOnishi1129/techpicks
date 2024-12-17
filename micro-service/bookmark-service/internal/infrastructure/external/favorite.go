@@ -3,7 +3,7 @@ package external
 import (
 	"context"
 
-	fpb "github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/grpc/favorite"
+	fpb "github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go/grpc/favorite"
 )
 
 type FavoriteExternal interface {
