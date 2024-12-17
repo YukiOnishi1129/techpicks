@@ -71,6 +71,8 @@ github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go v0.0.0-2
 github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go v0.0.0-20241216130805-a8c2121d1ce8/go.mod h1:yYVnYLpGtN0bus9Pt71NzOnUEqy/33R46B7n94FPXJc=
 github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go v0.0.0-20241217033458-5f4168de61d5 h1:00qKCDiUUDCWxVuX8mrj8bH6IUjDUv1fbgxDpywpHGo=
 github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go v0.0.0-20241217033458-5f4168de61d5/go.mod h1:yYVnYLpGtN0bus9Pt71NzOnUEqy/33R46B7n94FPXJc=
+github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go v1.0.0 h1:QehuY6/srnganoWmi2wqMghsf6LH/eHvC5AamWRtrDI=
+github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go v1.0.0/go.mod h1:yYVnYLpGtN0bus9Pt71NzOnUEqy/33R46B7n94FPXJc=
 github.com/alecthomas/template v0.0.0-20160405071501-a0175ee3bccc/go.mod h1:LOuyumcjzFXgccqObfd/Ljyb9UuFJ6TxHnclSeseNhc=
 github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751/go.mod h1:LOuyumcjzFXgccqObfd/Ljyb9UuFJ6TxHnclSeseNhc=
 github.com/alecthomas/units v0.0.0-20151022065526-2efee857e7cf/go.mod h1:ybxpYRFXyAe+OPACYpWeL0wqObRcbAqCMya13uyzqw0=
