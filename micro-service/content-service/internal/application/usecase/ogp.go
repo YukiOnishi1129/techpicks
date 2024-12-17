@@ -9,7 +9,7 @@ import (
 	"time"
 	"unicode/utf8"
 
-	cpb "github.com/YukiOnishi1129/techpicks/micro-service/content-service/grpc/content"
+	cpb "github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go/grpc/content"
 	"github.com/otiai10/opengraph"
 	"golang.org/x/net/html/charset"
 	"google.golang.org/protobuf/types/known/wrapperspb"

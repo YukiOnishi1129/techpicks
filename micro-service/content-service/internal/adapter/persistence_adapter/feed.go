@@ -3,7 +3,7 @@ package persistenceadapter
 import (
 	"context"
 
-	cpb "github.com/YukiOnishi1129/techpicks/micro-service/content-service/grpc/content"
+	cpb "github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go/grpc/content"
 	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/domain/entity"
 	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/domain/repository"
 	"github.com/volatiletech/sqlboiler/v4/queries/qm"
