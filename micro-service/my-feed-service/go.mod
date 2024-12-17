@@ -3,7 +3,7 @@ module github.com/YukiOnishi1129/techpicks/micro-service/my-feed-service
 go 1.23.4
 
 require (
-	github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go v0.0.0-20241217033458-5f4168de61d5
+	github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go v1.0.0
 	github.com/friendsofgo/errors v0.9.2
 	github.com/joho/godotenv v1.5.1
 	github.com/lib/pq v1.10.9

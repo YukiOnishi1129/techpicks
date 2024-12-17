@@ -1,6 +1,6 @@
 module github.com/YukiOnishi1129/techpicks/batch-service
 
-go 1.22.0
+go 1.23.4
 
 require (
 	cloud.google.com/go/firestore v1.15.0

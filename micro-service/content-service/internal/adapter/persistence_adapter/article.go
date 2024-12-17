@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	cpb "github.com/YukiOnishi1129/techpicks/micro-service/content-service/grpc/content"
+	cpb "github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go/grpc/content"
 	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/domain"
 	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/domain/entity"
 	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/domain/repository"

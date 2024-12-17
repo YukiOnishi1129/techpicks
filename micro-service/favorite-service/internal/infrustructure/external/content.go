@@ -3,7 +3,7 @@ package external
 import (
 	"context"
 
-	cpb "github.com/YukiOnishi1129/techpicks/micro-service/favorite-service/grpc/content"
+	cpb "github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go/grpc/content"
 )
 
 type ContentExternal interface {

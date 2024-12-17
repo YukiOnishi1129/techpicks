@@ -1,8 +1,8 @@
+import { FavoriteServiceClient } from '@checkpicks/checkpicks-rpc-ts/src/grpc/favorite/favorite_grpc_pb';
 import * as grpc from '@grpc/grpc-js';
 import { Injectable, OnModuleInit } from '@nestjs/common';
 
 import { grpcCredentials } from '../../constants/grpc';
-import { FavoriteServiceClient } from '../../grpc/favorite/favorite_grpc_pb';
 
 const grpcUrl =
   process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'staging'

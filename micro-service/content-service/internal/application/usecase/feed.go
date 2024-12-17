@@ -3,7 +3,8 @@ package usecase
 import (
 	"context"
 
-	cpb "github.com/YukiOnishi1129/techpicks/micro-service/content-service/grpc/content"
+	copb "github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go/grpc/common"
+	cpb "github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go/grpc/content"
 	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/domain/entity"
 	"google.golang.org/protobuf/types/known/timestamppb"
 	"google.golang.org/protobuf/types/known/wrapperspb"
@@ -35,7 +36,7 @@ func (cu *contentUseCase) GetFeeds(ctx context.Context, req *cpb.GetFeedsRequest
 	if len(edges) == 0 {
 		return &cpb.GetFeedsResponse{
 			FeedEdge: edges,
-			PageInfo: &cpb.PageInfo{
+			PageInfo: &copb.PageInfo{
 				HasNextPage: false,
 				EndCursor:   "",
 			},
@@ -44,7 +45,7 @@ func (cu *contentUseCase) GetFeeds(ctx context.Context, req *cpb.GetFeedsRequest
 
 	res := &cpb.GetFeedsResponse{
 		FeedEdge: edges,
-		PageInfo: &cpb.PageInfo{
+		PageInfo: &copb.PageInfo{
 			HasNextPage: len(edges) == limit,
 			EndCursor:   edges[len(edges)-1].Cursor,
 		},

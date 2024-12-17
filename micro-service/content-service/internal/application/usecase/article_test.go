@@ -5,9 +5,9 @@ import (
 	"testing"
 	"time"
 
-	bpb "github.com/YukiOnishi1129/techpicks/micro-service/content-service/grpc/bookmark"
-	cpb "github.com/YukiOnishi1129/techpicks/micro-service/content-service/grpc/content"
-	fpb "github.com/YukiOnishi1129/techpicks/micro-service/content-service/grpc/favorite"
+	bpb "github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go/grpc/bookmark"
+	cpb "github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go/grpc/content"
+	fpb "github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go/grpc/favorite"
 	externaladapter "github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/adapter/external_adapter"
 	persistenceadapter "github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/adapter/persistence_adapter"
 	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/domain/entity"

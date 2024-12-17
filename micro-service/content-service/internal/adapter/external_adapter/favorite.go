@@ -3,7 +3,7 @@ package externaladapter
 import (
 	"context"
 
-	fpb "github.com/YukiOnishi1129/techpicks/micro-service/content-service/grpc/favorite"
+	fpb "github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go/grpc/favorite"
 	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/infrastructure/external"
 )
 

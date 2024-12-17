@@ -1,3 +1,9 @@
+import {
+  GetBookmarksRequest,
+  CreateBookmarkRequest,
+  DeleteBookmarkRequest,
+  CreateBookmarkForUploadArticleRequest,
+} from '@checkpicks/checkpicks-rpc-ts/src/grpc/bookmark/bookmark_pb';
 import { Injectable } from '@nestjs/common';
 import { Timestamp } from 'google-protobuf/google/protobuf/timestamp_pb';
 import { StringValue } from 'google-protobuf/google/protobuf/wrappers_pb';
@@ -9,12 +15,6 @@ import {
   BookmarkConnection,
   CreateBookmarkForUploadArticleInput,
 } from 'src/graphql/types/graphql';
-import {
-  GetBookmarksRequest,
-  CreateBookmarkRequest,
-  DeleteBookmarkRequest,
-  CreateBookmarkForUploadArticleRequest,
-} from 'src/grpc/bookmark/bookmark_pb';
 import { convertTimestampToInt } from 'src/utils/timestamp';
 
 import { GrpcBookmarkClientService } from '../grpc/grpc-bookmark-client.service';

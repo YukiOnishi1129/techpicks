@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	cpb "github.com/YukiOnishi1129/techpicks/micro-service/favorite-service/grpc/content"
-	fpb "github.com/YukiOnishi1129/techpicks/micro-service/favorite-service/grpc/favorite"
+	cpb "github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go/grpc/content"
+	fpb "github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go/grpc/favorite"
 	"github.com/YukiOnishi1129/techpicks/micro-service/favorite-service/internal/domain/entity"
 	"github.com/YukiOnishi1129/techpicks/micro-service/favorite-service/internal/domain/repository"
 	"github.com/google/uuid"

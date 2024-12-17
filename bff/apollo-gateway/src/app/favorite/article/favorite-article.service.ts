@@ -1,3 +1,11 @@
+import {
+  CreateFavoriteArticleForUploadArticleRequest,
+  CreateFavoriteArticleRequest,
+  DeleteFavoriteArticleByArticleIdRequest,
+  DeleteFavoriteArticleRequest,
+  GetFavoriteArticlesRequest,
+  GetFavoriteAllFolderArticlesRequest,
+} from '@checkpicks/checkpicks-rpc-ts/src/grpc/favorite/favorite_pb';
 import { Injectable } from '@nestjs/common';
 import { Timestamp } from 'google-protobuf/google/protobuf/timestamp_pb';
 import {
@@ -17,14 +25,6 @@ import {
   FavoriteAllFolderArticlesInput,
   FavoriteAllFolderArticleConnection,
 } from 'src/graphql/types/graphql';
-import {
-  CreateFavoriteArticleForUploadArticleRequest,
-  CreateFavoriteArticleRequest,
-  DeleteFavoriteArticleByArticleIdRequest,
-  DeleteFavoriteArticleRequest,
-  GetFavoriteArticlesRequest,
-  GetFavoriteAllFolderArticlesRequest,
-} from 'src/grpc/favorite/favorite_pb';
 import { convertTimestampToInt } from 'src/utils/timestamp';
 
 import { GrpcFavoriteClientService } from '../../grpc/grpc-favorite-client.service';
