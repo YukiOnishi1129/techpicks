@@ -5,7 +5,6 @@ var grpc = require('@grpc/grpc-js');
 var my_feed_my_feed_pb = require('../my_feed/my_feed_pb.js');
 var google_protobuf_timestamp_pb = require('google-protobuf/google/protobuf/timestamp_pb.js');
 var google_protobuf_wrappers_pb = require('google-protobuf/google/protobuf/wrappers_pb.js');
-var content_content_pb = require('../content/content_pb.js');
 
 function serialize_checkpicks_my_feed_v1_GetMyFeedFoldersRequest(arg) {
   if (!(arg instanceof my_feed_my_feed_pb.GetMyFeedFoldersRequest)) {

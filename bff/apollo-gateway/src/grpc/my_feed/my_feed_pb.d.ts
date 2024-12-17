@@ -7,7 +7,6 @@
 import * as jspb from "google-protobuf";
 import * as google_protobuf_timestamp_pb from "google-protobuf/google/protobuf/timestamp_pb";
 import * as google_protobuf_wrappers_pb from "google-protobuf/google/protobuf/wrappers_pb";
-import * as content_content_pb from "../content/content_pb";
 
 export class GetMyFeedFoldersResponse extends jspb.Message { 
     clearMyFeedFolderEdgesList(): void;
@@ -17,8 +16,8 @@ export class GetMyFeedFoldersResponse extends jspb.Message {
 
     hasPageInfo(): boolean;
     clearPageInfo(): void;
-    getPageInfo(): content_content_pb.PageInfo | undefined;
-    setPageInfo(value?: content_content_pb.PageInfo): GetMyFeedFoldersResponse;
+    getPageInfo(): PageInfo | undefined;
+    setPageInfo(value?: PageInfo): GetMyFeedFoldersResponse;
 
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): GetMyFeedFoldersResponse.AsObject;
@@ -33,7 +32,7 @@ export class GetMyFeedFoldersResponse extends jspb.Message {
 export namespace GetMyFeedFoldersResponse {
     export type AsObject = {
         myFeedFolderEdgesList: Array<MyFeedFolderEdge.AsObject>,
-        pageInfo?: content_content_pb.PageInfo.AsObject,
+        pageInfo?: PageInfo.AsObject,
     }
 }
 
@@ -102,10 +101,6 @@ export class MyFeedFolder extends jspb.Message {
     setUserId(value: string): MyFeedFolder;
     getTitle(): string;
     setTitle(value: string): MyFeedFolder;
-    clearFeedsList(): void;
-    getFeedsList(): Array<content_content_pb.Feed>;
-    setFeedsList(value: Array<content_content_pb.Feed>): MyFeedFolder;
-    addFeeds(value?: content_content_pb.Feed, index?: number): content_content_pb.Feed;
 
     hasDescription(): boolean;
     clearDescription(): void;
@@ -137,9 +132,31 @@ export namespace MyFeedFolder {
         id: string,
         userId: string,
         title: string,
-        feedsList: Array<content_content_pb.Feed.AsObject>,
         description?: google_protobuf_wrappers_pb.StringValue.AsObject,
         createdAt?: google_protobuf_timestamp_pb.Timestamp.AsObject,
         updatedAt?: google_protobuf_timestamp_pb.Timestamp.AsObject,
+    }
+}
+
+export class PageInfo extends jspb.Message { 
+    getEndCursor(): string;
+    setEndCursor(value: string): PageInfo;
+    getHasNextPage(): boolean;
+    setHasNextPage(value: boolean): PageInfo;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): PageInfo.AsObject;
+    static toObject(includeInstance: boolean, msg: PageInfo): PageInfo.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: PageInfo, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): PageInfo;
+    static deserializeBinaryFromReader(message: PageInfo, reader: jspb.BinaryReader): PageInfo;
+}
+
+export namespace PageInfo {
+    export type AsObject = {
+        endCursor: string,
+        hasNextPage: boolean,
     }
 }

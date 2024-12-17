@@ -8,7 +8,6 @@ import * as grpc from "@grpc/grpc-js";
 import * as my_feed_my_feed_pb from "../my_feed/my_feed_pb";
 import * as google_protobuf_timestamp_pb from "google-protobuf/google/protobuf/timestamp_pb";
 import * as google_protobuf_wrappers_pb from "google-protobuf/google/protobuf/wrappers_pb";
-import * as content_content_pb from "../content/content_pb";
 
 interface IMyFeedServiceService extends grpc.ServiceDefinition<grpc.UntypedServiceImplementation> {
     getMyFeedFolders: IMyFeedServiceService_IGetMyFeedFolders;

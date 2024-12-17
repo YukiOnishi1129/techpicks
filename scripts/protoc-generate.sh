@@ -23,6 +23,9 @@ protoc \
   --go-grpc_out=paths=source_relative,require_unimplemented_servers=false:${PROTO_OUT_DIR_CONTENT_SEVICE} \
   ${API_PROTO_FILES};
 
+# 修正: 生成されたファイルのインポート文を修正
+# find "${OUT_DIR_CONTENT_SEVICE}" -name "my_feed.pb.go" -exec sed -i 's|import "github.com/YukiOnishi1129/techpicks/grpc/common"|import "github.com/YukiOnishi1129/techpicks/micro-service/content-service/grpc/common|g' {} +
+
 # ===============================
 
 # Bookmark Service Generate
@@ -43,19 +46,19 @@ protoc \
 # ===============================
 
 # My Feed Service Generate
-OUT_DIR_MY_FEED_SEVICE="${ROOT_DIR}/micro-service/my-feed-service/grpc"
-PROTO_OUT_DIR_MY_FEED_SEVICE="./micro-service/my-feed-service/grpc"
+# OUT_DIR_MY_FEED_SEVICE="${ROOT_DIR}/micro-service/my-feed-service/grpc"
+# PROTO_OUT_DIR_MY_FEED_SEVICE="./micro-service/my-feed-service/grpc"
 
-## Clean all existing generated files
-rm -r "${OUT_DIR_MY_FEED_SEVICE}"
-mkdir "${OUT_DIR_MY_FEED_SEVICE}"
+# ## Clean all existing generated files
+# rm -r "${OUT_DIR_MY_FEED_SEVICE}"
+# mkdir "${OUT_DIR_MY_FEED_SEVICE}"
 
-## Generate code at My Feed Service
-protoc \
-  -I=${PROTO_FILE_DIR} \
-  --go_out=paths=source_relative:${PROTO_OUT_DIR_MY_FEED_SEVICE} \
-  --go-grpc_out=paths=source_relative,require_unimplemented_servers=false:${PROTO_OUT_DIR_MY_FEED_SEVICE} \
-  ${API_PROTO_FILES};
+# ## Generate code at My Feed Service
+# protoc \
+#   -I=${PROTO_FILE_DIR} \
+#   --go_out=paths=source_relative:${PROTO_OUT_DIR_MY_FEED_SEVICE} \
+#   --go-grpc_out=paths=source_relative,require_unimplemented_servers=false:${PROTO_OUT_DIR_MY_FEED_SEVICE} \
+#   ${API_PROTO_FILES};
 
 # ===============================
 
