@@ -1,7 +1,6 @@
+import { MyFeedServiceClient } from '@checkpicks/checkpicks-rpc-ts/src/grpc/my_feed/my_feed_grpc_pb';
 import * as grpc from '@grpc/grpc-js';
 import { Injectable, OnModuleInit } from '@nestjs/common';
-
-import { MyFeedServiceClient } from '../../grpc/my_feed/my_feed_grpc_pb';
 
 const grpcUrl =
   process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'staging'

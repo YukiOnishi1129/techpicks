@@ -1,3 +1,7 @@
+import {
+  GetFeedsRequest,
+  GetFeedRequest,
+} from '@checkpicks/checkpicks-rpc-ts/src/grpc/content/content_pb';
 import { Injectable } from '@nestjs/common';
 import {
   Int64Value,
@@ -9,7 +13,6 @@ import {
   Feed,
   FeedInput,
 } from 'src/graphql/types/graphql';
-import { GetFeedsRequest, GetFeedRequest } from 'src/grpc/content/content_pb';
 
 import { convertTimestampToInt } from '../../../utils/timestamp';
 import { GrpcContentClientService } from '../../grpc/grpc-content-client.service';
