@@ -8,7 +8,7 @@ import (
 	context "context"
 	reflect "reflect"
 
-	bookmark "github.com/YukiOnishi1129/techpicks/micro-service/favorite-service/grpc/bookmark"
+	bookmark "github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go/grpc/bookmark"
 	gomock "github.com/golang/mock/gomock"
 	grpc "google.golang.org/grpc"
 	emptypb "google.golang.org/protobuf/types/known/emptypb"

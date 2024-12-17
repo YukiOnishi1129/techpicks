@@ -5,7 +5,8 @@ import (
 	"testing"
 	"time"
 
-	fpb "github.com/YukiOnishi1129/techpicks/micro-service/favorite-service/grpc/favorite"
+	copb "github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go/grpc/common"
+	fpb "github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go/grpc/favorite"
 	externaladapter "github.com/YukiOnishi1129/techpicks/micro-service/favorite-service/internal/adapter/external_adapter"
 	persistenceadapter "github.com/YukiOnishi1129/techpicks/micro-service/favorite-service/internal/adapter/persistence_adapter"
 	"github.com/YukiOnishi1129/techpicks/micro-service/favorite-service/internal/domain/entity"
@@ -193,7 +194,7 @@ func Test_UseCase_GetFavoriteArticleFolders(t *testing.T) {
 						Cursor: fafID4.String(),
 					},
 				},
-				PageInfo: &fpb.PageInfo{
+				PageInfo: &copb.PageInfo{
 					HasNextPage: false,
 					EndCursor:   fafID4.String(),
 				},
@@ -316,7 +317,7 @@ func Test_UseCase_GetFavoriteArticleFolders(t *testing.T) {
 						Cursor: fafID1.String(),
 					},
 				},
-				PageInfo: &fpb.PageInfo{
+				PageInfo: &copb.PageInfo{
 					HasNextPage: false,
 					EndCursor:   fafID1.String(),
 				},
@@ -439,7 +440,7 @@ func Test_UseCase_GetFavoriteArticleFolders(t *testing.T) {
 						Cursor: fafID1.String(),
 					},
 				},
-				PageInfo: &fpb.PageInfo{
+				PageInfo: &copb.PageInfo{
 					HasNextPage: true,
 					EndCursor:   fafID1.String(),
 				},
@@ -556,7 +557,7 @@ func Test_UseCase_GetFavoriteArticleFolders(t *testing.T) {
 						Cursor: fafID4.String(),
 					},
 				},
-				PageInfo: &fpb.PageInfo{
+				PageInfo: &copb.PageInfo{
 					HasNextPage: false,
 					EndCursor:   fafID4.String(),
 				},
@@ -729,7 +730,7 @@ func Test_UseCase_GetFavoriteArticleFolders(t *testing.T) {
 						Cursor: fafID4.String(),
 					},
 				},
-				PageInfo: &fpb.PageInfo{
+				PageInfo: &copb.PageInfo{
 					HasNextPage: false,
 					EndCursor:   fafID4.String(),
 				},
@@ -824,7 +825,7 @@ func Test_UseCase_GetFavoriteArticleFolders(t *testing.T) {
 			},
 			want: &fpb.GetFavoriteArticleFoldersResponse{
 				FavoriteArticleFoldersEdge: []*fpb.FavoriteArticleFolderEdge{},
-				PageInfo: &fpb.PageInfo{
+				PageInfo: &copb.PageInfo{
 					HasNextPage: false,
 					EndCursor:   "",
 				},
@@ -951,7 +952,7 @@ func Test_UseCase_GetFavoriteArticleFolders(t *testing.T) {
 						Cursor: fafID4.String(),
 					},
 				},
-				PageInfo: &fpb.PageInfo{
+				PageInfo: &copb.PageInfo{
 					HasNextPage: false,
 					EndCursor:   fafID4.String(),
 				},
@@ -1095,7 +1096,7 @@ func Test_UseCase_GetFavoriteArticleFolders(t *testing.T) {
 						Cursor: fafID4.String(),
 					},
 				},
-				PageInfo: &fpb.PageInfo{
+				PageInfo: &copb.PageInfo{
 					HasNextPage: false,
 					EndCursor:   fafID4.String(),
 				},
@@ -1288,7 +1289,7 @@ func Test_UseCase_GetFavoriteArticleFolders(t *testing.T) {
 						Cursor: fafID4.String(),
 					},
 				},
-				PageInfo: &fpb.PageInfo{
+				PageInfo: &copb.PageInfo{
 					HasNextPage: false,
 					EndCursor:   fafID4.String(),
 				},
@@ -1357,12 +1358,12 @@ func Test_UseCase_GetFavoriteArticleFolders(t *testing.T) {
 
 			opts := []cmp.Option{
 				cmp.AllowUnexported(fpb.GetFavoriteArticleFoldersResponse{}),
-				cmp.AllowUnexported(fpb.PageInfo{}),
+				cmp.AllowUnexported(copb.PageInfo{}),
 				cmp.AllowUnexported(fpb.FavoriteArticleFolderEdge{}),
 				cmp.AllowUnexported(fpb.FavoriteArticleFolder{}),
 				cmp.AllowUnexported(fpb.FavoriteArticle{}),
 				cmpopts.IgnoreFields(fpb.GetFavoriteArticleFoldersResponse{}, "state", "sizeCache", "unknownFields"),
-				cmpopts.IgnoreFields(fpb.PageInfo{}, "state", "sizeCache", "unknownFields"),
+				cmpopts.IgnoreFields(copb.PageInfo{}, "state", "sizeCache", "unknownFields"),
 				cmpopts.IgnoreFields(fpb.FavoriteArticleFolderEdge{}, "state", "sizeCache", "unknownFields"),
 				cmpopts.IgnoreFields(fpb.FavoriteArticleFolder{}, "state", "sizeCache", "unknownFields", "Id", "CreatedAt", "UpdatedAt"),
 				cmpopts.IgnoreFields(fpb.FavoriteArticle{}, "state", "sizeCache", "unknownFields", "Id", "CreatedAt", "UpdatedAt"),

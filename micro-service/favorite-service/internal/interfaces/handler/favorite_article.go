@@ -3,7 +3,7 @@ package handler
 import (
 	"context"
 
-	fpb "github.com/YukiOnishi1129/techpicks/micro-service/favorite-service/grpc/favorite"
+	fpb "github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go/grpc/favorite"
 	"google.golang.org/protobuf/types/known/emptypb"
 )
 

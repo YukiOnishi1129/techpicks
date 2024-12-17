@@ -8,7 +8,7 @@ import (
 	context "context"
 	reflect "reflect"
 
-	content "github.com/YukiOnishi1129/techpicks/micro-service/favorite-service/grpc/content"
+	content "github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go/grpc/content"
 	gomock "github.com/golang/mock/gomock"
 	grpc "google.golang.org/grpc"
 )
