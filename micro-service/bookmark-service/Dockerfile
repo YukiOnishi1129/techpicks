@@ -1,4 +1,4 @@
-FROM golang:1.22-alpine3.18 AS go-builder
+FROM golang:1.23.4-alpine3.21 AS go-builder
 
 RUN apk update && apk add git
 
@@ -9,7 +9,7 @@ COPY ./micro-service/bookmark-service ./
 RUN go mod download \
 && go build -o main /app/cmd/main.go
 
-FROM alpine:3.18
+FROM alpine:3.21
 WORKDIR /app
 COPY --from=go-builder /app/main .
 
