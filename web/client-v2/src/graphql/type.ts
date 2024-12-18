@@ -437,6 +437,30 @@ export type MyFeedFolder = Node & {
   userId: Scalars['String']['output'];
 };
 
+export type MyFeedFolderConnection = {
+  __typename?: 'MyFeedFolderConnection';
+  edges: Array<MyFeedFolderEdge>;
+  pageInfo: PageInfo;
+};
+
+export type MyFeedFolderEdge = {
+  __typename?: 'MyFeedFolderEdge';
+  cursor: Scalars['String']['output'];
+  node: MyFeedFolder;
+};
+
+export type MyFeedFolderInput = {
+  id: Scalars['String']['input'];
+};
+
+export type MyFeedFoldersInput = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  keyword?: InputMaybe<Scalars['String']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+};
+
 export type Node = {
   id: Scalars['ID']['output'];
 };
@@ -491,6 +515,9 @@ export type Query = {
   feed: Feed;
   /** Get feeds */
   feeds: FeedConnection;
+  myFeedFolder: MyFeedFolder;
+  /** Get my feed folders */
+  myFeedFolders: MyFeedFolderConnection;
 };
 
 
@@ -536,6 +563,16 @@ export type QueryFeedArgs = {
 
 export type QueryFeedsArgs = {
   feedsInput: FeedsInput;
+};
+
+
+export type QueryMyFeedFolderArgs = {
+  myFeedFolderInput: MyFeedFolderInput;
+};
+
+
+export type QueryMyFeedFoldersArgs = {
+  myFeedFoldersInput: MyFeedFoldersInput;
 };
 
 export type UpdateFavoriteArticleFolderInput = {
@@ -802,6 +839,20 @@ export type FeedListTemplateQueryQueryVariables = Exact<{
 
 
 export type FeedListTemplateQueryQuery = { __typename?: 'Query', feeds: { __typename?: 'FeedConnection', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null }, edges: Array<{ __typename?: 'FeedEdge', node: { __typename?: 'Feed', id: string, myFeedIds?: Array<string> | null, name: string, description: string, siteUrl: string, thumbnailUrl: string, platform: { __typename?: 'Platform', id: string, faviconUrl: string } } }> } };
+
+export type MyFeedFolderListQueryQueryVariables = Exact<{
+  myFeedFoldersInput: MyFeedFoldersInput;
+}>;
+
+
+export type MyFeedFolderListQueryQuery = { __typename?: 'Query', myFeedFolders: { __typename?: 'MyFeedFolderConnection', pageInfo: { __typename?: 'PageInfo', endCursor?: string | null, hasNextPage: boolean }, edges: Array<{ __typename?: 'MyFeedFolderEdge', node: { __typename?: 'MyFeedFolder', id: string } }> } };
+
+export type MyFeedFolderListTemplateQueryQueryVariables = Exact<{
+  myFeedFoldersInput: MyFeedFoldersInput;
+}>;
+
+
+export type MyFeedFolderListTemplateQueryQuery = { __typename?: 'Query', myFeedFolders: { __typename?: 'MyFeedFolderConnection', pageInfo: { __typename?: 'PageInfo', endCursor?: string | null, hasNextPage: boolean }, edges: Array<{ __typename?: 'MyFeedFolderEdge', node: { __typename?: 'MyFeedFolder', id: string } }> } };
 
 export type OgpPreviewContentFragmentFragment = { __typename?: 'ArticleOGP', title: string, description?: string | null, thumbnailUrl: string, articleUrl: string, siteName: string, faviconUrl: string };
 
@@ -2504,6 +2555,102 @@ export type FeedListTemplateQueryQueryHookResult = ReturnType<typeof useFeedList
 export type FeedListTemplateQueryLazyQueryHookResult = ReturnType<typeof useFeedListTemplateQueryLazyQuery>;
 export type FeedListTemplateQuerySuspenseQueryHookResult = ReturnType<typeof useFeedListTemplateQuerySuspenseQuery>;
 export type FeedListTemplateQueryQueryResult = Apollo.QueryResult<FeedListTemplateQueryQuery, FeedListTemplateQueryQueryVariables>;
+export const MyFeedFolderListQueryDocument = gql`
+    query MyFeedFolderListQuery($myFeedFoldersInput: MyFeedFoldersInput!) {
+  myFeedFolders(myFeedFoldersInput: $myFeedFoldersInput) {
+    pageInfo {
+      endCursor
+      hasNextPage
+    }
+    edges {
+      node {
+        id
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useMyFeedFolderListQueryQuery__
+ *
+ * To run a query within a React component, call `useMyFeedFolderListQueryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMyFeedFolderListQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMyFeedFolderListQueryQuery({
+ *   variables: {
+ *      myFeedFoldersInput: // value for 'myFeedFoldersInput'
+ *   },
+ * });
+ */
+export function useMyFeedFolderListQueryQuery(baseOptions: Apollo.QueryHookOptions<MyFeedFolderListQueryQuery, MyFeedFolderListQueryQueryVariables> & ({ variables: MyFeedFolderListQueryQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<MyFeedFolderListQueryQuery, MyFeedFolderListQueryQueryVariables>(MyFeedFolderListQueryDocument, options);
+      }
+export function useMyFeedFolderListQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MyFeedFolderListQueryQuery, MyFeedFolderListQueryQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<MyFeedFolderListQueryQuery, MyFeedFolderListQueryQueryVariables>(MyFeedFolderListQueryDocument, options);
+        }
+export function useMyFeedFolderListQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<MyFeedFolderListQueryQuery, MyFeedFolderListQueryQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<MyFeedFolderListQueryQuery, MyFeedFolderListQueryQueryVariables>(MyFeedFolderListQueryDocument, options);
+        }
+export type MyFeedFolderListQueryQueryHookResult = ReturnType<typeof useMyFeedFolderListQueryQuery>;
+export type MyFeedFolderListQueryLazyQueryHookResult = ReturnType<typeof useMyFeedFolderListQueryLazyQuery>;
+export type MyFeedFolderListQuerySuspenseQueryHookResult = ReturnType<typeof useMyFeedFolderListQuerySuspenseQuery>;
+export type MyFeedFolderListQueryQueryResult = Apollo.QueryResult<MyFeedFolderListQueryQuery, MyFeedFolderListQueryQueryVariables>;
+export const MyFeedFolderListTemplateQueryDocument = gql`
+    query MyFeedFolderListTemplateQuery($myFeedFoldersInput: MyFeedFoldersInput!) {
+  myFeedFolders(myFeedFoldersInput: $myFeedFoldersInput) {
+    pageInfo {
+      endCursor
+      hasNextPage
+    }
+    edges {
+      node {
+        id
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useMyFeedFolderListTemplateQueryQuery__
+ *
+ * To run a query within a React component, call `useMyFeedFolderListTemplateQueryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMyFeedFolderListTemplateQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMyFeedFolderListTemplateQueryQuery({
+ *   variables: {
+ *      myFeedFoldersInput: // value for 'myFeedFoldersInput'
+ *   },
+ * });
+ */
+export function useMyFeedFolderListTemplateQueryQuery(baseOptions: Apollo.QueryHookOptions<MyFeedFolderListTemplateQueryQuery, MyFeedFolderListTemplateQueryQueryVariables> & ({ variables: MyFeedFolderListTemplateQueryQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<MyFeedFolderListTemplateQueryQuery, MyFeedFolderListTemplateQueryQueryVariables>(MyFeedFolderListTemplateQueryDocument, options);
+      }
+export function useMyFeedFolderListTemplateQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MyFeedFolderListTemplateQueryQuery, MyFeedFolderListTemplateQueryQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<MyFeedFolderListTemplateQueryQuery, MyFeedFolderListTemplateQueryQueryVariables>(MyFeedFolderListTemplateQueryDocument, options);
+        }
+export function useMyFeedFolderListTemplateQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<MyFeedFolderListTemplateQueryQuery, MyFeedFolderListTemplateQueryQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<MyFeedFolderListTemplateQueryQuery, MyFeedFolderListTemplateQueryQueryVariables>(MyFeedFolderListTemplateQueryDocument, options);
+        }
+export type MyFeedFolderListTemplateQueryQueryHookResult = ReturnType<typeof useMyFeedFolderListTemplateQueryQuery>;
+export type MyFeedFolderListTemplateQueryLazyQueryHookResult = ReturnType<typeof useMyFeedFolderListTemplateQueryLazyQuery>;
+export type MyFeedFolderListTemplateQuerySuspenseQueryHookResult = ReturnType<typeof useMyFeedFolderListTemplateQuerySuspenseQuery>;
+export type MyFeedFolderListTemplateQueryQueryResult = Apollo.QueryResult<MyFeedFolderListTemplateQueryQuery, MyFeedFolderListTemplateQueryQueryVariables>;
 export const TrendArticleListQueryDocument = gql`
     query TrendArticleListQuery($input: ArticlesInput!) {
   articles(articlesInput: $input) {
