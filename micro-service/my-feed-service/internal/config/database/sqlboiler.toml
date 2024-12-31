@@ -1,3 +1,9 @@
+# templates = [
+# 	"/Users/xxx/go/pkg/mod/github.com/volatiletech/sqlboiler/v4@v4.17.1/templates/main",
+#     "/Users/xxx/go/pkg/mod/github.com/volatiletech/sqlboiler/v4@v4.17.1/templates/test",
+# 	"micro-service/my-feed-service/internal/config/database/templates",
+# 	]
+
 [psql]
 dbname = "postgres"
 host   = "localhost"

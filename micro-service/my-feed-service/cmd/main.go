@@ -1,21 +1,28 @@
 package main
 
 import (
+	"crypto/tls"
+	"crypto/x509"
 	"fmt"
 	"log"
 	"net"
 	"os"
 	"os/signal"
 
+	cpb "github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go/grpc/content"
 	mfpb "github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go/grpc/my_feed"
 
-	persistenceadapter "github.com/YukiOnishi1129/techpicks/micro-service/my-feed-service/internal/adapter/persistence"
+	externaladapter "github.com/YukiOnishi1129/techpicks/micro-service/my-feed-service/internal/adapter/external_adapter"
+	persistenceadapter "github.com/YukiOnishi1129/techpicks/micro-service/my-feed-service/internal/adapter/persistence_adapter"
 	"github.com/YukiOnishi1129/techpicks/micro-service/my-feed-service/internal/application/usecase"
 	"github.com/YukiOnishi1129/techpicks/micro-service/my-feed-service/internal/config/database"
+	"github.com/YukiOnishi1129/techpicks/micro-service/my-feed-service/internal/infrastructure/external"
 	"github.com/YukiOnishi1129/techpicks/micro-service/my-feed-service/internal/infrastructure/persistence"
 	"github.com/YukiOnishi1129/techpicks/micro-service/my-feed-service/internal/interfaces/handler"
 	"github.com/joho/godotenv"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials"
+	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/reflection"
 )
 
@@ -38,28 +45,50 @@ func main() {
 		return
 	}
 
-	// systemRoots, err := x509.SystemCertPool()
-	// if err != nil {
-	// 	fmt.Println("failed to read system root certificate pool")
-	// }
-	// grpcCredential := credentials.NewTLS(&tls.Config{
-	// 	RootCAs: systemRoots,
-	// })
-	// if isDev {
-	// 	grpcCredential = insecure.NewCredentials()
-	// }
+	systemRoots, err := x509.SystemCertPool()
+	if err != nil {
+		fmt.Println("failed to read system root certificate pool")
+	}
+	grpcCredential := credentials.NewTLS(&tls.Config{
+		RootCAs: systemRoots,
+	})
+	if isDev {
+		grpcCredential = insecure.NewCredentials()
+	}
+
+	// create grpc client
+	// content client
+	crpcURL := os.Getenv("CONTENT_SERVICE_CONTAINER_NAME")
+	if isDev {
+		crpcURL = fmt.Sprintf("%s:%s", os.Getenv("CONTENT_SERVICE_CONTAINER_NAME"), os.Getenv("CONTENT_SERVICE_CONTAINER_PORT"))
+	}
+	cConn, err := grpc.NewClient(crpcURL, grpc.WithTransportCredentials(grpcCredential))
+	if err != nil {
+		log.Fatal("Error connecting to content service")
+		return
+	}
+	defer cConn.Close()
+	cClient := cpb.NewContentServiceClient(cConn)
 
 	// infrastructure layer
 	// persistence layer
+	tps := persistence.NewTransactionPersistence(db)
 	mffps := persistence.NewMyFeedFolderPersistence(db)
+	mfps := persistence.NewMyFeedPersistence(db)
+	// external layer
+	cex := external.NewContentExternal(cClient)
 
 	// adapter layer
 	// persistence adapter
+	tpa := persistenceadapter.NewTransactionPersistenceAdapter(tps)
 	mffpa := persistenceadapter.NewMyFeedFolderPersistenceAdapter(mffps)
+	mfpa := persistenceadapter.NewMyFeedPersistenceAdapter(mfps)
+	// external adapter
+	cxpa := externaladapter.NewContentExternalAdapter(cex)
 
 	// application layer
 	// usecase layer
-	muc := usecase.NewMyUseCase(mffpa)
+	muc := usecase.NewMyUseCase(tpa, mffpa, mfpa, cxpa)
 
 	// interface layer
 	mhd := handler.NewMyHandler(muc)

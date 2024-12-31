@@ -62,3 +62,11 @@ func (mfp *myFeedPersistence) DeleteMyFeed(ctx context.Context, mf entity.MyFeed
 	}
 	return nil
 }
+
+
+func (mfp *myFeedPersistence) BulkDeleteMyFeeds(ctx context.Context, mfs entity.MyFeedSlice) error {
+	if _, err := mfs.DeleteAll(ctx, mfp.db); err != nil {
+		return err
+	}
+	return nil
+}

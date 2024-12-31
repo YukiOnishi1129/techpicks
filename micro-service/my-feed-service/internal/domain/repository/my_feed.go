@@ -13,4 +13,6 @@ type MyFeedRepository interface {
 	CreateMyFeed(ctx context.Context, mf entity.MyFeed) error
 	UpdateMyFeed(ctx context.Context, mf entity.MyFeed) error
 	DeleteMyFeed(ctx context.Context, mf entity.MyFeed) error
+
+	BulkDeleteMyFeeds(ctx context.Context, mfs entity.MyFeedSlice) error
 }

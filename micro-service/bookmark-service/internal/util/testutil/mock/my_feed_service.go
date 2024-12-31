@@ -11,6 +11,7 @@ import (
 	my_feed "github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go/grpc/my_feed"
 	gomock "github.com/golang/mock/gomock"
 	grpc "google.golang.org/grpc"
+	emptypb "google.golang.org/protobuf/types/known/emptypb"
 )
 
 // MockMyFeedServiceClient is a mock of MyFeedServiceClient interface.
@@ -36,6 +37,66 @@ func (m *MockMyFeedServiceClient) EXPECT() *MockMyFeedServiceClientMockRecorder 
 	return m.recorder
 }
 
+// CreateMyFeedFolder mocks base method.
+func (m *MockMyFeedServiceClient) CreateMyFeedFolder(arg0 context.Context, arg1 *my_feed.CreateMyFeedFolderRequest, arg2 ...grpc.CallOption) (*my_feed.CreateMyFeedFolderResponse, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{arg0, arg1}
+	for _, a := range arg2 {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "CreateMyFeedFolder", varargs...)
+	ret0, _ := ret[0].(*my_feed.CreateMyFeedFolderResponse)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CreateMyFeedFolder indicates an expected call of CreateMyFeedFolder.
+func (mr *MockMyFeedServiceClientMockRecorder) CreateMyFeedFolder(arg0, arg1 interface{}, arg2 ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{arg0, arg1}, arg2...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateMyFeedFolder", reflect.TypeOf((*MockMyFeedServiceClient)(nil).CreateMyFeedFolder), varargs...)
+}
+
+// DeleteMyFeedFolder mocks base method.
+func (m *MockMyFeedServiceClient) DeleteMyFeedFolder(arg0 context.Context, arg1 *my_feed.DeleteMyFeedFolderRequest, arg2 ...grpc.CallOption) (*emptypb.Empty, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{arg0, arg1}
+	for _, a := range arg2 {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "DeleteMyFeedFolder", varargs...)
+	ret0, _ := ret[0].(*emptypb.Empty)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// DeleteMyFeedFolder indicates an expected call of DeleteMyFeedFolder.
+func (mr *MockMyFeedServiceClientMockRecorder) DeleteMyFeedFolder(arg0, arg1 interface{}, arg2 ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{arg0, arg1}, arg2...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteMyFeedFolder", reflect.TypeOf((*MockMyFeedServiceClient)(nil).DeleteMyFeedFolder), varargs...)
+}
+
+// GetMyFeedFolder mocks base method.
+func (m *MockMyFeedServiceClient) GetMyFeedFolder(arg0 context.Context, arg1 *my_feed.GetMyFeedFolderRequest, arg2 ...grpc.CallOption) (*my_feed.GetMyFeedFolderResponse, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{arg0, arg1}
+	for _, a := range arg2 {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "GetMyFeedFolder", varargs...)
+	ret0, _ := ret[0].(*my_feed.GetMyFeedFolderResponse)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetMyFeedFolder indicates an expected call of GetMyFeedFolder.
+func (mr *MockMyFeedServiceClientMockRecorder) GetMyFeedFolder(arg0, arg1 interface{}, arg2 ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{arg0, arg1}, arg2...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetMyFeedFolder", reflect.TypeOf((*MockMyFeedServiceClient)(nil).GetMyFeedFolder), varargs...)
+}
+
 // GetMyFeedFolders mocks base method.
 func (m *MockMyFeedServiceClient) GetMyFeedFolders(arg0 context.Context, arg1 *my_feed.GetMyFeedFoldersRequest, arg2 ...grpc.CallOption) (*my_feed.GetMyFeedFoldersResponse, error) {
 	m.ctrl.T.Helper()
@@ -54,6 +115,26 @@ func (mr *MockMyFeedServiceClientMockRecorder) GetMyFeedFolders(arg0, arg1 inter
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{arg0, arg1}, arg2...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetMyFeedFolders", reflect.TypeOf((*MockMyFeedServiceClient)(nil).GetMyFeedFolders), varargs...)
+}
+
+// UpdateMyFeedFolder mocks base method.
+func (m *MockMyFeedServiceClient) UpdateMyFeedFolder(arg0 context.Context, arg1 *my_feed.UpdateMyFeedFolderRequest, arg2 ...grpc.CallOption) (*my_feed.UpdateMyFeedFolderResponse, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{arg0, arg1}
+	for _, a := range arg2 {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "UpdateMyFeedFolder", varargs...)
+	ret0, _ := ret[0].(*my_feed.UpdateMyFeedFolderResponse)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// UpdateMyFeedFolder indicates an expected call of UpdateMyFeedFolder.
+func (mr *MockMyFeedServiceClientMockRecorder) UpdateMyFeedFolder(arg0, arg1 interface{}, arg2 ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{arg0, arg1}, arg2...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateMyFeedFolder", reflect.TypeOf((*MockMyFeedServiceClient)(nil).UpdateMyFeedFolder), varargs...)
 }
 
 // MockMyFeedServiceServer is a mock of MyFeedServiceServer interface.
@@ -79,6 +160,51 @@ func (m *MockMyFeedServiceServer) EXPECT() *MockMyFeedServiceServerMockRecorder 
 	return m.recorder
 }
 
+// CreateMyFeedFolder mocks base method.
+func (m *MockMyFeedServiceServer) CreateMyFeedFolder(arg0 context.Context, arg1 *my_feed.CreateMyFeedFolderRequest) (*my_feed.CreateMyFeedFolderResponse, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateMyFeedFolder", arg0, arg1)
+	ret0, _ := ret[0].(*my_feed.CreateMyFeedFolderResponse)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CreateMyFeedFolder indicates an expected call of CreateMyFeedFolder.
+func (mr *MockMyFeedServiceServerMockRecorder) CreateMyFeedFolder(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateMyFeedFolder", reflect.TypeOf((*MockMyFeedServiceServer)(nil).CreateMyFeedFolder), arg0, arg1)
+}
+
+// DeleteMyFeedFolder mocks base method.
+func (m *MockMyFeedServiceServer) DeleteMyFeedFolder(arg0 context.Context, arg1 *my_feed.DeleteMyFeedFolderRequest) (*emptypb.Empty, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DeleteMyFeedFolder", arg0, arg1)
+	ret0, _ := ret[0].(*emptypb.Empty)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// DeleteMyFeedFolder indicates an expected call of DeleteMyFeedFolder.
+func (mr *MockMyFeedServiceServerMockRecorder) DeleteMyFeedFolder(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteMyFeedFolder", reflect.TypeOf((*MockMyFeedServiceServer)(nil).DeleteMyFeedFolder), arg0, arg1)
+}
+
+// GetMyFeedFolder mocks base method.
+func (m *MockMyFeedServiceServer) GetMyFeedFolder(arg0 context.Context, arg1 *my_feed.GetMyFeedFolderRequest) (*my_feed.GetMyFeedFolderResponse, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetMyFeedFolder", arg0, arg1)
+	ret0, _ := ret[0].(*my_feed.GetMyFeedFolderResponse)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetMyFeedFolder indicates an expected call of GetMyFeedFolder.
+func (mr *MockMyFeedServiceServerMockRecorder) GetMyFeedFolder(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetMyFeedFolder", reflect.TypeOf((*MockMyFeedServiceServer)(nil).GetMyFeedFolder), arg0, arg1)
+}
+
 // GetMyFeedFolders mocks base method.
 func (m *MockMyFeedServiceServer) GetMyFeedFolders(arg0 context.Context, arg1 *my_feed.GetMyFeedFoldersRequest) (*my_feed.GetMyFeedFoldersResponse, error) {
 	m.ctrl.T.Helper()
@@ -92,6 +218,21 @@ func (m *MockMyFeedServiceServer) GetMyFeedFolders(arg0 context.Context, arg1 *m
 func (mr *MockMyFeedServiceServerMockRecorder) GetMyFeedFolders(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetMyFeedFolders", reflect.TypeOf((*MockMyFeedServiceServer)(nil).GetMyFeedFolders), arg0, arg1)
+}
+
+// UpdateMyFeedFolder mocks base method.
+func (m *MockMyFeedServiceServer) UpdateMyFeedFolder(arg0 context.Context, arg1 *my_feed.UpdateMyFeedFolderRequest) (*my_feed.UpdateMyFeedFolderResponse, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateMyFeedFolder", arg0, arg1)
+	ret0, _ := ret[0].(*my_feed.UpdateMyFeedFolderResponse)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// UpdateMyFeedFolder indicates an expected call of UpdateMyFeedFolder.
+func (mr *MockMyFeedServiceServerMockRecorder) UpdateMyFeedFolder(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateMyFeedFolder", reflect.TypeOf((*MockMyFeedServiceServer)(nil).UpdateMyFeedFolder), arg0, arg1)
 }
 
 // MockUnsafeMyFeedServiceServer is a mock of UnsafeMyFeedServiceServer interface.
