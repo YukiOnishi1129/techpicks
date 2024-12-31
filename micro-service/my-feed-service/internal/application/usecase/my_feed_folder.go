@@ -156,6 +156,7 @@ func (m *myUseCase) convertPBMyFeedFolder(mff *entity.MyFeedFolder) *mfpb.MyFeed
 	}
 	// if mff.R != nil && len(mff.R.MyFeeds) > 0 {
 	// 	// TODO: fetch feed connect from content service
+
 	// }
 	return resMfRPC
 }
