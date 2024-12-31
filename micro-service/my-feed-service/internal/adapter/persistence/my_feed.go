@@ -3,6 +3,7 @@ package persistence
 import (
 	"context"
 
+	mfpb "github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go/grpc/my_feed"
 	"github.com/YukiOnishi1129/techpicks/micro-service/my-feed-service/internal/domain/entity"
 	"github.com/YukiOnishi1129/techpicks/micro-service/my-feed-service/internal/domain/repository"
 	"github.com/google/uuid"
@@ -11,7 +12,8 @@ import (
 type MyFeedPersistenceAdapter interface {
 	BulkCreateMyFeed(ctx context.Context, dto BulkCreateMyFeedInputDto) (entity.MyFeedSlice, error)
 
-	BulkDeleteMyFeedsAsUpdate8(ctx context.Context, mfs entity.MyFeedSlice, fIDs []string) error
+	BulkCreateMyFeedsAsUpdate(ctx context.Context, req *mfpb.UpdateMyFeedFolderRequest, mfs entity.MyFeedSlice) error
+	BulkDeleteMyFeedsAsUpdate(ctx context.Context, mfs entity.MyFeedSlice, fIDs []string) error
 }
 
 type myFeedPersistenceAdapter struct {
@@ -25,7 +27,6 @@ func NewMyFeedPersistenceAdapter(mfr repository.MyFeedRepository) MyFeedPersiste
 }
 
 func (mfp *myFeedPersistenceAdapter) BulkCreateMyFeed(ctx context.Context, dto BulkCreateMyFeedInputDto) (entity.MyFeedSlice, error) {
-
 	myFeeds := make(entity.MyFeedSlice, 0, len(dto.FeedIDs))
 	for _, fID := range dto.FeedIDs {
 		mfID, _ := uuid.NewUUID()
@@ -45,8 +46,33 @@ func (mfp *myFeedPersistenceAdapter) BulkCreateMyFeed(ctx context.Context, dto B
 	return myFeeds, nil
 }
 
+func (mfp *myFeedPersistenceAdapter) BulkCreateMyFeedsAsUpdate(ctx context.Context, req *mfpb.UpdateMyFeedFolderRequest, mfs entity.MyFeedSlice) error {
+	for _, fID := range req.GetFeedIdList() {
+		isExist := false
+		for _, mf := range mfs {
+			if mf.FeedID == fID {
+				isExist = true
+				break
+			}
+		}
+		if !isExist {
+			mfID, _ := uuid.NewUUID()
+			myFeed := entity.MyFeed{
+				ID:             mfID.String(),
+				UserID:         req.GetUserId(),
+				MyFeedFolderID: req.GetMyFeedFolderId(),
+				FeedID:         fID,
+			}
+			if err := mfp.myFeedPersistence.CreateMyFeed(ctx, myFeed); err != nil {
+				return err
+			}
+		}
+	}
 
-func (mfp *myFeedPersistenceAdapter) BulkDeleteMyFeedsAsUpdate8(ctx context.Context, mfs entity.MyFeedSlice, fIDs []string) error {
+	return nil
+}
+
+func (mfp *myFeedPersistenceAdapter) BulkDeleteMyFeedsAsUpdate(ctx context.Context, mfs entity.MyFeedSlice, fIDs []string) error {
 	deleteMyFeeds := make(entity.MyFeedSlice, 0, len(fIDs))
 	for _, fID := range fIDs {
 		for _, mf := range mfs {
@@ -60,4 +86,4 @@ func (mfp *myFeedPersistenceAdapter) BulkDeleteMyFeedsAsUpdate8(ctx context.Cont
 	}
 
 	return nil
-}	
+}

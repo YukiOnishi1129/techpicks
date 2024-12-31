@@ -74,11 +74,14 @@ func (m *myUseCase) UpdateMyFeedFolder(ctx context.Context, req *mfpb.UpdateMyFe
 		}
 
 		// bulk delete my feed
-		if err := m.myFeedPersistenceAdapter.BulkDeleteMyFeedsAsUpdate8(ctx, res.R.MyFeeds, req.GetFeedIdList()); err != nil {
+		if err = m.myFeedPersistenceAdapter.BulkDeleteMyFeedsAsUpdate(ctx, res.R.MyFeeds, req.GetFeedIdList()); err != nil {
 			return err
 		}
 
 		// bulk create my feed
+		if err = m.myFeedPersistenceAdapter.BulkCreateMyFeedsAsUpdate(ctx, req, res.R.MyFeeds); err != nil {
+			return err
+		}
 		mff := m.convertPBMyFeedFolder(res)
 		resRPC.MyFeedFolder = mff
 		return nil
