@@ -53,6 +53,19 @@ func (m *myUseCase) GetMyFeedFolders(ctx context.Context, req *mfpb.GetMyFeedFol
 	return res, nil
 }
 
+func (m *myUseCase) GetMyFeedFolder(ctx context.Context, req *mfpb.GetMyFeedFolderRequest) (*mfpb.GetMyFeedFolderResponse, error) {
+	mff, err := m.myFeedFolderPersistenceAdapter.GetMyFeedFolderByID(ctx, req.GetMyFeedFolderId())
+	if err != nil {
+		return nil, err
+	}
+
+	resMff := m.convertPBMyFeedFolder(mff)
+	res := &mfpb.GetMyFeedFolderResponse{
+		MyFeedFolder: resMff,
+	}
+	return res, nil
+}
+
 func (m *myUseCase) CreateMyFeedFolder(ctx context.Context, req *mfpb.CreateMyFeedFolderRequest) (*mfpb.CreateMyFeedFolderResponse, error) {
 	resRPC := &mfpb.CreateMyFeedFolderResponse{}
 	if err := m.transactionPersistenceAdapter.RunInTx(ctx, func(ctx context.Context) error {

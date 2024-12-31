@@ -10,6 +10,7 @@ import (
 
 type MyUseCase interface {
 	GetMyFeedFolders(ctx context.Context, req *mfpb.GetMyFeedFoldersRequest) (*mfpb.GetMyFeedFoldersResponse, error)
+	GetMyFeedFolder(ctx context.Context, req *mfpb.GetMyFeedFolderRequest) (*mfpb.GetMyFeedFolderResponse, error)
 	CreateMyFeedFolder(ctx context.Context, req *mfpb.CreateMyFeedFolderRequest) (*mfpb.CreateMyFeedFolderResponse, error)
 	UpdateMyFeedFolder(ctx context.Context, req *mfpb.UpdateMyFeedFolderRequest) (*mfpb.UpdateMyFeedFolderResponse, error)
 	DeleteMyFeedFolder(ctx context.Context, req *mfpb.DeleteMyFeedFolderRequest) (*emptypb.Empty, error)
@@ -18,13 +19,13 @@ type MyUseCase interface {
 type myUseCase struct {
 	transactionPersistenceAdapter  persistenceadapter.TransactionPersistenceAdapter
 	myFeedFolderPersistenceAdapter persistenceadapter.MyFeedFolderPersistenceAdapter
-	myFeedPersistenceAdapter 	  persistenceadapter.MyFeedPersistenceAdapter
+	myFeedPersistenceAdapter       persistenceadapter.MyFeedPersistenceAdapter
 }
 
 func NewMyUseCase(tpa persistenceadapter.TransactionPersistenceAdapter, mffpa persistenceadapter.MyFeedFolderPersistenceAdapter, mfpa persistenceadapter.MyFeedPersistenceAdapter) MyUseCase {
 	return &myUseCase{
 		transactionPersistenceAdapter:  tpa,
 		myFeedFolderPersistenceAdapter: mffpa,
-		myFeedPersistenceAdapter: mfpa,
+		myFeedPersistenceAdapter:       mfpa,
 	}
 }
