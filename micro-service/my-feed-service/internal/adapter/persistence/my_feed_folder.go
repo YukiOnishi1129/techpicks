@@ -16,6 +16,7 @@ type MyFeedFolderPersistenceAdapter interface {
 	GetMyFeedFolderByID(ctx context.Context, id string) (*entity.MyFeedFolder, error)
 	CreateMyFeedFolder(ctx context.Context, req *mfpb.CreateMyFeedFolderRequest) (*entity.MyFeedFolder, error)
 	UpdateMyFeedFolder(ctx context.Context, req *mfpb.UpdateMyFeedFolderRequest) (*entity.MyFeedFolder, error)
+	DeleteMyFeedFolder(ctx context.Context, req *mfpb.DeleteMyFeedFolderRequest) error
 }
 
 type myFeedFolderPersistenceAdapter struct {
@@ -97,7 +98,7 @@ func (m *myFeedFolderPersistenceAdapter) UpdateMyFeedFolder(ctx context.Context,
 	q := []qm.QueryMod{
 		qm.Load(qm.Rels(entity.MyFeedFolderRels.MyFeeds)),
 	}
-	mff, err := m.myFeedFolderRepository.GetMyFeedFolderByID(ctx, req.GetId(), q)
+	mff, err := m.myFeedFolderRepository.GetMyFeedFolderByID(ctx, req.GetMyFeedFolderId(), q)
 	if err != nil {
 		return nil, err
 	}
@@ -112,4 +113,17 @@ func (m *myFeedFolderPersistenceAdapter) UpdateMyFeedFolder(ctx context.Context,
 	}
 
 	return &mff, nil
+}
+
+func (m *myFeedFolderPersistenceAdapter) DeleteMyFeedFolder(ctx context.Context, req *mfpb.DeleteMyFeedFolderRequest) error {
+	tmff, err := m.myFeedFolderRepository.GetMyFeedFolderByID(ctx, req.GetMyFeedFolderId(), nil)
+	if err != nil {
+		return err
+	}
+
+	if err := m.myFeedFolderRepository.DeleteMyFeedFolder(ctx, tmff); err != nil {
+		return err
+	}
+
+	return nil
 }

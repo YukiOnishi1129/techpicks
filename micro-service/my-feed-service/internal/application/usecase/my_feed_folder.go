@@ -115,13 +115,20 @@ func (m *myUseCase) UpdateMyFeedFolder(ctx context.Context, req *mfpb.UpdateMyFe
 }
 
 func (m *myUseCase) DeleteMyFeedFolder(ctx context.Context, req *mfpb.DeleteMyFeedFolderRequest) (*emptypb.Empty, error) {
-	// mff := &entity.MyFeedFolder{
-	// 	ID: req.GetId(),
-	// }
+	if err := m.transactionPersistenceAdapter.RunInTx(ctx, func(ctx context.Context) error {
+		res, err := m.myFeedFolderPersistenceAdapter.GetMyFeedFolderByID(ctx, req.GetMyFeedFolderId())
+		if err != nil {
+			return err
+		}
 
-	// if err := m.myFeedFolderPersistenceAdapter.DeleteMyFeedFolder(ctx, mff); err != nil {
-	// 	return nil, err
-	// }
+		// bulk delete my feed
+		if err = m.myFeedPersistenceAdapter.BulkDeleteMyFeedsAsFolderDelete(ctx, res.R.MyFeeds, req.GetMyFeedFolderId()); err != nil {
+			return err
+		}
+		return nil
+	}); err != nil {
+		return nil, err
+	}
 
 	return nil, nil
 }
