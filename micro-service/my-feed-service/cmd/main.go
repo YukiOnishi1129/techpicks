@@ -53,15 +53,17 @@ func main() {
 	// persistence layer
 	tps := persistence.NewTransactionPersistence(db)
 	mffps := persistence.NewMyFeedFolderPersistence(db)
+	mfps := persistence.NewMyFeedPersistence(db)
 
 	// adapter layer
 	// persistence adapter
 	tpa := persistenceadapter.NewTransactionPersistenceAdapter(tps)
 	mffpa := persistenceadapter.NewMyFeedFolderPersistenceAdapter(mffps)
+	mfpa := persistenceadapter.NewMyFeedPersistenceAdapter(mfps)
 
 	// application layer
 	// usecase layer
-	muc := usecase.NewMyUseCase(tpa, mffpa)
+	muc := usecase.NewMyUseCase(tpa, mffpa, mfpa)
 
 	// interface layer
 	mhd := handler.NewMyHandler(muc)

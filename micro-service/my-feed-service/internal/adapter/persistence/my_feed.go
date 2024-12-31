@@ -10,6 +10,8 @@ import (
 
 type MyFeedPersistenceAdapter interface {
 	BulkCreateMyFeed(ctx context.Context, dto BulkCreateMyFeedInputDto) (entity.MyFeedSlice, error)
+
+	BulkDeleteMyFeedsAsUpdate8(ctx context.Context, mfs entity.MyFeedSlice, fIDs []string) error
 }
 
 type myFeedPersistenceAdapter struct {
@@ -36,9 +38,26 @@ func (mfp *myFeedPersistenceAdapter) BulkCreateMyFeed(ctx context.Context, dto B
 		myFeeds = append(myFeeds, &myFeed)
 	}
 
-	if err := mfp.myFeedPersistence.BulkCreateMyFeed(ctx, myFeeds); err != nil {
-		return nil, err
-	}
+	// if err := mfp.myFeedPersistence.BulkCreateMyFeed(ctx, myFeeds); err != nil {
+	// 	return nil, err
+	// }
 
 	return myFeeds, nil
 }
+
+
+func (mfp *myFeedPersistenceAdapter) BulkDeleteMyFeedsAsUpdate8(ctx context.Context, mfs entity.MyFeedSlice, fIDs []string) error {
+	deleteMyFeeds := make(entity.MyFeedSlice, 0, len(fIDs))
+	for _, fID := range fIDs {
+		for _, mf := range mfs {
+			if mf.FeedID == fID {
+				deleteMyFeeds = append(deleteMyFeeds, mf)
+			}
+		}
+	}
+	if err := mfp.myFeedPersistence.BulkDeleteMyFeeds(ctx, deleteMyFeeds); err != nil {
+		return err
+	}
+
+	return nil
+}	
