@@ -66,17 +66,15 @@ func (m *myUseCase) CreateMyFeedFolder(ctx context.Context, req *mfpb.CreateMyFe
 }
 
 func (m *myUseCase) UpdateMyFeedFolder(ctx context.Context, req *mfpb.UpdateMyFeedFolderRequest) (*mfpb.UpdateMyFeedFolderResponse, error) {
-	// mff := &entity.MyFeedFolder{
-	// 	ID:    req.GetId(),
-	// 	Title: req.GetTitle(),
-	// }
+	res, err := m.myFeedFolderPersistenceAdapter.UpdateMyFeedFolder(ctx, req)
+	if err != nil {
+		return nil, err
+	}
 
-	// if err := m.myFeedFolderPersistenceAdapter.UpdateMyFeedFolder(ctx, mff); err != nil {
-	// 	return nil, err
-	// }
+	mff := m.convertPBMyFeedFolder(res)
 
 	return &mfpb.UpdateMyFeedFolderResponse{
-		MyFeedFolder: nil,
+		MyFeedFolder: mff,
 	}, nil
 }
 

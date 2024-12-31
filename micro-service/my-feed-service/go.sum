@@ -69,6 +69,8 @@ github.com/Masterminds/sprig/v3 v3.2.2/go.mod h1:UoaO7Yp8KlPnJIYWTFkMaqPUYKTfGFP
 github.com/OneOfOne/xxhash v1.2.2/go.mod h1:HSdplMjZKSmBqAxg5vPj2TmRDmfkzw+cTzAElWljhcU=
 github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go v1.1.0 h1:vgf1cy9caIRAgnfSWWT9hyPe7wcvhLViuIkB/8tTlK0=
 github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go v1.1.0/go.mod h1:yYVnYLpGtN0bus9Pt71NzOnUEqy/33R46B7n94FPXJc=
+github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go v1.2.3-0.20241231130221-a5f27fd98c60 h1:YZS/mF0qarXLozkXb9EOwJPrrmk1+cTADo5cTfNmhBU=
+github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go v1.2.3-0.20241231130221-a5f27fd98c60/go.mod h1:rvek3M1fmYjn8RZ4CGWf/2DVwbghLinAn4F9IPP9enQ=
 github.com/alecthomas/template v0.0.0-20160405071501-a0175ee3bccc/go.mod h1:LOuyumcjzFXgccqObfd/Ljyb9UuFJ6TxHnclSeseNhc=
 github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751/go.mod h1:LOuyumcjzFXgccqObfd/Ljyb9UuFJ6TxHnclSeseNhc=
 github.com/alecthomas/units v0.0.0-20151022065526-2efee857e7cf/go.mod h1:ybxpYRFXyAe+OPACYpWeL0wqObRcbAqCMya13uyzqw0=

@@ -15,6 +15,7 @@ type MyFeedFolderPersistenceAdapter interface {
 	GetMyFeedFolders(ctx context.Context, req *mfpb.GetMyFeedFoldersRequest, limit int) (entity.MyFeedFolderSlice, error)
 	GetMyFeedFolderByID(ctx context.Context, id string) (*entity.MyFeedFolder, error)
 	CreateMyFeedFolder(ctx context.Context, req *mfpb.CreateMyFeedFolderRequest) (*entity.MyFeedFolder, error)
+	UpdateMyFeedFolder(ctx context.Context, req *mfpb.UpdateMyFeedFolderRequest) (*entity.MyFeedFolder, error)
 }
 
 type myFeedFolderPersistenceAdapter struct {
@@ -74,6 +75,30 @@ func (m *myFeedFolderPersistenceAdapter) CreateMyFeedFolder(ctx context.Context,
 	}
 
 	if err := m.myFeedFolderRepository.CreateMyFeedFolder(ctx, *mff); err != nil {
+		return nil, err
+	}
+
+	res, err := m.myFeedFolderRepository.GetMyFeedFolderByID(ctx, mff.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+func (m *myFeedFolderPersistenceAdapter) UpdateMyFeedFolder(ctx context.Context, req *mfpb.UpdateMyFeedFolderRequest) (*entity.MyFeedFolder, error) {
+	mff, err := m.myFeedFolderRepository.GetMyFeedFolderByID(ctx, req.GetId())
+	if err != nil {
+		return nil, err
+	}
+
+	mff.Title = req.GetTitle()
+
+	if req.GetDescription().GetValue() != "" {
+		mff.Description.String = req.GetDescription().GetValue()
+	}
+
+	if err := m.myFeedFolderRepository.UpdateMyFeedFolder(ctx, mff); err != nil {
 		return nil, err
 	}
 
