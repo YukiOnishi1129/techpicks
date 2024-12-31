@@ -22,11 +22,20 @@ func (tp *transactionPersistence) RunInTx(ctx context.Context, fn func(context.C
 	if err != nil {
 		return err
 	}
-	defer tx.Rollback()
 
 	if err := fn(ctx); err != nil {
+		if rollbackErr := tx.Rollback(); rollbackErr != nil {
+			return rollbackErr
+		}
 		return err
 	}
 
-	return tx.Commit()
+	if err := tx.Commit(); err != nil {
+		if rollbackErr := tx.Rollback(); rollbackErr != nil {
+			return rollbackErr
+		}
+		return err
+	}
+
+	return nil
 }
