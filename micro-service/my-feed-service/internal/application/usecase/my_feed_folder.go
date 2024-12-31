@@ -6,6 +6,7 @@ import (
 	copb "github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go/grpc/common"
 	mfpb "github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go/grpc/my_feed"
 	"github.com/YukiOnishi1129/techpicks/micro-service/my-feed-service/internal/domain/entity"
+	"google.golang.org/protobuf/types/known/emptypb"
 )
 
 func (m *myUseCase) GetMyFeedFolders(ctx context.Context, req *mfpb.GetMyFeedFoldersRequest) (*mfpb.GetMyFeedFoldersResponse, error) {
@@ -49,6 +50,46 @@ func (m *myUseCase) GetMyFeedFolders(ctx context.Context, req *mfpb.GetMyFeedFol
 	}
 
 	return res, nil
+}
+
+func (m *myUseCase) CreateMyFeedFolder(ctx context.Context, req *mfpb.CreateMyFeedFolderRequest) (*mfpb.CreateMyFeedFolderResponse, error) {
+	res, err := m.myFeedFolderPersistenceAdapter.CreateMyFeedFolder(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+
+	mff := m.convertPBMyFeedFolder(res)
+
+	return &mfpb.CreateMyFeedFolderResponse{
+		MyFeedFolder: mff,
+	}, nil
+}
+
+func (m *myUseCase) UpdateMyFeedFolder(ctx context.Context, req *mfpb.UpdateMyFeedFolderRequest) (*mfpb.UpdateMyFeedFolderResponse, error) {
+	// mff := &entity.MyFeedFolder{
+	// 	ID:    req.GetId(),
+	// 	Title: req.GetTitle(),
+	// }
+
+	// if err := m.myFeedFolderPersistenceAdapter.UpdateMyFeedFolder(ctx, mff); err != nil {
+	// 	return nil, err
+	// }
+
+	return &mfpb.UpdateMyFeedFolderResponse{
+		MyFeedFolder: nil,
+	}, nil
+}
+
+func (m *myUseCase) DeleteMyFeedFolder(ctx context.Context, req *mfpb.DeleteMyFeedFolderRequest) (*emptypb.Empty, error) {
+	// mff := &entity.MyFeedFolder{
+	// 	ID: req.GetId(),
+	// }
+
+	// if err := m.myFeedFolderPersistenceAdapter.DeleteMyFeedFolder(ctx, mff); err != nil {
+	// 	return nil, err
+	// }
+
+	return nil, nil
 }
 
 func (m *myUseCase) convertPBMyFeedFolder(mff *entity.MyFeedFolder) *mfpb.MyFeedFolder {

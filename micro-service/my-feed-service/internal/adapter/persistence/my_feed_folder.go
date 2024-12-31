@@ -6,12 +6,15 @@ import (
 	mfpb "github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go/grpc/my_feed"
 	"github.com/YukiOnishi1129/techpicks/micro-service/my-feed-service/internal/domain/entity"
 	"github.com/YukiOnishi1129/techpicks/micro-service/my-feed-service/internal/domain/repository"
+	"github.com/google/uuid"
 
 	"github.com/volatiletech/sqlboiler/v4/queries/qm"
 )
 
 type MyFeedFolderPersistenceAdapter interface {
 	GetMyFeedFolders(ctx context.Context, req *mfpb.GetMyFeedFoldersRequest, limit int) (entity.MyFeedFolderSlice, error)
+	GetMyFeedFolderByID(ctx context.Context, id string) (*entity.MyFeedFolder, error)
+	CreateMyFeedFolder(ctx context.Context, req *mfpb.CreateMyFeedFolderRequest) (*entity.MyFeedFolder, error)
 }
 
 type myFeedFolderPersistenceAdapter struct {
@@ -48,4 +51,36 @@ func (m *myFeedFolderPersistenceAdapter) GetMyFeedFolders(ctx context.Context, r
 		return nil, err
 	}
 	return myFeedFolders, nil
+}
+
+func (m *myFeedFolderPersistenceAdapter) GetMyFeedFolderByID(ctx context.Context, id string) (*entity.MyFeedFolder, error) {
+	myFeedFolder, err := m.myFeedFolderRepository.GetMyFeedFolderByID(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+	return &myFeedFolder, nil
+}
+
+func (m *myFeedFolderPersistenceAdapter) CreateMyFeedFolder(ctx context.Context, req *mfpb.CreateMyFeedFolderRequest) (*entity.MyFeedFolder, error) {
+	myFeedFolderID, _ := uuid.NewUUID()
+	mff := &entity.MyFeedFolder{
+		ID:     myFeedFolderID.String(),
+		UserID: req.GetUserId(),
+		Title:  req.GetTitle(),
+	}
+
+	if req.GetDescription().GetValue() != "" {
+		mff.Description.String = req.GetDescription().GetValue()
+	}
+
+	if err := m.myFeedFolderRepository.CreateMyFeedFolder(ctx, *mff); err != nil {
+		return nil, err
+	}
+
+	res, err := m.myFeedFolderRepository.GetMyFeedFolderByID(ctx, mff.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	return &res, nil
 }
