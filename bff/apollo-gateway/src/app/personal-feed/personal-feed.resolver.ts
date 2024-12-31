@@ -1,8 +1,10 @@
 import { UseGuards } from '@nestjs/common';
-import { Resolver, Query, Args, Context } from '@nestjs/graphql';
+import { Resolver, Query, Args, Context, Mutation } from '@nestjs/graphql';
 import {
   MyFeedFolderConnection,
   MyFeedFoldersInput,
+  MyFeedFolder,
+  CreateMyFeedFolderInput,
 } from 'src/graphql/types/graphql';
 
 import { MyFeedFolderService } from './folder/my-feed-folder.service';
@@ -13,7 +15,7 @@ import { SupabaseAuthGuard } from '../auth/auth.guard';
 export class PersonalFeedResolver {
   constructor(private readonly myFeedFolderService: MyFeedFolderService) {}
 
-  @Query(() => String)
+  @Query(() => MyFeedFolderConnection)
   @UseGuards(SupabaseAuthGuard)
   async myFeedFolders(
     @Args('myFeedFoldersInput') myFeedFoldersInput: MyFeedFoldersInput,
@@ -23,6 +25,20 @@ export class PersonalFeedResolver {
     return await this.myFeedFolderService.getMyFeedFolders(
       user.id,
       myFeedFoldersInput,
+    );
+  }
+
+  @Mutation(() => MyFeedFolder)
+  @UseGuards(SupabaseAuthGuard)
+  async createMyFeedFolder(
+    @Args('createMyFeedFolderInput')
+    createMyFeedFolderInput: CreateMyFeedFolderInput,
+    @Context() context: GraphQLContext,
+  ): Promise<MyFeedFolder> {
+    const user = context.req.user;
+    return await this.myFeedFolderService.createMyFeedFolder(
+      user.id,
+      createMyFeedFolderInput,
     );
   }
 }
