@@ -7,6 +7,7 @@ import (
 	mfpb "github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go/grpc/my_feed"
 	"github.com/YukiOnishi1129/techpicks/micro-service/my-feed-service/internal/domain/entity"
 	"google.golang.org/protobuf/types/known/emptypb"
+	"google.golang.org/protobuf/types/known/wrapperspb"
 )
 
 func (m *myUseCase) GetMyFeedFolders(ctx context.Context, req *mfpb.GetMyFeedFoldersRequest) (*mfpb.GetMyFeedFoldersResponse, error) {
@@ -82,7 +83,12 @@ func (m *myUseCase) UpdateMyFeedFolder(ctx context.Context, req *mfpb.UpdateMyFe
 		if err = m.myFeedPersistenceAdapter.BulkCreateMyFeedsAsUpdate(ctx, req, res.R.MyFeeds); err != nil {
 			return err
 		}
-		mff := m.convertPBMyFeedFolder(res)
+
+		resMff, err := m.myFeedFolderPersistenceAdapter.GetMyFeedFolderByID(ctx, res.ID)
+		if err != nil {
+			return err
+		}
+		mff := m.convertPBMyFeedFolder(resMff)
 		resRPC.MyFeedFolder = mff
 		return nil
 	}); err != nil {
@@ -105,8 +111,15 @@ func (m *myUseCase) DeleteMyFeedFolder(ctx context.Context, req *mfpb.DeleteMyFe
 }
 
 func (m *myUseCase) convertPBMyFeedFolder(mff *entity.MyFeedFolder) *mfpb.MyFeedFolder {
-	return &mfpb.MyFeedFolder{
+	resMfRPC := &mfpb.MyFeedFolder{
 		Id:    mff.ID,
-		Title: mff.ID,
+		Title: mff.Title,
 	}
+	if mff.Description.Valid {
+		resMfRPC.Description = wrapperspb.String(mff.Description.String)
+	}
+	if mff.R.MyFeeds != nil {
+		// TODO: fetch feed connect from content service
+	}
+	return resMfRPC
 }
