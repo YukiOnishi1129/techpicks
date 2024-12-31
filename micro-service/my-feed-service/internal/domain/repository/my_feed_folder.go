@@ -9,7 +9,7 @@ import (
 
 type MyFeedFolderRepository interface {
 	GetMyFeedFolders(ctx context.Context, q []qm.QueryMod) (entity.MyFeedFolderSlice, error)
-	GetMyFeedFolderByID(ctx context.Context, id string) (entity.MyFeedFolder, error)
+	GetMyFeedFolderByID(ctx context.Context, id string, q []qm.QueryMod) (entity.MyFeedFolder, error)
 	CreateMyFeedFolder(ctx context.Context, mff entity.MyFeedFolder) error
 	UpdateMyFeedFolder(ctx context.Context, mff entity.MyFeedFolder) error
 	DeleteMyFeedFolder(ctx context.Context, mff entity.MyFeedFolder) error

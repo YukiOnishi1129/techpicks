@@ -55,7 +55,10 @@ func (m *myFeedFolderPersistenceAdapter) GetMyFeedFolders(ctx context.Context, r
 }
 
 func (m *myFeedFolderPersistenceAdapter) GetMyFeedFolderByID(ctx context.Context, id string) (*entity.MyFeedFolder, error) {
-	myFeedFolder, err := m.myFeedFolderRepository.GetMyFeedFolderByID(ctx, id)
+	q := []qm.QueryMod{
+		qm.Load(qm.Rels(entity.MyFeedFolderRels.MyFeeds)),
+	}
+	myFeedFolder, err := m.myFeedFolderRepository.GetMyFeedFolderByID(ctx, id, q)
 	if err != nil {
 		return nil, err
 	}
@@ -78,7 +81,11 @@ func (m *myFeedFolderPersistenceAdapter) CreateMyFeedFolder(ctx context.Context,
 		return nil, err
 	}
 
-	res, err := m.myFeedFolderRepository.GetMyFeedFolderByID(ctx, mff.ID)
+	q := []qm.QueryMod{
+		qm.Load(qm.Rels(entity.MyFeedFolderRels.MyFeeds)),
+	}
+
+	res, err := m.myFeedFolderRepository.GetMyFeedFolderByID(ctx, mff.ID, q)
 	if err != nil {
 		return nil, err
 	}
@@ -87,25 +94,22 @@ func (m *myFeedFolderPersistenceAdapter) CreateMyFeedFolder(ctx context.Context,
 }
 
 func (m *myFeedFolderPersistenceAdapter) UpdateMyFeedFolder(ctx context.Context, req *mfpb.UpdateMyFeedFolderRequest) (*entity.MyFeedFolder, error) {
-	mff, err := m.myFeedFolderRepository.GetMyFeedFolderByID(ctx, req.GetId())
+	q := []qm.QueryMod{
+		qm.Load(qm.Rels(entity.MyFeedFolderRels.MyFeeds)),
+	}
+	mff, err := m.myFeedFolderRepository.GetMyFeedFolderByID(ctx, req.GetId(), q)
 	if err != nil {
 		return nil, err
 	}
 
 	mff.Title = req.GetTitle()
-
 	if req.GetDescription().GetValue() != "" {
 		mff.Description.String = req.GetDescription().GetValue()
 	}
 
-	if err := m.myFeedFolderRepository.UpdateMyFeedFolder(ctx, mff); err != nil {
+	if err = m.myFeedFolderRepository.UpdateMyFeedFolder(ctx, mff); err != nil {
 		return nil, err
 	}
 
-	res, err := m.myFeedFolderRepository.GetMyFeedFolderByID(ctx, mff.ID)
-	if err != nil {
-		return nil, err
-	}
-
-	return &res, nil
+	return &mff, nil
 }

@@ -71,6 +71,10 @@ func (m *myUseCase) UpdateMyFeedFolder(ctx context.Context, req *mfpb.UpdateMyFe
 		return nil, err
 	}
 
+	// bulk delete my feed
+
+	// bulk create my feed
+
 	mff := m.convertPBMyFeedFolder(res)
 
 	return &mfpb.UpdateMyFeedFolderResponse{

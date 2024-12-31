@@ -31,8 +31,8 @@ func (mfp *myFeedFolderPersistence) GetMyFeedFolders(ctx context.Context, q []qm
 	return myFeedFolders, nil
 }
 
-func (mfp *myFeedFolderPersistence) GetMyFeedFolderByID(ctx context.Context, id string) (entity.MyFeedFolder, error) {
-	myFeedFolder, err := entity.FindMyFeedFolder(ctx, mfp.db, id)
+func (mfp *myFeedFolderPersistence) GetMyFeedFolderByID(ctx context.Context, id string, q []qm.QueryMod) (entity.MyFeedFolder, error) {
+	myFeedFolder, err := entity.MyFeedFolders(append(q, qm.Where("id = ?", id))...).One(ctx, mfp.db)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return entity.MyFeedFolder{}, nil
