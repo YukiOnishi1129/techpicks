@@ -10,10 +10,10 @@ import (
 )
 
 type MyFeedPersistenceAdapter interface {
-	BulkCreateMyFeed(ctx context.Context, dto BulkCreateMyFeedInputDto) (entity.MyFeedSlice, error)
+	BulkCreateMyFeedAsFolderCreate(ctx context.Context, req *mfpb.CreateMyFeedFolderRequest, mfs entity.MyFeedSlice, folderID string) error
 
-	BulkCreateMyFeedsAsUpdate(ctx context.Context, req *mfpb.UpdateMyFeedFolderRequest, mfs entity.MyFeedSlice) error
-	BulkDeleteMyFeedsAsUpdate(ctx context.Context, mfs entity.MyFeedSlice, fIDs []string) error
+	BulkCreateMyFeedsAsFolderUpdate(ctx context.Context, req *mfpb.UpdateMyFeedFolderRequest, mfs entity.MyFeedSlice) error
+	BulkDeleteMyFeedsAsFolderUpdate(ctx context.Context, mfs entity.MyFeedSlice, fIDs []string) error
 }
 
 type myFeedPersistenceAdapter struct {
@@ -26,27 +26,33 @@ func NewMyFeedPersistenceAdapter(mfr repository.MyFeedRepository) MyFeedPersiste
 	}
 }
 
-func (mfp *myFeedPersistenceAdapter) BulkCreateMyFeed(ctx context.Context, dto BulkCreateMyFeedInputDto) (entity.MyFeedSlice, error) {
-	myFeeds := make(entity.MyFeedSlice, 0, len(dto.FeedIDs))
-	for _, fID := range dto.FeedIDs {
-		mfID, _ := uuid.NewUUID()
-		myFeed := entity.MyFeed{
-			ID:             mfID.String(),
-			FeedID:         fID,
-			MyFeedFolderID: dto.MyFeedFolderID,
-			UserID:         dto.UserID,
+func (mfp *myFeedPersistenceAdapter) BulkCreateMyFeedAsFolderCreate(ctx context.Context, req *mfpb.CreateMyFeedFolderRequest, mfs entity.MyFeedSlice, folderID string) error {
+	for _, fID := range req.GetFeedIdList() {
+		isExist := false
+		for _, mf := range mfs {
+			if mf.FeedID == fID {
+				isExist = true
+				break
+			}
 		}
-		myFeeds = append(myFeeds, &myFeed)
+		if !isExist {
+			mfID, _ := uuid.NewUUID()
+			myFeed := entity.MyFeed{
+				ID:             mfID.String(),
+				UserID:         req.GetUserId(),
+				MyFeedFolderID: folderID,
+				FeedID:         fID,
+			}
+			if err := mfp.myFeedPersistence.CreateMyFeed(ctx, myFeed); err != nil {
+				return err
+			}
+		}
 	}
 
-	// if err := mfp.myFeedPersistence.BulkCreateMyFeed(ctx, myFeeds); err != nil {
-	// 	return nil, err
-	// }
-
-	return myFeeds, nil
+	return nil
 }
 
-func (mfp *myFeedPersistenceAdapter) BulkCreateMyFeedsAsUpdate(ctx context.Context, req *mfpb.UpdateMyFeedFolderRequest, mfs entity.MyFeedSlice) error {
+func (mfp *myFeedPersistenceAdapter) BulkCreateMyFeedsAsFolderUpdate(ctx context.Context, req *mfpb.UpdateMyFeedFolderRequest, mfs entity.MyFeedSlice) error {
 	for _, fID := range req.GetFeedIdList() {
 		isExist := false
 		for _, mf := range mfs {
@@ -72,7 +78,7 @@ func (mfp *myFeedPersistenceAdapter) BulkCreateMyFeedsAsUpdate(ctx context.Conte
 	return nil
 }
 
-func (mfp *myFeedPersistenceAdapter) BulkDeleteMyFeedsAsUpdate(ctx context.Context, mfs entity.MyFeedSlice, fIDs []string) error {
+func (mfp *myFeedPersistenceAdapter) BulkDeleteMyFeedsAsFolderUpdate(ctx context.Context, mfs entity.MyFeedSlice, fIDs []string) error {
 	deleteMyFeeds := make(entity.MyFeedSlice, 0, len(fIDs))
 	for _, fID := range fIDs {
 		for _, mf := range mfs {

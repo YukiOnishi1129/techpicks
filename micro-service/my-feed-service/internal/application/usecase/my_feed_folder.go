@@ -54,16 +54,32 @@ func (m *myUseCase) GetMyFeedFolders(ctx context.Context, req *mfpb.GetMyFeedFol
 }
 
 func (m *myUseCase) CreateMyFeedFolder(ctx context.Context, req *mfpb.CreateMyFeedFolderRequest) (*mfpb.CreateMyFeedFolderResponse, error) {
-	res, err := m.myFeedFolderPersistenceAdapter.CreateMyFeedFolder(ctx, req)
-	if err != nil {
+	resRPC := &mfpb.CreateMyFeedFolderResponse{}
+	if err := m.transactionPersistenceAdapter.RunInTx(ctx, func(ctx context.Context) error {
+		res, err := m.myFeedFolderPersistenceAdapter.CreateMyFeedFolder(ctx, req)
+		if err != nil {
+			return err
+		}
+
+		// bulk create my feed
+		if err = m.myFeedPersistenceAdapter.BulkCreateMyFeedAsFolderCreate(ctx, req, res.R.MyFeeds, res.ID); err != nil {
+			return err
+		}
+
+		resMff, err := m.myFeedFolderPersistenceAdapter.GetMyFeedFolderByID(ctx, res.ID)
+		if err != nil {
+			return err
+		}
+
+		mff := m.convertPBMyFeedFolder(resMff)
+		resRPC.MyFeedFolder = mff
+		return nil
+
+	}); err != nil {
 		return nil, err
 	}
 
-	mff := m.convertPBMyFeedFolder(res)
-
-	return &mfpb.CreateMyFeedFolderResponse{
-		MyFeedFolder: mff,
-	}, nil
+	return resRPC, nil
 }
 
 func (m *myUseCase) UpdateMyFeedFolder(ctx context.Context, req *mfpb.UpdateMyFeedFolderRequest) (*mfpb.UpdateMyFeedFolderResponse, error) {
@@ -75,12 +91,12 @@ func (m *myUseCase) UpdateMyFeedFolder(ctx context.Context, req *mfpb.UpdateMyFe
 		}
 
 		// bulk delete my feed
-		if err = m.myFeedPersistenceAdapter.BulkDeleteMyFeedsAsUpdate(ctx, res.R.MyFeeds, req.GetFeedIdList()); err != nil {
+		if err = m.myFeedPersistenceAdapter.BulkDeleteMyFeedsAsFolderUpdate(ctx, res.R.MyFeeds, req.GetFeedIdList()); err != nil {
 			return err
 		}
 
 		// bulk create my feed
-		if err = m.myFeedPersistenceAdapter.BulkCreateMyFeedsAsUpdate(ctx, req, res.R.MyFeeds); err != nil {
+		if err = m.myFeedPersistenceAdapter.BulkCreateMyFeedsAsFolderUpdate(ctx, req, res.R.MyFeeds); err != nil {
 			return err
 		}
 
