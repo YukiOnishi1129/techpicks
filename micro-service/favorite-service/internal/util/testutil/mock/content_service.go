@@ -56,6 +56,26 @@ func (mr *MockContentServiceClientMockRecorder) CreateUploadArticle(arg0, arg1 i
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateUploadArticle", reflect.TypeOf((*MockContentServiceClient)(nil).CreateUploadArticle), varargs...)
 }
 
+// GetAllFeeds mocks base method.
+func (m *MockContentServiceClient) GetAllFeeds(arg0 context.Context, arg1 *content.GetAllFeedsRequest, arg2 ...grpc.CallOption) (*content.GetFeedsResponse, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{arg0, arg1}
+	for _, a := range arg2 {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "GetAllFeeds", varargs...)
+	ret0, _ := ret[0].(*content.GetFeedsResponse)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetAllFeeds indicates an expected call of GetAllFeeds.
+func (mr *MockContentServiceClientMockRecorder) GetAllFeeds(arg0, arg1 interface{}, arg2 ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{arg0, arg1}, arg2...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAllFeeds", reflect.TypeOf((*MockContentServiceClient)(nil).GetAllFeeds), varargs...)
+}
+
 // GetArticleOGP mocks base method.
 func (m *MockContentServiceClient) GetArticleOGP(arg0 context.Context, arg1 *content.GetArticleOGPRequest, arg2 ...grpc.CallOption) (*content.GetArticleOGPResponse, error) {
 	m.ctrl.T.Helper()
@@ -172,6 +192,21 @@ func (m *MockContentServiceServer) CreateUploadArticle(arg0 context.Context, arg
 func (mr *MockContentServiceServerMockRecorder) CreateUploadArticle(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateUploadArticle", reflect.TypeOf((*MockContentServiceServer)(nil).CreateUploadArticle), arg0, arg1)
+}
+
+// GetAllFeeds mocks base method.
+func (m *MockContentServiceServer) GetAllFeeds(arg0 context.Context, arg1 *content.GetAllFeedsRequest) (*content.GetFeedsResponse, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetAllFeeds", arg0, arg1)
+	ret0, _ := ret[0].(*content.GetFeedsResponse)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetAllFeeds indicates an expected call of GetAllFeeds.
+func (mr *MockContentServiceServerMockRecorder) GetAllFeeds(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAllFeeds", reflect.TypeOf((*MockContentServiceServer)(nil).GetAllFeeds), arg0, arg1)
 }
 
 // GetArticleOGP mocks base method.
