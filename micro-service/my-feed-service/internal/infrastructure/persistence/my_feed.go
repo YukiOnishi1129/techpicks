@@ -49,6 +49,13 @@ func (mfp *myFeedPersistence) CreateMyFeed(ctx context.Context, mf entity.MyFeed
 	return nil
 }
 
+func (mfp *myFeedPersistence) BulkCreateMyFeed(ctx context.Context, myFeeds entity.MyFeedSlice) error {
+	// if err := myFeeds.UpdateAll(ctx, mfp.db, boil.Infer()); err != nil {
+	// 	return err
+	// }
+	return nil
+}
+
 func (mfp *myFeedPersistence) UpdateMyFeed(ctx context.Context, mf entity.MyFeed) error {
 	if _, err := mf.Update(ctx, mfp.db, boil.Infer()); err != nil {
 		return err

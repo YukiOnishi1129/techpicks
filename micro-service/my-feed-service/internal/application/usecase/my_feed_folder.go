@@ -66,20 +66,23 @@ func (m *myUseCase) CreateMyFeedFolder(ctx context.Context, req *mfpb.CreateMyFe
 }
 
 func (m *myUseCase) UpdateMyFeedFolder(ctx context.Context, req *mfpb.UpdateMyFeedFolderRequest) (*mfpb.UpdateMyFeedFolderResponse, error) {
-	res, err := m.myFeedFolderPersistenceAdapter.UpdateMyFeedFolder(ctx, req)
-	if err != nil {
+	resRpc := &mfpb.UpdateMyFeedFolderResponse{}
+	if err := m.transactionPersistenceAdapter.RunInTx(ctx, func(ctx context.Context) error {
+		res, err := m.myFeedFolderPersistenceAdapter.UpdateMyFeedFolder(ctx, req)
+		if err != nil {
+			return err
+		}
+		// bulk delete my feed
+
+		// bulk create my feed
+		mff := m.convertPBMyFeedFolder(res)
+		resRpc.MyFeedFolder = mff
+		return nil
+	}); err != nil {
 		return nil, err
 	}
 
-	// bulk delete my feed
-
-	// bulk create my feed
-
-	mff := m.convertPBMyFeedFolder(res)
-
-	return &mfpb.UpdateMyFeedFolderResponse{
-		MyFeedFolder: mff,
-	}, nil
+	return resRpc, nil
 }
 
 func (m *myUseCase) DeleteMyFeedFolder(ctx context.Context, req *mfpb.DeleteMyFeedFolderRequest) (*emptypb.Empty, error) {

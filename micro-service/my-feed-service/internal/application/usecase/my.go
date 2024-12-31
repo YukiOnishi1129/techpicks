@@ -16,11 +16,13 @@ type MyUseCase interface {
 }
 
 type myUseCase struct {
+	transactionPersistenceAdapter  persistenceadapter.TransactionPersistenceAdapter
 	myFeedFolderPersistenceAdapter persistenceadapter.MyFeedFolderPersistenceAdapter
 }
 
-func NewMyUseCase(mffpa persistenceadapter.MyFeedFolderPersistenceAdapter) MyUseCase {
+func NewMyUseCase(tpa persistenceadapter.TransactionPersistenceAdapter, mffpa persistenceadapter.MyFeedFolderPersistenceAdapter) MyUseCase {
 	return &myUseCase{
+		transactionPersistenceAdapter:  tpa,
 		myFeedFolderPersistenceAdapter: mffpa,
 	}
 }
