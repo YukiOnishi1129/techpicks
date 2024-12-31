@@ -4,6 +4,7 @@ import (
 	"context"
 
 	copb "github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go/grpc/common"
+	cpb "github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go/grpc/content"
 	mfpb "github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go/grpc/my_feed"
 	"github.com/YukiOnishi1129/techpicks/micro-service/my-feed-service/internal/domain/entity"
 	"google.golang.org/protobuf/types/known/emptypb"
@@ -24,7 +25,10 @@ func (m *myUseCase) GetMyFeedFolders(ctx context.Context, req *mfpb.GetMyFeedFol
 	edges := make([]*mfpb.MyFeedFolderEdge, len(mffs))
 
 	for i, mff := range mffs {
-		resMff := m.convertPBMyFeedFolder(mff)
+		resMff, err := m.convertPBMyFeedFolder(mff)
+		if err != nil {
+			return nil, err
+		}
 		// TODO: fetch feed connect from content service
 		edges[i] = &mfpb.MyFeedFolderEdge{
 			Cursor: mff.ID,
@@ -59,7 +63,10 @@ func (m *myUseCase) GetMyFeedFolder(ctx context.Context, req *mfpb.GetMyFeedFold
 		return nil, err
 	}
 
-	resMff := m.convertPBMyFeedFolder(mff)
+	resMff, err := m.convertPBMyFeedFolder(mff)
+	if err != nil {
+		return nil, err
+	}
 	res := &mfpb.GetMyFeedFolderResponse{
 		MyFeedFolder: resMff,
 	}
@@ -84,7 +91,10 @@ func (m *myUseCase) CreateMyFeedFolder(ctx context.Context, req *mfpb.CreateMyFe
 			return err
 		}
 
-		mff := m.convertPBMyFeedFolder(resMff)
+		mff, err := m.convertPBMyFeedFolder(resMff)
+		if err != nil {
+			return err
+		}
 		resRPC.MyFeedFolder = mff
 		return nil
 
@@ -117,7 +127,10 @@ func (m *myUseCase) UpdateMyFeedFolder(ctx context.Context, req *mfpb.UpdateMyFe
 		if err != nil {
 			return err
 		}
-		mff := m.convertPBMyFeedFolder(resMff)
+		mff, err := m.convertPBMyFeedFolder(resMff)
+		if err != nil {
+			return err
+		}
 		resRPC.MyFeedFolder = mff
 		return nil
 	}); err != nil {
@@ -146,7 +159,7 @@ func (m *myUseCase) DeleteMyFeedFolder(ctx context.Context, req *mfpb.DeleteMyFe
 	return nil, nil
 }
 
-func (m *myUseCase) convertPBMyFeedFolder(mff *entity.MyFeedFolder) *mfpb.MyFeedFolder {
+func (m *myUseCase) convertPBMyFeedFolder(mff *entity.MyFeedFolder) (*mfpb.MyFeedFolder, error) {
 	resMfRPC := &mfpb.MyFeedFolder{
 		Id:    mff.ID,
 		Title: mff.Title,
@@ -154,9 +167,27 @@ func (m *myUseCase) convertPBMyFeedFolder(mff *entity.MyFeedFolder) *mfpb.MyFeed
 	if mff.Description.Valid {
 		resMfRPC.Description = wrapperspb.String(mff.Description.String)
 	}
-	// if mff.R != nil && len(mff.R.MyFeeds) > 0 {
-	// 	// TODO: fetch feed connect from content service
+	if mff.R != nil && len(mff.R.MyFeeds) > 0 {
+		fIDs := make([]*wrapperspb.StringValue, len(mff.R.MyFeeds))
+		for i, mf := range mff.R.MyFeeds {
+			fIDs[i] = &wrapperspb.StringValue{
+				Value: mf.FeedID,
+			}
+		}
+		resFeeds, err := m.contentExternalAdapter.GetFeeds(context.Background(), &cpb.GetAllFeedsRequest{
+			FeedIds: fIDs,
+		})
+		if err != nil {
+			return nil, err
+		}
 
-	// }
-	return resMfRPC
+		feedEdge := make([]*cpb.Feed, len(resFeeds.FeedEdge))
+		for i, f := range resFeeds.FeedEdge {
+			feedEdge[i] = f.Feed
+		}
+
+		resMfRPC.Feeds = feedEdge
+
+	}
+	return resMfRPC, nil
 }
