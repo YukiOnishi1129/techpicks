@@ -7,6 +7,7 @@ import { PreloadQuery } from "@/lib/apollo/client";
 // import { MyFeedFoldersInput } from "@/graphql/type";
 
 import { MyFeedFolderListTemplateQuery } from "./MyFeedFolderListTemplateQuery";
+import { CreateMyFeedFolderDialog } from "../../Dialog";
 import { MyFeedFolderList } from "../../List";
 
 type MyFeedFolderListTemplateProps = {
@@ -24,7 +25,7 @@ export const MyFeedFolderListTemplate: FC<MyFeedFolderListTemplateProps> = ({
           <div className="w-4/5 pr-4">
             {/* <MyFeedFolderKeywordSearchInput keyword={keyword} /> */}
           </div>
-          {/* <CreateMyFeedFolderDialog /> */}
+          <CreateMyFeedFolderDialog />
         </div>
       </div>
 
