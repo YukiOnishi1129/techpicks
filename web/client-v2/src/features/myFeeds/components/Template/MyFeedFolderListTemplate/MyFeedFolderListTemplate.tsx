@@ -9,6 +9,7 @@ import { PreloadQuery } from "@/lib/apollo/client";
 import { MyFeedFolderListTemplateQuery } from "./MyFeedFolderListTemplateQuery";
 import { CreateMyFeedFolderDialog } from "../../Dialog";
 import { MyFeedFolderList } from "../../List";
+import { MyFeedFolderKeywordSearchForm } from "../../Search";
 
 const LIMIT = 6;
 
@@ -25,7 +26,7 @@ export const MyFeedFolderListTemplate: FC<MyFeedFolderListTemplateProps> = ({
         <h1 className="mt-4 text-2xl font-bold">My Feed Folders</h1>
         <div className="mt-2 flex w-full items-center justify-between">
           <div className="w-4/5 pr-4">
-            {/* <MyFeedFolderKeywordSearchInput keyword={keyword} /> */}
+            <MyFeedFolderKeywordSearchForm keyword={keyword} />
           </div>
           <CreateMyFeedFolderDialog />
         </div>
