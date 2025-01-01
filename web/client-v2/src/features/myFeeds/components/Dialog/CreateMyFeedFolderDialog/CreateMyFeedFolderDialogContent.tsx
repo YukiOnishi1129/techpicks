@@ -31,6 +31,8 @@ import { useStatusToast } from "@/hooks/useStatusToast";
 
 import { serverRevalidatePage } from "@/actions/actServerRevalidatePage";
 
+import { createMyFeedFolderMutation } from "./actCreateMyFeedFolderMutation";
+
 const FormSchema = z.object({
   title: z
     .string({
@@ -80,15 +82,31 @@ export const CreateMyFeedFolderDialogContent: FC<
           await logoutToLoginPage();
           return;
         }
-        // const createdId = await createMyFeedFolder({
-        //   title: data.title,
-        //   description: data?.description ?? "",
-        //   userId: user?.id,
-        // });
-        const createdId = "123";
-        if (!createdId) {
+        const { data: resData, error } = await createMyFeedFolderMutation({
+          userId: user?.id || "",
+          title: data.title,
+          description: data?.description || "",
+        });
+        if (error) {
+          if (error.length > 0) {
+            // TODO: Modify the error message response on the BFF side
+            const errMsg =
+              error[0].message.indexOf("my feed folder already exists") != -1
+                ? "my feed folder already exists"
+                : error[0].message;
+            failToast({
+              description: errMsg,
+            });
+            return;
+          }
           failToast({
-            description: "Failed to create new feed folder",
+            description: "Fail: Something went wrong",
+          });
+          return;
+        }
+        if (!resData?.createMyFeedFolder?.id) {
+          failToast({
+            description: "Fail: Something went wrong",
           });
           return;
         }
@@ -96,7 +114,7 @@ export const CreateMyFeedFolderDialogContent: FC<
           description: "Successfully created new feed folder",
         });
         if (onCreatedMyFeedFolder !== undefined) {
-          await onCreatedMyFeedFolder(createdId);
+          await onCreatedMyFeedFolder(resData.createMyFeedFolder.id);
           await serverRevalidatePage(pathname);
           resetDialog();
           onCloseDialog();

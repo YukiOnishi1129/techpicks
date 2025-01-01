@@ -191,6 +191,13 @@ export type CreateFavoriteArticleInput = {
   title: Scalars['String']['input'];
 };
 
+export type CreateMyFeedFolderInput = {
+  description?: InputMaybe<Scalars['String']['input']>;
+  feedIds?: InputMaybe<Array<Scalars['String']['input']>>;
+  title: Scalars['String']['input'];
+  userId: Scalars['String']['input'];
+};
+
 export type DeleteBookmarkInput = {
   bookmarkId: Scalars['ID']['input'];
   userId: Scalars['ID']['input'];
@@ -207,6 +214,11 @@ export type DeleteFavoriteArticleFolderInput = {
 
 export type DeleteFavoriteArticleInput = {
   id: Scalars['ID']['input'];
+};
+
+export type DeleteMyFeedFolderInput = {
+  myFeedFolderId: Scalars['ID']['input'];
+  userId: Scalars['String']['input'];
 };
 
 export type FavoriteAllFolderArticleConnection = {
@@ -368,11 +380,14 @@ export type Mutation = {
   createFavoriteArticle: FavoriteArticle;
   createFavoriteArticleFolder: FavoriteArticleFolder;
   createFavoriteArticleForUploadArticle: FavoriteArticle;
+  createMyFeedFolder: MyFeedFolder;
   deleteBookmark: Scalars['Boolean']['output'];
   deleteFavoriteArticle: Scalars['Boolean']['output'];
   deleteFavoriteArticleByArticleId: Scalars['Boolean']['output'];
   deleteFavoriteArticleFolder: Scalars['Boolean']['output'];
+  deleteMyFeedFolder: Scalars['Boolean']['output'];
   updateFavoriteArticleFolder: FavoriteArticleFolder;
+  updateMyFeedFolder: MyFeedFolder;
 };
 
 
@@ -401,6 +416,11 @@ export type MutationCreateFavoriteArticleForUploadArticleArgs = {
 };
 
 
+export type MutationCreateMyFeedFolderArgs = {
+  createMyFeedFolderInput: CreateMyFeedFolderInput;
+};
+
+
 export type MutationDeleteBookmarkArgs = {
   deleteBookmarkInput: DeleteBookmarkInput;
 };
@@ -421,8 +441,18 @@ export type MutationDeleteFavoriteArticleFolderArgs = {
 };
 
 
+export type MutationDeleteMyFeedFolderArgs = {
+  deleteMyFeedFolderInput: DeleteMyFeedFolderInput;
+};
+
+
 export type MutationUpdateFavoriteArticleFolderArgs = {
   input: UpdateFavoriteArticleFolderInput;
+};
+
+
+export type MutationUpdateMyFeedFolderArgs = {
+  updateMyFeedFolderInput: UpdateMyFeedFolderInput;
 };
 
 /** MyFeedFolder is a folder that contains a list of feeds. */
@@ -579,6 +609,13 @@ export type UpdateFavoriteArticleFolderInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   id: Scalars['ID']['input'];
   title: Scalars['String']['input'];
+};
+
+export type UpdateMyFeedFolderInput = {
+  description?: InputMaybe<Scalars['String']['input']>;
+  feedIds?: InputMaybe<Array<Scalars['String']['input']>>;
+  myFeedFolderId: Scalars['ID']['input'];
+  title?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type GetLoggedBaseLayoutQueryQueryVariables = Exact<{
@@ -839,6 +876,13 @@ export type FeedListTemplateQueryQueryVariables = Exact<{
 
 
 export type FeedListTemplateQueryQuery = { __typename?: 'Query', feeds: { __typename?: 'FeedConnection', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null }, edges: Array<{ __typename?: 'FeedEdge', node: { __typename?: 'Feed', id: string, myFeedIds?: Array<string> | null, name: string, description: string, siteUrl: string, thumbnailUrl: string, platform: { __typename?: 'Platform', id: string, faviconUrl: string } } }> } };
+
+export type CreateMyFeedFolderMutationMutationVariables = Exact<{
+  input: CreateMyFeedFolderInput;
+}>;
+
+
+export type CreateMyFeedFolderMutationMutation = { __typename?: 'Mutation', createMyFeedFolder: { __typename?: 'MyFeedFolder', id: string } };
 
 export type MyFeedFolderListQueryQueryVariables = Exact<{
   myFeedFoldersInput: MyFeedFoldersInput;
@@ -2555,6 +2599,39 @@ export type FeedListTemplateQueryQueryHookResult = ReturnType<typeof useFeedList
 export type FeedListTemplateQueryLazyQueryHookResult = ReturnType<typeof useFeedListTemplateQueryLazyQuery>;
 export type FeedListTemplateQuerySuspenseQueryHookResult = ReturnType<typeof useFeedListTemplateQuerySuspenseQuery>;
 export type FeedListTemplateQueryQueryResult = Apollo.QueryResult<FeedListTemplateQueryQuery, FeedListTemplateQueryQueryVariables>;
+export const CreateMyFeedFolderMutationDocument = gql`
+    mutation CreateMyFeedFolderMutation($input: CreateMyFeedFolderInput!) {
+  createMyFeedFolder(createMyFeedFolderInput: $input) {
+    id
+  }
+}
+    `;
+export type CreateMyFeedFolderMutationMutationFn = Apollo.MutationFunction<CreateMyFeedFolderMutationMutation, CreateMyFeedFolderMutationMutationVariables>;
+
+/**
+ * __useCreateMyFeedFolderMutationMutation__
+ *
+ * To run a mutation, you first call `useCreateMyFeedFolderMutationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateMyFeedFolderMutationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createMyFeedFolderMutationMutation, { data, loading, error }] = useCreateMyFeedFolderMutationMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateMyFeedFolderMutationMutation(baseOptions?: Apollo.MutationHookOptions<CreateMyFeedFolderMutationMutation, CreateMyFeedFolderMutationMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateMyFeedFolderMutationMutation, CreateMyFeedFolderMutationMutationVariables>(CreateMyFeedFolderMutationDocument, options);
+      }
+export type CreateMyFeedFolderMutationMutationHookResult = ReturnType<typeof useCreateMyFeedFolderMutationMutation>;
+export type CreateMyFeedFolderMutationMutationResult = Apollo.MutationResult<CreateMyFeedFolderMutationMutation>;
+export type CreateMyFeedFolderMutationMutationOptions = Apollo.BaseMutationOptions<CreateMyFeedFolderMutationMutation, CreateMyFeedFolderMutationMutationVariables>;
 export const MyFeedFolderListQueryDocument = gql`
     query MyFeedFolderListQuery($myFeedFoldersInput: MyFeedFoldersInput!) {
   myFeedFolders(myFeedFoldersInput: $myFeedFoldersInput) {
