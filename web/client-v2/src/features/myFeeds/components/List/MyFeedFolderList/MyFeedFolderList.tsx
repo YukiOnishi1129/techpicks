@@ -5,14 +5,18 @@ import { FC, useCallback, useEffect, useState } from "react";
 import { NotFoundList } from "@/components/layout/NotFoundList";
 
 import { MyFeedFolderListQuery } from "./MyFeedFolderListQuery";
+import { MyFeedFolderCard } from "../../Card";
 import { MyFeedFolderListTemplateQuery } from "../../Template/MyFeedFolderListTemplate/MyFeedFolderListTemplateQuery";
 
 type MyFeedFolderListProps = {
   keyword?: string;
+  limit: number;
 };
 
-export const MyFeedFolderList: FC<MyFeedFolderListProps> = ({ keyword }) => {
-  const limit = 10;
+export const MyFeedFolderList: FC<MyFeedFolderListProps> = ({
+  keyword,
+  limit,
+}) => {
   const { data: resSuspenseData, error } = useSuspenseQuery(
     MyFeedFolderListTemplateQuery,
     {
@@ -85,7 +89,7 @@ export const MyFeedFolderList: FC<MyFeedFolderListProps> = ({ keyword }) => {
     setIsNextPage(resData.myFeedFolders.pageInfo.hasNextPage);
 
     setHashMore(resData.myFeedFolders.edges.length > 0);
-  }, [endCursor, isNextPage, fetchMore, keyword]);
+  }, [endCursor, isNextPage, fetchMore, keyword, limit]);
 
   useEffect(() => {
     if (offset > 1) {
@@ -111,7 +115,7 @@ export const MyFeedFolderList: FC<MyFeedFolderListProps> = ({ keyword }) => {
         <div className="mb-8">
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
             {res?.myFeedFolders?.edges.map((edge, i) => (
-              <div key={`${i}-${edge.node.id}`}>{edge.node.id}</div>
+              <MyFeedFolderCard key={`${i}-${edge.node.id}`} data={edge.node} />
             ))}
           </div>
         </div>

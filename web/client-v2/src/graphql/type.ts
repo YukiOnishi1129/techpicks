@@ -877,6 +877,8 @@ export type FeedListTemplateQueryQueryVariables = Exact<{
 
 export type FeedListTemplateQueryQuery = { __typename?: 'Query', feeds: { __typename?: 'FeedConnection', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null }, edges: Array<{ __typename?: 'FeedEdge', node: { __typename?: 'Feed', id: string, myFeedIds?: Array<string> | null, name: string, description: string, siteUrl: string, thumbnailUrl: string, platform: { __typename?: 'Platform', id: string, faviconUrl: string } } }> } };
 
+export type MyFeedFolderCardFragmentFragment = { __typename?: 'MyFeedFolder', id: string, userId: string, title: string, description?: string | null, createdAt: number, updatedAt: number };
+
 export type CreateMyFeedFolderMutationMutationVariables = Exact<{
   input: CreateMyFeedFolderInput;
 }>;
@@ -889,7 +891,7 @@ export type MyFeedFolderListQueryQueryVariables = Exact<{
 }>;
 
 
-export type MyFeedFolderListQueryQuery = { __typename?: 'Query', myFeedFolders: { __typename?: 'MyFeedFolderConnection', pageInfo: { __typename?: 'PageInfo', endCursor?: string | null, hasNextPage: boolean }, edges: Array<{ __typename?: 'MyFeedFolderEdge', node: { __typename?: 'MyFeedFolder', id: string } }> } };
+export type MyFeedFolderListQueryQuery = { __typename?: 'Query', myFeedFolders: { __typename?: 'MyFeedFolderConnection', pageInfo: { __typename?: 'PageInfo', endCursor?: string | null, hasNextPage: boolean }, edges: Array<{ __typename?: 'MyFeedFolderEdge', node: { __typename?: 'MyFeedFolder', id: string, userId: string, title: string, description?: string | null, createdAt: number, updatedAt: number } }> } };
 
 export type MyFeedFolderListTemplateQueryQueryVariables = Exact<{
   myFeedFoldersInput: MyFeedFoldersInput;
@@ -1377,6 +1379,16 @@ export const FeedCardWrapperFragmentFragmentDoc = gql`
   ...FeedCardItemFragment
 }
     ${FeedCardItemFragmentFragmentDoc}`;
+export const MyFeedFolderCardFragmentFragmentDoc = gql`
+    fragment MyFeedFolderCardFragment on MyFeedFolder {
+  id
+  userId
+  title
+  description
+  createdAt
+  updatedAt
+}
+    `;
 export const GetLoggedBaseLayoutQueryDocument = gql`
     query GetLoggedBaseLayoutQuery($input: FavoriteArticleFoldersInput!) {
   favoriteArticleFolders(input: $input) {
@@ -2642,11 +2654,12 @@ export const MyFeedFolderListQueryDocument = gql`
     edges {
       node {
         id
+        ...MyFeedFolderCardFragment
       }
     }
   }
 }
-    `;
+    ${MyFeedFolderCardFragmentFragmentDoc}`;
 
 /**
  * __useMyFeedFolderListQueryQuery__

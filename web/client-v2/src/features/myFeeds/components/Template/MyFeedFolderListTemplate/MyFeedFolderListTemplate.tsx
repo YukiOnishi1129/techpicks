@@ -10,6 +10,8 @@ import { MyFeedFolderListTemplateQuery } from "./MyFeedFolderListTemplateQuery";
 import { CreateMyFeedFolderDialog } from "../../Dialog";
 import { MyFeedFolderList } from "../../List";
 
+const LIMIT = 6;
+
 type MyFeedFolderListTemplateProps = {
   keyword?: string;
 };
@@ -36,13 +38,13 @@ export const MyFeedFolderListTemplate: FC<MyFeedFolderListTemplateProps> = ({
         variables={{
           myFeedFoldersInput: {
             keyword,
-            first: 10,
+            first: LIMIT,
             after: null,
           },
         }}
       >
         <Suspense fallback={<ScreenLoader />}>
-          <MyFeedFolderList keyword={keyword} />
+          <MyFeedFolderList keyword={keyword} limit={LIMIT} />
         </Suspense>
       </PreloadQuery>
 
