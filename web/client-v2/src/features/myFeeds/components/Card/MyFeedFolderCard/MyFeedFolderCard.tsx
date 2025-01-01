@@ -25,6 +25,8 @@ import { MyFeedFolderCardFragment } from "./MyFeedFolderCardFragment";
 
 // import { UpdateMyFeedFolderDialog } from "../Dialog";
 
+const SHOW_FEED_LIST_COUNT = 3;
+
 type MyFeedFolderCardProps = {
   data: FragmentOf<typeof MyFeedFolderCardFragment>;
   //   user?: User;
@@ -65,8 +67,12 @@ export const MyFeedFolderCard: FC<MyFeedFolderCardProps> = ({
   //       };
   //     });
 
-  //   const showFeedList = myFeedFolder.feeds.slice(0, 3);
-  //   const moreFeedsCount = myFeedFolder.feeds.length - showFeedList.length;
+  const showFeedList = fragment?.feeds
+    ? fragment.feeds.slice(0, SHOW_FEED_LIST_COUNT)
+    : [];
+  const isMoreFeeds = fragment?.feeds
+    ? fragment.feeds.length > SHOW_FEED_LIST_COUNT
+    : false;
 
   return (
     <div className="mb-4 bg-primary-foreground">
@@ -100,24 +106,24 @@ export const MyFeedFolderCard: FC<MyFeedFolderCardProps> = ({
             )}
           </Link>
         </p> */}
-        <div className="grid grid-cols-1 gap-4 border-t-2 py-2 md:grid-cols-2 ">
-          {/* {showFeedList.map((feed) => {
+        <div className="grid grid-cols-1 gap-4 border-t-2 py-2 md:grid-cols-2">
+          {showFeedList.map((feed) => {
             return (
-              <div key={`${myFeedFolder}-${feed.id}`} className="mb-2">
-                <Link href={`/my-feed-folder/${myFeedFolder.id}`}>
+              <div key={`${fragment.id}-${feed.id}`} className="mb-2">
+                <Link href={`/my-feed/article/${fragment.id}`}>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-          {/* <img
+                  <img
                     className="h-8"
                     src={feed.platform.faviconUrl}
                     alt={feed.name}
                   />
                   <span className="line-clamp-2 block w-full pt-2 text-left text-sm font-bold tracking-wide">
                     {feed.name}
-                  </span> */}
-          {/* </Link>
-              </div> */}
-          {/* ); */}
-          {/* })}  */}
+                  </span>
+                </Link>
+              </div>
+            );
+          })}
           {/* {moreFeedsCount > 0 && (
             <ShowMyFeedListDialog
               buttonLabel={`More +${moreFeedsCount}`}

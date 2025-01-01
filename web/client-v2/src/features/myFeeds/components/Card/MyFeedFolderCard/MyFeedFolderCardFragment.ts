@@ -3,9 +3,17 @@ import { graphql } from "gql.tada";
 export const MyFeedFolderCardFragment = graphql(`
   fragment MyFeedFolderCardFragment on MyFeedFolder {
     id
-    userId
     title
     description
+    feeds {
+      id
+      name
+      thumbnailUrl
+      platform {
+        id
+        faviconUrl
+      }
+    }
     createdAt
     updatedAt
   }
