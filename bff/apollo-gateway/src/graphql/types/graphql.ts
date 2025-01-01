@@ -160,6 +160,25 @@ export class FeedInput {
     id: string;
 }
 
+export class CreateMyFeedFolderInput {
+    userId: string;
+    title: string;
+    description?: Nullable<string>;
+    feedIds?: Nullable<string[]>;
+}
+
+export class UpdateMyFeedFolderInput {
+    myFeedFolderId: string;
+    title?: Nullable<string>;
+    description?: Nullable<string>;
+    feedIds?: Nullable<string[]>;
+}
+
+export class DeleteMyFeedFolderInput {
+    myFeedFolderId: string;
+    userId: string;
+}
+
 export class MyFeedFoldersInput {
     keyword?: Nullable<string>;
     first?: Nullable<number>;
@@ -269,6 +288,12 @@ export abstract class IMutation {
     abstract deleteFavoriteArticle(input: DeleteFavoriteArticleInput): boolean | Promise<boolean>;
 
     abstract deleteFavoriteArticleByArticleId(input: DeleteFavoriteArticleByArticleIdInput): boolean | Promise<boolean>;
+
+    abstract createMyFeedFolder(createMyFeedFolderInput: CreateMyFeedFolderInput): MyFeedFolder | Promise<MyFeedFolder>;
+
+    abstract updateMyFeedFolder(updateMyFeedFolderInput: UpdateMyFeedFolderInput): MyFeedFolder | Promise<MyFeedFolder>;
+
+    abstract deleteMyFeedFolder(deleteMyFeedFolderInput: DeleteMyFeedFolderInput): boolean | Promise<boolean>;
 }
 
 export class Bookmark implements Node {
