@@ -2,6 +2,7 @@ import {
   GetMyFeedFoldersRequest,
   CreateMyFeedFolderRequest,
   UpdateMyFeedFolderRequest,
+  DeleteMyFeedFolderRequest,
 } from '@checkpicks/checkpicks-rpc-ts/src/grpc/my_feed/my_feed_pb';
 import { Injectable } from '@nestjs/common';
 import { StringValue } from 'google-protobuf/google/protobuf/wrappers_pb';
@@ -12,6 +13,7 @@ import {
   CreateMyFeedFolderInput,
   MyFeedFolder,
   UpdateMyFeedFolderInput,
+  DeleteMyFeedFolderInput,
 } from 'src/graphql/types/graphql';
 
 import { convertTimestampToInt } from '../../../utils/timestamp';
@@ -263,6 +265,30 @@ export class MyFeedFolderService {
         };
 
         resolve(folder);
+      });
+    });
+  }
+
+  async deleteMyFeedFolder(
+    userId: string,
+    deleteMyFeedFolderInput: DeleteMyFeedFolderInput,
+  ): Promise<boolean> {
+    const req = new DeleteMyFeedFolderRequest();
+    req.setUserId(userId);
+    req.setMyFeedFolderId(deleteMyFeedFolderInput.myFeedFolderId);
+
+    return new Promise((resolve, reject) => {
+      const client = this.grpcMyFeedClientService.getGrpcMyFeedService();
+      client.deleteMyFeedFolder(req, (err) => {
+        if (err) {
+          reject({
+            code: err?.code || 500,
+            message: err?.message || 'something went wrong',
+          });
+          return;
+        }
+
+        resolve(true);
       });
     });
   }
