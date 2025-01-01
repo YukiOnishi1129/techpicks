@@ -5,6 +5,7 @@ import {
   MyFeedFoldersInput,
   MyFeedFolder,
   CreateMyFeedFolderInput,
+  UpdateMyFeedFolderInput,
 } from 'src/graphql/types/graphql';
 
 import { MyFeedFolderService } from './folder/my-feed-folder.service';
@@ -39,6 +40,20 @@ export class PersonalFeedResolver {
     return await this.myFeedFolderService.createMyFeedFolder(
       user.id,
       createMyFeedFolderInput,
+    );
+  }
+
+  @Mutation(() => MyFeedFolder)
+  @UseGuards(SupabaseAuthGuard)
+  async updateMyFeedFolder(
+    @Args('updateMyFeedFolderInput')
+    updateMyFeedFolderInput: UpdateMyFeedFolderInput,
+    @Context() context: GraphQLContext,
+  ): Promise<MyFeedFolder> {
+    const user = context.req.user;
+    return await this.myFeedFolderService.updateMyFeedFolder(
+      user.id,
+      updateMyFeedFolderInput,
     );
   }
 }
