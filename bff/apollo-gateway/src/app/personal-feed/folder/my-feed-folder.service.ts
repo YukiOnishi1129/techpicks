@@ -3,6 +3,7 @@ import {
   CreateMyFeedFolderRequest,
   UpdateMyFeedFolderRequest,
   DeleteMyFeedFolderRequest,
+  GetMyFeedFolderRequest,
 } from '@checkpicks/checkpicks-rpc-ts/src/grpc/my_feed/my_feed_pb';
 import { Injectable } from '@nestjs/common';
 import { StringValue } from 'google-protobuf/google/protobuf/wrappers_pb';
@@ -12,6 +13,7 @@ import {
   MyFeedFolderConnection,
   CreateMyFeedFolderInput,
   MyFeedFolder,
+  MyFeedFolderInput,
   UpdateMyFeedFolderInput,
   DeleteMyFeedFolderInput,
 } from 'src/graphql/types/graphql';
@@ -107,6 +109,72 @@ export class MyFeedFolderService {
         };
 
         resolve(folders);
+      });
+    });
+  }
+
+  async getMyFeedFolder(
+    userId: string,
+    myFeedFolderInput: MyFeedFolderInput,
+  ): Promise<MyFeedFolder> {
+    const req = new GetMyFeedFolderRequest();
+    req.setUserId(userId);
+    req.setMyFeedFolderId(myFeedFolderInput.id);
+
+    return new Promise((resolve, reject) => {
+      const client = this.grpcMyFeedClientService.getGrpcMyFeedService();
+      client.getMyFeedFolder(req, (err, res) => {
+        if (err) {
+          reject({
+            code: err?.code || 500,
+            message: err?.message || 'something went wrong',
+          });
+          return;
+        }
+
+        const resFolder = res.toObject().myFeedFolder;
+
+        const folder: MyFeedFolder = {
+          createdAt: convertTimestampToInt(resFolder.createdAt),
+          description: resFolder?.description.value,
+          feeds: resFolder.feedsList.map((feed) => {
+            return {
+              apiQueryParams: feed.apiQueryParam.value || '',
+              category: {
+                createdAt: convertTimestampToInt(feed.category.createdAt),
+                id: feed.category.id,
+                name: feed.category.name,
+                type: feed.category.type,
+                updatedAt: convertTimestampToInt(feed.category.updatedAt),
+              },
+              createdAt: convertTimestampToInt(feed.createdAt),
+              description: feed.description,
+              id: feed.id,
+              name: feed.name,
+              platform: {
+                createdAt: convertTimestampToInt(feed.platform.createdAt),
+                faviconUrl: feed.platform.faviconUrl,
+                id: feed.platform.id,
+                isEng: feed.platform.isEng,
+                name: feed.platform.name,
+                platformSiteType: feed.platform.platformSiteType,
+                siteUrl: feed.platform.siteUrl,
+                updatedAt: convertTimestampToInt(feed.platform.updatedAt),
+              },
+              rssUrl: feed.rssUrl,
+              siteUrl: feed.siteUrl,
+              thumbnailUrl: feed.thumbnailUrl,
+              trendPlatformType: feed.trendPlatformType,
+              updatedAt: convertTimestampToInt(feed.updatedAt),
+            };
+          }),
+          id: resFolder.id,
+          title: resFolder.title,
+          updatedAt: convertTimestampToInt(resFolder.updatedAt),
+          userId: resFolder.userId,
+        };
+
+        resolve(folder);
       });
     });
   }
