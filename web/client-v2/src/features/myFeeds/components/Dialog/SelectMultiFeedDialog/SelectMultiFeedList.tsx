@@ -57,6 +57,8 @@ export const SelectMultiFeedList: FC<SelectMultiFeedListProps> = ({
   defaultSelectedFeedList,
   onSelectFeedList,
 }) => {
+  const observerTarget = useRef(null);
+
   const {
     data: res,
     fetchMore,
@@ -91,8 +93,6 @@ export const SelectMultiFeedList: FC<SelectMultiFeedListProps> = ({
   const { stopPropagate } = useHookForm();
 
   const selectedTargetFeedList = form.watch("targetFeedList");
-
-  const observerTarget = useRef(null);
 
   const [hashMore, setHashMore] = useState(true);
   const [offset, setOffset] = useState(1);
@@ -240,7 +240,7 @@ export const SelectMultiFeedList: FC<SelectMultiFeedListProps> = ({
     if (offset > 1) {
       loadMore();
     }
-  }, [loadMore, offset, hashMore]);
+  }, [offset, hashMore]); // eslint-disable-line
 
   if (onlyFetchArticlesError) {
     return <div>{onlyFetchArticlesError.message}</div>;
@@ -386,7 +386,7 @@ export const SelectMultiFeedList: FC<SelectMultiFeedListProps> = ({
                 />
               ))}
               <div ref={observerTarget}>
-                {hashMore && (
+                {hashMore && isNextPage && (
                   <div className="flex justify-center py-4">
                     <Loader />
                   </div>
