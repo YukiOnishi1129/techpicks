@@ -150,7 +150,7 @@ export const MyFeedFolderList: FC<MyFeedFolderListProps> = ({
               <MyFeedFolderCard
                 key={`${i}-${edge.node.id}`}
                 data={edge.node}
-                feeds={resSuspenseData.feeds}
+                initialFeedList={resSuspenseData.feeds}
               />
             ))}
           </div>

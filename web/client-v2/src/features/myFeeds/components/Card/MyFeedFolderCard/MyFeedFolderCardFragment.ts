@@ -1,28 +1,17 @@
 import { graphql } from "gql.tada";
 
-export const MyFeedFolderCardFragment = graphql(`
-  fragment MyFeedFolderCardFragment on MyFeedFolder {
-    id
-    title
-    description
-    feeds {
-      id
-      name
-      thumbnailUrl
-      platform {
-        id
-        faviconUrl
-      }
-    }
-    createdAt
-    updatedAt
-  }
-`);
+import {
+  FeedListUpdateMyFeedFolderDialogFragment,
+  UpdateMyFeedFolderDialogFragment,
+} from "../../Dialog/UpdateMyFeedFolderDialog/UpdateMyFeedFolderDialogFragment";
 
-export const FeedsMyFeedFolderCardFragment = graphql(`
-  fragment FeedsMyFeedFolderCardFragment on FeedConnection {
-    edges {
-      node {
+export const MyFeedFolderCardFragment = graphql(
+  `
+    fragment MyFeedFolderCardFragment on MyFeedFolder {
+      id
+      title
+      description
+      feeds {
         id
         name
         thumbnailUrl
@@ -31,6 +20,30 @@ export const FeedsMyFeedFolderCardFragment = graphql(`
           faviconUrl
         }
       }
+      createdAt
+      updatedAt
+      ...UpdateMyFeedFolderDialogFragment
     }
-  }
-`);
+  `,
+  [UpdateMyFeedFolderDialogFragment]
+);
+
+export const FeedListMyFeedFolderCardFragment = graphql(
+  `
+    fragment FeedListMyFeedFolderCardFragment on FeedConnection {
+      edges {
+        node {
+          id
+          name
+          thumbnailUrl
+          platform {
+            id
+            faviconUrl
+          }
+        }
+      }
+      ...FeedListUpdateMyFeedFolderDialogFragment
+    }
+  `,
+  [FeedListUpdateMyFeedFolderDialogFragment]
+);

@@ -884,7 +884,7 @@ export type FeedListTemplateQueryQuery = { __typename?: 'Query', feeds: { __type
 
 export type MyFeedFolderCardFragmentFragment = { __typename?: 'MyFeedFolder', id: string, title: string, description?: string | null, createdAt: number, updatedAt: number, feeds?: Array<{ __typename?: 'Feed', id: string, name: string, thumbnailUrl: string, platform: { __typename?: 'Platform', id: string, faviconUrl: string } }> | null };
 
-export type FeedsMyFeedFolderCardFragmentFragment = { __typename?: 'FeedConnection', edges: Array<{ __typename?: 'FeedEdge', node: { __typename?: 'Feed', id: string, name: string, thumbnailUrl: string, platform: { __typename?: 'Platform', id: string, faviconUrl: string } } }> };
+export type FeedListMyFeedFolderCardFragmentFragment = { __typename?: 'FeedConnection', edges: Array<{ __typename?: 'FeedEdge', node: { __typename?: 'Feed', id: string, name: string, thumbnailUrl: string, platform: { __typename?: 'Platform', id: string, faviconUrl: string } } }> };
 
 export type CreateMyFeedFolderMutationMutationVariables = Exact<{
   input: CreateMyFeedFolderInput;
@@ -892,6 +892,10 @@ export type CreateMyFeedFolderMutationMutationVariables = Exact<{
 
 
 export type CreateMyFeedFolderMutationMutation = { __typename?: 'Mutation', createMyFeedFolder: { __typename?: 'MyFeedFolder', id: string } };
+
+export type UpdateMyFeedFolderDialogFragmentFragment = { __typename?: 'MyFeedFolder', id: string, title: string, description?: string | null, feeds?: Array<{ __typename?: 'Feed', id: string, name: string }> | null };
+
+export type FeedListUpdateMyFeedFolderDialogFragmentFragment = { __typename?: 'FeedConnection', edges: Array<{ __typename?: 'FeedEdge', node: { __typename?: 'Feed', id: string, name: string } }> };
 
 export type MyFeedFolderListQueryQueryVariables = Exact<{
   myFeedFoldersInput: MyFeedFoldersInput;
@@ -907,6 +911,8 @@ export type MyFeedFolderListTemplateQueryQueryVariables = Exact<{
 
 
 export type MyFeedFolderListTemplateQueryQuery = { __typename?: 'Query', myFeedFolders: { __typename?: 'MyFeedFolderConnection', pageInfo: { __typename?: 'PageInfo', endCursor?: string | null, hasNextPage: boolean }, edges: Array<{ __typename?: 'MyFeedFolderEdge', node: { __typename?: 'MyFeedFolder', id: string } }> }, feeds: { __typename?: 'FeedConnection', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null }, edges: Array<{ __typename?: 'FeedEdge', node: { __typename?: 'Feed', id: string, name: string, thumbnailUrl: string, platform: { __typename?: 'Platform', id: string, faviconUrl: string } } }> } };
+
+export type UseManageMyFeedFolderFragmentFragment = { __typename?: 'MyFeedFolder', id: string };
 
 export type OgpPreviewContentFragmentFragment = { __typename?: 'ArticleOGP', title: string, description?: string | null, thumbnailUrl: string, articleUrl: string, siteName: string, faviconUrl: string };
 
@@ -1406,6 +1412,23 @@ export const FeedCardWrapperFragmentFragmentDoc = gql`
   ...FeedCardItemFragment
 }
     ${FeedCardItemFragmentFragmentDoc}`;
+export const UseManageMyFeedFolderFragmentFragmentDoc = gql`
+    fragment UseManageMyFeedFolderFragment on MyFeedFolder {
+  id
+}
+    `;
+export const UpdateMyFeedFolderDialogFragmentFragmentDoc = gql`
+    fragment UpdateMyFeedFolderDialogFragment on MyFeedFolder {
+  id
+  title
+  description
+  feeds {
+    id
+    name
+  }
+  ...UseManageMyFeedFolderFragment
+}
+    ${UseManageMyFeedFolderFragmentFragmentDoc}`;
 export const MyFeedFolderCardFragmentFragmentDoc = gql`
     fragment MyFeedFolderCardFragment on MyFeedFolder {
   id
@@ -1422,10 +1445,21 @@ export const MyFeedFolderCardFragmentFragmentDoc = gql`
   }
   createdAt
   updatedAt
+  ...UpdateMyFeedFolderDialogFragment
+}
+    ${UpdateMyFeedFolderDialogFragmentFragmentDoc}`;
+export const FeedListUpdateMyFeedFolderDialogFragmentFragmentDoc = gql`
+    fragment FeedListUpdateMyFeedFolderDialogFragment on FeedConnection {
+  edges {
+    node {
+      id
+      name
+    }
+  }
 }
     `;
-export const FeedsMyFeedFolderCardFragmentFragmentDoc = gql`
-    fragment FeedsMyFeedFolderCardFragment on FeedConnection {
+export const FeedListMyFeedFolderCardFragmentFragmentDoc = gql`
+    fragment FeedListMyFeedFolderCardFragment on FeedConnection {
   edges {
     node {
       id
@@ -1437,8 +1471,9 @@ export const FeedsMyFeedFolderCardFragmentFragmentDoc = gql`
       }
     }
   }
+  ...FeedListUpdateMyFeedFolderDialogFragment
 }
-    `;
+    ${FeedListUpdateMyFeedFolderDialogFragmentFragmentDoc}`;
 export const GetLoggedBaseLayoutQueryDocument = gql`
     query GetLoggedBaseLayoutQuery($input: FavoriteArticleFoldersInput!, $myFeedFoldersInput: MyFeedFoldersInput!) {
   favoriteArticleFolders(input: $input) {
@@ -2777,10 +2812,10 @@ export const MyFeedFolderListTemplateQueryDocument = gql`
         name
       }
     }
-    ...FeedsMyFeedFolderCardFragment
+    ...FeedListMyFeedFolderCardFragment
   }
 }
-    ${FeedsMyFeedFolderCardFragmentFragmentDoc}`;
+    ${FeedListMyFeedFolderCardFragmentFragmentDoc}`;
 
 /**
  * __useMyFeedFolderListTemplateQueryQuery__

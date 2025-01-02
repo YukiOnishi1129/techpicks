@@ -1,6 +1,6 @@
 import { graphql } from "gql.tada";
 
-import { FeedsMyFeedFolderCardFragment } from "../../Card/MyFeedFolderCard/MyFeedFolderCardFragment";
+import { FeedListMyFeedFolderCardFragment } from "../../Card/MyFeedFolderCard/MyFeedFolderCardFragment";
 
 export const MyFeedFolderListTemplateQuery = graphql(
   `
@@ -30,9 +30,9 @@ export const MyFeedFolderListTemplateQuery = graphql(
             name
           }
         }
-        ...FeedsMyFeedFolderCardFragment
+        ...FeedListMyFeedFolderCardFragment
       }
     }
   `,
-  [FeedsMyFeedFolderCardFragment]
+  [FeedListMyFeedFolderCardFragment]
 );

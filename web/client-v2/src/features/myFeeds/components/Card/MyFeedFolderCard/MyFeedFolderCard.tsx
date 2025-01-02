@@ -14,9 +14,10 @@ import { FC } from "react";
 import { useStatusToast } from "@/hooks/useStatusToast";
 
 import {
-  FeedsMyFeedFolderCardFragment,
+  FeedListMyFeedFolderCardFragment,
   MyFeedFolderCardFragment,
 } from "./MyFeedFolderCardFragment";
+import { UpdateMyFeedFolderDialog } from "../../Dialog";
 
 // import { diffStringArray } from "@/lib/convert";
 
@@ -32,31 +33,20 @@ const SHOW_FEED_LIST_COUNT = 3;
 
 type MyFeedFolderCardProps = {
   data: FragmentOf<typeof MyFeedFolderCardFragment>;
-  feeds: FragmentOf<typeof FeedsMyFeedFolderCardFragment>;
-  //   user?: User;
-  //   handleUpdateMyFeedFolder: ({
-  //     id,
-  //     title,
-  //     description,
-  //   }: {
-  //     id: string;
-  //     title: string;
-  //     description: string;
-  //   }) => Promise<void>;
-  //   handleDeleteMyFeedFolder: (id: string) => Promise<void>;
+  initialFeedList: FragmentOf<typeof FeedListMyFeedFolderCardFragment>;
 };
 
 export const MyFeedFolderCard: FC<MyFeedFolderCardProps> = ({
   data,
-  //   user,
-  //   myFeedFolder,
-  //   initialFeedList,
-  //   handleUpdateMyFeedFolder,
-  //   handleDeleteMyFeedFolder,
+  initialFeedList,
 }) => {
   const { successToast, failToast } = useStatusToast();
   const pathname = usePathname();
   const fragment = readFragment(MyFeedFolderCardFragment, data);
+  const initialFeedListFragment = readFragment(
+    FeedListMyFeedFolderCardFragment,
+    initialFeedList
+  );
   //   const selectedFeedList = myFeedFolder.feeds.map((feed) => {
   //     return {
   //       ...feed,
@@ -88,17 +78,10 @@ export const MyFeedFolderCard: FC<MyFeedFolderCardProps> = ({
             </Link>
           </h3>
 
-          {/* <UpdateMyFeedFolderDialog
-            myFeedFolderId={myFeedFolder.id}
-            title={myFeedFolder.title}
-            description={myFeedFolder?.description || ""}
-            selectedFeedList={selectedFeedList}
-            initialFeedList={initialFeedList}
-            handleUpdateMyFeedFolder={
-              handleUpdateMyFeedFolderAndInsertOrDeleteMyFeed
-            }
-            handleDeleteMyFeedFolder={handleDeleteMyFeedFolder}
-          /> */}
+          <UpdateMyFeedFolderDialog
+            data={fragment}
+            initialFeedList={initialFeedListFragment}
+          />
         </div>
 
         {/* <p className="line-clamp-3 h-[62px] w-full text-sm">
