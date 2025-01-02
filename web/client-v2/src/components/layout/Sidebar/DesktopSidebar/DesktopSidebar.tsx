@@ -24,6 +24,7 @@ import { LoggedBaseLayoutQuery } from "@/components/layout/BaseLayout/LoggedBase
 
 import { FavoriteArticleFolderLink } from "../FavoriteArticleFolderLink";
 import { LogoutLink } from "../LogoutLink";
+import { MyFeedFolderLink } from "../MyFeedFolderLink";
 // import { MyFeedFolderLinks } from "./MyFeedFolderLinks";
 
 export function DesktopSidebar() {
@@ -34,6 +35,9 @@ export function DesktopSidebar() {
         input: {
           isAllFetch: true,
           isFolderOnly: true,
+        },
+        myFeedFoldersInput: {
+          // isAllFetch: true,
         },
       },
     }
@@ -110,14 +114,19 @@ export function DesktopSidebar() {
               My Feeds
             </h2>
             <div className="mt-2 text-base">
-              {/* <Link
-                  href="/my-feed-folder"
-                  className="flex cursor-pointer items-center space-x-2 rounded-md p-2 hover:bg-secondary"
-                >
-                  <MdFeed />
-                  <span className="pl-2">All</span>
-                </Link> */}
-              {/* <MyFeedFolderLinks myFeedFolders={myFeedFolders} /> */}
+              <Link
+                href="/my-feed"
+                className="flex cursor-pointer items-center space-x-2 rounded-md p-2 hover:bg-secondary"
+              >
+                <MdFeed />
+                <span className="pl-2">Folders</span>
+              </Link>
+              {resSuspenseData.myFeedFolders.edges.map((edge, i) => (
+                <MyFeedFolderLink
+                  key={`sidebar-my-feed-link-${i}-${edge.node.id}`}
+                  data={edge.node}
+                />
+              ))}
               {/* <div className="ml-4">
                   <CreateMyFeedFolderDialog
                     buttonVariant="ghost"

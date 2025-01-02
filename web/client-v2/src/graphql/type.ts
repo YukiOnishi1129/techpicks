@@ -620,10 +620,11 @@ export type UpdateMyFeedFolderInput = {
 
 export type GetLoggedBaseLayoutQueryQueryVariables = Exact<{
   input: FavoriteArticleFoldersInput;
+  myFeedFoldersInput: MyFeedFoldersInput;
 }>;
 
 
-export type GetLoggedBaseLayoutQueryQuery = { __typename?: 'Query', favoriteArticleFolders: { __typename?: 'FavoriteArticleFolderConnection', edges: Array<{ __typename?: 'FavoriteArticleFolderEdge', node: { __typename?: 'FavoriteArticleFolder', id: string, title: string } }> } };
+export type GetLoggedBaseLayoutQueryQuery = { __typename?: 'Query', favoriteArticleFolders: { __typename?: 'FavoriteArticleFolderConnection', edges: Array<{ __typename?: 'FavoriteArticleFolderEdge', node: { __typename?: 'FavoriteArticleFolder', id: string, title: string } }> }, myFeedFolders: { __typename?: 'MyFeedFolderConnection', edges: Array<{ __typename?: 'MyFeedFolderEdge', node: { __typename?: 'MyFeedFolder', id: string } }> } };
 
 export type FavoriteArticleFolderLinkFragmentFragment = { __typename?: 'FavoriteArticleFolder', id: string, title: string };
 
@@ -877,7 +878,7 @@ export type FeedListTemplateQueryQueryVariables = Exact<{
 
 export type FeedListTemplateQueryQuery = { __typename?: 'Query', feeds: { __typename?: 'FeedConnection', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null }, edges: Array<{ __typename?: 'FeedEdge', node: { __typename?: 'Feed', id: string, myFeedIds?: Array<string> | null, name: string, description: string, siteUrl: string, thumbnailUrl: string, platform: { __typename?: 'Platform', id: string, faviconUrl: string } } }> } };
 
-export type MyFeedFolderCardFragmentFragment = { __typename?: 'MyFeedFolder', id: string, userId: string, title: string, description?: string | null, createdAt: number, updatedAt: number };
+export type MyFeedFolderCardFragmentFragment = { __typename?: 'MyFeedFolder', id: string, title: string, description?: string | null, createdAt: number, updatedAt: number, feeds?: Array<{ __typename?: 'Feed', id: string, name: string, thumbnailUrl: string, platform: { __typename?: 'Platform', id: string, faviconUrl: string } }> | null };
 
 export type CreateMyFeedFolderMutationMutationVariables = Exact<{
   input: CreateMyFeedFolderInput;
@@ -891,7 +892,7 @@ export type MyFeedFolderListQueryQueryVariables = Exact<{
 }>;
 
 
-export type MyFeedFolderListQueryQuery = { __typename?: 'Query', myFeedFolders: { __typename?: 'MyFeedFolderConnection', pageInfo: { __typename?: 'PageInfo', endCursor?: string | null, hasNextPage: boolean }, edges: Array<{ __typename?: 'MyFeedFolderEdge', node: { __typename?: 'MyFeedFolder', id: string, userId: string, title: string, description?: string | null, createdAt: number, updatedAt: number } }> } };
+export type MyFeedFolderListQueryQuery = { __typename?: 'Query', myFeedFolders: { __typename?: 'MyFeedFolderConnection', pageInfo: { __typename?: 'PageInfo', endCursor?: string | null, hasNextPage: boolean }, edges: Array<{ __typename?: 'MyFeedFolderEdge', node: { __typename?: 'MyFeedFolder', id: string, title: string, description?: string | null, createdAt: number, updatedAt: number, feeds?: Array<{ __typename?: 'Feed', id: string, name: string, thumbnailUrl: string, platform: { __typename?: 'Platform', id: string, faviconUrl: string } }> | null } }> } };
 
 export type MyFeedFolderListTemplateQueryQueryVariables = Exact<{
   myFeedFoldersInput: MyFeedFoldersInput;
@@ -1382,19 +1383,34 @@ export const FeedCardWrapperFragmentFragmentDoc = gql`
 export const MyFeedFolderCardFragmentFragmentDoc = gql`
     fragment MyFeedFolderCardFragment on MyFeedFolder {
   id
-  userId
   title
   description
+  feeds {
+    id
+    name
+    thumbnailUrl
+    platform {
+      id
+      faviconUrl
+    }
+  }
   createdAt
   updatedAt
 }
     `;
 export const GetLoggedBaseLayoutQueryDocument = gql`
-    query GetLoggedBaseLayoutQuery($input: FavoriteArticleFoldersInput!) {
+    query GetLoggedBaseLayoutQuery($input: FavoriteArticleFoldersInput!, $myFeedFoldersInput: MyFeedFoldersInput!) {
   favoriteArticleFolders(input: $input) {
     edges {
       node {
         ...FavoriteArticleFolderLinkFragment
+      }
+    }
+  }
+  myFeedFolders(myFeedFoldersInput: $myFeedFoldersInput) {
+    edges {
+      node {
+        id
       }
     }
   }
@@ -1414,6 +1430,7 @@ export const GetLoggedBaseLayoutQueryDocument = gql`
  * const { data, loading, error } = useGetLoggedBaseLayoutQueryQuery({
  *   variables: {
  *      input: // value for 'input'
+ *      myFeedFoldersInput: // value for 'myFeedFoldersInput'
  *   },
  * });
  */

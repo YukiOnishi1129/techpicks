@@ -41,6 +41,9 @@ export const LoggedBaseLayout: FC<LoggedBaseLayoutProps> = async ({
                 isAllFetch: true,
                 isFolderOnly: true,
               },
+              myFeedFoldersInput: {
+                // isAllFetch: true,
+              },
             }}
           >
             <Suspense fallback={<ScreenLoader />}>
