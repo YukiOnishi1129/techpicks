@@ -17,14 +17,3 @@ export const UpdateMyFeedFolderDialogFragment = graphql(
   `,
   [UseManageMyFeedFolderFragment]
 );
-
-export const FeedListUpdateMyFeedFolderDialogFragment = graphql(`
-  fragment FeedListUpdateMyFeedFolderDialogFragment on FeedConnection {
-    edges {
-      node {
-        id
-        name
-      }
-    }
-  }
-`);

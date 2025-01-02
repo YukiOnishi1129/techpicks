@@ -4,8 +4,6 @@ import { ScreenLoader } from "@/components/layout/ScreenLoader";
 
 import { PreloadQuery } from "@/lib/apollo/client";
 
-// import { MyFeedFoldersInput } from "@/graphql/type";
-
 import { MyFeedFolderListTemplateQuery } from "./MyFeedFolderListTemplateQuery";
 import { CreateMyFeedFolderDialog } from "../../Dialog";
 import { MyFeedFolderList } from "../../List";
@@ -42,22 +40,12 @@ export const MyFeedFolderListTemplate: FC<MyFeedFolderListTemplateProps> = ({
             first: LIMIT,
             after: null,
           },
-          feedsInput: {
-            first: LIMIT,
-            after: null,
-          },
         }}
       >
         <Suspense fallback={<ScreenLoader />}>
           <MyFeedFolderList keyword={keyword} limit={LIMIT} />
         </Suspense>
       </PreloadQuery>
-
-      {/* <MyFeedFolderList
-            initialMyFeedFolders={myFeedFolders}
-            user={user}
-            initialFeedList={resInitialFeedList.data.feeds}
-          /> */}
 
       {/* <div className="fixed bottom-20 right-4 z-50 md:hidden">
             <MyFeedFolderKeywordSearchDialog keyword={keyword} />

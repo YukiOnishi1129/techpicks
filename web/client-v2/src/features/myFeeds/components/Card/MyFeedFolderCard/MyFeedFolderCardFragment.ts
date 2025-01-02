@@ -1,9 +1,6 @@
 import { graphql } from "gql.tada";
 
-import {
-  FeedListUpdateMyFeedFolderDialogFragment,
-  UpdateMyFeedFolderDialogFragment,
-} from "../../Dialog/UpdateMyFeedFolderDialog/UpdateMyFeedFolderDialogFragment";
+import { UpdateMyFeedFolderDialogFragment } from "../../Dialog/UpdateMyFeedFolderDialog/UpdateMyFeedFolderDialogFragment";
 
 export const MyFeedFolderCardFragment = graphql(
   `
@@ -26,24 +23,4 @@ export const MyFeedFolderCardFragment = graphql(
     }
   `,
   [UpdateMyFeedFolderDialogFragment]
-);
-
-export const FeedListMyFeedFolderCardFragment = graphql(
-  `
-    fragment FeedListMyFeedFolderCardFragment on FeedConnection {
-      edges {
-        node {
-          id
-          name
-          thumbnailUrl
-          platform {
-            id
-            faviconUrl
-          }
-        }
-      }
-      ...FeedListUpdateMyFeedFolderDialogFragment
-    }
-  `,
-  [FeedListUpdateMyFeedFolderDialogFragment]
 );

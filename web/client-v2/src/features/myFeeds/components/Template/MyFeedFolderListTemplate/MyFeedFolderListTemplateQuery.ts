@@ -1,38 +1,19 @@
 import { graphql } from "gql.tada";
 
-import { FeedListMyFeedFolderCardFragment } from "../../Card/MyFeedFolderCard/MyFeedFolderCardFragment";
-
-export const MyFeedFolderListTemplateQuery = graphql(
-  `
-    query MyFeedFolderListTemplateQuery(
-      $myFeedFoldersInput: MyFeedFoldersInput!
-      $feedsInput: FeedsInput!
-    ) {
-      myFeedFolders(myFeedFoldersInput: $myFeedFoldersInput) {
-        pageInfo {
-          endCursor
-          hasNextPage
-        }
-        edges {
-          node {
-            id
-          }
-        }
+export const MyFeedFolderListTemplateQuery = graphql(`
+  query MyFeedFolderListTemplateQuery(
+    $myFeedFoldersInput: MyFeedFoldersInput!
+  ) {
+    myFeedFolders(myFeedFoldersInput: $myFeedFoldersInput) {
+      pageInfo {
+        endCursor
+        hasNextPage
       }
-      feeds(feedsInput: $feedsInput) {
-        pageInfo {
-          hasNextPage
-          endCursor
+      edges {
+        node {
+          id
         }
-        edges {
-          node {
-            id
-            name
-          }
-        }
-        ...FeedListMyFeedFolderCardFragment
       }
     }
-  `,
-  [FeedListMyFeedFolderCardFragment]
-);
+  }
+`);

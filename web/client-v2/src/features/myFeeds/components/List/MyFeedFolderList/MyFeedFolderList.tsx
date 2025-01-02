@@ -28,10 +28,6 @@ export const MyFeedFolderList: FC<MyFeedFolderListProps> = ({
           first: limit,
           after: null,
         },
-        feedsInput: {
-          first: limit,
-          after: null,
-        },
       },
     }
   );
@@ -147,11 +143,7 @@ export const MyFeedFolderList: FC<MyFeedFolderListProps> = ({
         <div className="mb-8">
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
             {res?.myFeedFolders?.edges.map((edge, i) => (
-              <MyFeedFolderCard
-                key={`${i}-${edge.node.id}`}
-                data={edge.node}
-                initialFeedList={resSuspenseData.feeds}
-              />
+              <MyFeedFolderCard key={`${i}-${edge.node.id}`} data={edge.node} />
             ))}
           </div>
         </div>

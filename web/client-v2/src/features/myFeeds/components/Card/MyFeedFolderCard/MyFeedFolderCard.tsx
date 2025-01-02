@@ -13,10 +13,7 @@ import { FC } from "react";
 
 import { useStatusToast } from "@/hooks/useStatusToast";
 
-import {
-  FeedListMyFeedFolderCardFragment,
-  MyFeedFolderCardFragment,
-} from "./MyFeedFolderCardFragment";
+import { MyFeedFolderCardFragment } from "./MyFeedFolderCardFragment";
 import { UpdateMyFeedFolderDialog } from "../../Dialog";
 
 // import { diffStringArray } from "@/lib/convert";
@@ -33,20 +30,13 @@ const SHOW_FEED_LIST_COUNT = 3;
 
 type MyFeedFolderCardProps = {
   data: FragmentOf<typeof MyFeedFolderCardFragment>;
-  initialFeedList: FragmentOf<typeof FeedListMyFeedFolderCardFragment>;
 };
 
-export const MyFeedFolderCard: FC<MyFeedFolderCardProps> = ({
-  data,
-  initialFeedList,
-}) => {
+export const MyFeedFolderCard: FC<MyFeedFolderCardProps> = ({ data }) => {
   const { successToast, failToast } = useStatusToast();
   const pathname = usePathname();
   const fragment = readFragment(MyFeedFolderCardFragment, data);
-  const initialFeedListFragment = readFragment(
-    FeedListMyFeedFolderCardFragment,
-    initialFeedList
-  );
+
   //   const selectedFeedList = myFeedFolder.feeds.map((feed) => {
   //     return {
   //       ...feed,
@@ -78,10 +68,7 @@ export const MyFeedFolderCard: FC<MyFeedFolderCardProps> = ({
             </Link>
           </h3>
 
-          <UpdateMyFeedFolderDialog
-            data={fragment}
-            initialFeedList={initialFeedListFragment}
-          />
+          <UpdateMyFeedFolderDialog data={fragment} />
         </div>
 
         {/* <p className="line-clamp-3 h-[62px] w-full text-sm">

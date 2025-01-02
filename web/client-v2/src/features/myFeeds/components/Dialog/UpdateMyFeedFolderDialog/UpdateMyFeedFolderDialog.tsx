@@ -7,19 +7,14 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 
 import { UpdateMyFeedFolderDialogContent } from "./UpdateMyFeedFolderDialogContent";
-import {
-  FeedListUpdateMyFeedFolderDialogFragment,
-  UpdateMyFeedFolderDialogFragment,
-} from "./UpdateMyFeedFolderDialogFragment";
+import { UpdateMyFeedFolderDialogFragment } from "./UpdateMyFeedFolderDialogFragment";
 
 type UpdateMyFeedFolderDialogProps = {
   data: FragmentOf<typeof UpdateMyFeedFolderDialogFragment>;
-  initialFeedList: FragmentOf<typeof FeedListUpdateMyFeedFolderDialogFragment>;
 };
 
 export const UpdateMyFeedFolderDialog: FC<UpdateMyFeedFolderDialogProps> = ({
   data,
-  initialFeedList,
 }) => {
   const [open, setOpen] = useState(false);
   const handleClose = useCallback(() => {
@@ -38,11 +33,7 @@ export const UpdateMyFeedFolderDialog: FC<UpdateMyFeedFolderDialogProps> = ({
         </Button>
       </DialogTrigger>
       {open && (
-        <UpdateMyFeedFolderDialogContent
-          data={data}
-          initialFeedList={initialFeedList}
-          onClose={handleClose}
-        />
+        <UpdateMyFeedFolderDialogContent data={data} onClose={handleClose} />
       )}
     </Dialog>
   );

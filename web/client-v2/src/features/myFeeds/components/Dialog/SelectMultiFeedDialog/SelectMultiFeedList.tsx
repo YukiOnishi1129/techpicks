@@ -68,7 +68,7 @@ export const SelectMultiFeedList: FC<SelectMultiFeedListProps> = ({
         after: null,
       },
     },
-    fetchPolicy: "cache-first",
+    fetchPolicy: "network-only",
     nextFetchPolicy: "network-only",
   });
 
@@ -111,7 +111,7 @@ export const SelectMultiFeedList: FC<SelectMultiFeedListProps> = ({
               platformSiteTypeForm.getValues("platformSiteType")
             ),
             first: LIMIT,
-            after: endCursor,
+            after: null,
           },
         },
         updateQuery: (prev, { fetchMoreResult }) => {

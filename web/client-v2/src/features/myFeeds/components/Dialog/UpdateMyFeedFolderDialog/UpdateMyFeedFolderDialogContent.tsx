@@ -31,10 +31,7 @@ import { Input } from "@/components/ui/input";
 
 import { SelectOptionType } from "@/types/utils";
 
-import {
-  UpdateMyFeedFolderDialogFragment,
-  FeedListUpdateMyFeedFolderDialogFragment,
-} from "./UpdateMyFeedFolderDialogFragment";
+import { UpdateMyFeedFolderDialogFragment } from "./UpdateMyFeedFolderDialogFragment";
 import { SelectMultiFeedDialog } from "../SelectMultiFeedDialog";
 
 // import { DeleteMyFeedFolderAlertDialog } from "../Delete/DeleteMyFeedFolderAlertDialog";
@@ -57,18 +54,13 @@ const formSchema = z.object({
 
 type UpdateMyFeedFolderDialogContentProps = {
   data: FragmentOf<typeof UpdateMyFeedFolderDialogFragment>;
-  initialFeedList: FragmentOf<typeof FeedListUpdateMyFeedFolderDialogFragment>;
   onClose: () => void;
 };
 
 export const UpdateMyFeedFolderDialogContent: FC<
   UpdateMyFeedFolderDialogContentProps
-> = ({ data, initialFeedList, onClose }) => {
+> = ({ data, onClose }) => {
   const fragment = readFragment(UpdateMyFeedFolderDialogFragment, data);
-  const fragmentInitFeedList = readFragment(
-    FeedListUpdateMyFeedFolderDialogFragment,
-    initialFeedList
-  );
 
   const { handleUpdateMyFeedFolder, handleDeleteMyFeedFolder } =
     useManageMyFeedFolder({ data: fragment });
