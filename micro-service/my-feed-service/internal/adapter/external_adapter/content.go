@@ -8,7 +8,7 @@ import (
 )
 
 type ContentExternalAdapter interface {
-	GetFeeds(ctx context.Context, req *cpb.GetAllFeedsRequest) (*cpb.GetFeedsResponse, error)
+	GetAllFeeds(ctx context.Context, req *cpb.GetAllFeedsRequest) (*cpb.GetFeedsResponse, error)
 }
 
 type contentExternalAdapter struct {
@@ -21,8 +21,8 @@ func NewContentExternalAdapter(ce external.ContentExternal) ContentExternalAdapt
 	}
 }
 
-func (cea *contentExternalAdapter) GetFeeds(ctx context.Context, req *cpb.GetAllFeedsRequest) (*cpb.GetFeedsResponse, error) {
-	res, err := cea.contentExternal.GetFeeds(ctx, req)
+func (cea *contentExternalAdapter) GetAllFeeds(ctx context.Context, req *cpb.GetAllFeedsRequest) (*cpb.GetFeedsResponse, error) {
+	res, err := cea.contentExternal.GetAllFeeds(ctx, req)
 	if err != nil {
 		return nil, err
 	}

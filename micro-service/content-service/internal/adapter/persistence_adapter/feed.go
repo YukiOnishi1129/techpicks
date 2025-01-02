@@ -71,20 +71,21 @@ func (fpa *feedPersistenceAdapter) GetFeeds(ctx context.Context, req *cpb.GetFee
 
 func (fpa *feedPersistenceAdapter) GetAllFeeds(ctx context.Context, req *cpb.GetAllFeedsRequest) (entity.FeedSlice, error) {
 	q := []qm.QueryMod{
-		qm.Where("deleted_at IS NULL"),
+		qm.InnerJoin("platforms ON feeds.platform_id = platforms.id"),
+		qm.Where("feeds.deleted_at IS NULL"),
 		qm.Load(qm.Rels(entity.FeedRels.Platform)),
 		qm.Load(qm.Rels(entity.FeedRels.Category)),
-		qm.OrderBy("created_at ASC"),
+		qm.OrderBy("feeds.created_at ASC"),
 	}
 
 	if req.GetPlatformSiteType().GetValue() != 0 {
 		switch {
 		case req.GetPlatformSiteType().GetValue() == 1:
-			q = append(q, qm.Where("platforms.site_type = ?", 1))
+			q = append(q, qm.Where("platforms.platform_site_type = ?", 1))
 		case req.GetPlatformSiteType().GetValue() == 2:
-			q = append(q, qm.Where("platforms.site_type = ?", 2))
+			q = append(q, qm.Where("platforms.platform_site_type = ?", 2))
 		case req.GetPlatformSiteType().GetValue() == 3:
-			q = append(q, qm.Where("platforms.site_type = ?", 3))
+			q = append(q, qm.Where("platforms.platform_site_type = ?", 3))
 		}
 	}
 
@@ -94,17 +95,19 @@ func (fpa *feedPersistenceAdapter) GetAllFeeds(ctx context.Context, req *cpb.Get
 
 	if req.GetKeyword().GetValue() != "" {
 		q = append(q, qm.Expr(
-			qm.And("name LIKE ?", "%"+req.GetKeyword().GetValue()+"%"),
-			qm.Or("description LIKE ?", "%"+req.GetKeyword().GetValue()+"%"),
+			qm.And("feeds.name LIKE ?", "%"+req.GetKeyword().GetValue()+"%"),
+			// qm.Or("description LIKE ?", "%"+req.GetKeyword().GetValue()+"%"),
 		))
 	}
 
 	if req.GetFeedIds() != nil {
-		feedIds := make([]interface{}, len(req.GetFeedIds()))
-		for i, id := range req.GetFeedIds() {
-			feedIds[i] = id
+		qmWhere := make([]interface{}, len(req.GetFeedIds()))
+		// fIDparams := fmt.Sprintf("'%s'", req.GetFeedIds()[0].GetValue())
+		for i, fid := range req.GetFeedIds() {
+			qmWhere[i] = fid.GetValue()
+			// fIDparams += fmt.Sprintf(",'%s'", id.GetValue())
 		}
-		q = append(q, qm.WhereIn("id IN ?", feedIds...))
+		q = append(q, qm.WhereIn("feeds.id IN ?", qmWhere...))
 	}
 
 	feeds, err := fpa.feedRepository.GetFeeds(ctx, q)

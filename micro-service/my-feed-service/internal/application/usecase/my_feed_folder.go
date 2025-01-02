@@ -30,7 +30,6 @@ func (m *myUseCase) GetMyFeedFolders(ctx context.Context, req *mfpb.GetMyFeedFol
 		if err != nil {
 			return nil, err
 		}
-		// TODO: fetch feed connect from content service
 		edges[i] = &mfpb.MyFeedFolderEdge{
 			Cursor: mff.ID,
 			Node:   resMff,
@@ -171,6 +170,7 @@ func (m *myUseCase) convertPBMyFeedFolder(mff *entity.MyFeedFolder) (*mfpb.MyFee
 	if mff.Description.Valid {
 		resMfRPC.Description = wrapperspb.String(mff.Description.String)
 	}
+
 	if mff.R != nil && len(mff.R.MyFeeds) > 0 {
 		fIDs := make([]*wrapperspb.StringValue, len(mff.R.MyFeeds))
 		for i, mf := range mff.R.MyFeeds {
@@ -178,7 +178,7 @@ func (m *myUseCase) convertPBMyFeedFolder(mff *entity.MyFeedFolder) (*mfpb.MyFee
 				Value: mf.FeedID,
 			}
 		}
-		resFeeds, err := m.contentExternalAdapter.GetFeeds(context.Background(), &cpb.GetAllFeedsRequest{
+		resFeeds, err := m.contentExternalAdapter.GetAllFeeds(context.Background(), &cpb.GetAllFeedsRequest{
 			FeedIds: fIDs,
 		})
 		if err != nil {

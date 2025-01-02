@@ -916,6 +916,13 @@ export type MyFeedFolderListTemplateQueryQuery = { __typename?: 'Query', myFeedF
 
 export type UseManageMyFeedFolderFragmentFragment = { __typename?: 'MyFeedFolder', id: string };
 
+export type UpdateMyFeedFolderMutationMutationVariables = Exact<{
+  input: UpdateMyFeedFolderInput;
+}>;
+
+
+export type UpdateMyFeedFolderMutationMutation = { __typename?: 'Mutation', updateMyFeedFolder: { __typename?: 'MyFeedFolder', id: string, title: string, description?: string | null, feeds?: Array<{ __typename?: 'Feed', id: string, name: string, description: string, siteUrl: string, thumbnailUrl: string, platform: { __typename?: 'Platform', id: string, name: string, siteUrl: string, platformSiteType: number, faviconUrl: string, isEng: boolean } }> | null } };
+
 export type OgpPreviewContentFragmentFragment = { __typename?: 'ArticleOGP', title: string, description?: string | null, thumbnailUrl: string, articleUrl: string, siteName: string, faviconUrl: string };
 
 export type TrendArticleListQueryQueryVariables = Exact<{
@@ -2862,6 +2869,56 @@ export type MyFeedFolderListTemplateQueryQueryHookResult = ReturnType<typeof use
 export type MyFeedFolderListTemplateQueryLazyQueryHookResult = ReturnType<typeof useMyFeedFolderListTemplateQueryLazyQuery>;
 export type MyFeedFolderListTemplateQuerySuspenseQueryHookResult = ReturnType<typeof useMyFeedFolderListTemplateQuerySuspenseQuery>;
 export type MyFeedFolderListTemplateQueryQueryResult = Apollo.QueryResult<MyFeedFolderListTemplateQueryQuery, MyFeedFolderListTemplateQueryQueryVariables>;
+export const UpdateMyFeedFolderMutationDocument = gql`
+    mutation UpdateMyFeedFolderMutation($input: UpdateMyFeedFolderInput!) {
+  updateMyFeedFolder(updateMyFeedFolderInput: $input) {
+    id
+    title
+    description
+    feeds {
+      id
+      name
+      description
+      siteUrl
+      thumbnailUrl
+      platform {
+        id
+        name
+        siteUrl
+        platformSiteType
+        faviconUrl
+        isEng
+      }
+    }
+  }
+}
+    `;
+export type UpdateMyFeedFolderMutationMutationFn = Apollo.MutationFunction<UpdateMyFeedFolderMutationMutation, UpdateMyFeedFolderMutationMutationVariables>;
+
+/**
+ * __useUpdateMyFeedFolderMutationMutation__
+ *
+ * To run a mutation, you first call `useUpdateMyFeedFolderMutationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateMyFeedFolderMutationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateMyFeedFolderMutationMutation, { data, loading, error }] = useUpdateMyFeedFolderMutationMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateMyFeedFolderMutationMutation(baseOptions?: Apollo.MutationHookOptions<UpdateMyFeedFolderMutationMutation, UpdateMyFeedFolderMutationMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateMyFeedFolderMutationMutation, UpdateMyFeedFolderMutationMutationVariables>(UpdateMyFeedFolderMutationDocument, options);
+      }
+export type UpdateMyFeedFolderMutationMutationHookResult = ReturnType<typeof useUpdateMyFeedFolderMutationMutation>;
+export type UpdateMyFeedFolderMutationMutationResult = Apollo.MutationResult<UpdateMyFeedFolderMutationMutation>;
+export type UpdateMyFeedFolderMutationMutationOptions = Apollo.BaseMutationOptions<UpdateMyFeedFolderMutationMutation, UpdateMyFeedFolderMutationMutationVariables>;
 export const TrendArticleListQueryDocument = gql`
     query TrendArticleListQuery($input: ArticlesInput!) {
   articles(articlesInput: $input) {
