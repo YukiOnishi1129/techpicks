@@ -893,6 +893,13 @@ export type CreateMyFeedFolderMutationMutationVariables = Exact<{
 
 export type CreateMyFeedFolderMutationMutation = { __typename?: 'Mutation', createMyFeedFolder: { __typename?: 'MyFeedFolder', id: string } };
 
+export type SelectMultiFeedListQueryQueryVariables = Exact<{
+  input: FeedsInput;
+}>;
+
+
+export type SelectMultiFeedListQueryQuery = { __typename?: 'Query', feeds: { __typename?: 'FeedConnection', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null }, edges: Array<{ __typename?: 'FeedEdge', node: { __typename?: 'Feed', id: string, name: string, thumbnailUrl: string } }> } };
+
 export type UpdateMyFeedFolderDialogFragmentFragment = { __typename?: 'MyFeedFolder', id: string, title: string, description?: string | null, feeds?: Array<{ __typename?: 'Feed', id: string, name: string }> | null };
 
 export type FeedListUpdateMyFeedFolderDialogFragmentFragment = { __typename?: 'FeedConnection', edges: Array<{ __typename?: 'FeedEdge', node: { __typename?: 'Feed', id: string, name: string } }> };
@@ -2739,6 +2746,56 @@ export function useCreateMyFeedFolderMutationMutation(baseOptions?: Apollo.Mutat
 export type CreateMyFeedFolderMutationMutationHookResult = ReturnType<typeof useCreateMyFeedFolderMutationMutation>;
 export type CreateMyFeedFolderMutationMutationResult = Apollo.MutationResult<CreateMyFeedFolderMutationMutation>;
 export type CreateMyFeedFolderMutationMutationOptions = Apollo.BaseMutationOptions<CreateMyFeedFolderMutationMutation, CreateMyFeedFolderMutationMutationVariables>;
+export const SelectMultiFeedListQueryDocument = gql`
+    query SelectMultiFeedListQuery($input: FeedsInput!) {
+  feeds(feedsInput: $input) {
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+    edges {
+      node {
+        id
+        name
+        thumbnailUrl
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useSelectMultiFeedListQueryQuery__
+ *
+ * To run a query within a React component, call `useSelectMultiFeedListQueryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSelectMultiFeedListQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSelectMultiFeedListQueryQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useSelectMultiFeedListQueryQuery(baseOptions: Apollo.QueryHookOptions<SelectMultiFeedListQueryQuery, SelectMultiFeedListQueryQueryVariables> & ({ variables: SelectMultiFeedListQueryQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SelectMultiFeedListQueryQuery, SelectMultiFeedListQueryQueryVariables>(SelectMultiFeedListQueryDocument, options);
+      }
+export function useSelectMultiFeedListQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SelectMultiFeedListQueryQuery, SelectMultiFeedListQueryQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SelectMultiFeedListQueryQuery, SelectMultiFeedListQueryQueryVariables>(SelectMultiFeedListQueryDocument, options);
+        }
+export function useSelectMultiFeedListQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<SelectMultiFeedListQueryQuery, SelectMultiFeedListQueryQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<SelectMultiFeedListQueryQuery, SelectMultiFeedListQueryQueryVariables>(SelectMultiFeedListQueryDocument, options);
+        }
+export type SelectMultiFeedListQueryQueryHookResult = ReturnType<typeof useSelectMultiFeedListQueryQuery>;
+export type SelectMultiFeedListQueryLazyQueryHookResult = ReturnType<typeof useSelectMultiFeedListQueryLazyQuery>;
+export type SelectMultiFeedListQuerySuspenseQueryHookResult = ReturnType<typeof useSelectMultiFeedListQuerySuspenseQuery>;
+export type SelectMultiFeedListQueryQueryResult = Apollo.QueryResult<SelectMultiFeedListQueryQuery, SelectMultiFeedListQueryQueryVariables>;
 export const MyFeedFolderListQueryDocument = gql`
     query MyFeedFolderListQuery($myFeedFoldersInput: MyFeedFoldersInput!) {
   myFeedFolders(myFeedFoldersInput: $myFeedFoldersInput) {

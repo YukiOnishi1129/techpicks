@@ -35,6 +35,7 @@ import {
   UpdateMyFeedFolderDialogFragment,
   FeedListUpdateMyFeedFolderDialogFragment,
 } from "./UpdateMyFeedFolderDialogFragment";
+import { SelectMultiFeedDialog } from "../SelectMultiFeedDialog";
 
 // import { DeleteMyFeedFolderAlertDialog } from "../Delete/DeleteMyFeedFolderAlertDialog";
 
@@ -171,11 +172,10 @@ export const UpdateMyFeedFolderDialogContent: FC<
                       <div className="mb-4">
                         <FormLabel className="text-base">Feeds</FormLabel>
                         <div>
-                          {/* <SelectMultiFeedDialog
-                            feedList={initialFeedList}
+                          <SelectMultiFeedDialog
                             selectedFeedList={field.value}
-                            handleSelectFeedList={handleSelectFeedList}
-                          /> */}
+                            onSelectFeedList={handleSelectFeedList}
+                          />
                         </div>
                         <FormControl>
                           {field.value.length > 0 && (
