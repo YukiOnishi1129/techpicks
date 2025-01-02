@@ -18,3 +18,19 @@ export const MyFeedFolderCardFragment = graphql(`
     updatedAt
   }
 `);
+
+export const FeedsMyFeedFolderCardFragment = graphql(`
+  fragment FeedsMyFeedFolderCardFragment on FeedConnection {
+    edges {
+      node {
+        id
+        name
+        thumbnailUrl
+        platform {
+          id
+          faviconUrl
+        }
+      }
+    }
+  }
+`);

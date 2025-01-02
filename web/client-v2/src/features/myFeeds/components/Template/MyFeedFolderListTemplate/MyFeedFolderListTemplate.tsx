@@ -42,6 +42,10 @@ export const MyFeedFolderListTemplate: FC<MyFeedFolderListTemplateProps> = ({
             first: LIMIT,
             after: null,
           },
+          feedsInput: {
+            first: LIMIT,
+            after: null,
+          },
         }}
       >
         <Suspense fallback={<ScreenLoader />}>

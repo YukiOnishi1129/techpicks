@@ -13,7 +13,10 @@ import { FC } from "react";
 
 import { useStatusToast } from "@/hooks/useStatusToast";
 
-import { MyFeedFolderCardFragment } from "./MyFeedFolderCardFragment";
+import {
+  FeedsMyFeedFolderCardFragment,
+  MyFeedFolderCardFragment,
+} from "./MyFeedFolderCardFragment";
 
 // import { diffStringArray } from "@/lib/convert";
 
@@ -29,6 +32,7 @@ const SHOW_FEED_LIST_COUNT = 3;
 
 type MyFeedFolderCardProps = {
   data: FragmentOf<typeof MyFeedFolderCardFragment>;
+  feeds: FragmentOf<typeof FeedsMyFeedFolderCardFragment>;
   //   user?: User;
   //   handleUpdateMyFeedFolder: ({
   //     id,
