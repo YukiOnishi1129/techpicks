@@ -8,6 +8,7 @@ import (
 	mfpb "github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go/grpc/my_feed"
 	"github.com/YukiOnishi1129/techpicks/micro-service/my-feed-service/internal/domain/entity"
 	"google.golang.org/protobuf/types/known/emptypb"
+	"google.golang.org/protobuf/types/known/timestamppb"
 	"google.golang.org/protobuf/types/known/wrapperspb"
 )
 
@@ -161,8 +162,11 @@ func (m *myUseCase) DeleteMyFeedFolder(ctx context.Context, req *mfpb.DeleteMyFe
 
 func (m *myUseCase) convertPBMyFeedFolder(mff *entity.MyFeedFolder) (*mfpb.MyFeedFolder, error) {
 	resMfRPC := &mfpb.MyFeedFolder{
-		Id:    mff.ID,
-		Title: mff.Title,
+		Id:        mff.ID,
+		UserId:    mff.UserID,
+		Title:     mff.Title,
+		CreatedAt: timestamppb.New(mff.CreatedAt),
+		UpdatedAt: timestamppb.New(mff.UpdatedAt),
 	}
 	if mff.Description.Valid {
 		resMfRPC.Description = wrapperspb.String(mff.Description.String)

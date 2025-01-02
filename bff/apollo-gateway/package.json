@@ -35,7 +35,7 @@
     "@nestjs/mapped-types": "*",
     "@nestjs/microservices": "^10.4.1",
     "@nestjs/platform-express": "^10.0.0",
-    "@supabase/supabase-js": "^2.45.3",
+    "@supabase/supabase-js": "^2.47.10",
     "apollo-server-express": "^3.13.0",
     "dotenv": "^16.4.5",
     "google-protobuf": "^3.21.4",

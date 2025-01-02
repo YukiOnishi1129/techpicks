@@ -191,6 +191,13 @@ export type CreateFavoriteArticleInput = {
   title: Scalars['String']['input'];
 };
 
+export type CreateMyFeedFolderInput = {
+  description?: InputMaybe<Scalars['String']['input']>;
+  feedIds?: InputMaybe<Array<Scalars['String']['input']>>;
+  title: Scalars['String']['input'];
+  userId: Scalars['String']['input'];
+};
+
 export type DeleteBookmarkInput = {
   bookmarkId: Scalars['ID']['input'];
   userId: Scalars['ID']['input'];
@@ -207,6 +214,11 @@ export type DeleteFavoriteArticleFolderInput = {
 
 export type DeleteFavoriteArticleInput = {
   id: Scalars['ID']['input'];
+};
+
+export type DeleteMyFeedFolderInput = {
+  myFeedFolderId: Scalars['ID']['input'];
+  userId: Scalars['String']['input'];
 };
 
 export type FavoriteAllFolderArticleConnection = {
@@ -368,11 +380,14 @@ export type Mutation = {
   createFavoriteArticle: FavoriteArticle;
   createFavoriteArticleFolder: FavoriteArticleFolder;
   createFavoriteArticleForUploadArticle: FavoriteArticle;
+  createMyFeedFolder: MyFeedFolder;
   deleteBookmark: Scalars['Boolean']['output'];
   deleteFavoriteArticle: Scalars['Boolean']['output'];
   deleteFavoriteArticleByArticleId: Scalars['Boolean']['output'];
   deleteFavoriteArticleFolder: Scalars['Boolean']['output'];
+  deleteMyFeedFolder: Scalars['Boolean']['output'];
   updateFavoriteArticleFolder: FavoriteArticleFolder;
+  updateMyFeedFolder: MyFeedFolder;
 };
 
 
@@ -401,6 +416,11 @@ export type MutationCreateFavoriteArticleForUploadArticleArgs = {
 };
 
 
+export type MutationCreateMyFeedFolderArgs = {
+  createMyFeedFolderInput: CreateMyFeedFolderInput;
+};
+
+
 export type MutationDeleteBookmarkArgs = {
   deleteBookmarkInput: DeleteBookmarkInput;
 };
@@ -421,8 +441,18 @@ export type MutationDeleteFavoriteArticleFolderArgs = {
 };
 
 
+export type MutationDeleteMyFeedFolderArgs = {
+  deleteMyFeedFolderInput: DeleteMyFeedFolderInput;
+};
+
+
 export type MutationUpdateFavoriteArticleFolderArgs = {
   input: UpdateFavoriteArticleFolderInput;
+};
+
+
+export type MutationUpdateMyFeedFolderArgs = {
+  updateMyFeedFolderInput: UpdateMyFeedFolderInput;
 };
 
 /** MyFeedFolder is a folder that contains a list of feeds. */
@@ -581,14 +611,26 @@ export type UpdateFavoriteArticleFolderInput = {
   title: Scalars['String']['input'];
 };
 
+export type UpdateMyFeedFolderInput = {
+  description?: InputMaybe<Scalars['String']['input']>;
+  feedIds?: InputMaybe<Array<Scalars['String']['input']>>;
+  myFeedFolderId: Scalars['ID']['input'];
+  title?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type GetLoggedBaseLayoutQueryQueryVariables = Exact<{
   input: FavoriteArticleFoldersInput;
+  myFeedFoldersInput: MyFeedFoldersInput;
 }>;
 
 
-export type GetLoggedBaseLayoutQueryQuery = { __typename?: 'Query', favoriteArticleFolders: { __typename?: 'FavoriteArticleFolderConnection', edges: Array<{ __typename?: 'FavoriteArticleFolderEdge', node: { __typename?: 'FavoriteArticleFolder', id: string, title: string } }> } };
+export type GetLoggedBaseLayoutQueryQuery = { __typename?: 'Query', favoriteArticleFolders: { __typename?: 'FavoriteArticleFolderConnection', edges: Array<{ __typename?: 'FavoriteArticleFolderEdge', node: { __typename?: 'FavoriteArticleFolder', id: string, title: string } }> }, myFeedFolders: { __typename?: 'MyFeedFolderConnection', edges: Array<{ __typename?: 'MyFeedFolderEdge', node: { __typename?: 'MyFeedFolder', id: string, title: string, feeds?: Array<{ __typename?: 'Feed', id: string, name: string, platform: { __typename?: 'Platform', faviconUrl: string } }> | null } }> } };
 
 export type FavoriteArticleFolderLinkFragmentFragment = { __typename?: 'FavoriteArticleFolder', id: string, title: string };
+
+export type FeedAccordionFragmentFragment = { __typename?: 'MyFeedFolder', id: string, feeds?: Array<{ __typename?: 'Feed', id: string, name: string, platform: { __typename?: 'Platform', faviconUrl: string } }> | null };
+
+export type MyFeedFolderLinkFragmentFragment = { __typename?: 'MyFeedFolder', id: string, title: string, feeds?: Array<{ __typename?: 'Feed', id: string, name: string, platform: { __typename?: 'Platform', faviconUrl: string } }> | null };
 
 export type ArticleCardItemFragmentFragment = { __typename?: 'Article', id: string, title: string, description: string, articleUrl: string, publishedAt?: number | null, thumbnailUrl: string, isEng: boolean, isPrivate: boolean, isBookmarked: boolean, bookmarkId?: string | null, likeCount?: number | null, platform?: { __typename?: 'Platform', id: string, name: string, siteUrl: string, faviconUrl: string } | null, feeds?: Array<{ __typename?: 'Feed', id: string, name: string }> | null };
 
@@ -840,12 +882,21 @@ export type FeedListTemplateQueryQueryVariables = Exact<{
 
 export type FeedListTemplateQueryQuery = { __typename?: 'Query', feeds: { __typename?: 'FeedConnection', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null }, edges: Array<{ __typename?: 'FeedEdge', node: { __typename?: 'Feed', id: string, myFeedIds?: Array<string> | null, name: string, description: string, siteUrl: string, thumbnailUrl: string, platform: { __typename?: 'Platform', id: string, faviconUrl: string } } }> } };
 
+export type MyFeedFolderCardFragmentFragment = { __typename?: 'MyFeedFolder', id: string, title: string, description?: string | null, createdAt: number, updatedAt: number, feeds?: Array<{ __typename?: 'Feed', id: string, name: string, thumbnailUrl: string, platform: { __typename?: 'Platform', id: string, faviconUrl: string } }> | null };
+
+export type CreateMyFeedFolderMutationMutationVariables = Exact<{
+  input: CreateMyFeedFolderInput;
+}>;
+
+
+export type CreateMyFeedFolderMutationMutation = { __typename?: 'Mutation', createMyFeedFolder: { __typename?: 'MyFeedFolder', id: string } };
+
 export type MyFeedFolderListQueryQueryVariables = Exact<{
   myFeedFoldersInput: MyFeedFoldersInput;
 }>;
 
 
-export type MyFeedFolderListQueryQuery = { __typename?: 'Query', myFeedFolders: { __typename?: 'MyFeedFolderConnection', pageInfo: { __typename?: 'PageInfo', endCursor?: string | null, hasNextPage: boolean }, edges: Array<{ __typename?: 'MyFeedFolderEdge', node: { __typename?: 'MyFeedFolder', id: string } }> } };
+export type MyFeedFolderListQueryQuery = { __typename?: 'Query', myFeedFolders: { __typename?: 'MyFeedFolderConnection', pageInfo: { __typename?: 'PageInfo', endCursor?: string | null, hasNextPage: boolean }, edges: Array<{ __typename?: 'MyFeedFolderEdge', node: { __typename?: 'MyFeedFolder', id: string, title: string, description?: string | null, createdAt: number, updatedAt: number, feeds?: Array<{ __typename?: 'Feed', id: string, name: string, thumbnailUrl: string, platform: { __typename?: 'Platform', id: string, faviconUrl: string } }> | null } }> } };
 
 export type MyFeedFolderListTemplateQueryQueryVariables = Exact<{
   myFeedFoldersInput: MyFeedFoldersInput;
@@ -877,6 +928,25 @@ export const FavoriteArticleFolderLinkFragmentFragmentDoc = gql`
   title
 }
     `;
+export const FeedAccordionFragmentFragmentDoc = gql`
+    fragment FeedAccordionFragment on MyFeedFolder {
+  id
+  feeds {
+    id
+    name
+    platform {
+      faviconUrl
+    }
+  }
+}
+    `;
+export const MyFeedFolderLinkFragmentFragmentDoc = gql`
+    fragment MyFeedFolderLinkFragment on MyFeedFolder {
+  id
+  title
+  ...FeedAccordionFragment
+}
+    ${FeedAccordionFragmentFragmentDoc}`;
 export const ArticleCardItemFragmentFragmentDoc = gql`
     fragment ArticleCardItemFragment on Article {
   id
@@ -1333,8 +1403,26 @@ export const FeedCardWrapperFragmentFragmentDoc = gql`
   ...FeedCardItemFragment
 }
     ${FeedCardItemFragmentFragmentDoc}`;
+export const MyFeedFolderCardFragmentFragmentDoc = gql`
+    fragment MyFeedFolderCardFragment on MyFeedFolder {
+  id
+  title
+  description
+  feeds {
+    id
+    name
+    thumbnailUrl
+    platform {
+      id
+      faviconUrl
+    }
+  }
+  createdAt
+  updatedAt
+}
+    `;
 export const GetLoggedBaseLayoutQueryDocument = gql`
-    query GetLoggedBaseLayoutQuery($input: FavoriteArticleFoldersInput!) {
+    query GetLoggedBaseLayoutQuery($input: FavoriteArticleFoldersInput!, $myFeedFoldersInput: MyFeedFoldersInput!) {
   favoriteArticleFolders(input: $input) {
     edges {
       node {
@@ -1342,8 +1430,17 @@ export const GetLoggedBaseLayoutQueryDocument = gql`
       }
     }
   }
+  myFeedFolders(myFeedFoldersInput: $myFeedFoldersInput) {
+    edges {
+      node {
+        id
+        ...MyFeedFolderLinkFragment
+      }
+    }
+  }
 }
-    ${FavoriteArticleFolderLinkFragmentFragmentDoc}`;
+    ${FavoriteArticleFolderLinkFragmentFragmentDoc}
+${MyFeedFolderLinkFragmentFragmentDoc}`;
 
 /**
  * __useGetLoggedBaseLayoutQueryQuery__
@@ -1358,6 +1455,7 @@ export const GetLoggedBaseLayoutQueryDocument = gql`
  * const { data, loading, error } = useGetLoggedBaseLayoutQueryQuery({
  *   variables: {
  *      input: // value for 'input'
+ *      myFeedFoldersInput: // value for 'myFeedFoldersInput'
  *   },
  * });
  */
@@ -2555,6 +2653,39 @@ export type FeedListTemplateQueryQueryHookResult = ReturnType<typeof useFeedList
 export type FeedListTemplateQueryLazyQueryHookResult = ReturnType<typeof useFeedListTemplateQueryLazyQuery>;
 export type FeedListTemplateQuerySuspenseQueryHookResult = ReturnType<typeof useFeedListTemplateQuerySuspenseQuery>;
 export type FeedListTemplateQueryQueryResult = Apollo.QueryResult<FeedListTemplateQueryQuery, FeedListTemplateQueryQueryVariables>;
+export const CreateMyFeedFolderMutationDocument = gql`
+    mutation CreateMyFeedFolderMutation($input: CreateMyFeedFolderInput!) {
+  createMyFeedFolder(createMyFeedFolderInput: $input) {
+    id
+  }
+}
+    `;
+export type CreateMyFeedFolderMutationMutationFn = Apollo.MutationFunction<CreateMyFeedFolderMutationMutation, CreateMyFeedFolderMutationMutationVariables>;
+
+/**
+ * __useCreateMyFeedFolderMutationMutation__
+ *
+ * To run a mutation, you first call `useCreateMyFeedFolderMutationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateMyFeedFolderMutationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createMyFeedFolderMutationMutation, { data, loading, error }] = useCreateMyFeedFolderMutationMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateMyFeedFolderMutationMutation(baseOptions?: Apollo.MutationHookOptions<CreateMyFeedFolderMutationMutation, CreateMyFeedFolderMutationMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateMyFeedFolderMutationMutation, CreateMyFeedFolderMutationMutationVariables>(CreateMyFeedFolderMutationDocument, options);
+      }
+export type CreateMyFeedFolderMutationMutationHookResult = ReturnType<typeof useCreateMyFeedFolderMutationMutation>;
+export type CreateMyFeedFolderMutationMutationResult = Apollo.MutationResult<CreateMyFeedFolderMutationMutation>;
+export type CreateMyFeedFolderMutationMutationOptions = Apollo.BaseMutationOptions<CreateMyFeedFolderMutationMutation, CreateMyFeedFolderMutationMutationVariables>;
 export const MyFeedFolderListQueryDocument = gql`
     query MyFeedFolderListQuery($myFeedFoldersInput: MyFeedFoldersInput!) {
   myFeedFolders(myFeedFoldersInput: $myFeedFoldersInput) {
@@ -2565,11 +2696,12 @@ export const MyFeedFolderListQueryDocument = gql`
     edges {
       node {
         id
+        ...MyFeedFolderCardFragment
       }
     }
   }
 }
-    `;
+    ${MyFeedFolderCardFragmentFragmentDoc}`;
 
 /**
  * __useMyFeedFolderListQueryQuery__
