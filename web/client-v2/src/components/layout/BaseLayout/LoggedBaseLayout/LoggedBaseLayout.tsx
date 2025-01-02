@@ -1,18 +1,14 @@
 import { User } from "@supabase/supabase-js";
 import { FC, ReactNode, Suspense } from "react";
 
-// import { fetchFavoriteArticleFoldersAPI } from "@/features/favoriteArticleFolders/actions/favoriteArticleFolders";
-// import { fetchMyFeedFoldersAPI } from "@/features/myFeedFolders/actions/myFeedFolder";
-
 import { Header } from "@/components/layout/Header";
 
 import { PreloadQuery } from "@/lib/apollo/client";
 
 import { LoggedBaseLayoutQuery } from "./LoggedBaseLayoutQuery";
+import { LoggedBottomNavigationMenu } from "../../BottomNavigationMenu";
 import { ScreenLoader } from "../../ScreenLoader";
 import { DesktopSidebar } from "../../Sidebar";
-
-// import { LoggedBottomNavigationMenu } from "../BottomNavigationMenu";
 
 type LoggedBaseLayoutProps = {
   user: User;
@@ -56,9 +52,9 @@ export const LoggedBaseLayout: FC<LoggedBaseLayoutProps> = async ({
         <div className="mx-auto w-[90%] md:w-[70%]">{children}</div>
       </main>
 
-      {/* <footer className="fixed inset-x-0 bottom-0 z-50 block border-t border-gray-200  md:hidden">
+      <footer className="fixed inset-x-0 bottom-0 z-50 block border-t border-gray-200  md:hidden">
         <LoggedBottomNavigationMenu />
-      </footer> */}
+      </footer>
     </div>
   );
 };
