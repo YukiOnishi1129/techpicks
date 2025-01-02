@@ -11,11 +11,13 @@ import { MyFeedFolderListTemplateQuery } from "../../Template/MyFeedFolderListTe
 type MyFeedFolderListProps = {
   keyword?: string;
   limit: number;
+  feedLimit: number;
 };
 
 export const MyFeedFolderList: FC<MyFeedFolderListProps> = ({
   keyword,
   limit,
+  feedLimit,
 }) => {
   const observerTarget = useRef(null);
 
@@ -26,6 +28,10 @@ export const MyFeedFolderList: FC<MyFeedFolderListProps> = ({
         myFeedFoldersInput: {
           keyword,
           first: limit,
+          after: null,
+        },
+        feedsInput: {
+          first: feedLimit,
           after: null,
         },
       },
@@ -143,7 +149,13 @@ export const MyFeedFolderList: FC<MyFeedFolderListProps> = ({
         <div className="mb-8">
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
             {res?.myFeedFolders?.edges.map((edge, i) => (
-              <MyFeedFolderCard key={`${i}-${edge.node.id}`} data={edge.node} />
+              <MyFeedFolderCard
+                key={`${i}-${edge.node.id}`}
+                data={edge.node}
+                feedsEndCursor={
+                  resSuspenseData?.feeds?.pageInfo.endCursor || undefined
+                }
+              />
             ))}
           </div>
         </div>

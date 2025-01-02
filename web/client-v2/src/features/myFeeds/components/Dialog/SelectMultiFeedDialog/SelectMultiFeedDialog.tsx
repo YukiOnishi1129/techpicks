@@ -14,6 +14,7 @@ type SelectMultiFeedDialogProps = {
   label?: string;
   variant?: VariantProps<typeof buttonVariants>["variant"];
   selectedFeedList?: Array<SelectOptionType>;
+  feedsEndCursor?: string;
   onSelectFeedList?: (selectedFeedList: Array<SelectOptionType>) => void;
 };
 
@@ -21,6 +22,7 @@ export const SelectMultiFeedDialog: FC<SelectMultiFeedDialogProps> = ({
   label = "SELECT",
   variant,
   selectedFeedList,
+  feedsEndCursor,
   onSelectFeedList,
 }) => {
   const [openDialog, setOpenDialog] = useState(false);
@@ -40,6 +42,7 @@ export const SelectMultiFeedDialog: FC<SelectMultiFeedDialogProps> = ({
       {openDialog && (
         <SelectMultiFeedDialogContent
           selectedFeedList={selectedFeedList}
+          feedsEndCursor={feedsEndCursor}
           onDialogClose={handleDialogClose}
           onSelectFeedList={onSelectFeedList}
         />

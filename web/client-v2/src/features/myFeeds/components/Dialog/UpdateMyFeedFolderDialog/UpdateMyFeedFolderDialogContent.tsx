@@ -54,12 +54,13 @@ const formSchema = z.object({
 
 type UpdateMyFeedFolderDialogContentProps = {
   data: FragmentOf<typeof UpdateMyFeedFolderDialogFragment>;
+  feedsEndCursor?: string;
   onClose: () => void;
 };
 
 export const UpdateMyFeedFolderDialogContent: FC<
   UpdateMyFeedFolderDialogContentProps
-> = ({ data, onClose }) => {
+> = ({ data, feedsEndCursor, onClose }) => {
   const fragment = readFragment(UpdateMyFeedFolderDialogFragment, data);
 
   const { handleUpdateMyFeedFolder, handleDeleteMyFeedFolder } =
@@ -166,6 +167,7 @@ export const UpdateMyFeedFolderDialogContent: FC<
                         <div>
                           <SelectMultiFeedDialog
                             selectedFeedList={field.value}
+                            feedsEndCursor={feedsEndCursor}
                             onSelectFeedList={handleSelectFeedList}
                           />
                         </div>

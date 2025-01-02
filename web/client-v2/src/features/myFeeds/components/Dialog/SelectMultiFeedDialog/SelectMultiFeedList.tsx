@@ -50,11 +50,13 @@ const FormSchema = z.object({
 
 type SelectMultiFeedListProps = {
   defaultSelectedFeedList?: Array<SelectOptionType>;
+  feedsEndCursor?: string;
   onSelectFeedList: (selectedFeedList: Array<SelectOptionType>) => void;
 };
 
 export const SelectMultiFeedList: FC<SelectMultiFeedListProps> = ({
   defaultSelectedFeedList,
+  feedsEndCursor,
   onSelectFeedList,
 }) => {
   const observerTarget = useRef(null);
@@ -95,10 +97,8 @@ export const SelectMultiFeedList: FC<SelectMultiFeedListProps> = ({
   const selectedTargetFeedList = form.watch("targetFeedList");
 
   const [hashMore, setHashMore] = useState(true);
-  const [offset, setOffset] = useState(1);
-  const [endCursor, setEndCursor] = useState(
-    res?.feeds?.pageInfo?.endCursor || null
-  );
+  const [offset, setOffset] = useState(0);
+  const [endCursor, setEndCursor] = useState(feedsEndCursor);
   const [isNextPage, setIsNextPage] = useState(true);
 
   const handleKeywordSearch = useCallback(
@@ -124,7 +124,7 @@ export const SelectMultiFeedList: FC<SelectMultiFeedListProps> = ({
 
       if (resData.feeds.pageInfo.hasNextPage) {
         const endCursor = resData.feeds.pageInfo?.endCursor || null;
-        setEndCursor(endCursor);
+        setEndCursor(endCursor || undefined);
       }
       setIsNextPage(resData.feeds.pageInfo.hasNextPage);
 
@@ -154,7 +154,7 @@ export const SelectMultiFeedList: FC<SelectMultiFeedListProps> = ({
 
       if (resData.feeds.pageInfo.hasNextPage) {
         const endCursor = resData.feeds.pageInfo?.endCursor || null;
-        setEndCursor(endCursor);
+        setEndCursor(endCursor || undefined);
       }
       setIsNextPage(resData.feeds.pageInfo.hasNextPage);
 
@@ -203,7 +203,7 @@ export const SelectMultiFeedList: FC<SelectMultiFeedListProps> = ({
 
     if (resData.feeds.pageInfo.hasNextPage) {
       const endCursor = resData.feeds.pageInfo?.endCursor || null;
-      setEndCursor(endCursor);
+      setEndCursor(endCursor || undefined);
     }
     setIsNextPage(resData.feeds.pageInfo.hasNextPage);
 

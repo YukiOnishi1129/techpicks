@@ -11,10 +11,12 @@ import { UpdateMyFeedFolderDialogFragment } from "./UpdateMyFeedFolderDialogFrag
 
 type UpdateMyFeedFolderDialogProps = {
   data: FragmentOf<typeof UpdateMyFeedFolderDialogFragment>;
+  feedsEndCursor?: string;
 };
 
 export const UpdateMyFeedFolderDialog: FC<UpdateMyFeedFolderDialogProps> = ({
   data,
+  feedsEndCursor,
 }) => {
   const [open, setOpen] = useState(false);
   const handleClose = useCallback(() => {
@@ -33,7 +35,11 @@ export const UpdateMyFeedFolderDialog: FC<UpdateMyFeedFolderDialogProps> = ({
         </Button>
       </DialogTrigger>
       {open && (
-        <UpdateMyFeedFolderDialogContent data={data} onClose={handleClose} />
+        <UpdateMyFeedFolderDialogContent
+          data={data}
+          feedsEndCursor={feedsEndCursor}
+          onClose={handleClose}
+        />
       )}
     </Dialog>
   );

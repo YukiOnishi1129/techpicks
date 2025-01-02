@@ -3,6 +3,7 @@ import { graphql } from "gql.tada";
 export const MyFeedFolderListTemplateQuery = graphql(`
   query MyFeedFolderListTemplateQuery(
     $myFeedFoldersInput: MyFeedFoldersInput!
+    $feedsInput: FeedsInput!
   ) {
     myFeedFolders(myFeedFoldersInput: $myFeedFoldersInput) {
       pageInfo {
@@ -13,6 +14,11 @@ export const MyFeedFolderListTemplateQuery = graphql(`
         node {
           id
         }
+      }
+    }
+    feeds(feedsInput: $feedsInput) {
+      pageInfo {
+        endCursor
       }
     }
   }

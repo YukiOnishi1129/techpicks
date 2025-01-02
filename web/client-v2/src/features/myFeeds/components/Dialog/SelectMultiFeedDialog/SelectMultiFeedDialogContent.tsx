@@ -14,13 +14,14 @@ import { SelectMultiFeedList } from "./SelectMultiFeedList";
 
 type SelectMultiFeedDialogContentProps = {
   selectedFeedList?: Array<SelectOptionType>;
+  feedsEndCursor?: string;
   onDialogClose: () => void;
   onSelectFeedList?: (selectedFeedList: Array<SelectOptionType>) => void;
 };
 
 export const SelectMultiFeedDialogContent: FC<
   SelectMultiFeedDialogContentProps
-> = ({ selectedFeedList, onDialogClose, onSelectFeedList }) => {
+> = ({ selectedFeedList, feedsEndCursor, onDialogClose, onSelectFeedList }) => {
   const handleSelectFeedList = useCallback(
     (selectedFeedList: Array<SelectOptionType>) => {
       if (onSelectFeedList) onSelectFeedList(selectedFeedList);
@@ -36,6 +37,7 @@ export const SelectMultiFeedDialogContent: FC<
       </DialogHeader>
       <SelectMultiFeedList
         defaultSelectedFeedList={selectedFeedList}
+        feedsEndCursor={feedsEndCursor}
         onSelectFeedList={handleSelectFeedList}
       />
     </DialogContent>

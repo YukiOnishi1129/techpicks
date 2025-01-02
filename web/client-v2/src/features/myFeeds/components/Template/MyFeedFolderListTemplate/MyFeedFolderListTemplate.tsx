@@ -10,6 +10,7 @@ import { MyFeedFolderList } from "../../List";
 import { MyFeedFolderKeywordSearchForm } from "../../Search";
 
 const LIMIT = 6;
+const FEED_LIMIT = 10;
 
 type MyFeedFolderListTemplateProps = {
   keyword?: string;
@@ -40,10 +41,18 @@ export const MyFeedFolderListTemplate: FC<MyFeedFolderListTemplateProps> = ({
             first: LIMIT,
             after: null,
           },
+          feedsInput: {
+            first: FEED_LIMIT,
+            after: null,
+          },
         }}
       >
         <Suspense fallback={<ScreenLoader />}>
-          <MyFeedFolderList keyword={keyword} limit={LIMIT} />
+          <MyFeedFolderList
+            keyword={keyword}
+            limit={LIMIT}
+            feedLimit={FEED_LIMIT}
+          />
         </Suspense>
       </PreloadQuery>
 

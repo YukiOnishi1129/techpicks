@@ -909,10 +909,11 @@ export type MyFeedFolderListQueryQuery = { __typename?: 'Query', myFeedFolders: 
 
 export type MyFeedFolderListTemplateQueryQueryVariables = Exact<{
   myFeedFoldersInput: MyFeedFoldersInput;
+  feedsInput: FeedsInput;
 }>;
 
 
-export type MyFeedFolderListTemplateQueryQuery = { __typename?: 'Query', myFeedFolders: { __typename?: 'MyFeedFolderConnection', pageInfo: { __typename?: 'PageInfo', endCursor?: string | null, hasNextPage: boolean }, edges: Array<{ __typename?: 'MyFeedFolderEdge', node: { __typename?: 'MyFeedFolder', id: string } }> } };
+export type MyFeedFolderListTemplateQueryQuery = { __typename?: 'Query', myFeedFolders: { __typename?: 'MyFeedFolderConnection', pageInfo: { __typename?: 'PageInfo', endCursor?: string | null, hasNextPage: boolean }, edges: Array<{ __typename?: 'MyFeedFolderEdge', node: { __typename?: 'MyFeedFolder', id: string } }> }, feeds: { __typename?: 'FeedConnection', pageInfo: { __typename?: 'PageInfo', endCursor?: string | null } } };
 
 export type UseManageMyFeedFolderFragmentFragment = { __typename?: 'MyFeedFolder', id: string };
 
@@ -2822,7 +2823,7 @@ export type MyFeedFolderListQueryLazyQueryHookResult = ReturnType<typeof useMyFe
 export type MyFeedFolderListQuerySuspenseQueryHookResult = ReturnType<typeof useMyFeedFolderListQuerySuspenseQuery>;
 export type MyFeedFolderListQueryQueryResult = Apollo.QueryResult<MyFeedFolderListQueryQuery, MyFeedFolderListQueryQueryVariables>;
 export const MyFeedFolderListTemplateQueryDocument = gql`
-    query MyFeedFolderListTemplateQuery($myFeedFoldersInput: MyFeedFoldersInput!) {
+    query MyFeedFolderListTemplateQuery($myFeedFoldersInput: MyFeedFoldersInput!, $feedsInput: FeedsInput!) {
   myFeedFolders(myFeedFoldersInput: $myFeedFoldersInput) {
     pageInfo {
       endCursor
@@ -2832,6 +2833,11 @@ export const MyFeedFolderListTemplateQueryDocument = gql`
       node {
         id
       }
+    }
+  }
+  feeds(feedsInput: $feedsInput) {
+    pageInfo {
+      endCursor
     }
   }
 }
@@ -2850,6 +2856,7 @@ export const MyFeedFolderListTemplateQueryDocument = gql`
  * const { data, loading, error } = useMyFeedFolderListTemplateQueryQuery({
  *   variables: {
  *      myFeedFoldersInput: // value for 'myFeedFoldersInput'
+ *      feedsInput: // value for 'feedsInput'
  *   },
  * });
  */

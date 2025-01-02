@@ -5,11 +5,6 @@ import { usePathname } from "next/navigation";
 import { FC } from "react";
 
 // import { ShowMyFeedListDialog } from "@/features/myFeeds/components/Dialog";
-// import {
-//   CreateMyFeedDTO,
-//   bulkCreateMyFeed,
-//   bulkDeleteMyFeed,
-// } from "@/features/myFeeds/repository/myFeed";
 
 import { useStatusToast } from "@/hooks/useStatusToast";
 
@@ -18,21 +13,17 @@ import { UpdateMyFeedFolderDialog } from "../../Dialog";
 
 // import { diffStringArray } from "@/lib/convert";
 
-// import { FeedType } from "@/types/feed";
-// import { MyFeedType } from "@/types/myFeed";
-// import { MyFeedFolderType } from "@/types/myFeedFolder";
-
-// import { serverRevalidatePage } from "@/actions/serverAction";
-
-// import { UpdateMyFeedFolderDialog } from "../Dialog";
-
 const SHOW_FEED_LIST_COUNT = 3;
 
 type MyFeedFolderCardProps = {
   data: FragmentOf<typeof MyFeedFolderCardFragment>;
+  feedsEndCursor?: string;
 };
 
-export const MyFeedFolderCard: FC<MyFeedFolderCardProps> = ({ data }) => {
+export const MyFeedFolderCard: FC<MyFeedFolderCardProps> = ({
+  data,
+  feedsEndCursor,
+}) => {
   const { successToast, failToast } = useStatusToast();
   const pathname = usePathname();
   const fragment = readFragment(MyFeedFolderCardFragment, data);
@@ -68,7 +59,10 @@ export const MyFeedFolderCard: FC<MyFeedFolderCardProps> = ({ data }) => {
             </Link>
           </h3>
 
-          <UpdateMyFeedFolderDialog data={fragment} />
+          <UpdateMyFeedFolderDialog
+            data={fragment}
+            feedsEndCursor={feedsEndCursor}
+          />
         </div>
 
         {/* <p className="line-clamp-3 h-[62px] w-full text-sm">
