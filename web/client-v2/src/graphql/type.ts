@@ -624,9 +624,13 @@ export type GetLoggedBaseLayoutQueryQueryVariables = Exact<{
 }>;
 
 
-export type GetLoggedBaseLayoutQueryQuery = { __typename?: 'Query', favoriteArticleFolders: { __typename?: 'FavoriteArticleFolderConnection', edges: Array<{ __typename?: 'FavoriteArticleFolderEdge', node: { __typename?: 'FavoriteArticleFolder', id: string, title: string } }> }, myFeedFolders: { __typename?: 'MyFeedFolderConnection', edges: Array<{ __typename?: 'MyFeedFolderEdge', node: { __typename?: 'MyFeedFolder', id: string } }> } };
+export type GetLoggedBaseLayoutQueryQuery = { __typename?: 'Query', favoriteArticleFolders: { __typename?: 'FavoriteArticleFolderConnection', edges: Array<{ __typename?: 'FavoriteArticleFolderEdge', node: { __typename?: 'FavoriteArticleFolder', id: string, title: string } }> }, myFeedFolders: { __typename?: 'MyFeedFolderConnection', edges: Array<{ __typename?: 'MyFeedFolderEdge', node: { __typename?: 'MyFeedFolder', id: string, title: string, feeds?: Array<{ __typename?: 'Feed', id: string, name: string, platform: { __typename?: 'Platform', faviconUrl: string } }> | null } }> } };
 
 export type FavoriteArticleFolderLinkFragmentFragment = { __typename?: 'FavoriteArticleFolder', id: string, title: string };
+
+export type FeedAccordionFragmentFragment = { __typename?: 'MyFeedFolder', id: string, feeds?: Array<{ __typename?: 'Feed', id: string, name: string, platform: { __typename?: 'Platform', faviconUrl: string } }> | null };
+
+export type MyFeedFolderLinkFragmentFragment = { __typename?: 'MyFeedFolder', id: string, title: string, feeds?: Array<{ __typename?: 'Feed', id: string, name: string, platform: { __typename?: 'Platform', faviconUrl: string } }> | null };
 
 export type ArticleCardItemFragmentFragment = { __typename?: 'Article', id: string, title: string, description: string, articleUrl: string, publishedAt?: number | null, thumbnailUrl: string, isEng: boolean, isPrivate: boolean, isBookmarked: boolean, bookmarkId?: string | null, likeCount?: number | null, platform?: { __typename?: 'Platform', id: string, name: string, siteUrl: string, faviconUrl: string } | null, feeds?: Array<{ __typename?: 'Feed', id: string, name: string }> | null };
 
@@ -924,6 +928,25 @@ export const FavoriteArticleFolderLinkFragmentFragmentDoc = gql`
   title
 }
     `;
+export const FeedAccordionFragmentFragmentDoc = gql`
+    fragment FeedAccordionFragment on MyFeedFolder {
+  id
+  feeds {
+    id
+    name
+    platform {
+      faviconUrl
+    }
+  }
+}
+    `;
+export const MyFeedFolderLinkFragmentFragmentDoc = gql`
+    fragment MyFeedFolderLinkFragment on MyFeedFolder {
+  id
+  title
+  ...FeedAccordionFragment
+}
+    ${FeedAccordionFragmentFragmentDoc}`;
 export const ArticleCardItemFragmentFragmentDoc = gql`
     fragment ArticleCardItemFragment on Article {
   id
@@ -1411,11 +1434,13 @@ export const GetLoggedBaseLayoutQueryDocument = gql`
     edges {
       node {
         id
+        ...MyFeedFolderLinkFragment
       }
     }
   }
 }
-    ${FavoriteArticleFolderLinkFragmentFragmentDoc}`;
+    ${FavoriteArticleFolderLinkFragmentFragmentDoc}
+${MyFeedFolderLinkFragmentFragmentDoc}`;
 
 /**
  * __useGetLoggedBaseLayoutQueryQuery__
