@@ -27,6 +27,7 @@ func NewFeedPersistenceAdapter(feedRepository repository.FeedRepository) FeedPer
 
 func (fpa *feedPersistenceAdapter) GetFeeds(ctx context.Context, req *cpb.GetFeedsRequest, limit int) (entity.FeedSlice, error) {
 	q := []qm.QueryMod{
+		qm.InnerJoin("platforms ON feeds.platform_id = platforms.id"),
 		qm.Where("feeds.deleted_at IS NULL"),
 		qm.Load(qm.Rels(entity.FeedRels.Platform)),
 		qm.Load(qm.Rels(entity.FeedRels.Category)),
@@ -41,11 +42,11 @@ func (fpa *feedPersistenceAdapter) GetFeeds(ctx context.Context, req *cpb.GetFee
 	if req.GetPlatformSiteType().GetValue() != 0 {
 		switch {
 		case req.GetPlatformSiteType().GetValue() == 1:
-			q = append(q, qm.Where("platforms.site_type = ?", 1))
+			q = append(q, qm.Where("platforms.platform_site_type = ?", 1))
 		case req.GetPlatformSiteType().GetValue() == 2:
-			q = append(q, qm.Where("platforms.site_type = ?", 2))
+			q = append(q, qm.Where("platforms.platform_site_type = ?", 2))
 		case req.GetPlatformSiteType().GetValue() == 3:
-			q = append(q, qm.Where("platforms.site_type = ?", 3))
+			q = append(q, qm.Where("platforms.platform_site_type = ?", 3))
 		}
 	}
 
@@ -55,8 +56,8 @@ func (fpa *feedPersistenceAdapter) GetFeeds(ctx context.Context, req *cpb.GetFee
 
 	if req.GetKeyword().GetValue() != "" {
 		q = append(q, qm.Expr(
-			qm.And("name LIKE ?", "%"+req.GetKeyword().GetValue()+"%"),
-			qm.Or("description LIKE ?", "%"+req.GetKeyword().GetValue()+"%"),
+			qm.And("feeds.name LIKE ?", "%"+req.GetKeyword().GetValue()+"%"),
+			// qm.Or("description LIKE ?", "%"+req.GetKeyword().GetValue()+"%"),
 		))
 	}
 

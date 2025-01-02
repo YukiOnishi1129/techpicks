@@ -130,7 +130,7 @@ export const SelectMultiFeedList: FC<SelectMultiFeedListProps> = ({
 
       setHashMore(resData.feeds.edges.length > 0);
     },
-    [setHashMore, platformSiteTypeForm, endCursor, fetchMore]
+    [setHashMore, platformSiteTypeForm, fetchMore]
   );
 
   const handlePlatformTypeSearch = useCallback(
@@ -146,14 +146,7 @@ export const SelectMultiFeedList: FC<SelectMultiFeedListProps> = ({
         },
         updateQuery: (prev, { fetchMoreResult }) => {
           if (!fetchMoreResult) return prev;
-          return {
-            ...prev,
-            feeds: {
-              ...prev.feeds,
-              edges: [...prev.feeds.edges, ...fetchMoreResult.feeds.edges],
-              pageInfo: fetchMoreResult.feeds.pageInfo,
-            },
-          };
+          return fetchMoreResult;
         },
       });
 
