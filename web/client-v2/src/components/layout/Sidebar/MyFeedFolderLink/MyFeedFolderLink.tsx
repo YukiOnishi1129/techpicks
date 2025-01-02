@@ -3,10 +3,7 @@ import Link from "next/link";
 import { FC } from "react";
 
 import { MyFeedFolderLinkFragment } from "./MyFeedFolderLinkFragment";
-
-// import { MyFeedFolderType } from "@/types/myFeedFolder";
-
-// import { FeedAccordion } from "./Accordion";
+import { FeedAccordion } from "../FeedAccordion";
 
 type MyFeedFolderLinkProps = {
   data: FragmentOf<typeof MyFeedFolderLinkFragment>;
@@ -29,7 +26,9 @@ export const MyFeedFolderLink: FC<MyFeedFolderLinkProps> = ({
           <span className="inline-block w-full truncate">{fragment.title}</span>
         </Link>
 
-        <div>{/* <FeedAccordion myFeedFolder={myFeedFolder} /> */}</div>
+        <div>
+          <FeedAccordion data={fragment} />
+        </div>
       </div>
     </div>
   );
