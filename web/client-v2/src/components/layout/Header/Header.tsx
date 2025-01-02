@@ -8,8 +8,6 @@ type HeaderProps = {
 };
 
 export const Header: FC<HeaderProps> = ({ user }) => {
-  //   const myFeedFolderRes = await fetchMyFeedFoldersAPI({});
-  //   const favoriteArticleFolderRes = await fetchFavoriteArticleFoldersAPI({});
   return (
     <>
       <div className="hidden md:block">

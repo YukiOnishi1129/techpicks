@@ -19,8 +19,6 @@ export const LoggedBaseLayout: FC<LoggedBaseLayoutProps> = async ({
   user,
   children,
 }) => {
-  //   const myFeedFolderRes = await fetchMyFeedFoldersAPI({});
-  //   const favoriteArticleFolderRes = await fetchFavoriteArticleFoldersAPI({});
   return (
     <div>
       <header className="overflow-hidden">
