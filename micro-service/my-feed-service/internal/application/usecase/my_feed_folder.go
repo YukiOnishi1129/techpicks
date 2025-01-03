@@ -46,6 +46,16 @@ func (m *myUseCase) GetMyFeedFolders(ctx context.Context, req *mfpb.GetMyFeedFol
 		}, nil
 	}
 
+	if req.GetIsAllFetch().GetValue() {
+		return &mfpb.GetMyFeedFoldersResponse{
+			MyFeedFolderEdges: edges,
+			PageInfo: &copb.PageInfo{
+				EndCursor:   edges[len(edges)-1].Cursor,
+				HasNextPage: false,
+			},
+		}, nil
+	}
+
 	res := &mfpb.GetMyFeedFoldersResponse{
 		MyFeedFolderEdges: edges,
 		PageInfo: &copb.PageInfo{

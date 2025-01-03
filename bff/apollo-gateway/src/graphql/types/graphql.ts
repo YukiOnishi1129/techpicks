@@ -184,6 +184,7 @@ export class DeleteMyFeedFolderInput {
 
 export class MyFeedFoldersInput {
     keyword?: Nullable<string>;
+    isAllFetch?: Nullable<boolean>;
     first?: Nullable<number>;
     after?: Nullable<string>;
     last?: Nullable<number>;

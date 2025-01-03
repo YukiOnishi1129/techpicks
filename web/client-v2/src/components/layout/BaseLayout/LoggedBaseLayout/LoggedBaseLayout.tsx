@@ -36,7 +36,7 @@ export const LoggedBaseLayout: FC<LoggedBaseLayoutProps> = async ({
                 isFolderOnly: true,
               },
               myFeedFoldersInput: {
-                // isAllFetch: true,
+                isAllFetch: true,
               },
             }}
           >

@@ -6,7 +6,10 @@ import {
   GetMyFeedFolderRequest,
 } from '@checkpicks/checkpicks-rpc-ts/src/grpc/my_feed/my_feed_pb';
 import { Injectable } from '@nestjs/common';
-import { StringValue } from 'google-protobuf/google/protobuf/wrappers_pb';
+import {
+  StringValue,
+  BoolValue,
+} from 'google-protobuf/google/protobuf/wrappers_pb';
 import { GrpcMyFeedClientService } from 'src/app/grpc/grpc-my-feed-client.service';
 import {
   MyFeedFoldersInput,
@@ -39,6 +42,8 @@ export class MyFeedFolderService {
       keyword.setValue(input.keyword);
       req.setKeyword(keyword);
     }
+    if (input?.isAllFetch)
+      req.setIsAllFetch(new BoolValue().setValue(input.isAllFetch));
 
     return new Promise((resolve, reject) => {
       const client = this.grpcMyFeedClientService.getGrpcMyFeedService();
