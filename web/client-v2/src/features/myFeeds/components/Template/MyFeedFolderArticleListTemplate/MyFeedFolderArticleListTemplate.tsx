@@ -14,6 +14,7 @@ import {
 import { getMyFeedFolderArticleListTemplateQuery } from "./actGetMyFeedFolderArticleListTemplateQuery";
 import { MyFeedFolderArticleListTemplateQuery } from "./MyFeedFolderArticleListTemplateQuery";
 import { MyFeedFolderArticleList } from "../../List";
+import { MyFeedFolderArticleKeywordSearchForm } from "../../Search";
 
 const LIMIT = 20;
 
@@ -73,14 +74,14 @@ export const MyFeedFolderArticleListTemplate: FC<
         </div>
 
         <div className="hidden md:block">
-          {/* <MyFeedFolderArticleKeywordSearchInput
-            myFeedFolderId={id}
+          <MyFeedFolderArticleKeywordSearchForm
+            myFeedFolderId={myFeedFolderId}
             keyword={keyword}
-          /> */}
+          />
         </div>
       </div>
 
-      <div className="h-12 md:h-24" />
+      <div className="h-12 md:h-32" />
       <PreloadQuery
         query={MyFeedFolderArticleListTemplateQuery}
         variables={{
