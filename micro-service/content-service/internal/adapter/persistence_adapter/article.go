@@ -56,10 +56,18 @@ func (apa *articlePersistenceAdapter) GetArticles(ctx context.Context, req *cpb.
 		q = append(q, qm.Where("articles.published_at < (SELECT published_at FROM articles WHERE id = ?)", req.GetCursor()))
 	}
 
+	if req.GetKeyword().GetValue() != "" {
+		q = append(q, qm.Expr(
+			qm.And("articles.title LIKE ?", "%"+req.GetKeyword().GetValue()+"%"),
+			qm.Or("articles.description LIKE ?", "%"+req.GetKeyword().GetValue()+"%"),
+		))
+	}
+
 	if req.LanguageStatus != nil {
 		isEng := req.LanguageStatus.GetValue() == int64(domain.LanguageStatusEnglish)
 		q = append(q, qm.Where("articles.is_eng = ?", isEng))
 	}
+
 	if req.Tag != nil {
 		tag := req.Tag.GetValue()
 		switch {
@@ -87,9 +95,9 @@ func (apa *articlePersistenceAdapter) GetArticles(ctx context.Context, req *cpb.
 		q = append(q, qm.OrderBy("published_at desc"))
 	}
 
-	if req.FeedIds != nil {
-		qmWhere := make([]interface{}, len(req.FeedIds))
-		for i, feedID := range req.FeedIds {
+	if req.GetFeedIds() != nil {
+		qmWhere := make([]interface{}, len(req.GetFeedIds()))
+		for i, feedID := range req.GetFeedIds() {
 			qmWhere[i] = feedID.GetValue()
 		}
 		q = append(q, qm.WhereIn("feed_article_relations.feed_id IN ?", qmWhere...))

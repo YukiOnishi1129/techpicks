@@ -29,6 +29,8 @@ export class ArticleService {
     const req = new GetArticlesRequest();
     if (input?.first) req.setLimit(input.first);
     if (input?.after) req.setCursor(input.after);
+    if (input?.keyword)
+      req.setKeyword(new StringValue().setValue(input.keyword));
     if (input?.feedIds)
       req.setFeedIdsList(
         input.feedIds.map((feedId) => {

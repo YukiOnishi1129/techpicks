@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 
 import { getUser } from "@/features/auth/actions/user";
+import { MyFeedFolderArticleListTemplate } from "@/features/myFeeds/components/Template";
 
 type MyFeedFolderArticleListPageProps = {
   params: { id: string };
@@ -15,5 +16,12 @@ export default async function MyFeedFolderArticleListPage({
   if (!user) {
     redirect("/login");
   }
-  return <div>MyFeedFolder Article List</div>;
+  const { id } = params;
+  const keyword =
+    typeof searchParams["keyword"] === "string"
+      ? searchParams["keyword"]
+      : undefined;
+  return (
+    <MyFeedFolderArticleListTemplate myFeedFolderId={id} keyword={keyword} />
+  );
 }
