@@ -1,21 +1,22 @@
 type Query {
-    """
-    Get feeds
-    """
-    feeds(feedsInput: FeedsInput!): FeedConnection!
-    feed(feedInput: FeedInput): Feed!
+  """
+  Get feeds
+  """
+  feeds(feedsInput: FeedsInput!): FeedConnection!
+  feed(feedInput: FeedInput): Feed!
 }
 
 input FeedsInput {
-    platformSiteType: Int
-    platformId: String
-    keyword: String
-    first: Int
-    after: String
-    last: Int
-    before: String
+  platformSiteType: Int
+  platformId: String
+  keyword: String
+  isAllFetch: Boolean
+  first: Int
+  after: String
+  last: Int
+  before: String
 }
 
 input FeedInput {
-    id: ID!
+  id: ID!
 }

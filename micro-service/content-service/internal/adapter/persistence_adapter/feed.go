@@ -32,7 +32,10 @@ func (fpa *feedPersistenceAdapter) GetFeeds(ctx context.Context, req *cpb.GetFee
 		qm.Load(qm.Rels(entity.FeedRels.Platform)),
 		qm.Load(qm.Rels(entity.FeedRels.Category)),
 		qm.OrderBy("feeds.created_at ASC"),
-		qm.Limit(limit),
+	}
+
+	if !req.GetIsAllFetch().GetValue() {
+		q = append(q, qm.Limit(limit))
 	}
 
 	if req.GetCursor() != "" {

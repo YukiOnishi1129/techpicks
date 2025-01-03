@@ -4,6 +4,7 @@ import {
 } from '@checkpicks/checkpicks-rpc-ts/src/grpc/content/content_pb';
 import { Injectable } from '@nestjs/common';
 import {
+  BoolValue,
   Int64Value,
   StringValue,
 } from 'google-protobuf/google/protobuf/wrappers_pb';
@@ -34,6 +35,8 @@ export class FeedService {
       req.setPlatformId(new StringValue().setValue(input.platformId));
     if (input?.keyword)
       req.setKeyword(new StringValue().setValue(input.keyword));
+    if (input?.isAllFetch)
+      req.setIsAllFetch(new BoolValue().setValue(input.isAllFetch));
 
     req.setUserId(userId);
 

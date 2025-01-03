@@ -154,6 +154,7 @@ export class FeedsInput {
     after?: Nullable<string>;
     last?: Nullable<number>;
     before?: Nullable<string>;
+    isAllFetch?: Nullable<boolean>;
 }
 
 export class FeedInput {
