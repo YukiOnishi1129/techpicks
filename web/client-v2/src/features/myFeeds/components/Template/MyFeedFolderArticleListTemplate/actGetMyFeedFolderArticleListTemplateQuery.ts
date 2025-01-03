@@ -10,6 +10,8 @@ import {
   MyFeedFolderInput,
 } from "@/graphql/type";
 
+import { MyFeedFolderArticleListFragment } from "../../List/MyFeedFolderArticleList/MyFeedFolderArticleListFragment";
+
 export const GetMyFeedFolderArticleListTemplateQuery = graphql(
   `
     query GetMyFeedFolderArticleListTemplateQuery(
@@ -35,9 +37,10 @@ export const GetMyFeedFolderArticleListTemplateQuery = graphql(
       favoriteArticleFolders(input: $favoriteArticleFoldersInput) {
         ...FavoriteFolderArticleCardWrapperFragment
       }
+      ...MyFeedFolderArticleListFragment
     }
   `,
-  [FavoriteFolderArticleCardWrapperFragment]
+  [FavoriteFolderArticleCardWrapperFragment, MyFeedFolderArticleListFragment]
 );
 
 export const getMyFeedFolderArticleListTemplateQuery = async (

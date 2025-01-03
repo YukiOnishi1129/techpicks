@@ -70,6 +70,7 @@ export type ArticlesInput = {
   before?: InputMaybe<Scalars['String']['input']>;
   feedIds?: InputMaybe<Array<Scalars['String']['input']>>;
   first?: InputMaybe<Scalars['Int']['input']>;
+  keyword?: InputMaybe<Scalars['String']['input']>;
   languageStatus?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
   tab?: InputMaybe<Scalars['String']['input']>;
@@ -905,6 +906,15 @@ export type ShowMyFeedListDialogFragmentFragment = { __typename?: 'MyFeedFolder'
 
 export type UpdateMyFeedFolderDialogFragmentFragment = { __typename?: 'MyFeedFolder', id: string, title: string, description?: string | null, feeds?: Array<{ __typename?: 'Feed', id: string, name: string }> | null };
 
+export type MyFeedFolderArticleListFragmentFragment = { __typename?: 'Query', myFeedFolder: { __typename?: 'MyFeedFolder', id: string, title: string, feeds?: Array<{ __typename?: 'Feed', id: string }> | null }, feeds: { __typename?: 'FeedConnection', edges: Array<{ __typename?: 'FeedEdge', node: { __typename?: 'Feed', id: string, name: string } }> }, favoriteArticleFolders: { __typename?: 'FavoriteArticleFolderConnection', edges: Array<{ __typename?: 'FavoriteArticleFolderEdge', node: { __typename?: 'FavoriteArticleFolder', id: string, title: string } }> } };
+
+export type MyFeedFolderArticleListQueryQueryVariables = Exact<{
+  input: ArticlesInput;
+}>;
+
+
+export type MyFeedFolderArticleListQueryQuery = { __typename?: 'Query', articles: { __typename?: 'ArticleConnection', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null }, edges: Array<{ __typename?: 'ArticleEdge', node: { __typename: 'Article', id: string, title: string, description: string, articleUrl: string, publishedAt?: number | null, authorName?: string | null, tags?: string | null, thumbnailUrl: string, isEng: boolean, isPrivate: boolean, isBookmarked: boolean, bookmarkId?: string | null, likeCount?: number | null, isFollowing: boolean, favoriteArticleFolderIds: Array<string>, platform?: { __typename?: 'Platform', id: string, name: string, siteUrl: string, faviconUrl: string } | null, feeds?: Array<{ __typename?: 'Feed', id: string, name: string }> | null } }> } };
+
 export type MyFeedFolderListQueryQueryVariables = Exact<{
   myFeedFoldersInput: MyFeedFoldersInput;
 }>;
@@ -1086,44 +1096,6 @@ export const ArticleCardWrapperFragmentFragmentDoc = gql`
     ${ArticleCardItemFragmentFragmentDoc}
 ${UseArticleManageBookmarkFragmentFragmentDoc}
 ${UseArticleManageFavoriteArticleFragmentFragmentDoc}`;
-export const FollowTargetFavoriteArticleFolderItemFragmentFragmentDoc = gql`
-    fragment FollowTargetFavoriteArticleFolderItemFragment on FavoriteArticleFolder {
-  id
-  title
-}
-    `;
-export const FollowFavoriteArticleDropdownMenuContentFragmentFragmentDoc = gql`
-    fragment FollowFavoriteArticleDropdownMenuContentFragment on FavoriteArticleFolderConnection {
-  edges {
-    node {
-      ...FollowTargetFavoriteArticleFolderItemFragment
-    }
-  }
-}
-    ${FollowTargetFavoriteArticleFolderItemFragmentFragmentDoc}`;
-export const FavoriteFolderUseArticleManageFavoriteArticleFragmentFragmentDoc = gql`
-    fragment FavoriteFolderUseArticleManageFavoriteArticleFragment on FavoriteArticleFolderConnection {
-  edges {
-    node {
-      id
-      title
-    }
-  }
-}
-    `;
-export const FavoriteFolderArticleCardWrapperFragmentFragmentDoc = gql`
-    fragment FavoriteFolderArticleCardWrapperFragment on FavoriteArticleFolderConnection {
-  edges {
-    node {
-      id
-      title
-    }
-  }
-  ...FollowFavoriteArticleDropdownMenuContentFragment
-  ...FavoriteFolderUseArticleManageFavoriteArticleFragment
-}
-    ${FollowFavoriteArticleDropdownMenuContentFragmentFragmentDoc}
-${FavoriteFolderUseArticleManageFavoriteArticleFragmentFragmentDoc}`;
 export const BookmarkCardItemFragmentFragmentDoc = gql`
     fragment BookmarkCardItemFragment on Bookmark {
   id
@@ -1178,6 +1150,21 @@ export const BookmarkCardWrapperFragmentFragmentDoc = gql`
 }
     ${BookmarkCardItemFragmentFragmentDoc}
 ${UseBookmarkMangeFavoriteArticleFragmentDoc}`;
+export const FollowTargetFavoriteArticleFolderItemFragmentFragmentDoc = gql`
+    fragment FollowTargetFavoriteArticleFolderItemFragment on FavoriteArticleFolder {
+  id
+  title
+}
+    `;
+export const FollowFavoriteArticleDropdownMenuContentFragmentFragmentDoc = gql`
+    fragment FollowFavoriteArticleDropdownMenuContentFragment on FavoriteArticleFolderConnection {
+  edges {
+    node {
+      ...FollowTargetFavoriteArticleFolderItemFragment
+    }
+  }
+}
+    ${FollowTargetFavoriteArticleFolderItemFragmentFragmentDoc}`;
 export const FavoriteFolderUseBookmarkManageFavoriteArticleFragmentFragmentDoc = gql`
     fragment FavoriteFolderUseBookmarkManageFavoriteArticleFragment on FavoriteArticleFolderConnection {
   edges {
@@ -1507,6 +1494,51 @@ export const MyFeedFolderCardFragmentFragmentDoc = gql`
 }
     ${UpdateMyFeedFolderDialogFragmentFragmentDoc}
 ${ShowMyFeedListDialogFragmentFragmentDoc}`;
+export const FavoriteFolderUseArticleManageFavoriteArticleFragmentFragmentDoc = gql`
+    fragment FavoriteFolderUseArticleManageFavoriteArticleFragment on FavoriteArticleFolderConnection {
+  edges {
+    node {
+      id
+      title
+    }
+  }
+}
+    `;
+export const FavoriteFolderArticleCardWrapperFragmentFragmentDoc = gql`
+    fragment FavoriteFolderArticleCardWrapperFragment on FavoriteArticleFolderConnection {
+  edges {
+    node {
+      id
+      title
+    }
+  }
+  ...FollowFavoriteArticleDropdownMenuContentFragment
+  ...FavoriteFolderUseArticleManageFavoriteArticleFragment
+}
+    ${FollowFavoriteArticleDropdownMenuContentFragmentFragmentDoc}
+${FavoriteFolderUseArticleManageFavoriteArticleFragmentFragmentDoc}`;
+export const MyFeedFolderArticleListFragmentFragmentDoc = gql`
+    fragment MyFeedFolderArticleListFragment on Query {
+  myFeedFolder(myFeedFolderInput: $myFeedFolderInput) {
+    id
+    title
+    feeds {
+      id
+    }
+  }
+  feeds(feedsInput: $feedsInput) {
+    edges {
+      node {
+        id
+        name
+      }
+    }
+  }
+  favoriteArticleFolders(input: $favoriteArticleFoldersInput) {
+    ...FavoriteFolderArticleCardWrapperFragment
+  }
+}
+    ${FavoriteFolderArticleCardWrapperFragmentFragmentDoc}`;
 export const GetLoggedBaseLayoutQueryDocument = gql`
     query GetLoggedBaseLayoutQuery($input: FavoriteArticleFoldersInput!, $myFeedFoldersInput: MyFeedFoldersInput!) {
   favoriteArticleFolders(input: $input) {
@@ -2822,6 +2854,55 @@ export type SelectMultiFeedListQueryQueryHookResult = ReturnType<typeof useSelec
 export type SelectMultiFeedListQueryLazyQueryHookResult = ReturnType<typeof useSelectMultiFeedListQueryLazyQuery>;
 export type SelectMultiFeedListQuerySuspenseQueryHookResult = ReturnType<typeof useSelectMultiFeedListQuerySuspenseQuery>;
 export type SelectMultiFeedListQueryQueryResult = Apollo.QueryResult<SelectMultiFeedListQueryQuery, SelectMultiFeedListQueryQueryVariables>;
+export const MyFeedFolderArticleListQueryDocument = gql`
+    query MyFeedFolderArticleListQuery($input: ArticlesInput!) {
+  articles(articlesInput: $input) {
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+    edges {
+      node {
+        id
+        ...ArticleCardWrapperFragment
+      }
+    }
+  }
+}
+    ${ArticleCardWrapperFragmentFragmentDoc}`;
+
+/**
+ * __useMyFeedFolderArticleListQueryQuery__
+ *
+ * To run a query within a React component, call `useMyFeedFolderArticleListQueryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMyFeedFolderArticleListQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMyFeedFolderArticleListQueryQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useMyFeedFolderArticleListQueryQuery(baseOptions: Apollo.QueryHookOptions<MyFeedFolderArticleListQueryQuery, MyFeedFolderArticleListQueryQueryVariables> & ({ variables: MyFeedFolderArticleListQueryQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<MyFeedFolderArticleListQueryQuery, MyFeedFolderArticleListQueryQueryVariables>(MyFeedFolderArticleListQueryDocument, options);
+      }
+export function useMyFeedFolderArticleListQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MyFeedFolderArticleListQueryQuery, MyFeedFolderArticleListQueryQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<MyFeedFolderArticleListQueryQuery, MyFeedFolderArticleListQueryQueryVariables>(MyFeedFolderArticleListQueryDocument, options);
+        }
+export function useMyFeedFolderArticleListQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<MyFeedFolderArticleListQueryQuery, MyFeedFolderArticleListQueryQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<MyFeedFolderArticleListQueryQuery, MyFeedFolderArticleListQueryQueryVariables>(MyFeedFolderArticleListQueryDocument, options);
+        }
+export type MyFeedFolderArticleListQueryQueryHookResult = ReturnType<typeof useMyFeedFolderArticleListQueryQuery>;
+export type MyFeedFolderArticleListQueryLazyQueryHookResult = ReturnType<typeof useMyFeedFolderArticleListQueryLazyQuery>;
+export type MyFeedFolderArticleListQuerySuspenseQueryHookResult = ReturnType<typeof useMyFeedFolderArticleListQuerySuspenseQuery>;
+export type MyFeedFolderArticleListQueryQueryResult = Apollo.QueryResult<MyFeedFolderArticleListQueryQuery, MyFeedFolderArticleListQueryQueryVariables>;
 export const MyFeedFolderListQueryDocument = gql`
     query MyFeedFolderListQuery($myFeedFoldersInput: MyFeedFoldersInput!) {
   myFeedFolders(myFeedFoldersInput: $myFeedFoldersInput) {
@@ -2940,8 +3021,10 @@ export const GetMyFeedFolderArticleListTemplateQueryDocument = gql`
   favoriteArticleFolders(input: $favoriteArticleFoldersInput) {
     ...FavoriteFolderArticleCardWrapperFragment
   }
+  ...MyFeedFolderArticleListFragment
 }
-    ${FavoriteFolderArticleCardWrapperFragmentFragmentDoc}`;
+    ${FavoriteFolderArticleCardWrapperFragmentFragmentDoc}
+${MyFeedFolderArticleListFragmentFragmentDoc}`;
 
 /**
  * __useGetMyFeedFolderArticleListTemplateQueryQuery__
