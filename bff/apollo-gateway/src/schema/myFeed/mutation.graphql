@@ -1,0 +1,25 @@
+type Mutation {
+  createMyFeedFolder(createMyFeedFolderInput: CreateMyFeedFolderInput!): MyFeedFolder!
+  updateMyFeedFolder(updateMyFeedFolderInput: UpdateMyFeedFolderInput!): MyFeedFolder!
+  deleteMyFeedFolder(deleteMyFeedFolderInput: DeleteMyFeedFolderInput!): Boolean!
+}
+
+
+input CreateMyFeedFolderInput {
+  userId: String!
+  title: String!
+  description: String
+  feedIds: [String!]
+}
+
+input UpdateMyFeedFolderInput {
+  myFeedFolderId: ID!
+  title: String
+  description: String
+  feedIds: [String!]
+}
+
+input DeleteMyFeedFolderInput {
+  myFeedFolderId: ID!
+  userId: String!
+}

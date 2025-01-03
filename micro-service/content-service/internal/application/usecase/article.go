@@ -3,9 +3,10 @@ package usecase
 import (
 	"context"
 
-	bpb "github.com/YukiOnishi1129/techpicks/micro-service/content-service/grpc/bookmark"
-	cpb "github.com/YukiOnishi1129/techpicks/micro-service/content-service/grpc/content"
-	fpb "github.com/YukiOnishi1129/techpicks/micro-service/content-service/grpc/favorite"
+	bpb "github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go/grpc/bookmark"
+	copb "github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go/grpc/common"
+	cpb "github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go/grpc/content"
+	fpb "github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go/grpc/favorite"
 	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/domain/entity"
 	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/util"
 	"google.golang.org/protobuf/types/known/timestamppb"
@@ -78,7 +79,7 @@ func (cu *contentUseCase) GetArticles(ctx context.Context, req *cpb.GetArticlesR
 	if len(edges) == 0 {
 		return &cpb.GetArticlesResponse{
 			ArticlesEdge: edges,
-			PageInfo: &cpb.PageInfo{
+			PageInfo: &copb.PageInfo{
 				HasNextPage: false,
 				EndCursor:   "",
 			},
@@ -87,7 +88,7 @@ func (cu *contentUseCase) GetArticles(ctx context.Context, req *cpb.GetArticlesR
 
 	return &cpb.GetArticlesResponse{
 		ArticlesEdge: edges,
-		PageInfo: &cpb.PageInfo{
+		PageInfo: &copb.PageInfo{
 			HasNextPage: len(edges) == limit,
 			EndCursor:   edges[len(edges)-1].Cursor,
 		},

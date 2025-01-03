@@ -1,3 +1,10 @@
+import {
+  CreateFavoriteArticleFolderRequest,
+  DeleteFavoriteArticleFolderRequest,
+  GetFavoriteArticleFolderByIdRequest,
+  GetFavoriteArticleFoldersRequest,
+  UpdateFavoriteArticleFolderRequest,
+} from '@checkpicks/checkpicks-rpc-ts/src/grpc/favorite/favorite_pb';
 import { Injectable } from '@nestjs/common';
 import {
   Int64Value,
@@ -14,13 +21,6 @@ import {
   UpdateFavoriteArticleFolderInput,
   DeleteFavoriteArticleFolderInput,
 } from 'src/graphql/types/graphql';
-import {
-  CreateFavoriteArticleFolderRequest,
-  DeleteFavoriteArticleFolderRequest,
-  GetFavoriteArticleFolderByIdRequest,
-  GetFavoriteArticleFoldersRequest,
-  UpdateFavoriteArticleFolderRequest,
-} from 'src/grpc/favorite/favorite_pb';
 import { convertTimestampToInt } from 'src/utils/timestamp';
 
 import { GrpcFavoriteClientService } from '../../grpc/grpc-favorite-client.service';

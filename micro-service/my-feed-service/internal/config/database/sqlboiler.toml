@@ -1,0 +1,15 @@
+# templates = [
+# 	"/Users/xxx/go/pkg/mod/github.com/volatiletech/sqlboiler/v4@v4.17.1/templates/main",
+#     "/Users/xxx/go/pkg/mod/github.com/volatiletech/sqlboiler/v4@v4.17.1/templates/test",
+# 	"micro-service/my-feed-service/internal/config/database/templates",
+# 	]
+
+[psql]
+dbname = "postgres"
+host   = "localhost"
+port   = 54322
+user   = "postgres"
+pass   = "postgres"
+sslmode = "disable"
+schema = "public"
+blacklist = ["migrations", "other", "platforms", "categories", "articles","trend_articles","feed_article_relations", "favorite_articles","bookmarks", "favorite_article_folders", "trend_articles", "profiles", "feeds"]

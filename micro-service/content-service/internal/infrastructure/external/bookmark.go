@@ -3,7 +3,7 @@ package external
 import (
 	"context"
 
-	bpb "github.com/YukiOnishi1129/techpicks/micro-service/content-service/grpc/bookmark"
+	bpb "github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go/grpc/bookmark"
 )
 
 type BookmarkExternal interface {

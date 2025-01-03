@@ -4,9 +4,10 @@ import (
 	"context"
 	"fmt"
 
-	bpb "github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/grpc/bookmark"
-	cpb "github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/grpc/content"
-	fpb "github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/grpc/favorite"
+	bpb "github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go/grpc/bookmark"
+	copb "github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go/grpc/common"
+	cpb "github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go/grpc/content"
+	fpb "github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go/grpc/favorite"
 	externaladapter "github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/internal/adapter/external_adapter"
 	persistenceadapter "github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/internal/adapter/persistence_adapter"
 	"github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/internal/domain/entity"
@@ -74,7 +75,7 @@ func (bu *bookmarkUseCase) GetBookmarks(ctx context.Context, req *bpb.GetBookmar
 	if len(edges) == 0 {
 		return &bpb.GetBookmarksResponse{
 			BookmarkEdge: edges,
-			PageInfo: &bpb.PageInfo{
+			PageInfo: &copb.PageInfo{
 				HasNextPage: false,
 				EndCursor:   "",
 			},
@@ -83,7 +84,7 @@ func (bu *bookmarkUseCase) GetBookmarks(ctx context.Context, req *bpb.GetBookmar
 
 	return &bpb.GetBookmarksResponse{
 		BookmarkEdge: edges,
-		PageInfo: &bpb.PageInfo{
+		PageInfo: &copb.PageInfo{
 			HasNextPage: len(edges) == int(req.GetLimit()),
 			EndCursor:   edges[len(edges)-1].Cursor,
 		},

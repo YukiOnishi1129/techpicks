@@ -43,8 +43,8 @@ reset-migrate:
 
 # generate
 ## generate proto
-gen-proto:
-	$(shell ./scripts/protoc-generate.sh)
+# gen-proto:
+# 	$(shell ./scripts/protoc-generate.sh)
 
 # create entity
 create-entity:

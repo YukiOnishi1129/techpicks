@@ -5,8 +5,9 @@ import (
 	"errors"
 	"sort"
 
-	cpb "github.com/YukiOnishi1129/techpicks/micro-service/favorite-service/grpc/content"
-	fpb "github.com/YukiOnishi1129/techpicks/micro-service/favorite-service/grpc/favorite"
+	copb "github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go/grpc/common"
+	cpb "github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go/grpc/content"
+	fpb "github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go/grpc/favorite"
 	"github.com/YukiOnishi1129/techpicks/micro-service/favorite-service/internal/domain/entity"
 	"google.golang.org/protobuf/types/known/emptypb"
 	"google.golang.org/protobuf/types/known/timestamppb"
@@ -28,7 +29,7 @@ func (fu *favoriteUseCase) GetFavoriteArticles(ctx context.Context, req *fpb.Get
 	if len(fas) == 0 {
 		return &fpb.GetFavoriteArticlesResponse{
 			FavoriteArticlesEdge: resFas,
-			PageInfo: &fpb.PageInfo{
+			PageInfo: &copb.PageInfo{
 				HasNextPage: false,
 				EndCursor:   "",
 			},
@@ -44,7 +45,7 @@ func (fu *favoriteUseCase) GetFavoriteArticles(ctx context.Context, req *fpb.Get
 
 	return &fpb.GetFavoriteArticlesResponse{
 		FavoriteArticlesEdge: resFas,
-		PageInfo: &fpb.PageInfo{
+		PageInfo: &copb.PageInfo{
 			HasNextPage: len(resFas) == limit,
 			EndCursor:   resFas[len(resFas)-1].Cursor,
 		},
@@ -141,7 +142,7 @@ func (fu *favoriteUseCase) GetFavoriteAllFolderArticles(ctx context.Context, req
 
 	return &fpb.GetFavoriteAllFolderArticlesResponse{
 		FavoriteAllFolderArticleEdge: resFas,
-		PageInfo: &fpb.PageInfo{
+		PageInfo: &copb.PageInfo{
 			HasNextPage: len(resFas) == limit,
 			EndCursor:   endCursor,
 		},

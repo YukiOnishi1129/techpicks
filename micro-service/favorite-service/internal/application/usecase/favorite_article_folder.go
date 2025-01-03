@@ -4,7 +4,8 @@ import (
 	"context"
 	"errors"
 
-	fpb "github.com/YukiOnishi1129/techpicks/micro-service/favorite-service/grpc/favorite"
+	copb "github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go/grpc/common"
+	fpb "github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go/grpc/favorite"
 	"github.com/YukiOnishi1129/techpicks/micro-service/favorite-service/internal/domain/entity"
 	"google.golang.org/protobuf/types/known/emptypb"
 	"google.golang.org/protobuf/types/known/timestamppb"
@@ -20,7 +21,7 @@ func (fu *favoriteUseCase) GetFavoriteArticleFolders(ctx context.Context, req *f
 	if len(fafs) == 0 {
 		return &fpb.GetFavoriteArticleFoldersResponse{
 			FavoriteArticleFoldersEdge: resFafs,
-			PageInfo: &fpb.PageInfo{
+			PageInfo: &copb.PageInfo{
 				HasNextPage: false,
 				EndCursor:   "",
 			},
@@ -54,7 +55,7 @@ func (fu *favoriteUseCase) GetFavoriteArticleFolders(ctx context.Context, req *f
 	if req.GetIsAllFetch() != nil && req.GetIsAllFetch().GetValue() {
 		return &fpb.GetFavoriteArticleFoldersResponse{
 			FavoriteArticleFoldersEdge: resFafs,
-			PageInfo: &fpb.PageInfo{
+			PageInfo: &copb.PageInfo{
 				HasNextPage: false,
 				EndCursor:   resFafs[len(resFafs)-1].Cursor,
 			},
@@ -63,7 +64,7 @@ func (fu *favoriteUseCase) GetFavoriteArticleFolders(ctx context.Context, req *f
 
 	return &fpb.GetFavoriteArticleFoldersResponse{
 		FavoriteArticleFoldersEdge: resFafs,
-		PageInfo: &fpb.PageInfo{
+		PageInfo: &copb.PageInfo{
 			HasNextPage: len(resFafs) == int(req.GetLimit().GetValue()),
 			EndCursor:   resFafs[len(resFafs)-1].Cursor,
 		},
@@ -79,7 +80,7 @@ func (fu *favoriteUseCase) GetFavoriteArticleFoldersByArticleId(ctx context.Cont
 	if len(fa) == 0 {
 		return &fpb.GetFavoriteArticleFoldersResponse{
 			FavoriteArticleFoldersEdge: make([]*fpb.FavoriteArticleFolderEdge, 0),
-			PageInfo: &fpb.PageInfo{
+			PageInfo: &copb.PageInfo{
 				HasNextPage: false,
 				EndCursor:   "",
 			},
@@ -99,7 +100,7 @@ func (fu *favoriteUseCase) GetFavoriteArticleFoldersByArticleId(ctx context.Cont
 	if len(fafs) == 0 {
 		return &fpb.GetFavoriteArticleFoldersResponse{
 			FavoriteArticleFoldersEdge: make([]*fpb.FavoriteArticleFolderEdge, 0),
-			PageInfo: &fpb.PageInfo{
+			PageInfo: &copb.PageInfo{
 				HasNextPage: false,
 				EndCursor:   "",
 			},
@@ -118,7 +119,7 @@ func (fu *favoriteUseCase) GetFavoriteArticleFoldersByArticleId(ctx context.Cont
 
 	return &fpb.GetFavoriteArticleFoldersResponse{
 		FavoriteArticleFoldersEdge: resFavFolders,
-		PageInfo: &fpb.PageInfo{
+		PageInfo: &copb.PageInfo{
 			HasNextPage: false,
 			EndCursor:   "",
 		},

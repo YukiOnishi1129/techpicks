@@ -1,0 +1,35 @@
+# staging environment
+substitutions:
+  _IMAGE: 'my-feed-service-application/latest'
+  _SERVICE_NAME: 'my-feed-service-application'
+steps:
+  # Build the container image
+  - name: "gcr.io/cloud-builders/docker"
+    args:
+      [
+        "build",
+        "-t",
+        "$_REGION-docker.pkg.dev/$PROJECT_ID/$_IMAGE",
+        "-f",
+        "micro-service/my-feed-service/Dockerfile",
+        ".",
+      ]
+  # Push the container image to Artifact Registry
+  - name: "gcr.io/cloud-builders/docker"
+    args: ["push", "$_REGION-docker.pkg.dev/$PROJECT_ID/$_IMAGE"]
+  # Deploy container image to Cloud Run
+    # Deploy container image to Cloud Run
+  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
+    entrypoint: gcloud
+    args:
+      [
+        "run",
+        "deploy",
+        "$_SERVICE_NAME",
+        "--image",
+        "$_REGION-docker.pkg.dev/$PROJECT_ID/$_IMAGE",
+        "--region",
+        "$_REGION",
+      ]
+images:
+  - $_REGION-docker.pkg.dev/$PROJECT_ID/$_IMAGE

@@ -10,3 +10,15 @@ type MyFeedFolder implements Node {
   createdAt: Int!
   updatedAt: Int!
 }
+
+
+type MyFeedFolderConnection {
+  edges: [MyFeedFolderEdge!]!
+  pageInfo: PageInfo!
+}
+
+
+type MyFeedFolderEdge {
+  cursor: String!
+  node: MyFeedFolder!
+}

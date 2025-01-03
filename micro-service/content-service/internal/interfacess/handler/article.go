@@ -3,7 +3,7 @@ package handler
 import (
 	"context"
 
-	cpb "github.com/YukiOnishi1129/techpicks/micro-service/content-service/grpc/content"
+	cpb "github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go/grpc/content"
 )
 
 func (ch *contentHandler) GetArticles(ctx context.Context, req *cpb.GetArticlesRequest) (*cpb.GetArticlesResponse, error) {

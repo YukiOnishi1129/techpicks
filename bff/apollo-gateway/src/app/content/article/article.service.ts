@@ -1,3 +1,7 @@
+import {
+  GetArticlesRequest,
+  GetArticleOGPRequest,
+} from '@checkpicks/checkpicks-rpc-ts/src/grpc/content/content_pb';
 import { Injectable } from '@nestjs/common';
 import {
   StringValue,
@@ -9,10 +13,6 @@ import {
   ArticlesInput,
   ArticleOGP,
 } from '../../../graphql/types/graphql';
-import {
-  GetArticlesRequest,
-  GetArticleOGPRequest,
-} from '../../../grpc/content/content_pb';
 import { convertTimestampToInt } from '../../../utils/timestamp';
 import { GrpcContentClientService } from '../../grpc/grpc-content-client.service';
 
@@ -29,6 +29,8 @@ export class ArticleService {
     const req = new GetArticlesRequest();
     if (input?.first) req.setLimit(input.first);
     if (input?.after) req.setCursor(input.after);
+    if (input?.keyword)
+      req.setKeyword(new StringValue().setValue(input.keyword));
     if (input?.feedIds)
       req.setFeedIdsList(
         input.feedIds.map((feedId) => {

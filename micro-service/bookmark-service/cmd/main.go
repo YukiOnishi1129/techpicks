@@ -9,9 +9,9 @@ import (
 	"os"
 	"os/signal"
 
-	bpb "github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/grpc/bookmark"
-	cpb "github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/grpc/content"
-	fpb "github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/grpc/favorite"
+	bpb "github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go/grpc/bookmark"
+	cpb "github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go/grpc/content"
+	fpb "github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go/grpc/favorite"
 	externaladapter "github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/internal/adapter/external_adapter"
 	persistenceadapter "github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/internal/adapter/persistence_adapter"
 	"github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/internal/application/usecase"
@@ -99,7 +99,7 @@ func main() {
 
 	// application layer
 	// usecase layer
-	buc := usecase.NewBookmarkUseCase(bpa, cea,fea)
+	buc := usecase.NewBookmarkUseCase(bpa, cea, fea)
 
 	// interface layer
 	bhd := handler.NewBookmarkHandler(buc)

@@ -1,8 +1,8 @@
+import { BookmarkServiceClient } from '@checkpicks/checkpicks-rpc-ts/src/grpc/bookmark/bookmark_grpc_pb';
 import * as grpc from '@grpc/grpc-js';
 import { Injectable, OnModuleInit } from '@nestjs/common';
 
 import { grpcCredentials } from '../../constants/grpc';
-import { BookmarkServiceClient } from '../../grpc/bookmark/bookmark_grpc_pb';
 
 const grpcUrl =
   process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'staging'

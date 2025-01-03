@@ -1,5 +1,10 @@
+import {
+  GetFeedsRequest,
+  GetFeedRequest,
+} from '@checkpicks/checkpicks-rpc-ts/src/grpc/content/content_pb';
 import { Injectable } from '@nestjs/common';
 import {
+  BoolValue,
   Int64Value,
   StringValue,
 } from 'google-protobuf/google/protobuf/wrappers_pb';
@@ -9,7 +14,6 @@ import {
   Feed,
   FeedInput,
 } from 'src/graphql/types/graphql';
-import { GetFeedsRequest, GetFeedRequest } from 'src/grpc/content/content_pb';
 
 import { convertTimestampToInt } from '../../../utils/timestamp';
 import { GrpcContentClientService } from '../../grpc/grpc-content-client.service';
@@ -27,10 +31,22 @@ export class FeedService {
       req.setPlatformSiteType(
         new Int64Value().setValue(input.platformSiteType),
       );
+    if (input?.feedIdList) {
+      req.setFeedIdsList(
+        input.feedIdList.map((feedId) => {
+          const stringValue = new StringValue();
+          stringValue.setValue(feedId);
+          return stringValue;
+        }),
+      );
+    }
+
     if (input?.platformId)
       req.setPlatformId(new StringValue().setValue(input.platformId));
     if (input?.keyword)
       req.setKeyword(new StringValue().setValue(input.keyword));
+    if (input?.isAllFetch)
+      req.setIsAllFetch(new BoolValue().setValue(input.isAllFetch));
 
     req.setUserId(userId);
 

@@ -13,6 +13,7 @@ export class ArticlesInput {
     languageStatus?: Nullable<number>;
     tab?: Nullable<string>;
     feedIds?: Nullable<string[]>;
+    keyword?: Nullable<string>;
     first?: Nullable<number>;
     after?: Nullable<string>;
     last?: Nullable<number>;
@@ -150,6 +151,8 @@ export class FeedsInput {
     platformSiteType?: Nullable<number>;
     platformId?: Nullable<string>;
     keyword?: Nullable<string>;
+    feedIdList?: Nullable<string[]>;
+    isAllFetch?: Nullable<boolean>;
     first?: Nullable<number>;
     after?: Nullable<string>;
     last?: Nullable<number>;
@@ -157,6 +160,37 @@ export class FeedsInput {
 }
 
 export class FeedInput {
+    id: string;
+}
+
+export class CreateMyFeedFolderInput {
+    userId: string;
+    title: string;
+    description?: Nullable<string>;
+    feedIds?: Nullable<string[]>;
+}
+
+export class UpdateMyFeedFolderInput {
+    myFeedFolderId: string;
+    title?: Nullable<string>;
+    description?: Nullable<string>;
+    feedIds?: Nullable<string[]>;
+}
+
+export class DeleteMyFeedFolderInput {
+    myFeedFolderId: string;
+    userId: string;
+}
+
+export class MyFeedFoldersInput {
+    keyword?: Nullable<string>;
+    first?: Nullable<number>;
+    after?: Nullable<string>;
+    last?: Nullable<number>;
+    before?: Nullable<string>;
+}
+
+export class MyFeedFolderInput {
     id: string;
 }
 
@@ -182,6 +216,10 @@ export abstract class IQuery {
     abstract feeds(feedsInput: FeedsInput): FeedConnection | Promise<FeedConnection>;
 
     abstract feed(feedInput?: Nullable<FeedInput>): Feed | Promise<Feed>;
+
+    abstract myFeedFolders(myFeedFoldersInput: MyFeedFoldersInput): MyFeedFolderConnection | Promise<MyFeedFolderConnection>;
+
+    abstract myFeedFolder(myFeedFolderInput: MyFeedFolderInput): MyFeedFolder | Promise<MyFeedFolder>;
 }
 
 export class Article implements Node {
@@ -253,6 +291,12 @@ export abstract class IMutation {
     abstract deleteFavoriteArticle(input: DeleteFavoriteArticleInput): boolean | Promise<boolean>;
 
     abstract deleteFavoriteArticleByArticleId(input: DeleteFavoriteArticleByArticleIdInput): boolean | Promise<boolean>;
+
+    abstract createMyFeedFolder(createMyFeedFolderInput: CreateMyFeedFolderInput): MyFeedFolder | Promise<MyFeedFolder>;
+
+    abstract updateMyFeedFolder(updateMyFeedFolderInput: UpdateMyFeedFolderInput): MyFeedFolder | Promise<MyFeedFolder>;
+
+    abstract deleteMyFeedFolder(deleteMyFeedFolderInput: DeleteMyFeedFolderInput): boolean | Promise<boolean>;
 }
 
 export class Bookmark implements Node {
@@ -393,6 +437,16 @@ export class MyFeedFolder implements Node {
     feeds?: Nullable<Feed[]>;
     createdAt: number;
     updatedAt: number;
+}
+
+export class MyFeedFolderConnection {
+    edges: MyFeedFolderEdge[];
+    pageInfo: PageInfo;
+}
+
+export class MyFeedFolderEdge {
+    cursor: string;
+    node: MyFeedFolder;
 }
 
 export class Platform implements Node {

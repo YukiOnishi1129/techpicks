@@ -3,7 +3,7 @@ package usecase
 import (
 	"context"
 
-	cpb "github.com/YukiOnishi1129/techpicks/micro-service/content-service/grpc/content"
+	cpb "github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go/grpc/content"
 	externaladapter "github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/adapter/external_adapter"
 	persistenceadapter "github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/adapter/persistence_adapter"
 )
