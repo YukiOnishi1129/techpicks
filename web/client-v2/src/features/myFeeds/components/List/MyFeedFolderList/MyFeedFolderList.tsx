@@ -3,6 +3,7 @@ import { useQuery, useSuspenseQuery } from "@apollo/client";
 import { FC, useCallback, useEffect, useRef, useState } from "react";
 
 import { NotFoundList } from "@/components/layout/NotFoundList";
+import { Loader } from "@/components/ui/loader";
 
 import { MyFeedFolderListQuery } from "./MyFeedFolderListQuery";
 import { MyFeedFolderCard } from "../../Card";
@@ -57,16 +58,15 @@ export const MyFeedFolderList: FC<MyFeedFolderListProps> = ({
   const [hashMore, setHashMore] = useState(true);
   const [offset, setOffset] = useState(1);
   const [endCursor, setEndCursor] = useState(
-    res?.myFeedFolders?.pageInfo?.endCursor || null
+    resSuspenseData?.myFeedFolders?.pageInfo?.endCursor || null
   );
   const [isNextPage, setIsNextPage] = useState(true);
 
   const loadMore = useCallback(async () => {
     if (!isNextPage) return;
-
     const { data: resData, error: resError } = await fetchMore({
       variables: {
-        input: {
+        myFeedFoldersInput: {
           keyword,
           first: limit,
           after: endCursor,
@@ -94,7 +94,7 @@ export const MyFeedFolderList: FC<MyFeedFolderListProps> = ({
       const endCursor = resData.myFeedFolders.pageInfo?.endCursor || null;
       setEndCursor(endCursor);
     }
-    setIsNextPage(resData.myFeedFolders.pageInfo.hasNextPage);
+    if (!resData.myFeedFolders.pageInfo.hasNextPage) setIsNextPage(false);
 
     setHashMore(resData.myFeedFolders.edges.length > 0);
   }, [endCursor, isNextPage, fetchMore, keyword, limit]);
@@ -142,21 +142,28 @@ export const MyFeedFolderList: FC<MyFeedFolderListProps> = ({
   return (
     <>
       {res?.myFeedFolders?.edges.length === 0 ? (
-        <div>
+        <div className="flex flex-col items-center justify-center">
           <NotFoundList message="Not found my feed folders" />
         </div>
       ) : (
-        <div className="mb-8">
+        <div className="m-auto mb-8">
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {res?.myFeedFolders?.edges.map((edge, i) => (
+            {res?.myFeedFolders?.edges?.map((edge, i) => (
               <MyFeedFolderCard
-                key={`${i}-${edge.node.id}`}
+                key={`my-feed-folder-${edge.node.id}-${i}`}
                 data={edge.node}
                 feedsEndCursor={
                   resSuspenseData?.feeds?.pageInfo.endCursor || undefined
                 }
               />
             ))}
+          </div>
+          <div ref={observerTarget}>
+            {hashMore && isNextPage && (
+              <div className="flex justify-center py-4">
+                <Loader />
+              </div>
+            )}
           </div>
         </div>
       )}

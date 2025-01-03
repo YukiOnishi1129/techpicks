@@ -21,6 +21,7 @@ func NewMyFeedFolderPersistence(db *sql.DB) repository.MyFeedFolderRepository {
 }
 
 func (mfp *myFeedFolderPersistence) GetMyFeedFolders(ctx context.Context, q []qm.QueryMod) (entity.MyFeedFolderSlice, error) {
+	// boil.DebugMode = true
 	myFeedFolders, err := entity.MyFeedFolders(q...).All(ctx, mfp.db)
 	if err != nil {
 		if err == sql.ErrNoRows {
@@ -28,6 +29,7 @@ func (mfp *myFeedFolderPersistence) GetMyFeedFolders(ctx context.Context, q []qm
 		}
 		return nil, err
 	}
+	// boil.DebugMode = false
 	return myFeedFolders, nil
 }
 

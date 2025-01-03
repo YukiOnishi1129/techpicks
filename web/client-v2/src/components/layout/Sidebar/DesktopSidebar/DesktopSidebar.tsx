@@ -19,6 +19,7 @@ import {
 
 // import { FavoriteArticleFolderLinks } from "./FavoriteArticleFolderLinks";
 import { CreateFavoriteArticleFolderDialog } from "@/features/favorites/components/Dialog";
+import { CreateMyFeedFolderDialog } from "@/features/myFeeds/components/Dialog";
 
 import { LoggedBaseLayoutQuery } from "@/components/layout/BaseLayout/LoggedBaseLayout/LoggedBaseLayoutQuery";
 
@@ -37,7 +38,7 @@ export function DesktopSidebar() {
           isFolderOnly: true,
         },
         myFeedFoldersInput: {
-          // isAllFetch: true,
+          isAllFetch: true,
         },
       },
     }
@@ -127,12 +128,12 @@ export function DesktopSidebar() {
                   data={edge.node}
                 />
               ))}
-              {/* <div className="ml-4">
-                  <CreateMyFeedFolderDialog
-                    buttonVariant="ghost"
-                    buttonSize={18}
-                  />
-                </div> */}
+              <div className="ml-4">
+                <CreateMyFeedFolderDialog
+                  buttonVariant="ghost"
+                  buttonSize={18}
+                />
+              </div>
             </div>
           </div>
 
