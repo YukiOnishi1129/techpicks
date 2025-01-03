@@ -31,9 +31,9 @@ func NewMyFeedFolderPersistenceAdapter(mffr repository.MyFeedFolderRepository) M
 
 func (m *myFeedFolderPersistenceAdapter) GetMyFeedFolders(ctx context.Context, req *mfpb.GetMyFeedFoldersRequest, limit int) (entity.MyFeedFolderSlice, error) {
 	q := []qm.QueryMod{
-		qm.Where("user_id = ?", req.GetUserId()),
+		qm.Where("my_feed_folders.user_id = ?", req.GetUserId()),
 		qm.Load(qm.Rels(entity.MyFeedFolderRels.MyFeeds)),
-		qm.OrderBy("created_at ASC"),
+		qm.OrderBy("my_feed_folders.created_at ASC"),
 	}
 
 	if !req.GetIsAllFetch().GetValue() {
@@ -41,13 +41,13 @@ func (m *myFeedFolderPersistenceAdapter) GetMyFeedFolders(ctx context.Context, r
 	}
 
 	if req.GetCursor() != "" {
-		q = append(q, qm.Where("created_at > (SELECT created_at FROM my_feed_folders WHERE id = ?)", req.GetCursor()))
+		q = append(q, qm.Where("my_feed_folders.created_at > (SELECT created_at FROM my_feed_folders WHERE id = ?)", req.GetCursor()))
 	}
 
 	if req.GetKeyword().GetValue() != "" {
 		q = append(q, qm.Expr(
-			qm.And("title LIKE ?", "%"+req.GetKeyword().GetValue()+"%"),
-			qm.Or("description LIKE ?", "%"+req.GetKeyword().GetValue()+"%"),
+			qm.And("my_feed_folders.title LIKE ?", "%"+req.GetKeyword().GetValue()+"%"),
+			qm.Or("my_feed_folders.description LIKE ?", "%"+req.GetKeyword().GetValue()+"%"),
 		))
 	}
 

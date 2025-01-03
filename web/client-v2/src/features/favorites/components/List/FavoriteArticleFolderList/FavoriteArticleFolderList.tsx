@@ -138,7 +138,7 @@ export const FavoriteArticleFolderList: FC<FavoriteArticleFolderListProps> = ({
   return (
     <>
       {res?.favoriteArticleFolders?.edges.length === 0 ? (
-        <div className="flex flex-col items-center justify-center ">
+        <div className="flex flex-col items-center justify-center">
           <NotFoundList message="No folder found" />
         </div>
       ) : (

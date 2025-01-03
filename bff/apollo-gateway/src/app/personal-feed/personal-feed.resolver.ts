@@ -25,6 +25,8 @@ export class PersonalFeedResolver {
     @Context() context: GraphQLContext,
   ): Promise<MyFeedFolderConnection> {
     const user = context.req.user;
+    console.log('❤️‍🔥');
+    console.log(myFeedFoldersInput);
     return await this.myFeedFolderService.getMyFeedFolders(
       user.id,
       myFeedFoldersInput,
