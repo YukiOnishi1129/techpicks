@@ -34,7 +34,10 @@ func (m *myFeedFolderPersistenceAdapter) GetMyFeedFolders(ctx context.Context, r
 		qm.Where("user_id = ?", req.GetUserId()),
 		qm.Load(qm.Rels(entity.MyFeedFolderRels.MyFeeds)),
 		qm.OrderBy("created_at ASC"),
-		qm.Limit(limit),
+	}
+
+	if !req.GetIsAllFetch().GetValue() {
+		q = append(q, qm.Limit(limit))
 	}
 
 	if req.GetCursor() != "" {
