@@ -10,26 +10,32 @@ import { Loader } from "@/components/ui/loader";
 
 import { MyFeedFolderArticleListFragment } from "./MyFeedFolderArticleListFragment";
 import { MyFeedFolderArticleListQuery } from "./MyFeedFolderArticleListQuery";
+import { MyFeedFolderArticleListTemplateQuery } from "../../Template/MyFeedFolderArticleListTemplate/MyFeedFolderArticleListTemplateQuery";
 
 type MyFeedFolderArticleListProps = {
   data: FragmentOf<typeof MyFeedFolderArticleListFragment>;
   keyword?: string;
+  limit: number;
+  feedIdList: Array<string>;
 };
 
 export function MyFeedFolderArticleList({
   data,
   keyword,
+  limit,
+  feedIdList,
 }: MyFeedFolderArticleListProps) {
   const observerTarget = useRef(null);
 
   const fragment = readFragment(MyFeedFolderArticleListFragment, data);
 
-  const { error } = useSuspenseQuery(MyFeedFolderArticleListQuery, {
+  const { error } = useSuspenseQuery(MyFeedFolderArticleListTemplateQuery, {
     variables: {
       input: {
-        first: 20,
+        first: limit,
         after: null,
         keyword,
+        feedIds: feedIdList,
       },
     },
   });
@@ -41,9 +47,10 @@ export function MyFeedFolderArticleList({
   } = useQuery(MyFeedFolderArticleListQuery, {
     variables: {
       input: {
-        first: 20,
+        first: limit,
         after: null,
         keyword: keyword,
+        feedIds: feedIdList,
       },
     },
     fetchPolicy: "cache-first",
@@ -62,8 +69,10 @@ export function MyFeedFolderArticleList({
     const { data: resData, error: resError } = await fetchMore({
       variables: {
         input: {
-          first: 20,
+          first: limit,
           after: endCursor,
+          keyword: keyword,
+          feedIds: feedIdList,
         },
       },
       updateQuery: (prev, { fetchMoreResult }) => {
@@ -88,7 +97,7 @@ export function MyFeedFolderArticleList({
     setIsNextPage(resData.articles.pageInfo.hasNextPage);
 
     setHashMore(resData.articles.edges.length > 0);
-  }, [fetchMore, endCursor, isNextPage]);
+  }, [fetchMore, endCursor, isNextPage, feedIdList, keyword, limit]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(

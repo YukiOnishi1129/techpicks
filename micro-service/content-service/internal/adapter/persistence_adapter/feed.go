@@ -105,10 +105,8 @@ func (fpa *feedPersistenceAdapter) GetAllFeeds(ctx context.Context, req *cpb.Get
 
 	if req.GetFeedIds() != nil {
 		qmWhere := make([]interface{}, len(req.GetFeedIds()))
-		// fIDparams := fmt.Sprintf("'%s'", req.GetFeedIds()[0].GetValue())
 		for i, fid := range req.GetFeedIds() {
 			qmWhere[i] = fid.GetValue()
-			// fIDparams += fmt.Sprintf(",'%s'", id.GetValue())
 		}
 		q = append(q, qm.WhereIn("feeds.id IN ?", qmWhere...))
 	}

@@ -1,6 +1,9 @@
-import { FC } from "react";
+import { FC, Suspense } from "react";
 
+import { ScreenLoader } from "@/components/layout/ScreenLoader";
 import { BreadCrumbType, PageBreadcrumb } from "@/components/ui/breadcrumb";
+
+import { PreloadQuery } from "@/lib/apollo/client";
 
 import {
   FavoriteArticleFoldersInput,
@@ -9,6 +12,10 @@ import {
 } from "@/graphql/type";
 
 import { getMyFeedFolderArticleListTemplateQuery } from "./actGetMyFeedFolderArticleListTemplateQuery";
+import { MyFeedFolderArticleListTemplateQuery } from "./MyFeedFolderArticleListTemplateQuery";
+import { MyFeedFolderArticleList } from "../../List";
+
+const LIMIT = 20;
 
 type MyFeedFolderArticleListTemplateProps = {
   myFeedFolderId: string;
@@ -50,6 +57,14 @@ export const MyFeedFolderArticleListTemplate: FC<
     },
   ];
 
+  if (error) {
+    return <div>{error.message}</div>;
+  }
+
+  const feedIdList = data?.myFeedFolder?.feeds
+    ? data?.myFeedFolder?.feeds.map((feed) => feed.id)
+    : [];
+
   return (
     <>
       <div className="fixed z-10  w-[90%] bg-card md:block md:w-[70%] md:justify-between md:px-4">
@@ -66,17 +81,26 @@ export const MyFeedFolderArticleListTemplate: FC<
       </div>
 
       <div className="h-12 md:h-24" />
-
-      {/* <MyFeedFolderArticleList
-        user={user}
-        initialArticles={res.data.articles}
-        keyword={keyword}
-        feedIdList={feedIdList}
-        favoriteArticleFolders={
-          resFavoriteArticleFolders.data.favoriteArticleFolders
-        }
-        fetchArticles={fetchArticlesByFeedIdsAPI}
-      /> */}
+      <PreloadQuery
+        query={MyFeedFolderArticleListTemplateQuery}
+        variables={{
+          input: {
+            first: LIMIT,
+            after: null,
+            keyword,
+            feedIds: feedIdList,
+          },
+        }}
+      >
+        <Suspense fallback={<ScreenLoader />}>
+          <MyFeedFolderArticleList
+            data={data}
+            limit={LIMIT}
+            feedIdList={feedIdList}
+            keyword={keyword}
+          />
+        </Suspense>
+      </PreloadQuery>
 
       <div className="fixed bottom-20 right-4 z-50 md:hidden">
         {/* <MyFeedFolderArticleKeyWordSearchDialog
