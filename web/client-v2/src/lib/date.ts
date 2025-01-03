@@ -40,7 +40,7 @@ export const diffDates = (nowUnixTime: number, targetUnixTime: number) => {
 
 export const showDiffDateToCurrentDate = (targetDateUnix: number) => {
   const currentUnixTime = convertUnixTime(getDayjsTz());
-  const targetUnixTimeDay = convertUnixTimeToDayjs(currentUnixTime);
+  const targetUnixTimeDay = convertUnixTimeToDayjs(targetDateUnix);
   const diffHour = diffHours(currentUnixTime, targetDateUnix);
 
   if (diffHour < 24) {
