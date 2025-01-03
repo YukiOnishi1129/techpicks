@@ -58,7 +58,7 @@ export const MyFeedFolderList: FC<MyFeedFolderListProps> = ({
   const [hashMore, setHashMore] = useState(true);
   const [offset, setOffset] = useState(1);
   const [endCursor, setEndCursor] = useState(
-    res?.myFeedFolders?.pageInfo?.endCursor || null
+    resSuspenseData?.myFeedFolders?.pageInfo?.endCursor || null
   );
   const [isNextPage, setIsNextPage] = useState(true);
 

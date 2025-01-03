@@ -9,7 +9,7 @@ import { CreateMyFeedFolderDialog } from "../../Dialog";
 import { MyFeedFolderList } from "../../List";
 import { MyFeedFolderKeywordSearchForm } from "../../Search";
 
-const LIMIT = 10;
+const LIMIT = 6;
 const FEED_LIMIT = 10;
 
 type MyFeedFolderListTemplateProps = {
