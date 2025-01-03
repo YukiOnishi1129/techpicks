@@ -10,6 +10,7 @@ input FeedsInput {
   platformSiteType: Int
   platformId: String
   keyword: String
+  feedIdList: [String!]
   isAllFetch: Boolean
   first: Int
   after: String

@@ -31,6 +31,16 @@ export class FeedService {
       req.setPlatformSiteType(
         new Int64Value().setValue(input.platformSiteType),
       );
+    if (input?.feedIdList) {
+      req.setFeedIdsList(
+        input.feedIdList.map((feedId) => {
+          const stringValue = new StringValue();
+          stringValue.setValue(feedId);
+          return stringValue;
+        }),
+      );
+    }
+
     if (input?.platformId)
       req.setPlatformId(new StringValue().setValue(input.platformId));
     if (input?.keyword)

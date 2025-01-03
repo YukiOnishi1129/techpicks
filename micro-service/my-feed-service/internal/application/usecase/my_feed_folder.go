@@ -178,8 +178,11 @@ func (m *myUseCase) convertPBMyFeedFolder(mff *entity.MyFeedFolder) (*mfpb.MyFee
 				Value: mf.FeedID,
 			}
 		}
-		resFeeds, err := m.contentExternalAdapter.GetAllFeeds(context.Background(), &cpb.GetAllFeedsRequest{
+		resFeeds, err := m.contentExternalAdapter.GetFeeds(context.Background(), &cpb.GetFeedsRequest{
 			FeedIds: fIDs,
+			IsAllFetch: &wrapperspb.BoolValue{
+				Value: true,
+			},
 		})
 		if err != nil {
 			return nil, err

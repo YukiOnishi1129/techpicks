@@ -151,6 +151,7 @@ export class FeedsInput {
     platformSiteType?: Nullable<number>;
     platformId?: Nullable<string>;
     keyword?: Nullable<string>;
+    feedIdList?: Nullable<string[]>;
     isAllFetch?: Nullable<boolean>;
     first?: Nullable<number>;
     after?: Nullable<string>;

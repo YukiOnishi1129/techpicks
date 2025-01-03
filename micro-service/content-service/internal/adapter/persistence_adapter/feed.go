@@ -11,7 +11,6 @@ import (
 
 type FeedPersistenceAdapter interface {
 	GetFeeds(ctx context.Context, req *cpb.GetFeedsRequest, limit int) (entity.FeedSlice, error)
-	GetAllFeeds(ctx context.Context, req *cpb.GetAllFeedsRequest) (entity.FeedSlice, error)
 	GetFeed(ctx context.Context, req *cpb.GetFeedRequest) (entity.Feed, error)
 }
 
@@ -57,58 +56,19 @@ func (fpa *feedPersistenceAdapter) GetFeeds(ctx context.Context, req *cpb.GetFee
 		q = append(q, qm.Where("platforms.id = ?", req.GetPlatformId().GetValue()))
 	}
 
-	if req.GetKeyword().GetValue() != "" {
-		q = append(q, qm.Expr(
-			qm.And("feeds.name LIKE ?", "%"+req.GetKeyword().GetValue()+"%"),
-			// qm.Or("description LIKE ?", "%"+req.GetKeyword().GetValue()+"%"),
-		))
-	}
-
-	feeds, err := fpa.feedRepository.GetFeeds(ctx, q)
-	if err != nil {
-		return nil, err
-	}
-
-	return feeds, nil
-}
-
-func (fpa *feedPersistenceAdapter) GetAllFeeds(ctx context.Context, req *cpb.GetAllFeedsRequest) (entity.FeedSlice, error) {
-	q := []qm.QueryMod{
-		qm.InnerJoin("platforms ON feeds.platform_id = platforms.id"),
-		qm.Where("feeds.deleted_at IS NULL"),
-		qm.Load(qm.Rels(entity.FeedRels.Platform)),
-		qm.Load(qm.Rels(entity.FeedRels.Category)),
-		qm.OrderBy("feeds.created_at ASC"),
-	}
-
-	if req.GetPlatformSiteType().GetValue() != 0 {
-		switch {
-		case req.GetPlatformSiteType().GetValue() == 1:
-			q = append(q, qm.Where("platforms.platform_site_type = ?", 1))
-		case req.GetPlatformSiteType().GetValue() == 2:
-			q = append(q, qm.Where("platforms.platform_site_type = ?", 2))
-		case req.GetPlatformSiteType().GetValue() == 3:
-			q = append(q, qm.Where("platforms.platform_site_type = ?", 3))
-		}
-	}
-
-	if req.GetPlatformId().GetValue() != "" {
-		q = append(q, qm.Where("platforms.id = ?", req.GetPlatformId().GetValue()))
-	}
-
-	if req.GetKeyword().GetValue() != "" {
-		q = append(q, qm.Expr(
-			qm.And("feeds.name LIKE ?", "%"+req.GetKeyword().GetValue()+"%"),
-			// qm.Or("description LIKE ?", "%"+req.GetKeyword().GetValue()+"%"),
-		))
-	}
-
 	if req.GetFeedIds() != nil {
 		qmWhere := make([]interface{}, len(req.GetFeedIds()))
 		for i, fid := range req.GetFeedIds() {
 			qmWhere[i] = fid.GetValue()
 		}
 		q = append(q, qm.WhereIn("feeds.id IN ?", qmWhere...))
+	}
+
+	if req.GetKeyword().GetValue() != "" {
+		q = append(q, qm.Expr(
+			qm.And("feeds.name LIKE ?", "%"+req.GetKeyword().GetValue()+"%"),
+			// qm.Or("description LIKE ?", "%"+req.GetKeyword().GetValue()+"%"),
+		))
 	}
 
 	feeds, err := fpa.feedRepository.GetFeeds(ctx, q)

@@ -53,31 +53,6 @@ func (cu *contentUseCase) GetFeeds(ctx context.Context, req *cpb.GetFeedsRequest
 	return res, nil
 }
 
-func (cu *contentUseCase) GetAllFeeds(ctx context.Context, req *cpb.GetAllFeedsRequest) (*cpb.GetFeedsResponse, error) {
-	feeds, err := cu.feedPersistenceAdapter.GetAllFeeds(ctx, req)
-	if err != nil {
-		return nil, err
-	}
-
-	edges := make([]*cpb.FeedEdge, len(feeds))
-
-	for i, feed := range feeds {
-		res := cu.convertPBFeed(*feed)
-		edges[i] = &cpb.FeedEdge{
-			Cursor: feed.ID,
-			Feed:   res,
-		}
-	}
-
-	return &cpb.GetFeedsResponse{
-		FeedEdge: edges,
-		PageInfo: &copb.PageInfo{
-			HasNextPage: false,
-			EndCursor:   "",
-		},
-	}, nil
-}
-
 func (cu *contentUseCase) GetFeed(ctx context.Context, req *cpb.GetFeedRequest) (*cpb.GetFeedResponse, error) {
 	feed, err := cu.feedPersistenceAdapter.GetFeed(ctx, req)
 	if err != nil {
