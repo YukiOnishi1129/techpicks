@@ -1,20 +1,28 @@
 import { graphql } from "gql.tada";
 
-export const MyFeedFolderCardFragment = graphql(`
-  fragment MyFeedFolderCardFragment on MyFeedFolder {
-    id
-    title
-    description
-    feeds {
+import { ShowMyFeedListDialogFragment } from "../../Dialog/ShowMyFeedListDialog/ShowMyFeedListDialogFragment";
+import { UpdateMyFeedFolderDialogFragment } from "../../Dialog/UpdateMyFeedFolderDialog/UpdateMyFeedFolderDialogFragment";
+
+export const MyFeedFolderCardFragment = graphql(
+  `
+    fragment MyFeedFolderCardFragment on MyFeedFolder {
       id
-      name
-      thumbnailUrl
-      platform {
+      title
+      description
+      feeds {
         id
-        faviconUrl
+        name
+        thumbnailUrl
+        platform {
+          id
+          faviconUrl
+        }
       }
+      createdAt
+      updatedAt
+      ...UpdateMyFeedFolderDialogFragment
+      ...ShowMyFeedListDialogFragment
     }
-    createdAt
-    updatedAt
-  }
-`);
+  `,
+  [UpdateMyFeedFolderDialogFragment, ShowMyFeedListDialogFragment]
+);

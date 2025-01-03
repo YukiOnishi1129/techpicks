@@ -5,54 +5,29 @@ import { usePathname } from "next/navigation";
 import { FC } from "react";
 
 // import { ShowMyFeedListDialog } from "@/features/myFeeds/components/Dialog";
-// import {
-//   CreateMyFeedDTO,
-//   bulkCreateMyFeed,
-//   bulkDeleteMyFeed,
-// } from "@/features/myFeeds/repository/myFeed";
 
 import { useStatusToast } from "@/hooks/useStatusToast";
 
 import { MyFeedFolderCardFragment } from "./MyFeedFolderCardFragment";
+import { ShowMyFeedListDialog, UpdateMyFeedFolderDialog } from "../../Dialog";
 
 // import { diffStringArray } from "@/lib/convert";
-
-// import { FeedType } from "@/types/feed";
-// import { MyFeedType } from "@/types/myFeed";
-// import { MyFeedFolderType } from "@/types/myFeedFolder";
-
-// import { serverRevalidatePage } from "@/actions/serverAction";
-
-// import { UpdateMyFeedFolderDialog } from "../Dialog";
 
 const SHOW_FEED_LIST_COUNT = 3;
 
 type MyFeedFolderCardProps = {
   data: FragmentOf<typeof MyFeedFolderCardFragment>;
-  //   user?: User;
-  //   handleUpdateMyFeedFolder: ({
-  //     id,
-  //     title,
-  //     description,
-  //   }: {
-  //     id: string;
-  //     title: string;
-  //     description: string;
-  //   }) => Promise<void>;
-  //   handleDeleteMyFeedFolder: (id: string) => Promise<void>;
+  feedsEndCursor?: string;
 };
 
 export const MyFeedFolderCard: FC<MyFeedFolderCardProps> = ({
   data,
-  //   user,
-  //   myFeedFolder,
-  //   initialFeedList,
-  //   handleUpdateMyFeedFolder,
-  //   handleDeleteMyFeedFolder,
+  feedsEndCursor,
 }) => {
   const { successToast, failToast } = useStatusToast();
   const pathname = usePathname();
   const fragment = readFragment(MyFeedFolderCardFragment, data);
+
   //   const selectedFeedList = myFeedFolder.feeds.map((feed) => {
   //     return {
   //       ...feed,
@@ -70,31 +45,24 @@ export const MyFeedFolderCard: FC<MyFeedFolderCardProps> = ({
   const showFeedList = fragment?.feeds
     ? fragment.feeds.slice(0, SHOW_FEED_LIST_COUNT)
     : [];
-  const isMoreFeeds = fragment?.feeds
-    ? fragment.feeds.length > SHOW_FEED_LIST_COUNT
-    : false;
+  const moreFeedsCount = fragment?.feeds
+    ? fragment.feeds.length - SHOW_FEED_LIST_COUNT
+    : 0;
 
   return (
-    <div className="mb-4 bg-primary-foreground">
-      <div className="w-full rounded border-2 px-4 py-2">
-        <div className="mb-2 flex h-[48px] w-full items-center justify-between border-b-2 pb-2">
+    <div className="rounded border bg-primary-foreground">
+      <div className="grid w-full gap-4 px-4 py-2">
+        <div className="flex h-[48px] w-full items-center justify-between border-b pb-2">
           <h3 className="truncate px-2 text-left text-base font-bold tracking-wide md:text-xl">
             <Link href={`/my-feed/article/${fragment.id}`}>
               {fragment.title}
             </Link>
           </h3>
 
-          {/* <UpdateMyFeedFolderDialog
-            myFeedFolderId={myFeedFolder.id}
-            title={myFeedFolder.title}
-            description={myFeedFolder?.description || ""}
-            selectedFeedList={selectedFeedList}
-            initialFeedList={initialFeedList}
-            handleUpdateMyFeedFolder={
-              handleUpdateMyFeedFolderAndInsertOrDeleteMyFeed
-            }
-            handleDeleteMyFeedFolder={handleDeleteMyFeedFolder}
-          /> */}
+          <UpdateMyFeedFolderDialog
+            data={fragment}
+            feedsEndCursor={feedsEndCursor}
+          />
         </div>
 
         {/* <p className="line-clamp-3 h-[62px] w-full text-sm">
@@ -106,7 +74,7 @@ export const MyFeedFolderCard: FC<MyFeedFolderCardProps> = ({
             )}
           </Link>
         </p> */}
-        <div className="grid grid-cols-1 gap-4 border-t-2 py-2 md:grid-cols-2">
+        <div className="grid grid-cols-1 gap-4 py-2 md:grid-cols-2">
           {showFeedList.map((feed) => {
             return (
               <div key={`${fragment.id}-${feed.id}`} className="mb-2">
@@ -124,12 +92,12 @@ export const MyFeedFolderCard: FC<MyFeedFolderCardProps> = ({
               </div>
             );
           })}
-          {/* {moreFeedsCount > 0 && (
+          {moreFeedsCount > 0 && (
             <ShowMyFeedListDialog
+              data={fragment}
               buttonLabel={`More +${moreFeedsCount}`}
-              feeds={myFeedFolder.feeds}
             />
-          )} */}
+          )}
         </div>
       </div>
     </div>

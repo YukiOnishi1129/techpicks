@@ -882,7 +882,7 @@ export type FeedListTemplateQueryQueryVariables = Exact<{
 
 export type FeedListTemplateQueryQuery = { __typename?: 'Query', feeds: { __typename?: 'FeedConnection', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null }, edges: Array<{ __typename?: 'FeedEdge', node: { __typename?: 'Feed', id: string, myFeedIds?: Array<string> | null, name: string, description: string, siteUrl: string, thumbnailUrl: string, platform: { __typename?: 'Platform', id: string, faviconUrl: string } } }> } };
 
-export type MyFeedFolderCardFragmentFragment = { __typename?: 'MyFeedFolder', id: string, title: string, description?: string | null, createdAt: number, updatedAt: number, feeds?: Array<{ __typename?: 'Feed', id: string, name: string, thumbnailUrl: string, platform: { __typename?: 'Platform', id: string, faviconUrl: string } }> | null };
+export type MyFeedFolderCardFragmentFragment = { __typename?: 'MyFeedFolder', id: string, title: string, description?: string | null, createdAt: number, updatedAt: number, feeds?: Array<{ __typename?: 'Feed', id: string, name: string, thumbnailUrl: string, description: string, platform: { __typename?: 'Platform', id: string, faviconUrl: string } }> | null };
 
 export type CreateMyFeedFolderMutationMutationVariables = Exact<{
   input: CreateMyFeedFolderInput;
@@ -891,19 +891,42 @@ export type CreateMyFeedFolderMutationMutationVariables = Exact<{
 
 export type CreateMyFeedFolderMutationMutation = { __typename?: 'Mutation', createMyFeedFolder: { __typename?: 'MyFeedFolder', id: string } };
 
+export type SelectMultiFeedListQueryQueryVariables = Exact<{
+  input: FeedsInput;
+}>;
+
+
+export type SelectMultiFeedListQueryQuery = { __typename?: 'Query', feeds: { __typename?: 'FeedConnection', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null }, edges: Array<{ __typename?: 'FeedEdge', node: { __typename?: 'Feed', id: string, name: string, thumbnailUrl: string } }> } };
+
+export type ShowMyFeedListDialogContentFragmentFragment = { __typename?: 'Feed', id: string, name: string, description: string, thumbnailUrl: string, platform: { __typename?: 'Platform', faviconUrl: string } };
+
+export type ShowMyFeedListDialogFragmentFragment = { __typename?: 'MyFeedFolder', id: string, feeds?: Array<{ __typename?: 'Feed', id: string, name: string, description: string, thumbnailUrl: string, platform: { __typename?: 'Platform', faviconUrl: string } }> | null };
+
+export type UpdateMyFeedFolderDialogFragmentFragment = { __typename?: 'MyFeedFolder', id: string, title: string, description?: string | null, feeds?: Array<{ __typename?: 'Feed', id: string, name: string }> | null };
+
 export type MyFeedFolderListQueryQueryVariables = Exact<{
   myFeedFoldersInput: MyFeedFoldersInput;
 }>;
 
 
-export type MyFeedFolderListQueryQuery = { __typename?: 'Query', myFeedFolders: { __typename?: 'MyFeedFolderConnection', pageInfo: { __typename?: 'PageInfo', endCursor?: string | null, hasNextPage: boolean }, edges: Array<{ __typename?: 'MyFeedFolderEdge', node: { __typename?: 'MyFeedFolder', id: string, title: string, description?: string | null, createdAt: number, updatedAt: number, feeds?: Array<{ __typename?: 'Feed', id: string, name: string, thumbnailUrl: string, platform: { __typename?: 'Platform', id: string, faviconUrl: string } }> | null } }> } };
+export type MyFeedFolderListQueryQuery = { __typename?: 'Query', myFeedFolders: { __typename?: 'MyFeedFolderConnection', pageInfo: { __typename?: 'PageInfo', endCursor?: string | null, hasNextPage: boolean }, edges: Array<{ __typename?: 'MyFeedFolderEdge', node: { __typename?: 'MyFeedFolder', id: string, title: string, description?: string | null, createdAt: number, updatedAt: number, feeds?: Array<{ __typename?: 'Feed', id: string, name: string, thumbnailUrl: string, description: string, platform: { __typename?: 'Platform', id: string, faviconUrl: string } }> | null } }> } };
 
 export type MyFeedFolderListTemplateQueryQueryVariables = Exact<{
   myFeedFoldersInput: MyFeedFoldersInput;
+  feedsInput: FeedsInput;
 }>;
 
 
-export type MyFeedFolderListTemplateQueryQuery = { __typename?: 'Query', myFeedFolders: { __typename?: 'MyFeedFolderConnection', pageInfo: { __typename?: 'PageInfo', endCursor?: string | null, hasNextPage: boolean }, edges: Array<{ __typename?: 'MyFeedFolderEdge', node: { __typename?: 'MyFeedFolder', id: string } }> } };
+export type MyFeedFolderListTemplateQueryQuery = { __typename?: 'Query', myFeedFolders: { __typename?: 'MyFeedFolderConnection', pageInfo: { __typename?: 'PageInfo', endCursor?: string | null, hasNextPage: boolean }, edges: Array<{ __typename?: 'MyFeedFolderEdge', node: { __typename?: 'MyFeedFolder', id: string } }> }, feeds: { __typename?: 'FeedConnection', pageInfo: { __typename?: 'PageInfo', endCursor?: string | null } } };
+
+export type UseManageMyFeedFolderFragmentFragment = { __typename?: 'MyFeedFolder', id: string };
+
+export type UpdateMyFeedFolderMutationMutationVariables = Exact<{
+  input: UpdateMyFeedFolderInput;
+}>;
+
+
+export type UpdateMyFeedFolderMutationMutation = { __typename?: 'Mutation', updateMyFeedFolder: { __typename?: 'MyFeedFolder', id: string, title: string, description?: string | null, feeds?: Array<{ __typename?: 'Feed', id: string, name: string, description: string, siteUrl: string, thumbnailUrl: string, platform: { __typename?: 'Platform', id: string, name: string, siteUrl: string, platformSiteType: number, faviconUrl: string, isEng: boolean } }> | null } };
 
 export type OgpPreviewContentFragmentFragment = { __typename?: 'ArticleOGP', title: string, description?: string | null, thumbnailUrl: string, articleUrl: string, siteName: string, faviconUrl: string };
 
@@ -1403,6 +1426,49 @@ export const FeedCardWrapperFragmentFragmentDoc = gql`
   ...FeedCardItemFragment
 }
     ${FeedCardItemFragmentFragmentDoc}`;
+export const UseManageMyFeedFolderFragmentFragmentDoc = gql`
+    fragment UseManageMyFeedFolderFragment on MyFeedFolder {
+  id
+}
+    `;
+export const UpdateMyFeedFolderDialogFragmentFragmentDoc = gql`
+    fragment UpdateMyFeedFolderDialogFragment on MyFeedFolder {
+  id
+  title
+  description
+  feeds {
+    id
+    name
+  }
+  ...UseManageMyFeedFolderFragment
+}
+    ${UseManageMyFeedFolderFragmentFragmentDoc}`;
+export const ShowMyFeedListDialogContentFragmentFragmentDoc = gql`
+    fragment ShowMyFeedListDialogContentFragment on Feed {
+  id
+  name
+  description
+  thumbnailUrl
+  platform {
+    faviconUrl
+  }
+}
+    `;
+export const ShowMyFeedListDialogFragmentFragmentDoc = gql`
+    fragment ShowMyFeedListDialogFragment on MyFeedFolder {
+  id
+  feeds {
+    id
+    name
+    description
+    thumbnailUrl
+    platform {
+      faviconUrl
+    }
+    ...ShowMyFeedListDialogContentFragment
+  }
+}
+    ${ShowMyFeedListDialogContentFragmentFragmentDoc}`;
 export const MyFeedFolderCardFragmentFragmentDoc = gql`
     fragment MyFeedFolderCardFragment on MyFeedFolder {
   id
@@ -1419,8 +1485,11 @@ export const MyFeedFolderCardFragmentFragmentDoc = gql`
   }
   createdAt
   updatedAt
+  ...UpdateMyFeedFolderDialogFragment
+  ...ShowMyFeedListDialogFragment
 }
-    `;
+    ${UpdateMyFeedFolderDialogFragmentFragmentDoc}
+${ShowMyFeedListDialogFragmentFragmentDoc}`;
 export const GetLoggedBaseLayoutQueryDocument = gql`
     query GetLoggedBaseLayoutQuery($input: FavoriteArticleFoldersInput!, $myFeedFoldersInput: MyFeedFoldersInput!) {
   favoriteArticleFolders(input: $input) {
@@ -2686,6 +2755,56 @@ export function useCreateMyFeedFolderMutationMutation(baseOptions?: Apollo.Mutat
 export type CreateMyFeedFolderMutationMutationHookResult = ReturnType<typeof useCreateMyFeedFolderMutationMutation>;
 export type CreateMyFeedFolderMutationMutationResult = Apollo.MutationResult<CreateMyFeedFolderMutationMutation>;
 export type CreateMyFeedFolderMutationMutationOptions = Apollo.BaseMutationOptions<CreateMyFeedFolderMutationMutation, CreateMyFeedFolderMutationMutationVariables>;
+export const SelectMultiFeedListQueryDocument = gql`
+    query SelectMultiFeedListQuery($input: FeedsInput!) {
+  feeds(feedsInput: $input) {
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+    edges {
+      node {
+        id
+        name
+        thumbnailUrl
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useSelectMultiFeedListQueryQuery__
+ *
+ * To run a query within a React component, call `useSelectMultiFeedListQueryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSelectMultiFeedListQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSelectMultiFeedListQueryQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useSelectMultiFeedListQueryQuery(baseOptions: Apollo.QueryHookOptions<SelectMultiFeedListQueryQuery, SelectMultiFeedListQueryQueryVariables> & ({ variables: SelectMultiFeedListQueryQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SelectMultiFeedListQueryQuery, SelectMultiFeedListQueryQueryVariables>(SelectMultiFeedListQueryDocument, options);
+      }
+export function useSelectMultiFeedListQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SelectMultiFeedListQueryQuery, SelectMultiFeedListQueryQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SelectMultiFeedListQueryQuery, SelectMultiFeedListQueryQueryVariables>(SelectMultiFeedListQueryDocument, options);
+        }
+export function useSelectMultiFeedListQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<SelectMultiFeedListQueryQuery, SelectMultiFeedListQueryQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<SelectMultiFeedListQueryQuery, SelectMultiFeedListQueryQueryVariables>(SelectMultiFeedListQueryDocument, options);
+        }
+export type SelectMultiFeedListQueryQueryHookResult = ReturnType<typeof useSelectMultiFeedListQueryQuery>;
+export type SelectMultiFeedListQueryLazyQueryHookResult = ReturnType<typeof useSelectMultiFeedListQueryLazyQuery>;
+export type SelectMultiFeedListQuerySuspenseQueryHookResult = ReturnType<typeof useSelectMultiFeedListQuerySuspenseQuery>;
+export type SelectMultiFeedListQueryQueryResult = Apollo.QueryResult<SelectMultiFeedListQueryQuery, SelectMultiFeedListQueryQueryVariables>;
 export const MyFeedFolderListQueryDocument = gql`
     query MyFeedFolderListQuery($myFeedFoldersInput: MyFeedFoldersInput!) {
   myFeedFolders(myFeedFoldersInput: $myFeedFoldersInput) {
@@ -2736,7 +2855,7 @@ export type MyFeedFolderListQueryLazyQueryHookResult = ReturnType<typeof useMyFe
 export type MyFeedFolderListQuerySuspenseQueryHookResult = ReturnType<typeof useMyFeedFolderListQuerySuspenseQuery>;
 export type MyFeedFolderListQueryQueryResult = Apollo.QueryResult<MyFeedFolderListQueryQuery, MyFeedFolderListQueryQueryVariables>;
 export const MyFeedFolderListTemplateQueryDocument = gql`
-    query MyFeedFolderListTemplateQuery($myFeedFoldersInput: MyFeedFoldersInput!) {
+    query MyFeedFolderListTemplateQuery($myFeedFoldersInput: MyFeedFoldersInput!, $feedsInput: FeedsInput!) {
   myFeedFolders(myFeedFoldersInput: $myFeedFoldersInput) {
     pageInfo {
       endCursor
@@ -2746,6 +2865,11 @@ export const MyFeedFolderListTemplateQueryDocument = gql`
       node {
         id
       }
+    }
+  }
+  feeds(feedsInput: $feedsInput) {
+    pageInfo {
+      endCursor
     }
   }
 }
@@ -2764,6 +2888,7 @@ export const MyFeedFolderListTemplateQueryDocument = gql`
  * const { data, loading, error } = useMyFeedFolderListTemplateQueryQuery({
  *   variables: {
  *      myFeedFoldersInput: // value for 'myFeedFoldersInput'
+ *      feedsInput: // value for 'feedsInput'
  *   },
  * });
  */
@@ -2783,6 +2908,56 @@ export type MyFeedFolderListTemplateQueryQueryHookResult = ReturnType<typeof use
 export type MyFeedFolderListTemplateQueryLazyQueryHookResult = ReturnType<typeof useMyFeedFolderListTemplateQueryLazyQuery>;
 export type MyFeedFolderListTemplateQuerySuspenseQueryHookResult = ReturnType<typeof useMyFeedFolderListTemplateQuerySuspenseQuery>;
 export type MyFeedFolderListTemplateQueryQueryResult = Apollo.QueryResult<MyFeedFolderListTemplateQueryQuery, MyFeedFolderListTemplateQueryQueryVariables>;
+export const UpdateMyFeedFolderMutationDocument = gql`
+    mutation UpdateMyFeedFolderMutation($input: UpdateMyFeedFolderInput!) {
+  updateMyFeedFolder(updateMyFeedFolderInput: $input) {
+    id
+    title
+    description
+    feeds {
+      id
+      name
+      description
+      siteUrl
+      thumbnailUrl
+      platform {
+        id
+        name
+        siteUrl
+        platformSiteType
+        faviconUrl
+        isEng
+      }
+    }
+  }
+}
+    `;
+export type UpdateMyFeedFolderMutationMutationFn = Apollo.MutationFunction<UpdateMyFeedFolderMutationMutation, UpdateMyFeedFolderMutationMutationVariables>;
+
+/**
+ * __useUpdateMyFeedFolderMutationMutation__
+ *
+ * To run a mutation, you first call `useUpdateMyFeedFolderMutationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateMyFeedFolderMutationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateMyFeedFolderMutationMutation, { data, loading, error }] = useUpdateMyFeedFolderMutationMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateMyFeedFolderMutationMutation(baseOptions?: Apollo.MutationHookOptions<UpdateMyFeedFolderMutationMutation, UpdateMyFeedFolderMutationMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateMyFeedFolderMutationMutation, UpdateMyFeedFolderMutationMutationVariables>(UpdateMyFeedFolderMutationDocument, options);
+      }
+export type UpdateMyFeedFolderMutationMutationHookResult = ReturnType<typeof useUpdateMyFeedFolderMutationMutation>;
+export type UpdateMyFeedFolderMutationMutationResult = Apollo.MutationResult<UpdateMyFeedFolderMutationMutation>;
+export type UpdateMyFeedFolderMutationMutationOptions = Apollo.BaseMutationOptions<UpdateMyFeedFolderMutationMutation, UpdateMyFeedFolderMutationMutationVariables>;
 export const TrendArticleListQueryDocument = gql`
     query TrendArticleListQuery($input: ArticlesInput!) {
   articles(articlesInput: $input) {

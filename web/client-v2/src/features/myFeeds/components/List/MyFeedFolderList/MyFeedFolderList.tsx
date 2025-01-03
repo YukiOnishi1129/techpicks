@@ -1,6 +1,6 @@
 "use client";
 import { useQuery, useSuspenseQuery } from "@apollo/client";
-import { FC, useCallback, useEffect, useState } from "react";
+import { FC, useCallback, useEffect, useRef, useState } from "react";
 
 import { NotFoundList } from "@/components/layout/NotFoundList";
 
@@ -11,12 +11,16 @@ import { MyFeedFolderListTemplateQuery } from "../../Template/MyFeedFolderListTe
 type MyFeedFolderListProps = {
   keyword?: string;
   limit: number;
+  feedLimit: number;
 };
 
 export const MyFeedFolderList: FC<MyFeedFolderListProps> = ({
   keyword,
   limit,
+  feedLimit,
 }) => {
+  const observerTarget = useRef(null);
+
   const { data: resSuspenseData, error } = useSuspenseQuery(
     MyFeedFolderListTemplateQuery,
     {
@@ -24,6 +28,10 @@ export const MyFeedFolderList: FC<MyFeedFolderListProps> = ({
         myFeedFoldersInput: {
           keyword,
           first: limit,
+          after: null,
+        },
+        feedsInput: {
+          first: feedLimit,
           after: null,
         },
       },
@@ -92,6 +100,32 @@ export const MyFeedFolderList: FC<MyFeedFolderListProps> = ({
   }, [endCursor, isNextPage, fetchMore, keyword, limit]);
 
   useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && hashMore) {
+            setOffset((prev) => prev + 1);
+          }
+        });
+      },
+      { threshold: 1 }
+    );
+
+    let observerRefValue: null = null;
+
+    if (observerTarget.current) {
+      observer.observe(observerTarget.current);
+      observerRefValue = observerTarget.current;
+    }
+
+    return () => {
+      if (observerRefValue) {
+        observer.unobserve(observerRefValue);
+      }
+    };
+  }, [hashMore]);
+
+  useEffect(() => {
     if (offset > 1) {
       loadMore();
     }
@@ -115,7 +149,13 @@ export const MyFeedFolderList: FC<MyFeedFolderListProps> = ({
         <div className="mb-8">
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
             {res?.myFeedFolders?.edges.map((edge, i) => (
-              <MyFeedFolderCard key={`${i}-${edge.node.id}`} data={edge.node} />
+              <MyFeedFolderCard
+                key={`${i}-${edge.node.id}`}
+                data={edge.node}
+                feedsEndCursor={
+                  resSuspenseData?.feeds?.pageInfo.endCursor || undefined
+                }
+              />
             ))}
           </div>
         </div>

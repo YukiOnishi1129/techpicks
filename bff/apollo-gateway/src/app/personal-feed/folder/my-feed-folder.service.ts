@@ -65,7 +65,7 @@ export class MyFeedFolderService {
                 description: edge.node?.description?.value || undefined,
                 feeds: edge.node.feedsList.map((feed) => {
                   return {
-                    apiQueryParams: feed?.apiQueryParam.value || undefined,
+                    apiQueryParams: feed?.apiQueryParam?.value || undefined,
                     category: {
                       createdAt: convertTimestampToInt(feed.category.createdAt),
                       id: feed.category.id,
@@ -139,7 +139,7 @@ export class MyFeedFolderService {
           description: resFolder?.description?.value || undefined,
           feeds: resFolder.feedsList.map((feed) => {
             return {
-              apiQueryParams: feed.apiQueryParam.value || '',
+              apiQueryParams: feed.apiQueryParam?.value || undefined,
               category: {
                 createdAt: convertTimestampToInt(feed.category.createdAt),
                 id: feed.category.id,
@@ -217,7 +217,7 @@ export class MyFeedFolderService {
           description: resFolder?.description?.value || undefined,
           feeds: resFolder.feedsList.map((feed) => {
             return {
-              apiQueryParams: feed.apiQueryParam.value || '',
+              apiQueryParams: feed.apiQueryParam?.value || undefined,
               category: {
                 createdAt: convertTimestampToInt(feed.category.createdAt),
                 id: feed.category.id,
@@ -297,7 +297,7 @@ export class MyFeedFolderService {
           description: resFolder?.description?.value || undefined,
           feeds: resFolder.feedsList.map((feed) => {
             return {
-              apiQueryParams: feed.apiQueryParam.value || '',
+              apiQueryParams: feed.apiQueryParam?.value || undefined,
               category: {
                 createdAt: convertTimestampToInt(feed.category.createdAt),
                 id: feed.category.id,
