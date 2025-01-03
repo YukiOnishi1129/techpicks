@@ -367,6 +367,7 @@ export type FeedInput = {
 export type FeedsInput = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
+  feedIdList?: InputMaybe<Array<Scalars['String']['input']>>;
   first?: InputMaybe<Scalars['Int']['input']>;
   isAllFetch?: InputMaybe<Scalars['Boolean']['input']>;
   keyword?: InputMaybe<Scalars['String']['input']>;
