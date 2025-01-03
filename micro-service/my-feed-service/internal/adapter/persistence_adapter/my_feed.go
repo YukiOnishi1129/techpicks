@@ -82,15 +82,19 @@ func (mfp *myFeedPersistenceAdapter) BulkCreateMyFeedsAsFolderUpdate(ctx context
 }
 
 func (mfp *myFeedPersistenceAdapter) BulkDeleteMyFeedsAsFolderUpdate(ctx context.Context, mfs entity.MyFeedSlice, fIDs []string) error {
-	deleteMyFeeds := make(entity.MyFeedSlice, 0, len(fIDs))
+	compareMap := make(map[string]struct{})
 	for _, fID := range fIDs {
-		for _, mf := range mfs {
-			if mf.FeedID == fID {
-				deleteMyFeeds = append(deleteMyFeeds, mf)
-			}
-		}
+		compareMap[fID] = struct{}{}
 	}
-	if err := mfp.myFeedPersistence.BulkDeleteMyFeeds(ctx, deleteMyFeeds); err != nil {
+
+	deleteMffs := entity.MyFeedSlice{}
+	for _, mf := range mfs {
+		if _, ok := compareMap[mf.FeedID]; !ok {
+			deleteMffs = append(deleteMffs, mf)
+		}
+	} 
+
+	if err := mfp.myFeedPersistence.BulkDeleteMyFeeds(ctx, deleteMffs); err != nil {
 		return err
 	}
 
