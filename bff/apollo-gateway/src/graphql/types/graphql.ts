@@ -13,6 +13,7 @@ export class ArticlesInput {
     languageStatus?: Nullable<number>;
     tab?: Nullable<string>;
     feedIds?: Nullable<string[]>;
+    keyword?: Nullable<string>;
     first?: Nullable<number>;
     after?: Nullable<string>;
     last?: Nullable<number>;
@@ -150,11 +151,11 @@ export class FeedsInput {
     platformSiteType?: Nullable<number>;
     platformId?: Nullable<string>;
     keyword?: Nullable<string>;
+    isAllFetch?: Nullable<boolean>;
     first?: Nullable<number>;
     after?: Nullable<string>;
     last?: Nullable<number>;
     before?: Nullable<string>;
-    isAllFetch?: Nullable<boolean>;
 }
 
 export class FeedInput {
