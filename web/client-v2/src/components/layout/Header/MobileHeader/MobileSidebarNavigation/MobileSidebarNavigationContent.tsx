@@ -2,7 +2,7 @@
 
 import { FC } from "react";
 
-// import { MobileSidebar } from "@/components/layout/Sidebar/MobileSidebar";
+import { MobileSidebar } from "@/components/layout/Sidebar";
 import { SheetContent } from "@/components/ui/sheet";
 
 type MobileSidebarNavigationContentProps = {
@@ -14,11 +14,7 @@ export const MobileSidebarNavigationContent: FC<
 > = ({ onCloseSheet }) => {
   return (
     <SheetContent side={"left"}>
-      {/* <MobileSidebar
-        myFeedFolders={myFeedFolders}
-        favoriteArticleFolders={favoriteArticleFolders}
-        handleCloseSheet={handleCloseSheet}
-      /> */}
+      <MobileSidebar onCloseSheet={onCloseSheet} />
     </SheetContent>
   );
 };
