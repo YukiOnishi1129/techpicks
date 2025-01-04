@@ -9,5 +9,7 @@ export const NAVIGATION_LISTS = {
   ARTICLE_SEARCH_RESULT: "/article/search/result",
   FEED: "/feed",
   MY_FEED_FOLDER: "/my-feed",
+  MY_FEED_FOLDER_ARTICLE: "/my-feed/article",
   FAVORITE_ARTICLE_FOLDER: "/favorite",
+  FAVORITE_ARTICLE_FOLDER_ARTICLE: "/favorite/article",
 };

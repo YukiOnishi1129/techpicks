@@ -1,9 +1,8 @@
-"use client";
-
 import { User } from "@supabase/supabase-js";
 import { FC } from "react";
 
 import { DesktopHeader } from "./DesktopHeader";
+import { MobileHeader } from "./MobileHeader";
 
 type HeaderProps = {
   user?: User;
@@ -16,13 +15,7 @@ export const Header: FC<HeaderProps> = ({ user }) => {
         <DesktopHeader user={user} />
       </div>
       <div className="block md:hidden">
-        {/* <MobileHeader
-          user={user}
-          myFeedFolders={myFeedFolderRes.data.myFeedFolders}
-          favoriteArticleFolders={
-            favoriteArticleFolderRes.data.favoriteArticleFolders
-          }
-        /> */}
+        <MobileHeader user={user} />
       </div>
     </>
   );
