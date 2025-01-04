@@ -34,7 +34,7 @@ func (fafa *favoriteArticleFolderPersistenceAdapter) GetFavoriteArticleFolders(c
 	q := []qm.QueryMod{
 		qm.Where("favorite_article_folders.user_id = ?", req.GetUserId()),
 		qm.GroupBy("favorite_article_folders.id"),
-		qm.OrderBy("favorite_article_folders.created_at ASC"),
+		qm.OrderBy("favorite_article_folders.title ASC"),
 	}
 
 	if !req.GetIsAllFetch().GetValue() {
@@ -46,7 +46,7 @@ func (fafa *favoriteArticleFolderPersistenceAdapter) GetFavoriteArticleFolders(c
 	}
 
 	if req.GetCursor() != nil {
-		q = append(q, qm.Where("favorite_article_folders.created_at > (SELECT created_at FROM favorite_article_folders WHERE id = ?)", req.GetCursor().GetValue()))
+		q = append(q, qm.Where("favorite_article_folders.title > (SELECT title FROM favorite_article_folders WHERE id = ?)", req.GetCursor().GetValue()))
 	}
 
 	if req.GetKeyword().GetValue() != "" {

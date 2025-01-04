@@ -11,13 +11,6 @@ import {
   MdRssFeed,
 } from "react-icons/md";
 
-// import { CreateFavoriteArticleFolderDialog } from "@/features/favoriteArticleFolders/components/Dialog";
-// import { CreateMyFeedFolderDialog } from "@/features/myFeedFolders/components/Dialog";
-
-// import { FavoriteArticleFolderType } from "@/types/favoriteArticleFolder";
-// import { MyFeedFolderType } from "@/types/myFeedFolder";
-
-// import { FavoriteArticleFolderLinks } from "./FavoriteArticleFolderLinks";
 import { CreateFavoriteArticleFolderDialog } from "@/features/favorites/components/Dialog";
 import { CreateMyFeedFolderDialog } from "@/features/myFeeds/components/Dialog";
 
@@ -26,7 +19,6 @@ import { LoggedBaseLayoutQuery } from "@/components/layout/BaseLayout/LoggedBase
 import { FavoriteArticleFolderLink } from "../FavoriteArticleFolderLink";
 import { LogoutLink } from "../LogoutLink";
 import { MyFeedFolderLink } from "../MyFeedFolderLink";
-// import { MyFeedFolderLinks } from "./MyFeedFolderLinks";
 
 export function DesktopSidebar() {
   const { data: resSuspenseData, error } = useSuspenseQuery(

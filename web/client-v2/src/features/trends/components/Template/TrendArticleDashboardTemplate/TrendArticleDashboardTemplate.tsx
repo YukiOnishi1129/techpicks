@@ -2,6 +2,8 @@ import { User } from "@supabase/supabase-js";
 import Image from "next/image";
 import { FC, Suspense } from "react";
 
+import { SelectArticlePageTab } from "@/features/articles/components/Tab";
+
 import { ScreenLoader } from "@/components/layout/ScreenLoader";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -53,7 +55,7 @@ export const TrendArticleDashboardTemplate: FC<
         <h1 className="my-4 hidden text-2xl font-bold md:block">{title}</h1>
         <div className="h-2 w-full md:hidden" />
         <div className="h-16 w-full md:hidden">
-          {/* <SelectArticlePageTab userId={user?.id} /> */}
+          <SelectArticlePageTab userId={user?.id} />
         </div>
       </div>
       <div className=" h-16" />

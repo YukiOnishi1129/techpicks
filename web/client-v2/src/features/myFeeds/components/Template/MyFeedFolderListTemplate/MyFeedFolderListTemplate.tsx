@@ -5,7 +5,10 @@ import { ScreenLoader } from "@/components/layout/ScreenLoader";
 import { PreloadQuery } from "@/lib/apollo/client";
 
 import { MyFeedFolderListTemplateQuery } from "./MyFeedFolderListTemplateQuery";
-import { CreateMyFeedFolderDialog } from "../../Dialog";
+import {
+  CreateMyFeedFolderDialog,
+  SearchMyFeedFolderDialog,
+} from "../../Dialog";
 import { MyFeedFolderList } from "../../List";
 import { MyFeedFolderKeywordSearchForm } from "../../Search";
 
@@ -56,9 +59,9 @@ export const MyFeedFolderListTemplate: FC<MyFeedFolderListTemplateProps> = ({
         </Suspense>
       </PreloadQuery>
 
-      {/* <div className="fixed bottom-20 right-4 z-50 md:hidden">
-            <MyFeedFolderKeywordSearchDialog keyword={keyword} />
-          </div> */}
+      <div className="fixed bottom-20 right-4 z-50 md:hidden">
+        <SearchMyFeedFolderDialog keyword={keyword} />
+      </div>
     </div>
   );
 };

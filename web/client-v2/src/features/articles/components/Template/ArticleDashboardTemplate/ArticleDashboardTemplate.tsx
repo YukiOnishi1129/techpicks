@@ -15,6 +15,7 @@ import { ENGLISH_IMAGE, JAPANESE_IMAGE } from "@/constant/image";
 import { ArticlesInput, FavoriteArticleFoldersInput } from "@/graphql/type";
 
 import { ArticleDashboardTemplateQuery } from "./ArticleDashboardTemplateQuery";
+import { SelectArticlePageTab } from "../../Tab";
 
 type ArticleDashboardTemplateProps = {
   user: User;
@@ -56,7 +57,7 @@ export const ArticleDashboardTemplate: FC<
         <h1 className="my-4 hidden text-2xl font-bold md:block">{title}</h1>
         <div className="h-2 w-full md:hidden" />
         <div className="h-16 w-full md:hidden">
-          {/* <SelectArticlePageTab userId={user?.id} /> */}
+          <SelectArticlePageTab userId={user?.id} />
         </div>
       </div>
       <div className=" h-16" />

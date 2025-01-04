@@ -13,6 +13,7 @@ import {
 
 import { getMyFeedFolderArticleListTemplateQuery } from "./actGetMyFeedFolderArticleListTemplateQuery";
 import { MyFeedFolderArticleListTemplateQuery } from "./MyFeedFolderArticleListTemplateQuery";
+import { SearchMyFeedFolderArticleDialog } from "../../Dialog";
 import { MyFeedFolderArticleList } from "../../List";
 import { MyFeedFolderArticleKeywordSearchForm } from "../../Search";
 
@@ -104,10 +105,10 @@ export const MyFeedFolderArticleListTemplate: FC<
       </PreloadQuery>
 
       <div className="fixed bottom-20 right-4 z-50 md:hidden">
-        {/* <MyFeedFolderArticleKeyWordSearchDialog
-          myFeedFolderId={id}
+        <SearchMyFeedFolderArticleDialog
+          myFeedFolderId={myFeedFolderId}
           keyword={keyword}
-        /> */}
+        />
       </div>
     </>
   );
