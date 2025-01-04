@@ -2,7 +2,6 @@
 
 import { FC, useCallback, useState } from "react";
 import { FaSearch } from "react-icons/fa";
-import { z } from "zod";
 
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 

@@ -95,7 +95,7 @@ export function FeedArticleList({ id, keyword }: FeedArticleListProps) {
     setIsNextPage(resData.articles.pageInfo.hasNextPage);
 
     setHashMore(resData.articles.edges.length > 0);
-  }, [id, endCursor, isNextPage, fetchMore]);
+  }, [id, endCursor, isNextPage, fetchMore, keyword]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
