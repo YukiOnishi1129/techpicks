@@ -6,6 +6,7 @@ import { BreadCrumbType, PageBreadcrumb } from "@/components/ui/breadcrumb";
 import { PreloadQuery } from "@/lib/apollo/client";
 
 import { getServerFeedArticleTemplateQuery } from "./actGetServerFeedArticleTemplateQuery";
+import { FeedArticleHeader } from "./FeedArticleHeader";
 import { FeedArticleListTemplateQuery } from "./FeedArticleListTemplateQuery";
 import { FeedArticleKeywordSearchDialog } from "../../Dialog";
 import { FeedArticleList } from "../../List";
@@ -45,14 +46,7 @@ export const FeedArticleListTemplate: FC<
           <PageBreadcrumb breadcrumbs={breadcrumbs} />
         </div>
         <div className="mt-2">
-          {/* {resFeed.data.feed && (
-            <FeedDetailHeader
-              user={user}
-              keyword={keyword}
-              feed={resFeed.data.feed}
-              myFeedFolders={resMyFeedList.data.myFeedFolders}
-            />
-          )} */}
+          <FeedArticleHeader feedId={id} keyword={keyword} />
         </div>
       </div>
 
