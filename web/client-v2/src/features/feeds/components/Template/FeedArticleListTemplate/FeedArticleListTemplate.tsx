@@ -7,6 +7,7 @@ import { PreloadQuery } from "@/lib/apollo/client";
 
 import { getServerFeedArticleTemplateQuery } from "./actGetServerFeedArticleTemplateQuery";
 import { FeedArticleListTemplateQuery } from "./FeedArticleListTemplateQuery";
+import { FeedArticleKeywordSearchDialog } from "../../Dialog";
 import { FeedArticleList } from "../../List";
 
 type FeedArticleListTemplateProps = {
@@ -75,6 +76,10 @@ export const FeedArticleListTemplate: FC<
           <FeedArticleList id={id} keyword={keyword} />
         </Suspense>
       </PreloadQuery>
+
+      <div className="fixed bottom-20 right-4 z-50 md:hidden">
+        <FeedArticleKeywordSearchDialog feedId={id} keyword={keyword} />
+      </div>
     </>
   );
 };
