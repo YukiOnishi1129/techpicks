@@ -5,3 +5,5 @@ export * from "./RemoveFavoriteArticleAlertDialog";
 
 export * from "./CreateFavoriteArticleDialog";
 export * from "./CreateFavoriteArticleDialogFloatButton";
+
+export * from "./FavoriteArticleFolderKeyWordSearchDialog";
