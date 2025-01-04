@@ -27,13 +27,13 @@ const formSchema = z.object({
   keyword: z.string().optional(),
 });
 
-type FavoriteArticleFolderKeyWordSearchDialogContentProps = {
+type SearchFavoriteArticleFolderDialogContentProps = {
   keyword?: string;
   onClose: () => void;
 };
 
-export const FavoriteArticleFolderKeyWordSearchDialogContent: FC<
-  FavoriteArticleFolderKeyWordSearchDialogContentProps
+export const SearchFavoriteArticleFolderDialogContent: FC<
+  SearchFavoriteArticleFolderDialogContentProps
 > = ({ keyword, onClose }) => {
   const pathname = usePathname();
   const router = useRouter();

@@ -5,14 +5,14 @@ import { FaSearch } from "react-icons/fa";
 
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 
-import { FavoriteArticleFolderKeyWordSearchDialogContent } from "./FavoriteArticleFolderKeyWordSearchDialogContent";
+import { SearchFavoriteArticleFolderDialogContent } from "./SearchFavoriteArticleFolderDialogContent";
 
-type FavoriteArticleFolderKeyWordSearchDialogProps = {
+type SearchFavoriteArticleFolderDialogProps = {
   keyword?: string;
 };
 
-export const FavoriteArticleFolderKeyWordSearchDialog: FC<
-  FavoriteArticleFolderKeyWordSearchDialogProps
+export const SearchFavoriteArticleFolderDialog: FC<
+  SearchFavoriteArticleFolderDialogProps
 > = ({ keyword }) => {
   const [open, setOpen] = useState(false);
 
@@ -26,7 +26,7 @@ export const FavoriteArticleFolderKeyWordSearchDialog: FC<
         <FaSearch size="24" color="black" />
       </DialogTrigger>
       {open && (
-        <FavoriteArticleFolderKeyWordSearchDialogContent
+        <SearchFavoriteArticleFolderDialogContent
           keyword={keyword}
           onClose={handleClose}
         />

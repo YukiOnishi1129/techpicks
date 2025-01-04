@@ -8,7 +8,7 @@ import { PreloadQuery } from "@/lib/apollo/client";
 import { FavoriteArticleFolderListTemplateQuery } from "./FavoriteArticleFolderListTemplateQuery";
 import {
   CreateFavoriteArticleFolderDialog,
-  FavoriteArticleFolderKeyWordSearchDialog,
+  SearchFavoriteArticleFolderDialog,
 } from "../../Dialog";
 import { FavoriteArticleFolderList } from "../../List";
 import { FavoriteArticleFolderKeywordSearchForm } from "../../Search";
@@ -54,7 +54,7 @@ export const FavoriteArticleFolderListTemplate: FC<
       </PreloadQuery>
 
       <div className="fixed bottom-20 right-4 z-50 md:hidden">
-        <FavoriteArticleFolderKeyWordSearchDialog keyword={keyword} />
+        <SearchFavoriteArticleFolderDialog keyword={keyword} />
       </div>
     </div>
   );
