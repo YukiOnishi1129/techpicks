@@ -1,56 +1,68 @@
 "use client";
-import { useQuery, useSuspenseQuery } from "@apollo/client";
-import { FragmentOf, readFragment } from "gql.tada";
-import { useCallback, useRef, useState, useEffect } from "react";
 
-import { ArticleCardWrapper } from "@/features/articles/components/Card";
+import { useSuspenseQuery, useQuery } from "@apollo/client";
+import { useCallback, useRef, useState, useEffect } from "react";
 
 import { NotFoundList } from "@/components/layout/NotFoundList";
 import { Loader } from "@/components/ui/loader";
 
-import { MyFeedFolderArticleListFragment } from "./MyFeedFolderArticleListFragment";
-import { MyFeedFolderArticleListQuery } from "./MyFeedFolderArticleListQuery";
-import { MyFeedFolderArticleListTemplateQuery } from "../../Template/MyFeedFolderArticleListTemplate/MyFeedFolderArticleListTemplateQuery";
+import { ArticleTabType } from "@/types/article";
+import { LanguageStatus } from "@/types/language";
 
-type MyFeedFolderArticleListProps = {
-  data: FragmentOf<typeof MyFeedFolderArticleListFragment>;
-  keyword?: string;
+import { SearchArticleListQuery } from "./SearchArticleListQuery";
+import { ArticleCardWrapper } from "../../Card/ArticleCardWrapper/ArticleCardWrapper";
+import { SearchArticleListTemplateQuery } from "../../Template/SearchArticleListTemplate/SearchArticleListTemplateQuery";
+
+type SearchArticleListProps = {
   limit: number;
-  feedIdList: Array<string>;
+  languageStatus: LanguageStatus;
+  tab: ArticleTabType;
+  feedIdList?: Array<string>;
+  keyword?: string;
 };
 
-export function MyFeedFolderArticleList({
-  data,
-  keyword,
+export function SearchArticleList({
   limit,
+  languageStatus,
+  tab,
   feedIdList,
-}: MyFeedFolderArticleListProps) {
+  keyword,
+}: SearchArticleListProps) {
   const observerTarget = useRef(null);
 
-  const fragment = readFragment(MyFeedFolderArticleListFragment, data);
-
-  const { error } = useSuspenseQuery(MyFeedFolderArticleListTemplateQuery, {
-    variables: {
-      input: {
-        first: limit,
-        after: null,
-        keyword,
-        feedIds: feedIdList,
+  const { data: resSuspenseData, error } = useSuspenseQuery(
+    SearchArticleListTemplateQuery,
+    {
+      variables: {
+        input: {
+          first: limit,
+          after: null,
+          languageStatus,
+          keyword,
+          feedIds: feedIdList,
+          tab,
+        },
+        favoriteArticleFoldersInput: {
+          isAllFetch: true,
+          isFolderOnly: true,
+        },
       },
-    },
-  });
+    }
+  );
 
   const {
     data: res,
     fetchMore,
     error: onlyFetchArticlesError,
-  } = useQuery(MyFeedFolderArticleListQuery, {
+  } = useQuery(SearchArticleListQuery, {
     variables: {
       input: {
         first: limit,
         after: null,
-        keyword: keyword,
+        languageStatus,
+        keyword,
         feedIds: feedIdList,
+        tab,
       },
     },
     fetchPolicy: "cache-first",
@@ -66,13 +78,16 @@ export function MyFeedFolderArticleList({
 
   const loadMore = useCallback(async () => {
     if (!isNextPage) return;
+
     const { data: resData, error: resError } = await fetchMore({
       variables: {
         input: {
           first: limit,
           after: endCursor,
-          keyword: keyword,
+          languageStatus,
+          keyword,
           feedIds: feedIdList,
+          tab,
         },
       },
       updateQuery: (prev, { fetchMoreResult }) => {
@@ -97,7 +112,7 @@ export function MyFeedFolderArticleList({
     setIsNextPage(resData.articles.pageInfo.hasNextPage);
 
     setHashMore(resData.articles.edges.length > 0);
-  }, [fetchMore, endCursor, isNextPage, feedIdList, keyword, limit]);
+  }, [languageStatus, tab, endCursor, isNextPage, fetchMore]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -142,7 +157,7 @@ export function MyFeedFolderArticleList({
   return (
     <>
       {res?.articles?.edges.length === 0 ? (
-        <div>
+        <div className="flex flex-col items-center justify-center">
           <NotFoundList message="No articles found" />
         </div>
       ) : (
@@ -151,8 +166,8 @@ export function MyFeedFolderArticleList({
             <ArticleCardWrapper
               key={`${i}-${edge.node.id}`}
               data={edge.node}
-              tab="unknown"
-              favoriteArticleFolders={fragment.favoriteArticleFolders}
+              favoriteArticleFolders={resSuspenseData.favoriteArticleFolders}
+              tab={tab}
             />
           ))}
           <div ref={observerTarget}>
