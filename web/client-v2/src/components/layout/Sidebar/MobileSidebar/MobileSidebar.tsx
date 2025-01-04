@@ -1,5 +1,6 @@
 "use client";
 
+import { useQuery } from "@apollo/client";
 import Link from "next/link";
 import { FC } from "react";
 import { CgWebsite } from "react-icons/cg";
@@ -15,15 +16,36 @@ import {
 import { CreateFavoriteArticleFolderDialog } from "@/features/favorites/components/Dialog";
 import { CreateMyFeedFolderDialog } from "@/features/myFeeds/components/Dialog";
 
+import { GetMobileSidebarQuery } from "./GetMobileSidebarQuery";
+import { FavoriteArticleFolderLink } from "../FavoriteArticleFolderLink";
 import { LogoutLink } from "../LogoutLink";
+import { MyFeedFolderLink } from "../MyFeedFolderLink";
 
 type SidebarProps = {
-  //   myFeedFolders: Array<MyFeedFolderType>;
-  //   favoriteArticleFolders: Array<FavoriteArticleFolderType>;
   onCloseSheet: () => void;
 };
 
 export const MobileSidebar: FC<SidebarProps> = ({ onCloseSheet }) => {
+  const { data, loading, error } = useQuery(GetMobileSidebarQuery, {
+    variables: {
+      input: {
+        isAllFetch: true,
+        isFolderOnly: true,
+      },
+      myFeedFoldersInput: {
+        isAllFetch: true,
+      },
+    },
+  });
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
+
   return (
     <div className="h-lvh w-full overflow-y-auto pb-12">
       <div className="mb-16 space-y-4 py-4">
@@ -108,10 +130,12 @@ export const MobileSidebar: FC<SidebarProps> = ({ onCloseSheet }) => {
                 <MdFeed />
                 <span className="pl-2">All</span>
               </Link>
-              {/* <MyFeedFolderLinks
-                myFeedFolders={myFeedFolders}
-                handleCloseSheet={onCloseSheet}
-              /> */}
+              {data?.myFeedFolders.edges.map((edge, i) => (
+                <MyFeedFolderLink
+                  key={`sidebar-my-feed-link-${i}-${edge.node.id}`}
+                  data={edge.node}
+                />
+              ))}
               <div className="ml-4">
                 <CreateMyFeedFolderDialog
                   buttonVariant="ghost"
@@ -142,10 +166,12 @@ export const MobileSidebar: FC<SidebarProps> = ({ onCloseSheet }) => {
                 <MdFeed />
                 <span className="pl-2">All</span>
               </Link>
-              {/* <FavoriteArticleFolderLinks
-                favoriteArticleFolders={favoriteArticleFolders}
-                handleCloseSheet={onCloseSheet}
-              /> */}
+              {data?.favoriteArticleFolders.edges.map((edge, i) => (
+                <FavoriteArticleFolderLink
+                  key={`sidebar-favorite-link-${i}`}
+                  data={edge.node}
+                />
+              ))}
               <div className="ml-4">
                 <CreateFavoriteArticleFolderDialog
                   buttonVariant="ghost"
