@@ -7,6 +7,7 @@ import { FC, useMemo } from "react";
 import { NAVIGATION_LISTS } from "@/constant/navigation";
 
 import { MobileHeaderButton } from "./MobileHeaderButton";
+import { MobileSidebarNavigation } from "./MobileSidebarNavigation";
 
 type MobileHeaderProps = {
   user?: User;
@@ -53,10 +54,7 @@ export const MobileHeader: FC<MobileHeaderProps> = ({ user }) => {
   return (
     <div className="fixed z-50 flex h-12 w-screen items-center justify-center border-b border-gray-300  bg-card px-8 shadow-md">
       <div className="absolute left-3">
-        {/* <MobileSidebarNavigation
-          myFeedFolders={myFeedFolders}
-          favoriteArticleFolders={favoriteArticleFolders}
-        /> */}
+        <MobileSidebarNavigation />
       </div>
 
       <h1 className="text-2xl font-bold">{pageName}</h1>
