@@ -15,6 +15,7 @@ import { ENGLISH_IMAGE, JAPANESE_IMAGE } from "@/constant/image";
 import { ArticlesInput, FavoriteArticleFoldersInput } from "@/graphql/type";
 
 import { ArticleDashboardTemplateQuery } from "./ArticleDashboardTemplateQuery";
+import { SearchArticleDialog } from "../../Dialog";
 import { SelectArticlePageTab } from "../../Tab";
 
 type ArticleDashboardTemplateProps = {
@@ -113,6 +114,10 @@ export const ArticleDashboardTemplate: FC<
           </PreloadQuery>
         </TabsContent>
       </Tabs>
+
+      <div className="fixed bottom-20 right-4 z-50 md:hidden">
+        <SearchArticleDialog />
+      </div>
     </div>
   );
 };

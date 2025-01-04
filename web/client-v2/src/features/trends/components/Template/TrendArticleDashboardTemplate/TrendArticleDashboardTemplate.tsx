@@ -2,6 +2,7 @@ import { User } from "@supabase/supabase-js";
 import Image from "next/image";
 import { FC, Suspense } from "react";
 
+import { SearchArticleDialog } from "@/features/articles/components/Dialog";
 import { SelectArticlePageTab } from "@/features/articles/components/Tab";
 
 import { ScreenLoader } from "@/components/layout/ScreenLoader";
@@ -111,6 +112,10 @@ export const TrendArticleDashboardTemplate: FC<
           </PreloadQuery>
         </TabsContent>
       </Tabs>
+
+      <div className="fixed bottom-20 right-4 z-50 md:hidden">
+        <SearchArticleDialog />
+      </div>
     </div>
   );
 };
