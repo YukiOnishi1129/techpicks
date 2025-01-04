@@ -15,7 +15,7 @@ export const ZoomableImage: FC<Props> = ({ imageUrl, alt }) => {
     <div className="inline-block overflow-hidden rounded-lg">
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
-        className="h-full cursor-pointer rounded-lg border object-cover object-center shadow-md transition-transform duration-300 ease-in-out hover:scale-110 md:h-full"
+        className="h-48 w-full cursor-pointer rounded-lg border object-cover object-center shadow-md transition-transform duration-300 ease-in-out hover:scale-110 md:h-full"
         src={thumbnailUrl}
         alt={alt}
       />
