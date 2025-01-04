@@ -151,7 +151,7 @@ export const CreateFavoriteArticleDialogContent: FC<
 
       if (data?.createFavoriteArticleForUploadArticle?.id) {
         successToast({
-          description: "Add bookmark",
+          description: `Added to the favorite article folder '${fragment.articleOpg.title}'`,
         });
       }
       await revalidatePage();

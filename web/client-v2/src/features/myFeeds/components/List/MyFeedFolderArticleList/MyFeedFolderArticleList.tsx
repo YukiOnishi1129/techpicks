@@ -146,7 +146,7 @@ export function MyFeedFolderArticleList({
           <NotFoundList message="No articles found" />
         </div>
       ) : (
-        <div>
+        <div className="m-auto grid gap-4">
           {res?.articles?.edges?.map((edge, i) => (
             <ArticleCardWrapper
               key={`${i}-${edge.node.id}`}
