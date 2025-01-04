@@ -53,14 +53,18 @@ export const MobileHeader: FC<MobileHeaderProps> = ({ user }) => {
 
   return (
     <div className="fixed z-50 flex h-12 w-screen items-center justify-center border-b border-gray-300  bg-card px-8 shadow-md">
-      <div className="absolute left-3">
-        <MobileSidebarNavigation />
-      </div>
+      {user && (
+        <div className="absolute left-3">
+          <MobileSidebarNavigation />
+        </div>
+      )}
 
       <h1 className="text-2xl font-bold">{pageName}</h1>
-      <div className="absolute right-1 w-14">
-        <MobileHeaderButton user={user} pathname={pathname} />
-      </div>
+      {user && (
+        <div className="absolute right-1 w-14">
+          <MobileHeaderButton user={user} pathname={pathname} />
+        </div>
+      )}
     </div>
   );
 };

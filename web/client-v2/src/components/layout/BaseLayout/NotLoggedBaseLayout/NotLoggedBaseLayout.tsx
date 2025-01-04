@@ -1,5 +1,6 @@
 import { FC, ReactNode } from "react";
 
+import { NotLoggedBottomNavigationMenu } from "../../BottomNavigationMenu";
 import { Header } from "../../Header";
 
 type NotLoggedBaseLayoutProps = {
@@ -20,9 +21,9 @@ export const NotLoggedBaseLayout: FC<NotLoggedBaseLayoutProps> = async ({
         <div className="mx-auto w-[90%] md:w-[70%]">{children}</div>
       </main>
 
-      {/* <footer className="fixed inset-x-0 bottom-0 z-50 block border-t border-gray-200  md:hidden">
+      <footer className="fixed inset-x-0 bottom-0 z-50 block border-t border-gray-200  md:hidden">
         <NotLoggedBottomNavigationMenu />
-      </footer> */}
+      </footer>
     </div>
   );
 };
