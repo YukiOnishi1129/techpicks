@@ -1,1 +1,3 @@
-export * from "./DesktopSidebar/DesktopSidebar";
+export * from "./DesktopSidebar";
+
+export * from "./MobileSidebar";

@@ -12,6 +12,7 @@ import {
 } from "@/graphql/type";
 
 import { AllFolderFavoriteArticleListTemplateQuery } from "./AllFolderFavoriteArticleListTemplateQuery";
+import { SearchFavoriteArticleListDialog } from "../../Dialog";
 import { AllFolderFavoriteArticleList } from "../../List";
 import { FavoriteArticleKeywordSearchForm } from "../../Search";
 
@@ -78,12 +79,9 @@ export const AllFolderFavoriteArticleListTemplate: FC<
         </Suspense>
       </PreloadQuery>
 
-      {/* <div className="fixed bottom-20 right-4 z-50 md:hidden">
-        <FavoriteArticleKeyWordSearchDialog
-          keyword={keyword}
-          favoriteArticleFolderId={id}
-        />
-      </div> */}
+      <div className="fixed bottom-20 right-4 z-50 md:hidden">
+        <SearchFavoriteArticleListDialog keyword={keyword} />
+      </div>
     </div>
   );
 };

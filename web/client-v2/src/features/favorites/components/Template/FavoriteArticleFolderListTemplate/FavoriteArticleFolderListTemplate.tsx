@@ -6,7 +6,10 @@ import { ScreenLoader } from "@/components/layout/ScreenLoader";
 import { PreloadQuery } from "@/lib/apollo/client";
 
 import { FavoriteArticleFolderListTemplateQuery } from "./FavoriteArticleFolderListTemplateQuery";
-import { CreateFavoriteArticleFolderDialog } from "../../Dialog";
+import {
+  CreateFavoriteArticleFolderDialog,
+  SearchFavoriteArticleFolderDialog,
+} from "../../Dialog";
 import { FavoriteArticleFolderList } from "../../List";
 import { FavoriteArticleFolderKeywordSearchForm } from "../../Search";
 
@@ -50,9 +53,9 @@ export const FavoriteArticleFolderListTemplate: FC<
         </Suspense>
       </PreloadQuery>
 
-      {/* <div className="fixed bottom-20 right-4 z-50 md:hidden">
-        <FavoriteArticleFolderKeyWordSearchDialog keyword={keyword} />
-      </div> */}
+      <div className="fixed bottom-20 right-4 z-50 md:hidden">
+        <SearchFavoriteArticleFolderDialog keyword={keyword} />
+      </div>
     </div>
   );
 };

@@ -634,6 +634,14 @@ export type FavoriteArticleFolderLinkFragmentFragment = { __typename?: 'Favorite
 
 export type FeedAccordionFragmentFragment = { __typename?: 'MyFeedFolder', id: string, feeds?: Array<{ __typename?: 'Feed', id: string, name: string, platform: { __typename?: 'Platform', faviconUrl: string } }> | null };
 
+export type GetMobileSidebarQueryQueryVariables = Exact<{
+  input: FavoriteArticleFoldersInput;
+  myFeedFoldersInput: MyFeedFoldersInput;
+}>;
+
+
+export type GetMobileSidebarQueryQuery = { __typename?: 'Query', favoriteArticleFolders: { __typename?: 'FavoriteArticleFolderConnection', edges: Array<{ __typename?: 'FavoriteArticleFolderEdge', node: { __typename?: 'FavoriteArticleFolder', id: string, title: string } }> }, myFeedFolders: { __typename?: 'MyFeedFolderConnection', edges: Array<{ __typename?: 'MyFeedFolderEdge', node: { __typename?: 'MyFeedFolder', id: string, title: string, feeds?: Array<{ __typename?: 'Feed', id: string, name: string, platform: { __typename?: 'Platform', faviconUrl: string } }> | null } }> } };
+
 export type MyFeedFolderLinkFragmentFragment = { __typename?: 'MyFeedFolder', id: string, title: string, feeds?: Array<{ __typename?: 'Feed', id: string, name: string, platform: { __typename?: 'Platform', faviconUrl: string } }> | null };
 
 export type ArticleCardItemFragmentFragment = { __typename?: 'Article', id: string, title: string, description: string, articleUrl: string, publishedAt?: number | null, thumbnailUrl: string, isEng: boolean, isPrivate: boolean, isBookmarked: boolean, bookmarkId?: string | null, likeCount?: number | null, platform?: { __typename?: 'Platform', id: string, name: string, siteUrl: string, faviconUrl: string } | null, feeds?: Array<{ __typename?: 'Feed', id: string, name: string }> | null };
@@ -1595,6 +1603,60 @@ export type GetLoggedBaseLayoutQueryQueryHookResult = ReturnType<typeof useGetLo
 export type GetLoggedBaseLayoutQueryLazyQueryHookResult = ReturnType<typeof useGetLoggedBaseLayoutQueryLazyQuery>;
 export type GetLoggedBaseLayoutQuerySuspenseQueryHookResult = ReturnType<typeof useGetLoggedBaseLayoutQuerySuspenseQuery>;
 export type GetLoggedBaseLayoutQueryQueryResult = Apollo.QueryResult<GetLoggedBaseLayoutQueryQuery, GetLoggedBaseLayoutQueryQueryVariables>;
+export const GetMobileSidebarQueryDocument = gql`
+    query GetMobileSidebarQuery($input: FavoriteArticleFoldersInput!, $myFeedFoldersInput: MyFeedFoldersInput!) {
+  favoriteArticleFolders(input: $input) {
+    edges {
+      node {
+        ...FavoriteArticleFolderLinkFragment
+      }
+    }
+  }
+  myFeedFolders(myFeedFoldersInput: $myFeedFoldersInput) {
+    edges {
+      node {
+        id
+        ...MyFeedFolderLinkFragment
+      }
+    }
+  }
+}
+    ${FavoriteArticleFolderLinkFragmentFragmentDoc}
+${MyFeedFolderLinkFragmentFragmentDoc}`;
+
+/**
+ * __useGetMobileSidebarQueryQuery__
+ *
+ * To run a query within a React component, call `useGetMobileSidebarQueryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetMobileSidebarQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetMobileSidebarQueryQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *      myFeedFoldersInput: // value for 'myFeedFoldersInput'
+ *   },
+ * });
+ */
+export function useGetMobileSidebarQueryQuery(baseOptions: Apollo.QueryHookOptions<GetMobileSidebarQueryQuery, GetMobileSidebarQueryQueryVariables> & ({ variables: GetMobileSidebarQueryQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetMobileSidebarQueryQuery, GetMobileSidebarQueryQueryVariables>(GetMobileSidebarQueryDocument, options);
+      }
+export function useGetMobileSidebarQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetMobileSidebarQueryQuery, GetMobileSidebarQueryQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetMobileSidebarQueryQuery, GetMobileSidebarQueryQueryVariables>(GetMobileSidebarQueryDocument, options);
+        }
+export function useGetMobileSidebarQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetMobileSidebarQueryQuery, GetMobileSidebarQueryQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetMobileSidebarQueryQuery, GetMobileSidebarQueryQueryVariables>(GetMobileSidebarQueryDocument, options);
+        }
+export type GetMobileSidebarQueryQueryHookResult = ReturnType<typeof useGetMobileSidebarQueryQuery>;
+export type GetMobileSidebarQueryLazyQueryHookResult = ReturnType<typeof useGetMobileSidebarQueryLazyQuery>;
+export type GetMobileSidebarQuerySuspenseQueryHookResult = ReturnType<typeof useGetMobileSidebarQuerySuspenseQuery>;
+export type GetMobileSidebarQueryQueryResult = Apollo.QueryResult<GetMobileSidebarQueryQuery, GetMobileSidebarQueryQueryVariables>;
 export const ArticleListQueryDocument = gql`
     query ArticleListQuery($input: ArticlesInput!) {
   articles(articlesInput: $input) {

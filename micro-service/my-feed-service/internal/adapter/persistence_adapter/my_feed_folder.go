@@ -33,7 +33,7 @@ func (m *myFeedFolderPersistenceAdapter) GetMyFeedFolders(ctx context.Context, r
 	q := []qm.QueryMod{
 		qm.Where("my_feed_folders.user_id = ?", req.GetUserId()),
 		qm.Load(qm.Rels(entity.MyFeedFolderRels.MyFeeds)),
-		qm.OrderBy("my_feed_folders.created_at ASC"),
+		qm.OrderBy("my_feed_folders.title ASC"),
 	}
 
 	if !req.GetIsAllFetch().GetValue() {
@@ -41,7 +41,7 @@ func (m *myFeedFolderPersistenceAdapter) GetMyFeedFolders(ctx context.Context, r
 	}
 
 	if req.GetCursor() != "" {
-		q = append(q, qm.Where("my_feed_folders.created_at > (SELECT created_at FROM my_feed_folders WHERE id = ?)", req.GetCursor()))
+		q = append(q, qm.Where("my_feed_folders.title > (SELECT title FROM my_feed_folders WHERE id = ?)", req.GetCursor()))
 	}
 
 	if req.GetKeyword().GetValue() != "" {
