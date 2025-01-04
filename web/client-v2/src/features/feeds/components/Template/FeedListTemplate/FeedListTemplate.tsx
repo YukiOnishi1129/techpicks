@@ -7,6 +7,7 @@ import { PreloadQuery } from "@/lib/apollo/client";
 import { PlatformSiteType } from "@/types/platform";
 
 import { FeedListTemplateQuery } from "./FeedListTemplateQuery";
+import { FeedKeywordSearchDialog } from "../../Dialog";
 import { FeedList } from "../../List";
 import { FeedKeywordSearchForm } from "../../Search";
 
@@ -53,9 +54,9 @@ export const FeedListTemplate: FC<FeedListTemplateProps> = ({
         </Suspense>
       </PreloadQuery>
 
-      {/* <div className="fixed bottom-20 right-4 z-50 md:hidden">
+      <div className="fixed bottom-20 right-4 z-50 md:hidden">
         <FeedKeywordSearchDialog keyword={keyword} />
-      </div> */}
+      </div>
     </>
   );
 };
