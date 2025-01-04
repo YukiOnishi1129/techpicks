@@ -64,6 +64,7 @@ export const FeedArticleListTemplate: FC<
           input: {
             first: 20,
             after: null,
+            keyword,
             feedIds: [id],
           },
           favoriteArticleFoldersInput: {
