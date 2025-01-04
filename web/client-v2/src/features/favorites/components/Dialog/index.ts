@@ -7,3 +7,4 @@ export * from "./CreateFavoriteArticleDialog";
 export * from "./CreateFavoriteArticleDialogFloatButton";
 
 export * from "./SearchFavoriteArticleFolderDialog";
+export * from "./SearchFavoriteArticleListDialog";

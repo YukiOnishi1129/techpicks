@@ -13,7 +13,10 @@ import {
 
 import { getServerFavoriteArticleListByFolderIdTemplateQuery } from "./actGetServerFavoriteArticleListByFolderIdTemplateQuery";
 import { FavoriteArticleListByFolderIdTemplateQuery } from "./FavoriteArticleListByFolderIdTemplateQuery";
-import { CreateFavoriteArticleDialog } from "../../Dialog";
+import {
+  CreateFavoriteArticleDialog,
+  SearchFavoriteArticleListDialog,
+} from "../../Dialog";
 import { FavoriteArticleList } from "../../List/FavoriteArticleList/FavoriteArticleList";
 import { FavoriteArticleKeywordSearchForm } from "../../Search";
 
@@ -96,12 +99,12 @@ export const FavoriteArticleListByFolderIdTemplate: FC<
         </Suspense>
       </PreloadQuery>
 
-      {/* <div className="fixed bottom-20 right-4 z-50 md:hidden">
-        <FavoriteArticleKeyWordSearchDialog
+      <div className="fixed bottom-20 right-4 z-50 md:hidden">
+        <SearchFavoriteArticleListDialog
           keyword={keyword}
           favoriteArticleFolderId={id}
         />
-      </div> */}
+      </div>
     </div>
   );
 };
