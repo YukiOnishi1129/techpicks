@@ -1,5 +1,5 @@
-// import { ArticleSearchTemplate } from "@/features/search/components/articles/Template";
+import { SearchArticleListFormTemplate } from "@/features/articles/components/Template";
 
 export default async function SearchFormPage() {
-  return <div></div>;
+  return <SearchArticleListFormTemplate />;
 }

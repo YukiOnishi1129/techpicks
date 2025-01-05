@@ -7,12 +7,12 @@ import { FeedAccordion } from "../FeedAccordion";
 
 type MyFeedFolderLinkProps = {
   data: FragmentOf<typeof MyFeedFolderLinkFragment>;
-  handleCloseSheet?: () => void;
+  onCloseSheet?: () => void;
 };
 
 export const MyFeedFolderLink: FC<MyFeedFolderLinkProps> = ({
   data,
-  handleCloseSheet,
+  onCloseSheet,
 }) => {
   const fragment = readFragment(MyFeedFolderLinkFragment, data);
   return (
@@ -21,7 +21,7 @@ export const MyFeedFolderLink: FC<MyFeedFolderLinkProps> = ({
         <Link
           className="absolute left-10 top-0  w-4/6 pt-2 hover:bg-secondary"
           href={`/my-feed/article/${fragment.id}`}
-          onClick={handleCloseSheet}
+          onClick={onCloseSheet}
         >
           <span className="inline-block w-full truncate">{fragment.title}</span>
         </Link>
