@@ -1,6 +1,6 @@
 import { graphql } from "gql.tada";
 
-import { ShowMyFeedListDialogFragment } from "../../Dialog/ShowMyFeedListDialog/ShowMyFeedListDialogFragment";
+import { ShowMyFeedListDialogFragment } from "../../../../feeds/components/Dialog/ShowMyFeedListDialog/ShowMyFeedListDialogFragment";
 import { UpdateMyFeedFolderDialogFragment } from "../../Dialog/UpdateMyFeedFolderDialog/UpdateMyFeedFolderDialogFragment";
 
 export const MyFeedFolderCardFragment = graphql(

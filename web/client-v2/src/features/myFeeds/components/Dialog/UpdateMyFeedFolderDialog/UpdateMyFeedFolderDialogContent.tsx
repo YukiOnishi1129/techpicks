@@ -8,8 +8,7 @@ import { useForm } from "react-hook-form";
 import { RxCross2 } from "react-icons/rx";
 import { z } from "zod";
 
-// import { SelectMultiFeedDialog } from "@/features/feeds/components/Dialog";
-
+import { SelectMultiFeedDialog } from "@/features/feeds/components/Dialog/SelectMultiFeedDialog";
 import { useManageMyFeedFolder } from "@/features/myFeeds/hooks/useManageMyFeedFolder";
 
 import { Button } from "@/components/ui/button";
@@ -32,9 +31,6 @@ import { Input } from "@/components/ui/input";
 import { SelectOptionType } from "@/types/utils";
 
 import { UpdateMyFeedFolderDialogFragment } from "./UpdateMyFeedFolderDialogFragment";
-import { SelectMultiFeedDialog } from "../SelectMultiFeedDialog";
-
-// import { DeleteMyFeedFolderAlertDialog } from "../Delete/DeleteMyFeedFolderAlertDialog";
 
 const formSchema = z.object({
   title: z

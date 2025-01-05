@@ -8,8 +8,14 @@ import { PreloadQuery } from "@/lib/apollo/client";
 import { ArticleTabType } from "@/types/article";
 import { LanguageStatus } from "@/types/language";
 import { PlatformSiteType } from "@/types/platform";
+import { SelectOptionType } from "@/types/utils";
 
+import { listServerSelectedFeedSearchArticleListTemplateQuery } from "./actListServerSelectedFeedSearchArticleListTemplateQuery";
 import { SearchArticleListTemplateQuery } from "./SearchArticleListTemplateQuery";
+import {
+  SearchDetailArticleDialog,
+  SearchDetailArticleDialogFloatButton,
+} from "../../Dialog";
 import { SearchArticleList } from "../../List";
 
 const LIMIT = 20;
@@ -38,6 +44,21 @@ export const SearchArticleListTemplate: FC<
     feedIdPath = feedIdList.map((feedId) => `&feedId=${feedId}`).join("");
   }
 
+  const { data, error } =
+    await listServerSelectedFeedSearchArticleListTemplateQuery(feedIdList);
+
+  if (error) {
+    return <div>{error.message}</div>;
+  }
+
+  const selectedFeedList: Array<SelectOptionType> =
+    feedIdList.length > 0
+      ? data.selectedFeeds.edges.map((edge) => ({
+          id: edge.node.id,
+          label: edge.node.name,
+        }))
+      : [];
+
   const breadcrumbs: BreadCrumbType[] = [
     {
       title: "Home",
@@ -57,11 +78,11 @@ export const SearchArticleListTemplate: FC<
         <div className="hidden w-full items-center justify-between md:flex ">
           <h1 className="text-2xl font-bold ">Article Search Result</h1>
           <div className="mr-8 flex w-48 items-center justify-end">
-            {/* <ArticleSearchDialog
+            <SearchDetailArticleDialog
               keyword={keyword}
-              selectedFeedList={resSelectedFeedList.data.feeds}
-              initialFeedList={resInitialFeedList.data.feeds}
-            /> */}
+              selectedFeedList={selectedFeedList}
+              feedsEndCursor={data?.initFeeds?.pageInfo?.endCursor || undefined}
+            />
           </div>
         </div>
       </div>
@@ -99,11 +120,11 @@ export const SearchArticleListTemplate: FC<
       </div>
 
       <div className="fixed bottom-20 right-4 z-50 md:hidden">
-        {/* <ArticleSearchDialogFloatButton
+        <SearchDetailArticleDialogFloatButton
           keyword={keyword}
-          selectedFeedList={resSelectedFeedList.data.feeds}
-          initialFeedList={resInitialFeedList.data.feeds}
-        /> */}
+          selectedFeedList={selectedFeedList}
+          feedsEndCursor={data?.initFeeds?.pageInfo?.endCursor || undefined}
+        />
       </div>
     </div>
   );

@@ -4,6 +4,8 @@ import { ScreenLoader } from "@/components/layout/ScreenLoader";
 
 import { PreloadQuery } from "@/lib/apollo/client";
 
+import { SELECTABLE_FEED_LIST_LIMIT } from "@/constant/limit";
+
 import { MyFeedFolderListTemplateQuery } from "./MyFeedFolderListTemplateQuery";
 import {
   CreateMyFeedFolderDialog,
@@ -13,7 +15,6 @@ import { MyFeedFolderList } from "../../List";
 import { MyFeedFolderKeywordSearchForm } from "../../Search";
 
 const LIMIT = 6;
-const FEED_LIMIT = 10;
 
 type MyFeedFolderListTemplateProps = {
   keyword?: string;
@@ -45,7 +46,7 @@ export const MyFeedFolderListTemplate: FC<MyFeedFolderListTemplateProps> = ({
             after: null,
           },
           feedsInput: {
-            first: FEED_LIMIT,
+            first: SELECTABLE_FEED_LIST_LIMIT,
             after: null,
           },
         }}
@@ -54,7 +55,7 @@ export const MyFeedFolderListTemplate: FC<MyFeedFolderListTemplateProps> = ({
           <MyFeedFolderList
             keyword={keyword}
             limit={LIMIT}
-            feedLimit={FEED_LIMIT}
+            feedLimit={SELECTABLE_FEED_LIST_LIMIT}
           />
         </Suspense>
       </PreloadQuery>
