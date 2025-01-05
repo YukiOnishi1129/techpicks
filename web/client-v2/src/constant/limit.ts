@@ -1,0 +1,1 @@
+export const SELECTABLE_FEED_LIST_LIMIT = 10;

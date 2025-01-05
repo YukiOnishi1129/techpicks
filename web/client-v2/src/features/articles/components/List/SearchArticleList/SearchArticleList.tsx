@@ -112,7 +112,16 @@ export function SearchArticleList({
     setIsNextPage(resData.articles.pageInfo.hasNextPage);
 
     setHashMore(resData.articles.edges.length > 0);
-  }, [languageStatus, tab, endCursor, isNextPage, fetchMore]);
+  }, [
+    languageStatus,
+    tab,
+    endCursor,
+    isNextPage,
+    fetchMore,
+    feedIdList,
+    keyword,
+    limit,
+  ]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(

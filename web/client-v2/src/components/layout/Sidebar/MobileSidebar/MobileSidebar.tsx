@@ -3,6 +3,7 @@
 import { useQuery } from "@apollo/client";
 import Link from "next/link";
 import { FC } from "react";
+import { BiSolidSearch } from "react-icons/bi";
 import { CgWebsite } from "react-icons/cg";
 import { FaRegBookmark } from "react-icons/fa";
 import {
@@ -105,14 +106,14 @@ export const MobileSidebar: FC<SidebarProps> = ({ onCloseSheet }) => {
               <span>Feeds</span>
             </Link>
 
-            {/* <Link
-              href="/article/search"
+            <Link
+              href="/search"
               className="flex cursor-pointer items-center space-x-2 rounded-md p-2 hover:bg-secondary"
               onClick={onCloseSheet}
             >
               <BiSolidSearch />
               <span>Search</span>
-            </Link> */}
+            </Link>
           </div>
         </div>
 
@@ -134,6 +135,7 @@ export const MobileSidebar: FC<SidebarProps> = ({ onCloseSheet }) => {
                 <MyFeedFolderLink
                   key={`sidebar-my-feed-link-${i}-${edge.node.id}`}
                   data={edge.node}
+                  onCloseSheet={onCloseSheet}
                 />
               ))}
               <div className="ml-4">
@@ -170,6 +172,7 @@ export const MobileSidebar: FC<SidebarProps> = ({ onCloseSheet }) => {
                 <FavoriteArticleFolderLink
                   key={`sidebar-favorite-link-${i}`}
                   data={edge.node}
+                  onCloseSheet={onCloseSheet}
                 />
               ))}
               <div className="ml-4">

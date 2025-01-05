@@ -7,12 +7,12 @@ import { FavoriteArticleFolderLinkFragment } from "./FavoriteArticleFolderLinkFr
 
 type FavoriteArticleFolderLinksProps = {
   data: FragmentOf<typeof FavoriteArticleFolderLinkFragment>;
-  handleCloseSheet?: () => void;
+  onCloseSheet?: () => void;
 };
 
 export const FavoriteArticleFolderLink: FC<FavoriteArticleFolderLinksProps> = ({
   data,
-  handleCloseSheet,
+  onCloseSheet,
 }) => {
   const fragment = readFragment(FavoriteArticleFolderLinkFragment, data);
   return (
@@ -20,7 +20,7 @@ export const FavoriteArticleFolderLink: FC<FavoriteArticleFolderLinksProps> = ({
       <Link
         href={`/favorite/article/${fragment.id}`}
         className="flex items-center py-2 pl-2 hover:bg-secondary"
-        onClick={handleCloseSheet}
+        onClick={onCloseSheet}
       >
         <FaHeart color="red" />
         <p className="ml-4 inline-block w-full truncate ">{fragment.title}</p>
