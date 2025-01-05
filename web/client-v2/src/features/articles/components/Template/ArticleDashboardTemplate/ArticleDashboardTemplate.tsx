@@ -17,8 +17,8 @@ import { LanguageStatus } from "@/shared/types/language";
 
 import { ArticleDashboardTemplateQuery } from "./ArticleDashboardTemplateQuery";
 import { SearchArticleDialog } from "../../Dialog";
-import { SelectArticlePageTab } from "../../Tab";
 import { SkeltonArticleList } from "../../List";
+import { SelectArticlePageTab } from "../../Tab";
 
 type ArticleDashboardTemplateProps = {
   user: User;

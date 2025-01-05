@@ -1,15 +1,15 @@
 import { User } from "@supabase/supabase-js";
 import { Suspense } from "react";
 
-import { BookmarksInput, FavoriteArticleFoldersInput } from "@/graphql/type";
+import { SkeltonArticleList } from "@/features/articles/components/List";
 
+import { BookmarksInput, FavoriteArticleFoldersInput } from "@/graphql/type";
 import { PreloadQuery } from "@/shared/lib/apollo/client";
 
 import { BookmarkTemplateQuery } from "./BookmarkTemplateQuery";
 import { CreateBookmarkDialog } from "../../Dialog";
 import { BookmarkList } from "../../List";
 import { BookmarkArticleKeywordSearchInput } from "../../Search";
-import { SkeltonArticleList } from "@/features/articles/components/List";
 
 type BookmarkTemplateProps = {
   user: User;

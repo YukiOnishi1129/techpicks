@@ -1,5 +1,7 @@
 import { FC, Suspense } from "react";
 
+import { SkeltonArticleList } from "@/features/articles/components/List";
+
 import {
   FavoriteArticleFoldersInput,
   FeedsInput,
@@ -16,7 +18,6 @@ import { MyFeedFolderArticleListTemplateQuery } from "./MyFeedFolderArticleListT
 import { SearchMyFeedFolderArticleDialog } from "../../Dialog";
 import { MyFeedFolderArticleList } from "../../List";
 import { MyFeedFolderArticleKeywordSearchForm } from "../../Search";
-import { SkeltonArticleList } from "@/features/articles/components/List";
 
 const LIMIT = 20;
 

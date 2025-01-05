@@ -14,7 +14,7 @@ export const SkeltonArticleList = () => {
           <div className="grid gap-4">
             <div className="flex h-16 justify-between border-b py-4 md:px-6">
               <>
-                <div className="flex justify-between items-center w-full">
+                <div className="flex w-full items-center justify-between">
                   <Skeleton className="h-8 w-24 md:w-48" />
                   <Skeleton className="h-8 w-40" />
                 </div>
@@ -22,8 +22,8 @@ export const SkeltonArticleList = () => {
             </div>
 
             <div className="md:px-4">
-              <div className="hidden md:flex gap-4">
-                <div className="hidden md:inline-block overflow-hidden rounded-lg">
+              <div className="hidden gap-4 md:flex">
+                <div className="hidden overflow-hidden rounded-lg md:inline-block">
                   <Skeleton className="w-full justify-center md:h-36 md:w-48" />
                 </div>
                 <div className="grid gap-2 md:w-[65%]">
@@ -33,10 +33,10 @@ export const SkeltonArticleList = () => {
                 </div>
               </div>
 
-              <div className="grid md:hidden gap-4">
-                <Skeleton className="w-full h-12 block md:hidden" />
-                <div className="inline-block w-full md:hidden overflow-hidden rounded-lg">
-                  <Skeleton className="w-full h-36 justify-center md:h-36 md:w-48" />
+              <div className="grid gap-4 md:hidden">
+                <Skeleton className="block h-12 w-full md:hidden" />
+                <div className="inline-block w-full overflow-hidden rounded-lg md:hidden">
+                  <Skeleton className="h-36 w-full justify-center md:h-36 md:w-48" />
                 </div>
               </div>
             </div>

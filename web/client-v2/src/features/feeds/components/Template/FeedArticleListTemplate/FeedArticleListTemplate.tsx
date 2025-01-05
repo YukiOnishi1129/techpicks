@@ -1,5 +1,7 @@
 import { FC, Suspense } from "react";
 
+import { SkeltonArticleList } from "@/features/articles/components/List";
+
 import {
   BreadCrumbType,
   PageBreadcrumb,
@@ -11,7 +13,6 @@ import { FeedArticleHeader } from "./FeedArticleHeader";
 import { FeedArticleListTemplateQuery } from "./FeedArticleListTemplateQuery";
 import { FeedArticleKeywordSearchDialog } from "../../Dialog";
 import { FeedArticleList } from "../../List";
-import { SkeltonArticleList } from "@/features/articles/components/List";
 
 type FeedArticleListTemplateProps = {
   id: string;

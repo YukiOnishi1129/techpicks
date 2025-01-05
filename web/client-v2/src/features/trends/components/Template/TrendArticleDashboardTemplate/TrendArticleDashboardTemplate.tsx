@@ -3,6 +3,7 @@ import Image from "next/image";
 import { FC, Suspense } from "react";
 
 import { SearchArticleDialog } from "@/features/articles/components/Dialog";
+import { SkeltonArticleList } from "@/features/articles/components/List";
 import { SelectArticlePageTab } from "@/features/articles/components/Tab";
 
 import { ArticlesInput, FavoriteArticleFoldersInput } from "@/graphql/type";
@@ -18,7 +19,6 @@ import { LanguageStatus } from "@/shared/types/language";
 
 import { TrendArticleDashboardTemplateQuery } from "./TrendArticleDashboardTemplateQuery";
 import { TrendArticleList } from "../../List";
-import { SkeltonArticleList } from "@/features/articles/components/List";
 
 type TrendArticleDashboardTemplateProps = {
   user: User;

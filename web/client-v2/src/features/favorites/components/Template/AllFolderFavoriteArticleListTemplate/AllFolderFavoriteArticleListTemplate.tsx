@@ -1,6 +1,8 @@
 import { User } from "@supabase/supabase-js";
 import { FC, Suspense } from "react";
 
+import { SkeltonArticleList } from "@/features/articles/components/List";
+
 import {
   FavoriteAllFolderArticlesInput,
   FavoriteArticleFoldersInput,
@@ -15,7 +17,6 @@ import { AllFolderFavoriteArticleListTemplateQuery } from "./AllFolderFavoriteAr
 import { SearchFavoriteArticleListDialog } from "../../Dialog";
 import { AllFolderFavoriteArticleList } from "../../List";
 import { FavoriteArticleKeywordSearchForm } from "../../Search";
-import { SkeltonArticleList } from "@/features/articles/components/List";
 
 type FavoriteArticleAllListTemplateProps = {
   user: User;
