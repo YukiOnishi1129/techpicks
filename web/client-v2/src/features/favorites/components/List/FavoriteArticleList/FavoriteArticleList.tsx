@@ -3,8 +3,8 @@
 import { useQuery, useSuspenseQuery } from "@apollo/client";
 import { useCallback, useRef, useState, useEffect } from "react";
 
-import { NotFoundList } from "@/components/layout/NotFoundList";
-import { Loader } from "@/components/ui/loader";
+import { NotFoundList } from "@/shared/components/layout/NotFoundList";
+import { Loader } from "@/shared/components/ui/loader";
 
 import { FavoriteArticleListQuery } from "./FavoriteArticleListQuery";
 import { FavoriteArticleCardWrapper } from "../../Card";

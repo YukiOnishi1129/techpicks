@@ -6,11 +6,12 @@ import { FC, useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
+import { serverRevalidatePage } from "@/shared/actions/actServerRevalidatePage";
 import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
+} from "@/shared/components/ui/dialog";
 import {
   Form,
   FormField,
@@ -18,10 +19,8 @@ import {
   FormLabel,
   FormControl,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-
-import { serverRevalidatePage } from "@/actions/actServerRevalidatePage";
+} from "@/shared/components/ui/form";
+import { Input } from "@/shared/components/ui/input";
 
 const formSchema = z.object({
   keyword: z.string().optional(),

@@ -7,9 +7,9 @@ import { useForm } from "react-hook-form";
 import { RxCross2 } from "react-icons/rx";
 import { z } from "zod";
 
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import { DialogClose } from "@/components/ui/dialog";
+import { Button } from "@/shared/components/ui/button";
+import { Checkbox } from "@/shared/components/ui/checkbox";
+import { DialogClose } from "@/shared/components/ui/dialog";
 import {
   Form,
   FormField,
@@ -17,17 +17,14 @@ import {
   FormControl,
   FormItem,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Loader } from "@/components/ui/loader";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-
-import { useHookForm } from "@/hooks/useHookForm";
-
-import { SelectOptionType } from "@/types/utils";
-
-import { SELECTABLE_FEED_LIST_LIMIT } from "@/constant/limit";
+} from "@/shared/components/ui/form";
+import { Input } from "@/shared/components/ui/input";
+import { Label } from "@/shared/components/ui/label";
+import { Loader } from "@/shared/components/ui/loader";
+import { RadioGroup, RadioGroupItem } from "@/shared/components/ui/radio-group";
+import { SELECTABLE_FEED_LIST_LIMIT } from "@/shared/constant/limit";
+import { useHookForm } from "@/shared/hooks/useHookForm";
+import { SelectOptionType } from "@/shared/types/utils";
 
 import { SelectMultiFeedListQuery } from "./SelectMultiFeedListQuery";
 

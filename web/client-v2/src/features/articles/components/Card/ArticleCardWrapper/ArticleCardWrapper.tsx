@@ -8,10 +8,9 @@ import { useArticleManageBookmark } from "@/features/articles/hooks/useArticleMa
 import { useArticleManageFavoriteArticle } from "@/features/articles/hooks/useArticleManageFavoriteArticle";
 import { FollowFavoriteArticleDropdownMenu } from "@/features/favorites/components/DropdownMenu";
 
-import { IconTitleLink } from "@/components/ui/link";
-import { ShareLinks } from "@/components/ui/share";
-
-import { ArticleTabType } from "@/types/article";
+import { IconTitleLink } from "@/shared/components/ui/link";
+import { ShareLinks } from "@/shared/components/ui/share";
+import { ArticleTabType } from "@/shared/types/article";
 
 import style from "./ArticleCardWrapper.module.css";
 import {

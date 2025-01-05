@@ -1,9 +1,9 @@
 "use server";
 import { graphql } from "gql.tada";
 
-import { getClient } from "@/lib/apollo/client";
-
 import { CreateMyFeedFolderInput } from "@/graphql/type";
+import { getClient } from "@/shared/lib/apollo/client";
+
 
 const CreateMyFeedFolderMutation = graphql(`
   mutation CreateMyFeedFolderMutation($input: CreateMyFeedFolderInput!) {

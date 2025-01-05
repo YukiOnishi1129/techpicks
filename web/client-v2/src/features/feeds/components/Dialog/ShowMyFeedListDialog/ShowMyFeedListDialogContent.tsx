@@ -3,7 +3,7 @@
 import { FragmentOf, readFragment } from "gql.tada";
 import { FC } from "react";
 
-import { useCheckImageExist } from "@/hooks/useImage";
+import { useCheckImageExist } from "@/shared/hooks/useImage";
 
 import { ShowMyFeedListDialogContentFragment } from "./ShowMyFeedListDialogContentFragment";
 

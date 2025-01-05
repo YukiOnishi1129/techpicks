@@ -2,8 +2,8 @@
 import { FragmentOf, readFragment } from "gql.tada";
 import { FC } from "react";
 
-import { IconTitleLink } from "@/components/ui/link/IconTitleLink";
-import { ShareLinks } from "@/components/ui/share";
+import { IconTitleLink } from "@/shared/components/ui/link/IconTitleLink";
+import { ShareLinks } from "@/shared/components/ui/share";
 
 import {
   AllFolderFavoriteArticleCardWrapperFragment,

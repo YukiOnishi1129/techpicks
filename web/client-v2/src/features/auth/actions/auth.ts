@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import {
   createGetOnlyServerSideClient,
   createServerSideClient,
-} from "@/lib/supabase/client/serverClient";
+} from "@/shared/lib/supabase/client/serverClient";
 
 export async function loginWithGoogle() {
   const supabase = await createServerSideClient();

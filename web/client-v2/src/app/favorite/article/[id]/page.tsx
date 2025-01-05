@@ -4,7 +4,7 @@ import { Suspense } from "react";
 import { getUser } from "@/features/auth/actions/user";
 import { FavoriteArticleListByFolderIdTemplate } from "@/features/favorites/components";
 
-import { ScreenLoader } from "@/components/layout/ScreenLoader";
+import { ScreenLoader } from "@/shared/components/layout/ScreenLoader";
 
 type FavoriteArticleListPageProps = {
   params: { id: string };

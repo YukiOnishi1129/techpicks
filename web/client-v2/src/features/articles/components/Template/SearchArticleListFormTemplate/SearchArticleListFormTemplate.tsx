@@ -1,4 +1,7 @@
-import { BreadCrumbType, PageBreadcrumb } from "@/components/ui/breadcrumb";
+import {
+  BreadCrumbType,
+  PageBreadcrumb,
+} from "@/shared/components/ui/breadcrumb";
 
 import { listServerFeedSearchArticleListFormTemplateQuery } from "./actListServerFeedSearchArticleListFormTemplateQuery";
 import { SearchArticleListForm } from "../../Form";

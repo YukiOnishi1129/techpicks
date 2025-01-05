@@ -1,15 +1,17 @@
 import { User } from "@supabase/supabase-js";
 import { FC, Suspense } from "react";
 
-import { ScreenLoader } from "@/components/layout/ScreenLoader";
-import { BreadCrumbType, PageBreadcrumb } from "@/components/ui/breadcrumb";
-
-import { PreloadQuery } from "@/lib/apollo/client";
-
 import {
   FavoriteArticleFoldersInput,
   FavoriteArticlesInput,
 } from "@/graphql/type";
+import { ScreenLoader } from "@/shared/components/layout/ScreenLoader";
+import {
+  BreadCrumbType,
+  PageBreadcrumb,
+} from "@/shared/components/ui/breadcrumb";
+import { PreloadQuery } from "@/shared/lib/apollo/client";
+
 
 import { getServerFavoriteArticleListByFolderIdTemplateQuery } from "./actGetServerFavoriteArticleListByFolderIdTemplateQuery";
 import { FavoriteArticleListByFolderIdTemplateQuery } from "./FavoriteArticleListByFolderIdTemplateQuery";

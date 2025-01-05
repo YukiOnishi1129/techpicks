@@ -8,13 +8,13 @@ import { FaRegHeart, FaHeart } from "react-icons/fa";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "@/shared/components/ui/dropdown-menu";
 import {
   Tooltip,
   TooltipProvider,
   TooltipTrigger,
   TooltipContent,
-} from "@/components/ui/tooltip";
+} from "@/shared/components/ui/tooltip";
 
 import { FollowFavoriteArticleDropdownMenuContent } from "./FollowFavoriteArticleDropdownMenuContent";
 import { FollowFavoriteArticleDropdownMenuContentFragment } from "./FollowFavoriteArticleDropdownMenuFragment";

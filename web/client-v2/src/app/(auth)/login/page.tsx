@@ -4,7 +4,7 @@ import { Suspense } from "react";
 import { getUser } from "@/features/auth/actions/user";
 import { LoginTemplate } from "@/features/auth/components/Template";
 
-import { ScreenLoader } from "@/components/layout/ScreenLoader";
+import { ScreenLoader } from "@/shared/components/layout/ScreenLoader";
 
 export default async function Login() {
   const user = await getUser();

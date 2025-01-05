@@ -9,9 +9,8 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-
-import { NAVIGATION_LISTS } from "@/constant/navigation";
+} from "@/shared/components/ui/select";
+import { NAVIGATION_LISTS } from "@/shared/constant/navigation";
 
 type SelectArticlePageTabProps = {
   userId?: string;

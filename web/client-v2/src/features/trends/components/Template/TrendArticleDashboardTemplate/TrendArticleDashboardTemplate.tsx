@@ -5,15 +5,17 @@ import { FC, Suspense } from "react";
 import { SearchArticleDialog } from "@/features/articles/components/Dialog";
 import { SelectArticlePageTab } from "@/features/articles/components/Tab";
 
-import { ScreenLoader } from "@/components/layout/ScreenLoader";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-
-import { PreloadQuery } from "@/lib/apollo/client";
-
-import { LanguageStatus } from "@/types/language";
-
-import { ENGLISH_IMAGE, JAPANESE_IMAGE } from "@/constant/image";
 import { ArticlesInput, FavoriteArticleFoldersInput } from "@/graphql/type";
+import { ScreenLoader } from "@/shared/components/layout/ScreenLoader";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/shared/components/ui/tabs";
+import { ENGLISH_IMAGE, JAPANESE_IMAGE } from "@/shared/constant/image";
+import { PreloadQuery } from "@/shared/lib/apollo/client";
+import { LanguageStatus } from "@/shared/types/language";
 
 import { TrendArticleDashboardTemplateQuery } from "./TrendArticleDashboardTemplateQuery";
 import { TrendArticleList } from "../../List";

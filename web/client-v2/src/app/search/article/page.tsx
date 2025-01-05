@@ -3,9 +3,9 @@ import { redirect } from "next/navigation";
 import { SearchArticleListTemplate } from "@/features/articles/components/Template";
 import { getUser } from "@/features/auth/actions/user";
 
-import { ArticleTabType } from "@/types/article";
-import { LanguageStatus } from "@/types/language";
-import { PlatformSiteType } from "@/types/platform";
+import { ArticleTabType } from "@/shared/types/article";
+import { LanguageStatus } from "@/shared/types/language";
+import { PlatformSiteType } from "@/shared/types/platform";
 
 type PageProps = {
   params: { slug: string };

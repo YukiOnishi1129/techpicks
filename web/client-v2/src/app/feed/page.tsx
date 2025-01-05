@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { getUser } from "@/features/auth/actions/user";
 import { FeedListTemplate } from "@/features/feeds/components/Template";
 
-import { convertPlatformSiteType } from "@/lib/convert";
+import { convertPlatformSiteType } from "@/shared/lib/convert";
 
 type PageProps = {
   params: { slug: string };

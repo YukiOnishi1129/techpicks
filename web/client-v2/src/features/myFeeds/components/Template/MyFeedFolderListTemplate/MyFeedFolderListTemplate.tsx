@@ -1,10 +1,8 @@
 import { FC, Suspense } from "react";
 
-import { ScreenLoader } from "@/components/layout/ScreenLoader";
-
-import { PreloadQuery } from "@/lib/apollo/client";
-
-import { SELECTABLE_FEED_LIST_LIMIT } from "@/constant/limit";
+import { ScreenLoader } from "@/shared/components/layout/ScreenLoader";
+import { SELECTABLE_FEED_LIST_LIMIT } from "@/shared/constant/limit";
+import { PreloadQuery } from "@/shared/lib/apollo/client";
 
 import { MyFeedFolderListTemplateQuery } from "./MyFeedFolderListTemplateQuery";
 import {

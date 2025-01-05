@@ -1,9 +1,11 @@
 import { FC, Suspense } from "react";
 
-import { ScreenLoader } from "@/components/layout/ScreenLoader";
-import { BreadCrumbType, PageBreadcrumb } from "@/components/ui/breadcrumb";
-
-import { PreloadQuery } from "@/lib/apollo/client";
+import { ScreenLoader } from "@/shared/components/layout/ScreenLoader";
+import {
+  BreadCrumbType,
+  PageBreadcrumb,
+} from "@/shared/components/ui/breadcrumb";
+import { PreloadQuery } from "@/shared/lib/apollo/client";
 
 import { getServerFeedArticleTemplateQuery } from "./actGetServerFeedArticleTemplateQuery";
 import { FeedArticleHeader } from "./FeedArticleHeader";

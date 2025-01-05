@@ -7,10 +7,14 @@ import { useForm } from "react-hook-form";
 import { CiSearch } from "react-icons/ci";
 import { z } from "zod";
 
-import { Form, FormField, FormItem, FormControl } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-
-import { serverRevalidatePage } from "@/actions/actServerRevalidatePage";
+import { serverRevalidatePage } from "@/shared/actions/actServerRevalidatePage";
+import {
+  Form,
+  FormField,
+  FormItem,
+  FormControl,
+} from "@/shared/components/ui/form";
+import { Input } from "@/shared/components/ui/input";
 
 const formSchema = z.object({
   keyword: z.string().optional(),

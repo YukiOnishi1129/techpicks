@@ -1,11 +1,10 @@
 import { User } from "@supabase/supabase-js";
 import { Suspense } from "react";
 
-import { ScreenLoader } from "@/components/layout/ScreenLoader";
-
-import { PreloadQuery } from "@/lib/apollo/client";
-
 import { BookmarksInput, FavoriteArticleFoldersInput } from "@/graphql/type";
+import { ScreenLoader } from "@/shared/components/layout/ScreenLoader";
+import { PreloadQuery } from "@/shared/lib/apollo/client";
+
 
 import { BookmarkTemplateQuery } from "./BookmarkTemplateQuery";
 import { CreateBookmarkDialog } from "../../Dialog";

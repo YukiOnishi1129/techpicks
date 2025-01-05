@@ -3,7 +3,7 @@
 import { FragmentOf, readFragment } from "gql.tada";
 import { FC } from "react";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@/shared/components/ui/button";
 import {
   Dialog,
   DialogTrigger,
@@ -11,7 +11,7 @@ import {
   DialogTitle,
   DialogContent,
   DialogClose,
-} from "@/components/ui/dialog";
+} from "@/shared/components/ui/dialog";
 
 import { ShowMyFeedListDialogContent } from "./ShowMyFeedListDialogContent";
 import { ShowMyFeedListDialogFragment } from "./ShowMyFeedListDialogFragment";

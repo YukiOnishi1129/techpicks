@@ -1,9 +1,9 @@
 import { clsx } from "clsx";
 import { Inter } from "next/font/google";
 
-import { BaseLayout } from "@/components/layout/BaseLayout";
-import { ApolloProvider, ThemeProvider } from "@/components/provider";
-import { Toaster } from "@/components/ui/sonner";
+import { BaseLayout } from "@/shared/components/layout/BaseLayout";
+import { ApolloProvider, ThemeProvider } from "@/shared/components/provider";
+import { Toaster } from "@/shared/components/ui/sonner";
 
 import type { Metadata } from "next";
 

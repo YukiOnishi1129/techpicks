@@ -2,8 +2,8 @@
 import { useQuery, useSuspenseQuery } from "@apollo/client";
 import { FC, useCallback, useEffect, useRef, useState } from "react";
 
-import { NotFoundList } from "@/components/layout/NotFoundList";
-import { Loader } from "@/components/ui/loader";
+import { NotFoundList } from "@/shared/components/layout/NotFoundList";
+import { Loader } from "@/shared/components/ui/loader";
 
 import { MyFeedFolderListQuery } from "./MyFeedFolderListQuery";
 import { MyFeedFolderCard } from "../../Card";

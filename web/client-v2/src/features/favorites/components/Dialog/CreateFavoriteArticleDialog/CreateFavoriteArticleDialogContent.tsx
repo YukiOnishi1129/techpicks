@@ -19,13 +19,13 @@ import { logoutToLoginPage } from "@/features/auth/actions/auth";
 import { createFavoriteArticleForUploadArticleMutation } from "@/features/favorites/actions/actCreateFavoriteArticleForUploadArticleMutation";
 import { OGPPreviewContent } from "@/features/ogp/components/Dialog";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@/shared/components/ui/button";
 import {
   DialogHeader,
   DialogTitle,
   DialogContent,
   DialogClose,
-} from "@/components/ui/dialog/dialog";
+} from "@/shared/components/ui/dialog/dialog";
 import {
   Form,
   FormField,
@@ -33,14 +33,12 @@ import {
   FormLabel,
   FormControl,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Loader } from "@/components/ui/loader";
-
-import { useServerRevalidatePage } from "@/hooks/useServerRevalidatePage";
-import { useStatusToast } from "@/hooks/useStatusToast";
-
-import { checkURL } from "@/lib/check";
+} from "@/shared/components/ui/form";
+import { Input } from "@/shared/components/ui/input";
+import { Loader } from "@/shared/components/ui/loader";
+import { useServerRevalidatePage } from "@/shared/hooks/useServerRevalidatePage";
+import { useStatusToast } from "@/shared/hooks/useStatusToast";
+import { checkURL } from "@/shared/lib/check";
 
 import { getCreateFavoriteArticleDialogOGPQuery } from "./actGetCreateFavoriteArticleDialogOGPQuery";
 import { CreateFavoriteArticleDialogContentFragment } from "./CreateFavoriteArticleDialogFragment";
