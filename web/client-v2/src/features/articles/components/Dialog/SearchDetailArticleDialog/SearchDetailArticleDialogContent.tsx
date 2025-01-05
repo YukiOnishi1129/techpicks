@@ -95,7 +95,7 @@ export const SearchDetailArticleDialogContent: FC<
         .join("");
     }
     await serverRevalidatePage(
-      `/article/search/result?dummy=1${keywordPath}${feedIdPath}`
+      `/search/article?dummy=1${keywordPath}${feedIdPath}`
     );
     router.replace(`/search/article?dummy=1${keywordPath}${feedIdPath}`);
     resetDialog();

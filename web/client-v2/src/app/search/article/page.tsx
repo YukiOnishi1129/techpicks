@@ -1,4 +1,7 @@
+import { redirect } from "next/navigation";
+
 import { SearchArticleListTemplate } from "@/features/articles/components/Template";
+import { getUser } from "@/features/auth/actions/user";
 
 import { ArticleTabType } from "@/types/article";
 import { LanguageStatus } from "@/types/language";
@@ -12,6 +15,10 @@ type PageProps = {
 export default async function SearchArticleListPage({
   searchParams,
 }: PageProps) {
+  const user = await getUser();
+  if (!user) {
+    redirect("/login");
+  }
   const languageStatus =
     typeof searchParams["languageStatus"] === "string"
       ? (parseInt(searchParams["languageStatus"]) as LanguageStatus)
