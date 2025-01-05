@@ -15,7 +15,7 @@ export default async function SearchArticleListPage({
   const languageStatus =
     typeof searchParams["languageStatus"] === "string"
       ? (parseInt(searchParams["languageStatus"]) as LanguageStatus)
-      : 1;
+      : 0;
 
   const keyword =
     typeof searchParams["keyword"] === "string"

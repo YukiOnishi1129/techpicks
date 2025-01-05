@@ -110,7 +110,7 @@ export const SearchArticleListTemplate: FC<
           <Suspense fallback={<ScreenLoader />}>
             <SearchArticleList
               limit={LIMIT}
-              languageStatus={2}
+              languageStatus={languageStatus}
               tab={tab}
               feedIdList={feedIdList}
               keyword={keyword}
