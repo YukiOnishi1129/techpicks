@@ -27,9 +27,9 @@ import { useHookForm } from "@/hooks/useHookForm";
 
 import { SelectOptionType } from "@/types/utils";
 
-import { SelectMultiFeedListQuery } from "./SelectMultiFeedListQuery";
+import { SELECTABLE_FEED_LIST_LIMIT } from "@/constant/limit";
 
-const LIMIT = 10;
+import { SelectMultiFeedListQuery } from "./SelectMultiFeedListQuery";
 
 const KeywordFormSchema = z.object({
   keyword: z.string().optional(),
@@ -68,7 +68,7 @@ export const SelectMultiFeedList: FC<SelectMultiFeedListProps> = ({
   } = useQuery(SelectMultiFeedListQuery, {
     variables: {
       input: {
-        first: LIMIT,
+        first: SELECTABLE_FEED_LIST_LIMIT,
         after: null,
       },
     },
@@ -110,7 +110,7 @@ export const SelectMultiFeedList: FC<SelectMultiFeedListProps> = ({
             platformSiteType: Number(
               platformSiteTypeForm.getValues("platformSiteType")
             ),
-            first: LIMIT,
+            first: SELECTABLE_FEED_LIST_LIMIT,
             after: null,
           },
         },
@@ -140,7 +140,7 @@ export const SelectMultiFeedList: FC<SelectMultiFeedListProps> = ({
           input: {
             keyword: keywordForm.getValues("keyword"),
             platformSiteType: Number(value),
-            first: LIMIT,
+            first: SELECTABLE_FEED_LIST_LIMIT,
             after: null,
           },
         },
@@ -182,7 +182,7 @@ export const SelectMultiFeedList: FC<SelectMultiFeedListProps> = ({
           platformSiteType: Number(
             platformSiteTypeForm.watch("platformSiteType")
           ),
-          first: LIMIT,
+          first: SELECTABLE_FEED_LIST_LIMIT,
           after: endCursor,
         },
       },

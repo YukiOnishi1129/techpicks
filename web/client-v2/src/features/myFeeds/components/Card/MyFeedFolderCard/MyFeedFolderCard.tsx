@@ -4,14 +4,12 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { FC } from "react";
 
-// import { ShowMyFeedListDialog } from "@/features/myFeeds/components/Dialog";
+import { ShowMyFeedListDialog } from "@/features/feeds/components/Dialog";
 
 import { useStatusToast } from "@/hooks/useStatusToast";
 
 import { MyFeedFolderCardFragment } from "./MyFeedFolderCardFragment";
-import { ShowMyFeedListDialog, UpdateMyFeedFolderDialog } from "../../Dialog";
-
-// import { diffStringArray } from "@/lib/convert";
+import { UpdateMyFeedFolderDialog } from "../../Dialog";
 
 const SHOW_FEED_LIST_COUNT = 3;
 
@@ -27,20 +25,6 @@ export const MyFeedFolderCard: FC<MyFeedFolderCardProps> = ({
   const { successToast, failToast } = useStatusToast();
   const pathname = usePathname();
   const fragment = readFragment(MyFeedFolderCardFragment, data);
-
-  //   const selectedFeedList = myFeedFolder.feeds.map((feed) => {
-  //     return {
-  //       ...feed,
-  //       myFeeds: [],
-  //     };
-  //   });
-  //   const myFeeds: Array<Pick<MyFeedType, "id" | "feedId">> =
-  //     myFeedFolder.feeds.map((feed) => {
-  //       return {
-  //         id: feed.myFeedId,
-  //         feedId: feed.id,
-  //       };
-  //     });
 
   const showFeedList = fragment?.feeds
     ? fragment.feeds.slice(0, SHOW_FEED_LIST_COUNT)

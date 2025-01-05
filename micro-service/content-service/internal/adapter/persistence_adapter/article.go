@@ -63,13 +63,13 @@ func (apa *articlePersistenceAdapter) GetArticles(ctx context.Context, req *cpb.
 		))
 	}
 
-	if req.LanguageStatus != nil {
-		isEng := req.LanguageStatus.GetValue() == int64(domain.LanguageStatusEnglish)
+	if req.GetLanguageStatus() != nil && (req.GetLanguageStatus().GetValue() == int64(domain.LanguageStatusJapanese) || req.GetLanguageStatus().GetValue() == int64(domain.LanguageStatusEnglish)) {
+		isEng := req.GetLanguageStatus().GetValue() == int64(domain.LanguageStatusEnglish)
 		q = append(q, qm.Where("articles.is_eng = ?", isEng))
 	}
 
-	if req.Tag != nil {
-		tag := req.Tag.GetValue()
+	if req.GetTag() != nil {
+		tag := req.GetTag().GetValue()
 		switch {
 		case tag == "trend":
 			sixHoursAgo := time.Now().Add(-6 * time.Hour)

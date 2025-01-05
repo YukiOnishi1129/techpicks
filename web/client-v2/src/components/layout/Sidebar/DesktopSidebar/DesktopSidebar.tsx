@@ -1,6 +1,7 @@
 "use client";
 import { useSuspenseQuery } from "@apollo/client";
 import Link from "next/link";
+import { BiSolidSearch } from "react-icons/bi";
 import { CgWebsite } from "react-icons/cg";
 import { FaRegBookmark } from "react-icons/fa";
 import {
@@ -91,13 +92,13 @@ export function DesktopSidebar() {
               <MdRssFeed />
               <span>Feeds</span>
             </Link>
-            {/* <Link
-              href="/article/search"
+            <Link
+              href="/search"
               className="flex cursor-pointer items-center space-x-2 rounded-md p-2 hover:bg-secondary"
             >
               <BiSolidSearch />
               <span>Search</span>
-            </Link> */}
+            </Link>
           </div>
         </div>
 

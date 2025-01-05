@@ -1,5 +1,12 @@
-// import { ArticleSearchTemplate } from "@/features/search/components/articles/Template";
+import { redirect } from "next/navigation";
+
+import { SearchArticleListFormTemplate } from "@/features/articles/components/Template";
+import { getUser } from "@/features/auth/actions/user";
 
 export default async function SearchFormPage() {
-  return <div></div>;
+  const user = await getUser();
+  if (!user) {
+    redirect("/login");
+  }
+  return <SearchArticleListFormTemplate />;
 }
