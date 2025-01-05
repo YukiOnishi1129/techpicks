@@ -8,8 +8,7 @@ import { LanguageStatus } from "@/shared/types/language";
 import { PlatformSiteType } from "@/shared/types/platform";
 
 type PageProps = {
-  params: { slug: string };
-  searchParams: { [key: string]: string | string[] | undefined };
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
 export default async function SearchArticleListPage({
@@ -19,32 +18,26 @@ export default async function SearchArticleListPage({
   if (!user) {
     redirect("/login");
   }
+  const q = await searchParams;
   const languageStatus =
-    typeof searchParams["languageStatus"] === "string"
-      ? (parseInt(searchParams["languageStatus"]) as LanguageStatus)
+    typeof q["languageStatus"] === "string"
+      ? (parseInt(q["languageStatus"]) as LanguageStatus)
       : 0;
 
-  const keyword =
-    typeof searchParams["keyword"] === "string"
-      ? searchParams["keyword"]
-      : undefined;
+  const keyword = typeof q["keyword"] === "string" ? q["keyword"] : undefined;
 
   const platformSiteType =
-    typeof searchParams["platformSiteType"] === "string"
-      ? (parseInt(searchParams["platformSiteType"]) as PlatformSiteType)
+    typeof q["platformSiteType"] === "string"
+      ? (parseInt(q["platformSiteType"]) as PlatformSiteType)
       : undefined;
 
   let feedIdList: Array<string> = [];
-  if (typeof searchParams["feedId"] !== "string" && searchParams["feedId"])
-    feedIdList = searchParams["feedId"];
+  if (typeof q["feedId"] !== "string" && q["feedId"]) feedIdList = q["feedId"];
 
-  if (typeof searchParams["feedId"] === "string")
-    feedIdList.push(searchParams["feedId"]);
+  if (typeof q["feedId"] === "string") feedIdList.push(q["feedId"]);
 
   const tab =
-    typeof searchParams["tab"] === "string"
-      ? (searchParams["tab"] as ArticleTabType)
-      : "unknown";
+    typeof q["tab"] === "string" ? (q["tab"] as ArticleTabType) : "unknown";
 
   return (
     <SearchArticleListTemplate

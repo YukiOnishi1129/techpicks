@@ -6,8 +6,7 @@ import { FeedListTemplate } from "@/features/feeds/components/Template";
 import { convertPlatformSiteType } from "@/shared/lib/convert";
 
 type PageProps = {
-  params: { slug: string };
-  searchParams: { [key: string]: string | string[] | undefined };
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
 export default async function FeedListPage({ searchParams }: PageProps) {
@@ -15,22 +14,17 @@ export default async function FeedListPage({ searchParams }: PageProps) {
   if (!user) {
     redirect("/login");
   }
-
-  const keyword =
-    typeof searchParams["keyword"] === "string"
-      ? searchParams["keyword"]
-      : undefined;
+  const q = await searchParams;
+  const keyword = typeof q["keyword"] === "string" ? q["keyword"] : undefined;
 
   const platformSiteType =
-    typeof searchParams["platformSiteType"] === "string" &&
-    !Number.isNaN(Number(searchParams["platformSiteType"]))
-      ? convertPlatformSiteType(searchParams["platformSiteType"])
+    typeof q["platformSiteType"] === "string" &&
+    !Number.isNaN(Number(q["platformSiteType"]))
+      ? convertPlatformSiteType(q["platformSiteType"])
       : undefined;
 
   const platformId =
-    typeof searchParams["platformId"] === "string"
-      ? searchParams["platformId"]
-      : undefined;
+    typeof q["platformId"] === "string" ? q["platformId"] : undefined;
 
   return (
     <FeedListTemplate

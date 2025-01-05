@@ -27,7 +27,6 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
 
 const httpLink = new HttpLink({
   uri: `${graphqlUrl}/graphql`,
-  fetchOptions: { cache: "no-store" },
 });
 
 const authLink = setContext(async (_, { headers }) => {

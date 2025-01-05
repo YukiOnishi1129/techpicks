@@ -4,8 +4,7 @@ import { getUser } from "@/features/auth/actions/user";
 import { FavoriteArticleFolderListTemplate } from "@/features/favorites/components/Template";
 
 type PageProps = {
-  params: { slug: string };
-  searchParams: { [key: string]: string | string[] | undefined };
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
 export default async function FavoritePage({ searchParams }: PageProps) {
@@ -13,10 +12,8 @@ export default async function FavoritePage({ searchParams }: PageProps) {
   if (!user) {
     redirect("/login");
   }
-  const keyword =
-    typeof searchParams["keyword"] === "string"
-      ? searchParams["keyword"]
-      : undefined;
+  const q = await searchParams;
+  const keyword = typeof q["keyword"] === "string" ? q["keyword"] : undefined;
 
   return <FavoriteArticleFolderListTemplate keyword={keyword} />;
 }
