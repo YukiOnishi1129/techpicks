@@ -6,7 +6,6 @@ import { SearchArticleDialog } from "@/features/articles/components/Dialog";
 import { SelectArticlePageTab } from "@/features/articles/components/Tab";
 
 import { ArticlesInput, FavoriteArticleFoldersInput } from "@/graphql/type";
-import { ScreenLoader } from "@/shared/components/layout/ScreenLoader";
 import {
   Tabs,
   TabsContent,
@@ -19,6 +18,7 @@ import { LanguageStatus } from "@/shared/types/language";
 
 import { TrendArticleDashboardTemplateQuery } from "./TrendArticleDashboardTemplateQuery";
 import { TrendArticleList } from "../../List";
+import { SkeltonArticleList } from "@/features/articles/components/List";
 
 type TrendArticleDashboardTemplateProps = {
   user: User;
@@ -95,7 +95,7 @@ export const TrendArticleDashboardTemplate: FC<
               favoriteArticleFoldersInput,
             }}
           >
-            <Suspense fallback={<ScreenLoader />}>
+            <Suspense fallback={<SkeltonArticleList />}>
               <TrendArticleList user={user} languageStatus={2} tab={tab} />
             </Suspense>
           </PreloadQuery>
@@ -108,7 +108,7 @@ export const TrendArticleDashboardTemplate: FC<
               favoriteArticleFoldersInput,
             }}
           >
-            <Suspense fallback={<ScreenLoader />}>
+            <Suspense fallback={<SkeltonArticleList />}>
               <TrendArticleList user={user} languageStatus={1} tab={tab} />
             </Suspense>
           </PreloadQuery>

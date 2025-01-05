@@ -2,14 +2,14 @@ import { User } from "@supabase/supabase-js";
 import { Suspense } from "react";
 
 import { BookmarksInput, FavoriteArticleFoldersInput } from "@/graphql/type";
-import { ScreenLoader } from "@/shared/components/layout/ScreenLoader";
-import { PreloadQuery } from "@/shared/lib/apollo/client";
 
+import { PreloadQuery } from "@/shared/lib/apollo/client";
 
 import { BookmarkTemplateQuery } from "./BookmarkTemplateQuery";
 import { CreateBookmarkDialog } from "../../Dialog";
 import { BookmarkList } from "../../List";
 import { BookmarkArticleKeywordSearchInput } from "../../Search";
+import { SkeltonArticleList } from "@/features/articles/components/List";
 
 type BookmarkTemplateProps = {
   user: User;
@@ -49,7 +49,7 @@ export const BookmarkTemplate = async ({
         query={BookmarkTemplateQuery}
         variables={{ input, favoriteArticleFoldersInput }}
       >
-        <Suspense fallback={<ScreenLoader />}>
+        <Suspense fallback={<SkeltonArticleList />}>
           <BookmarkList user={user} />
         </Suspense>
       </PreloadQuery>

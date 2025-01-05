@@ -24,7 +24,6 @@ import {
 } from "@/shared/components/ui/form";
 import { Input } from "@/shared/components/ui/input";
 
-
 const formSchema = z.object({
   keyword: z.string().optional(),
 });

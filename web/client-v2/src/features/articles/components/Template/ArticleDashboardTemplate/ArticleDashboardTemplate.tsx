@@ -5,7 +5,6 @@ import { FC, Suspense } from "react";
 import { ArticleList } from "@/features/articles/components/List/ArticleList";
 
 import { ArticlesInput, FavoriteArticleFoldersInput } from "@/graphql/type";
-import { ScreenLoader } from "@/shared/components/layout/ScreenLoader";
 import {
   Tabs,
   TabsContent,
@@ -19,6 +18,7 @@ import { LanguageStatus } from "@/shared/types/language";
 import { ArticleDashboardTemplateQuery } from "./ArticleDashboardTemplateQuery";
 import { SearchArticleDialog } from "../../Dialog";
 import { SelectArticlePageTab } from "../../Tab";
+import { SkeltonArticleList } from "../../List";
 
 type ArticleDashboardTemplateProps = {
   user: User;
@@ -97,7 +97,7 @@ export const ArticleDashboardTemplate: FC<
               favoriteArticleFoldersInput,
             }}
           >
-            <Suspense fallback={<ScreenLoader />}>
+            <Suspense fallback={<SkeltonArticleList />}>
               <ArticleList user={user} languageStatus={2} tab={tab} />
             </Suspense>
           </PreloadQuery>
@@ -110,7 +110,7 @@ export const ArticleDashboardTemplate: FC<
               favoriteArticleFoldersInput,
             }}
           >
-            <Suspense fallback={<ScreenLoader />}>
+            <Suspense fallback={<SkeltonArticleList />}>
               <ArticleList user={user} languageStatus={1} tab={tab} />
             </Suspense>
           </PreloadQuery>

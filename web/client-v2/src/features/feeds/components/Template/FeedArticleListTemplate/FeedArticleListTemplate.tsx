@@ -1,6 +1,5 @@
 import { FC, Suspense } from "react";
 
-import { ScreenLoader } from "@/shared/components/layout/ScreenLoader";
 import {
   BreadCrumbType,
   PageBreadcrumb,
@@ -12,6 +11,7 @@ import { FeedArticleHeader } from "./FeedArticleHeader";
 import { FeedArticleListTemplateQuery } from "./FeedArticleListTemplateQuery";
 import { FeedArticleKeywordSearchDialog } from "../../Dialog";
 import { FeedArticleList } from "../../List";
+import { SkeltonArticleList } from "@/features/articles/components/List";
 
 type FeedArticleListTemplateProps = {
   id: string;
@@ -69,7 +69,7 @@ export const FeedArticleListTemplate: FC<
           },
         }}
       >
-        <Suspense fallback={<ScreenLoader />}>
+        <Suspense fallback={<SkeltonArticleList />}>
           <FeedArticleList id={id} keyword={keyword} />
         </Suspense>
       </PreloadQuery>

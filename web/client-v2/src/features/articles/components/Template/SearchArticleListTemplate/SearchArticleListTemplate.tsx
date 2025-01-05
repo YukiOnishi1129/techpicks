@@ -1,6 +1,5 @@
 import { FC, Suspense } from "react";
 
-import { ScreenLoader } from "@/shared/components/layout/ScreenLoader";
 import {
   BreadCrumbType,
   PageBreadcrumb,
@@ -17,7 +16,7 @@ import {
   SearchDetailArticleDialog,
   SearchDetailArticleDialogFloatButton,
 } from "../../Dialog";
-import { SearchArticleList } from "../../List";
+import { SearchArticleList, SkeltonArticleList } from "../../List";
 
 const LIMIT = 20;
 
@@ -108,7 +107,7 @@ export const SearchArticleListTemplate: FC<
             },
           }}
         >
-          <Suspense fallback={<ScreenLoader />}>
+          <Suspense fallback={<SkeltonArticleList />}>
             <SearchArticleList
               limit={LIMIT}
               languageStatus={languageStatus}

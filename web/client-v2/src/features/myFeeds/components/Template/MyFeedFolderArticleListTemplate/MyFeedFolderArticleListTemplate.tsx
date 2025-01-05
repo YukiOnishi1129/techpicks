@@ -5,19 +5,18 @@ import {
   FeedsInput,
   MyFeedFolderInput,
 } from "@/graphql/type";
-import { ScreenLoader } from "@/shared/components/layout/ScreenLoader";
 import {
   BreadCrumbType,
   PageBreadcrumb,
 } from "@/shared/components/ui/breadcrumb";
 import { PreloadQuery } from "@/shared/lib/apollo/client";
 
-
 import { getMyFeedFolderArticleListTemplateQuery } from "./actGetMyFeedFolderArticleListTemplateQuery";
 import { MyFeedFolderArticleListTemplateQuery } from "./MyFeedFolderArticleListTemplateQuery";
 import { SearchMyFeedFolderArticleDialog } from "../../Dialog";
 import { MyFeedFolderArticleList } from "../../List";
 import { MyFeedFolderArticleKeywordSearchForm } from "../../Search";
+import { SkeltonArticleList } from "@/features/articles/components/List";
 
 const LIMIT = 20;
 
@@ -96,7 +95,7 @@ export const MyFeedFolderArticleListTemplate: FC<
           },
         }}
       >
-        <Suspense fallback={<ScreenLoader />}>
+        <Suspense fallback={<SkeltonArticleList />}>
           <MyFeedFolderArticleList
             data={data}
             limit={LIMIT}

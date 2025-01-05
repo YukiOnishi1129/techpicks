@@ -5,13 +5,11 @@ import {
   FavoriteArticleFoldersInput,
   FavoriteArticlesInput,
 } from "@/graphql/type";
-import { ScreenLoader } from "@/shared/components/layout/ScreenLoader";
 import {
   BreadCrumbType,
   PageBreadcrumb,
 } from "@/shared/components/ui/breadcrumb";
 import { PreloadQuery } from "@/shared/lib/apollo/client";
-
 
 import { getServerFavoriteArticleListByFolderIdTemplateQuery } from "./actGetServerFavoriteArticleListByFolderIdTemplateQuery";
 import { FavoriteArticleListByFolderIdTemplateQuery } from "./FavoriteArticleListByFolderIdTemplateQuery";
@@ -21,6 +19,7 @@ import {
 } from "../../Dialog";
 import { FavoriteArticleList } from "../../List/FavoriteArticleList/FavoriteArticleList";
 import { FavoriteArticleKeywordSearchForm } from "../../Search";
+import { SkeltonArticleList } from "@/features/articles/components/List";
 
 type FavoriteArticleListByFolderIdTemplateProps = {
   user: User;
@@ -96,7 +95,7 @@ export const FavoriteArticleListByFolderIdTemplate: FC<
           favoriteArticleFoldersInput,
         }}
       >
-        <Suspense fallback={<ScreenLoader />}>
+        <Suspense fallback={<SkeltonArticleList />}>
           <FavoriteArticleList folderId={id} keyword={keyword} />
         </Suspense>
       </PreloadQuery>
