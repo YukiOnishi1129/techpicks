@@ -3,10 +3,9 @@
 import { VariantProps } from "class-variance-authority";
 import { useState, useCallback, FC } from "react";
 
-import { Button, buttonVariants } from "@/components/ui/button";
-import { Dialog, DialogTrigger } from "@/components/ui/dialog";
-
-import { SelectOptionType } from "@/types/utils";
+import { Button, buttonVariants } from "@/shared/components/ui/button";
+import { Dialog, DialogTrigger } from "@/shared/components/ui/dialog";
+import { SelectOptionType } from "@/shared/types/utils";
 
 import { SelectMultiFeedDialogContent } from "./SelectMultiFeedDialogContent";
 

@@ -4,11 +4,10 @@ import { useSuspenseQuery, useQuery } from "@apollo/client";
 import { User } from "@supabase/supabase-js";
 import { useCallback, useRef, useState, useEffect } from "react";
 
-import { NotFoundList } from "@/components/layout/NotFoundList";
-import { Loader } from "@/components/ui/loader";
-
-import { ArticleTabType } from "@/types/article";
-import { LanguageStatus } from "@/types/language";
+import { NotFoundList } from "@/shared/components/layout/NotFoundList";
+import { Loader } from "@/shared/components/ui/loader";
+import { ArticleTabType } from "@/shared/types/article";
+import { LanguageStatus } from "@/shared/types/language";
 
 import { ArticleListQuery } from "./ArticleListQuery";
 import { ArticleCardWrapper } from "../../Card/ArticleCardWrapper/ArticleCardWrapper";

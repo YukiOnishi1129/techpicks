@@ -1,8 +1,7 @@
 import { graphql } from "gql.tada";
 
-import { getClient } from "@/lib/apollo/client";
-
-import { SELECTABLE_FEED_LIST_LIMIT } from "@/constant/limit";
+import { SELECTABLE_FEED_LIST_LIMIT } from "@/shared/constant/limit";
+import { getClient } from "@/shared/lib/apollo/client";
 
 export const ListServerFeedSearchArticleListFormTemplateQuery = graphql(`
   query ListServerFeedSearchArticleListFormTemplateQuery(

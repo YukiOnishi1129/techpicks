@@ -1,8 +1,8 @@
 "use client";
 import { FC, useCallback, useState } from "react";
 
-import { Button } from "@/components/ui/button";
-import { Dialog, DialogTrigger } from "@/components/ui/dialog";
+import { Button } from "@/shared/components/ui/button";
+import { Dialog, DialogTrigger } from "@/shared/components/ui/dialog";
 
 import { UpdateFavoriteArticleFolderDialogContent } from "./UpdateFavoriteArticleFolderDialogContent";
 

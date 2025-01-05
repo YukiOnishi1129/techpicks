@@ -4,8 +4,8 @@ import { getUser } from "@/features/auth/actions/user";
 import { MyFeedFolderArticleListTemplate } from "@/features/myFeeds/components/Template";
 
 type MyFeedFolderArticleListPageProps = {
-  params: { id: string };
-  searchParams: { [key: string]: string | string[] | undefined };
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
 export default async function MyFeedFolderArticleListPage({
@@ -16,11 +16,9 @@ export default async function MyFeedFolderArticleListPage({
   if (!user) {
     redirect("/login");
   }
-  const { id } = params;
-  const keyword =
-    typeof searchParams["keyword"] === "string"
-      ? searchParams["keyword"]
-      : undefined;
+  const { id } = await params;
+  const q = await searchParams;
+  const keyword = typeof q["keyword"] === "string" ? q["keyword"] : undefined;
   return (
     <MyFeedFolderArticleListTemplate myFeedFolderId={id} keyword={keyword} />
   );

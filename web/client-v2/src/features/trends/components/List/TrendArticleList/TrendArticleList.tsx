@@ -6,10 +6,9 @@ import { useCallback, useRef, useState, useEffect } from "react";
 
 import { ArticleCardWrapper } from "@/features/articles/components/Card";
 
-import { Loader } from "@/components/ui/loader";
-
-import { ArticleTabType } from "@/types/article";
-import { LanguageStatus } from "@/types/language";
+import { Loader } from "@/shared/components/ui/loader";
+import { ArticleTabType } from "@/shared/types/article";
+import { LanguageStatus } from "@/shared/types/language";
 
 import { TrendArticleListQuery } from "./TrendArticleListQuery";
 import { TrendArticleDashboardTemplateQuery } from "../../Template/TrendArticleDashboardTemplate/TrendArticleDashboardTemplateQuery";

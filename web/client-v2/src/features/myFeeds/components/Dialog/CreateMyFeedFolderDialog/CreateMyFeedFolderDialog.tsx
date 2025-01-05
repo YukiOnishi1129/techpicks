@@ -3,8 +3,8 @@
 import { FC, useCallback, useState } from "react";
 import { HiPlus } from "react-icons/hi";
 
-import { Button } from "@/components/ui/button";
-import { Dialog, DialogTrigger } from "@/components/ui/dialog";
+import { Button } from "@/shared/components/ui/button";
+import { Dialog, DialogTrigger } from "@/shared/components/ui/dialog";
 
 import { CreateMyFeedFolderDialogContent } from "./CreateMyFeedFolderDialogContent";
 

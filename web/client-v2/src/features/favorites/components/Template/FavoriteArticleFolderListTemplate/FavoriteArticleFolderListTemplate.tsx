@@ -1,9 +1,8 @@
 import { FC, Suspense } from "react";
 import { FaHeart } from "react-icons/fa";
 
-import { ScreenLoader } from "@/components/layout/ScreenLoader";
-
-import { PreloadQuery } from "@/lib/apollo/client";
+import { ScreenLoader } from "@/shared/components/layout/ScreenLoader";
+import { PreloadQuery } from "@/shared/lib/apollo/client";
 
 import { FavoriteArticleFolderListTemplateQuery } from "./FavoriteArticleFolderListTemplateQuery";
 import {

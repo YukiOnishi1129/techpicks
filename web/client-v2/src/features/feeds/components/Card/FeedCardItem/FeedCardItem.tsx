@@ -4,7 +4,7 @@ import { FragmentOf, readFragment } from "gql.tada";
 import Link from "next/link";
 import { FC } from "react";
 
-import { useCheckImageExist } from "@/hooks/useCheckImageExist";
+import { useCheckImageExist } from "@/shared/hooks/useCheckImageExist";
 
 import { FeedCardItemFragment } from "./FeedCardItemFragment";
 

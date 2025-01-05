@@ -10,13 +10,14 @@ import { z } from "zod";
 import { logoutToLoginPage } from "@/features/auth/actions/auth";
 import { getUser } from "@/features/auth/actions/user";
 
-import { Button } from "@/components/ui/button";
+import { serverRevalidatePage } from "@/shared/actions/actServerRevalidatePage";
+import { Button } from "@/shared/components/ui/button";
 import {
   DialogContent,
   DialogTitle,
   DialogClose,
   DialogHeader,
-} from "@/components/ui/dialog";
+} from "@/shared/components/ui/dialog";
 import {
   Form,
   FormField,
@@ -24,12 +25,10 @@ import {
   FormLabel,
   FormControl,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+} from "@/shared/components/ui/form";
+import { Input } from "@/shared/components/ui/input";
+import { useStatusToast } from "@/shared/hooks/useStatusToast";
 
-import { useStatusToast } from "@/hooks/useStatusToast";
-
-import { serverRevalidatePage } from "@/actions/actServerRevalidatePage";
 
 import { createMyFeedFolderMutation } from "./actCreateMyFeedFolderMutation";
 

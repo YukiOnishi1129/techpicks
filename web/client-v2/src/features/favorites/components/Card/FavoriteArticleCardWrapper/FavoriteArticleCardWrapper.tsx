@@ -4,8 +4,8 @@ import { FC } from "react";
 
 import { useManageFavoriteArticle } from "@/features/favorites/hooks/useManageFavoriteArticle";
 
-import { IconTitleLink } from "@/components/ui/link";
-import { ShareLinks } from "@/components/ui/share";
+import { IconTitleLink } from "@/shared/components/ui/link";
+import { ShareLinks } from "@/shared/components/ui/share";
 
 import {
   FavoriteArticleCardWrapperFragment,

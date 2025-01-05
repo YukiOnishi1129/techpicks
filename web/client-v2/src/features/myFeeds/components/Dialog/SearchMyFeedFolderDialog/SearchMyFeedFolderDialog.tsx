@@ -3,7 +3,7 @@
 import { FC, useCallback, useState } from "react";
 import { FaSearch } from "react-icons/fa";
 
-import { Dialog, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogTrigger } from "@/shared/components/ui/dialog";
 
 import { SearchMyFeedFolderDialogContent } from "./SearchMyFeedFolderDialogContent";
 

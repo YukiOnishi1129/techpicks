@@ -2,13 +2,13 @@ import { graphql } from "gql.tada";
 
 import { FavoriteFolderArticleCardWrapperFragment } from "@/features/articles/components/Card";
 
-import { getClient } from "@/lib/apollo/client";
-
 import {
   FavoriteArticleFoldersInput,
   FeedsInput,
   MyFeedFolderInput,
 } from "@/graphql/type";
+import { getClient } from "@/shared/lib/apollo/client";
+
 
 import { MyFeedFolderArticleListFragment } from "../../List/MyFeedFolderArticleList/MyFeedFolderArticleListFragment";
 

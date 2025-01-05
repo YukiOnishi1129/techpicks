@@ -1,9 +1,12 @@
 import { FC, Suspense } from "react";
 
-import { ScreenLoader } from "@/components/layout/ScreenLoader";
-import { BreadCrumbType, PageBreadcrumb } from "@/components/ui/breadcrumb";
+import { SkeltonArticleList } from "@/features/articles/components/List";
 
-import { PreloadQuery } from "@/lib/apollo/client";
+import {
+  BreadCrumbType,
+  PageBreadcrumb,
+} from "@/shared/components/ui/breadcrumb";
+import { PreloadQuery } from "@/shared/lib/apollo/client";
 
 import { getServerFeedArticleTemplateQuery } from "./actGetServerFeedArticleTemplateQuery";
 import { FeedArticleHeader } from "./FeedArticleHeader";
@@ -67,7 +70,7 @@ export const FeedArticleListTemplate: FC<
           },
         }}
       >
-        <Suspense fallback={<ScreenLoader />}>
+        <Suspense fallback={<SkeltonArticleList />}>
           <FeedArticleList id={id} keyword={keyword} />
         </Suspense>
       </PreloadQuery>

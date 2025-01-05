@@ -7,9 +7,9 @@ import { getUser } from "@/features/auth/actions/user";
 import { CreateFavoriteArticleMutation } from "@/features/favorites/mutations/CreateFavoriteArticleMutation";
 import { DeleteFavoriteArticleByArticleIdMutation } from "@/features/favorites/mutations/DeleteFavoriteArticleByArticleIdMutation";
 
-import { useStatusToast } from "@/hooks/useStatusToast";
+import { serverRevalidatePage } from "@/shared/actions/actServerRevalidatePage";
+import { useStatusToast } from "@/shared/hooks/useStatusToast";
 
-import { serverRevalidatePage } from "@/actions/actServerRevalidatePage";
 
 export const UseBookmarkMangeFavoriteArticle = graphql(`
   fragment UseBookmarkMangeFavoriteArticle on Bookmark {

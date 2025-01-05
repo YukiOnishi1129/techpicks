@@ -6,7 +6,7 @@ import { FC } from "react";
 
 import { ShowMyFeedListDialog } from "@/features/feeds/components/Dialog";
 
-import { useStatusToast } from "@/hooks/useStatusToast";
+import { useStatusToast } from "@/shared/hooks/useStatusToast";
 
 import { MyFeedFolderCardFragment } from "./MyFeedFolderCardFragment";
 import { UpdateMyFeedFolderDialog } from "../../Dialog";

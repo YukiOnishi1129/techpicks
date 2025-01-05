@@ -3,9 +3,8 @@
 import { FC, useCallback, useState } from "react";
 import { CiSearch } from "react-icons/ci";
 
-import { Dialog, DialogTrigger } from "@/components/ui/dialog";
-
-import { SelectOptionType } from "@/types/utils";
+import { Dialog, DialogTrigger } from "@/shared/components/ui/dialog";
+import { SelectOptionType } from "@/shared/types/utils";
 
 import { SearchDetailArticleDialogContent } from "./SearchDetailArticleDialogContent";
 

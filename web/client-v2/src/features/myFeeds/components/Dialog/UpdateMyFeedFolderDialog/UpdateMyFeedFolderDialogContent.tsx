@@ -11,13 +11,13 @@ import { z } from "zod";
 import { SelectMultiFeedDialog } from "@/features/feeds/components/Dialog/SelectMultiFeedDialog";
 import { useManageMyFeedFolder } from "@/features/myFeeds/hooks/useManageMyFeedFolder";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@/shared/components/ui/button";
 import {
   DialogClose,
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
+} from "@/shared/components/ui/dialog";
 import {
   Form,
   FormField,
@@ -25,10 +25,9 @@ import {
   FormLabel,
   FormControl,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-
-import { SelectOptionType } from "@/types/utils";
+} from "@/shared/components/ui/form";
+import { Input } from "@/shared/components/ui/input";
+import { SelectOptionType } from "@/shared/types/utils";
 
 import { UpdateMyFeedFolderDialogFragment } from "./UpdateMyFeedFolderDialogFragment";
 

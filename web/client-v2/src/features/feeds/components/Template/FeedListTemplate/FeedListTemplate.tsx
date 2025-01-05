@@ -1,10 +1,8 @@
 import { FC, Suspense } from "react";
 
-import { ScreenLoader } from "@/components/layout/ScreenLoader";
-
-import { PreloadQuery } from "@/lib/apollo/client";
-
-import { PlatformSiteType } from "@/types/platform";
+import { ScreenLoader } from "@/shared/components/layout/ScreenLoader";
+import { PreloadQuery } from "@/shared/lib/apollo/client";
+import { PlatformSiteType } from "@/shared/types/platform";
 
 import { FeedListTemplateQuery } from "./FeedListTemplateQuery";
 import { FeedKeywordSearchDialog } from "../../Dialog";

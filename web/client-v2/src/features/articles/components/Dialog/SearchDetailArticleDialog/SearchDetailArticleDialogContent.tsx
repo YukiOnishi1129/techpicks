@@ -9,13 +9,14 @@ import { z } from "zod";
 
 import { SelectMultiFeedDialog } from "@/features/feeds/components/Dialog";
 
-import { Button } from "@/components/ui/button";
+import { serverRevalidatePage } from "@/shared/actions/actServerRevalidatePage";
+import { Button } from "@/shared/components/ui/button";
 import {
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogClose,
-} from "@/components/ui/dialog";
+} from "@/shared/components/ui/dialog";
 import {
   Form,
   FormField,
@@ -23,12 +24,9 @@ import {
   FormLabel,
   FormControl,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-
-import { SelectOptionType } from "@/types/utils";
-
-import { serverRevalidatePage } from "@/actions/actServerRevalidatePage";
+} from "@/shared/components/ui/form";
+import { Input } from "@/shared/components/ui/input";
+import { SelectOptionType } from "@/shared/types/utils";
 
 const formSchema = z.object({
   keyword: z.string().optional(),

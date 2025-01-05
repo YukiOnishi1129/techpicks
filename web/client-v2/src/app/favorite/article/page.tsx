@@ -4,10 +4,10 @@ import { Suspense } from "react";
 import { getUser } from "@/features/auth/actions/user";
 import { AllFolderFavoriteArticleListTemplate } from "@/features/favorites/components";
 
-import { ScreenLoader } from "@/components/layout/ScreenLoader";
+import { ScreenLoader } from "@/shared/components/layout/ScreenLoader";
 
 type FavoriteArticleAllListPageeProps = {
-  searchParams: { [key: string]: string | string[] | undefined };
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
 export default async function FavoriteArticleAllListPage({
@@ -17,10 +17,8 @@ export default async function FavoriteArticleAllListPage({
   if (!user) {
     redirect("/login");
   }
-  const keyword =
-    typeof searchParams["keyword"] === "string"
-      ? searchParams["keyword"]
-      : undefined;
+  const q = await searchParams;
+  const keyword = typeof q["keyword"] === "string" ? q["keyword"] : undefined;
 
   return (
     <Suspense fallback={<ScreenLoader />}>

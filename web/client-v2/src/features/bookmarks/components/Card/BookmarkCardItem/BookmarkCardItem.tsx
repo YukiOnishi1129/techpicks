@@ -3,12 +3,10 @@
 import { FragmentOf, readFragment } from "gql.tada";
 import { FC } from "react";
 
-import { ZoomableImage } from "@/components/ui/image";
-import { Link } from "@/components/ui/link";
-
-import { useCheckImageExist } from "@/hooks/useCheckImageExist";
-
-import { showDiffDateToCurrentDate } from "@/lib/date";
+import { ZoomableImage } from "@/shared/components/ui/image";
+import { Link } from "@/shared/components/ui/link";
+import { useCheckImageExist } from "@/shared/hooks/useCheckImageExist";
+import { showDiffDateToCurrentDate } from "@/shared/lib/date";
 
 import { BookmarkCardItemFragment } from "./BookmarkCardItemFragment";
 

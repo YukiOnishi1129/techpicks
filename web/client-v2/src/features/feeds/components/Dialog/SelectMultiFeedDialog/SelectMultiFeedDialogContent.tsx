@@ -6,9 +6,8 @@ import {
   DialogContent,
   DialogTitle,
   DialogHeader,
-} from "@/components/ui/dialog";
-
-import { SelectOptionType } from "@/types/utils";
+} from "@/shared/components/ui/dialog";
+import { SelectOptionType } from "@/shared/types/utils";
 
 import { SelectMultiFeedList } from "./SelectMultiFeedList";
 

@@ -4,8 +4,8 @@ import { User } from "@supabase/supabase-js";
 import { useState, FC, useCallback } from "react";
 import { HiPlus } from "react-icons/hi";
 
-import { Button } from "@/components/ui/button";
-import { Dialog, DialogTrigger } from "@/components/ui/dialog";
+import { Button } from "@/shared/components/ui/button";
+import { Dialog, DialogTrigger } from "@/shared/components/ui/dialog";
 
 import { CreateFavoriteArticleDialogContent } from "../CreateFavoriteArticleDialog/CreateFavoriteArticleDialogContent";
 
