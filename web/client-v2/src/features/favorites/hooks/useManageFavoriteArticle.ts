@@ -5,9 +5,9 @@ import { useCallback } from "react";
 import { logoutToLoginPage } from "@/features/auth/actions/auth";
 import { getUser } from "@/features/auth/actions/user";
 
-import { useStatusToast } from "@/hooks/useStatusToast";
+import { serverRevalidatePage } from "@/shared/actions/actServerRevalidatePage";
+import { useStatusToast } from "@/shared/hooks/useStatusToast";
 
-import { serverRevalidatePage } from "@/actions/actServerRevalidatePage";
 
 import { CreateFavoriteArticleMutation } from "../mutations/CreateFavoriteArticleMutation";
 import { DeleteFavoriteArticleByArticleIdMutation } from "../mutations/DeleteFavoriteArticleByArticleIdMutation";

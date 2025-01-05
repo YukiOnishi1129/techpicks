@@ -2,9 +2,8 @@
 import { FragmentOf, readFragment } from "gql.tada";
 import { FC } from "react";
 
-import { useCheckImageExist } from "@/hooks/useImage";
-
-import { showDiffDateToCurrentDate } from "@/lib/date";
+import { useCheckImageExist } from "@/shared/hooks/useImage";
+import { showDiffDateToCurrentDate } from "@/shared/lib/date";
 
 import { FavoriteArticleCardItemFragment } from "./FavoriteArticleCardItemFragment";
 

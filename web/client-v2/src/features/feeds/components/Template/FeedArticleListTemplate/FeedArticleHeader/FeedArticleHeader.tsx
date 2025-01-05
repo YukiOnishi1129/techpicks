@@ -3,8 +3,8 @@ import { useQuery } from "@apollo/client";
 import { User } from "@supabase/supabase-js";
 import { FC } from "react";
 
-import { useCheckImageExist } from "@/hooks/useImage";
-import { useStatusToast } from "@/hooks/useStatusToast";
+import { useCheckImageExist } from "@/shared/hooks/useImage";
+import { useStatusToast } from "@/shared/hooks/useStatusToast";
 
 import { FeedArticleHeaderQuery } from "./FeedArticleHeaderQuery";
 import { FeedArticleKeywordSearchForm } from "../../../Search";

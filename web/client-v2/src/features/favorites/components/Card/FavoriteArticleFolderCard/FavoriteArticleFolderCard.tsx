@@ -4,9 +4,8 @@ import { FragmentOf, readFragment } from "gql.tada";
 import Link from "next/link";
 import { FC } from "react";
 
-import { Button } from "@/components/ui/button";
-
-import { useCheckImageExist } from "@/hooks/useCheckImageExist";
+import { Button } from "@/shared/components/ui/button";
+import { useCheckImageExist } from "@/shared/hooks/useCheckImageExist";
 
 import { FavoriteArticleFolderCardFragment } from "./FavoriteArticleFolderCardFragment";
 import { UpdateFavoriteArticleFolderDialog } from "../../Dialog";

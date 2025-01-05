@@ -1,14 +1,14 @@
 import { FC, Suspense } from "react";
 
-import { ScreenLoader } from "@/components/layout/ScreenLoader";
-import { BreadCrumbType, PageBreadcrumb } from "@/components/ui/breadcrumb";
-
-import { PreloadQuery } from "@/lib/apollo/client";
-
-import { ArticleTabType } from "@/types/article";
-import { LanguageStatus } from "@/types/language";
-import { PlatformSiteType } from "@/types/platform";
-import { SelectOptionType } from "@/types/utils";
+import {
+  BreadCrumbType,
+  PageBreadcrumb,
+} from "@/shared/components/ui/breadcrumb";
+import { PreloadQuery } from "@/shared/lib/apollo/client";
+import { ArticleTabType } from "@/shared/types/article";
+import { LanguageStatus } from "@/shared/types/language";
+import { PlatformSiteType } from "@/shared/types/platform";
+import { SelectOptionType } from "@/shared/types/utils";
 
 import { listServerSelectedFeedSearchArticleListTemplateQuery } from "./actListServerSelectedFeedSearchArticleListTemplateQuery";
 import { SearchArticleListTemplateQuery } from "./SearchArticleListTemplateQuery";
@@ -16,7 +16,7 @@ import {
   SearchDetailArticleDialog,
   SearchDetailArticleDialogFloatButton,
 } from "../../Dialog";
-import { SearchArticleList } from "../../List";
+import { SearchArticleList, SkeltonArticleList } from "../../List";
 
 const LIMIT = 20;
 
@@ -107,7 +107,7 @@ export const SearchArticleListTemplate: FC<
             },
           }}
         >
-          <Suspense fallback={<ScreenLoader />}>
+          <Suspense fallback={<SkeltonArticleList />}>
             <SearchArticleList
               limit={LIMIT}
               languageStatus={languageStatus}

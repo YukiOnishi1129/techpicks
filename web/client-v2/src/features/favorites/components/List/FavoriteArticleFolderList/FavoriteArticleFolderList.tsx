@@ -4,8 +4,8 @@ import { FC, useCallback, useEffect, useRef, useState } from "react";
 
 import { useManageFavoriteFolder } from "@/features/favorites/hooks/useManageFavoriteFolder";
 
-import { NotFoundList } from "@/components/layout/NotFoundList";
-import { Loader } from "@/components/ui/loader";
+import { NotFoundList } from "@/shared/components/layout/NotFoundList";
+import { Loader } from "@/shared/components/ui/loader";
 
 import { FavoriteArticleFolderListQuery } from "./FavoriteArticleFolderListQuery";
 import { FavoriteArticleFolderCard } from "../../Card";

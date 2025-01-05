@@ -3,8 +3,8 @@
 import { FragmentOf } from "gql.tada";
 import { FC, useCallback, useState } from "react";
 
-import { Button } from "@/components/ui/button";
-import { Dialog, DialogTrigger } from "@/components/ui/dialog";
+import { Button } from "@/shared/components/ui/button";
+import { Dialog, DialogTrigger } from "@/shared/components/ui/dialog";
 
 import { UpdateMyFeedFolderDialogContent } from "./UpdateMyFeedFolderDialogContent";
 import { UpdateMyFeedFolderDialogFragment } from "./UpdateMyFeedFolderDialogFragment";

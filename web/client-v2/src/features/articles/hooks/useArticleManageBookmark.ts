@@ -7,9 +7,9 @@ import { getUser } from "@/features/auth/actions/user";
 import { CreateBookmarkMutation } from "@/features/bookmarks/mutations/CreateBookmarkMutation";
 import { DeleteBookmarkMutation } from "@/features/bookmarks/mutations/DeleteBookmarkMutation";
 
-import { useStatusToast } from "@/hooks/useStatusToast";
+import { serverRevalidatePage } from "@/shared/actions/actServerRevalidatePage";
+import { useStatusToast } from "@/shared/hooks/useStatusToast";
 
-import { serverRevalidatePage } from "@/actions/actServerRevalidatePage";
 
 export const UseArticleManageBookmarkFragment = graphql(`
   fragment UseArticleManageBookmarkFragment on Article {

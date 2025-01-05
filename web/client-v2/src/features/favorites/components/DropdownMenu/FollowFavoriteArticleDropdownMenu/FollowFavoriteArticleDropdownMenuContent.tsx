@@ -10,8 +10,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuContent,
   DropdownMenuLabel,
-} from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
+} from "@/shared/components/ui/dropdown-menu";
+import { Input } from "@/shared/components/ui/input";
 
 import {
   FollowFavoriteArticleDropdownMenuContentFragment,

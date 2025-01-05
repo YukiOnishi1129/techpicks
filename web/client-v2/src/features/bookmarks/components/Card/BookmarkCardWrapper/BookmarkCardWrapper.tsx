@@ -5,8 +5,8 @@ import { FC } from "react";
 import { useBookmarkManageFavoriteArticle } from "@/features/bookmarks/hooks/useBookmarkManageFavoriteArticle";
 import { FollowFavoriteArticleDropdownMenu } from "@/features/favorites/components/DropdownMenu";
 
-import { IconTitleLink } from "@/components/ui/link";
-import { ShareLinks } from "@/components/ui/share";
+import { IconTitleLink } from "@/shared/components/ui/link";
+import { ShareLinks } from "@/shared/components/ui/share";
 
 import {
   BookmarkCardWrapperFragment,

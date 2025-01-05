@@ -3,8 +3,8 @@
 import { FragmentOf, readFragment } from "gql.tada";
 import { FC, useMemo } from "react";
 
-import { Button } from "@/components/ui/button";
-import { DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
+import { Button } from "@/shared/components/ui/button";
+import { DropdownMenuSeparator } from "@/shared/components/ui/dropdown-menu";
 
 import { CopyTargetFavoriteArticleFolderItemFragment } from "./CopyFavoriteArticleDropdownMenuFragment";
 

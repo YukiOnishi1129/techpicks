@@ -2,9 +2,9 @@
 
 import { graphql } from "gql.tada";
 
-import { getClient } from "@/lib/apollo/client";
-
 import { CreateFavoriteArticleForUploadArticleInput } from "@/graphql/type";
+import { getClient } from "@/shared/lib/apollo/client";
+
 
 const CreateFavoriteArticleForUploadArticleMutation = graphql(`
   mutation CreateFavoriteArticleForUploadArticleMutation(

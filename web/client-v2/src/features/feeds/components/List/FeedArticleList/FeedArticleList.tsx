@@ -5,8 +5,8 @@ import { useCallback, useRef, useState, useEffect } from "react";
 
 import { ArticleCardWrapper } from "@/features/articles/components/Card/ArticleCardWrapper/ArticleCardWrapper";
 
-import { NotFoundList } from "@/components/layout/NotFoundList";
-import { Loader } from "@/components/ui/loader";
+import { NotFoundList } from "@/shared/components/layout/NotFoundList";
+import { Loader } from "@/shared/components/ui/loader";
 
 import { FeedArticleListQuery } from "./FeedArticleListQuery";
 import { FeedArticleListTemplateQuery } from "../../Template/FeedArticleListTemplate/FeedArticleListTemplateQuery";

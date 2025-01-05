@@ -3,11 +3,10 @@
 import { useSuspenseQuery, useQuery } from "@apollo/client";
 import { useCallback, useRef, useState, useEffect } from "react";
 
-import { NotFoundList } from "@/components/layout/NotFoundList";
-import { Loader } from "@/components/ui/loader";
-
-import { ArticleTabType } from "@/types/article";
-import { LanguageStatus } from "@/types/language";
+import { NotFoundList } from "@/shared/components/layout/NotFoundList";
+import { Loader } from "@/shared/components/ui/loader";
+import { ArticleTabType } from "@/shared/types/article";
+import { LanguageStatus } from "@/shared/types/language";
 
 import { SearchArticleListQuery } from "./SearchArticleListQuery";
 import { ArticleCardWrapper } from "../../Card/ArticleCardWrapper/ArticleCardWrapper";

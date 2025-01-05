@@ -1,15 +1,17 @@
 import { User } from "@supabase/supabase-js";
 import { FC, Suspense } from "react";
 
-import { ScreenLoader } from "@/components/layout/ScreenLoader";
-import { BreadCrumbType, PageBreadcrumb } from "@/components/ui/breadcrumb";
-
-import { PreloadQuery } from "@/lib/apollo/client";
+import { SkeltonArticleList } from "@/features/articles/components/List";
 
 import {
   FavoriteAllFolderArticlesInput,
   FavoriteArticleFoldersInput,
 } from "@/graphql/type";
+import {
+  BreadCrumbType,
+  PageBreadcrumb,
+} from "@/shared/components/ui/breadcrumb";
+import { PreloadQuery } from "@/shared/lib/apollo/client";
 
 import { AllFolderFavoriteArticleListTemplateQuery } from "./AllFolderFavoriteArticleListTemplateQuery";
 import { SearchFavoriteArticleListDialog } from "../../Dialog";
@@ -74,7 +76,7 @@ export const AllFolderFavoriteArticleListTemplate: FC<
           favoriteArticleFoldersInput,
         }}
       >
-        <Suspense fallback={<ScreenLoader />}>
+        <Suspense fallback={<SkeltonArticleList />}>
           <AllFolderFavoriteArticleList keyword={keyword} />
         </Suspense>
       </PreloadQuery>

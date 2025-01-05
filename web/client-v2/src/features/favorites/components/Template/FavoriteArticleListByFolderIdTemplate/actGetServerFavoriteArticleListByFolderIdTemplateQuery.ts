@@ -2,7 +2,7 @@
 
 import { graphql } from "gql.tada";
 
-import { getClient } from "@/lib/apollo/client";
+import { getClient } from "@/shared/lib/apollo/client";
 
 const GetServerFavoriteArticleListByFolderIdTemplateQuery = graphql(`
   query GetServerFavoriteArticleListByFolderIdTemplate(

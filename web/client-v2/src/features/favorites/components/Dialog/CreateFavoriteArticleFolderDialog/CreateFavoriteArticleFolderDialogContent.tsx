@@ -11,13 +11,13 @@ import { logoutToLoginPage } from "@/features/auth/actions/auth";
 import { getUser } from "@/features/auth/actions/user";
 import { CreateFavoriteArticleFolderMutation } from "@/features/favorites/mutations/CreateFavoriteArticleFolderMutation";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@/shared/components/ui/button";
 import {
   DialogHeader,
   DialogTitle,
   DialogContent,
   DialogClose,
-} from "@/components/ui/dialog";
+} from "@/shared/components/ui/dialog";
 import {
   Form,
   FormField,
@@ -25,10 +25,9 @@ import {
   FormLabel,
   FormControl,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-
-import { useStatusToast } from "@/hooks/useStatusToast";
+} from "@/shared/components/ui/form";
+import { Input } from "@/shared/components/ui/input";
+import { useStatusToast } from "@/shared/hooks/useStatusToast";
 
 import { FollowTargetFavoriteArticleFolderItemFragment } from "../../DropdownMenu/FollowFavoriteArticleDropdownMenu/FollowFavoriteArticleDropdownMenuFragment";
 
