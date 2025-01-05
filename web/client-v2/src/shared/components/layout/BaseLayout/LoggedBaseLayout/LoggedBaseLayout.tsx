@@ -6,8 +6,7 @@ import { PreloadQuery } from "@/shared/lib/apollo/client";
 
 import { LoggedBaseLayoutQuery } from "./LoggedBaseLayoutQuery";
 import { LoggedBottomNavigationMenu } from "../../BottomNavigationMenu";
-import { ScreenLoader } from "../../ScreenLoader";
-import { DesktopSidebar } from "../../Sidebar";
+import { DesktopSidebar, SkeltonDesktopSidebar } from "../../Sidebar";
 
 type LoggedBaseLayoutProps = {
   user: User;
@@ -39,7 +38,7 @@ export const LoggedBaseLayout: FC<LoggedBaseLayoutProps> = async ({
               },
             }}
           >
-            <Suspense fallback={<ScreenLoader />}>
+            <Suspense fallback={<SkeltonDesktopSidebar />}>
               <DesktopSidebar />
             </Suspense>
           </PreloadQuery>
