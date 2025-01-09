@@ -10,7 +10,6 @@ import { DeleteBookmarkMutation } from "@/features/bookmarks/mutations/DeleteBoo
 import { serverRevalidatePage } from "@/shared/actions/actServerRevalidatePage";
 import { useStatusToast } from "@/shared/hooks/useStatusToast";
 
-
 export const UseArticleManageBookmarkFragment = graphql(`
   fragment UseArticleManageBookmarkFragment on Article {
     id
@@ -57,7 +56,6 @@ export const useArticleManageBookmark = ({
       variables: {
         input: {
           articleId: fragment.id,
-          userId: user.id,
           platformId: fragment.platform?.id,
           title: fragment.title,
           description: fragment.description,
@@ -118,7 +116,6 @@ export const useArticleManageBookmark = ({
         variables: {
           input: {
             bookmarkId,
-            userId: user.id,
           },
         },
         update: (cache) => {

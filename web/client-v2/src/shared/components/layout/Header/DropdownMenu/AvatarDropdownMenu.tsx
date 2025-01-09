@@ -1,5 +1,4 @@
 "use client";
-import { User } from "@supabase/supabase-js";
 import { FC } from "react";
 import { FiLogOut } from "react-icons/fi";
 import { GrUser } from "react-icons/gr";
@@ -15,18 +14,14 @@ import {
   DropdownMenuItem,
 } from "@/shared/components/ui/dropdown-menu";
 
-type AvatarDropdownMenuProps = {
-  user?: User;
-};
+type AvatarDropdownMenuProps = {};
 
-export const AvatarDropdownMenu: FC<AvatarDropdownMenuProps> = ({
-  user,
-}: AvatarDropdownMenuProps) => {
+export const AvatarDropdownMenu: FC<AvatarDropdownMenuProps> = ({}) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <div className="md:flex md:justify-end">
-          <UserAvatar user={user} />
+          <UserAvatar />
         </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-[100px]">

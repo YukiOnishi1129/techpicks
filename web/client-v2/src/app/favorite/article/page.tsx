@@ -1,13 +1,12 @@
 import { redirect } from "next/navigation";
-import { Suspense } from "react";
 
 import { getUser } from "@/features/auth/actions/user";
 import { AllFolderFavoriteArticleListTemplate } from "@/features/favorites/components";
 
-import { ScreenLoader } from "@/shared/components/layout/ScreenLoader";
+import { SearchParamsType } from "@/shared/types/utils";
 
 type FavoriteArticleAllListPageeProps = {
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+  searchParams: Promise<SearchParamsType>;
 };
 
 export default async function FavoriteArticleAllListPage({
@@ -21,8 +20,6 @@ export default async function FavoriteArticleAllListPage({
   const keyword = typeof q["keyword"] === "string" ? q["keyword"] : undefined;
 
   return (
-    <Suspense fallback={<ScreenLoader />}>
-      <AllFolderFavoriteArticleListTemplate user={user} keyword={keyword} />
-    </Suspense>
+    <AllFolderFavoriteArticleListTemplate keyword={keyword} searchParams={q} />
   );
 }

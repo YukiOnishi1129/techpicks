@@ -5,14 +5,14 @@ import { FaSearch } from "react-icons/fa";
 
 import { Dialog, DialogTrigger } from "@/shared/components/ui/dialog";
 
-import { SearchFavoriteArticleFolderDialogContent } from "./SearchFavoriteArticleFolderDialogContent";
+import { SearchBookmarkKeywordDialogContent } from "./SearchBookmarkKeywordDialogContent";
 
-type SearchFavoriteArticleFolderDialogProps = {
+type SearchBookmarkKeywordDialogFloatButtonProps = {
   keyword?: string;
 };
 
-export const SearchFavoriteArticleFolderDialog: FC<
-  SearchFavoriteArticleFolderDialogProps
+export const SearchBookmarkKeywordDialogFloatButton: FC<
+  SearchBookmarkKeywordDialogFloatButtonProps
 > = ({ keyword }) => {
   const [open, setOpen] = useState(false);
 
@@ -26,7 +26,7 @@ export const SearchFavoriteArticleFolderDialog: FC<
         <FaSearch size="24" color="black" />
       </DialogTrigger>
       {open && (
-        <SearchFavoriteArticleFolderDialogContent
+        <SearchBookmarkKeywordDialogContent
           keyword={keyword}
           onClose={handleClose}
         />

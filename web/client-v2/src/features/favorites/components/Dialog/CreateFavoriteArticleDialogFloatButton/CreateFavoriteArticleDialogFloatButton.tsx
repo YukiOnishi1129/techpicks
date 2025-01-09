@@ -1,6 +1,5 @@
 "use client";
 
-import { User } from "@supabase/supabase-js";
 import { useState, FC, useCallback } from "react";
 import { HiPlus } from "react-icons/hi";
 
@@ -10,13 +9,12 @@ import { Dialog, DialogTrigger } from "@/shared/components/ui/dialog";
 import { CreateFavoriteArticleDialogContent } from "../CreateFavoriteArticleDialog/CreateFavoriteArticleDialogContent";
 
 type CreateFavoriteArticleDialogFloatButtonProps = {
-  user: User | undefined;
   favoriteArticleFolderId: string;
 };
 
 export const CreateFavoriteArticleDialogFloatButton: FC<
   CreateFavoriteArticleDialogFloatButtonProps
-> = ({ user, favoriteArticleFolderId }) => {
+> = ({ favoriteArticleFolderId }) => {
   const [open, setOpen] = useState(false);
 
   const handleClose = useCallback(() => setOpen(false), []);
@@ -30,9 +28,8 @@ export const CreateFavoriteArticleDialogFloatButton: FC<
       </DialogTrigger>
       {open && (
         <CreateFavoriteArticleDialogContent
-          user={user}
           favoriteArticleFolderId={favoriteArticleFolderId}
-          handleClose={handleClose}
+          onClose={handleClose}
         />
       )}
     </Dialog>

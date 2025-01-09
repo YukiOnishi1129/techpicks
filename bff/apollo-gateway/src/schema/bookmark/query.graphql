@@ -6,7 +6,6 @@ type Query {
 }
 
 input BookmarksInput {
-  userId: String!
   keyword: String
   first: Int
   after: String

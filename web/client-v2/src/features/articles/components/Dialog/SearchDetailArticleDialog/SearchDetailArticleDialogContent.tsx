@@ -81,24 +81,27 @@ export const SearchDetailArticleDialogContent: FC<
     form.reset();
   }, [form]);
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    let keywordPath = "";
-    if (!!values.keyword && values.keyword.trim() !== "") {
-      keywordPath = `&keyword=${values.keyword}`;
-    }
-    let feedIdPath = "";
-    if (values.targetFeedList) {
-      feedIdPath = values.targetFeedList
-        .map((feed) => `&feedId=${feed.id}`)
-        .join("");
-    }
-    await serverRevalidatePage(
-      `/search/article?dummy=1${keywordPath}${feedIdPath}`
-    );
-    router.replace(`/search/article?dummy=1${keywordPath}${feedIdPath}`);
-    resetDialog();
-    onClose();
-  };
+  const onSubmit = useCallback(
+    async (values: z.infer<typeof formSchema>) => {
+      let keywordPath = "";
+      if (!!values.keyword && values.keyword.trim() !== "") {
+        keywordPath = `&keyword=${values.keyword}`;
+      }
+      let feedIdPath = "";
+      if (values.targetFeedList) {
+        feedIdPath = values.targetFeedList
+          .map((feed) => `&feedId=${feed.id}`)
+          .join("");
+      }
+      await serverRevalidatePage(
+        `/search/article?dummy=1${keywordPath}${feedIdPath}`
+      );
+      router.replace(`/search/article?dummy=1${keywordPath}${feedIdPath}`);
+      resetDialog();
+      onClose();
+    },
+    [onClose, resetDialog, router]
+  );
 
   return (
     <DialogContent onCloseAutoFocus={resetDialog}>

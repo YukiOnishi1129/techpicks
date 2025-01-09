@@ -3,8 +3,10 @@ import { redirect } from "next/navigation";
 import { getUser } from "@/features/auth/actions/user";
 import { BookmarkTemplate } from "@/features/bookmarks/components/Template";
 
+import { SearchParamsType } from "@/shared/types/utils";
+
 type PageProps = {
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+  searchParams: Promise<SearchParamsType>;
 };
 
 export default async function BookmarkPage({ searchParams }: PageProps) {
@@ -17,5 +19,5 @@ export default async function BookmarkPage({ searchParams }: PageProps) {
 
   const keyword = typeof q["keyword"] === "string" ? q["keyword"] : undefined;
 
-  return <BookmarkTemplate user={user} keyword={keyword} />;
+  return <BookmarkTemplate keyword={keyword} searchParams={q} />;
 }

@@ -26,11 +26,19 @@ export type SearchArticleListTemplateProps = {
   platformSiteType?: PlatformSiteType;
   feedIdList: Array<string>;
   tab: ArticleTabType;
+  searchParams: { [key: string]: string | string[] | undefined };
 };
 
 export const SearchArticleListTemplate: FC<
   SearchArticleListTemplateProps
-> = async ({ languageStatus, keyword, platformSiteType, feedIdList, tab }) => {
+> = async ({
+  languageStatus,
+  keyword,
+  platformSiteType,
+  feedIdList,
+  tab,
+  searchParams,
+}) => {
   let keywordPath = "";
   if (!!keyword && keyword.trim() !== "") {
     keywordPath = `&keyword=${keyword}`;
@@ -70,7 +78,7 @@ export const SearchArticleListTemplate: FC<
     },
   ];
   return (
-    <div>
+    <>
       <div className="fixed z-10  w-[90%] bg-card md:block md:w-[70%] md:justify-between md:px-4">
         <div className="mb-2 mt-4">
           <PageBreadcrumb breadcrumbs={breadcrumbs} />
@@ -107,7 +115,10 @@ export const SearchArticleListTemplate: FC<
             },
           }}
         >
-          <Suspense fallback={<SkeltonArticleList />}>
+          <Suspense
+            key={JSON.stringify(searchParams)}
+            fallback={<SkeltonArticleList />}
+          >
             <SearchArticleList
               limit={LIMIT}
               languageStatus={languageStatus}
@@ -126,6 +137,6 @@ export const SearchArticleListTemplate: FC<
           feedsEndCursor={data?.initFeeds?.pageInfo?.endCursor || undefined}
         />
       </div>
-    </div>
+    </>
   );
 };

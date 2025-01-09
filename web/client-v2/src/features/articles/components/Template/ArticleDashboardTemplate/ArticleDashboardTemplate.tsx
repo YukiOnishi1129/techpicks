@@ -1,4 +1,3 @@
-import { User } from "@supabase/supabase-js";
 import Image from "next/image";
 import { FC, Suspense } from "react";
 
@@ -21,7 +20,6 @@ import { SkeltonArticleList } from "../../List";
 import { SelectArticlePageTab } from "../../Tab";
 
 type ArticleDashboardTemplateProps = {
-  user: User;
   languageStatus?: LanguageStatus;
   tab: "site" | "company" | "summary";
 };
@@ -33,7 +31,7 @@ const TAB_LIST = {
 
 export const ArticleDashboardTemplate: FC<
   ArticleDashboardTemplateProps
-> = async ({ user, languageStatus = 2, tab }) => {
+> = async ({ languageStatus = 2, tab }) => {
   const title =
     tab === "site" ? "Site" : tab === "company" ? "Company" : "Summary";
 
@@ -60,7 +58,7 @@ export const ArticleDashboardTemplate: FC<
         <h1 className="my-4 hidden text-2xl font-bold md:block">{title}</h1>
         <div className="h-2 w-full md:hidden" />
         <div className="h-16 w-full md:hidden">
-          <SelectArticlePageTab userId={user?.id} />
+          <SelectArticlePageTab />
         </div>
       </div>
       <div className=" h-16" />
@@ -98,7 +96,7 @@ export const ArticleDashboardTemplate: FC<
             }}
           >
             <Suspense fallback={<SkeltonArticleList />}>
-              <ArticleList user={user} languageStatus={2} tab={tab} />
+              <ArticleList languageStatus={2} tab={tab} />
             </Suspense>
           </PreloadQuery>
         </TabsContent>
@@ -111,7 +109,7 @@ export const ArticleDashboardTemplate: FC<
             }}
           >
             <Suspense fallback={<SkeltonArticleList />}>
-              <ArticleList user={user} languageStatus={1} tab={tab} />
+              <ArticleList languageStatus={1} tab={tab} />
             </Suspense>
           </PreloadQuery>
         </TabsContent>

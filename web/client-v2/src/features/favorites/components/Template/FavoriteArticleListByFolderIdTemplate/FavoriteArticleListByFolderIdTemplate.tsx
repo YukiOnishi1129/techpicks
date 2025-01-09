@@ -1,4 +1,3 @@
-import { User } from "@supabase/supabase-js";
 import { FC, Suspense } from "react";
 
 import { SkeltonArticleList } from "@/features/articles/components/List";
@@ -12,6 +11,7 @@ import {
   PageBreadcrumb,
 } from "@/shared/components/ui/breadcrumb";
 import { PreloadQuery } from "@/shared/lib/apollo/client";
+import { SearchParamsType } from "@/shared/types/utils";
 
 import { getServerFavoriteArticleListByFolderIdTemplateQuery } from "./actGetServerFavoriteArticleListByFolderIdTemplateQuery";
 import { FavoriteArticleListByFolderIdTemplateQuery } from "./FavoriteArticleListByFolderIdTemplateQuery";
@@ -23,14 +23,14 @@ import { FavoriteArticleList } from "../../List/FavoriteArticleList/FavoriteArti
 import { FavoriteArticleKeywordSearchForm } from "../../Search";
 
 type FavoriteArticleListByFolderIdTemplateProps = {
-  user: User;
+  searchParams: SearchParamsType;
   id: string;
   keyword?: string;
 };
 
 export const FavoriteArticleListByFolderIdTemplate: FC<
   FavoriteArticleListByFolderIdTemplateProps
-> = async ({ user, id, keyword }) => {
+> = async ({ searchParams, id, keyword }) => {
   const input: FavoriteArticlesInput = {
     first: 20,
     after: null,
@@ -80,10 +80,7 @@ export const FavoriteArticleListByFolderIdTemplate: FC<
               keyword={keyword}
             />
           </div>
-          <CreateFavoriteArticleDialog
-            user={user}
-            favoriteArticleFolderId={id}
-          />
+          <CreateFavoriteArticleDialog favoriteArticleFolderId={id} />
         </div>
       </div>
 
@@ -96,7 +93,10 @@ export const FavoriteArticleListByFolderIdTemplate: FC<
           favoriteArticleFoldersInput,
         }}
       >
-        <Suspense fallback={<SkeltonArticleList />}>
+        <Suspense
+          key={JSON.stringify(searchParams)}
+          fallback={<SkeltonArticleList />}
+        >
           <FavoriteArticleList folderId={id} keyword={keyword} />
         </Suspense>
       </PreloadQuery>

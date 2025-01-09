@@ -93,11 +93,14 @@ export class BookmarkService {
     });
   }
 
-  async createBookmark(input: CreateBookmarkInput): Promise<Bookmark> {
+  async createBookmark(
+    userId: string,
+    input: CreateBookmarkInput,
+  ): Promise<Bookmark> {
     const req = new CreateBookmarkRequest();
     req.setArticleId(input.articleId);
     req.setPlatformId(new StringValue().setValue(input.platformId));
-    req.setUserId(input.userId);
+    req.setUserId(userId);
     req.setTitle(input.title);
     req.setDescription(input.description);
     req.setArticleUrl(input.articleUrl);
@@ -207,10 +210,13 @@ export class BookmarkService {
     });
   }
 
-  async deleteBookmark(input: DeleteBookmarkInput): Promise<boolean> {
+  async deleteBookmark(
+    userId: string,
+    input: DeleteBookmarkInput,
+  ): Promise<boolean> {
     const req = new DeleteBookmarkRequest();
     req.setBookmarkId(input.bookmarkId);
-    req.setUserId(input.userId);
+    req.setUserId(userId);
 
     return new Promise((resolve, reject) => {
       const client = this.grpcBookmarkClientService.getGrpcBookmarkService();

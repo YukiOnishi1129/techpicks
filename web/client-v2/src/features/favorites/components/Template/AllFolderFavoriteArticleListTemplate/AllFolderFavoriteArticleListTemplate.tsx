@@ -1,4 +1,3 @@
-import { User } from "@supabase/supabase-js";
 import { FC, Suspense } from "react";
 
 import { SkeltonArticleList } from "@/features/articles/components/List";
@@ -12,6 +11,7 @@ import {
   PageBreadcrumb,
 } from "@/shared/components/ui/breadcrumb";
 import { PreloadQuery } from "@/shared/lib/apollo/client";
+import { SearchParamsType } from "@/shared/types/utils";
 
 import { AllFolderFavoriteArticleListTemplateQuery } from "./AllFolderFavoriteArticleListTemplateQuery";
 import { SearchFavoriteArticleListDialog } from "../../Dialog";
@@ -19,13 +19,13 @@ import { AllFolderFavoriteArticleList } from "../../List";
 import { FavoriteArticleKeywordSearchForm } from "../../Search";
 
 type FavoriteArticleAllListTemplateProps = {
-  user: User;
+  searchParams: SearchParamsType;
   keyword?: string;
 };
 
 export const AllFolderFavoriteArticleListTemplate: FC<
   FavoriteArticleAllListTemplateProps
-> = async ({ user, keyword }) => {
+> = async ({ searchParams, keyword }) => {
   const breadcrumbs: BreadCrumbType[] = [
     {
       title: "Home",
@@ -76,7 +76,10 @@ export const AllFolderFavoriteArticleListTemplate: FC<
           favoriteArticleFoldersInput,
         }}
       >
-        <Suspense fallback={<SkeltonArticleList />}>
+        <Suspense
+          key={JSON.stringify(searchParams)}
+          fallback={<SkeltonArticleList />}
+        >
           <AllFolderFavoriteArticleList keyword={keyword} />
         </Suspense>
       </PreloadQuery>

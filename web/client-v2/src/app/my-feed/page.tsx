@@ -3,8 +3,10 @@ import { redirect } from "next/navigation";
 import { getUser } from "@/features/auth/actions/user";
 import { MyFeedFolderListTemplate } from "@/features/myFeeds/components/Template";
 
+import { SearchParamsType } from "@/shared/types/utils";
+
 type PageProps = {
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+  searchParams: Promise<SearchParamsType>;
 };
 
 export default async function MyFeedFolderListPage({
@@ -17,5 +19,5 @@ export default async function MyFeedFolderListPage({
   const q = await searchParams;
   const keyword = typeof q["keyword"] === "string" ? q["keyword"] : undefined;
 
-  return <MyFeedFolderListTemplate keyword={keyword} />;
+  return <MyFeedFolderListTemplate keyword={keyword} searchParams={q} />;
 }

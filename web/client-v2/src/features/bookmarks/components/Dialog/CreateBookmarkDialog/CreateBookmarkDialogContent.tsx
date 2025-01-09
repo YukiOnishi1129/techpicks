@@ -2,7 +2,6 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ReloadIcon } from "@radix-ui/react-icons";
-import { User } from "@supabase/supabase-js";
 import { FragmentOf, readFragment } from "gql.tada";
 import { useRouter } from "next/navigation";
 import React, {
@@ -16,6 +15,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { logoutToLoginPage } from "@/features/auth/actions/auth";
+import { getUser } from "@/features/auth/actions/user";
 import { createBookmarkForUploadArticleMutation } from "@/features/bookmarks/actions/actCreateBookmarkForUploadArticleMutation";
 import { OGPPreviewContent } from "@/features/ogp/components/Dialog";
 
@@ -44,7 +44,6 @@ import { getCreateBookmarkDialogArticleOGPQuery } from "./actGetCreateBookmarkDi
 import { CreateBookmarkDialogContentFragment } from "./CreateBookmarkDialogContentFragment";
 
 type CreateBookmarkDialogContentProps = {
-  user?: User;
   handleClose: () => void;
 };
 
@@ -58,7 +57,7 @@ const FormSchema = z.object({
 
 export const CreateBookmarkDialogContent: FC<
   CreateBookmarkDialogContentProps
-> = ({ user, handleClose }) => {
+> = ({ handleClose }) => {
   const router = useRouter();
   const { revalidatePage } = useServerRevalidatePage();
   const [ogpData, setOgpData] = useState<FragmentOf<
@@ -102,6 +101,7 @@ export const CreateBookmarkDialogContent: FC<
 
   const handleAddSubmit = useCallback(async () => {
     startOgpPending(async () => {
+      const user = await getUser();
       if (!user) {
         failToast({
           description: "Fail: Please login to bookmark this article",
@@ -156,7 +156,6 @@ export const CreateBookmarkDialogContent: FC<
       return;
     });
   }, [
-    user,
     successToast,
     failToast,
     form,

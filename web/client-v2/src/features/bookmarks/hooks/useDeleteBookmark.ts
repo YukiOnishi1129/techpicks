@@ -7,7 +7,6 @@ import { getUser } from "@/features/auth/actions/user";
 import { serverRevalidatePage } from "@/shared/actions/actServerRevalidatePage";
 import { useStatusToast } from "@/shared/hooks/useStatusToast";
 
-
 import { DeleteBookmarkMutation } from "../mutations/DeleteBookmarkMutation";
 
 export const useDeleteBookmark = () => {
@@ -32,7 +31,6 @@ export const useDeleteBookmark = () => {
         variables: {
           input: {
             bookmarkId,
-            userId: user.id,
           },
         },
         update: (cache) => {
