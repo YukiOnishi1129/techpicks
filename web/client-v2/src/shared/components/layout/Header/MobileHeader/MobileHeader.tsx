@@ -1,20 +1,19 @@
 "use client";
 
-import { User } from "@supabase/supabase-js";
 import { usePathname } from "next/navigation";
 import { FC, useMemo } from "react";
 
 import { NAVIGATION_LISTS } from "@/shared/constant/navigation";
+import { useUserId } from "@/shared/hooks/useUserId";
 
 import { MobileHeaderButton } from "./MobileHeaderButton";
 import { MobileSidebarNavigation } from "./MobileSidebarNavigation";
 
-type MobileHeaderProps = {
-  user?: User;
-};
+type MobileHeaderProps = {};
 
-export const MobileHeader: FC<MobileHeaderProps> = ({ user }) => {
+export const MobileHeader: FC<MobileHeaderProps> = ({}) => {
   const pathname = usePathname();
+  const { userId, loading } = useUserId();
 
   const pageName = useMemo(() => {
     switch (pathname) {
@@ -53,16 +52,16 @@ export const MobileHeader: FC<MobileHeaderProps> = ({ user }) => {
 
   return (
     <div className="fixed z-50 flex h-12 w-screen items-center justify-center border-b border-gray-300  bg-card px-8 shadow-md">
-      {user && (
+      {userId && (
         <div className="absolute left-3">
           <MobileSidebarNavigation />
         </div>
       )}
 
       <h1 className="text-2xl font-bold">{pageName}</h1>
-      {user && (
+      {userId && (
         <div className="absolute right-1 w-14">
-          <MobileHeaderButton user={user} pathname={pathname} />
+          <MobileHeaderButton pathname={pathname} />
         </div>
       )}
     </div>

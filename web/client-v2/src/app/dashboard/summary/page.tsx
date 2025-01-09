@@ -9,5 +9,5 @@ export default async function DashboardSummaryPage() {
     redirect("/login");
   }
 
-  return <ArticleDashboardTemplate user={user} tab={"summary"} />;
+  return <ArticleDashboardTemplate tab={"summary"} />;
 }

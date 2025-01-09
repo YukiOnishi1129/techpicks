@@ -1,4 +1,3 @@
-import { User } from "@supabase/supabase-js";
 import Image from "next/image";
 import { FC, Suspense } from "react";
 
@@ -21,7 +20,6 @@ import { TrendArticleDashboardTemplateQuery } from "./TrendArticleDashboardTempl
 import { TrendArticleList } from "../../List";
 
 type TrendArticleDashboardTemplateProps = {
-  user: User;
   languageStatus?: LanguageStatus;
 };
 
@@ -32,7 +30,7 @@ const TAB_LIST = {
 
 export const TrendArticleDashboardTemplate: FC<
   TrendArticleDashboardTemplateProps
-> = async ({ user, languageStatus = 2 }) => {
+> = async ({ languageStatus = 2 }) => {
   const title = "Trend";
   const tab = "trend";
   const enInput: ArticlesInput = {
@@ -58,7 +56,7 @@ export const TrendArticleDashboardTemplate: FC<
         <h1 className="my-4 hidden text-2xl font-bold md:block">{title}</h1>
         <div className="h-2 w-full md:hidden" />
         <div className="h-16 w-full md:hidden">
-          <SelectArticlePageTab userId={user?.id} />
+          <SelectArticlePageTab />
         </div>
       </div>
       <div className=" h-16" />
@@ -96,7 +94,7 @@ export const TrendArticleDashboardTemplate: FC<
             }}
           >
             <Suspense fallback={<SkeltonArticleList />}>
-              <TrendArticleList user={user} languageStatus={2} tab={tab} />
+              <TrendArticleList languageStatus={2} tab={tab} />
             </Suspense>
           </PreloadQuery>
         </TabsContent>
@@ -109,7 +107,7 @@ export const TrendArticleDashboardTemplate: FC<
             }}
           >
             <Suspense fallback={<SkeltonArticleList />}>
-              <TrendArticleList user={user} languageStatus={1} tab={tab} />
+              <TrendArticleList languageStatus={1} tab={tab} />
             </Suspense>
           </PreloadQuery>
         </TabsContent>

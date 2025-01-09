@@ -1,6 +1,5 @@
 "use client";
 
-import { User } from "@supabase/supabase-js";
 import { useState, FC, useCallback } from "react";
 import { HiPlus } from "react-icons/hi";
 
@@ -10,7 +9,6 @@ import { Dialog, DialogTrigger } from "@/shared/components/ui/dialog/dialog";
 import { CreateBookmarkDialogContent } from "./CreateBookmarkDialogContent";
 
 type CreateBookmarkDialogProps = {
-  user?: User;
   buttonVariant?:
     | "default"
     | "destructive"
@@ -22,7 +20,6 @@ type CreateBookmarkDialogProps = {
 };
 
 export const CreateBookmarkDialog: FC<CreateBookmarkDialogProps> = ({
-  user,
   buttonVariant,
   buttonSize = 24,
 }) => {
@@ -40,9 +37,7 @@ export const CreateBookmarkDialog: FC<CreateBookmarkDialogProps> = ({
           <span className="hidden pl-2 md:block">{"Add"}</span>
         </Button>
       </DialogTrigger>
-      {open && (
-        <CreateBookmarkDialogContent user={user} handleClose={handleClose} />
-      )}
+      {open && <CreateBookmarkDialogContent handleClose={handleClose} />}
     </Dialog>
   );
 };

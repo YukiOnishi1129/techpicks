@@ -1,6 +1,5 @@
 "use client";
 import { useQuery } from "@apollo/client";
-import { User } from "@supabase/supabase-js";
 import { FC } from "react";
 
 import { useCheckImageExist } from "@/shared/hooks/useImage";
@@ -11,13 +10,11 @@ import { FeedArticleKeywordSearchForm } from "../../../Search";
 
 type FeedArticleHeaderProps = {
   feedId: string;
-  user?: User;
   keyword?: string;
 };
 
 export const FeedArticleHeader: FC<FeedArticleHeaderProps> = ({
   feedId,
-  user,
   keyword,
 }) => {
   const { successToast, failToast } = useStatusToast();

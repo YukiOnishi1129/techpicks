@@ -7,6 +7,7 @@ import {
   PageBreadcrumb,
 } from "@/shared/components/ui/breadcrumb";
 import { PreloadQuery } from "@/shared/lib/apollo/client";
+import { SearchParamsType } from "@/shared/types/utils";
 
 import { getServerFeedArticleTemplateQuery } from "./actGetServerFeedArticleTemplateQuery";
 import { FeedArticleHeader } from "./FeedArticleHeader";
@@ -17,11 +18,12 @@ import { FeedArticleList } from "../../List";
 type FeedArticleListTemplateProps = {
   id: string;
   keyword?: string;
+  searchParams: SearchParamsType;
 };
 
 export const FeedArticleListTemplate: FC<
   FeedArticleListTemplateProps
-> = async ({ id, keyword }) => {
+> = async ({ id, keyword, searchParams }) => {
   const { data, error } = await getServerFeedArticleTemplateQuery(id);
   if (error) {
     return <div>Not Found</div>;
@@ -70,7 +72,10 @@ export const FeedArticleListTemplate: FC<
           },
         }}
       >
-        <Suspense fallback={<SkeltonArticleList />}>
+        <Suspense
+          key={JSON.stringify(searchParams)}
+          fallback={<SkeltonArticleList />}
+        >
           <FeedArticleList id={id} keyword={keyword} />
         </Suspense>
       </PreloadQuery>

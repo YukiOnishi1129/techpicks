@@ -22,7 +22,6 @@ export class ArticlesInput {
 
 export class CreateBookmarkInput {
     articleId: string;
-    userId: string;
     platformId?: Nullable<string>;
     title: string;
     description: string;
@@ -48,11 +47,9 @@ export class CreateBookmarkForUploadArticleInput {
 
 export class DeleteBookmarkInput {
     bookmarkId: string;
-    userId: string;
 }
 
 export class BookmarksInput {
-    userId: string;
     keyword?: Nullable<string>;
     first?: Nullable<number>;
     after?: Nullable<string>;

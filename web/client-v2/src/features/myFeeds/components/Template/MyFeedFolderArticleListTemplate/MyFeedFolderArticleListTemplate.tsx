@@ -12,6 +12,7 @@ import {
   PageBreadcrumb,
 } from "@/shared/components/ui/breadcrumb";
 import { PreloadQuery } from "@/shared/lib/apollo/client";
+import { SearchParamsType } from "@/shared/types/utils";
 
 import { getMyFeedFolderArticleListTemplateQuery } from "./actGetMyFeedFolderArticleListTemplateQuery";
 import { MyFeedFolderArticleListTemplateQuery } from "./MyFeedFolderArticleListTemplateQuery";
@@ -24,11 +25,12 @@ const LIMIT = 20;
 type MyFeedFolderArticleListTemplateProps = {
   myFeedFolderId: string;
   keyword?: string;
+  searchParams: SearchParamsType;
 };
 
 export const MyFeedFolderArticleListTemplate: FC<
   MyFeedFolderArticleListTemplateProps
-> = async ({ myFeedFolderId, keyword }) => {
+> = async ({ myFeedFolderId, keyword, searchParams }) => {
   const myFeedFolderInput: MyFeedFolderInput = {
     id: myFeedFolderId,
   };
@@ -96,7 +98,10 @@ export const MyFeedFolderArticleListTemplate: FC<
           },
         }}
       >
-        <Suspense fallback={<SkeltonArticleList />}>
+        <Suspense
+          key={JSON.stringify(searchParams)}
+          fallback={<SkeltonArticleList />}
+        >
           <MyFeedFolderArticleList
             data={data}
             limit={LIMIT}

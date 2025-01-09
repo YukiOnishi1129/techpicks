@@ -3,6 +3,7 @@ import { FC, Suspense } from "react";
 import { ScreenLoader } from "@/shared/components/layout/ScreenLoader";
 import { PreloadQuery } from "@/shared/lib/apollo/client";
 import { PlatformSiteType } from "@/shared/types/platform";
+import { SearchParamsType } from "@/shared/types/utils";
 
 import { FeedListTemplateQuery } from "./FeedListTemplateQuery";
 import { FeedKeywordSearchDialog } from "../../Dialog";
@@ -10,12 +11,14 @@ import { FeedList } from "../../List";
 import { FeedKeywordSearchForm } from "../../Search";
 
 type FeedListTemplateProps = {
+  searchParams: SearchParamsType;
   platformSiteType?: PlatformSiteType;
   platformId?: string;
   keyword?: string;
 };
 
 export const FeedListTemplate: FC<FeedListTemplateProps> = ({
+  searchParams,
   platformSiteType,
   platformId,
   keyword,
@@ -43,7 +46,10 @@ export const FeedListTemplate: FC<FeedListTemplateProps> = ({
           },
         }}
       >
-        <Suspense fallback={<ScreenLoader />}>
+        <Suspense
+          key={JSON.stringify(searchParams)}
+          fallback={<ScreenLoader />}
+        >
           <FeedList
             keyword={keyword}
             platformSiteType={platformSiteType}

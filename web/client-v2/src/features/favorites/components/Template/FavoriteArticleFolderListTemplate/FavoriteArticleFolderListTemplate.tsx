@@ -3,6 +3,7 @@ import { FaHeart } from "react-icons/fa";
 
 import { ScreenLoader } from "@/shared/components/layout/ScreenLoader";
 import { PreloadQuery } from "@/shared/lib/apollo/client";
+import { SearchParamsType } from "@/shared/types/utils";
 
 import { FavoriteArticleFolderListTemplateQuery } from "./FavoriteArticleFolderListTemplateQuery";
 import {
@@ -13,12 +14,13 @@ import { FavoriteArticleFolderList } from "../../List";
 import { FavoriteArticleFolderKeywordSearchForm } from "../../Search";
 
 type FavoriteArticleFolderListTemplateProps = {
+  searchParams: SearchParamsType;
   keyword?: string;
 };
 
 export const FavoriteArticleFolderListTemplate: FC<
   FavoriteArticleFolderListTemplateProps
-> = async ({ keyword }) => {
+> = async ({ searchParams, keyword }) => {
   return (
     <div>
       <div className="fixed z-10 hidden w-[90%] gap-2 bg-card md:block md:w-[70%] md:px-4">
@@ -47,7 +49,10 @@ export const FavoriteArticleFolderListTemplate: FC<
           },
         }}
       >
-        <Suspense fallback={<ScreenLoader />}>
+        <Suspense
+          key={JSON.stringify(searchParams)}
+          fallback={<ScreenLoader />}
+        >
           <FavoriteArticleFolderList keyword={keyword} />
         </Suspense>
       </PreloadQuery>

@@ -12,13 +12,9 @@ import {
 } from "@/shared/components/ui/select";
 import { NAVIGATION_LISTS } from "@/shared/constant/navigation";
 
-type SelectArticlePageTabProps = {
-  userId?: string;
-};
+type SelectArticlePageTabProps = {};
 
-export const SelectArticlePageTab: FC<SelectArticlePageTabProps> = ({
-  userId,
-}) => {
+export const SelectArticlePageTab: FC<SelectArticlePageTabProps> = ({}) => {
   const router = useRouter();
   const pathname = usePathname();
 
@@ -39,32 +35,20 @@ export const SelectArticlePageTab: FC<SelectArticlePageTabProps> = ({
     (value: string) => {
       switch (value) {
         case "0":
-          if (userId) {
-            router.replace("/dashboard/trend");
-            break;
-          }
+          router.replace("/dashboard/trend");
           break;
         case "1":
-          if (userId) {
-            router.replace("/dashboard/site");
-            break;
-          }
+          router.replace("/dashboard/site");
           break;
         case "2":
-          if (userId) {
-            router.replace("/dashboard/company");
-            break;
-          }
+          router.replace("/dashboard/company");
           break;
         case "3":
-          if (userId) {
-            router.replace("/dashboard/summary");
-            break;
-          }
+          router.replace("/dashboard/summary");
           break;
       }
     },
-    [router, userId]
+    [router]
   );
 
   return (

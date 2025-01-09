@@ -6,9 +6,10 @@ import { getUser } from "@/features/auth/actions/user";
 import { ArticleTabType } from "@/shared/types/article";
 import { LanguageStatus } from "@/shared/types/language";
 import { PlatformSiteType } from "@/shared/types/platform";
+import { SearchParamsType } from "@/shared/types/utils";
 
 type PageProps = {
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+  searchParams: Promise<SearchParamsType>;
 };
 
 export default async function SearchArticleListPage({

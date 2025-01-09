@@ -1,7 +1,6 @@
 "use client";
 
 import { useQuery, useSuspenseQuery } from "@apollo/client";
-import { User } from "@supabase/supabase-js";
 import { FC, useCallback, useEffect, useRef, useState } from "react";
 
 import { NotFoundList } from "@/shared/components/layout/NotFoundList";
@@ -12,11 +11,10 @@ import { BookmarkCardWrapper } from "../../Card";
 import { BookmarkTemplateQuery } from "../../Template/BookmarkTemplate/BookmarkTemplateQuery";
 
 type BookmarkListProps = {
-  user: User;
   keyword?: string;
 };
 
-export const BookmarkList: FC<BookmarkListProps> = ({ user, keyword }) => {
+export const BookmarkList: FC<BookmarkListProps> = ({ keyword }) => {
   const observerTarget = useRef(null);
 
   const { data: resSuspenseData, error } = useSuspenseQuery(
@@ -26,7 +24,6 @@ export const BookmarkList: FC<BookmarkListProps> = ({ user, keyword }) => {
         input: {
           first: 20,
           after: null,
-          userId: user.id,
           keyword,
         },
         favoriteArticleFoldersInput: {
@@ -46,7 +43,6 @@ export const BookmarkList: FC<BookmarkListProps> = ({ user, keyword }) => {
       input: {
         first: 20,
         after: null,
-        userId: user.id,
         keyword,
       },
     },
@@ -68,7 +64,6 @@ export const BookmarkList: FC<BookmarkListProps> = ({ user, keyword }) => {
       variables: {
         input: {
           first: 20,
-          userId: user.id,
           keyword,
           after: endCursor,
         },
@@ -97,7 +92,7 @@ export const BookmarkList: FC<BookmarkListProps> = ({ user, keyword }) => {
     if (!resData.bookmarks.pageInfo.hasNextPage) setIsNextPage(false);
 
     setHashMore(resData.bookmarks.edges.length > 0);
-  }, [keyword, user.id, endCursor, isNextPage, fetchMore]);
+  }, [keyword, endCursor, isNextPage, fetchMore]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
