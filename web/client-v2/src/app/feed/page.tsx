@@ -4,9 +4,10 @@ import { getUser } from "@/features/auth/actions/user";
 import { FeedListTemplate } from "@/features/feeds/components/Template";
 
 import { convertPlatformSiteType } from "@/shared/lib/convert";
+import { SearchParamsType } from "@/shared/types/utils";
 
 type PageProps = {
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+  searchParams: Promise<SearchParamsType>;
 };
 
 export default async function FeedListPage({ searchParams }: PageProps) {
@@ -28,6 +29,7 @@ export default async function FeedListPage({ searchParams }: PageProps) {
 
   return (
     <FeedListTemplate
+      searchParams={q}
       keyword={keyword}
       platformSiteType={platformSiteType}
       platformId={platformId}

@@ -3,9 +3,11 @@ import { redirect } from "next/navigation";
 import { getUser } from "@/features/auth/actions/user";
 import { MyFeedFolderArticleListTemplate } from "@/features/myFeeds/components/Template";
 
+import { SearchParamsType } from "@/shared/types/utils";
+
 type MyFeedFolderArticleListPageProps = {
   params: Promise<{ id: string }>;
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+  searchParams: Promise<SearchParamsType>;
 };
 
 export default async function MyFeedFolderArticleListPage({
@@ -20,6 +22,10 @@ export default async function MyFeedFolderArticleListPage({
   const q = await searchParams;
   const keyword = typeof q["keyword"] === "string" ? q["keyword"] : undefined;
   return (
-    <MyFeedFolderArticleListTemplate myFeedFolderId={id} keyword={keyword} />
+    <MyFeedFolderArticleListTemplate
+      myFeedFolderId={id}
+      keyword={keyword}
+      searchParams={q}
+    />
   );
 }

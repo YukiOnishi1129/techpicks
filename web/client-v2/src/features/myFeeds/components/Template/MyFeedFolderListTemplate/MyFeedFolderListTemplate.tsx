@@ -3,6 +3,7 @@ import { FC, Suspense } from "react";
 import { ScreenLoader } from "@/shared/components/layout/ScreenLoader";
 import { SELECTABLE_FEED_LIST_LIMIT } from "@/shared/constant/limit";
 import { PreloadQuery } from "@/shared/lib/apollo/client";
+import { SearchParamsType } from "@/shared/types/utils";
 
 import { MyFeedFolderListTemplateQuery } from "./MyFeedFolderListTemplateQuery";
 import {
@@ -16,10 +17,12 @@ const LIMIT = 6;
 
 type MyFeedFolderListTemplateProps = {
   keyword?: string;
+  searchParams: SearchParamsType;
 };
 
 export const MyFeedFolderListTemplate: FC<MyFeedFolderListTemplateProps> = ({
   keyword,
+  searchParams,
 }) => {
   return (
     <div className="w-auto">
@@ -49,7 +52,10 @@ export const MyFeedFolderListTemplate: FC<MyFeedFolderListTemplateProps> = ({
           },
         }}
       >
-        <Suspense fallback={<ScreenLoader />}>
+        <Suspense
+          key={JSON.stringify(searchParams)}
+          fallback={<ScreenLoader />}
+        >
           <MyFeedFolderList
             keyword={keyword}
             limit={LIMIT}
