@@ -66,7 +66,7 @@ func (fpa *feedPersistenceAdapter) GetFeeds(ctx context.Context, req *cpb.GetFee
 
 	if req.GetKeyword().GetValue() != "" {
 		q = append(q, qm.Expr(
-			qm.And("feeds.name LIKE ?", "%"+req.GetKeyword().GetValue()+"%"),
+			qm.And("feeds.name ILIKE ?", "%"+req.GetKeyword().GetValue()+"%"),
 			// qm.Or("description LIKE ?", "%"+req.GetKeyword().GetValue()+"%"),
 		))
 	}

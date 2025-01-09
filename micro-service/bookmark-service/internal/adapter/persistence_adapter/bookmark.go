@@ -49,8 +49,8 @@ func (bpa *bookmarkPersistenceAdapter) GetBookmarks(ctx context.Context, req *bp
 
 	if req.GetKeyword().GetValue() != "" {
 		q = append(q, qm.Expr(
-			qm.And("title LIKE ?", "%"+req.GetKeyword().GetValue()+"%"),
-			qm.Or("description LIKE ?", "%"+req.GetKeyword().GetValue()+"%"),
+			qm.And("title ILIKE ?", "%"+req.GetKeyword().GetValue()+"%"),
+			qm.Or("description ILIKE ?", "%"+req.GetKeyword().GetValue()+"%"),
 		))
 	}
 

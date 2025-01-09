@@ -40,7 +40,7 @@ export const MyFeedFolderArticleKeywordSearchForm: FC<
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     let keywordPath = "";
     if (!!values.keyword && values.keyword.trim() !== "") {
-      keywordPath = `?keyword=${values.keyword}`;
+      keywordPath = `keyword=${values.keyword}`;
     }
     await serverRevalidatePage(pathname);
     router.replace(`/my-feed/article/${myFeedFolderId}?${keywordPath}`);
