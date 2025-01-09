@@ -51,8 +51,8 @@ func (fafa *favoriteArticleFolderPersistenceAdapter) GetFavoriteArticleFolders(c
 
 	if req.GetKeyword().GetValue() != "" {
 		q = append(q, qm.Expr(
-			qm.And("favorite_article_folders.title LIKE ?", "%"+req.GetKeyword().GetValue()+"%"),
-			qm.Or("favorite_article_folders.description LIKE ?", "%"+req.GetKeyword().GetValue()+"%"),
+			qm.And("favorite_article_folders.title ILIKE ?", "%"+req.GetKeyword().GetValue()+"%"),
+			qm.Or("favorite_article_folders.description ILIKE ?", "%"+req.GetKeyword().GetValue()+"%"),
 		))
 	}
 	favoriteArticleFolders, err := fafa.favoriteArticleFolderRepository.GetFavoriteArticleFolders(ctx, q)

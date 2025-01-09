@@ -46,8 +46,8 @@ func (m *myFeedFolderPersistenceAdapter) GetMyFeedFolders(ctx context.Context, r
 
 	if req.GetKeyword().GetValue() != "" {
 		q = append(q, qm.Expr(
-			qm.And("my_feed_folders.title LIKE ?", "%"+req.GetKeyword().GetValue()+"%"),
-			qm.Or("my_feed_folders.description LIKE ?", "%"+req.GetKeyword().GetValue()+"%"),
+			qm.And("my_feed_folders.title ILIKE ?", "%"+req.GetKeyword().GetValue()+"%"),
+			qm.Or("my_feed_folders.description ILIKE ?", "%"+req.GetKeyword().GetValue()+"%"),
 		))
 	}
 

@@ -50,8 +50,8 @@ func (fapa *favoriteArticlePersistenceAdapter) GetFavoriteArticles(ctx context.C
 	}
 	if req.GetKeyword() != nil {
 		q = append(q, qm.Expr(
-			qm.And("title LIKE ?", "%"+req.GetKeyword().GetValue()+"%"),
-			qm.Or("description LIKE ?", "%"+req.GetKeyword().GetValue()+"%"),
+			qm.And("title ILIKE ?", "%"+req.GetKeyword().GetValue()+"%"),
+			qm.Or("description ILIKE ?", "%"+req.GetKeyword().GetValue()+"%"),
 		))
 	}
 	if req.GetFavoriteArticleFolderId() != nil {
