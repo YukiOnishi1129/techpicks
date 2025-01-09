@@ -5,18 +5,24 @@ import { SkeltonArticleList } from "@/features/articles/components/List";
 
 import { BookmarksInput, FavoriteArticleFoldersInput } from "@/graphql/type";
 import { PreloadQuery } from "@/shared/lib/apollo/client";
+import { SearchParamsType } from "@/shared/types/utils";
 
 import { BookmarkTemplateQuery } from "./BookmarkTemplateQuery";
-import { CreateBookmarkDialog } from "../../Dialog";
+import {
+  CreateBookmarkDialog,
+  SearchBookmarkKeywordDialogFloatButton,
+} from "../../Dialog";
 import { BookmarkList } from "../../List";
 import { BookmarkArticleKeywordSearchInput } from "../../Search";
 
 type BookmarkTemplateProps = {
+  searchParams: SearchParamsType;
   user: User;
   keyword?: string;
 };
 
 export const BookmarkTemplate = async ({
+  searchParams,
   user,
   keyword,
 }: BookmarkTemplateProps) => {
@@ -49,13 +55,16 @@ export const BookmarkTemplate = async ({
         query={BookmarkTemplateQuery}
         variables={{ input, favoriteArticleFoldersInput }}
       >
-        <Suspense fallback={<SkeltonArticleList />}>
+        <Suspense
+          key={JSON.stringify(searchParams)}
+          fallback={<SkeltonArticleList />}
+        >
           <BookmarkList user={user} keyword={keyword} />
         </Suspense>
       </PreloadQuery>
 
       <div className="fixed bottom-20 right-4 z-50  md:hidden">
-        {/* <BookmarkSearchKeywordDialogFloatButton keyword={keyword} /> */}
+        <SearchBookmarkKeywordDialogFloatButton keyword={keyword} />
       </div>
     </div>
   );
