@@ -58,8 +58,8 @@ func (apa *articlePersistenceAdapter) GetArticles(ctx context.Context, req *cpb.
 
 	if req.GetKeyword().GetValue() != "" {
 		q = append(q, qm.Expr(
-			qm.And("articles.title LIKE ?", "%"+req.GetKeyword().GetValue()+"%"),
-			qm.Or("articles.description LIKE ?", "%"+req.GetKeyword().GetValue()+"%"),
+			qm.And("articles.title ILIKE ?", "%"+req.GetKeyword().GetValue()+"%"),
+			qm.Or("articles.description ILIKE ?", "%"+req.GetKeyword().GetValue()+"%"),
 		))
 	}
 
