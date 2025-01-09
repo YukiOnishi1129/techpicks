@@ -18,7 +18,7 @@ type AvatarDropdownMenuProps = {};
 
 export const AvatarDropdownMenu: FC<AvatarDropdownMenuProps> = ({}) => {
   return (
-    <DropdownMenu>
+    <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild>
         <div className="md:flex md:justify-end">
           <UserAvatar />

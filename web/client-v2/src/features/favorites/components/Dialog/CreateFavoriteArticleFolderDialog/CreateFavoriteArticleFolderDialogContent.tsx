@@ -17,6 +17,7 @@ import {
   DialogTitle,
   DialogContent,
   DialogClose,
+  DialogDescription,
 } from "@/shared/components/ui/dialog";
 import {
   Form,
@@ -64,7 +65,7 @@ export const CreateFavoriteArticleFolderDialogContent: FC<
     resolver: zodResolver(FormSchema),
     defaultValues: {
       title: "",
-      description: "",
+      description: undefined,
     },
   });
 
@@ -166,77 +167,76 @@ export const CreateFavoriteArticleFolderDialogContent: FC<
     <DialogContent onCloseAutoFocus={resetDialog}>
       <DialogHeader>
         <DialogTitle>{"Create Favorite Article Folder"}</DialogTitle>
+        <DialogDescription></DialogDescription>
       </DialogHeader>
 
-      <div>
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="w-full space-y-6"
-          >
-            <FormField
-              control={form.control}
-              name="title"
-              render={({ field }) => (
-                <FormItem className="w-full">
-                  <FormLabel className="font-bold">
-                    TITLE
-                    <span className="text-red-700"> *</span>
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      className="block w-full border-primary bg-secondary text-primary"
-                      placeholder="Favorite Article  Folder Title"
-                      type="text"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="description"
-              render={({ field }) => (
-                <FormItem className="w-full">
-                  <FormLabel className="font-bold">DESCRIPTION</FormLabel>
-                  <FormControl>
-                    <Input
-                      className="block w-full border-primary bg-secondary text-primary"
-                      placeholder="Favorite Article Folder Description"
-                      type="text"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="w-full space-y-6"
+        >
+          <FormField
+            control={form.control}
+            name="title"
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <FormLabel className="font-bold">
+                  TITLE
+                  <span className="text-red-700"> *</span>
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    className="block w-full border-primary bg-secondary text-primary"
+                    placeholder="Favorite Article  Folder Title"
+                    type="text"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="description"
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <FormLabel className="font-bold">DESCRIPTION</FormLabel>
+                <FormControl>
+                  <Input
+                    className="block w-full border-primary bg-secondary text-primary"
+                    placeholder="Favorite Article Folder Description"
+                    type="text"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-            <div className="mt-4 flex w-full justify-between space-x-4">
-              <DialogClose asChild>
-                <Button variant={"outline"} onClick={resetDialog}>
-                  {"CLOSE"}
-                </Button>
-              </DialogClose>
-              {isPending ? (
-                <Button disabled>
-                  <ReloadIcon className="mr-2 size-4 animate-spin" />
-                  PLEASE WAIT
-                </Button>
-              ) : (
-                <Button
-                  disabled={!form.formState.isValid || isPending}
-                  type="submit"
-                >
-                  {"CREATE"}
-                </Button>
-              )}
-            </div>
-          </form>
-        </Form>
-      </div>
+          <div className="mt-4 flex w-full justify-between space-x-4">
+            <DialogClose asChild>
+              <Button variant={"outline"} onClick={resetDialog}>
+                {"CLOSE"}
+              </Button>
+            </DialogClose>
+            {isPending ? (
+              <Button disabled>
+                <ReloadIcon className="mr-2 size-4 animate-spin" />
+                PLEASE WAIT
+              </Button>
+            ) : (
+              <Button
+                disabled={!form.formState.isValid || isPending}
+                type="submit"
+              >
+                {"CREATE"}
+              </Button>
+            )}
+          </div>
+        </form>
+      </Form>
     </DialogContent>
   );
 };
