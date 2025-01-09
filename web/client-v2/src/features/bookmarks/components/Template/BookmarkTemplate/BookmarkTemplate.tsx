@@ -1,4 +1,3 @@
-import { User } from "@supabase/supabase-js";
 import { Suspense } from "react";
 
 import { SkeltonArticleList } from "@/features/articles/components/List";
@@ -17,19 +16,16 @@ import { BookmarkArticleKeywordSearchInput } from "../../Search";
 
 type BookmarkTemplateProps = {
   searchParams: SearchParamsType;
-  user: User;
   keyword?: string;
 };
 
 export const BookmarkTemplate = async ({
   searchParams,
-  user,
   keyword,
 }: BookmarkTemplateProps) => {
   const input: BookmarksInput = {
     first: 20,
     after: null,
-    userId: user.id,
     keyword: keyword,
   };
 
@@ -47,19 +43,22 @@ export const BookmarkTemplate = async ({
         <div className="mr-2 w-3/4 md:mr-4">
           <BookmarkArticleKeywordSearchInput keyword={keyword} />
         </div>
-        <CreateBookmarkDialog user={user} />
+        <CreateBookmarkDialog />
       </div>
       <div className="h-4 md:h-16" />
 
       <PreloadQuery
         query={BookmarkTemplateQuery}
-        variables={{ input, favoriteArticleFoldersInput }}
+        variables={{
+          input,
+          favoriteArticleFoldersInput,
+        }}
       >
         <Suspense
           key={JSON.stringify(searchParams)}
           fallback={<SkeltonArticleList />}
         >
-          <BookmarkList user={user} keyword={keyword} />
+          <BookmarkList keyword={keyword} />
         </Suspense>
       </PreloadQuery>
 

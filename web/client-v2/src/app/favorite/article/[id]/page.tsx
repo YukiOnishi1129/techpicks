@@ -1,14 +1,13 @@
 import { redirect } from "next/navigation";
-import { Suspense } from "react";
 
 import { getUser } from "@/features/auth/actions/user";
 import { FavoriteArticleListByFolderIdTemplate } from "@/features/favorites/components";
 
-import { ScreenLoader } from "@/shared/components/layout/ScreenLoader";
+import { SearchParamsType } from "@/shared/types/utils";
 
 type FavoriteArticleListPageProps = {
   params: Promise<{ id: string }>;
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+  searchParams: Promise<SearchParamsType>;
 };
 
 export default async function FavoriteArticleListPage({
@@ -25,12 +24,10 @@ export default async function FavoriteArticleListPage({
   const keyword = typeof q["keyword"] === "string" ? q["keyword"] : undefined;
 
   return (
-    <Suspense fallback={<ScreenLoader />}>
-      <FavoriteArticleListByFolderIdTemplate
-        user={user}
-        id={id}
-        keyword={keyword}
-      />
-    </Suspense>
+    <FavoriteArticleListByFolderIdTemplate
+      id={id}
+      keyword={keyword}
+      searchParams={q}
+    />
   );
 }

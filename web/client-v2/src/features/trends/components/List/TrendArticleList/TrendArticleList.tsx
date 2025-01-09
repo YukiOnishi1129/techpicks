@@ -1,7 +1,6 @@
 "use client";
 
 import { useQuery, useSuspenseQuery } from "@apollo/client";
-import { User } from "@supabase/supabase-js";
 import { useCallback, useRef, useState, useEffect } from "react";
 
 import { ArticleCardWrapper } from "@/features/articles/components/Card";
@@ -14,13 +13,11 @@ import { TrendArticleListQuery } from "./TrendArticleListQuery";
 import { TrendArticleDashboardTemplateQuery } from "../../Template/TrendArticleDashboardTemplate/TrendArticleDashboardTemplateQuery";
 
 type TrendArticleListProps = {
-  user: User;
   languageStatus: LanguageStatus;
   tab: ArticleTabType;
 };
 
 export function TrendArticleList({
-  user,
   languageStatus,
   tab,
 }: TrendArticleListProps) {

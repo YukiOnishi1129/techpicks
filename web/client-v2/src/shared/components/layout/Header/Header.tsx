@@ -1,21 +1,18 @@
-import { User } from "@supabase/supabase-js";
 import { FC } from "react";
 
 import { DesktopHeader } from "./DesktopHeader";
 import { MobileHeader } from "./MobileHeader";
 
-type HeaderProps = {
-  user?: User;
-};
+type HeaderProps = {};
 
-export const Header: FC<HeaderProps> = ({ user }) => {
+export const Header: FC<HeaderProps> = ({}) => {
   return (
     <>
       <div className="hidden md:block">
-        <DesktopHeader user={user} />
+        <DesktopHeader />
       </div>
       <div className="block md:hidden">
-        <MobileHeader user={user} />
+        <MobileHeader />
       </div>
     </>
   );

@@ -9,5 +9,5 @@ export default async function DashboardTrendPage() {
     redirect("/login");
   }
 
-  return <TrendArticleDashboardTemplate user={user} />;
+  return <TrendArticleDashboardTemplate />;
 }

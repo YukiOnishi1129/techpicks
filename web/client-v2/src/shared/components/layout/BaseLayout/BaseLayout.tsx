@@ -10,7 +10,7 @@ export const BaseLayout = async ({ children }: { children: ReactNode }) => {
   return (
     <>
       {user ? (
-        <LoggedBaseLayout user={user}>{children}</LoggedBaseLayout>
+        <LoggedBaseLayout>{children}</LoggedBaseLayout>
       ) : (
         <NotLoggedBaseLayout>{children}</NotLoggedBaseLayout>
       )}

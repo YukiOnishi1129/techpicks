@@ -1,7 +1,6 @@
 "use client";
 
 import { useSuspenseQuery, useQuery } from "@apollo/client";
-import { User } from "@supabase/supabase-js";
 import { useCallback, useRef, useState, useEffect } from "react";
 
 import { NotFoundList } from "@/shared/components/layout/NotFoundList";
@@ -14,12 +13,11 @@ import { ArticleCardWrapper } from "../../Card/ArticleCardWrapper/ArticleCardWra
 import { ArticleDashboardTemplateQuery } from "../../Template/ArticleDashboardTemplate/ArticleDashboardTemplateQuery";
 
 type ArticleListProps = {
-  user: User;
   languageStatus: LanguageStatus;
   tab: ArticleTabType;
 };
 
-export function ArticleList({ user, languageStatus, tab }: ArticleListProps) {
+export function ArticleList({ languageStatus, tab }: ArticleListProps) {
   const observerTarget = useRef(null);
 
   const { data: resSuspenseData, error } = useSuspenseQuery(

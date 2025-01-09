@@ -1,4 +1,3 @@
-import { User } from "@supabase/supabase-js";
 import { FC, ReactNode, Suspense } from "react";
 
 import { Header } from "@/shared/components/layout/Header";
@@ -9,18 +8,16 @@ import { LoggedBottomNavigationMenu } from "../../BottomNavigationMenu";
 import { DesktopSidebar, SkeltonDesktopSidebar } from "../../Sidebar";
 
 type LoggedBaseLayoutProps = {
-  user: User;
   children: ReactNode;
 };
 
 export const LoggedBaseLayout: FC<LoggedBaseLayoutProps> = async ({
-  user,
   children,
 }) => {
   return (
     <div>
       <header className="overflow-hidden">
-        <Header user={user} />
+        <Header />
       </header>
 
       <div className="h-12 md:h-16" />

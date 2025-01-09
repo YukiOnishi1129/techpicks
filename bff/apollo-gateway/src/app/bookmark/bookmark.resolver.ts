@@ -31,9 +31,10 @@ export class BookmarkResolver {
   @UseGuards(SupabaseAuthGuard)
   async createBookmark(
     @Args('createBookmarkInput') input: CreateBookmarkInput,
-    // @Context() context: GraphQLContext,
+    @Context() context: GraphQLContext,
   ): Promise<Bookmark> {
-    return await this.bookmarkService.createBookmark(input);
+    const user = context.req.user;
+    return await this.bookmarkService.createBookmark(user.id, input);
   }
 
   @Mutation(() => Bookmark)
@@ -53,8 +54,9 @@ export class BookmarkResolver {
   @UseGuards(SupabaseAuthGuard)
   async deleteBookmark(
     @Args('deleteBookmarkInput') input: DeleteBookmarkInput,
-    // @Context() context: GraphQLContext,
+    @Context() context: GraphQLContext,
   ): Promise<boolean> {
-    return await this.bookmarkService.deleteBookmark(input);
+    const user = context.req.user;
+    return await this.bookmarkService.deleteBookmark(user.id, input);
   }
 }

@@ -2,7 +2,6 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ReloadIcon } from "@radix-ui/react-icons";
-import { User } from "@supabase/supabase-js";
 import { FragmentOf, readFragment } from "gql.tada";
 import { useRouter } from "next/navigation";
 import React, {
@@ -16,6 +15,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { logoutToLoginPage } from "@/features/auth/actions/auth";
+import { getUser } from "@/features/auth/actions/user";
 import { createFavoriteArticleForUploadArticleMutation } from "@/features/favorites/actions/actCreateFavoriteArticleForUploadArticleMutation";
 import { OGPPreviewContent } from "@/features/ogp/components/Dialog";
 
@@ -44,9 +44,8 @@ import { getCreateFavoriteArticleDialogOGPQuery } from "./actGetCreateFavoriteAr
 import { CreateFavoriteArticleDialogContentFragment } from "./CreateFavoriteArticleDialogFragment";
 
 type CreateFavoriteArticleDialogContentProps = {
-  user?: User;
   favoriteArticleFolderId: string;
-  handleClose: () => void;
+  onClose: () => void;
 };
 
 const FormSchema = z.object({
@@ -59,7 +58,7 @@ const FormSchema = z.object({
 
 export const CreateFavoriteArticleDialogContent: FC<
   CreateFavoriteArticleDialogContentProps
-> = ({ user, favoriteArticleFolderId, handleClose }) => {
+> = ({ favoriteArticleFolderId, onClose }) => {
   const router = useRouter();
   const { revalidatePage } = useServerRevalidatePage();
   const [ogpData, setOgpData] = useState<FragmentOf<
@@ -103,6 +102,7 @@ export const CreateFavoriteArticleDialogContent: FC<
 
   const handleAddSubmit = useCallback(async () => {
     startOgpPending(async () => {
+      const user = await getUser();
       if (!user) {
         failToast({
           description: "Fail: Please login to favorite this article",
@@ -155,16 +155,15 @@ export const CreateFavoriteArticleDialogContent: FC<
       await revalidatePage();
       router.replace(`/favorite/article/${favoriteArticleFolderId}`);
       resetDialog();
-      handleClose();
+      onClose();
       return;
     });
   }, [
-    user,
     successToast,
     failToast,
     form,
     ogpData,
-    handleClose,
+    onClose,
     resetDialog,
     revalidatePage,
     router,
