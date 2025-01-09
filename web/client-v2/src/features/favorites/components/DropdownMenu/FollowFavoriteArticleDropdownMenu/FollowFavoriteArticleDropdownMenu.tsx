@@ -49,7 +49,7 @@ export const FollowFavoriteArticleDropdownMenu: FC<
   handleCreateFavoriteArticleFolder,
 }) => {
   return (
-    <DropdownMenu>
+    <DropdownMenu modal={false}>
       <TooltipProvider>
         <Tooltip>
           <DropdownMenuTrigger asChild>
