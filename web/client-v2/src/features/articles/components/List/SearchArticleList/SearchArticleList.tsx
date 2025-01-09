@@ -11,6 +11,7 @@ import { LanguageStatus } from "@/shared/types/language";
 import { SearchArticleListQuery } from "./SearchArticleListQuery";
 import { ArticleCardWrapper } from "../../Card/ArticleCardWrapper/ArticleCardWrapper";
 import { SearchArticleListTemplateQuery } from "../../Template/SearchArticleListTemplate/SearchArticleListTemplateQuery";
+import { SkeltonArticleList } from "../SkeltonArticleList";
 
 type SearchArticleListProps = {
   limit: number;
@@ -52,6 +53,7 @@ export function SearchArticleList({
   const {
     data: res,
     fetchMore,
+    loading,
     error: onlyFetchArticlesError,
   } = useQuery(SearchArticleListQuery, {
     variables: {
@@ -160,6 +162,10 @@ export function SearchArticleList({
 
   if (onlyFetchArticlesError) {
     return <div>{onlyFetchArticlesError.message}</div>;
+  }
+
+  if (loading) {
+    return <SkeltonArticleList />;
   }
 
   return (

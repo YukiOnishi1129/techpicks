@@ -70,7 +70,7 @@ export const SearchArticleListTemplate: FC<
     },
   ];
   return (
-    <div>
+    <>
       <div className="fixed z-10  w-[90%] bg-card md:block md:w-[70%] md:justify-between md:px-4">
         <div className="mb-2 mt-4">
           <PageBreadcrumb breadcrumbs={breadcrumbs} />
@@ -126,6 +126,6 @@ export const SearchArticleListTemplate: FC<
           feedsEndCursor={data?.initFeeds?.pageInfo?.endCursor || undefined}
         />
       </div>
-    </div>
+    </>
   );
 };
