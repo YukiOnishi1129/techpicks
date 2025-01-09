@@ -50,7 +50,7 @@ export const BookmarkTemplate = async ({
         variables={{ input, favoriteArticleFoldersInput }}
       >
         <Suspense fallback={<SkeltonArticleList />}>
-          <BookmarkList user={user} />
+          <BookmarkList user={user} keyword={keyword} />
         </Suspense>
       </PreloadQuery>
 

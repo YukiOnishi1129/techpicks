@@ -1,9 +1,9 @@
 {
   "folders": [
-    {
-      "name": "💻 Web",
-      "path": "./web/client"
-    },
+    // {
+    //   "name": "💻 Web",
+    //   "path": "./web/client"
+    // },
     {
       "name": "🖥️ Web-V2",
       "path": "./web/client-v2"
