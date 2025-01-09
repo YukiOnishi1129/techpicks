@@ -41,6 +41,7 @@ export default async function SearchArticleListPage({
 
   return (
     <SearchArticleListTemplate
+      searchParams={q}
       languageStatus={languageStatus}
       keyword={keyword}
       platformSiteType={platformSiteType}

@@ -26,11 +26,19 @@ export type SearchArticleListTemplateProps = {
   platformSiteType?: PlatformSiteType;
   feedIdList: Array<string>;
   tab: ArticleTabType;
+  searchParams: { [key: string]: string | string[] | undefined };
 };
 
 export const SearchArticleListTemplate: FC<
   SearchArticleListTemplateProps
-> = async ({ languageStatus, keyword, platformSiteType, feedIdList, tab }) => {
+> = async ({
+  languageStatus,
+  keyword,
+  platformSiteType,
+  feedIdList,
+  tab,
+  searchParams,
+}) => {
   let keywordPath = "";
   if (!!keyword && keyword.trim() !== "") {
     keywordPath = `&keyword=${keyword}`;
@@ -107,7 +115,10 @@ export const SearchArticleListTemplate: FC<
             },
           }}
         >
-          <Suspense fallback={<SkeltonArticleList />}>
+          <Suspense
+            key={JSON.stringify(searchParams)}
+            fallback={<SkeltonArticleList />}
+          >
             <SearchArticleList
               limit={LIMIT}
               languageStatus={languageStatus}
