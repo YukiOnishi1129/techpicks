@@ -8,7 +8,9 @@ import (
 	copb "github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go/grpc/common"
 	cpb "github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go/grpc/content"
 	fpb "github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go/grpc/favorite"
+	persistenceadapter "github.com/YukiOnishi1129/techpicks/micro-service/favorite-service/internal/adapter/persistence_adapter"
 	"github.com/YukiOnishi1129/techpicks/micro-service/favorite-service/internal/domain/entity"
+	"github.com/volatiletech/null/v8"
 	"google.golang.org/protobuf/types/known/emptypb"
 	"google.golang.org/protobuf/types/known/timestamppb"
 	"google.golang.org/protobuf/types/known/wrapperspb"
@@ -196,8 +198,36 @@ func (fu *favoriteUseCase) CreateFavoriteArticleForUploadArticle(ctx context.Con
 		return &fpb.CreateFavoriteArticleResponse{}, err
 	}
 
+	dto := persistenceadapter.CreateFavoriteArticleForUploadArticleDTO{
+		UserID:                  req.GetUserId(),
+		FavoriteArticleFolderID: req.GetFavoriteArticleFolderId(),
+		ArticleID:               article.GetArticle().GetId(),
+		Title:                   article.GetArticle().GetTitle(),
+		Description:             article.GetArticle().GetDescription(),
+		ArticleURL:              article.GetArticle().GetArticleUrl(),
+		ThumbnailURL:            article.GetArticle().GetThumbnailUrl(),
+		PlatformName:            article.GetArticle().GetPlatform().GetName(),
+		PlatformURL:             article.GetArticle().GetPlatform().GetSiteUrl(),
+		PlatformFaviconURL:      article.GetArticle().GetPlatform().GetFaviconUrl(),
+		IsEng:                   article.GetArticle().GetIsEng(),
+		IsPrivate:               article.GetArticle().GetIsPrivate(),
+	}
+
+	if article.GetArticle().GetPlatform().GetId() != "" {
+		dto.PlatformID = null.StringFrom(article.GetArticle().GetPlatform().GetId())
+	}
+	if article.GetArticle().GetPublishedAt() != nil {
+		dto.PublishedAt = null.TimeFrom(article.GetArticle().GetPublishedAt().AsTime())
+	}
+	if article.GetArticle().GetAuthorName() != nil {
+		dto.AuthorName = null.StringFrom(article.GetArticle().GetAuthorName().GetValue())
+	}
+	if article.GetArticle().GetTags() != nil {
+		dto.Tags = null.StringFrom(article.GetArticle().GetTags().GetValue())
+	}
+
 	// create favorite article
-	cfa, err := fu.favoriteArticlePersistenceAdapter.CreateFavoriteArticleForUploadArticle(ctx, req, article.Article)
+	cfa, err := fu.favoriteArticlePersistenceAdapter.CreateFavoriteArticleForUploadArticle(ctx, dto)
 	if err != nil {
 		return &fpb.CreateFavoriteArticleResponse{}, err
 	}
@@ -209,6 +239,119 @@ func (fu *favoriteUseCase) CreateFavoriteArticleForUploadArticle(ctx context.Con
 
 	return &fpb.CreateFavoriteArticleResponse{
 		FavoriteArticle: fu.convertPBFavoriteArticle(&fa),
+	}, nil
+}
+
+func (fu *favoriteUseCase) CreateMultiFavoriteArticlesForUploadArticle(ctx context.Context, req *fpb.CreateMultiFavoriteArticlesForUploadArticleRequest) (*fpb.CreateMultiFavoriteArticlesForUploadArticleResponse, error) {
+	resFa := &fpb.FavoriteArticle{}
+	dto := persistenceadapter.CreateFavoriteArticleForUploadArticleDTO{
+		UserID: req.GetUserId(),
+	}
+
+	// check article data
+	articles, err := fu.contentExternalAdapter.ListArticleByArticleURL(ctx, &cpb.ListArticleByArticleURLRequest{
+		ArticleUrl: req.GetArticleUrl(),
+		Limit:      1,
+	})
+	if err != nil {
+		return &fpb.CreateMultiFavoriteArticlesForUploadArticleResponse{}, err
+	}
+
+	if articles.GetArticlesEdge() != nil {
+		// create article
+		article, err := fu.contentExternalAdapter.CreateUploadArticle(ctx, &cpb.CreateUploadArticleRequest{
+			UserId:             req.GetUserId(),
+			Title:              req.GetTitle(),
+			Description:        req.GetDescription(),
+			ArticleUrl:         req.GetArticleUrl(),
+			ThumbnailUrl:       req.GetThumbnailUrl(),
+			PlatformName:       req.GetPlatformName(),
+			PlatformUrl:        req.GetPlatformUrl(),
+			PlatformFaviconUrl: req.GetPlatformFaviconUrl(),
+		})
+		if err != nil {
+			return &fpb.CreateMultiFavoriteArticlesForUploadArticleResponse{}, err
+		}
+
+		dto.ArticleID = article.GetArticle().GetId()
+		dto.Title = article.GetArticle().GetTitle()
+		dto.Description = article.GetArticle().GetDescription()
+		dto.ArticleURL = article.GetArticle().GetArticleUrl()
+		dto.ThumbnailURL = article.GetArticle().GetThumbnailUrl()
+		dto.PlatformName = article.GetArticle().GetPlatform().GetName()
+		dto.PlatformURL = article.GetArticle().GetPlatform().GetSiteUrl()
+		dto.PlatformFaviconURL = article.GetArticle().GetPlatform().GetFaviconUrl()
+		dto.IsEng = article.GetArticle().GetIsEng()
+		dto.IsPrivate = article.GetArticle().GetIsPrivate()
+
+		if article.GetArticle().GetPlatform().GetId() != "" {
+			dto.PlatformID = null.StringFrom(article.GetArticle().GetPlatform().GetId())
+		}
+		if article.GetArticle().GetPublishedAt() != nil {
+			dto.PublishedAt = null.TimeFrom(article.GetArticle().GetPublishedAt().AsTime())
+		}
+		if article.GetArticle().GetAuthorName() != nil {
+			dto.AuthorName = null.StringFrom(article.GetArticle().GetAuthorName().GetValue())
+		}
+		if article.GetArticle().GetTags() != nil {
+			dto.Tags = null.StringFrom(article.GetArticle().GetTags().GetValue())
+		}
+	} else {
+		a := articles.GetArticlesEdge()[0]
+		dto.ArticleID = a.GetArticle().GetId()
+		dto.Title = a.GetArticle().GetTitle()
+		dto.Description = a.GetArticle().GetDescription()
+		dto.ArticleURL = a.GetArticle().GetArticleUrl()
+		dto.ThumbnailURL = a.GetArticle().GetThumbnailUrl()
+		dto.PlatformName = a.GetPlatform().GetName()
+		dto.PlatformURL = a.GetPlatform().GetSiteUrl()
+		dto.PlatformFaviconURL = a.GetPlatform().GetFaviconUrl()
+		dto.IsEng = a.GetArticle().GetIsEng()
+		dto.IsPrivate = a.GetArticle().GetIsPrivate()
+
+		if a.GetPlatform().GetId() != "" {
+			dto.PlatformID = null.StringFrom(a.GetPlatform().GetId())
+		}
+		if a.GetArticle().GetPublishedAt() != nil {
+			dto.PublishedAt = null.TimeFrom(a.GetArticle().GetPublishedAt().AsTime())
+		}
+		if a.GetArticle().GetAuthorName() != nil {
+			dto.AuthorName = null.StringFrom(a.GetArticle().GetAuthorName().GetValue())
+		}
+		if a.GetArticle().GetTags() != nil {
+			dto.Tags = null.StringFrom(a.GetArticle().GetTags().GetValue())
+		}
+	}
+
+	// create article data
+	for i, fafID := range req.GetFavoriteArticleFolderIds() {
+		data, err := fu.favoriteArticlePersistenceAdapter.GetFavoriteArticleByArticleURL(ctx, req.GetArticleUrl(), fafID, req.GetUserId())
+		if err != nil {
+			return &fpb.CreateMultiFavoriteArticlesForUploadArticleResponse{}, err
+		}
+		if data.ID != "" {
+			continue
+		}
+		dto.FavoriteArticleFolderID = fafID
+		// create favorite article
+		cfa, err := fu.favoriteArticlePersistenceAdapter.CreateFavoriteArticleForUploadArticle(ctx, dto)
+		if err != nil {
+			return &fpb.CreateMultiFavoriteArticlesForUploadArticleResponse{}, err
+		}
+
+		fa, err := fu.favoriteArticlePersistenceAdapter.GetFavoriteArticleByID(ctx, cfa.ID, cfa.UserID)
+		if err != nil {
+			return &fpb.CreateMultiFavoriteArticlesForUploadArticleResponse{}, err
+		}
+
+		if len(req.GetFavoriteArticleFolderIds())-1 == i {
+			resFa = fu.convertPBFavoriteArticle(&fa)
+		}
+	}
+
+	return &fpb.CreateMultiFavoriteArticlesForUploadArticleResponse{
+		FavoriteArticle:          resFa,
+		FavoriteArticleFolderIds: req.GetFavoriteArticleFolderIds(), // TODO: implement
 	}, nil
 }
 

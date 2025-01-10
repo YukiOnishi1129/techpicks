@@ -8,6 +8,7 @@ import (
 )
 
 type ContentExternalAdapter interface {
+	ListArticleByArticleURL(ctx context.Context, dto *cpb.ListArticleByArticleURLRequest) (*cpb.ListArticleByArticleURLResponse, error)
 	CreateUploadArticle(ctx context.Context, dto *cpb.CreateUploadArticleRequest) (*cpb.CreateArticleResponse, error)
 }
 
@@ -19,6 +20,14 @@ func NewContentExternalAdapter(ce external.ContentExternal) ContentExternalAdapt
 	return &contentExternalAdapter{
 		contentExternal: ce,
 	}
+}
+
+func (cea *contentExternalAdapter) ListArticleByArticleURL(ctx context.Context, dto *cpb.ListArticleByArticleURLRequest) (*cpb.ListArticleByArticleURLResponse, error) {
+	res, err := cea.contentExternal.ListArticleByArticleURL(ctx, dto)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
 }
 
 func (cea *contentExternalAdapter) CreateUploadArticle(ctx context.Context, dto *cpb.CreateUploadArticleRequest) (*cpb.CreateArticleResponse, error) {

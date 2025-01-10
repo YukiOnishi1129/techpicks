@@ -16,6 +16,7 @@ import (
 type ArticlePersistenceAdapter interface {
 	GetArticles(ctx context.Context, req *cpb.GetArticlesRequest, limit int) (entity.ArticleSlice, error)
 	GetArticlesByArticleURLAndPlatformURL(ctx context.Context, articleURL, platformURL string) (entity.ArticleSlice, error)
+	ListArticleByArticleURL(ctx context.Context, articleURL string, limit int) (entity.ArticleSlice, error)
 	GetPrivateArticlesByArticleURL(ctx context.Context, articleURL string) (entity.ArticleSlice, error)
 	GetArticleRelationPlatform(ctx context.Context, articleID string) (entity.Article, error)
 	CreateUploadArticle(ctx context.Context, req *cpb.CreateUploadArticleRequest, isEng bool) (*entity.Article, error)
@@ -125,7 +126,22 @@ func (apa *articlePersistenceAdapter) GetArticlesByArticleURLAndPlatformURL(ctx 
 
 	articles, err := apa.articleRepository.GetArticles(ctx, q)
 	if err != nil {
-		println("Error executing query: %v\n", err)
+		return nil, err
+	}
+
+	return articles, nil
+}
+
+func (apa *articlePersistenceAdapter) ListArticleByArticleURL(ctx context.Context, articleURL string, limit int) (entity.ArticleSlice, error) {
+	q := []qm.QueryMod{
+		qm.InnerJoin("platforms ON articles.platform_id = platforms.id"),
+		qm.Where("articles.article_url = ?", articleURL),
+		qm.Load(qm.Rels(entity.ArticleRels.Platform)),
+		qm.Limit(limit),
+	}
+
+	articles, err := apa.articleRepository.GetArticles(ctx, q)
+	if err != nil {
 		fmt.Printf("Error executing query: %v\n", err)
 		return nil, err
 	}

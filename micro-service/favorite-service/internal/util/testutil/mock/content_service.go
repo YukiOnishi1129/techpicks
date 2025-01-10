@@ -136,6 +136,26 @@ func (mr *MockContentServiceClientMockRecorder) GetFeeds(arg0, arg1 interface{},
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetFeeds", reflect.TypeOf((*MockContentServiceClient)(nil).GetFeeds), varargs...)
 }
 
+// ListArticleByArticleURL mocks base method.
+func (m *MockContentServiceClient) ListArticleByArticleURL(arg0 context.Context, arg1 *content.ListArticleByArticleURLRequest, arg2 ...grpc.CallOption) (*content.ListArticleByArticleURLResponse, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{arg0, arg1}
+	for _, a := range arg2 {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "ListArticleByArticleURL", varargs...)
+	ret0, _ := ret[0].(*content.ListArticleByArticleURLResponse)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ListArticleByArticleURL indicates an expected call of ListArticleByArticleURL.
+func (mr *MockContentServiceClientMockRecorder) ListArticleByArticleURL(arg0, arg1 interface{}, arg2 ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{arg0, arg1}, arg2...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListArticleByArticleURL", reflect.TypeOf((*MockContentServiceClient)(nil).ListArticleByArticleURL), varargs...)
+}
+
 // MockContentServiceServer is a mock of ContentServiceServer interface.
 type MockContentServiceServer struct {
 	ctrl     *gomock.Controller
@@ -232,6 +252,21 @@ func (m *MockContentServiceServer) GetFeeds(arg0 context.Context, arg1 *content.
 func (mr *MockContentServiceServerMockRecorder) GetFeeds(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetFeeds", reflect.TypeOf((*MockContentServiceServer)(nil).GetFeeds), arg0, arg1)
+}
+
+// ListArticleByArticleURL mocks base method.
+func (m *MockContentServiceServer) ListArticleByArticleURL(arg0 context.Context, arg1 *content.ListArticleByArticleURLRequest) (*content.ListArticleByArticleURLResponse, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ListArticleByArticleURL", arg0, arg1)
+	ret0, _ := ret[0].(*content.ListArticleByArticleURLResponse)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ListArticleByArticleURL indicates an expected call of ListArticleByArticleURL.
+func (mr *MockContentServiceServerMockRecorder) ListArticleByArticleURL(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListArticleByArticleURL", reflect.TypeOf((*MockContentServiceServer)(nil).ListArticleByArticleURL), arg0, arg1)
 }
 
 // MockUnsafeContentServiceServer is a mock of UnsafeContentServiceServer interface.

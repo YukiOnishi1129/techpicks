@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 
-	cpb "github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go/grpc/content"
 	fpb "github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go/grpc/favorite"
 	"github.com/YukiOnishi1129/techpicks/micro-service/favorite-service/internal/domain/entity"
 	"github.com/YukiOnishi1129/techpicks/micro-service/favorite-service/internal/domain/repository"
@@ -24,7 +23,7 @@ type FavoriteArticlePersistenceAdapter interface {
 	CountPreviousFavoriteArticleByArticleID(ctx context.Context, id, articleID, userID string) (int64, error)
 
 	CreateFavoriteArticle(ctx context.Context, req *fpb.CreateFavoriteArticleRequest) (entity.FavoriteArticle, error)
-	CreateFavoriteArticleForUploadArticle(ctx context.Context, req *fpb.CreateFavoriteArticleForUploadArticleRequest, article *cpb.Article) (entity.FavoriteArticle, error)
+	CreateFavoriteArticleForUploadArticle(ctx context.Context, dto CreateFavoriteArticleForUploadArticleDTO) (entity.FavoriteArticle, error)
 	DeleteFavoriteArticle(ctx context.Context, fa entity.FavoriteArticle) error
 	MultiDeleteFavoriteArticles(ctx context.Context, fa entity.FavoriteArticleSlice) error
 }
@@ -222,45 +221,55 @@ func (fapa *favoriteArticlePersistenceAdapter) CreateFavoriteArticle(ctx context
 	return fa, nil
 }
 
-func (fapa *favoriteArticlePersistenceAdapter) CreateFavoriteArticleForUploadArticle(ctx context.Context, req *fpb.CreateFavoriteArticleForUploadArticleRequest, article *cpb.Article) (entity.FavoriteArticle, error) {
+type CreateFavoriteArticleForUploadArticleDTO struct {
+	UserID                  string
+	FavoriteArticleFolderID string
+	PlatformID              null.String
+	ArticleID               string
+	Title                   string
+	Description             string
+	ArticleURL              string
+	PublishedAt             null.Time
+	AuthorName              null.String
+	Tags                    null.String
+	ThumbnailURL            string
+	PlatformName            string
+	PlatformURL             string
+	PlatformFaviconURL      string
+	IsEng                   bool
+	IsPrivate               bool
+}
+
+func (fapa *favoriteArticlePersistenceAdapter) CreateFavoriteArticleForUploadArticle(ctx context.Context, dto CreateFavoriteArticleForUploadArticleDTO) (entity.FavoriteArticle, error) {
 	favoriteArticleID, _ := uuid.NewRandom()
 	fa := entity.FavoriteArticle{
 		ID:                      favoriteArticleID.String(),
-		UserID:                  req.GetUserId(),
-		FavoriteArticleFolderID: req.GetFavoriteArticleFolderId(),
-		ArticleID:               article.GetId(),
-		Title:                   article.GetTitle(),
-		Description:             article.GetDescription(),
-		ArticleURL:              article.GetArticleUrl(),
-		ThumbnailURL:            article.GetThumbnailUrl(),
-		IsEng:                   article.GetIsEng(),
-		IsPrivate:               article.GetIsPrivate(),
+		UserID:                  dto.UserID,
+		FavoriteArticleFolderID: dto.FavoriteArticleFolderID,
+		ArticleID:               dto.ArticleID,
+		Title:                   dto.Title,
+		Description:             dto.Description,
+		ArticleURL:              dto.ArticleURL,
+		ThumbnailURL:            dto.ThumbnailURL,
+		PlatformName:            dto.PlatformName,
+		PlatformURL:             dto.PlatformURL,
+		PlatformFaviconURL:      dto.PlatformFaviconURL,
+		IsEng:                   dto.IsEng,
+		IsPrivate:               dto.IsPrivate,
 		IsRead:                  false,
 	}
 
-	if article.GetPublishedAt() != nil {
-		fa.PublishedAt.Time = article.GetPublishedAt().AsTime()
-		fa.PublishedAt.Valid = true
+	if dto.PlatformID.Valid {
+		fa.PlatformID = dto.PlatformID
 	}
-
-	if article.GetPlatform() != nil {
-		fa.PlatformID.String = article.GetPlatform().GetId()
-		fa.PlatformID.Valid = true
-		fa.PlatformName = article.GetPlatform().GetName()
-		fa.PlatformURL = article.GetPlatform().GetSiteUrl()
-		fa.PlatformFaviconURL = article.GetPlatform().GetFaviconUrl()
-	} else {
-		fa.PlatformName = req.GetPlatformName()
-		fa.PlatformURL = req.GetPlatformUrl()
-		fa.PlatformFaviconURL = req.GetPlatformFaviconUrl()
+	if dto.PublishedAt.Valid {
+		fa.PublishedAt = dto.PublishedAt
 	}
-
-	if article.GetAuthorName() != nil {
-		fa.AuthorName = null.String{String: article.GetAuthorName().GetValue(), Valid: true}
+	if dto.AuthorName.Valid {
+		fa.AuthorName = dto.AuthorName
 	}
-
-	if article.GetTags() != nil {
-		fa.Tags = null.String{String: article.GetTags().GetValue(), Valid: true}
+	if dto.Tags.Valid {
+		fa.Tags = dto.Tags
 	}
 
 	if _, err := fapa.favoriteArticleRepository.CreateFavoriteArticle(ctx, fa); err != nil {
