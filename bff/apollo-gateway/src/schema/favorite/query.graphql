@@ -12,7 +12,7 @@ type Query {
 }
 
 input FavoriteArticleFoldersInput {
-  keyword: String
+  keywords: [String!]
   isFolderOnly: Boolean
   isAllFetch: Boolean
   isFavoriteArticleAllFetch: Boolean
@@ -28,7 +28,7 @@ input FavoriteArticleFolderInput {
 }
 
 input FavoriteArticlesInput {
-  keyword: String
+  keywords: [String!]
   folderId: ID
   first: Int
   after: String
@@ -37,7 +37,7 @@ input FavoriteArticlesInput {
 }
 
 input FavoriteAllFolderArticlesInput {
-  keyword: String
+  keywords: [String!]
   first: Int
   after: String
   last: Int
