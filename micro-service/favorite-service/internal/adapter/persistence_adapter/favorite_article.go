@@ -48,11 +48,13 @@ func (fapa *favoriteArticlePersistenceAdapter) GetFavoriteArticles(ctx context.C
 	if req.GetCursor() != nil {
 		q = append(q, qm.Where("created_at < (SELECT created_at FROM favorite_articles WHERE id = ?)", req.GetCursor().GetValue()))
 	}
-	if req.GetKeyword() != nil {
-		q = append(q, qm.Expr(
-			qm.And("title ILIKE ?", "%"+req.GetKeyword().GetValue()+"%"),
-			qm.Or("description ILIKE ?", "%"+req.GetKeyword().GetValue()+"%"),
-		))
+	if req.GetKeywords() != nil {
+		for _, keyword := range req.GetKeywords() {
+			q = append(q, qm.Expr(
+				qm.And("title ILIKE ?", "%"+keyword.GetValue()+"%"),
+				qm.Or("description ILIKE ?", "%"+keyword.GetValue()+"%"),
+			))
+		}
 	}
 	if req.GetFavoriteArticleFolderId() != nil {
 		q = append(q, qm.Where("favorite_article_folder_id = ?", req.GetFavoriteArticleFolderId().GetValue()))
@@ -77,11 +79,13 @@ func (fapa *favoriteArticlePersistenceAdapter) GetFavoriteArticlesOrderByArticle
 		q = append(q, qm.Where("created_at < (SELECT created_at FROM favorite_articles WHERE id = ?)", cursor))
 	}
 
-	if req.GetKeyword().GetValue() != "" {
-		q = append(q, qm.Expr(
-			qm.And("title LIKE ?", "%"+req.GetKeyword().GetValue()+"%"),
-			qm.Or("description LIKE ?", "%"+req.GetKeyword().GetValue()+"%"),
-		))
+	if req.GetKeywords() != nil {
+		for _, keyword := range req.GetKeywords() {
+			q = append(q, qm.Expr(
+				qm.And("title LIKE ?", "%"+keyword.GetValue()+"%"),
+				qm.Or("description LIKE ?", "%"+keyword.GetValue()+"%"),
+			))
+		}
 	}
 
 	favoriteArticles, err := fapa.favoriteArticleRepository.GetFavoriteArticles(ctx, q)

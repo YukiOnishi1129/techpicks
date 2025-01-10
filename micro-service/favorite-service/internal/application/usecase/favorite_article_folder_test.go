@@ -285,8 +285,8 @@ func Test_UseCase_GetFavoriteArticleFolders(t *testing.T) {
 				},
 			},
 			arg: &fpb.GetFavoriteArticleFoldersRequest{
-				UserId:  userID1,
-				Keyword: &wrapperspb.StringValue{Value: "e1"},
+				UserId:   userID1,
+				Keywords: []*wrapperspb.StringValue{{Value: "e1"}},
 			},
 			want: &fpb.GetFavoriteArticleFoldersResponse{
 				FavoriteArticleFoldersEdge: []*fpb.FavoriteArticleFolderEdge{
