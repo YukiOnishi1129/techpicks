@@ -190,11 +190,28 @@ export type CreateFavoriteArticleInput = {
   title: Scalars['String']['input'];
 };
 
+export type CreateMultiFavoriteArticleForUploadArticleInput = {
+  articleUrl: Scalars['String']['input'];
+  description?: InputMaybe<Scalars['String']['input']>;
+  favoriteArticleFolderIds: Array<Scalars['ID']['input']>;
+  platformFaviconUrl: Scalars['String']['input'];
+  platformName: Scalars['String']['input'];
+  platformUrl: Scalars['String']['input'];
+  thumbnailUrl: Scalars['String']['input'];
+  title: Scalars['String']['input'];
+};
+
 export type CreateMyFeedFolderInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   feedIds?: InputMaybe<Array<Scalars['String']['input']>>;
   title: Scalars['String']['input'];
   userId: Scalars['String']['input'];
+};
+
+export type CreatedMultiFolderFavoriteArticle = {
+  __typename?: 'CreatedMultiFolderFavoriteArticle';
+  favoriteArticle: FavoriteArticle;
+  relationFavoriteArticleFolders: Array<FavoriteArticleFolder>;
 };
 
 export type DeleteBookmarkInput = {
@@ -380,6 +397,7 @@ export type Mutation = {
   createFavoriteArticle: FavoriteArticle;
   createFavoriteArticleFolder: FavoriteArticleFolder;
   createFavoriteArticleForUploadArticle: FavoriteArticle;
+  createMultiFavoriteArticleForUploadArticle: CreatedMultiFolderFavoriteArticle;
   createMyFeedFolder: MyFeedFolder;
   deleteBookmark: Scalars['Boolean']['output'];
   deleteFavoriteArticle: Scalars['Boolean']['output'];
@@ -413,6 +431,11 @@ export type MutationCreateFavoriteArticleFolderArgs = {
 
 export type MutationCreateFavoriteArticleForUploadArticleArgs = {
   input: CreateFavoriteArticleForUploadArticleInput;
+};
+
+
+export type MutationCreateMultiFavoriteArticleForUploadArticleArgs = {
+  input: CreateMultiFavoriteArticleForUploadArticleInput;
 };
 
 

@@ -202,13 +202,13 @@ func (fu *favoriteUseCase) CreateFavoriteArticleForUploadArticle(ctx context.Con
 		UserID:                  req.GetUserId(),
 		FavoriteArticleFolderID: req.GetFavoriteArticleFolderId(),
 		ArticleID:               article.GetArticle().GetId(),
-		Title:                   article.GetArticle().GetTitle(),
-		Description:             article.GetArticle().GetDescription(),
-		ArticleURL:              article.GetArticle().GetArticleUrl(),
-		ThumbnailURL:            article.GetArticle().GetThumbnailUrl(),
-		PlatformName:            article.GetArticle().GetPlatform().GetName(),
-		PlatformURL:             article.GetArticle().GetPlatform().GetSiteUrl(),
-		PlatformFaviconURL:      article.GetArticle().GetPlatform().GetFaviconUrl(),
+		Title:                   req.GetTitle(),
+		Description:             req.GetDescription(),
+		ArticleURL:              req.GetArticleUrl(),
+		ThumbnailURL:            req.GetThumbnailUrl(),
+		PlatformName:            req.GetPlatformName(),
+		PlatformURL:             req.GetPlatformUrl(),
+		PlatformFaviconURL:      req.GetPlatformFaviconUrl(),
 		IsEng:                   article.GetArticle().GetIsEng(),
 		IsPrivate:               article.GetArticle().GetIsPrivate(),
 	}
@@ -246,7 +246,13 @@ func (fu *favoriteUseCase) CreateMultiFavoriteArticlesForUploadArticle(ctx conte
 	resFa := &fpb.FavoriteArticle{}
 	resFafs := make([]*fpb.FavoriteArticleFolder, 0)
 	dto := persistenceadapter.CreateFavoriteArticleForUploadArticleDTO{
-		UserID: req.GetUserId(),
+		UserID:             req.GetUserId(),
+		Description:        req.GetDescription(),
+		ArticleURL:         req.GetArticleUrl(),
+		ThumbnailURL:       req.GetThumbnailUrl(),
+		PlatformName:       req.GetPlatformName(),
+		PlatformURL:        req.GetPlatformName(),
+		PlatformFaviconURL: req.GetPlatformUrl(),
 	}
 
 	// check article data
@@ -275,13 +281,6 @@ func (fu *favoriteUseCase) CreateMultiFavoriteArticlesForUploadArticle(ctx conte
 		}
 
 		dto.ArticleID = article.GetArticle().GetId()
-		dto.Title = article.GetArticle().GetTitle()
-		dto.Description = article.GetArticle().GetDescription()
-		dto.ArticleURL = article.GetArticle().GetArticleUrl()
-		dto.ThumbnailURL = article.GetArticle().GetThumbnailUrl()
-		dto.PlatformName = article.GetArticle().GetPlatform().GetName()
-		dto.PlatformURL = article.GetArticle().GetPlatform().GetSiteUrl()
-		dto.PlatformFaviconURL = article.GetArticle().GetPlatform().GetFaviconUrl()
 		dto.IsEng = article.GetArticle().GetIsEng()
 		dto.IsPrivate = article.GetArticle().GetIsPrivate()
 
@@ -300,13 +299,6 @@ func (fu *favoriteUseCase) CreateMultiFavoriteArticlesForUploadArticle(ctx conte
 	} else {
 		a := articles.GetArticlesEdge()[0]
 		dto.ArticleID = a.GetArticle().GetId()
-		dto.Title = a.GetArticle().GetTitle()
-		dto.Description = a.GetArticle().GetDescription()
-		dto.ArticleURL = a.GetArticle().GetArticleUrl()
-		dto.ThumbnailURL = a.GetArticle().GetThumbnailUrl()
-		dto.PlatformName = a.GetPlatform().GetName()
-		dto.PlatformURL = a.GetPlatform().GetSiteUrl()
-		dto.PlatformFaviconURL = a.GetPlatform().GetFaviconUrl()
 		dto.IsEng = a.GetArticle().GetIsEng()
 		dto.IsPrivate = a.GetArticle().GetIsPrivate()
 
