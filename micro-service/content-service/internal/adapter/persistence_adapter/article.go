@@ -56,11 +56,13 @@ func (apa *articlePersistenceAdapter) GetArticles(ctx context.Context, req *cpb.
 		q = append(q, qm.Where("articles.published_at < (SELECT published_at FROM articles WHERE id = ?)", req.GetCursor()))
 	}
 
-	if req.GetKeyword().GetValue() != "" {
-		q = append(q, qm.Expr(
-			qm.And("articles.title ILIKE ?", "%"+req.GetKeyword().GetValue()+"%"),
-			qm.Or("articles.description ILIKE ?", "%"+req.GetKeyword().GetValue()+"%"),
-		))
+	if req.GetKeywords() != nil {
+		for _, keyword := range req.GetKeywords() {
+			q = append(q, qm.Expr(
+				qm.And("articles.title ILIKE ?", "%"+keyword.GetValue()+"%"),
+				qm.Or("articles.description ILIKE ?", "%"+keyword.GetValue()+"%"),
+			))
+		}
 	}
 
 	if req.GetLanguageStatus() != nil && (req.GetLanguageStatus().GetValue() == int64(domain.LanguageStatusJapanese) || req.GetLanguageStatus().GetValue() == int64(domain.LanguageStatusEnglish)) {

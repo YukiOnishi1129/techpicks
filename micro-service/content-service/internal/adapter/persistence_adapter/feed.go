@@ -64,11 +64,13 @@ func (fpa *feedPersistenceAdapter) GetFeeds(ctx context.Context, req *cpb.GetFee
 		q = append(q, qm.WhereIn("feeds.id IN ?", qmWhere...))
 	}
 
-	if req.GetKeyword().GetValue() != "" {
-		q = append(q, qm.Expr(
-			qm.And("feeds.name ILIKE ?", "%"+req.GetKeyword().GetValue()+"%"),
-			// qm.Or("description LIKE ?", "%"+req.GetKeyword().GetValue()+"%"),
-		))
+	if req.GetKeywords() != nil {
+		for _, keyword := range req.GetKeywords() {
+			q = append(q, qm.Expr(
+				qm.And("feeds.name ILIKE ?", "%"+keyword.GetValue()+"%"),
+				// qm.Or("description LIKE ?", "%"+keyword.GetValue()+"%"),
+			))
+		}
 	}
 
 	feeds, err := fpa.feedRepository.GetFeeds(ctx, q)
