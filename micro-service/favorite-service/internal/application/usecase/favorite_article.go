@@ -244,6 +244,7 @@ func (fu *favoriteUseCase) CreateFavoriteArticleForUploadArticle(ctx context.Con
 
 func (fu *favoriteUseCase) CreateMultiFavoriteArticlesForUploadArticle(ctx context.Context, req *fpb.CreateMultiFavoriteArticlesForUploadArticleRequest) (*fpb.CreateMultiFavoriteArticlesForUploadArticleResponse, error) {
 	resFa := &fpb.FavoriteArticle{}
+	resFafs := make([]*fpb.FavoriteArticleFolder, 0)
 	dto := persistenceadapter.CreateFavoriteArticleForUploadArticleDTO{
 		UserID: req.GetUserId(),
 	}
@@ -344,14 +345,24 @@ func (fu *favoriteUseCase) CreateMultiFavoriteArticlesForUploadArticle(ctx conte
 			return &fpb.CreateMultiFavoriteArticlesForUploadArticleResponse{}, err
 		}
 
+		resFafs = append(resFafs, &fpb.FavoriteArticleFolder{
+			Id:               fa.FavoriteArticleFolderID,
+			UserId:           fa.UserID,
+			Title:            fa.R.FavoriteArticleFolder.Title,
+			CreatedAt:        timestamppb.New(fa.R.FavoriteArticleFolder.CreatedAt),
+			UpdatedAt:        timestamppb.New(fa.R.FavoriteArticleFolder.UpdatedAt),
+			Description:      fa.R.FavoriteArticleFolder.Description.String,
+			FavoriteArticles: []*fpb.FavoriteArticle{},
+		})
+
 		if len(req.GetFavoriteArticleFolderIds())-1 == i {
 			resFa = fu.convertPBFavoriteArticle(&fa)
 		}
 	}
 
 	return &fpb.CreateMultiFavoriteArticlesForUploadArticleResponse{
-		FavoriteArticle:          resFa,
-		FavoriteArticleFolderIds: req.GetFavoriteArticleFolderIds(), // TODO: implement
+		FavoriteArticle:        resFa,
+		FavoriteArticleFolders: resFafs, // TODO: implement
 	}, nil
 }
 

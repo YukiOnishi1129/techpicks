@@ -179,6 +179,7 @@ func (apa *articlePersistenceAdapter) GetArticleRelationPlatform(ctx context.Con
 }
 
 func (apa *articlePersistenceAdapter) CreateUploadArticle(ctx context.Context, req *cpb.CreateUploadArticleRequest, isEng bool) (*entity.Article, error) {
+	// When adding an upload article, the article.platformId is not registered.
 	articleID, _ := uuid.NewUUID()
 	article := entity.Article{
 		ID:           articleID.String(),
