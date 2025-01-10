@@ -10,12 +10,12 @@ import { AllFolderFavoriteArticleCardWrapper } from "../../Card";
 import { AllFolderFavoriteArticleListTemplateQuery } from "../../Template/AllFolderFavoriteArticleListTemplate/AllFolderFavoriteArticleListTemplateQuery";
 
 type AllFolderFavoriteArticleListFragmentProps = {
-  keyword?: string;
+  keywordList: Array<string>;
 };
 
 export const AllFolderFavoriteArticleList: FC<
   AllFolderFavoriteArticleListFragmentProps
-> = ({ keyword }) => {
+> = ({ keywordList }) => {
   const observerTarget = useRef(null);
 
   const { data: resSuspenseData, error } = useSuspenseQuery(
@@ -25,7 +25,7 @@ export const AllFolderFavoriteArticleList: FC<
         favoriteAllFolderArticlesInput: {
           first: 20,
           after: null,
-          keyword: keyword,
+          keywords: keywordList,
         },
         favoriteArticleFoldersInput: {
           isAllFetch: true,
@@ -45,7 +45,7 @@ export const AllFolderFavoriteArticleList: FC<
       input: {
         first: 20,
         after: null,
-        keyword: keyword,
+        keywords: keywordList,
       },
     },
     fetchPolicy: "cache-first",
@@ -66,7 +66,7 @@ export const AllFolderFavoriteArticleList: FC<
         input: {
           first: 20,
           after: endCursor,
-          keyword,
+          keywords: keywordList,
         },
       },
       updateQuery: (prev, { fetchMoreResult }) => {
@@ -94,7 +94,7 @@ export const AllFolderFavoriteArticleList: FC<
       setIsNextPage(false);
 
     setHashMore(resData.favoriteAllFolderArticles.edges.length > 0);
-  }, [endCursor, isNextPage, keyword, fetchMore]);
+  }, [endCursor, isNextPage, keywordList, fetchMore]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(

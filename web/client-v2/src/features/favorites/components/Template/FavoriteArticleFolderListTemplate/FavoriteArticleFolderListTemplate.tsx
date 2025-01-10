@@ -15,12 +15,12 @@ import { FavoriteArticleFolderKeywordSearchForm } from "../../Search";
 
 type FavoriteArticleFolderListTemplateProps = {
   searchParams: SearchParamsType;
-  keyword?: string;
+  keywordList: Array<string>;
 };
 
 export const FavoriteArticleFolderListTemplate: FC<
   FavoriteArticleFolderListTemplateProps
-> = async ({ searchParams, keyword }) => {
+> = async ({ searchParams, keywordList }) => {
   return (
     <div>
       <div className="fixed z-10 hidden w-[90%] gap-2 bg-card md:block md:w-[70%] md:px-4">
@@ -30,7 +30,7 @@ export const FavoriteArticleFolderListTemplate: FC<
         </h1>
         <div className="flex w-full items-center justify-between">
           <div className="w-4/5 pr-4">
-            <FavoriteArticleFolderKeywordSearchForm keyword={keyword} />
+            <FavoriteArticleFolderKeywordSearchForm keywordList={keywordList} />
           </div>
           <div>
             <CreateFavoriteArticleFolderDialog />
@@ -45,7 +45,7 @@ export const FavoriteArticleFolderListTemplate: FC<
           input: {
             first: 9,
             after: null,
-            keyword: keyword,
+            keywords: keywordList,
           },
         }}
       >
@@ -53,12 +53,12 @@ export const FavoriteArticleFolderListTemplate: FC<
           key={JSON.stringify(searchParams)}
           fallback={<ScreenLoader />}
         >
-          <FavoriteArticleFolderList keyword={keyword} />
+          <FavoriteArticleFolderList keywordList={keywordList} />
         </Suspense>
       </PreloadQuery>
 
       <div className="fixed bottom-20 right-4 z-50 md:hidden">
-        <SearchFavoriteArticleFolderDialog keyword={keyword} />
+        <SearchFavoriteArticleFolderDialog keywordList={keywordList} />
       </div>
     </div>
   );

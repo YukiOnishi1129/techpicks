@@ -20,12 +20,12 @@ import { FavoriteArticleKeywordSearchForm } from "../../Search";
 
 type FavoriteArticleAllListTemplateProps = {
   searchParams: SearchParamsType;
-  keyword?: string;
+  keywordList: Array<string>;
 };
 
 export const AllFolderFavoriteArticleListTemplate: FC<
   FavoriteArticleAllListTemplateProps
-> = async ({ searchParams, keyword }) => {
+> = async ({ searchParams, keywordList }) => {
   const breadcrumbs: BreadCrumbType[] = [
     {
       title: "Home",
@@ -44,7 +44,7 @@ export const AllFolderFavoriteArticleListTemplate: FC<
   const favoriteAllFolderArticlesInput: FavoriteAllFolderArticlesInput = {
     first: 20,
     after: null,
-    keyword: keyword,
+    keywords: keywordList,
   };
 
   const favoriteArticleFoldersInput: FavoriteArticleFoldersInput = {
@@ -62,7 +62,7 @@ export const AllFolderFavoriteArticleListTemplate: FC<
 
         <div className="hidden w-full items-center justify-between md:flex">
           <div className="w-4/5 pt-2">
-            <FavoriteArticleKeywordSearchForm keyword={keyword} />
+            <FavoriteArticleKeywordSearchForm keywordList={keywordList} />
           </div>
         </div>
       </div>
@@ -80,12 +80,12 @@ export const AllFolderFavoriteArticleListTemplate: FC<
           key={JSON.stringify(searchParams)}
           fallback={<SkeltonArticleList />}
         >
-          <AllFolderFavoriteArticleList keyword={keyword} />
+          <AllFolderFavoriteArticleList keywordList={keywordList} />
         </Suspense>
       </PreloadQuery>
 
       <div className="fixed bottom-20 right-4 z-50 md:hidden">
-        <SearchFavoriteArticleListDialog keyword={keyword} />
+        <SearchFavoriteArticleListDialog keywordList={keywordList} />
       </div>
     </div>
   );

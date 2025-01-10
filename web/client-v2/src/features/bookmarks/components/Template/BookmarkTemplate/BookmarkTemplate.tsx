@@ -16,17 +16,17 @@ import { BookmarkArticleKeywordSearchInput } from "../../Search";
 
 type BookmarkTemplateProps = {
   searchParams: SearchParamsType;
-  keyword?: string;
+  keywordList: Array<string>;
 };
 
 export const BookmarkTemplate = async ({
   searchParams,
-  keyword,
+  keywordList,
 }: BookmarkTemplateProps) => {
   const input: BookmarksInput = {
     first: 20,
     after: null,
-    keyword: keyword,
+    keywords: keywordList,
   };
 
   const favoriteArticleFoldersInput: FavoriteArticleFoldersInput = {
@@ -41,7 +41,7 @@ export const BookmarkTemplate = async ({
           Bookmark
         </h1>
         <div className="mr-2 w-3/4 md:mr-4">
-          <BookmarkArticleKeywordSearchInput keyword={keyword} />
+          <BookmarkArticleKeywordSearchInput keywordList={keywordList} />
         </div>
         <CreateBookmarkDialog />
       </div>
@@ -58,12 +58,12 @@ export const BookmarkTemplate = async ({
           key={JSON.stringify(searchParams)}
           fallback={<SkeltonArticleList />}
         >
-          <BookmarkList keyword={keyword} />
+          <BookmarkList keywordList={keywordList} />
         </Suspense>
       </PreloadQuery>
 
       <div className="fixed bottom-20 right-4 z-50  md:hidden">
-        <SearchBookmarkKeywordDialogFloatButton keyword={keyword} />
+        <SearchBookmarkKeywordDialogFloatButton keywordList={keywordList} />
       </div>
     </div>
   );

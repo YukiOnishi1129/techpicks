@@ -12,12 +12,12 @@ import { FavoriteArticleListByFolderIdTemplateQuery } from "../../Template/Favor
 
 type FavoriteArticleListProps = {
   folderId: string;
-  keyword?: string;
+  keywordList: Array<string>;
 };
 
 export function FavoriteArticleList({
   folderId,
-  keyword,
+  keywordList,
 }: FavoriteArticleListProps) {
   const observerTarget = useRef(null);
 
@@ -29,7 +29,7 @@ export function FavoriteArticleList({
           first: 20,
           after: null,
           folderId,
-          keyword,
+          keywords: keywordList,
         },
         favoriteArticleFoldersInput: {
           isAllFetch: true,
@@ -50,7 +50,7 @@ export function FavoriteArticleList({
         first: 20,
         after: null,
         folderId,
-        keyword,
+        keywords: keywordList,
       },
     },
     fetchPolicy: "cache-first",
@@ -69,10 +69,10 @@ export function FavoriteArticleList({
     const { data: resData, error: resError } = await fetchMore({
       variables: {
         input: {
-          keyword,
-          folderId,
           first: 20,
           after: endCursor,
+          folderId,
+          keywords: keywordList,
         },
       },
       updateQuery: (prev, { fetchMoreResult }) => {
@@ -98,7 +98,7 @@ export function FavoriteArticleList({
     setIsNextPage(resData.favoriteArticles.pageInfo.hasNextPage);
 
     setHashMore(resData.favoriteArticles.edges.length > 0);
-  }, [endCursor, isNextPage, folderId, keyword, fetchMore]);
+  }, [endCursor, isNextPage, folderId, keywordList, fetchMore]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(

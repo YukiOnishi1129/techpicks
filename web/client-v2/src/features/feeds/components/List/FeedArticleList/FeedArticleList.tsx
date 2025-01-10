@@ -13,10 +13,10 @@ import { FeedArticleListTemplateQuery } from "../../Template/FeedArticleListTemp
 
 type FeedArticleListProps = {
   id: string;
-  keyword?: string;
+  keywordList: Array<string>;
 };
 
-export function FeedArticleList({ id, keyword }: FeedArticleListProps) {
+export function FeedArticleList({ id, keywordList }: FeedArticleListProps) {
   const observerTarget = useRef(null);
 
   const { data: resSuspenseData, error } = useSuspenseQuery(
@@ -26,7 +26,7 @@ export function FeedArticleList({ id, keyword }: FeedArticleListProps) {
         input: {
           first: 20,
           after: null,
-          keyword,
+          keywords: keywordList,
           feedIds: [id],
         },
         favoriteArticleFoldersInput: {
@@ -46,7 +46,7 @@ export function FeedArticleList({ id, keyword }: FeedArticleListProps) {
       input: {
         first: 20,
         after: null,
-        keyword,
+        keywords: keywordList,
         feedIds: [id],
       },
     },
@@ -69,7 +69,7 @@ export function FeedArticleList({ id, keyword }: FeedArticleListProps) {
         input: {
           first: 20,
           after: endCursor,
-          keyword,
+          keywords: keywordList,
           feedIds: [id],
         },
       },
@@ -95,7 +95,7 @@ export function FeedArticleList({ id, keyword }: FeedArticleListProps) {
     setIsNextPage(resData.articles.pageInfo.hasNextPage);
 
     setHashMore(resData.articles.edges.length > 0);
-  }, [id, endCursor, isNextPage, fetchMore, keyword]);
+  }, [id, endCursor, isNextPage, fetchMore, keywordList]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(

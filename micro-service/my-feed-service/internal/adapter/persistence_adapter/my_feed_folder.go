@@ -44,11 +44,13 @@ func (m *myFeedFolderPersistenceAdapter) GetMyFeedFolders(ctx context.Context, r
 		q = append(q, qm.Where("my_feed_folders.title > (SELECT title FROM my_feed_folders WHERE id = ?)", req.GetCursor()))
 	}
 
-	if req.GetKeyword().GetValue() != "" {
-		q = append(q, qm.Expr(
-			qm.And("my_feed_folders.title ILIKE ?", "%"+req.GetKeyword().GetValue()+"%"),
-			qm.Or("my_feed_folders.description ILIKE ?", "%"+req.GetKeyword().GetValue()+"%"),
-		))
+	if req.GetKeywords() != nil {
+		for _, keyword := range req.GetKeywords() {
+			q = append(q, qm.Expr(
+				qm.And("my_feed_folders.title ILIKE ?", "%"+keyword.GetValue()+"%"),
+				qm.Or("my_feed_folders.description ILIKE ?", "%"+keyword.GetValue()+"%"),
+			))
+		}
 	}
 
 	myFeedFolders, err := m.myFeedFolderRepository.GetMyFeedFolders(ctx, q)

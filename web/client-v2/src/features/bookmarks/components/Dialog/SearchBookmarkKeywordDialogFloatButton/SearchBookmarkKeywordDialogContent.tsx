@@ -21,21 +21,23 @@ import {
   FormMessage,
 } from "@/shared/components/ui/form";
 import { Input } from "@/shared/components/ui/input";
+import { splitBySpace } from "@/shared/lib/utils";
 
 const formSchema = z.object({
   keyword: z.string().optional(),
 });
 
 type SearchBookmarkKeywordDialogContentProps = {
-  keyword?: string;
+  keywordList: Array<string>;
   onClose: () => void;
 };
 
 export const SearchBookmarkKeywordDialogContent: FC<
   SearchBookmarkKeywordDialogContentProps
-> = ({ keyword, onClose }) => {
+> = ({ keywordList, onClose }) => {
   const pathname = usePathname();
   const router = useRouter();
+  const keyword = keywordList.filter((keyword) => keyword !== "").join(" ");
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -48,10 +50,15 @@ export const SearchBookmarkKeywordDialogContent: FC<
   }, [form]);
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    if (!!values.keyword && values.keyword.trim() === "") return;
-    const keywordPath = `keyword=${values.keyword}`;
+    let keywordPath = "";
+    if (!!values.keyword && values.keyword.trim() !== "") {
+      const keywordArray = splitBySpace(values.keyword);
+      keywordPath = keywordArray
+        .map((keyword) => `&keyword=${keyword}`)
+        .join("");
+    }
     await serverRevalidatePage(pathname);
-    router.replace(`/bookmark?${keywordPath}`);
+    router.replace(`/bookmark?dummy=dummy${keywordPath}`);
     resetDialog();
     onClose();
   };

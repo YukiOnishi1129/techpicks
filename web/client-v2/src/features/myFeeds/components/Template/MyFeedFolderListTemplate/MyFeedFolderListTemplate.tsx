@@ -16,12 +16,12 @@ import { MyFeedFolderKeywordSearchForm } from "../../Search";
 const LIMIT = 6;
 
 type MyFeedFolderListTemplateProps = {
-  keyword?: string;
+  keywordList: Array<string>;
   searchParams: SearchParamsType;
 };
 
 export const MyFeedFolderListTemplate: FC<MyFeedFolderListTemplateProps> = ({
-  keyword,
+  keywordList,
   searchParams,
 }) => {
   return (
@@ -30,7 +30,7 @@ export const MyFeedFolderListTemplate: FC<MyFeedFolderListTemplateProps> = ({
         <h1 className="mt-4 text-2xl font-bold">My Feed Folders</h1>
         <div className="mt-2 flex w-full items-center justify-between">
           <div className="w-4/5 pr-4">
-            <MyFeedFolderKeywordSearchForm keyword={keyword} />
+            <MyFeedFolderKeywordSearchForm keywordList={keywordList} />
           </div>
           <CreateMyFeedFolderDialog />
         </div>
@@ -42,7 +42,7 @@ export const MyFeedFolderListTemplate: FC<MyFeedFolderListTemplateProps> = ({
         query={MyFeedFolderListTemplateQuery}
         variables={{
           myFeedFoldersInput: {
-            keyword,
+            keywords: keywordList,
             first: LIMIT,
             after: null,
           },
@@ -57,7 +57,7 @@ export const MyFeedFolderListTemplate: FC<MyFeedFolderListTemplateProps> = ({
           fallback={<ScreenLoader />}
         >
           <MyFeedFolderList
-            keyword={keyword}
+            keywordList={keywordList}
             limit={LIMIT}
             feedLimit={SELECTABLE_FEED_LIST_LIMIT}
           />
@@ -65,7 +65,7 @@ export const MyFeedFolderListTemplate: FC<MyFeedFolderListTemplateProps> = ({
       </PreloadQuery>
 
       <div className="fixed bottom-20 right-4 z-50 md:hidden">
-        <SearchMyFeedFolderDialog keyword={keyword} />
+        <SearchMyFeedFolderDialog keywordList={keywordList} />
       </div>
     </div>
   );

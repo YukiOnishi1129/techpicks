@@ -8,12 +8,12 @@ import { Dialog, DialogTrigger } from "@/shared/components/ui/dialog";
 import { SearchBookmarkKeywordDialogContent } from "./SearchBookmarkKeywordDialogContent";
 
 type SearchBookmarkKeywordDialogFloatButtonProps = {
-  keyword?: string;
+  keywordList: Array<string>;
 };
 
 export const SearchBookmarkKeywordDialogFloatButton: FC<
   SearchBookmarkKeywordDialogFloatButtonProps
-> = ({ keyword }) => {
+> = ({ keywordList }) => {
   const [open, setOpen] = useState(false);
 
   const handleClose = useCallback(() => {
@@ -27,7 +27,7 @@ export const SearchBookmarkKeywordDialogFloatButton: FC<
       </DialogTrigger>
       {open && (
         <SearchBookmarkKeywordDialogContent
-          keyword={keyword}
+          keywordList={keywordList}
           onClose={handleClose}
         />
       )}

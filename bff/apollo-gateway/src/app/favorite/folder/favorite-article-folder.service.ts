@@ -39,8 +39,12 @@ export class FavoriteArticleFolderService {
     req.setUserId(userId);
     if (input?.first) req.setLimit(new Int64Value().setValue(input.first));
     if (input?.after) req.setCursor(new StringValue().setValue(input.after));
-    if (input?.keyword)
-      req.setKeyword(new StringValue().setValue(input.keyword));
+    if (input?.keywords && input.keywords.length !== 0) {
+      const keywords = input.keywords.map((word) => {
+        return new StringValue().setValue(word);
+      });
+      req.setKeywordsList(keywords);
+    }
     if (input?.isFolderOnly)
       req.setIsFolderOnly(new BoolValue().setValue(input.isFolderOnly));
     if (input?.isAllFetch)

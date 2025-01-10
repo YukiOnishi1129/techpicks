@@ -9,7 +9,7 @@ type Query {
 input FeedsInput {
   platformSiteType: Int
   platformId: String
-  keyword: String
+  keywords: [String!]
   feedIdList: [String!]
   isAllFetch: Boolean
   first: Int

@@ -26,7 +26,7 @@ func (fe *favoriteExternal) GetFavoriteArticleFolders(ctx context.Context, dto *
 		Cursor:               dto.GetCursor(),
 		Limit:                dto.GetLimit(),
 		UserId:               dto.GetUserId(),
-		Keyword:              dto.GetKeyword(),
+		Keywords:             dto.GetKeywords(),
 		IsFolderOnly:         dto.GetIsFolderOnly(),
 		IsAllFetch:           dto.GetIsAllFetch(),
 		FavoriteArticleLimit: dto.GetFavoriteArticleLimit(),

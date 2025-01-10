@@ -15,20 +15,22 @@ import {
 } from "@/shared/components/ui/form";
 import { Input } from "@/shared/components/ui/input";
 import { useServerRevalidatePage } from "@/shared/hooks/useServerRevalidatePage";
+import { splitBySpace } from "@/shared/lib/utils";
 
 const formSchema = z.object({
   keyword: z.string().optional(),
 });
 
 type FavoriteArticleFolderKeywordSearchFormProps = {
-  keyword?: string;
+  keywordList: Array<string>;
 };
 
 export const FavoriteArticleFolderKeywordSearchForm: FC<
   FavoriteArticleFolderKeywordSearchFormProps
-> = ({ keyword }) => {
+> = ({ keywordList }) => {
   const router = useRouter();
   const { revalidatePage } = useServerRevalidatePage();
+  const keyword = keywordList.filter((keyword) => keyword !== "").join(" ");
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -39,10 +41,13 @@ export const FavoriteArticleFolderKeywordSearchForm: FC<
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     let keywordPath = "";
     if (!!values.keyword && values.keyword.trim() !== "") {
-      keywordPath = `keyword=${values.keyword}`;
+      const keywordArray = splitBySpace(values.keyword);
+      keywordPath = keywordArray
+        .map((keyword) => `&keyword=${keyword}`)
+        .join("");
     }
     await revalidatePage();
-    router.replace(`/favorite?${keywordPath}`);
+    router.replace(`/favorite?dummy=dummy${keywordPath}`);
   };
 
   return (
