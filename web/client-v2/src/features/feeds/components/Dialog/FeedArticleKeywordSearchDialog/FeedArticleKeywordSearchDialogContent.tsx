@@ -55,11 +55,11 @@ export const FeedArticleKeywordSearchDialogContent: FC<
     if (!!values.keyword && values.keyword.trim() !== "") {
       const keywordArray = splitBySpace(values.keyword);
       keywordPath = keywordArray
-        .map((keyword) => `keyword=${keyword}`)
-        .join("&");
+        .map((keyword) => `&keyword=${keyword}`)
+        .join("");
     }
     await serverRevalidatePage(pathname);
-    router.replace(`/feed/${feedId}?${keywordPath}`);
+    router.replace(`/feed/${feedId}?dummy=dummy${keywordPath}`);
     resetDialog();
     handleClose();
   };

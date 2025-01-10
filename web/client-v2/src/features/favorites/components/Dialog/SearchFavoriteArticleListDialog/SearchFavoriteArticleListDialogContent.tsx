@@ -57,12 +57,12 @@ export const SearchFavoriteArticleListDialogContent: FC<
     if (!!values.keyword && values.keyword.trim() !== "") {
       const keywordArray = splitBySpace(values.keyword);
       keywordPath = keywordArray
-        .map((keyword) => `keyword=${keyword}`)
-        .join("&");
+        .map((keyword) => `&keyword=${keyword}`)
+        .join("");
     }
     await serverRevalidatePage(pathname);
     if (!favoriteArticleFolderId) {
-      router.replace(`/favorite/article?${keywordPath}`);
+      router.replace(`/favorite/article?dummy=dummy${keywordPath}`);
       resetDialog();
       onClose();
       return;

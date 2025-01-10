@@ -53,8 +53,8 @@ export const SearchArticleDialogContent: FC<
     if (!!values.keyword && values.keyword.trim() !== "") {
       const keywordArray = splitBySpace(values.keyword);
       keywordPath = keywordArray
-        .map((keyword) => `keyword=${keyword}`)
-        .join("&");
+        .map((keyword) => `&keyword=${keyword}`)
+        .join("");
     }
 
     await serverRevalidatePage(`/search/article?dummy=dummy${keywordPath}`);

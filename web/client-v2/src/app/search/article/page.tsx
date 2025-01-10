@@ -28,6 +28,7 @@ export default async function SearchArticleListPage({
   let keywordList: Array<string> = [];
   if (typeof q["keyword"] !== "string" && q["keyword"])
     keywordList = q["keyword"];
+
   if (typeof q["keyword"] === "string") keywordList.push(q["keyword"]);
 
   const platformSiteType =

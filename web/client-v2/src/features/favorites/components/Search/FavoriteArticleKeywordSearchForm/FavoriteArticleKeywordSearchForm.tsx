@@ -44,14 +44,14 @@ export const FavoriteArticleKeywordSearchForm: FC<
     if (!!values.keyword && values.keyword.trim() !== "") {
       const keywordArray = splitBySpace(values.keyword);
       keywordPath = keywordArray
-        .map((keyword) => `keyword=${keyword}`)
-        .join("&");
+        .map((keyword) => `&keyword=${keyword}`)
+        .join("");
     }
     await serverRevalidatePage(pathname);
     router.replace(
       favoriteArticleFolderId
-        ? `/favorite/article/${favoriteArticleFolderId}?${keywordPath}`
-        : `/favorite/article?${keywordPath}`
+        ? `/favorite/article/${favoriteArticleFolderId}?dummy=dummy${keywordPath}`
+        : `/favorite/article?dummy=dummy${keywordPath}`
     );
   };
 
