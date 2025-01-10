@@ -102,6 +102,17 @@ export class CreateFavoriteArticleForUploadArticleInput {
     platformFaviconUrl: string;
 }
 
+export class CreateMultiFavoriteArticleForUploadArticleInput {
+    favoriteArticleFolderIds: string[];
+    title: string;
+    description?: Nullable<string>;
+    thumbnailUrl: string;
+    articleUrl: string;
+    platformName: string;
+    platformUrl: string;
+    platformFaviconUrl: string;
+}
+
 export class DeleteFavoriteArticleInput {
     id: string;
 }
@@ -286,6 +297,8 @@ export abstract class IMutation {
 
     abstract createFavoriteArticleForUploadArticle(input: CreateFavoriteArticleForUploadArticleInput): FavoriteArticle | Promise<FavoriteArticle>;
 
+    abstract createMultiFavoriteArticleForUploadArticle(input: CreateMultiFavoriteArticleForUploadArticleInput): CreatedMultiFolderFavoriteArticle | Promise<CreatedMultiFolderFavoriteArticle>;
+
     abstract deleteFavoriteArticle(input: DeleteFavoriteArticleInput): boolean | Promise<boolean>;
 
     abstract deleteFavoriteArticleByArticleId(input: DeleteFavoriteArticleByArticleIdInput): boolean | Promise<boolean>;
@@ -367,6 +380,11 @@ export class FavoriteArticleFolder implements Node {
     favoriteArticles: FavoriteArticle[];
     createdAt: number;
     updatedAt: number;
+}
+
+export class CreatedMultiFolderFavoriteArticle {
+    favoriteArticle: FavoriteArticle;
+    relationFavoriteArticleFolders: FavoriteArticleFolder[];
 }
 
 export class FavoriteArticleFolderConnection {

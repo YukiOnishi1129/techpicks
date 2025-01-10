@@ -13,6 +13,9 @@ type Mutation {
   createFavoriteArticleForUploadArticle(
     input: CreateFavoriteArticleForUploadArticleInput!
   ): FavoriteArticle!
+  createMultiFavoriteArticleForUploadArticle(
+    input: CreateMultiFavoriteArticleForUploadArticleInput!
+  ): CreatedMultiFolderFavoriteArticle!
   deleteFavoriteArticle(input: DeleteFavoriteArticleInput!): Boolean!
   deleteFavoriteArticleByArticleId(
     input: DeleteFavoriteArticleByArticleIdInput!
@@ -55,6 +58,17 @@ input CreateFavoriteArticleInput {
 
 input CreateFavoriteArticleForUploadArticleInput {
   favoriteArticleFolderId: ID!
+  title: String!
+  description: String
+  thumbnailUrl: String!
+  articleUrl: String!
+  platformName: String!
+  platformUrl: String!
+  platformFaviconUrl: String!
+}
+
+input CreateMultiFavoriteArticleForUploadArticleInput {
+  favoriteArticleFolderIds: [ID!]!
   title: String!
   description: String
   thumbnailUrl: String!
