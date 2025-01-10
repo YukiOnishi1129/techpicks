@@ -14,14 +14,14 @@ import { MyFeedFolderArticleListTemplateQuery } from "../../Template/MyFeedFolde
 
 type MyFeedFolderArticleListProps = {
   data: FragmentOf<typeof MyFeedFolderArticleListFragment>;
-  keyword?: string;
+  keywordList: Array<string>;
   limit: number;
   feedIdList: Array<string>;
 };
 
 export function MyFeedFolderArticleList({
   data,
-  keyword,
+  keywordList,
   limit,
   feedIdList,
 }: MyFeedFolderArticleListProps) {
@@ -34,7 +34,7 @@ export function MyFeedFolderArticleList({
       input: {
         first: limit,
         after: null,
-        keyword,
+        keywords: keywordList,
         feedIds: feedIdList,
       },
     },
@@ -49,7 +49,7 @@ export function MyFeedFolderArticleList({
       input: {
         first: limit,
         after: null,
-        keyword: keyword,
+        keywords: keywordList,
         feedIds: feedIdList,
       },
     },
@@ -71,7 +71,7 @@ export function MyFeedFolderArticleList({
         input: {
           first: limit,
           after: endCursor,
-          keyword: keyword,
+          keywords: keywordList,
           feedIds: feedIdList,
         },
       },
@@ -97,7 +97,7 @@ export function MyFeedFolderArticleList({
     setIsNextPage(resData.articles.pageInfo.hasNextPage);
 
     setHashMore(resData.articles.edges.length > 0);
-  }, [fetchMore, endCursor, isNextPage, feedIdList, keyword, limit]);
+  }, [fetchMore, endCursor, isNextPage, feedIdList, keywordList, limit]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(

@@ -20,7 +20,16 @@ export default async function FeedByIdPage({
   }
   const { id } = await params;
   const q = await searchParams;
-  const keyword = typeof q["keyword"] === "string" ? q["keyword"] : undefined;
+  let keywordList: Array<string> = [];
+  if (typeof q["keyword"] !== "string" && q["keyword"])
+    keywordList = q["keyword"];
+  if (typeof q["keyword"] === "string") keywordList.push(q["keyword"]);
 
-  return <FeedArticleListTemplate id={id} keyword={keyword} searchParams={q} />;
+  return (
+    <FeedArticleListTemplate
+      id={id}
+      keywordList={keywordList}
+      searchParams={q}
+    />
+  );
 }

@@ -7,7 +7,7 @@ type Query {
 }
 
 input MyFeedFoldersInput {
-    keyword: String
+    keywords: [String!]
     isAllFetch: Boolean
     first: Int
     after: String

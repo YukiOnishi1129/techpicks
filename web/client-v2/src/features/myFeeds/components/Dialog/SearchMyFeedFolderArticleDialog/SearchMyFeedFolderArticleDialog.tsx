@@ -9,12 +9,12 @@ import { SearchMyFeedFolderArticleDialogContent } from "./SearchMyFeedFolderArti
 
 type SearchMyFeedFolderArticleDialogProps = {
   myFeedFolderId: string;
-  keyword?: string;
+  keywordList: Array<string>;
 };
 
 export const SearchMyFeedFolderArticleDialog: FC<
   SearchMyFeedFolderArticleDialogProps
-> = ({ myFeedFolderId, keyword }) => {
+> = ({ myFeedFolderId, keywordList }) => {
   const [open, setOpen] = useState(false);
 
   const handleClose = useCallback(() => {
@@ -29,8 +29,8 @@ export const SearchMyFeedFolderArticleDialog: FC<
       {open && (
         <SearchMyFeedFolderArticleDialogContent
           myFeedFolderId={myFeedFolderId}
-          keyword={keyword}
-          handleClose={handleClose}
+          keywordList={keywordList}
+          onClose={handleClose}
         />
       )}
     </Dialog>

@@ -9,12 +9,12 @@ import { FeedArticleKeywordSearchDialogContent } from "./FeedArticleKeywordSearc
 
 type FeedArticleKeywordSearchDialogProps = {
   feedId: string;
-  keyword?: string;
+  keywordList: Array<string>;
 };
 
 export const FeedArticleKeywordSearchDialog: FC<
   FeedArticleKeywordSearchDialogProps
-> = ({ feedId, keyword }) => {
+> = ({ feedId, keywordList }) => {
   const [open, setOpen] = useState(false);
 
   const handleClose = useCallback(() => {
@@ -29,7 +29,7 @@ export const FeedArticleKeywordSearchDialog: FC<
       {open && (
         <FeedArticleKeywordSearchDialogContent
           feedId={feedId}
-          keyword={keyword}
+          keywordList={keywordList}
           handleClose={handleClose}
         />
       )}

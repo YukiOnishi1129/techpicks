@@ -15,20 +15,22 @@ import {
   FormControl,
 } from "@/shared/components/ui/form";
 import { Input } from "@/shared/components/ui/input";
+import { splitBySpace } from "@/shared/lib/utils";
 
 const formSchema = z.object({
   keyword: z.string().optional(),
 });
 
 type BookmarkArticleKeywordSearchInputProps = {
-  keyword?: string;
+  keywordList: Array<string>;
 };
 
 export const BookmarkArticleKeywordSearchInput: FC<
   BookmarkArticleKeywordSearchInputProps
-> = ({ keyword }) => {
+> = ({ keywordList }) => {
   const router = useRouter();
   const pathname = usePathname();
+  const keyword = keywordList.filter((keyword) => keyword !== "").join(" ");
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -39,10 +41,13 @@ export const BookmarkArticleKeywordSearchInput: FC<
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     let keywordPath = "";
     if (!!values.keyword && values.keyword.trim() !== "") {
-      keywordPath = `keyword=${values.keyword}`;
+      const keywordArray = splitBySpace(values.keyword);
+      keywordPath = keywordArray
+        .map((keyword) => `&keyword=${keyword}`)
+        .join("");
     }
     await serverRevalidatePage(pathname);
-    router.replace(`/bookmark?${keywordPath}`);
+    router.replace(`/bookmark?dummy=dummy${keywordPath}`);
   };
 
   return (

@@ -14,21 +14,21 @@ type FeedListTemplateProps = {
   searchParams: SearchParamsType;
   platformSiteType?: PlatformSiteType;
   platformId?: string;
-  keyword?: string;
+  keywordList: Array<string>;
 };
 
 export const FeedListTemplate: FC<FeedListTemplateProps> = ({
   searchParams,
   platformSiteType,
   platformId,
-  keyword,
+  keywordList,
 }) => {
   return (
     <>
       <div className="fixed z-50 hidden w-[90%] gap-2 bg-card py-4 md:block md:w-[70%] md:p-4">
         <h1 className="text-2xl font-bold">Feed List</h1>
         <div>
-          <FeedKeywordSearchForm keyword={keyword} />
+          <FeedKeywordSearchForm keywordList={keywordList} />
         </div>
       </div>
 
@@ -40,7 +40,7 @@ export const FeedListTemplate: FC<FeedListTemplateProps> = ({
           input: {
             first: 10,
             after: null,
-            keyword,
+            keywords: keywordList,
             platformSiteType: Number(platformSiteType),
             platformId,
           },
@@ -51,7 +51,7 @@ export const FeedListTemplate: FC<FeedListTemplateProps> = ({
           fallback={<ScreenLoader />}
         >
           <FeedList
-            keyword={keyword}
+            keywordList={keywordList}
             platformSiteType={platformSiteType}
             platformId={platformId}
           />
@@ -59,7 +59,7 @@ export const FeedListTemplate: FC<FeedListTemplateProps> = ({
       </PreloadQuery>
 
       <div className="fixed bottom-20 right-4 z-50 md:hidden">
-        <FeedKeywordSearchDialog keyword={keyword} />
+        <FeedKeywordSearchDialog keywordList={keywordList} />
       </div>
     </>
   );

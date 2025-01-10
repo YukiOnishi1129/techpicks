@@ -23,6 +23,7 @@ import {
   FormMessage,
 } from "@/shared/components/ui/form";
 import { Input } from "@/shared/components/ui/input";
+import { joinWithSpace, splitBySpace } from "@/shared/lib/utils";
 
 const formSchema = z.object({
   keyword: z.string().optional(),
@@ -30,15 +31,16 @@ const formSchema = z.object({
 
 type SearchFavoriteArticleListDialogContentProps = {
   favoriteArticleFolderId?: string;
-  keyword?: string;
+  keywordList: Array<string>;
   onClose: () => void;
 };
 
 export const SearchFavoriteArticleListDialogContent: FC<
   SearchFavoriteArticleListDialogContentProps
-> = ({ favoriteArticleFolderId, keyword, onClose }) => {
+> = ({ favoriteArticleFolderId, keywordList, onClose }) => {
   const pathname = usePathname();
   const router = useRouter();
+  const keyword = joinWithSpace(keywordList);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -53,11 +55,14 @@ export const SearchFavoriteArticleListDialogContent: FC<
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     let keywordPath = "";
     if (!!values.keyword && values.keyword.trim() !== "") {
-      keywordPath = `keyword=${values.keyword}`;
+      const keywordArray = splitBySpace(values.keyword);
+      keywordPath = keywordArray
+        .map((keyword) => `&keyword=${keyword}`)
+        .join("");
     }
     await serverRevalidatePage(pathname);
     if (!favoriteArticleFolderId) {
-      router.replace(`/favorite/article?${keywordPath}`);
+      router.replace(`/favorite/article?dummy=dummy${keywordPath}`);
       resetDialog();
       onClose();
       return;

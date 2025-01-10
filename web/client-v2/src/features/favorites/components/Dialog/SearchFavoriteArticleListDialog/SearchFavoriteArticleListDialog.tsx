@@ -9,12 +9,12 @@ import { SearchFavoriteArticleListDialogContent } from "./SearchFavoriteArticleL
 
 type SearchFavoriteArticleListDialogProps = {
   favoriteArticleFolderId?: string;
-  keyword?: string;
+  keywordList: Array<string>;
 };
 
 export const SearchFavoriteArticleListDialog: FC<
   SearchFavoriteArticleListDialogProps
-> = ({ favoriteArticleFolderId, keyword }) => {
+> = ({ favoriteArticleFolderId, keywordList }) => {
   const [open, setOpen] = useState(false);
 
   const handleClose = useCallback(() => {
@@ -29,7 +29,7 @@ export const SearchFavoriteArticleListDialog: FC<
       {open && (
         <SearchFavoriteArticleListDialogContent
           favoriteArticleFolderId={favoriteArticleFolderId}
-          keyword={keyword}
+          keywordList={keywordList}
           onClose={handleClose}
         />
       )}

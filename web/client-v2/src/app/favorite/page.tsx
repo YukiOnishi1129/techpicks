@@ -15,9 +15,15 @@ export default async function FavoritePage({ searchParams }: PageProps) {
     redirect("/login");
   }
   const q = await searchParams;
-  const keyword = typeof q["keyword"] === "string" ? q["keyword"] : undefined;
+  let keywordList: Array<string> = [];
+  if (typeof q["keyword"] !== "string" && q["keyword"])
+    keywordList = q["keyword"];
+  if (typeof q["keyword"] === "string") keywordList.push(q["keyword"]);
 
   return (
-    <FavoriteArticleFolderListTemplate keyword={keyword} searchParams={q} />
+    <FavoriteArticleFolderListTemplate
+      keywordList={keywordList}
+      searchParams={q}
+    />
   );
 }

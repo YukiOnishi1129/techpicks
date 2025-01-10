@@ -29,8 +29,12 @@ export class ArticleService {
     const req = new GetArticlesRequest();
     if (input?.first) req.setLimit(input.first);
     if (input?.after) req.setCursor(input.after);
-    if (input?.keyword)
-      req.setKeyword(new StringValue().setValue(input.keyword));
+    if (input?.keywords && input.keywords.length !== 0) {
+      const keywords = input.keywords.map((word) => {
+        return new StringValue().setValue(word);
+      });
+      req.setKeywordsList(keywords);
+    }
     if (input?.feedIds)
       req.setFeedIdsList(
         input.feedIds.map((feedId) => {

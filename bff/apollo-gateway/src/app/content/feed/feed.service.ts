@@ -43,8 +43,12 @@ export class FeedService {
 
     if (input?.platformId)
       req.setPlatformId(new StringValue().setValue(input.platformId));
-    if (input?.keyword)
-      req.setKeyword(new StringValue().setValue(input.keyword));
+    if (input?.keywords && input.keywords.length !== 0) {
+      const keywords = input.keywords.map((word) => {
+        return new StringValue().setValue(word);
+      });
+      req.setKeywordsList(keywords);
+    }
     if (input?.isAllFetch)
       req.setIsAllFetch(new BoolValue().setValue(input.isAllFetch));
 

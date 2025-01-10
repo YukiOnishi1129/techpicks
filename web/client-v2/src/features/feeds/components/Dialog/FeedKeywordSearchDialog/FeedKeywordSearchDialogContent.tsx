@@ -21,26 +21,27 @@ import {
   FormMessage,
 } from "@/shared/components/ui/form";
 import { Input } from "@/shared/components/ui/input";
-
+import { joinWithSpace, splitBySpace } from "@/shared/lib/utils";
 
 const formSchema = z.object({
   keyword: z.string().optional(),
 });
 
 type FeedKeywordSearchDialogContentProps = {
-  keyword?: string;
+  keywordList: Array<string>;
   handleClose: () => void;
 };
 
 export const FeedKeywordSearchDialogContent: FC<
   FeedKeywordSearchDialogContentProps
-> = ({ keyword, handleClose }) => {
+> = ({ keywordList, handleClose }) => {
   const pathname = usePathname();
   const router = useRouter();
+  const keyword = joinWithSpace(keywordList);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      keyword: keyword ?? "",
+      keyword,
     },
   });
 
@@ -51,10 +52,13 @@ export const FeedKeywordSearchDialogContent: FC<
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     let keywordPath = "";
     if (!!values.keyword && values.keyword.trim() !== "") {
-      keywordPath = `keyword=${values.keyword}`;
+      const keywordArray = splitBySpace(values.keyword);
+      keywordPath = keywordArray
+        .map((keyword) => `&keyword=${keyword}`)
+        .join("");
     }
     await serverRevalidatePage(pathname);
-    router.replace(`/feed?${keywordPath}`);
+    router.replace(`/feed?$dummy=dummy{keywordPath}`);
     resetDialog();
     handleClose();
   };

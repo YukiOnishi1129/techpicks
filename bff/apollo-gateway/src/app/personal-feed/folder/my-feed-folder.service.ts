@@ -37,10 +37,11 @@ export class MyFeedFolderService {
     req.setUserId(userId);
     if (input?.first) req.setLimit(input.first);
     if (input?.after) req.setCursor(input.after);
-    if (input?.keyword) {
-      const keyword = new StringValue();
-      keyword.setValue(input.keyword);
-      req.setKeyword(keyword);
+    if (input?.keywords && input.keywords.length !== 0) {
+      const keywords = input.keywords.map((word) => {
+        return new StringValue().setValue(word);
+      });
+      req.setKeywordsList(keywords);
     }
     if (input?.isAllFetch)
       req.setIsAllFetch(new BoolValue().setValue(input.isAllFetch));

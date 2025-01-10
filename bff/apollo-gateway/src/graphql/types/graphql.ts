@@ -13,7 +13,7 @@ export class ArticlesInput {
     languageStatus?: Nullable<number>;
     tab?: Nullable<string>;
     feedIds?: Nullable<string[]>;
-    keyword?: Nullable<string>;
+    keywords?: Nullable<string[]>;
     first?: Nullable<number>;
     after?: Nullable<string>;
     last?: Nullable<number>;
@@ -50,7 +50,7 @@ export class DeleteBookmarkInput {
 }
 
 export class BookmarksInput {
-    keyword?: Nullable<string>;
+    keywords?: Nullable<string[]>;
     first?: Nullable<number>;
     after?: Nullable<string>;
     last?: Nullable<number>;
@@ -112,7 +112,7 @@ export class DeleteFavoriteArticleByArticleIdInput {
 }
 
 export class FavoriteArticleFoldersInput {
-    keyword?: Nullable<string>;
+    keywords?: Nullable<string[]>;
     isFolderOnly?: Nullable<boolean>;
     isAllFetch?: Nullable<boolean>;
     isFavoriteArticleAllFetch?: Nullable<boolean>;
@@ -128,7 +128,7 @@ export class FavoriteArticleFolderInput {
 }
 
 export class FavoriteArticlesInput {
-    keyword?: Nullable<string>;
+    keywords?: Nullable<string[]>;
     folderId?: Nullable<string>;
     first?: Nullable<number>;
     after?: Nullable<string>;
@@ -137,7 +137,7 @@ export class FavoriteArticlesInput {
 }
 
 export class FavoriteAllFolderArticlesInput {
-    keyword?: Nullable<string>;
+    keywords?: Nullable<string[]>;
     first?: Nullable<number>;
     after?: Nullable<string>;
     last?: Nullable<number>;
@@ -147,7 +147,7 @@ export class FavoriteAllFolderArticlesInput {
 export class FeedsInput {
     platformSiteType?: Nullable<number>;
     platformId?: Nullable<string>;
-    keyword?: Nullable<string>;
+    keywords?: Nullable<string[]>;
     feedIdList?: Nullable<string[]>;
     isAllFetch?: Nullable<boolean>;
     first?: Nullable<number>;
@@ -180,7 +180,7 @@ export class DeleteMyFeedFolderInput {
 }
 
 export class MyFeedFoldersInput {
-    keyword?: Nullable<string>;
+    keywords?: Nullable<string[]>;
     isAllFetch?: Nullable<boolean>;
     first?: Nullable<number>;
     after?: Nullable<string>;

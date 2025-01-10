@@ -114,7 +114,7 @@ export const TrendArticleDashboardTemplate: FC<
       </Tabs>
 
       <div className="fixed bottom-20 right-4 z-50 md:hidden">
-        <SearchArticleDialog />
+        <SearchArticleDialog keywordList={[]} />
       </div>
     </div>
   );

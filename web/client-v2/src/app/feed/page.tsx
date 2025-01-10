@@ -16,7 +16,10 @@ export default async function FeedListPage({ searchParams }: PageProps) {
     redirect("/login");
   }
   const q = await searchParams;
-  const keyword = typeof q["keyword"] === "string" ? q["keyword"] : undefined;
+  let keywordList: Array<string> = [];
+  if (typeof q["keyword"] !== "string" && q["keyword"])
+    keywordList = q["keyword"];
+  if (typeof q["keyword"] === "string") keywordList.push(q["keyword"]);
 
   const platformSiteType =
     typeof q["platformSiteType"] === "string" &&
@@ -30,7 +33,7 @@ export default async function FeedListPage({ searchParams }: PageProps) {
   return (
     <FeedListTemplate
       searchParams={q}
-      keyword={keyword}
+      keywordList={keywordList}
       platformSiteType={platformSiteType}
       platformId={platformId}
     />

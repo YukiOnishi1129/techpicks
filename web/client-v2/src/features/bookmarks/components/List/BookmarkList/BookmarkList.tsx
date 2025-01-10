@@ -11,10 +11,10 @@ import { BookmarkCardWrapper } from "../../Card";
 import { BookmarkTemplateQuery } from "../../Template/BookmarkTemplate/BookmarkTemplateQuery";
 
 type BookmarkListProps = {
-  keyword?: string;
+  keywordList: Array<string>;
 };
 
-export const BookmarkList: FC<BookmarkListProps> = ({ keyword }) => {
+export const BookmarkList: FC<BookmarkListProps> = ({ keywordList }) => {
   const observerTarget = useRef(null);
 
   const { data: resSuspenseData, error } = useSuspenseQuery(
@@ -24,7 +24,7 @@ export const BookmarkList: FC<BookmarkListProps> = ({ keyword }) => {
         input: {
           first: 20,
           after: null,
-          keyword,
+          keywords: keywordList,
         },
         favoriteArticleFoldersInput: {
           isAllFetch: true,
@@ -43,7 +43,7 @@ export const BookmarkList: FC<BookmarkListProps> = ({ keyword }) => {
       input: {
         first: 20,
         after: null,
-        keyword,
+        keywords: keywordList,
       },
     },
     fetchPolicy: "cache-first",
@@ -64,7 +64,7 @@ export const BookmarkList: FC<BookmarkListProps> = ({ keyword }) => {
       variables: {
         input: {
           first: 20,
-          keyword,
+          keywords: keywordList,
           after: endCursor,
         },
       },
@@ -92,7 +92,7 @@ export const BookmarkList: FC<BookmarkListProps> = ({ keyword }) => {
     if (!resData.bookmarks.pageInfo.hasNextPage) setIsNextPage(false);
 
     setHashMore(resData.bookmarks.edges.length > 0);
-  }, [keyword, endCursor, isNextPage, fetchMore]);
+  }, [keywordList, endCursor, isNextPage, fetchMore]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(

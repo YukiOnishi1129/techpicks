@@ -8,11 +8,11 @@ import { Dialog, DialogTrigger } from "@/shared/components/ui/dialog";
 import { SearchMyFeedFolderDialogContent } from "./SearchMyFeedFolderDialogContent";
 
 type SearchMyFeedFolderDialogProps = {
-  keyword?: string;
+  keywordList: Array<string>;
 };
 
 export const SearchMyFeedFolderDialog: FC<SearchMyFeedFolderDialogProps> = ({
-  keyword,
+  keywordList,
 }) => {
   const [open, setOpen] = useState(false);
 
@@ -27,8 +27,8 @@ export const SearchMyFeedFolderDialog: FC<SearchMyFeedFolderDialogProps> = ({
       </DialogTrigger>
       {open && (
         <SearchMyFeedFolderDialogContent
-          keyword={keyword}
-          handleClose={handleClose}
+          keywordList={keywordList}
+          onClose={handleClose}
         />
       )}
     </Dialog>

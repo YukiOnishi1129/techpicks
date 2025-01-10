@@ -22,7 +22,7 @@ const LIMIT = 20;
 
 export type SearchArticleListTemplateProps = {
   languageStatus: LanguageStatus;
-  keyword?: string;
+  keywordList: Array<string>;
   platformSiteType?: PlatformSiteType;
   feedIdList: Array<string>;
   tab: ArticleTabType;
@@ -33,15 +33,15 @@ export const SearchArticleListTemplate: FC<
   SearchArticleListTemplateProps
 > = async ({
   languageStatus,
-  keyword,
+  keywordList,
   platformSiteType,
   feedIdList,
   tab,
   searchParams,
 }) => {
   let keywordPath = "";
-  if (!!keyword && keyword.trim() !== "") {
-    keywordPath = `&keyword=${keyword}`;
+  if (keywordList.length > 0) {
+    keywordPath = keywordList.map((keyword) => `keyword=${keyword}`).join("&");
   }
   let platformTypePath = "";
   if (String(platformSiteType)) {
@@ -87,7 +87,7 @@ export const SearchArticleListTemplate: FC<
           <h1 className="text-2xl font-bold ">Article Search Result</h1>
           <div className="mr-8 flex w-48 items-center justify-end">
             <SearchDetailArticleDialog
-              keyword={keyword}
+              keywordList={keywordList}
               selectedFeedList={selectedFeedList}
               feedsEndCursor={data?.initFeeds?.pageInfo?.endCursor || undefined}
             />
@@ -105,7 +105,7 @@ export const SearchArticleListTemplate: FC<
               first: LIMIT,
               after: null,
               languageStatus,
-              keyword,
+              keywords: keywordList,
               feedIds: feedIdList,
               tab,
             },
@@ -124,7 +124,7 @@ export const SearchArticleListTemplate: FC<
               languageStatus={languageStatus}
               tab={tab}
               feedIdList={feedIdList}
-              keyword={keyword}
+              keywordList={keywordList}
             />
           </Suspense>
         </PreloadQuery>
@@ -132,7 +132,7 @@ export const SearchArticleListTemplate: FC<
 
       <div className="fixed bottom-20 right-4 z-50 md:hidden">
         <SearchDetailArticleDialogFloatButton
-          keyword={keyword}
+          keywordList={keywordList}
           selectedFeedList={selectedFeedList}
           feedsEndCursor={data?.initFeeds?.pageInfo?.endCursor || undefined}
         />

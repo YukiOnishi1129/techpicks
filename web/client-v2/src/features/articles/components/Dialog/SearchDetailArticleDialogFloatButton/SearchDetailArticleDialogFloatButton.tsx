@@ -9,14 +9,14 @@ import { SelectOptionType } from "@/shared/types/utils";
 import { SearchDetailArticleDialogContent } from "../SearchDetailArticleDialog/SearchDetailArticleDialogContent";
 
 type SearchDetailArticleDialogFloatButtonProps = {
-  keyword?: string;
+  keywordList: Array<string>;
   selectedFeedList: Array<SelectOptionType>;
   feedsEndCursor?: string;
 };
 
 export const SearchDetailArticleDialogFloatButton: FC<
   SearchDetailArticleDialogFloatButtonProps
-> = ({ keyword, selectedFeedList = [], feedsEndCursor }) => {
+> = ({ keywordList, selectedFeedList = [], feedsEndCursor }) => {
   const [open, setOpen] = useState(false);
 
   const handleClose = useCallback(() => {
@@ -30,7 +30,7 @@ export const SearchDetailArticleDialogFloatButton: FC<
       </DialogTrigger>
       {open && (
         <SearchDetailArticleDialogContent
-          keyword={keyword}
+          keywordList={keywordList}
           selectedFeedList={selectedFeedList}
           feedsEndCursor={feedsEndCursor}
           onClose={handleClose}

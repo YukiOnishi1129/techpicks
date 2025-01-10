@@ -14,30 +14,27 @@ import { FeedListTemplateQuery } from "../../Template/FeedListTemplate/FeedListT
 type FeedListProps = {
   platformSiteType?: PlatformSiteType;
   platformId?: string;
-  keyword?: string;
+  keywordList: Array<string>;
 };
 
 export const FeedList: FC<FeedListProps> = ({
   platformSiteType,
   platformId,
-  keyword,
+  keywordList,
 }) => {
   const observerTarget = useRef(null);
 
-  const { data: resSuspenseData, error } = useSuspenseQuery(
-    FeedListTemplateQuery,
-    {
-      variables: {
-        input: {
-          first: 10,
-          after: null,
-          keyword,
-          platformSiteType: Number(platformSiteType),
-          platformId,
-        },
+  const { error } = useSuspenseQuery(FeedListTemplateQuery, {
+    variables: {
+      input: {
+        first: 10,
+        after: null,
+        keywords: keywordList,
+        platformSiteType: Number(platformSiteType),
+        platformId,
       },
-    }
-  );
+    },
+  });
 
   const {
     data: res,
@@ -48,7 +45,7 @@ export const FeedList: FC<FeedListProps> = ({
       input: {
         first: 10,
         after: null,
-        keyword,
+        keywords: keywordList,
         platformSiteType: Number(platformSiteType),
         platformId,
       },
@@ -72,7 +69,7 @@ export const FeedList: FC<FeedListProps> = ({
         input: {
           first: 10,
           after: endCursor,
-          keyword,
+          keywords: keywordList,
           platformSiteType: Number(platformSiteType),
           platformId,
         },
@@ -99,7 +96,14 @@ export const FeedList: FC<FeedListProps> = ({
     setIsNextPage(resData.feeds.pageInfo.hasNextPage);
 
     setHashMore(resData.feeds.edges.length > 0);
-  }, [endCursor, fetchMore, isNextPage, keyword, platformId, platformSiteType]);
+  }, [
+    endCursor,
+    fetchMore,
+    isNextPage,
+    keywordList,
+    platformId,
+    platformSiteType,
+  ]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(

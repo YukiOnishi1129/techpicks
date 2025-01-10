@@ -8,11 +8,11 @@ import { Dialog, DialogTrigger } from "@/shared/components/ui/dialog";
 import { SearchArticleDialogContent } from "./SearchArticleDialogContent";
 
 type SearchArticleDialogProps = {
-  keyword?: string;
+  keywordList: Array<string>;
 };
 
 export const SearchArticleDialog: FC<SearchArticleDialogProps> = ({
-  keyword,
+  keywordList,
 }) => {
   const [open, setOpen] = useState(false);
 
@@ -26,7 +26,10 @@ export const SearchArticleDialog: FC<SearchArticleDialogProps> = ({
         <FaSearch size="24" color="black" />
       </DialogTrigger>
       {open && (
-        <SearchArticleDialogContent keyword={keyword} onClose={handleClose} />
+        <SearchArticleDialogContent
+          keywordList={keywordList}
+          onClose={handleClose}
+        />
       )}
     </Dialog>
   );

@@ -47,11 +47,13 @@ func (bpa *bookmarkPersistenceAdapter) GetBookmarks(ctx context.Context, req *bp
 		q = append(q, qm.Where("created_at < (SELECT created_at FROM bookmarks WHERE id = ?)", req.GetCursor()))
 	}
 
-	if req.GetKeyword().GetValue() != "" {
-		q = append(q, qm.Expr(
-			qm.And("title ILIKE ?", "%"+req.GetKeyword().GetValue()+"%"),
-			qm.Or("description ILIKE ?", "%"+req.GetKeyword().GetValue()+"%"),
-		))
+	if req.GetKeywords() != nil {
+		for _, keyword := range req.GetKeywords() {
+			q = append(q, qm.Expr(
+				qm.And("title ILIKE ?", "%"+keyword.GetValue()+"%"),
+				qm.Or("description ILIKE ?", "%"+keyword.GetValue()+"%"),
+			))
+		}
 	}
 
 	return bpa.BookmarkRepository.GetBookmarks(ctx, q)
