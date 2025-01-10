@@ -14,7 +14,10 @@ import { PreloadQuery } from "@/shared/lib/apollo/client";
 import { SearchParamsType } from "@/shared/types/utils";
 
 import { AllFolderFavoriteArticleListTemplateQuery } from "./AllFolderFavoriteArticleListTemplateQuery";
-import { SearchFavoriteArticleListDialog } from "../../Dialog";
+import {
+  CreateMultiFolderFavoriteArticleDialog,
+  SearchFavoriteArticleListDialog,
+} from "../../Dialog";
 import { AllFolderFavoriteArticleList } from "../../List";
 import { FavoriteArticleKeywordSearchForm } from "../../Search";
 
@@ -64,6 +67,7 @@ export const AllFolderFavoriteArticleListTemplate: FC<
           <div className="w-4/5 pt-2">
             <FavoriteArticleKeywordSearchForm keywordList={keywordList} />
           </div>
+          <CreateMultiFolderFavoriteArticleDialog />
         </div>
       </div>
 
