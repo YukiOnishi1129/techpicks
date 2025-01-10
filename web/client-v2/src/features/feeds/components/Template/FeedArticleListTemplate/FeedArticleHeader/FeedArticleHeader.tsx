@@ -10,12 +10,12 @@ import { FeedArticleKeywordSearchForm } from "../../../Search";
 
 type FeedArticleHeaderProps = {
   feedId: string;
-  keyword?: string;
+  keywordList: Array<string>;
 };
 
 export const FeedArticleHeader: FC<FeedArticleHeaderProps> = ({
   feedId,
-  keyword,
+  keywordList,
 }) => {
   const { successToast, failToast } = useStatusToast();
 
@@ -258,7 +258,10 @@ export const FeedArticleHeader: FC<FeedArticleHeaderProps> = ({
   return (
     <div className="flex justify-between">
       <div className="hidden w-4/5 md:block">
-        <FeedArticleKeywordSearchForm feedId={feedId} keyword={keyword} />
+        <FeedArticleKeywordSearchForm
+          feedId={feedId}
+          keywordList={keywordList}
+        />
       </div>
       <div className="flex w-auto items-center space-x-4 space-y-4 md:static md:hidden">
         {/* eslint-disable-next-line @next/next/no-img-element */}

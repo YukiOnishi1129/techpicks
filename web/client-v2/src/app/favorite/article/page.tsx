@@ -17,9 +17,15 @@ export default async function FavoriteArticleAllListPage({
     redirect("/login");
   }
   const q = await searchParams;
-  const keyword = typeof q["keyword"] === "string" ? q["keyword"] : undefined;
+  let keywordList: Array<string> = [];
+  if (typeof q["keyword"] !== "string" && q["keyword"])
+    keywordList = q["keyword"];
+  if (typeof q["keyword"] === "string") keywordList.push(q["keyword"]);
 
   return (
-    <AllFolderFavoriteArticleListTemplate keyword={keyword} searchParams={q} />
+    <AllFolderFavoriteArticleListTemplate
+      keywordList={keywordList}
+      searchParams={q}
+    />
   );
 }

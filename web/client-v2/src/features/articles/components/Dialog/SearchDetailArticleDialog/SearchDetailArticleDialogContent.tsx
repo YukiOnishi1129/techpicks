@@ -26,6 +26,7 @@ import {
   FormMessage,
 } from "@/shared/components/ui/form";
 import { Input } from "@/shared/components/ui/input";
+import { joinWithSpace, splitBySpace } from "@/shared/lib/utils";
 import { SelectOptionType } from "@/shared/types/utils";
 
 const formSchema = z.object({
@@ -39,7 +40,7 @@ const formSchema = z.object({
 });
 
 type SearchDetailArticleDialogContentProps = {
-  keyword?: string;
+  keywordList: Array<string>;
   selectedFeedList?: Array<SelectOptionType>;
   feedsEndCursor?: string;
   onClose: () => void;
@@ -47,8 +48,9 @@ type SearchDetailArticleDialogContentProps = {
 
 export const SearchDetailArticleDialogContent: FC<
   SearchDetailArticleDialogContentProps
-> = ({ keyword, selectedFeedList = [], feedsEndCursor, onClose }) => {
+> = ({ keywordList, selectedFeedList = [], feedsEndCursor, onClose }) => {
   const router = useRouter();
+  const keyword = joinWithSpace(keywordList);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -85,7 +87,10 @@ export const SearchDetailArticleDialogContent: FC<
     async (values: z.infer<typeof formSchema>) => {
       let keywordPath = "";
       if (!!values.keyword && values.keyword.trim() !== "") {
-        keywordPath = `&keyword=${values.keyword}`;
+        const keywordArray = splitBySpace(values.keyword);
+        keywordPath = keywordArray
+          .map((keyword) => `keyword=${keyword}`)
+          .join("&");
       }
       let feedIdPath = "";
       if (values.targetFeedList) {

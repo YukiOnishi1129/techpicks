@@ -17,13 +17,13 @@ import { FeedArticleList } from "../../List";
 
 type FeedArticleListTemplateProps = {
   id: string;
-  keyword?: string;
+  keywordList: Array<string>;
   searchParams: SearchParamsType;
 };
 
 export const FeedArticleListTemplate: FC<
   FeedArticleListTemplateProps
-> = async ({ id, keyword, searchParams }) => {
+> = async ({ id, keywordList, searchParams }) => {
   const { data, error } = await getServerFeedArticleTemplateQuery(id);
   if (error) {
     return <div>Not Found</div>;
@@ -51,7 +51,7 @@ export const FeedArticleListTemplate: FC<
           <PageBreadcrumb breadcrumbs={breadcrumbs} />
         </div>
         <div className="mt-2">
-          <FeedArticleHeader feedId={id} keyword={keyword} />
+          <FeedArticleHeader feedId={id} keywordList={keywordList} />
         </div>
       </div>
 
@@ -63,7 +63,7 @@ export const FeedArticleListTemplate: FC<
           input: {
             first: 20,
             after: null,
-            keyword,
+            keywords: keywordList,
             feedIds: [id],
           },
           favoriteArticleFoldersInput: {
@@ -76,12 +76,12 @@ export const FeedArticleListTemplate: FC<
           key={JSON.stringify(searchParams)}
           fallback={<SkeltonArticleList />}
         >
-          <FeedArticleList id={id} keyword={keyword} />
+          <FeedArticleList id={id} keywordList={keywordList} />
         </Suspense>
       </PreloadQuery>
 
       <div className="fixed bottom-20 right-4 z-50 md:hidden">
-        <FeedArticleKeywordSearchDialog feedId={id} keyword={keyword} />
+        <FeedArticleKeywordSearchDialog feedId={id} keywordList={keywordList} />
       </div>
     </>
   );

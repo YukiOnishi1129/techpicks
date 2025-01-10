@@ -19,6 +19,7 @@ import {
   FormMessage,
 } from "@/shared/components/ui/form";
 import { Input } from "@/shared/components/ui/input";
+import { splitBySpace } from "@/shared/lib/utils";
 import { SelectOptionType } from "@/shared/types/utils";
 
 const formSchema = z.object({
@@ -61,8 +62,11 @@ export const SearchArticleListForm: FC<SearchArticleListFormProps> = ({
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     let keywordPath = "";
-    if (values.keyword !== "") {
-      keywordPath = `&keyword=${values.keyword}`;
+    if (!!values.keyword && values.keyword.trim() !== "") {
+      const keywordArray = splitBySpace(values.keyword);
+      keywordPath = keywordArray
+        .map((keyword) => `keyword=${keyword}`)
+        .join("&");
     }
     let feedIdPath = "";
     if (values.targetFeedList) {

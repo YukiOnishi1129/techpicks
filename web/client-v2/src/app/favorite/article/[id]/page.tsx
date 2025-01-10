@@ -21,12 +21,15 @@ export default async function FavoriteArticleListPage({
   const { id } = await params;
   const q = await searchParams;
 
-  const keyword = typeof q["keyword"] === "string" ? q["keyword"] : undefined;
+  let keywordList: Array<string> = [];
+  if (typeof q["keyword"] !== "string" && q["keyword"])
+    keywordList = q["keyword"];
+  if (typeof q["keyword"] === "string") keywordList.push(q["keyword"]);
 
   return (
     <FavoriteArticleListByFolderIdTemplate
       id={id}
-      keyword={keyword}
+      keywordList={keywordList}
       searchParams={q}
     />
   );

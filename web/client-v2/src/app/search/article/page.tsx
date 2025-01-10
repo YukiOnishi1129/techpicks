@@ -25,7 +25,10 @@ export default async function SearchArticleListPage({
       ? (parseInt(q["languageStatus"]) as LanguageStatus)
       : 0;
 
-  const keyword = typeof q["keyword"] === "string" ? q["keyword"] : undefined;
+  let keywordList: Array<string> = [];
+  if (typeof q["keyword"] !== "string" && q["keyword"])
+    keywordList = q["keyword"];
+  if (typeof q["keyword"] === "string") keywordList.push(q["keyword"]);
 
   const platformSiteType =
     typeof q["platformSiteType"] === "string"
@@ -44,7 +47,7 @@ export default async function SearchArticleListPage({
     <SearchArticleListTemplate
       searchParams={q}
       languageStatus={languageStatus}
-      keyword={keyword}
+      keywordList={keywordList}
       platformSiteType={platformSiteType}
       feedIdList={feedIdList}
       tab={tab}

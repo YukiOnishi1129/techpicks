@@ -10,13 +10,13 @@ import { MyFeedFolderCard } from "../../Card";
 import { MyFeedFolderListTemplateQuery } from "../../Template/MyFeedFolderListTemplate/MyFeedFolderListTemplateQuery";
 
 type MyFeedFolderListProps = {
-  keyword?: string;
+  keywordList: Array<string>;
   limit: number;
   feedLimit: number;
 };
 
 export const MyFeedFolderList: FC<MyFeedFolderListProps> = ({
-  keyword,
+  keywordList,
   limit,
   feedLimit,
 }) => {
@@ -27,7 +27,7 @@ export const MyFeedFolderList: FC<MyFeedFolderListProps> = ({
     {
       variables: {
         myFeedFoldersInput: {
-          keyword,
+          keywords: keywordList,
           first: limit,
           after: null,
         },
@@ -46,7 +46,7 @@ export const MyFeedFolderList: FC<MyFeedFolderListProps> = ({
   } = useQuery(MyFeedFolderListQuery, {
     variables: {
       myFeedFoldersInput: {
-        keyword,
+        keywords: keywordList,
         first: limit,
         after: null,
       },
@@ -67,7 +67,7 @@ export const MyFeedFolderList: FC<MyFeedFolderListProps> = ({
     const { data: resData, error: resError } = await fetchMore({
       variables: {
         myFeedFoldersInput: {
-          keyword,
+          keywords: keywordList,
           first: limit,
           after: endCursor,
         },
@@ -97,7 +97,7 @@ export const MyFeedFolderList: FC<MyFeedFolderListProps> = ({
     if (!resData.myFeedFolders.pageInfo.hasNextPage) setIsNextPage(false);
 
     setHashMore(resData.myFeedFolders.edges.length > 0);
-  }, [endCursor, isNextPage, fetchMore, keyword, limit]);
+  }, [endCursor, isNextPage, fetchMore, keywordList, limit]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(

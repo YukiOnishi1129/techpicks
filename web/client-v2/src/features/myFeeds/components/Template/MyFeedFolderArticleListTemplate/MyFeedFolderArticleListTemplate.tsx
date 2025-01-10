@@ -24,13 +24,13 @@ const LIMIT = 20;
 
 type MyFeedFolderArticleListTemplateProps = {
   myFeedFolderId: string;
-  keyword?: string;
+  keywordList: Array<string>;
   searchParams: SearchParamsType;
 };
 
 export const MyFeedFolderArticleListTemplate: FC<
   MyFeedFolderArticleListTemplateProps
-> = async ({ myFeedFolderId, keyword, searchParams }) => {
+> = async ({ myFeedFolderId, keywordList, searchParams }) => {
   const myFeedFolderInput: MyFeedFolderInput = {
     id: myFeedFolderId,
   };
@@ -81,7 +81,7 @@ export const MyFeedFolderArticleListTemplate: FC<
         <div className="hidden md:block">
           <MyFeedFolderArticleKeywordSearchForm
             myFeedFolderId={myFeedFolderId}
-            keyword={keyword}
+            keywordList={keywordList}
           />
         </div>
       </div>
@@ -93,7 +93,7 @@ export const MyFeedFolderArticleListTemplate: FC<
           input: {
             first: LIMIT,
             after: null,
-            keyword,
+            keywords: keywordList,
             feedIds: feedIdList,
           },
         }}
@@ -106,7 +106,7 @@ export const MyFeedFolderArticleListTemplate: FC<
             data={data}
             limit={LIMIT}
             feedIdList={feedIdList}
-            keyword={keyword}
+            keywordList={keywordList}
           />
         </Suspense>
       </PreloadQuery>
@@ -114,7 +114,7 @@ export const MyFeedFolderArticleListTemplate: FC<
       <div className="fixed bottom-20 right-4 z-50 md:hidden">
         <SearchMyFeedFolderArticleDialog
           myFeedFolderId={myFeedFolderId}
-          keyword={keyword}
+          keywordList={keywordList}
         />
       </div>
     </>

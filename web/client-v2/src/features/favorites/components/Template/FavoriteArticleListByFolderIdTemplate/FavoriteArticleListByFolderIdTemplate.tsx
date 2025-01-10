@@ -25,17 +25,17 @@ import { FavoriteArticleKeywordSearchForm } from "../../Search";
 type FavoriteArticleListByFolderIdTemplateProps = {
   searchParams: SearchParamsType;
   id: string;
-  keyword?: string;
+  keywordList: Array<string>;
 };
 
 export const FavoriteArticleListByFolderIdTemplate: FC<
   FavoriteArticleListByFolderIdTemplateProps
-> = async ({ searchParams, id, keyword }) => {
+> = async ({ searchParams, id, keywordList }) => {
   const input: FavoriteArticlesInput = {
     first: 20,
     after: null,
     folderId: id,
-    keyword: keyword,
+    keywords: keywordList,
   };
 
   const favoriteArticleFoldersInput: FavoriteArticleFoldersInput = {
@@ -77,7 +77,7 @@ export const FavoriteArticleListByFolderIdTemplate: FC<
           <div className="w-4/5 pt-2">
             <FavoriteArticleKeywordSearchForm
               favoriteArticleFolderId={id}
-              keyword={keyword}
+              keywordList={keywordList}
             />
           </div>
           <CreateFavoriteArticleDialog favoriteArticleFolderId={id} />
@@ -97,13 +97,13 @@ export const FavoriteArticleListByFolderIdTemplate: FC<
           key={JSON.stringify(searchParams)}
           fallback={<SkeltonArticleList />}
         >
-          <FavoriteArticleList folderId={id} keyword={keyword} />
+          <FavoriteArticleList folderId={id} keywordList={keywordList} />
         </Suspense>
       </PreloadQuery>
 
       <div className="fixed bottom-20 right-4 z-50 md:hidden">
         <SearchFavoriteArticleListDialog
-          keyword={keyword}
+          keywordList={keywordList}
           favoriteArticleFolderId={id}
         />
       </div>

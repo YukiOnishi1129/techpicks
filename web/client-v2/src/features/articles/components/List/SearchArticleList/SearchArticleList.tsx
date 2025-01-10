@@ -18,7 +18,7 @@ type SearchArticleListProps = {
   languageStatus: LanguageStatus;
   tab: ArticleTabType;
   feedIdList?: Array<string>;
-  keyword?: string;
+  keywordList: Array<string>;
 };
 
 export function SearchArticleList({
@@ -26,7 +26,7 @@ export function SearchArticleList({
   languageStatus,
   tab,
   feedIdList,
-  keyword,
+  keywordList,
 }: SearchArticleListProps) {
   const observerTarget = useRef(null);
 
@@ -38,7 +38,7 @@ export function SearchArticleList({
           first: limit,
           after: null,
           languageStatus,
-          keyword,
+          keywords: keywordList,
           feedIds: feedIdList,
           tab,
         },
@@ -61,7 +61,7 @@ export function SearchArticleList({
         first: limit,
         after: null,
         languageStatus,
-        keyword,
+        keywords: keywordList,
         feedIds: feedIdList,
         tab,
       },
@@ -86,7 +86,7 @@ export function SearchArticleList({
           first: limit,
           after: endCursor,
           languageStatus,
-          keyword,
+          keywords: keywordList,
           feedIds: feedIdList,
           tab,
         },
@@ -120,7 +120,7 @@ export function SearchArticleList({
     isNextPage,
     fetchMore,
     feedIdList,
-    keyword,
+    keywordList,
     limit,
   ]);
 

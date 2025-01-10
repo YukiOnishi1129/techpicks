@@ -8,12 +8,12 @@ import { Dialog, DialogTrigger } from "@/shared/components/ui/dialog";
 import { SearchFavoriteArticleFolderDialogContent } from "./SearchFavoriteArticleFolderDialogContent";
 
 type SearchFavoriteArticleFolderDialogProps = {
-  keyword?: string;
+  keywordList: Array<string>;
 };
 
 export const SearchFavoriteArticleFolderDialog: FC<
   SearchFavoriteArticleFolderDialogProps
-> = ({ keyword }) => {
+> = ({ keywordList }) => {
   const [open, setOpen] = useState(false);
 
   const handleClose = useCallback(() => {
@@ -27,7 +27,7 @@ export const SearchFavoriteArticleFolderDialog: FC<
       </DialogTrigger>
       {open && (
         <SearchFavoriteArticleFolderDialogContent
-          keyword={keyword}
+          keywordList={keywordList}
           onClose={handleClose}
         />
       )}

@@ -17,7 +17,10 @@ export default async function BookmarkPage({ searchParams }: PageProps) {
 
   const q = await searchParams;
 
-  const keyword = typeof q["keyword"] === "string" ? q["keyword"] : undefined;
+  let keywordList: Array<string> = [];
+  if (typeof q["keyword"] !== "string" && q["keyword"])
+    keywordList = q["keyword"];
+  if (typeof q["keyword"] === "string") keywordList.push(q["keyword"]);
 
-  return <BookmarkTemplate keyword={keyword} searchParams={q} />;
+  return <BookmarkTemplate keywordList={keywordList} searchParams={q} />;
 }

@@ -17,7 +17,12 @@ export default async function MyFeedFolderListPage({
     redirect("/login");
   }
   const q = await searchParams;
-  const keyword = typeof q["keyword"] === "string" ? q["keyword"] : undefined;
+  let keywordList: Array<string> = [];
+  if (typeof q["keyword"] !== "string" && q["keyword"])
+    keywordList = q["keyword"];
+  if (typeof q["keyword"] === "string") keywordList.push(q["keyword"]);
 
-  return <MyFeedFolderListTemplate keyword={keyword} searchParams={q} />;
+  return (
+    <MyFeedFolderListTemplate keywordList={keywordList} searchParams={q} />
+  );
 }

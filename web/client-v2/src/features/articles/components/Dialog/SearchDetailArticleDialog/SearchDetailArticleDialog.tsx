@@ -9,13 +9,13 @@ import { SelectOptionType } from "@/shared/types/utils";
 import { SearchDetailArticleDialogContent } from "./SearchDetailArticleDialogContent";
 
 type SearchDetailArticleDialogProps = {
-  keyword?: string;
+  keywordList: Array<string>;
   selectedFeedList: Array<SelectOptionType>;
   feedsEndCursor?: string;
 };
 
 export const SearchDetailArticleDialog: FC<SearchDetailArticleDialogProps> = ({
-  keyword,
+  keywordList,
   selectedFeedList = [],
   feedsEndCursor,
 }) => {
@@ -32,7 +32,7 @@ export const SearchDetailArticleDialog: FC<SearchDetailArticleDialogProps> = ({
       </DialogTrigger>
       {open && (
         <SearchDetailArticleDialogContent
-          keyword={keyword}
+          keywordList={keywordList}
           selectedFeedList={selectedFeedList}
           feedsEndCursor={feedsEndCursor}
           onClose={handleClose}

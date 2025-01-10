@@ -12,11 +12,11 @@ import { FavoriteArticleFolderCard } from "../../Card";
 import { FavoriteArticleFolderListTemplateQuery } from "../../Template/FavoriteArticleFolderListTemplate/FavoriteArticleFolderListTemplateQuery";
 
 type FavoriteArticleFolderListProps = {
-  keyword?: string;
+  keywordList: Array<string>;
 };
 
 export const FavoriteArticleFolderList: FC<FavoriteArticleFolderListProps> = ({
-  keyword,
+  keywordList,
 }) => {
   const observerTarget = useRef(null);
 
@@ -25,7 +25,7 @@ export const FavoriteArticleFolderList: FC<FavoriteArticleFolderListProps> = ({
       input: {
         first: 9,
         after: null,
-        keyword: keyword,
+        keywords: keywordList,
       },
     },
   });
@@ -39,7 +39,7 @@ export const FavoriteArticleFolderList: FC<FavoriteArticleFolderListProps> = ({
       input: {
         first: 9,
         after: null,
-        keyword: keyword,
+        keywords: keywordList,
       },
     },
     fetchPolicy: "cache-first",
@@ -65,7 +65,7 @@ export const FavoriteArticleFolderList: FC<FavoriteArticleFolderListProps> = ({
         input: {
           first: 9,
           after: endCursor,
-          keyword: keyword,
+          keywords: keywordList,
         },
       },
       updateQuery: (prev, { fetchMoreResult }) => {
@@ -93,7 +93,7 @@ export const FavoriteArticleFolderList: FC<FavoriteArticleFolderListProps> = ({
       setIsNextPage(false);
 
     setHashMore(resData.favoriteArticleFolders.edges.length > 0);
-  }, [endCursor, keyword, isNextPage, fetchMore]);
+  }, [endCursor, keywordList, isNextPage, fetchMore]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(

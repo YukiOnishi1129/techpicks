@@ -21,20 +21,22 @@ import {
   FormMessage,
 } from "@/shared/components/ui/form";
 import { Input } from "@/shared/components/ui/input";
+import { joinWithSpace, splitBySpace } from "@/shared/lib/utils";
 
 const formSchema = z.object({
   keyword: z.string().optional(),
 });
 
 type SearchArticleDialogContentProps = {
-  keyword?: string;
+  keywordList: Array<string>;
   onClose: () => void;
 };
 
 export const SearchArticleDialogContent: FC<
   SearchArticleDialogContentProps
-> = ({ keyword, onClose }) => {
+> = ({ keywordList, onClose }) => {
   const router = useRouter();
+  const keyword = joinWithSpace(keywordList);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -49,7 +51,10 @@ export const SearchArticleDialogContent: FC<
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     let keywordPath = "";
     if (!!values.keyword && values.keyword.trim() !== "") {
-      keywordPath = `&keyword=${values.keyword}`;
+      const keywordArray = splitBySpace(values.keyword);
+      keywordPath = keywordArray
+        .map((keyword) => `keyword=${keyword}`)
+        .join("&");
     }
 
     await serverRevalidatePage(`/search/article?dummy=dummy${keywordPath}`);

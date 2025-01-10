@@ -70,7 +70,7 @@ export type ArticlesInput = {
   before?: InputMaybe<Scalars['String']['input']>;
   feedIds?: InputMaybe<Array<Scalars['String']['input']>>;
   first?: InputMaybe<Scalars['Int']['input']>;
-  keyword?: InputMaybe<Scalars['String']['input']>;
+  keywords?: InputMaybe<Array<Scalars['String']['input']>>;
   languageStatus?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
   tab?: InputMaybe<Scalars['String']['input']>;
@@ -115,7 +115,7 @@ export type BookmarksInput = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
-  keyword?: InputMaybe<Scalars['String']['input']>;
+  keywords?: InputMaybe<Array<Scalars['String']['input']>>;
   last?: InputMaybe<Scalars['Int']['input']>;
 };
 
@@ -236,7 +236,7 @@ export type FavoriteAllFolderArticlesInput = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
-  keyword?: InputMaybe<Scalars['String']['input']>;
+  keywords?: InputMaybe<Array<Scalars['String']['input']>>;
   last?: InputMaybe<Scalars['Int']['input']>;
 };
 
@@ -313,7 +313,7 @@ export type FavoriteArticleFoldersInput = {
   isAllFetch?: InputMaybe<Scalars['Boolean']['input']>;
   isFavoriteArticleAllFetch?: InputMaybe<Scalars['Boolean']['input']>;
   isFolderOnly?: InputMaybe<Scalars['Boolean']['input']>;
-  keyword?: InputMaybe<Scalars['String']['input']>;
+  keywords?: InputMaybe<Array<Scalars['String']['input']>>;
   last?: InputMaybe<Scalars['Int']['input']>;
 };
 
@@ -322,7 +322,7 @@ export type FavoriteArticlesInput = {
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
   folderId?: InputMaybe<Scalars['ID']['input']>;
-  keyword?: InputMaybe<Scalars['String']['input']>;
+  keywords?: InputMaybe<Array<Scalars['String']['input']>>;
   last?: InputMaybe<Scalars['Int']['input']>;
 };
 
@@ -367,7 +367,7 @@ export type FeedsInput = {
   feedIdList?: InputMaybe<Array<Scalars['String']['input']>>;
   first?: InputMaybe<Scalars['Int']['input']>;
   isAllFetch?: InputMaybe<Scalars['Boolean']['input']>;
-  keyword?: InputMaybe<Scalars['String']['input']>;
+  keywords?: InputMaybe<Array<Scalars['String']['input']>>;
   last?: InputMaybe<Scalars['Int']['input']>;
   platformId?: InputMaybe<Scalars['String']['input']>;
   platformSiteType?: InputMaybe<Scalars['Int']['input']>;
@@ -488,7 +488,7 @@ export type MyFeedFoldersInput = {
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
   isAllFetch?: InputMaybe<Scalars['Boolean']['input']>;
-  keyword?: InputMaybe<Scalars['String']['input']>;
+  keywords?: InputMaybe<Array<Scalars['String']['input']>>;
   last?: InputMaybe<Scalars['Int']['input']>;
 };
 
