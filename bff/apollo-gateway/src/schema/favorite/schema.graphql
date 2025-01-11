@@ -37,6 +37,11 @@ type FavoriteArticleFolder implements Node {
   updatedAt: Int!
 }
 
+type CreatedMultiFolderFavoriteArticle {
+  favoriteArticle: FavoriteArticle!
+  relationFavoriteArticleFolders: [FavoriteArticleFolder!]!
+}
+
 type FavoriteArticleFolderConnection {
   edges: [FavoriteArticleFolderEdge!]!
   pageInfo: PageInfo!

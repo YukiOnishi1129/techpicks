@@ -4,16 +4,20 @@ import { usePathname } from "next/navigation";
 import { FC, useMemo } from "react";
 
 import { NAVIGATION_LISTS } from "@/shared/constant/navigation";
-import { useUserId } from "@/shared/hooks/useUserId";
 
 import { MobileHeaderButton } from "./MobileHeaderButton";
 import { MobileSidebarNavigation } from "./MobileSidebarNavigation";
 
-type MobileHeaderProps = {};
+type MobileHeaderProps = {
+  userId?: string;
+  foldersEndCursor?: string;
+};
 
-export const MobileHeader: FC<MobileHeaderProps> = ({}) => {
+export const MobileHeader: FC<MobileHeaderProps> = ({
+  userId,
+  foldersEndCursor,
+}) => {
   const pathname = usePathname();
-  const { userId, loading } = useUserId();
 
   const pageName = useMemo(() => {
     switch (pathname) {
@@ -61,7 +65,10 @@ export const MobileHeader: FC<MobileHeaderProps> = ({}) => {
       <h1 className="text-2xl font-bold">{pageName}</h1>
       {userId && (
         <div className="absolute right-1 w-14">
-          <MobileHeaderButton pathname={pathname} />
+          <MobileHeaderButton
+            pathname={pathname}
+            foldersEndCursor={foldersEndCursor}
+          />
         </div>
       )}
     </div>

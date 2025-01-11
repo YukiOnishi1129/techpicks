@@ -42,7 +42,7 @@ const FormSchema = z.object({
   description: z.string().optional(),
 });
 
-type CreateMyFeedFolderDialogContentProps = {
+type CreateFavoriteArticleFolderDialogContentProps = {
   onCloseDialog: () => void;
   onCreateFavoriteArticleFolder?: (
     favoriteArticleFolderId: string,
@@ -51,7 +51,7 @@ type CreateMyFeedFolderDialogContentProps = {
 };
 
 export const CreateFavoriteArticleFolderDialogContent: FC<
-  CreateMyFeedFolderDialogContentProps
+  CreateFavoriteArticleFolderDialogContentProps
 > = ({ onCloseDialog, onCreateFavoriteArticleFolder }) => {
   const { successToast, failToast } = useStatusToast();
   const [isPending, startTransition] = useTransition();

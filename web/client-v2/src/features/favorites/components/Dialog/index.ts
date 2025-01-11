@@ -5,6 +5,9 @@ export * from "./RemoveFavoriteArticleAlertDialog";
 
 export * from "./CreateFavoriteArticleDialog";
 export * from "./CreateFavoriteArticleDialogFloatButton";
+export * from "./CreateMultiFolderFavoriteArticleDialog";
 
 export * from "./SearchFavoriteArticleFolderDialog";
 export * from "./SearchFavoriteArticleListDialog";
+
+export * from "./SelectMultiFavoriteFolderDialog";

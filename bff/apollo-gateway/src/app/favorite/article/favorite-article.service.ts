@@ -5,6 +5,7 @@ import {
   DeleteFavoriteArticleRequest,
   GetFavoriteArticlesRequest,
   GetFavoriteAllFolderArticlesRequest,
+  CreateMultiFavoriteArticlesForUploadArticleRequest,
 } from '@checkpicks/checkpicks-rpc-ts/src/grpc/favorite/favorite_pb';
 import { Injectable } from '@nestjs/common';
 import { Timestamp } from 'google-protobuf/google/protobuf/timestamp_pb';
@@ -24,6 +25,8 @@ import {
   CreateFavoriteArticleForUploadArticleInput,
   FavoriteAllFolderArticlesInput,
   FavoriteAllFolderArticleConnection,
+  CreatedMultiFolderFavoriteArticle,
+  CreateMultiFavoriteArticleForUploadArticleInput,
 } from 'src/graphql/types/graphql';
 import { convertTimestampToInt } from 'src/utils/timestamp';
 
@@ -342,6 +345,83 @@ export class FavoriteArticleService {
         };
 
         resolve(favoriteArticle);
+      });
+    });
+  }
+
+  async createMultiFavoriteArticleForUploadArticle(
+    userId: string,
+    input: CreateMultiFavoriteArticleForUploadArticleInput,
+  ): Promise<CreatedMultiFolderFavoriteArticle> {
+    const req = new CreateMultiFavoriteArticlesForUploadArticleRequest();
+    req.setUserId(userId);
+    req.setFavoriteArticleFolderIdsList(input.favoriteArticleFolderIds);
+    req.setTitle(input.title);
+    req.setDescription(input.description);
+    req.setThumbnailUrl(input.thumbnailUrl);
+    req.setArticleUrl(input.articleUrl);
+    req.setPlatformName(input.platformName);
+    req.setPlatformUrl(input.platformUrl);
+    req.setPlatformFaviconUrl(input.platformFaviconUrl);
+
+    const client = this.grpcFavoriteClientService.getGrpcFavoriteService();
+
+    return new Promise((resolve, reject) => {
+      client.createMultiFavoriteArticlesForUploadArticle(req, (err, res) => {
+        if (err) {
+          reject({
+            code: err?.code || 500,
+            message: err?.details || 'something went wrong',
+          });
+          return;
+        }
+
+        const resFavoriteArticle = res.toObject().favoriteArticle;
+
+        const favoriteArticle: FavoriteArticle = {
+          articleId: resFavoriteArticle.articleId,
+          articleUrl: resFavoriteArticle.articleUrl,
+          authorName: resFavoriteArticle?.authorName?.value,
+          createdAt: convertTimestampToInt(resFavoriteArticle.createdAt),
+          description: resFavoriteArticle.description,
+          favoriteArticleFolderId: resFavoriteArticle.favoriteArticleFolderId,
+          id: resFavoriteArticle.id,
+          isEng: resFavoriteArticle.isEng,
+          isPrivate: resFavoriteArticle.isPrivate,
+          isRead: resFavoriteArticle.isRead,
+          platformFaviconUrl: resFavoriteArticle.platformFaviconUrl,
+          platformId: resFavoriteArticle?.platformId?.value,
+          platformName: resFavoriteArticle.platformName,
+          platformUrl: resFavoriteArticle.platformUrl,
+          publishedAt: resFavoriteArticle?.publishedAt
+            ? convertTimestampToInt(resFavoriteArticle.publishedAt)
+            : undefined,
+          tags: resFavoriteArticle?.tags?.value,
+          thumbnailUrl: resFavoriteArticle.thumbnailUrl,
+          title: resFavoriteArticle.title,
+          updatedAt: convertTimestampToInt(resFavoriteArticle.updatedAt),
+          userId: resFavoriteArticle.userId,
+        };
+
+        const createdMultiFolderFavoriteArticle: CreatedMultiFolderFavoriteArticle =
+          {
+            favoriteArticle: favoriteArticle,
+            relationFavoriteArticleFolders: res
+              .toObject()
+              .favoriteArticleFoldersList.map((folder) => {
+                return {
+                  createdAt: convertTimestampToInt(folder.createdAt),
+                  description: folder.description,
+                  favoriteArticles: [],
+                  id: folder.id,
+                  title: folder.title,
+                  updatedAt: convertTimestampToInt(folder.updatedAt),
+                  userId: folder.userId,
+                };
+              }),
+          };
+
+        resolve(createdMultiFolderFavoriteArticle);
       });
     });
   }
