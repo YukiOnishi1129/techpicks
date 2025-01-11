@@ -369,10 +369,6 @@ export class FavoriteArticleService {
     return new Promise((resolve, reject) => {
       client.createMultiFavoriteArticlesForUploadArticle(req, (err, res) => {
         if (err) {
-          console.log('🔥');
-          console.log(err);
-          console.log(err.message);
-          console.log(err.details);
           reject({
             code: err?.code || 500,
             message: err?.details || 'something went wrong',
