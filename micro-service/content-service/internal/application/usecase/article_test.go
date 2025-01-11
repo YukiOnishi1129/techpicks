@@ -212,7 +212,6 @@ func Test_UseCase_CreateUploadArticle(t *testing.T) {
 					Title:        "test title1",
 					Description:  "test description1",
 					ArticleURL:   "https://test.com/article1",
-					PublishedAt:  null.TimeFrom(time.Unix(publishedAt, 0)),
 					ThumbnailURL: "https://test.com/article1/thumbnail",
 					IsEng:        true,
 					IsPrivate:    true,

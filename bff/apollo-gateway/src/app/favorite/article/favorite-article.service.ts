@@ -371,7 +371,7 @@ export class FavoriteArticleService {
         if (err) {
           reject({
             code: err?.code || 500,
-            message: err?.message || 'something went wrong',
+            message: err?.details || 'something went wrong',
           });
           return;
         }

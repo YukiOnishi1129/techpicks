@@ -5,6 +5,10 @@ import (
 	"errors"
 	"sort"
 
+	"google.golang.org/genproto/googleapis/rpc/errdetails"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
+
 	copb "github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go/grpc/common"
 	cpb "github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go/grpc/content"
 	fpb "github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go/grpc/favorite"
@@ -326,6 +330,21 @@ func (fu *favoriteUseCase) CreateMultiFavoriteArticlesForUploadArticle(ctx conte
 		if len(req.GetFavoriteArticleFolderIds())-1 == i {
 			resFa = fu.convertPBFavoriteArticle(&fa)
 		}
+	}
+
+	if len(resFafs) == 0 {
+		errMsg := "Already existed favorite article in selected folders: "
+		// for _, t := range existedFafTitles {
+		// 	errMsg += fmt.Sprintf("'%s', ", t)
+		// }
+
+		stat := status.New(codes.AlreadyExists, "Already existed favorite article in selected folders")
+		stat, _ = stat.WithDetails(&errdetails.DebugInfo{
+			Detail: errMsg,
+		})
+		err = stat.Err()
+
+		return &fpb.CreateMultiFavoriteArticlesForUploadArticleResponse{}, err
 	}
 
 	return &fpb.CreateMultiFavoriteArticlesForUploadArticleResponse{
