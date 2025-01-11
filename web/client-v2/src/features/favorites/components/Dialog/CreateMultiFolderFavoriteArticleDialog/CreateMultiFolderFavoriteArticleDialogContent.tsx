@@ -187,7 +187,9 @@ export const CreateMultiFolderFavoriteArticleDialogContent: FC<
           if (errors.length > 0) {
             // TODO: Modify the error message response on the BFF side
             const errMsg =
-              errors[0].message.indexOf("favorite article already exists") != -1
+              errors[0].message.indexOf(
+                "Already existed favorite article in selected folders"
+              ) != -1
                 ? "favorite article already exists"
                 : errors[0].message;
             failToast({
