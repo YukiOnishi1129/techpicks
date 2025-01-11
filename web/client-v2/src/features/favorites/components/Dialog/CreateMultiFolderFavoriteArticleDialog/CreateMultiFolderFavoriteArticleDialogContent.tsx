@@ -228,7 +228,10 @@ export const CreateMultiFolderFavoriteArticleDialogContent: FC<
   );
 
   return (
-    <DialogContent onCloseAutoFocus={resetDialog}>
+    <DialogContent
+      onCloseAutoFocus={resetDialog}
+      className="max-h-lvh overflow-y-auto"
+    >
       <DialogHeader>
         <DialogTitle>{"Add New Favorite Article"}</DialogTitle>
       </DialogHeader>
