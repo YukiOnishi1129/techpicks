@@ -1,12 +1,17 @@
 "use client";
 
+import { FragmentOf } from "gql.tada";
 import { useState, useCallback, FC } from "react";
 import { HiPlus } from "react-icons/hi";
 
 import { Button } from "@/shared/components/ui/button";
 import { Dialog, DialogTrigger } from "@/shared/components/ui/dialog";
 
-type CreateMyFeedFolderDialogProps = {
+import { CreateMultiFolderFavoriteArticleDialogContent } from "./CreateMultiFolderFavoriteArticleDialogContent";
+import { CreateMultiFolderFavoriteArticleDialogFragment } from "./CreateMultiFolderFavoriteArticleDialogFragment";
+
+type CreateMultiFolderFavoriteArticleDialogProps = {
+  data: FragmentOf<typeof CreateMultiFolderFavoriteArticleDialogFragment>;
   buttonVariant?:
     | "default"
     | "destructive"
@@ -18,8 +23,8 @@ type CreateMyFeedFolderDialogProps = {
 };
 
 export const CreateMultiFolderFavoriteArticleDialog: FC<
-  CreateMyFeedFolderDialogProps
-> = ({ buttonVariant, buttonSize = 24 }) => {
+  CreateMultiFolderFavoriteArticleDialogProps
+> = ({ data, buttonVariant, buttonSize = 24 }) => {
   const [open, setOpen] = useState(false);
 
   const handleCloseDialog = useCallback(() => {
@@ -34,12 +39,12 @@ export const CreateMultiFolderFavoriteArticleDialog: FC<
           <span className="hidden pl-2 md:block">{"Create"}</span>
         </Button>
       </DialogTrigger>
-      {/* {open && (
-        <CreateFavoriteArticleFolderDialogContent
-          onCloseDialog={handleCloseDialog}
-          onCreateFavoriteArticleFolder={handleCreateFavoriteArticleFolder}
+      {open && (
+        <CreateMultiFolderFavoriteArticleDialogContent
+          data={data}
+          onClose={handleCloseDialog}
         />
-      )} */}
+      )}
     </Dialog>
   );
 };

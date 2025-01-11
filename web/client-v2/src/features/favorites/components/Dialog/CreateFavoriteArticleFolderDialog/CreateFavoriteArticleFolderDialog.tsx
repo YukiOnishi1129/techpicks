@@ -8,7 +8,7 @@ import { Dialog, DialogTrigger } from "@/shared/components/ui/dialog";
 
 import { CreateFavoriteArticleFolderDialogContent } from "./CreateFavoriteArticleFolderDialogContent";
 
-type CreateMyFeedFolderDialogProps = {
+type CreateFavoriteArticleFolderDialogProps = {
   buttonVariant?:
     | "default"
     | "destructive"
@@ -24,7 +24,7 @@ type CreateMyFeedFolderDialogProps = {
 };
 
 export const CreateFavoriteArticleFolderDialog: FC<
-  CreateMyFeedFolderDialogProps
+  CreateFavoriteArticleFolderDialogProps
 > = ({ buttonVariant, buttonSize = 24, handleCreateFavoriteArticleFolder }) => {
   const [open, setOpen] = useState(false);
 

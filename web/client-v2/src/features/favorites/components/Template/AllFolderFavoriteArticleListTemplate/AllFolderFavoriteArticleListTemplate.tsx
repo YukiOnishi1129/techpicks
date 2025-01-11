@@ -13,6 +13,7 @@ import {
 import { PreloadQuery } from "@/shared/lib/apollo/client";
 import { SearchParamsType } from "@/shared/types/utils";
 
+import { listServerFavoriteFolderAllFolderFavoriteArticleListTemplateQuery } from "./actListServerFavoriteFolderAllFolderFavoriteArticleListTemplateQuery";
 import { AllFolderFavoriteArticleListTemplateQuery } from "./AllFolderFavoriteArticleListTemplateQuery";
 import {
   CreateMultiFolderFavoriteArticleDialog,
@@ -56,6 +57,16 @@ export const AllFolderFavoriteArticleListTemplate: FC<
     isFavoriteArticleAllFetch: true,
   };
 
+  const { data, error } =
+    await listServerFavoriteFolderAllFolderFavoriteArticleListTemplateQuery({
+      first: 10,
+      after: null,
+    });
+
+  if (error) {
+    return <div>{error.message}</div>;
+  }
+
   return (
     <div>
       <div className="fixed z-10  w-[90%] bg-card md:block md:w-[70%] md:justify-between md:px-4">
@@ -67,7 +78,9 @@ export const AllFolderFavoriteArticleListTemplate: FC<
           <div className="w-4/5 pt-2">
             <FavoriteArticleKeywordSearchForm keywordList={keywordList} />
           </div>
-          <CreateMultiFolderFavoriteArticleDialog />
+          <CreateMultiFolderFavoriteArticleDialog
+            data={data.favoriteArticleFolders}
+          />
         </div>
       </div>
 
