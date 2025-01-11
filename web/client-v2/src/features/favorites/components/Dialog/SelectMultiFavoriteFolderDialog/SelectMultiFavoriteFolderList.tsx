@@ -24,13 +24,10 @@ import { useHookForm } from "@/shared/hooks/useHookForm";
 import { SelectOptionType } from "@/shared/types/utils";
 
 import { SelectMultiFavoriteFolderListQuery } from "./SelectMultiFavoriteFolderListQuery";
+import { after } from "next/server";
 
 const KeywordFormSchema = z.object({
   keyword: z.string().optional(),
-});
-
-const PlatformSiteTypeSchema = z.object({
-  platformSiteType: z.string(),
 });
 
 const FormSchema = z.object({
@@ -76,12 +73,6 @@ export const SelectMultiFavoriteFolderList: FC<
   });
   const keywordForm = useForm<z.infer<typeof KeywordFormSchema>>({
     resolver: zodResolver(KeywordFormSchema),
-  });
-  const platformSiteTypeForm = useForm<z.infer<typeof PlatformSiteTypeSchema>>({
-    resolver: zodResolver(PlatformSiteTypeSchema),
-    defaultValues: {
-      platformSiteType: "0",
-    },
   });
 
   const { stopPropagate } = useHookForm();
@@ -146,9 +137,6 @@ export const SelectMultiFavoriteFolderList: FC<
       variables: {
         input: {
           keywords: keywordList,
-          platformSiteType: Number(
-            platformSiteTypeForm.watch("platformSiteType")
-          ),
           first: SELECTABLE_FAVORITE_ARTICLE_FOLDER_LIST_LIMIT,
           after: endCursor,
         },
@@ -157,7 +145,7 @@ export const SelectMultiFavoriteFolderList: FC<
         if (!fetchMoreResult) return prev;
         return {
           ...prev,
-          feeds: {
+          favoriteArticleFolders: {
             ...prev.favoriteArticleFolders,
             edges: [
               ...prev.favoriteArticleFolders.edges,
@@ -179,7 +167,7 @@ export const SelectMultiFavoriteFolderList: FC<
     setIsNextPage(resData.favoriteArticleFolders.pageInfo.hasNextPage);
 
     setHashMore(resData.favoriteArticleFolders.edges.length > 0);
-  }, [isNextPage, endCursor, keywordForm, platformSiteTypeForm, fetchMore]);
+  }, [isNextPage, endCursor, keywordForm, fetchMore]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(

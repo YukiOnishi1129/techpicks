@@ -21,6 +21,7 @@ import {
 } from "../../Dialog";
 import { AllFolderFavoriteArticleList } from "../../List";
 import { FavoriteArticleKeywordSearchForm } from "../../Search";
+import { SELECTABLE_FAVORITE_ARTICLE_FOLDER_LIST_LIMIT } from "@/shared/constant/limit";
 
 type FavoriteArticleAllListTemplateProps = {
   searchParams: SearchParamsType;
@@ -59,7 +60,7 @@ export const AllFolderFavoriteArticleListTemplate: FC<
 
   const { data, error } =
     await listServerFavoriteFolderAllFolderFavoriteArticleListTemplateQuery({
-      first: 10,
+      first: SELECTABLE_FAVORITE_ARTICLE_FOLDER_LIST_LIMIT,
       after: null,
     });
 

@@ -343,10 +343,7 @@ export const CreateMultiFolderFavoriteArticleDialogContent: FC<
                 PLEASE WAIT
               </Button>
             ) : (
-              <Button
-                type="submit"
-                disabled={mutationForm.formState.isValid || !ogpData}
-              >
+              <Button type="submit" disabled={!ogpData}>
                 {"ADD"}
               </Button>
             )}
