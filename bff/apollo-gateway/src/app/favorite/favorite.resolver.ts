@@ -17,6 +17,8 @@ import {
   CreateFavoriteArticleForUploadArticleInput,
   FavoriteAllFolderArticlesInput,
   FavoriteAllFolderArticleConnection,
+  CreatedMultiFolderFavoriteArticle,
+  CreateMultiFavoriteArticleForUploadArticleInput,
 } from 'src/graphql/types/graphql';
 
 import { FavoriteArticleService } from './article/favorite-article.service';
@@ -139,6 +141,19 @@ export class FavoriteResolver {
   ): Promise<FavoriteArticle> {
     const userId = context.req.user.id;
     return await this.favoriteArticleService.createFavoriteArticleForUploadArticle(
+      userId,
+      input,
+    );
+  }
+
+  @Mutation(() => CreatedMultiFolderFavoriteArticle)
+  @UseGuards(SupabaseAuthGuard)
+  async createMultiFavoriteArticleForUploadArticle(
+    @Args('input') input: CreateMultiFavoriteArticleForUploadArticleInput,
+    @Context() context: GraphQLContext,
+  ): Promise<CreatedMultiFolderFavoriteArticle> {
+    const userId = context.req.user.id;
+    return await this.favoriteArticleService.createMultiFavoriteArticleForUploadArticle(
       userId,
       input,
     );

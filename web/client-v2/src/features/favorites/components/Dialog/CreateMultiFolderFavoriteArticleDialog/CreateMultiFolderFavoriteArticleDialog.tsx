@@ -6,9 +6,10 @@ import { HiPlus } from "react-icons/hi";
 import { Button } from "@/shared/components/ui/button";
 import { Dialog, DialogTrigger } from "@/shared/components/ui/dialog";
 
-import { CreateFavoriteArticleFolderDialogContent } from "./CreateFavoriteArticleFolderDialogContent";
+import { CreateMultiFolderFavoriteArticleDialogContent } from "./CreateMultiFolderFavoriteArticleDialogContent";
 
-type CreateFavoriteArticleFolderDialogProps = {
+type CreateMultiFolderFavoriteArticleDialogProps = {
+  foldersEndCursor?: string;
   buttonVariant?:
     | "default"
     | "destructive"
@@ -17,15 +18,11 @@ type CreateFavoriteArticleFolderDialogProps = {
     | "ghost"
     | "link";
   buttonSize?: number;
-  handleCreateFavoriteArticleFolder?: (
-    favoriteArticleFolderId: string,
-    title: string
-  ) => Promise<void>;
 };
 
-export const CreateFavoriteArticleFolderDialog: FC<
-  CreateFavoriteArticleFolderDialogProps
-> = ({ buttonVariant, buttonSize = 24, handleCreateFavoriteArticleFolder }) => {
+export const CreateMultiFolderFavoriteArticleDialog: FC<
+  CreateMultiFolderFavoriteArticleDialogProps
+> = ({ foldersEndCursor, buttonVariant, buttonSize = 24 }) => {
   const [open, setOpen] = useState(false);
 
   const handleCloseDialog = useCallback(() => {
@@ -41,9 +38,9 @@ export const CreateFavoriteArticleFolderDialog: FC<
         </Button>
       </DialogTrigger>
       {open && (
-        <CreateFavoriteArticleFolderDialogContent
-          onCloseDialog={handleCloseDialog}
-          onCreateFavoriteArticleFolder={handleCreateFavoriteArticleFolder}
+        <CreateMultiFolderFavoriteArticleDialogContent
+          foldersEndCursor={foldersEndCursor}
+          onClose={handleCloseDialog}
         />
       )}
     </Dialog>

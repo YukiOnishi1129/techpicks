@@ -95,6 +95,61 @@ func (cu *contentUseCase) GetArticles(ctx context.Context, req *cpb.GetArticlesR
 	}, nil
 }
 
+func (cu *contentUseCase) ListArticleByArticleURL(ctx context.Context, req *cpb.ListArticleByArticleURLRequest) (*cpb.ListArticleByArticleURLResponse, error) {
+	limit := 20
+	if req.GetLimit() != 0 {
+		limit = int(req.GetLimit())
+	}
+
+	res, err := cu.articlePersistenceAdapter.ListArticleByArticleURL(ctx, req.GetArticleUrl(), limit)
+	if err != nil {
+		return nil, err
+	}
+	if len(res) == 0 {
+		return &cpb.ListArticleByArticleURLResponse{}, nil
+	}
+
+	edges := make([]*cpb.TemporaryArticleEdge, len(res))
+	for i, article := range res {
+		edges[i] = &cpb.TemporaryArticleEdge{
+			Cursor: article.ID,
+			Article: &cpb.TemporaryArticle{
+				Id:           article.ID,
+				Title:        article.Title,
+				Description:  article.Description,
+				ArticleUrl:   article.ArticleURL,
+				PublishedAt:  timestamppb.New(article.PublishedAt.Time),
+				AuthorName:   wrapperspb.String(article.AuthorName.String),
+				Tags:         wrapperspb.String(article.Tags.String),
+				ThumbnailUrl: article.ThumbnailURL,
+				IsEng:        article.IsEng,
+				IsPrivate:    article.IsPrivate,
+				CreatedAt:    timestamppb.New(article.CreatedAt),
+				UpdatedAt:    timestamppb.New(article.UpdatedAt),
+			},
+			Platform: &cpb.Platform{
+				Id:               article.R.Platform.ID,
+				Name:             article.R.Platform.Name,
+				SiteUrl:          article.R.Platform.SiteURL,
+				PlatformSiteType: int64(article.R.Platform.PlatformSiteType),
+				FaviconUrl:       article.R.Platform.FaviconURL,
+				IsEng:            article.R.Platform.IsEng,
+				CreatedAt:        timestamppb.New(article.R.Platform.CreatedAt),
+				UpdatedAt:        timestamppb.New(article.R.Platform.UpdatedAt),
+				DeletedAt:        timestamppb.New(article.R.Platform.DeletedAt.Time),
+			},
+		}
+	}
+
+	return &cpb.ListArticleByArticleURLResponse{
+		ArticlesEdge: edges,
+		PageInfo: &copb.PageInfo{
+			HasNextPage: len(edges) == limit,
+			EndCursor:   edges[len(edges)-1].Cursor,
+		},
+	}, nil
+}
+
 func (cu *contentUseCase) convertPBArticle(a entity.Article) *cpb.Article {
 	article := &cpb.Article{
 		Id:           a.ID,

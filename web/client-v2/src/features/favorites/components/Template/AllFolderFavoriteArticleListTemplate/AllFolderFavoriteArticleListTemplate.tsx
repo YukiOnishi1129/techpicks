@@ -10,11 +10,16 @@ import {
   BreadCrumbType,
   PageBreadcrumb,
 } from "@/shared/components/ui/breadcrumb";
+import { SELECTABLE_FAVORITE_ARTICLE_FOLDER_LIST_LIMIT } from "@/shared/constant/limit";
 import { PreloadQuery } from "@/shared/lib/apollo/client";
 import { SearchParamsType } from "@/shared/types/utils";
 
+import { listServerFavoriteFolderAllFolderFavoriteArticleListTemplateQuery } from "./actListServerFavoriteFolderAllFolderFavoriteArticleListTemplateQuery";
 import { AllFolderFavoriteArticleListTemplateQuery } from "./AllFolderFavoriteArticleListTemplateQuery";
-import { SearchFavoriteArticleListDialog } from "../../Dialog";
+import {
+  CreateMultiFolderFavoriteArticleDialog,
+  SearchFavoriteArticleListDialog,
+} from "../../Dialog";
 import { AllFolderFavoriteArticleList } from "../../List";
 import { FavoriteArticleKeywordSearchForm } from "../../Search";
 
@@ -53,6 +58,16 @@ export const AllFolderFavoriteArticleListTemplate: FC<
     isFavoriteArticleAllFetch: true,
   };
 
+  const { data, error } =
+    await listServerFavoriteFolderAllFolderFavoriteArticleListTemplateQuery({
+      first: SELECTABLE_FAVORITE_ARTICLE_FOLDER_LIST_LIMIT,
+      after: null,
+    });
+
+  if (error) {
+    return <div>{error.message}</div>;
+  }
+
   return (
     <div>
       <div className="fixed z-10  w-[90%] bg-card md:block md:w-[70%] md:justify-between md:px-4">
@@ -64,6 +79,11 @@ export const AllFolderFavoriteArticleListTemplate: FC<
           <div className="w-4/5 pt-2">
             <FavoriteArticleKeywordSearchForm keywordList={keywordList} />
           </div>
+          <CreateMultiFolderFavoriteArticleDialog
+            foldersEndCursor={
+              data.favoriteArticleFolders.pageInfo.endCursor || undefined
+            }
+          />
         </div>
       </div>
 

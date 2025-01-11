@@ -16,28 +16,21 @@ import {
   FormLabel,
   FormControl,
   FormItem,
-  FormMessage,
 } from "@/shared/components/ui/form";
 import { Input } from "@/shared/components/ui/input";
-import { Label } from "@/shared/components/ui/label";
 import { Loader } from "@/shared/components/ui/loader";
-import { RadioGroup, RadioGroupItem } from "@/shared/components/ui/radio-group";
-import { SELECTABLE_FEED_LIST_LIMIT } from "@/shared/constant/limit";
+import { SELECTABLE_FAVORITE_ARTICLE_FOLDER_LIST_LIMIT } from "@/shared/constant/limit";
 import { useHookForm } from "@/shared/hooks/useHookForm";
 import { SelectOptionType } from "@/shared/types/utils";
 
-import { SelectMultiFeedListQuery } from "./SelectMultiFeedListQuery";
+import { SelectMultiFavoriteFolderListQuery } from "./SelectMultiFavoriteFolderListQuery";
 
 const KeywordFormSchema = z.object({
   keyword: z.string().optional(),
 });
 
-const PlatformSiteTypeSchema = z.object({
-  platformSiteType: z.string(),
-});
-
 const FormSchema = z.object({
-  targetFeedList: z
+  targetFolderList: z
     .object({
       id: z.string(),
       label: z.string(),
@@ -45,27 +38,25 @@ const FormSchema = z.object({
     .array(),
 });
 
-type SelectMultiFeedListProps = {
-  defaultSelectedFeedList?: Array<SelectOptionType>;
-  feedsEndCursor?: string;
-  onSelectFeedList: (selectedFeedList: Array<SelectOptionType>) => void;
+type SelectMultiFavoriteFolderListProps = {
+  defaultSelectedFolderList?: Array<SelectOptionType>;
+  foldersEndCursor?: string;
+  onSelectFolderList: (selectedFolderList: Array<SelectOptionType>) => void;
 };
 
-export const SelectMultiFeedList: FC<SelectMultiFeedListProps> = ({
-  defaultSelectedFeedList,
-  feedsEndCursor,
-  onSelectFeedList,
-}) => {
+export const SelectMultiFavoriteFolderList: FC<
+  SelectMultiFavoriteFolderListProps
+> = ({ defaultSelectedFolderList, foldersEndCursor, onSelectFolderList }) => {
   const observerTarget = useRef(null);
 
   const {
     data: res,
     fetchMore,
     error: onlyFetchArticlesError,
-  } = useQuery(SelectMultiFeedListQuery, {
+  } = useQuery(SelectMultiFavoriteFolderListQuery, {
     variables: {
       input: {
-        first: SELECTABLE_FEED_LIST_LIMIT,
+        first: SELECTABLE_FAVORITE_ARTICLE_FOLDER_LIST_LIMIT,
         after: null,
       },
     },
@@ -76,26 +67,20 @@ export const SelectMultiFeedList: FC<SelectMultiFeedListProps> = ({
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      targetFeedList: defaultSelectedFeedList,
+      targetFolderList: defaultSelectedFolderList,
     },
   });
   const keywordForm = useForm<z.infer<typeof KeywordFormSchema>>({
     resolver: zodResolver(KeywordFormSchema),
   });
-  const platformSiteTypeForm = useForm<z.infer<typeof PlatformSiteTypeSchema>>({
-    resolver: zodResolver(PlatformSiteTypeSchema),
-    defaultValues: {
-      platformSiteType: "0",
-    },
-  });
 
   const { stopPropagate } = useHookForm();
 
-  const selectedTargetFeedList = form.watch("targetFeedList");
+  const selectedTargetFeedList = form.watch("targetFolderList");
 
   const [hashMore, setHashMore] = useState(true);
   const [offset, setOffset] = useState(0);
-  const [endCursor, setEndCursor] = useState(feedsEndCursor);
+  const [endCursor, setEndCursor] = useState(foldersEndCursor);
   const [isNextPage, setIsNextPage] = useState(true);
 
   const handleKeywordSearch = useCallback(
@@ -107,10 +92,7 @@ export const SelectMultiFeedList: FC<SelectMultiFeedListProps> = ({
         variables: {
           input: {
             keywords: keywordList,
-            platformSiteType: Number(
-              platformSiteTypeForm.getValues("platformSiteType")
-            ),
-            first: SELECTABLE_FEED_LIST_LIMIT,
+            first: SELECTABLE_FAVORITE_ARTICLE_FOLDER_LIST_LIMIT,
             after: null,
           },
         },
@@ -122,54 +104,25 @@ export const SelectMultiFeedList: FC<SelectMultiFeedListProps> = ({
 
       if (resError) return;
 
-      if (resData.feeds.pageInfo.hasNextPage) {
-        const endCursor = resData.feeds.pageInfo?.endCursor || null;
+      if (resData.favoriteArticleFolders.pageInfo.hasNextPage) {
+        const endCursor =
+          resData.favoriteArticleFolders.pageInfo?.endCursor || null;
         setEndCursor(endCursor || undefined);
       }
-      setIsNextPage(resData.feeds.pageInfo.hasNextPage);
+      setIsNextPage(resData.favoriteArticleFolders.pageInfo.hasNextPage);
 
-      setHashMore(resData.feeds.edges.length > 0);
+      setHashMore(resData.favoriteArticleFolders.edges.length > 0);
     },
-    [setHashMore, platformSiteTypeForm, fetchMore]
-  );
-
-  const handlePlatformTypeSearch = useCallback(
-    async (value: string) => {
-      const inputKeyword = keywordForm.getValues("keyword");
-      const keywordList = inputKeyword ? inputKeyword.split(" ") : undefined;
-      const { data: resData, error: resError } = await fetchMore({
-        variables: {
-          input: {
-            keywords: keywordList,
-            platformSiteType: Number(value),
-            first: SELECTABLE_FEED_LIST_LIMIT,
-            after: null,
-          },
-        },
-        updateQuery: (prev, { fetchMoreResult }) => {
-          if (!fetchMoreResult) return prev;
-          return fetchMoreResult;
-        },
-      });
-
-      if (resError) return;
-
-      if (resData.feeds.pageInfo.hasNextPage) {
-        const endCursor = resData.feeds.pageInfo?.endCursor || null;
-        setEndCursor(endCursor || undefined);
-      }
-      setIsNextPage(resData.feeds.pageInfo.hasNextPage);
-
-      setHashMore(resData.feeds.edges.length > 0);
-    },
-    [setHashMore, keywordForm, fetchMore]
+    [setHashMore, fetchMore]
   );
 
   const handleRemoveChecked = useCallback(
-    (targetFeedId: string) => {
+    (targetFolderId: string) => {
       form.setValue(
-        "targetFeedList",
-        form.getValues("targetFeedList").filter((f) => f.id !== targetFeedId)
+        "targetFolderList",
+        form
+          .getValues("targetFolderList")
+          .filter((f) => f.id !== targetFolderId)
       );
     },
     [form]
@@ -183,10 +136,7 @@ export const SelectMultiFeedList: FC<SelectMultiFeedListProps> = ({
       variables: {
         input: {
           keywords: keywordList,
-          platformSiteType: Number(
-            platformSiteTypeForm.watch("platformSiteType")
-          ),
-          first: SELECTABLE_FEED_LIST_LIMIT,
+          first: SELECTABLE_FAVORITE_ARTICLE_FOLDER_LIST_LIMIT,
           after: endCursor,
         },
       },
@@ -194,10 +144,13 @@ export const SelectMultiFeedList: FC<SelectMultiFeedListProps> = ({
         if (!fetchMoreResult) return prev;
         return {
           ...prev,
-          feeds: {
-            ...prev.feeds,
-            edges: [...prev.feeds.edges, ...fetchMoreResult.feeds.edges],
-            pageInfo: fetchMoreResult.feeds.pageInfo,
+          favoriteArticleFolders: {
+            ...prev.favoriteArticleFolders,
+            edges: [
+              ...prev.favoriteArticleFolders.edges,
+              ...fetchMoreResult.favoriteArticleFolders.edges,
+            ],
+            pageInfo: fetchMoreResult.favoriteArticleFolders.pageInfo,
           },
         };
       },
@@ -205,14 +158,15 @@ export const SelectMultiFeedList: FC<SelectMultiFeedListProps> = ({
 
     if (resError) return;
 
-    if (resData.feeds.pageInfo.hasNextPage) {
-      const endCursor = resData.feeds.pageInfo?.endCursor || null;
+    if (resData.favoriteArticleFolders.pageInfo.hasNextPage) {
+      const endCursor =
+        resData.favoriteArticleFolders.pageInfo?.endCursor || null;
       setEndCursor(endCursor || undefined);
     }
-    setIsNextPage(resData.feeds.pageInfo.hasNextPage);
+    setIsNextPage(resData.favoriteArticleFolders.pageInfo.hasNextPage);
 
-    setHashMore(resData.feeds.edges.length > 0);
-  }, [isNextPage, endCursor, keywordForm, platformSiteTypeForm, fetchMore]);
+    setHashMore(resData.favoriteArticleFolders.edges.length > 0);
+  }, [isNextPage, endCursor, keywordForm, fetchMore]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -297,61 +251,21 @@ export const SelectMultiFeedList: FC<SelectMultiFeedListProps> = ({
         </Form>
       </div>
 
-      <div>
-        <FormField
-          control={platformSiteTypeForm.control}
-          name="platformSiteType"
-          render={({ field }) => (
-            <FormItem className="mb-4">
-              <FormLabel>PlatformType</FormLabel>
-              <FormControl>
-                <RadioGroup
-                  onValueChange={async (value) => {
-                    await handlePlatformTypeSearch(value);
-                    return field.onChange(value);
-                  }}
-                  defaultValue={field.value}
-                  className="grid-cols-2 md:grid-cols-4"
-                >
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value={"0"} id={"platform-type-0"} />
-                    <Label htmlFor="platform-type-0">All</Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value={"1"} id={"platform-type-1"} />
-                    <Label htmlFor="platform-type-1">Site</Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value={"2"} id={"platform-type-2"} />
-                    <Label htmlFor="platform-type-2">Company</Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value={"3"} id={"platform-type-3"} />
-                    <Label htmlFor="platform-type-3">Summary</Label>
-                  </div>
-                </RadioGroup>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-      </div>
-
       <div className="h-[300px] w-full overflow-y-scroll border-2 border-secondary p-4">
-        {res?.feeds.edges.length === 0 ? (
+        {res?.favoriteArticleFolders.edges.length === 0 ? (
           <p>No Feeds found</p>
         ) : (
           <Form {...form}>
             <form>
-              {res?.feeds?.edges.map((edge, i) => (
+              {res?.favoriteArticleFolders?.edges.map((edge, i) => (
                 <FormField
                   key={`target-${edge.node.id}-${i}`}
                   control={form.control}
-                  name="targetFeedList"
+                  name="targetFolderList"
                   render={({ field }) => (
                     <FormItem
                       // eslint-disable-next-line tailwindcss/migration-from-tailwind-2
-                      className="flex w-full cursor-pointer items-center border-t-2 border-t-secondary hover:bg-secondary hover:bg-opacity-10"
+                      className="flex w-full cursor-pointer items-center border-t border-t-secondary hover:bg-secondary hover:bg-opacity-10"
                     >
                       <FormControl>
                         <Checkbox
@@ -364,7 +278,7 @@ export const SelectMultiFeedList: FC<SelectMultiFeedListProps> = ({
                             return checked
                               ? field.onChange([
                                   ...array,
-                                  { id: edge.node.id, label: edge.node.name },
+                                  { id: edge.node.id, label: edge.node.title },
                                 ])
                               : field.onChange(
                                   array.filter((f) => f.id !== edge.node.id)
@@ -374,15 +288,8 @@ export const SelectMultiFeedList: FC<SelectMultiFeedListProps> = ({
                       </FormControl>
 
                       <FormLabel className="ml-2 flex h-12 w-full cursor-pointer items-center pb-2 text-sm font-normal">
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img
-                          className="mr-2 inline-block size-6 bg-white"
-                          src={edge.node.thumbnailUrl}
-                          alt=""
-                        />
-
                         <p className="flex w-full items-center text-lg">
-                          {edge.node.name}
+                          {edge.node.title}
                         </p>
                       </FormLabel>
                     </FormItem>
@@ -406,7 +313,7 @@ export const SelectMultiFeedList: FC<SelectMultiFeedListProps> = ({
           <Button variant={"outline"}>{"CLOSE"}</Button>
         </DialogClose>
         <Button
-          onClick={() => onSelectFeedList(form.getValues("targetFeedList"))}
+          onClick={() => onSelectFolderList(form.getValues("targetFolderList"))}
         >
           {"DONE"}
         </Button>

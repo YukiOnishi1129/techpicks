@@ -190,11 +190,28 @@ export type CreateFavoriteArticleInput = {
   title: Scalars['String']['input'];
 };
 
+export type CreateMultiFavoriteArticleForUploadArticleInput = {
+  articleUrl: Scalars['String']['input'];
+  description?: InputMaybe<Scalars['String']['input']>;
+  favoriteArticleFolderIds: Array<Scalars['ID']['input']>;
+  platformFaviconUrl: Scalars['String']['input'];
+  platformName: Scalars['String']['input'];
+  platformUrl: Scalars['String']['input'];
+  thumbnailUrl: Scalars['String']['input'];
+  title: Scalars['String']['input'];
+};
+
 export type CreateMyFeedFolderInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   feedIds?: InputMaybe<Array<Scalars['String']['input']>>;
   title: Scalars['String']['input'];
   userId: Scalars['String']['input'];
+};
+
+export type CreatedMultiFolderFavoriteArticle = {
+  __typename?: 'CreatedMultiFolderFavoriteArticle';
+  favoriteArticle: FavoriteArticle;
+  relationFavoriteArticleFolders: Array<FavoriteArticleFolder>;
 };
 
 export type DeleteBookmarkInput = {
@@ -380,6 +397,7 @@ export type Mutation = {
   createFavoriteArticle: FavoriteArticle;
   createFavoriteArticleFolder: FavoriteArticleFolder;
   createFavoriteArticleForUploadArticle: FavoriteArticle;
+  createMultiFavoriteArticleForUploadArticle: CreatedMultiFolderFavoriteArticle;
   createMyFeedFolder: MyFeedFolder;
   deleteBookmark: Scalars['Boolean']['output'];
   deleteFavoriteArticle: Scalars['Boolean']['output'];
@@ -413,6 +431,11 @@ export type MutationCreateFavoriteArticleFolderArgs = {
 
 export type MutationCreateFavoriteArticleForUploadArticleArgs = {
   input: CreateFavoriteArticleForUploadArticleInput;
+};
+
+
+export type MutationCreateMultiFavoriteArticleForUploadArticleArgs = {
+  input: CreateMultiFavoriteArticleForUploadArticleInput;
 };
 
 
@@ -738,6 +761,13 @@ export type CreateFavoriteArticleForUploadArticleMutationMutationVariables = Exa
 
 export type CreateFavoriteArticleForUploadArticleMutationMutation = { __typename?: 'Mutation', createFavoriteArticleForUploadArticle: { __typename?: 'FavoriteArticle', id: string } };
 
+export type CreateMultiFolderFavoriteArticleForUploadArticleMutationMutationVariables = Exact<{
+  input: CreateMultiFavoriteArticleForUploadArticleInput;
+}>;
+
+
+export type CreateMultiFolderFavoriteArticleForUploadArticleMutationMutation = { __typename?: 'Mutation', createMultiFavoriteArticleForUploadArticle: { __typename?: 'CreatedMultiFolderFavoriteArticle', favoriteArticle: { __typename?: 'FavoriteArticle', id: string }, relationFavoriteArticleFolders: Array<{ __typename?: 'FavoriteArticleFolder', id: string }> } };
+
 export type AllFolderFavoriteArticleCardItemFragmentFragment = { __typename?: 'FavoriteAllFolderArticleEdge', node: { __typename?: 'FavoriteArticle', id: string, title: string, articleUrl: string, thumbnailUrl: string, createdAt: number }, favoriteArticleFolders: Array<{ __typename?: 'FavoriteArticleFolder', id: string, title: string }> };
 
 export type AllFolderFavoriteArticleCardWrapperFragmentFragment = { __typename?: 'FavoriteAllFolderArticleEdge', node: { __typename?: 'FavoriteArticle', id: string, title: string, articleUrl: string, thumbnailUrl: string, platformId?: string | null, platformUrl: string, platformName: string, platformFaviconUrl: string, createdAt: number }, favoriteArticleFolders: Array<{ __typename?: 'FavoriteArticleFolder', id: string, title: string }> };
@@ -760,6 +790,22 @@ export type GetCreateFavoriteArticleDialogOgpQueryQueryVariables = Exact<{
 
 
 export type GetCreateFavoriteArticleDialogOgpQueryQuery = { __typename?: 'Query', articleOpg: { __typename?: 'ArticleOGP', title: string, description?: string | null, thumbnailUrl: string, articleUrl: string, siteUrl: string, siteName: string, faviconUrl: string } };
+
+export type OgpCreateMultiFolderFavoriteArticleDialogFragmentFragment = { __typename?: 'Query', articleOpg: { __typename?: 'ArticleOGP', title: string, description?: string | null, thumbnailUrl: string, articleUrl: string, siteUrl: string, siteName: string, faviconUrl: string } };
+
+export type GetServerGetCreateMultiFolderFavoriteArticleDialogOgpQueryQueryVariables = Exact<{
+  url: Scalars['String']['input'];
+}>;
+
+
+export type GetServerGetCreateMultiFolderFavoriteArticleDialogOgpQueryQuery = { __typename?: 'Query', articleOpg: { __typename?: 'ArticleOGP', title: string, description?: string | null, thumbnailUrl: string, articleUrl: string, siteUrl: string, siteName: string, faviconUrl: string } };
+
+export type SelectMultiFavoriteFolderListQueryQueryVariables = Exact<{
+  input?: InputMaybe<FavoriteArticleFoldersInput>;
+}>;
+
+
+export type SelectMultiFavoriteFolderListQueryQuery = { __typename?: 'Query', favoriteArticleFolders: { __typename?: 'FavoriteArticleFolderConnection', edges: Array<{ __typename?: 'FavoriteArticleFolderEdge', node: { __typename?: 'FavoriteArticleFolder', id: string, title: string } }>, pageInfo: { __typename?: 'PageInfo', endCursor?: string | null, hasNextPage: boolean } } };
 
 export type CopyTargetFavoriteArticleFolderItemFragmentFragment = { __typename?: 'FavoriteArticleFolder', id: string, title: string, favoriteArticles: Array<{ __typename?: 'FavoriteArticle', id: string, articleId: string }> };
 
@@ -797,6 +843,13 @@ export type AllFolderFavoriteArticleListTemplateQueryQueryVariables = Exact<{
 
 
 export type AllFolderFavoriteArticleListTemplateQueryQuery = { __typename?: 'Query', favoriteAllFolderArticles: { __typename?: 'FavoriteAllFolderArticleConnection', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null }, edges: Array<{ __typename?: 'FavoriteAllFolderArticleEdge', node: { __typename?: 'FavoriteArticle', id: string, title: string, articleUrl: string, thumbnailUrl: string, platformId?: string | null, platformUrl: string, platformName: string, platformFaviconUrl: string, createdAt: number }, favoriteArticleFolders: Array<{ __typename?: 'FavoriteArticleFolder', id: string, title: string }> }> }, favoriteArticleFolders: { __typename?: 'FavoriteArticleFolderConnection', edges: Array<{ __typename?: 'FavoriteArticleFolderEdge', node: { __typename?: 'FavoriteArticleFolder', id: string, title: string, favoriteArticles: Array<{ __typename?: 'FavoriteArticle', id: string, articleId: string }> } }> } };
+
+export type GetServerFavoriteFoldersAllFolderFavoriteArticleListTemplateQueryQueryVariables = Exact<{
+  input?: InputMaybe<FavoriteArticleFoldersInput>;
+}>;
+
+
+export type GetServerFavoriteFoldersAllFolderFavoriteArticleListTemplateQueryQuery = { __typename?: 'Query', favoriteArticleFolders: { __typename?: 'FavoriteArticleFolderConnection', pageInfo: { __typename?: 'PageInfo', endCursor?: string | null } } };
 
 export type FavoriteArticleFolderListTemplateQueryQueryVariables = Exact<{
   input: FavoriteArticleFoldersInput;
@@ -1414,6 +1467,20 @@ export const FavoriteArticleFolderCardFragmentFragmentDoc = gql`
     `;
 export const CreateFavoriteArticleDialogContentFragmentFragmentDoc = gql`
     fragment CreateFavoriteArticleDialogContentFragment on Query {
+  articleOpg(articleUrl: $url) {
+    title
+    description
+    thumbnailUrl
+    articleUrl
+    siteUrl
+    siteName
+    faviconUrl
+    ...OGPPreviewContentFragment
+  }
+}
+    ${OgpPreviewContentFragmentFragmentDoc}`;
+export const OgpCreateMultiFolderFavoriteArticleDialogFragmentFragmentDoc = gql`
+    fragment OGPCreateMultiFolderFavoriteArticleDialogFragment on Query {
   articleOpg(articleUrl: $url) {
     title
     description
@@ -2165,6 +2232,44 @@ export function useCreateFavoriteArticleForUploadArticleMutationMutation(baseOpt
 export type CreateFavoriteArticleForUploadArticleMutationMutationHookResult = ReturnType<typeof useCreateFavoriteArticleForUploadArticleMutationMutation>;
 export type CreateFavoriteArticleForUploadArticleMutationMutationResult = Apollo.MutationResult<CreateFavoriteArticleForUploadArticleMutationMutation>;
 export type CreateFavoriteArticleForUploadArticleMutationMutationOptions = Apollo.BaseMutationOptions<CreateFavoriteArticleForUploadArticleMutationMutation, CreateFavoriteArticleForUploadArticleMutationMutationVariables>;
+export const CreateMultiFolderFavoriteArticleForUploadArticleMutationDocument = gql`
+    mutation CreateMultiFolderFavoriteArticleForUploadArticleMutation($input: CreateMultiFavoriteArticleForUploadArticleInput!) {
+  createMultiFavoriteArticleForUploadArticle(input: $input) {
+    favoriteArticle {
+      id
+    }
+    relationFavoriteArticleFolders {
+      id
+    }
+  }
+}
+    `;
+export type CreateMultiFolderFavoriteArticleForUploadArticleMutationMutationFn = Apollo.MutationFunction<CreateMultiFolderFavoriteArticleForUploadArticleMutationMutation, CreateMultiFolderFavoriteArticleForUploadArticleMutationMutationVariables>;
+
+/**
+ * __useCreateMultiFolderFavoriteArticleForUploadArticleMutationMutation__
+ *
+ * To run a mutation, you first call `useCreateMultiFolderFavoriteArticleForUploadArticleMutationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateMultiFolderFavoriteArticleForUploadArticleMutationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createMultiFolderFavoriteArticleForUploadArticleMutationMutation, { data, loading, error }] = useCreateMultiFolderFavoriteArticleForUploadArticleMutationMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateMultiFolderFavoriteArticleForUploadArticleMutationMutation(baseOptions?: Apollo.MutationHookOptions<CreateMultiFolderFavoriteArticleForUploadArticleMutationMutation, CreateMultiFolderFavoriteArticleForUploadArticleMutationMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateMultiFolderFavoriteArticleForUploadArticleMutationMutation, CreateMultiFolderFavoriteArticleForUploadArticleMutationMutationVariables>(CreateMultiFolderFavoriteArticleForUploadArticleMutationDocument, options);
+      }
+export type CreateMultiFolderFavoriteArticleForUploadArticleMutationMutationHookResult = ReturnType<typeof useCreateMultiFolderFavoriteArticleForUploadArticleMutationMutation>;
+export type CreateMultiFolderFavoriteArticleForUploadArticleMutationMutationResult = Apollo.MutationResult<CreateMultiFolderFavoriteArticleForUploadArticleMutationMutation>;
+export type CreateMultiFolderFavoriteArticleForUploadArticleMutationMutationOptions = Apollo.BaseMutationOptions<CreateMultiFolderFavoriteArticleForUploadArticleMutationMutation, CreateMultiFolderFavoriteArticleForUploadArticleMutationMutationVariables>;
 export const GetCreateFavoriteArticleDialogOgpQueryDocument = gql`
     query GetCreateFavoriteArticleDialogOGPQuery($url: String!) {
   ...CreateFavoriteArticleDialogContentFragment
@@ -2203,6 +2308,93 @@ export type GetCreateFavoriteArticleDialogOgpQueryQueryHookResult = ReturnType<t
 export type GetCreateFavoriteArticleDialogOgpQueryLazyQueryHookResult = ReturnType<typeof useGetCreateFavoriteArticleDialogOgpQueryLazyQuery>;
 export type GetCreateFavoriteArticleDialogOgpQuerySuspenseQueryHookResult = ReturnType<typeof useGetCreateFavoriteArticleDialogOgpQuerySuspenseQuery>;
 export type GetCreateFavoriteArticleDialogOgpQueryQueryResult = Apollo.QueryResult<GetCreateFavoriteArticleDialogOgpQueryQuery, GetCreateFavoriteArticleDialogOgpQueryQueryVariables>;
+export const GetServerGetCreateMultiFolderFavoriteArticleDialogOgpQueryDocument = gql`
+    query GetServerGetCreateMultiFolderFavoriteArticleDialogOGPQuery($url: String!) {
+  ...OGPCreateMultiFolderFavoriteArticleDialogFragment
+}
+    ${OgpCreateMultiFolderFavoriteArticleDialogFragmentFragmentDoc}`;
+
+/**
+ * __useGetServerGetCreateMultiFolderFavoriteArticleDialogOgpQueryQuery__
+ *
+ * To run a query within a React component, call `useGetServerGetCreateMultiFolderFavoriteArticleDialogOgpQueryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetServerGetCreateMultiFolderFavoriteArticleDialogOgpQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetServerGetCreateMultiFolderFavoriteArticleDialogOgpQueryQuery({
+ *   variables: {
+ *      url: // value for 'url'
+ *   },
+ * });
+ */
+export function useGetServerGetCreateMultiFolderFavoriteArticleDialogOgpQueryQuery(baseOptions: Apollo.QueryHookOptions<GetServerGetCreateMultiFolderFavoriteArticleDialogOgpQueryQuery, GetServerGetCreateMultiFolderFavoriteArticleDialogOgpQueryQueryVariables> & ({ variables: GetServerGetCreateMultiFolderFavoriteArticleDialogOgpQueryQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetServerGetCreateMultiFolderFavoriteArticleDialogOgpQueryQuery, GetServerGetCreateMultiFolderFavoriteArticleDialogOgpQueryQueryVariables>(GetServerGetCreateMultiFolderFavoriteArticleDialogOgpQueryDocument, options);
+      }
+export function useGetServerGetCreateMultiFolderFavoriteArticleDialogOgpQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetServerGetCreateMultiFolderFavoriteArticleDialogOgpQueryQuery, GetServerGetCreateMultiFolderFavoriteArticleDialogOgpQueryQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetServerGetCreateMultiFolderFavoriteArticleDialogOgpQueryQuery, GetServerGetCreateMultiFolderFavoriteArticleDialogOgpQueryQueryVariables>(GetServerGetCreateMultiFolderFavoriteArticleDialogOgpQueryDocument, options);
+        }
+export function useGetServerGetCreateMultiFolderFavoriteArticleDialogOgpQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetServerGetCreateMultiFolderFavoriteArticleDialogOgpQueryQuery, GetServerGetCreateMultiFolderFavoriteArticleDialogOgpQueryQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetServerGetCreateMultiFolderFavoriteArticleDialogOgpQueryQuery, GetServerGetCreateMultiFolderFavoriteArticleDialogOgpQueryQueryVariables>(GetServerGetCreateMultiFolderFavoriteArticleDialogOgpQueryDocument, options);
+        }
+export type GetServerGetCreateMultiFolderFavoriteArticleDialogOgpQueryQueryHookResult = ReturnType<typeof useGetServerGetCreateMultiFolderFavoriteArticleDialogOgpQueryQuery>;
+export type GetServerGetCreateMultiFolderFavoriteArticleDialogOgpQueryLazyQueryHookResult = ReturnType<typeof useGetServerGetCreateMultiFolderFavoriteArticleDialogOgpQueryLazyQuery>;
+export type GetServerGetCreateMultiFolderFavoriteArticleDialogOgpQuerySuspenseQueryHookResult = ReturnType<typeof useGetServerGetCreateMultiFolderFavoriteArticleDialogOgpQuerySuspenseQuery>;
+export type GetServerGetCreateMultiFolderFavoriteArticleDialogOgpQueryQueryResult = Apollo.QueryResult<GetServerGetCreateMultiFolderFavoriteArticleDialogOgpQueryQuery, GetServerGetCreateMultiFolderFavoriteArticleDialogOgpQueryQueryVariables>;
+export const SelectMultiFavoriteFolderListQueryDocument = gql`
+    query SelectMultiFavoriteFolderListQuery($input: FavoriteArticleFoldersInput) {
+  favoriteArticleFolders(input: $input) {
+    edges {
+      node {
+        id
+        title
+      }
+    }
+    pageInfo {
+      endCursor
+      hasNextPage
+    }
+  }
+}
+    `;
+
+/**
+ * __useSelectMultiFavoriteFolderListQueryQuery__
+ *
+ * To run a query within a React component, call `useSelectMultiFavoriteFolderListQueryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSelectMultiFavoriteFolderListQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSelectMultiFavoriteFolderListQueryQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useSelectMultiFavoriteFolderListQueryQuery(baseOptions?: Apollo.QueryHookOptions<SelectMultiFavoriteFolderListQueryQuery, SelectMultiFavoriteFolderListQueryQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SelectMultiFavoriteFolderListQueryQuery, SelectMultiFavoriteFolderListQueryQueryVariables>(SelectMultiFavoriteFolderListQueryDocument, options);
+      }
+export function useSelectMultiFavoriteFolderListQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SelectMultiFavoriteFolderListQueryQuery, SelectMultiFavoriteFolderListQueryQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SelectMultiFavoriteFolderListQueryQuery, SelectMultiFavoriteFolderListQueryQueryVariables>(SelectMultiFavoriteFolderListQueryDocument, options);
+        }
+export function useSelectMultiFavoriteFolderListQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<SelectMultiFavoriteFolderListQueryQuery, SelectMultiFavoriteFolderListQueryQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<SelectMultiFavoriteFolderListQueryQuery, SelectMultiFavoriteFolderListQueryQueryVariables>(SelectMultiFavoriteFolderListQueryDocument, options);
+        }
+export type SelectMultiFavoriteFolderListQueryQueryHookResult = ReturnType<typeof useSelectMultiFavoriteFolderListQueryQuery>;
+export type SelectMultiFavoriteFolderListQueryLazyQueryHookResult = ReturnType<typeof useSelectMultiFavoriteFolderListQueryLazyQuery>;
+export type SelectMultiFavoriteFolderListQuerySuspenseQueryHookResult = ReturnType<typeof useSelectMultiFavoriteFolderListQuerySuspenseQuery>;
+export type SelectMultiFavoriteFolderListQueryQueryResult = Apollo.QueryResult<SelectMultiFavoriteFolderListQueryQuery, SelectMultiFavoriteFolderListQueryQueryVariables>;
 export const AllFolderFavoriteArticleListQueryDocument = gql`
     query AllFolderFavoriteArticleListQuery($input: FavoriteAllFolderArticlesInput!) {
   favoriteAllFolderArticles(input: $input) {
@@ -2406,6 +2598,48 @@ export type AllFolderFavoriteArticleListTemplateQueryQueryHookResult = ReturnTyp
 export type AllFolderFavoriteArticleListTemplateQueryLazyQueryHookResult = ReturnType<typeof useAllFolderFavoriteArticleListTemplateQueryLazyQuery>;
 export type AllFolderFavoriteArticleListTemplateQuerySuspenseQueryHookResult = ReturnType<typeof useAllFolderFavoriteArticleListTemplateQuerySuspenseQuery>;
 export type AllFolderFavoriteArticleListTemplateQueryQueryResult = Apollo.QueryResult<AllFolderFavoriteArticleListTemplateQueryQuery, AllFolderFavoriteArticleListTemplateQueryQueryVariables>;
+export const GetServerFavoriteFoldersAllFolderFavoriteArticleListTemplateQueryDocument = gql`
+    query GetServerFavoriteFoldersAllFolderFavoriteArticleListTemplateQuery($input: FavoriteArticleFoldersInput) {
+  favoriteArticleFolders(input: $input) {
+    pageInfo {
+      endCursor
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetServerFavoriteFoldersAllFolderFavoriteArticleListTemplateQueryQuery__
+ *
+ * To run a query within a React component, call `useGetServerFavoriteFoldersAllFolderFavoriteArticleListTemplateQueryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetServerFavoriteFoldersAllFolderFavoriteArticleListTemplateQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetServerFavoriteFoldersAllFolderFavoriteArticleListTemplateQueryQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useGetServerFavoriteFoldersAllFolderFavoriteArticleListTemplateQueryQuery(baseOptions?: Apollo.QueryHookOptions<GetServerFavoriteFoldersAllFolderFavoriteArticleListTemplateQueryQuery, GetServerFavoriteFoldersAllFolderFavoriteArticleListTemplateQueryQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetServerFavoriteFoldersAllFolderFavoriteArticleListTemplateQueryQuery, GetServerFavoriteFoldersAllFolderFavoriteArticleListTemplateQueryQueryVariables>(GetServerFavoriteFoldersAllFolderFavoriteArticleListTemplateQueryDocument, options);
+      }
+export function useGetServerFavoriteFoldersAllFolderFavoriteArticleListTemplateQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetServerFavoriteFoldersAllFolderFavoriteArticleListTemplateQueryQuery, GetServerFavoriteFoldersAllFolderFavoriteArticleListTemplateQueryQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetServerFavoriteFoldersAllFolderFavoriteArticleListTemplateQueryQuery, GetServerFavoriteFoldersAllFolderFavoriteArticleListTemplateQueryQueryVariables>(GetServerFavoriteFoldersAllFolderFavoriteArticleListTemplateQueryDocument, options);
+        }
+export function useGetServerFavoriteFoldersAllFolderFavoriteArticleListTemplateQuerySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetServerFavoriteFoldersAllFolderFavoriteArticleListTemplateQueryQuery, GetServerFavoriteFoldersAllFolderFavoriteArticleListTemplateQueryQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetServerFavoriteFoldersAllFolderFavoriteArticleListTemplateQueryQuery, GetServerFavoriteFoldersAllFolderFavoriteArticleListTemplateQueryQueryVariables>(GetServerFavoriteFoldersAllFolderFavoriteArticleListTemplateQueryDocument, options);
+        }
+export type GetServerFavoriteFoldersAllFolderFavoriteArticleListTemplateQueryQueryHookResult = ReturnType<typeof useGetServerFavoriteFoldersAllFolderFavoriteArticleListTemplateQueryQuery>;
+export type GetServerFavoriteFoldersAllFolderFavoriteArticleListTemplateQueryLazyQueryHookResult = ReturnType<typeof useGetServerFavoriteFoldersAllFolderFavoriteArticleListTemplateQueryLazyQuery>;
+export type GetServerFavoriteFoldersAllFolderFavoriteArticleListTemplateQuerySuspenseQueryHookResult = ReturnType<typeof useGetServerFavoriteFoldersAllFolderFavoriteArticleListTemplateQuerySuspenseQuery>;
+export type GetServerFavoriteFoldersAllFolderFavoriteArticleListTemplateQueryQueryResult = Apollo.QueryResult<GetServerFavoriteFoldersAllFolderFavoriteArticleListTemplateQueryQuery, GetServerFavoriteFoldersAllFolderFavoriteArticleListTemplateQueryQueryVariables>;
 export const FavoriteArticleFolderListTemplateQueryDocument = gql`
     query FavoriteArticleFolderListTemplateQuery($input: FavoriteArticleFoldersInput!) {
   favoriteArticleFolders(input: $input) {

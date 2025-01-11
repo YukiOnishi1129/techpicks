@@ -97,6 +97,26 @@ func (mr *MockFavoriteServiceClientMockRecorder) CreateFavoriteArticleForUploadA
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateFavoriteArticleForUploadArticle", reflect.TypeOf((*MockFavoriteServiceClient)(nil).CreateFavoriteArticleForUploadArticle), varargs...)
 }
 
+// CreateMultiFavoriteArticlesForUploadArticle mocks base method.
+func (m *MockFavoriteServiceClient) CreateMultiFavoriteArticlesForUploadArticle(arg0 context.Context, arg1 *favorite.CreateMultiFavoriteArticlesForUploadArticleRequest, arg2 ...grpc.CallOption) (*favorite.CreateMultiFavoriteArticlesForUploadArticleResponse, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{arg0, arg1}
+	for _, a := range arg2 {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "CreateMultiFavoriteArticlesForUploadArticle", varargs...)
+	ret0, _ := ret[0].(*favorite.CreateMultiFavoriteArticlesForUploadArticleResponse)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CreateMultiFavoriteArticlesForUploadArticle indicates an expected call of CreateMultiFavoriteArticlesForUploadArticle.
+func (mr *MockFavoriteServiceClientMockRecorder) CreateMultiFavoriteArticlesForUploadArticle(arg0, arg1 interface{}, arg2 ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{arg0, arg1}, arg2...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateMultiFavoriteArticlesForUploadArticle", reflect.TypeOf((*MockFavoriteServiceClient)(nil).CreateMultiFavoriteArticlesForUploadArticle), varargs...)
+}
+
 // DeleteFavoriteArticle mocks base method.
 func (m *MockFavoriteServiceClient) DeleteFavoriteArticle(arg0 context.Context, arg1 *favorite.DeleteFavoriteArticleRequest, arg2 ...grpc.CallOption) (*emptypb.Empty, error) {
 	m.ctrl.T.Helper()
@@ -343,6 +363,21 @@ func (m *MockFavoriteServiceServer) CreateFavoriteArticleForUploadArticle(arg0 c
 func (mr *MockFavoriteServiceServerMockRecorder) CreateFavoriteArticleForUploadArticle(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateFavoriteArticleForUploadArticle", reflect.TypeOf((*MockFavoriteServiceServer)(nil).CreateFavoriteArticleForUploadArticle), arg0, arg1)
+}
+
+// CreateMultiFavoriteArticlesForUploadArticle mocks base method.
+func (m *MockFavoriteServiceServer) CreateMultiFavoriteArticlesForUploadArticle(arg0 context.Context, arg1 *favorite.CreateMultiFavoriteArticlesForUploadArticleRequest) (*favorite.CreateMultiFavoriteArticlesForUploadArticleResponse, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateMultiFavoriteArticlesForUploadArticle", arg0, arg1)
+	ret0, _ := ret[0].(*favorite.CreateMultiFavoriteArticlesForUploadArticleResponse)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CreateMultiFavoriteArticlesForUploadArticle indicates an expected call of CreateMultiFavoriteArticlesForUploadArticle.
+func (mr *MockFavoriteServiceServerMockRecorder) CreateMultiFavoriteArticlesForUploadArticle(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateMultiFavoriteArticlesForUploadArticle", reflect.TypeOf((*MockFavoriteServiceServer)(nil).CreateMultiFavoriteArticlesForUploadArticle), arg0, arg1)
 }
 
 // DeleteFavoriteArticle mocks base method.
