@@ -9,3 +9,5 @@ export * from "./CreateMultiFolderFavoriteArticleDialog";
 
 export * from "./SearchFavoriteArticleFolderDialog";
 export * from "./SearchFavoriteArticleListDialog";
+
+export * from "./SelectMultiFavoriteFolderDialog";

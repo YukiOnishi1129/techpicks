@@ -40,10 +40,12 @@ import { Loader } from "@/shared/components/ui/loader";
 import { useServerRevalidatePage } from "@/shared/hooks/useServerRevalidatePage";
 import { useStatusToast } from "@/shared/hooks/useStatusToast";
 import { checkURL } from "@/shared/lib/check";
+import { SelectOptionType } from "@/shared/types/utils";
 
 import { getServerGetCreateMultiFolderFavoriteArticleDialogOGPQuery } from "./actGetServerGetCreateMultiFolderFavoriteArticleDialogOGPQuery";
 import { CreateMultiFolderFavoriteArticleDialogFragment } from "./CreateMultiFolderFavoriteArticleDialogFragment";
 import { OGPCreateMultiFolderFavoriteArticleDialogFragment } from "./OGPCreateMultiFolderFavoriteArticleDialogFragment";
+import { SelectMultiFavoriteFolderDialog } from "../SelectMultiFavoriteFolderDialog";
 
 const FormSchema = z.object({
   url: z
@@ -60,7 +62,8 @@ const MutationFormSchema = z.object({
       label: z.string(),
     })
     .array()
-    .nonempty(),
+    .min(1),
+  // .nonempty(),
 });
 
 type CreateMultiFolderFavoriteArticleDialogContentProps = {
@@ -125,6 +128,25 @@ export const CreateMultiFolderFavoriteArticleDialogContent: FC<
       onSubmit({ url: pastedText });
     },
     [onSubmit]
+  );
+
+  const handleSelectFolderList = useCallback(
+    (targetSelectFolderList: Array<SelectOptionType>) => {
+      mutationForm.setValue("targetFavoriteFolders", targetSelectFolderList);
+    },
+    [mutationForm]
+  );
+
+  const handleRemoveSelectedFolder = useCallback(
+    (targetFolderId: string) => {
+      mutationForm.setValue(
+        "targetFavoriteFolders",
+        mutationForm
+          .getValues("targetFavoriteFolders")
+          .filter((f) => f.id !== targetFolderId)
+      );
+    },
+    [mutationForm]
   );
 
   const handleAddSubmit = useCallback(async () => {
@@ -262,11 +284,10 @@ export const CreateMultiFolderFavoriteArticleDialogContent: FC<
                         Favorite Folders
                       </FormLabel>
                       <div>
-                        {/* <SelectMultiFeedDialog
-                          selectedFeedList={field.value}
-                          feedsEndCursor={feedsEndCursor}
-                          onSelectFeedList={handleSelectFeedList}
-                        /> */}
+                        <SelectMultiFavoriteFolderDialog
+                          selectedFolderList={field.value}
+                          onSelectFolderList={handleSelectFolderList}
+                        />
                       </div>
                       <FormControl>
                         {field.value.length > 0 && (
@@ -278,7 +299,13 @@ export const CreateMultiFolderFavoriteArticleDialogContent: FC<
                                   key={folder.id}
                                 >
                                   # {folder.label}
-                                  <Button variant={"ghost"} size="sm">
+                                  <Button
+                                    variant={"ghost"}
+                                    size="sm"
+                                    onClick={() =>
+                                      handleRemoveSelectedFolder(folder.id)
+                                    }
+                                  >
                                     <RxCross2 />
                                   </Button>
                                 </span>
@@ -311,7 +338,6 @@ export const CreateMultiFolderFavoriteArticleDialogContent: FC<
               <Button
                 type="submit"
                 disabled={!mutationForm.formState.isValid || isOgpPending}
-                // onClick={handleAddSubmit}
               >
                 {"ADD"}
               </Button>
