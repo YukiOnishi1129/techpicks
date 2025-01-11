@@ -7,6 +7,7 @@ import { CreateBookmarkDialog } from "@/features/bookmarks/components/Dialog";
 import {
   CreateFavoriteArticleFolderDialog,
   CreateFavoriteArticleDialogFloatButton,
+  CreateMultiFolderFavoriteArticleDialog,
 } from "@/features/favorites/components/Dialog";
 import { CreateMyFeedFolderDialog } from "@/features/myFeeds/components/Dialog";
 
@@ -14,10 +15,12 @@ import { NAVIGATION_LISTS } from "@/shared/constant/navigation";
 
 type MobileHeaderButtonProps = {
   pathname: string;
+  foldersEndCursor?: string;
 };
 
 export const MobileHeaderButton: FC<MobileHeaderButtonProps> = ({
   pathname,
+  foldersEndCursor,
 }) => {
   const params = useParams();
   const targetId = params.id;
@@ -30,6 +33,13 @@ export const MobileHeaderButton: FC<MobileHeaderButtonProps> = ({
         return <CreateMyFeedFolderDialog buttonVariant="ghost" />;
       case NAVIGATION_LISTS.FAVORITE_ARTICLE_FOLDER:
         return <CreateFavoriteArticleFolderDialog buttonVariant="ghost" />;
+      case NAVIGATION_LISTS.FAVORITE_ARTICLE_FOLDER_ARTICLE:
+        return (
+          <CreateMultiFolderFavoriteArticleDialog
+            buttonVariant="ghost"
+            foldersEndCursor={foldersEndCursor}
+          />
+        );
       default:
         if (
           pathname.includes(NAVIGATION_LISTS.FAVORITE_ARTICLE_FOLDER_ARTICLE) &&
