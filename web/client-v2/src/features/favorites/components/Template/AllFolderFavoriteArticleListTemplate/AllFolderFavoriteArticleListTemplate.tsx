@@ -79,7 +79,9 @@ export const AllFolderFavoriteArticleListTemplate: FC<
             <FavoriteArticleKeywordSearchForm keywordList={keywordList} />
           </div>
           <CreateMultiFolderFavoriteArticleDialog
-            data={data.favoriteArticleFolders}
+            foldersEndCursor={
+              data.favoriteArticleFolders.pageInfo.endCursor || undefined
+            }
           />
         </div>
       </div>

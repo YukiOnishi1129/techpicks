@@ -43,7 +43,6 @@ import { checkURL } from "@/shared/lib/check";
 import { SelectOptionType } from "@/shared/types/utils";
 
 import { getServerGetCreateMultiFolderFavoriteArticleDialogOGPQuery } from "./actGetServerGetCreateMultiFolderFavoriteArticleDialogOGPQuery";
-import { CreateMultiFolderFavoriteArticleDialogFragment } from "./CreateMultiFolderFavoriteArticleDialogFragment";
 import { OGPCreateMultiFolderFavoriteArticleDialogFragment } from "./OGPCreateMultiFolderFavoriteArticleDialogFragment";
 import { SelectMultiFavoriteFolderDialog } from "../SelectMultiFavoriteFolderDialog";
 
@@ -63,23 +62,18 @@ const MutationFormSchema = z.object({
     })
     .array()
     .min(1),
-  // .nonempty(),
 });
 
 type CreateMultiFolderFavoriteArticleDialogContentProps = {
-  data: FragmentOf<typeof CreateMultiFolderFavoriteArticleDialogFragment>;
+  foldersEndCursor?: string;
   onClose: () => void;
 };
 
 export const CreateMultiFolderFavoriteArticleDialogContent: FC<
   CreateMultiFolderFavoriteArticleDialogContentProps
-> = ({ data, onClose }) => {
+> = ({ foldersEndCursor, onClose }) => {
   const router = useRouter();
   const { revalidatePage } = useServerRevalidatePage();
-  const fragment = readFragment(
-    CreateMultiFolderFavoriteArticleDialogFragment,
-    data
-  );
 
   const [ogpData, setOgpData] = useState<FragmentOf<
     typeof OGPCreateMultiFolderFavoriteArticleDialogFragment
@@ -286,6 +280,7 @@ export const CreateMultiFolderFavoriteArticleDialogContent: FC<
                       <div>
                         <SelectMultiFavoriteFolderDialog
                           selectedFolderList={field.value}
+                          foldersEndCursor={foldersEndCursor}
                           onSelectFolderList={handleSelectFolderList}
                         />
                       </div>

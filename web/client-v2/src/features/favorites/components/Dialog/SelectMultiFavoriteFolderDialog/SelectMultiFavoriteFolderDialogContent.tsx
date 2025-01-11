@@ -9,15 +9,23 @@ import {
 } from "@/shared/components/ui/dialog";
 import { SelectOptionType } from "@/shared/types/utils";
 
+import { SelectMultiFavoriteFolderList } from "./SelectMultiFavoriteFolderList";
+
 type SelectMultiFavoriteFolderDialogContentProps = {
   selectedFolderList?: Array<SelectOptionType>;
+  foldersEndCursor?: string;
   onDialogClose: () => void;
   onSelectFolderList?: (selectedFolderList: Array<SelectOptionType>) => void;
 };
 
 export const SelectMultiFavoriteFolderDialogContent: FC<
   SelectMultiFavoriteFolderDialogContentProps
-> = ({ selectedFolderList, onDialogClose, onSelectFolderList }) => {
+> = ({
+  selectedFolderList,
+  foldersEndCursor,
+  onDialogClose,
+  onSelectFolderList,
+}) => {
   const handleSelectFolderList = useCallback(
     (targetSelectedFolderList: Array<SelectOptionType>) => {
       if (onSelectFolderList) onSelectFolderList(targetSelectedFolderList);
@@ -31,11 +39,11 @@ export const SelectMultiFavoriteFolderDialogContent: FC<
       <DialogHeader>
         <DialogTitle>{"Select Favorite Folders"}</DialogTitle>
       </DialogHeader>
-      {/* <SelectMultiFeedList
-        defaultSelectedFeedList={selectedFeedList}
-        feedsEndCursor={feedsEndCursor}
-        onSelectFeedList={handleSelectFeedList}
-      /> */}
+      <SelectMultiFavoriteFolderList
+        defaultSelectedFolderList={selectedFolderList}
+        foldersEndCursor={foldersEndCursor}
+        onSelectFolderList={handleSelectFolderList}
+      />
     </DialogContent>
   );
 };

@@ -13,12 +13,19 @@ type SelectMultiFavoriteFolderDialogProps = {
   label?: string;
   variant?: VariantProps<typeof buttonVariants>["variant"];
   selectedFolderList?: Array<SelectOptionType>;
+  foldersEndCursor?: string;
   onSelectFolderList?: (selectedFolderList: Array<SelectOptionType>) => void;
 };
 
 export const SelectMultiFavoriteFolderDialog: FC<
   SelectMultiFavoriteFolderDialogProps
-> = ({ label = "SELECT", variant, selectedFolderList, onSelectFolderList }) => {
+> = ({
+  label = "SELECT",
+  variant,
+  selectedFolderList,
+  foldersEndCursor,
+  onSelectFolderList,
+}) => {
   const [openDialog, setOpenDialog] = useState(false);
   const handleDialogOpen = useCallback(() => setOpenDialog(true), []);
   const handleDialogClose = useCallback(() => setOpenDialog(false), []);
@@ -36,6 +43,7 @@ export const SelectMultiFavoriteFolderDialog: FC<
       {openDialog && (
         <SelectMultiFavoriteFolderDialogContent
           selectedFolderList={selectedFolderList}
+          foldersEndCursor={foldersEndCursor}
           onDialogClose={handleDialogClose}
           onSelectFolderList={onSelectFolderList}
         />
