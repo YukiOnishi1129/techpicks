@@ -12,11 +12,12 @@ import React, {
   useState,
 } from "react";
 import { useForm } from "react-hook-form";
+import { RxCross2 } from "react-icons/rx";
 import { z } from "zod";
 
 import { logoutToLoginPage } from "@/features/auth/actions/auth";
 import { getUser } from "@/features/auth/actions/user";
-import { createFavoriteArticleForUploadArticleMutation } from "@/features/favorites/actions/actCreateFavoriteArticleForUploadArticleMutation";
+import { createMultiFolderFavoriteArticleForUploadArticleMutation } from "@/features/favorites/actions/actCreateMultiFolderFavoriteArticleForUploadArticleMutation";
 import { OGPPreviewContent } from "@/features/ogp/components/Dialog";
 
 import { Button } from "@/shared/components/ui/button";
@@ -52,6 +53,16 @@ const FormSchema = z.object({
     .url({ message: "Invalid URL" }),
 });
 
+const MutationFormSchema = z.object({
+  targetFavoriteFolders: z
+    .object({
+      id: z.string(),
+      label: z.string(),
+    })
+    .array()
+    .nonempty(),
+});
+
 type CreateMultiFolderFavoriteArticleDialogContentProps = {
   data: FragmentOf<typeof CreateMultiFolderFavoriteArticleDialogFragment>;
   onClose: () => void;
@@ -79,6 +90,14 @@ export const CreateMultiFolderFavoriteArticleDialogContent: FC<
     resolver: zodResolver(FormSchema),
     defaultValues: {
       url: "",
+    },
+  });
+
+  const mutationForm = useForm<z.infer<typeof MutationFormSchema>>({
+    mode: "onChange",
+    resolver: zodResolver(MutationFormSchema),
+    defaultValues: {
+      targetFavoriteFolders: [],
     },
   });
 
@@ -125,9 +144,9 @@ export const CreateMultiFolderFavoriteArticleDialogContent: FC<
       );
       if (!fragment) return;
 
-      const { data, error } =
-        await createFavoriteArticleForUploadArticleMutation({
-          favoriteArticleFolderId: "",
+      const { data, errors } =
+        await createMultiFolderFavoriteArticleForUploadArticleMutation({
+          favoriteArticleFolderIds: [],
           title: fragment.articleOpg.title,
           description: fragment?.articleOpg?.description || "",
           articleUrl: form.getValues("url"),
@@ -137,13 +156,13 @@ export const CreateMultiFolderFavoriteArticleDialogContent: FC<
           platformFaviconUrl: fragment.articleOpg.faviconUrl,
         });
 
-      if (error) {
-        if (error.length > 0) {
+      if (errors) {
+        if (errors.length > 0) {
           // TODO: Modify the error message response on the BFF side
           const errMsg =
-            error[0].message.indexOf("favorite article already exists") != -1
+            errors[0].message.indexOf("favorite article already exists") != -1
               ? "favorite article already exists"
-              : error[0].message;
+              : errors[0].message;
           failToast({
             description: errMsg,
           });
@@ -155,7 +174,9 @@ export const CreateMultiFolderFavoriteArticleDialogContent: FC<
         return;
       }
 
-      if (data?.createFavoriteArticleForUploadArticle?.id) {
+      if (
+        data?.createMultiFavoriteArticleForUploadArticle.favoriteArticle?.id
+      ) {
         successToast({
           description: `Added to the favorite article folder '${fragment.articleOpg.title}'`,
         });
@@ -215,36 +236,89 @@ export const CreateMultiFolderFavoriteArticleDialogContent: FC<
         </Form>
       </div>
 
-      {isPending && <Loader />}
-      {!isPending && ogpData && (
-        <OGPPreviewContent
-          data={
-            readFragment(
-              OGPCreateMultiFolderFavoriteArticleDialogFragment,
-              ogpData
-            ).articleOpg
-          }
-        />
-      )}
+      <Form {...mutationForm}>
+        <form
+          onSubmit={form.handleSubmit(handleAddSubmit)}
+          className="space-y-8"
+        >
+          {isPending && <Loader />}
+          {!isPending && ogpData && (
+            <>
+              <OGPPreviewContent
+                data={
+                  readFragment(
+                    OGPCreateMultiFolderFavoriteArticleDialogFragment,
+                    ogpData
+                  ).articleOpg
+                }
+              />
+              <FormField
+                control={mutationForm.control}
+                name="targetFavoriteFolders"
+                render={({ field }) => (
+                  <FormItem>
+                    <div className="mb-4">
+                      <FormLabel className="text-base">
+                        Favorite Folders
+                      </FormLabel>
+                      <div>
+                        {/* <SelectMultiFeedDialog
+                          selectedFeedList={field.value}
+                          feedsEndCursor={feedsEndCursor}
+                          onSelectFeedList={handleSelectFeedList}
+                        /> */}
+                      </div>
+                      <FormControl>
+                        {field.value.length > 0 && (
+                          <div className="mt-4 flex  w-full flex-wrap rounded-md border-primary bg-secondary p-2 text-primary">
+                            {field.value.map((folder) => {
+                              return (
+                                <span
+                                  className="mb-2 mr-2 block max-w-64 truncate rounded-full bg-primary-foreground px-2 py-1 text-xs font-normal text-amber-600"
+                                  key={folder.id}
+                                >
+                                  # {folder.label}
+                                  <Button variant={"ghost"} size="sm">
+                                    <RxCross2 />
+                                  </Button>
+                                </span>
+                              );
+                            })}
+                          </div>
+                        )}
+                      </FormControl>
+                      <FormMessage />
+                    </div>
+                  </FormItem>
+                )}
+              />
+            </>
+          )}
 
-      <div className="mt-4 flex w-full justify-between space-x-4">
-        <DialogClose>
-          <Button variant={"outline"} onClick={resetDialog}>
-            {"CLOSE"}
-          </Button>
-        </DialogClose>
+          <div className="mt-4 flex w-full justify-between space-x-4">
+            <DialogClose>
+              <Button variant={"outline"} onClick={resetDialog}>
+                {"CLOSE"}
+              </Button>
+            </DialogClose>
 
-        {isOgpPending ? (
-          <Button disabled>
-            <ReloadIcon className="mr-2 size-4 animate-spin" />
-            PLEASE WAIT
-          </Button>
-        ) : (
-          <Button disabled={!ogpData} onClick={handleAddSubmit}>
-            {"ADD"}
-          </Button>
-        )}
-      </div>
+            {isOgpPending ? (
+              <Button disabled>
+                <ReloadIcon className="mr-2 size-4 animate-spin" />
+                PLEASE WAIT
+              </Button>
+            ) : (
+              <Button
+                type="submit"
+                disabled={!mutationForm.formState.isValid || isOgpPending}
+                // onClick={handleAddSubmit}
+              >
+                {"ADD"}
+              </Button>
+            )}
+          </div>
+        </form>
+      </Form>
     </DialogContent>
   );
 };

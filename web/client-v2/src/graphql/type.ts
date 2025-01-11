@@ -761,6 +761,13 @@ export type CreateFavoriteArticleForUploadArticleMutationMutationVariables = Exa
 
 export type CreateFavoriteArticleForUploadArticleMutationMutation = { __typename?: 'Mutation', createFavoriteArticleForUploadArticle: { __typename?: 'FavoriteArticle', id: string } };
 
+export type CreateMultiFolderFavoriteArticleForUploadArticleMutationMutationVariables = Exact<{
+  input: CreateMultiFavoriteArticleForUploadArticleInput;
+}>;
+
+
+export type CreateMultiFolderFavoriteArticleForUploadArticleMutationMutation = { __typename?: 'Mutation', createMultiFavoriteArticleForUploadArticle: { __typename?: 'CreatedMultiFolderFavoriteArticle', favoriteArticle: { __typename?: 'FavoriteArticle', id: string }, relationFavoriteArticleFolders: Array<{ __typename?: 'FavoriteArticleFolder', id: string }> } };
+
 export type AllFolderFavoriteArticleCardItemFragmentFragment = { __typename?: 'FavoriteAllFolderArticleEdge', node: { __typename?: 'FavoriteArticle', id: string, title: string, articleUrl: string, thumbnailUrl: string, createdAt: number }, favoriteArticleFolders: Array<{ __typename?: 'FavoriteArticleFolder', id: string, title: string }> };
 
 export type AllFolderFavoriteArticleCardWrapperFragmentFragment = { __typename?: 'FavoriteAllFolderArticleEdge', node: { __typename?: 'FavoriteArticle', id: string, title: string, articleUrl: string, thumbnailUrl: string, platformId?: string | null, platformUrl: string, platformName: string, platformFaviconUrl: string, createdAt: number }, favoriteArticleFolders: Array<{ __typename?: 'FavoriteArticleFolder', id: string, title: string }> };
@@ -2234,6 +2241,44 @@ export function useCreateFavoriteArticleForUploadArticleMutationMutation(baseOpt
 export type CreateFavoriteArticleForUploadArticleMutationMutationHookResult = ReturnType<typeof useCreateFavoriteArticleForUploadArticleMutationMutation>;
 export type CreateFavoriteArticleForUploadArticleMutationMutationResult = Apollo.MutationResult<CreateFavoriteArticleForUploadArticleMutationMutation>;
 export type CreateFavoriteArticleForUploadArticleMutationMutationOptions = Apollo.BaseMutationOptions<CreateFavoriteArticleForUploadArticleMutationMutation, CreateFavoriteArticleForUploadArticleMutationMutationVariables>;
+export const CreateMultiFolderFavoriteArticleForUploadArticleMutationDocument = gql`
+    mutation CreateMultiFolderFavoriteArticleForUploadArticleMutation($input: CreateMultiFavoriteArticleForUploadArticleInput!) {
+  createMultiFavoriteArticleForUploadArticle(input: $input) {
+    favoriteArticle {
+      id
+    }
+    relationFavoriteArticleFolders {
+      id
+    }
+  }
+}
+    `;
+export type CreateMultiFolderFavoriteArticleForUploadArticleMutationMutationFn = Apollo.MutationFunction<CreateMultiFolderFavoriteArticleForUploadArticleMutationMutation, CreateMultiFolderFavoriteArticleForUploadArticleMutationMutationVariables>;
+
+/**
+ * __useCreateMultiFolderFavoriteArticleForUploadArticleMutationMutation__
+ *
+ * To run a mutation, you first call `useCreateMultiFolderFavoriteArticleForUploadArticleMutationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateMultiFolderFavoriteArticleForUploadArticleMutationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createMultiFolderFavoriteArticleForUploadArticleMutationMutation, { data, loading, error }] = useCreateMultiFolderFavoriteArticleForUploadArticleMutationMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateMultiFolderFavoriteArticleForUploadArticleMutationMutation(baseOptions?: Apollo.MutationHookOptions<CreateMultiFolderFavoriteArticleForUploadArticleMutationMutation, CreateMultiFolderFavoriteArticleForUploadArticleMutationMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateMultiFolderFavoriteArticleForUploadArticleMutationMutation, CreateMultiFolderFavoriteArticleForUploadArticleMutationMutationVariables>(CreateMultiFolderFavoriteArticleForUploadArticleMutationDocument, options);
+      }
+export type CreateMultiFolderFavoriteArticleForUploadArticleMutationMutationHookResult = ReturnType<typeof useCreateMultiFolderFavoriteArticleForUploadArticleMutationMutation>;
+export type CreateMultiFolderFavoriteArticleForUploadArticleMutationMutationResult = Apollo.MutationResult<CreateMultiFolderFavoriteArticleForUploadArticleMutationMutation>;
+export type CreateMultiFolderFavoriteArticleForUploadArticleMutationMutationOptions = Apollo.BaseMutationOptions<CreateMultiFolderFavoriteArticleForUploadArticleMutationMutation, CreateMultiFolderFavoriteArticleForUploadArticleMutationMutationVariables>;
 export const GetCreateFavoriteArticleDialogOgpQueryDocument = gql`
     query GetCreateFavoriteArticleDialogOGPQuery($url: String!) {
   ...CreateFavoriteArticleDialogContentFragment
