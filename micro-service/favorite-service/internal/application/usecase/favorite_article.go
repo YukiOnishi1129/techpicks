@@ -247,73 +247,45 @@ func (fu *favoriteUseCase) CreateMultiFavoriteArticlesForUploadArticle(ctx conte
 	resFafs := make([]*fpb.FavoriteArticleFolder, 0)
 	dto := persistenceadapter.CreateFavoriteArticleForUploadArticleDTO{
 		UserID:             req.GetUserId(),
+		Title:              req.GetTitle(),
 		Description:        req.GetDescription(),
 		ArticleURL:         req.GetArticleUrl(),
 		ThumbnailURL:       req.GetThumbnailUrl(),
 		PlatformName:       req.GetPlatformName(),
-		PlatformURL:        req.GetPlatformName(),
-		PlatformFaviconURL: req.GetPlatformUrl(),
+		PlatformURL:        req.GetPlatformUrl(),
+		PlatformFaviconURL: req.GetPlatformFaviconUrl(),
 	}
 
-	// check article data
-	articles, err := fu.contentExternalAdapter.ListArticleByArticleURL(ctx, &cpb.ListArticleByArticleURLRequest{
-		ArticleUrl: req.GetArticleUrl(),
-		Limit:      1,
+	// create article
+	article, err := fu.contentExternalAdapter.CreateUploadArticle(ctx, &cpb.CreateUploadArticleRequest{
+		UserId:             req.GetUserId(),
+		Title:              req.GetTitle(),
+		Description:        req.GetDescription(),
+		ArticleUrl:         req.GetArticleUrl(),
+		ThumbnailUrl:       req.GetThumbnailUrl(),
+		PlatformName:       req.GetPlatformName(),
+		PlatformUrl:        req.GetPlatformUrl(),
+		PlatformFaviconUrl: req.GetPlatformFaviconUrl(),
 	})
 	if err != nil {
 		return &fpb.CreateMultiFavoriteArticlesForUploadArticleResponse{}, err
 	}
 
-	if articles.GetArticlesEdge() != nil {
-		// create article
-		article, err := fu.contentExternalAdapter.CreateUploadArticle(ctx, &cpb.CreateUploadArticleRequest{
-			UserId:             req.GetUserId(),
-			Title:              req.GetTitle(),
-			Description:        req.GetDescription(),
-			ArticleUrl:         req.GetArticleUrl(),
-			ThumbnailUrl:       req.GetThumbnailUrl(),
-			PlatformName:       req.GetPlatformName(),
-			PlatformUrl:        req.GetPlatformUrl(),
-			PlatformFaviconUrl: req.GetPlatformFaviconUrl(),
-		})
-		if err != nil {
-			return &fpb.CreateMultiFavoriteArticlesForUploadArticleResponse{}, err
-		}
+	dto.ArticleID = article.GetArticle().GetId()
+	dto.IsEng = article.GetArticle().GetIsEng()
+	dto.IsPrivate = article.GetArticle().GetIsPrivate()
 
-		dto.ArticleID = article.GetArticle().GetId()
-		dto.IsEng = article.GetArticle().GetIsEng()
-		dto.IsPrivate = article.GetArticle().GetIsPrivate()
-
-		if article.GetArticle().GetPlatform().GetId() != "" {
-			dto.PlatformID = null.StringFrom(article.GetArticle().GetPlatform().GetId())
-		}
-		if article.GetArticle().GetPublishedAt() != nil {
-			dto.PublishedAt = null.TimeFrom(article.GetArticle().GetPublishedAt().AsTime())
-		}
-		if article.GetArticle().GetAuthorName() != nil {
-			dto.AuthorName = null.StringFrom(article.GetArticle().GetAuthorName().GetValue())
-		}
-		if article.GetArticle().GetTags() != nil {
-			dto.Tags = null.StringFrom(article.GetArticle().GetTags().GetValue())
-		}
-	} else {
-		a := articles.GetArticlesEdge()[0]
-		dto.ArticleID = a.GetArticle().GetId()
-		dto.IsEng = a.GetArticle().GetIsEng()
-		dto.IsPrivate = a.GetArticle().GetIsPrivate()
-
-		if a.GetPlatform().GetId() != "" {
-			dto.PlatformID = null.StringFrom(a.GetPlatform().GetId())
-		}
-		if a.GetArticle().GetPublishedAt() != nil {
-			dto.PublishedAt = null.TimeFrom(a.GetArticle().GetPublishedAt().AsTime())
-		}
-		if a.GetArticle().GetAuthorName() != nil {
-			dto.AuthorName = null.StringFrom(a.GetArticle().GetAuthorName().GetValue())
-		}
-		if a.GetArticle().GetTags() != nil {
-			dto.Tags = null.StringFrom(a.GetArticle().GetTags().GetValue())
-		}
+	if article.GetArticle().GetPlatform().GetId() != "" {
+		dto.PlatformID = null.StringFrom(article.GetArticle().GetPlatform().GetId())
+	}
+	if article.GetArticle().GetPublishedAt() != nil {
+		dto.PublishedAt = null.TimeFrom(article.GetArticle().GetPublishedAt().AsTime())
+	}
+	if article.GetArticle().GetAuthorName() != nil {
+		dto.AuthorName = null.StringFrom(article.GetArticle().GetAuthorName().GetValue())
+	}
+	if article.GetArticle().GetTags() != nil {
+		dto.Tags = null.StringFrom(article.GetArticle().GetTags().GetValue())
 	}
 
 	// create article data
@@ -331,19 +303,23 @@ func (fu *favoriteUseCase) CreateMultiFavoriteArticlesForUploadArticle(ctx conte
 		if err != nil {
 			return &fpb.CreateMultiFavoriteArticlesForUploadArticleResponse{}, err
 		}
-
 		fa, err := fu.favoriteArticlePersistenceAdapter.GetFavoriteArticleByID(ctx, cfa.ID, cfa.UserID)
+		if err != nil {
+			return &fpb.CreateMultiFavoriteArticlesForUploadArticleResponse{}, err
+		}
+		isFolderOnly := true
+		faf, err := fu.favoriteArticleFolderPersistenceAdapter.GetFavoriteArticleFolderByID(ctx, cfa.FavoriteArticleFolderID, req.GetUserId(), &isFolderOnly)
 		if err != nil {
 			return &fpb.CreateMultiFavoriteArticlesForUploadArticleResponse{}, err
 		}
 
 		resFafs = append(resFafs, &fpb.FavoriteArticleFolder{
-			Id:               fa.FavoriteArticleFolderID,
-			UserId:           fa.UserID,
-			Title:            fa.R.FavoriteArticleFolder.Title,
-			CreatedAt:        timestamppb.New(fa.R.FavoriteArticleFolder.CreatedAt),
-			UpdatedAt:        timestamppb.New(fa.R.FavoriteArticleFolder.UpdatedAt),
-			Description:      fa.R.FavoriteArticleFolder.Description.String,
+			Id:               faf.ID,
+			UserId:           faf.UserID,
+			Title:            faf.Title,
+			CreatedAt:        timestamppb.New(faf.CreatedAt),
+			UpdatedAt:        timestamppb.New(faf.UpdatedAt),
+			Description:      faf.Description.String,
 			FavoriteArticles: []*fpb.FavoriteArticle{},
 		})
 

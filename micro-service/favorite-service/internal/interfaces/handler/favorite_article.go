@@ -39,11 +39,11 @@ func (fh *favoriteHandler) CreateFavoriteArticleForUploadArticle(ctx context.Con
 }
 
 func (fh *favoriteHandler) CreateMultiFavoriteArticlesForUploadArticle(ctx context.Context, req *fpb.CreateMultiFavoriteArticlesForUploadArticleRequest) (*fpb.CreateMultiFavoriteArticlesForUploadArticleResponse, error) {
-	// res, err := fh.favoriteUseCase.CreateMultiFavoriteArticleForUploadArticle(ctx, req)
-	// if err != nil {
-	// 	return nil, err
-	// }
-	return nil, nil
+	res, err := fh.favoriteUseCase.CreateMultiFavoriteArticlesForUploadArticle(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
 }
 func (fh *favoriteHandler) DeleteFavoriteArticle(ctx context.Context, req *fpb.DeleteFavoriteArticleRequest) (*emptypb.Empty, error) {
 	res, err := fh.favoriteUseCase.DeleteFavoriteArticle(ctx, req)

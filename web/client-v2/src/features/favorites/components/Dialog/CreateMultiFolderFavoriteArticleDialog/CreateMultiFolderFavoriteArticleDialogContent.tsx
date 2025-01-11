@@ -143,76 +143,89 @@ export const CreateMultiFolderFavoriteArticleDialogContent: FC<
     [mutationForm]
   );
 
-  const handleAddSubmit = useCallback(async () => {
-    startOgpPending(async () => {
-      const user = await getUser();
-      if (!user) {
-        failToast({
-          description: "Fail: Please login to favorite this article",
-        });
-        await logoutToLoginPage();
-        return;
-      }
-
-      const fragment = readFragment(
-        OGPCreateMultiFolderFavoriteArticleDialogFragment,
-        ogpData
-      );
-      if (!fragment) return;
-
-      const { data, errors } =
-        await createMultiFolderFavoriteArticleForUploadArticleMutation({
-          favoriteArticleFolderIds: [],
-          title: fragment.articleOpg.title,
-          description: fragment?.articleOpg?.description || "",
-          articleUrl: form.getValues("url"),
-          thumbnailUrl: fragment.articleOpg.thumbnailUrl,
-          platformName: fragment.articleOpg.siteName,
-          platformUrl: fragment.articleOpg.siteUrl,
-          platformFaviconUrl: fragment.articleOpg.faviconUrl,
-        });
-
-      if (errors) {
-        if (errors.length > 0) {
-          // TODO: Modify the error message response on the BFF side
-          const errMsg =
-            errors[0].message.indexOf("favorite article already exists") != -1
-              ? "favorite article already exists"
-              : errors[0].message;
+  const handleAddSubmit = useCallback(
+    async (values: z.infer<typeof MutationFormSchema>) => {
+      startOgpPending(async () => {
+        const folderList = values.targetFavoriteFolders;
+        if (folderList.length === 0) {
           failToast({
-            description: errMsg,
+            description: "Please select a favorite folder",
           });
           return;
         }
-        failToast({
-          description: "Fail: Something went wrong",
-        });
-        return;
-      }
 
-      if (
-        data?.createMultiFavoriteArticleForUploadArticle.favoriteArticle?.id
-      ) {
-        successToast({
-          description: `Added to the favorite article folder '${fragment.articleOpg.title}'`,
-        });
-      }
-      await revalidatePage();
-      router.replace(`/favorite/article`);
-      resetDialog();
-      onClose();
-      return;
-    });
-  }, [
-    successToast,
-    failToast,
-    form,
-    ogpData,
-    onClose,
-    resetDialog,
-    revalidatePage,
-    router,
-  ]);
+        const user = await getUser();
+        if (!user) {
+          failToast({
+            description: "Fail: Please login to favorite this article",
+          });
+          await logoutToLoginPage();
+          return;
+        }
+
+        const fragment = readFragment(
+          OGPCreateMultiFolderFavoriteArticleDialogFragment,
+          ogpData
+        );
+        if (!fragment) return;
+
+        const targetFolderIds = folderList.map((folder) => folder.id);
+
+        const { data, errors } =
+          await createMultiFolderFavoriteArticleForUploadArticleMutation({
+            favoriteArticleFolderIds: targetFolderIds,
+            title: fragment.articleOpg.title,
+            description: fragment?.articleOpg?.description || "",
+            articleUrl: form.getValues("url"),
+            thumbnailUrl: fragment.articleOpg.thumbnailUrl,
+            platformName: fragment.articleOpg.siteName,
+            platformUrl: fragment.articleOpg.siteUrl,
+            platformFaviconUrl: fragment.articleOpg.faviconUrl,
+          });
+
+        if (errors) {
+          if (errors.length > 0) {
+            // TODO: Modify the error message response on the BFF side
+            const errMsg =
+              errors[0].message.indexOf("favorite article already exists") != -1
+                ? "favorite article already exists"
+                : errors[0].message;
+            failToast({
+              description: errMsg,
+            });
+            return;
+          }
+          failToast({
+            description: "Fail: Something went wrong",
+          });
+          return;
+        }
+
+        if (
+          data?.createMultiFavoriteArticleForUploadArticle.favoriteArticle?.id
+        ) {
+          successToast({
+            description: `Added to the favorite article folder '${fragment.articleOpg.title}'`,
+          });
+        }
+        await revalidatePage();
+        router.replace(`/favorite/article`);
+        resetDialog();
+        onClose();
+        return;
+      });
+    },
+    [
+      successToast,
+      failToast,
+      form,
+      ogpData,
+      onClose,
+      resetDialog,
+      revalidatePage,
+      router,
+    ]
+  );
 
   return (
     <DialogContent onCloseAutoFocus={resetDialog}>
@@ -254,7 +267,7 @@ export const CreateMultiFolderFavoriteArticleDialogContent: FC<
 
       <Form {...mutationForm}>
         <form
-          onSubmit={form.handleSubmit(handleAddSubmit)}
+          onSubmit={mutationForm.handleSubmit(handleAddSubmit)}
           className="space-y-8"
         >
           {isPending && <Loader />}
@@ -273,10 +286,11 @@ export const CreateMultiFolderFavoriteArticleDialogContent: FC<
                 name="targetFavoriteFolders"
                 render={({ field }) => (
                   <FormItem>
-                    <div className="mb-4">
+                    <div className="mb-4 grid gap-2">
                       <FormLabel className="text-base">
                         Favorite Folders
                       </FormLabel>
+                      <FormMessage />
                       <div>
                         <SelectMultiFavoriteFolderDialog
                           selectedFolderList={field.value}
@@ -309,7 +323,6 @@ export const CreateMultiFolderFavoriteArticleDialogContent: FC<
                           </div>
                         )}
                       </FormControl>
-                      <FormMessage />
                     </div>
                   </FormItem>
                 )}
@@ -332,7 +345,7 @@ export const CreateMultiFolderFavoriteArticleDialogContent: FC<
             ) : (
               <Button
                 type="submit"
-                disabled={!mutationForm.formState.isValid || isOgpPending}
+                disabled={mutationForm.formState.isValid || !ogpData}
               >
                 {"ADD"}
               </Button>
