@@ -53,7 +53,7 @@ export const MobileHeaderButton: FC<MobileHeaderButtonProps> = ({
         }
         return <></>;
     }
-  }, [pathname, targetId]);
+  }, [pathname, targetId, foldersEndCursor]);
 
   return <>{headerButton}</>;
 };

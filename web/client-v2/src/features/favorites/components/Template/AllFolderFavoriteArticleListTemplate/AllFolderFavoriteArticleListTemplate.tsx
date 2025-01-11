@@ -10,6 +10,7 @@ import {
   BreadCrumbType,
   PageBreadcrumb,
 } from "@/shared/components/ui/breadcrumb";
+import { SELECTABLE_FAVORITE_ARTICLE_FOLDER_LIST_LIMIT } from "@/shared/constant/limit";
 import { PreloadQuery } from "@/shared/lib/apollo/client";
 import { SearchParamsType } from "@/shared/types/utils";
 
@@ -21,7 +22,6 @@ import {
 } from "../../Dialog";
 import { AllFolderFavoriteArticleList } from "../../List";
 import { FavoriteArticleKeywordSearchForm } from "../../Search";
-import { SELECTABLE_FAVORITE_ARTICLE_FOLDER_LIST_LIMIT } from "@/shared/constant/limit";
 
 type FavoriteArticleAllListTemplateProps = {
   searchParams: SearchParamsType;

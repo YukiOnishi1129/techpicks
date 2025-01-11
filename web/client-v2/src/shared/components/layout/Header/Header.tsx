@@ -1,10 +1,13 @@
 import { FC } from "react";
 
+import { getUser } from "@/features/auth/actions/user";
+
+import { SELECTABLE_FAVORITE_ARTICLE_FOLDER_LIST_LIMIT } from "@/shared/constant/limit";
+
+import { fetchHeaderQuery } from "./actHeaderQuery";
 import { DesktopHeader } from "./DesktopHeader";
 import { MobileHeader } from "./MobileHeader";
-import { getUser } from "@/features/auth/actions/user";
-import { fetchHeaderQuery } from "./actHeaderQuery";
-import { SELECTABLE_FAVORITE_ARTICLE_FOLDER_LIST_LIMIT } from "@/shared/constant/limit";
+
 
 type HeaderProps = {};
 
