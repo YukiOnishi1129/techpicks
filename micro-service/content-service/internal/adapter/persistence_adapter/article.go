@@ -9,6 +9,7 @@ import (
 	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/domain"
 	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/domain/entity"
 	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/domain/repository"
+	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/util"
 	"github.com/google/uuid"
 	"github.com/volatiletech/sqlboiler/v4/queries/qm"
 )
@@ -118,8 +119,8 @@ func (apa *articlePersistenceAdapter) GetArticles(ctx context.Context, req *cpb.
 func (apa *articlePersistenceAdapter) GetArticlesByArticleURLAndPlatformURL(ctx context.Context, articleURL, platformURL string) (entity.ArticleSlice, error) {
 	q := []qm.QueryMod{
 		qm.InnerJoin("platforms ON articles.platform_id = platforms.id"),
-		qm.Where("articles.article_url = ?", articleURL),
-		qm.Where("platforms.site_url = ?", platformURL),
+		qm.Where("articles.article_url ILIKE ?", "%"+articleURL+"%"),
+		qm.Where("platforms.site_url ILIKE ?", "%"+platformURL+"%"),
 		qm.Load(qm.Rels(entity.ArticleRels.Platform)),
 		qm.Where("articles.is_private = ?", false),
 	}
@@ -151,9 +152,7 @@ func (apa *articlePersistenceAdapter) ListArticleByArticleURL(ctx context.Contex
 
 func (apa *articlePersistenceAdapter) GetPrivateArticlesByArticleURL(ctx context.Context, articleURL string) (entity.ArticleSlice, error) {
 	q := []qm.QueryMod{
-		qm.InnerJoin("platforms ON articles.platform_id = platforms.id"),
-		qm.Where("articles.article_url = ?", articleURL),
-		qm.Load(qm.Rels(entity.ArticleRels.Platform)),
+		qm.Where("articles.article_url ILIKE ?", "%"+articleURL+"%"),
 		qm.Where("articles.is_private = ?", true),
 	}
 
@@ -181,9 +180,10 @@ func (apa *articlePersistenceAdapter) GetArticleRelationPlatform(ctx context.Con
 func (apa *articlePersistenceAdapter) CreateUploadArticle(ctx context.Context, req *cpb.CreateUploadArticleRequest, isEng bool) (*entity.Article, error) {
 	// When adding an upload article, the article.platformId is not registered.
 	articleID, _ := uuid.NewUUID()
+	articleURL := util.RemoveTrailingSlash(req.GetArticleUrl())
 	article := entity.Article{
 		ID:           articleID.String(),
-		ArticleURL:   req.GetArticleUrl(),
+		ArticleURL:   articleURL,
 		Title:        req.GetTitle(),
 		Description:  req.GetDescription(),
 		ThumbnailURL: req.GetThumbnailUrl(),

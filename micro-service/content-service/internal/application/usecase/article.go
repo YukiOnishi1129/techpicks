@@ -178,8 +178,11 @@ func (cu *contentUseCase) convertPBArticle(a entity.Article) *cpb.Article {
 }
 
 func (cu *contentUseCase) CreateUploadArticle(ctx context.Context, req *cpb.CreateUploadArticleRequest) (*cpb.CreateArticleResponse, error) {
+	articleURL := util.RemoveTrailingSlash(req.GetArticleUrl())
+	platformURL := util.RemoveTrailingSlash(req.GetPlatformUrl())
+
 	// check public article
-	res, err := cu.articlePersistenceAdapter.GetArticlesByArticleURLAndPlatformURL(ctx, req.GetArticleUrl(), req.GetPlatformUrl())
+	res, err := cu.articlePersistenceAdapter.GetArticlesByArticleURLAndPlatformURL(ctx, articleURL, platformURL)
 	if err != nil {
 		return nil, err
 	}
@@ -190,7 +193,7 @@ func (cu *contentUseCase) CreateUploadArticle(ctx context.Context, req *cpb.Crea
 	}
 
 	// check private article
-	res, err = cu.articlePersistenceAdapter.GetPrivateArticlesByArticleURL(ctx, req.GetArticleUrl())
+	res, err = cu.articlePersistenceAdapter.GetPrivateArticlesByArticleURL(ctx, articleURL)
 	if err != nil {
 		return nil, err
 	}
