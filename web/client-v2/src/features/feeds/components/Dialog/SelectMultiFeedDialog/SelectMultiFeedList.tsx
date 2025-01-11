@@ -100,10 +100,13 @@ export const SelectMultiFeedList: FC<SelectMultiFeedListProps> = ({
 
   const handleKeywordSearch = useCallback(
     async (values: z.infer<typeof KeywordFormSchema>) => {
+      const keywordList = values.keyword
+        ? values.keyword.split(" ")
+        : undefined;
       const { data: resData, error: resError } = await fetchMore({
         variables: {
           input: {
-            keyword: values.keyword,
+            keywords: keywordList,
             platformSiteType: Number(
               platformSiteTypeForm.getValues("platformSiteType")
             ),
@@ -132,10 +135,12 @@ export const SelectMultiFeedList: FC<SelectMultiFeedListProps> = ({
 
   const handlePlatformTypeSearch = useCallback(
     async (value: string) => {
+      const inputKeyword = keywordForm.getValues("keyword");
+      const keywordList = inputKeyword ? inputKeyword.split(" ") : undefined;
       const { data: resData, error: resError } = await fetchMore({
         variables: {
           input: {
-            keyword: keywordForm.getValues("keyword"),
+            keywords: keywordList,
             platformSiteType: Number(value),
             first: SELECTABLE_FEED_LIST_LIMIT,
             after: null,
@@ -172,10 +177,12 @@ export const SelectMultiFeedList: FC<SelectMultiFeedListProps> = ({
 
   const loadMore = useCallback(async () => {
     if (!isNextPage) return;
+    const inputKeyword = keywordForm.getValues("keyword");
+    const keywordList = inputKeyword ? inputKeyword.split(" ") : undefined;
     const { data: resData, error: resError } = await fetchMore({
       variables: {
         input: {
-          keyword: keywordForm.getValues("keyword"),
+          keywords: keywordList,
           platformSiteType: Number(
             platformSiteTypeForm.watch("platformSiteType")
           ),
