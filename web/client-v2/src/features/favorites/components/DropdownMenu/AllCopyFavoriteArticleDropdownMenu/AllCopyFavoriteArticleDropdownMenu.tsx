@@ -16,13 +16,12 @@ import {
   TooltipContent,
 } from "@/shared/components/ui/tooltip";
 
-import { CopyFavoriteArticleDropdownMenuContent } from "./CopyFavoriteArticleDropdownMenuContent";
-import { CopyFavoriteArticleDropdownMenuContentFragment } from "./CopyFavoriteArticleDropdownMenuFragment";
+import { AllCopyFavoriteArticleDropdownMenuContent } from "./AllCopyFavoriteArticleDropdownMenuContent";
+import { AllCopyFavoriteArticleDropdownMenuContentFragment } from "./AllCopyFavoriteArticleDropdownMenuFragment";
 
-type CopyFavoriteArticleDropdownMenuProps = {
-  data: FragmentOf<typeof CopyFavoriteArticleDropdownMenuContentFragment>;
+type AllCopyFavoriteArticleDropdownMenuProps = {
+  data: FragmentOf<typeof AllCopyFavoriteArticleDropdownMenuContentFragment>;
   articleId: string;
-  targetFavoriteFolderId: string;
   onCreateFavoriteArticle: (
     targetFavoriteArticleFolderId: string
   ) => Promise<string | undefined>;
@@ -36,12 +35,11 @@ type CopyFavoriteArticleDropdownMenuProps = {
   ) => Promise<void>;
 };
 
-export const CopyFavoriteArticleDropdownMenu: FC<
-  CopyFavoriteArticleDropdownMenuProps
+export const AllCopyFavoriteArticleDropdownMenu: FC<
+  AllCopyFavoriteArticleDropdownMenuProps
 > = ({
   data,
   articleId,
-  targetFavoriteFolderId,
   onCreateFavoriteArticle,
   onRemoveFavoriteArticle,
   onCreateFavoriteArticleFolder,
@@ -66,10 +64,9 @@ export const CopyFavoriteArticleDropdownMenu: FC<
         </Tooltip>
       </TooltipProvider>
 
-      <CopyFavoriteArticleDropdownMenuContent
+      <AllCopyFavoriteArticleDropdownMenuContent
         data={data}
         articleId={articleId}
-        targetFavoriteFolderId={targetFavoriteFolderId}
         onCreateFavoriteArticle={onCreateFavoriteArticle}
         onRemoveFavoriteArticle={onRemoveFavoriteArticle}
         onCreateFavoriteArticleFolder={onCreateFavoriteArticleFolder}

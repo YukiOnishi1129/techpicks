@@ -13,18 +13,17 @@ import {
 } from "@/shared/components/ui/dropdown-menu";
 import { Input } from "@/shared/components/ui/input";
 
-import { CopyFavoriteArticleDropdownMenuContentFragment } from "./CopyFavoriteArticleDropdownMenuFragment";
-import { CopyTargetFavoriteArticleFolderItem } from "./CopyTargetFavoriteArticleFolderItem";
+import { AllCopyFavoriteArticleDropdownMenuContentFragment } from "./AllCopyFavoriteArticleDropdownMenuFragment";
 import { CreateFavoriteArticleFolderDialog } from "../../Dialog";
+import { CopyTargetFavoriteArticleFolderItem } from "../CopyFavoriteArticleDropdownMenu/CopyTargetFavoriteArticleFolderItem";
 
 const formSchema = z.object({
   keyword: z.string(),
 });
 
-type CopyFavoriteArticleDropdownMenuContentProps = {
-  data: FragmentOf<typeof CopyFavoriteArticleDropdownMenuContentFragment>;
+type AllCopyFavoriteArticleDropdownMenuContentProps = {
+  data: FragmentOf<typeof AllCopyFavoriteArticleDropdownMenuContentFragment>;
   articleId: string;
-  targetFavoriteFolderId: string;
   onCreateFavoriteArticle: (
     targetFavoriteArticleFolderId: string
   ) => Promise<string | undefined>;
@@ -38,12 +37,11 @@ type CopyFavoriteArticleDropdownMenuContentProps = {
   ) => Promise<void>;
 };
 
-export const CopyFavoriteArticleDropdownMenuContent: FC<
-  CopyFavoriteArticleDropdownMenuContentProps
+export const AllCopyFavoriteArticleDropdownMenuContent: FC<
+  AllCopyFavoriteArticleDropdownMenuContentProps
 > = ({
   data,
   articleId,
-  targetFavoriteFolderId,
   onCreateFavoriteArticle,
   onRemoveFavoriteArticle,
   onCreateFavoriteArticleFolder,
@@ -57,7 +55,7 @@ export const CopyFavoriteArticleDropdownMenuContent: FC<
   const searchKeyword = watch("keyword");
 
   const fragment = readFragment(
-    CopyFavoriteArticleDropdownMenuContentFragment,
+    AllCopyFavoriteArticleDropdownMenuContentFragment,
     data
   );
 
@@ -86,7 +84,6 @@ export const CopyFavoriteArticleDropdownMenuContent: FC<
       <DropdownMenuSeparator />
       <div className="max-h-[200px] overflow-y-auto overflow-x-hidden">
         {showFavoriteArticleFolders.map((folder) => {
-          if (folder.node.id === targetFavoriteFolderId) return;
           return (
             <CopyTargetFavoriteArticleFolderItem
               key={folder.node.id}
