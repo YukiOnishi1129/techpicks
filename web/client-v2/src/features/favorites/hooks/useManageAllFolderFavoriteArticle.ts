@@ -309,18 +309,6 @@ export const useManageAllFolderFavoriteArticle = ({
     ]
   );
 
-  //   const handleRemoveFavoriteArticleCard = useCallback(
-  //     async (favoriteArticleId: string) => {
-  //       const id = await handleRemoveFavoriteArticle(
-  //         favoriteArticleId,
-  //         fragment.favoriteArticleFolderId
-  //       );
-  //       if (!id) return;
-  //       return id;
-  //     },
-  //     [handleRemoveFavoriteArticle, fragment]
-  //   );
-
   return {
     handleCreateFavoriteArticle,
     handleCreateFavoriteArticleFolder,
