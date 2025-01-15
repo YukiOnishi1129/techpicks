@@ -6,15 +6,15 @@ import { FC, useMemo } from "react";
 import { Button } from "@/shared/components/ui/button";
 import { DropdownMenuSeparator } from "@/shared/components/ui/dropdown-menu";
 
-import { CopyTargetFavoriteArticleFolderItemFragment } from "./CopyFavoriteArticleDropdownMenuFragment";
+import { CopyTargetFavoriteArticleFolderItemFragment } from "./CopyTargetFavoriteArticleFolderItemFragment";
 
 type CopyTargetFavoriteArticleFolderItemProps = {
   data: FragmentOf<typeof CopyTargetFavoriteArticleFolderItemFragment>;
   articleId: string;
-  handleCreateFavoriteArticle: (
+  onCreateFavoriteArticle: (
     targetFavoriteArticleFolderId: string
   ) => Promise<string | undefined>;
-  handleRemoveFavoriteArticle: (
+  onRemoveFavoriteArticle: (
     favoriteArticleId: string,
     targetFavoriteArticleFolderId: string
   ) => Promise<string | undefined>;
@@ -22,12 +22,7 @@ type CopyTargetFavoriteArticleFolderItemProps = {
 
 export const CopyTargetFavoriteArticleFolderItem: FC<
   CopyTargetFavoriteArticleFolderItemProps
-> = ({
-  data,
-  articleId,
-  handleCreateFavoriteArticle,
-  handleRemoveFavoriteArticle,
-}) => {
+> = ({ data, articleId, onCreateFavoriteArticle, onRemoveFavoriteArticle }) => {
   const fragment = readFragment(
     CopyTargetFavoriteArticleFolderItemFragment,
     data
@@ -58,7 +53,7 @@ export const CopyTargetFavoriteArticleFolderItem: FC<
             size="sm"
             className="group relative border-emerald-500 bg-emerald-500 font-bold text-white hover:border-red-600 hover:text-red-600"
             onClick={() =>
-              handleRemoveFavoriteArticle(
+              onRemoveFavoriteArticle(
                 targetFavoriteArticleId || "",
                 fragment.id
               )
@@ -74,7 +69,7 @@ export const CopyTargetFavoriteArticleFolderItem: FC<
             variant="outline"
             size="sm"
             className="border-emerald-500 font-bold text-emerald-500 hover:text-emerald-600"
-            onClick={() => handleCreateFavoriteArticle(fragment.id)}
+            onClick={() => onCreateFavoriteArticle(fragment.id)}
           >
             {"COPY"}
           </Button>

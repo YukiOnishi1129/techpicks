@@ -10,6 +10,7 @@ import {
   BreadCrumbType,
   PageBreadcrumb,
 } from "@/shared/components/ui/breadcrumb";
+import { SHOW_ARTICLE_LIST_LIMIT } from "@/shared/constant/limit";
 import { PreloadQuery } from "@/shared/lib/apollo/client";
 import { SearchParamsType } from "@/shared/types/utils";
 
@@ -32,7 +33,7 @@ export const FavoriteArticleListByFolderIdTemplate: FC<
   FavoriteArticleListByFolderIdTemplateProps
 > = async ({ searchParams, id, keywordList }) => {
   const input: FavoriteArticlesInput = {
-    first: 20,
+    first: SHOW_ARTICLE_LIST_LIMIT,
     after: null,
     folderId: id,
     keywords: keywordList,
@@ -97,7 +98,11 @@ export const FavoriteArticleListByFolderIdTemplate: FC<
           key={JSON.stringify(searchParams)}
           fallback={<SkeltonArticleList />}
         >
-          <FavoriteArticleList folderId={id} keywordList={keywordList} />
+          <FavoriteArticleList
+            folderId={id}
+            keywordList={keywordList}
+            limit={SHOW_ARTICLE_LIST_LIMIT}
+          />
         </Suspense>
       </PreloadQuery>
 

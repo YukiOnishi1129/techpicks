@@ -114,7 +114,7 @@ export const FollowFavoriteArticleDropdownMenuContent: FC<
       </div>
       <DropdownMenuLabel>
         <CreateFavoriteArticleFolderDialog
-          handleCreateFavoriteArticleFolder={handleCreateFavoriteArticleFolder}
+          onCreateFavoriteArticleFolder={handleCreateFavoriteArticleFolder}
         />
       </DropdownMenuLabel>
     </DropdownMenuContent>
