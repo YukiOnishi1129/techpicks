@@ -23,6 +23,9 @@ export const AllFolderFavoriteArticleCardWrapperFragment = graphql(
         platformFaviconUrl
         ...UseManageAllFolderFavoriteArticleFragment
       }
+      favoriteArticleFolders {
+        id
+      }
       ...AllFolderFavoriteArticleCardItemFragment
     }
   `,

@@ -14,8 +14,8 @@ import {
 import { Input } from "@/shared/components/ui/input";
 
 import { AllCopyFavoriteArticleDropdownMenuContentFragment } from "./AllCopyFavoriteArticleDropdownMenuFragment";
+import { AllCopyTargetFavoriteArticleFolderItem } from "./AllCopyTargetFavoriteArticleFolderItem";
 import { CreateFavoriteArticleFolderDialog } from "../../Dialog";
-import { CopyTargetFavoriteArticleFolderItem } from "../CopyFavoriteArticleDropdownMenu/CopyTargetFavoriteArticleFolderItem";
 
 const formSchema = z.object({
   keyword: z.string(),
@@ -24,6 +24,8 @@ const formSchema = z.object({
 type AllCopyFavoriteArticleDropdownMenuContentProps = {
   data: FragmentOf<typeof AllCopyFavoriteArticleDropdownMenuContentFragment>;
   articleId: string;
+  articleTitle: string;
+  isLastIncludedFolder: boolean;
   onCreateFavoriteArticle: (
     targetFavoriteArticleFolderId: string
   ) => Promise<string | undefined>;
@@ -42,6 +44,8 @@ export const AllCopyFavoriteArticleDropdownMenuContent: FC<
 > = ({
   data,
   articleId,
+  articleTitle,
+  isLastIncludedFolder,
   onCreateFavoriteArticle,
   onRemoveFavoriteArticle,
   onCreateFavoriteArticleFolder,
@@ -85,10 +89,12 @@ export const AllCopyFavoriteArticleDropdownMenuContent: FC<
       <div className="max-h-[200px] overflow-y-auto overflow-x-hidden">
         {showFavoriteArticleFolders.map((folder) => {
           return (
-            <CopyTargetFavoriteArticleFolderItem
+            <AllCopyTargetFavoriteArticleFolderItem
               key={folder.node.id}
               data={folder.node}
               articleId={articleId}
+              articleTitle={articleTitle}
+              isLastIncludedFolder={isLastIncludedFolder}
               onCreateFavoriteArticle={onCreateFavoriteArticle}
               onRemoveFavoriteArticle={onRemoveFavoriteArticle}
             />

@@ -1,6 +1,6 @@
 "use client";
 import { FragmentOf, readFragment } from "gql.tada";
-import { FC } from "react";
+import { FC, useMemo } from "react";
 
 import { useManageAllFolderFavoriteArticle } from "@/features/favorites/hooks/useManageAllFolderFavoriteArticle";
 
@@ -42,6 +42,11 @@ export const AllFolderFavoriteArticleCardWrapper: FC<
     favoriteArticleFolders: fragmentFolders,
   });
 
+  const isLastIncludedFolder = useMemo(
+    () => fragment.favoriteArticleFolders.length === 1,
+    [fragment.favoriteArticleFolders]
+  );
+
   return (
     <div
       key={fragment.node.id}
@@ -64,6 +69,8 @@ export const AllFolderFavoriteArticleCardWrapper: FC<
             <AllCopyFavoriteArticleDropdownMenu
               data={fragmentFolders}
               articleId={fragment.node.articleId}
+              articleTitle={fragment.node.title}
+              isLastIncludedFolder={isLastIncludedFolder}
               onCreateFavoriteArticle={handleCreateFavoriteArticle}
               onRemoveFavoriteArticle={handleRemoveFavoriteArticle}
               onCreateFavoriteArticleFolder={handleCreateFavoriteArticleFolder}

@@ -1,6 +1,6 @@
 import { graphql } from "gql.tada";
 
-import { CopyTargetFavoriteArticleFolderItemFragment } from "../CopyFavoriteArticleDropdownMenu/CopyTargetFavoriteArticleFolderItemFragment";
+import { AllCopyTargetFavoriteArticleFolderItemFragment } from "./AllCopyTargetFavoriteArticleFolderItemFragment";
 
 export const AllCopyFavoriteArticleDropdownMenuContentFragment = graphql(
   `
@@ -9,10 +9,10 @@ export const AllCopyFavoriteArticleDropdownMenuContentFragment = graphql(
         node {
           id
           title
-          ...CopyTargetFavoriteArticleFolderItemFragment
+          ...AllCopyTargetFavoriteArticleFolderItemFragment
         }
       }
     }
   `,
-  [CopyTargetFavoriteArticleFolderItemFragment]
+  [AllCopyTargetFavoriteArticleFolderItemFragment]
 );

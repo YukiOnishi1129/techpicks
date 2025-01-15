@@ -22,6 +22,8 @@ import { AllCopyFavoriteArticleDropdownMenuContentFragment } from "./AllCopyFavo
 type AllCopyFavoriteArticleDropdownMenuProps = {
   data: FragmentOf<typeof AllCopyFavoriteArticleDropdownMenuContentFragment>;
   articleId: string;
+  articleTitle: string;
+  isLastIncludedFolder: boolean;
   onCreateFavoriteArticle: (
     targetFavoriteArticleFolderId: string
   ) => Promise<string | undefined>;
@@ -40,6 +42,8 @@ export const AllCopyFavoriteArticleDropdownMenu: FC<
 > = ({
   data,
   articleId,
+  articleTitle,
+  isLastIncludedFolder,
   onCreateFavoriteArticle,
   onRemoveFavoriteArticle,
   onCreateFavoriteArticleFolder,
@@ -67,6 +71,8 @@ export const AllCopyFavoriteArticleDropdownMenu: FC<
       <AllCopyFavoriteArticleDropdownMenuContent
         data={data}
         articleId={articleId}
+        articleTitle={articleTitle}
+        isLastIncludedFolder={isLastIncludedFolder}
         onCreateFavoriteArticle={onCreateFavoriteArticle}
         onRemoveFavoriteArticle={onRemoveFavoriteArticle}
         onCreateFavoriteArticleFolder={onCreateFavoriteArticleFolder}

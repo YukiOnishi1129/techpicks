@@ -809,6 +809,8 @@ export type SelectMultiFavoriteFolderListQueryQuery = { __typename?: 'Query', fa
 
 export type AllCopyFavoriteArticleDropdownMenuContentFragmentFragment = { __typename?: 'FavoriteArticleFolderConnection', edges: Array<{ __typename?: 'FavoriteArticleFolderEdge', node: { __typename?: 'FavoriteArticleFolder', id: string, title: string, favoriteArticles: Array<{ __typename?: 'FavoriteArticle', id: string, articleId: string }> } }> };
 
+export type AllCopyTargetFavoriteArticleFolderItemFragmentFragment = { __typename?: 'FavoriteArticleFolder', id: string, title: string, favoriteArticles: Array<{ __typename?: 'FavoriteArticle', id: string, articleId: string }> };
+
 export type CopyFavoriteArticleDropdownMenuContentFragmentFragment = { __typename?: 'FavoriteArticleFolderConnection', edges: Array<{ __typename?: 'FavoriteArticleFolderEdge', node: { __typename?: 'FavoriteArticleFolder', id: string, title: string, favoriteArticles: Array<{ __typename?: 'FavoriteArticle', id: string, articleId: string }> } }> };
 
 export type CopyTargetFavoriteArticleFolderItemFragmentFragment = { __typename?: 'FavoriteArticleFolder', id: string, title: string, favoriteArticles: Array<{ __typename?: 'FavoriteArticle', id: string, articleId: string }> };
@@ -1350,12 +1352,15 @@ export const AllFolderFavoriteArticleCardWrapperFragmentFragmentDoc = gql`
     platformFaviconUrl
     ...UseManageAllFolderFavoriteArticleFragment
   }
+  favoriteArticleFolders {
+    id
+  }
   ...AllFolderFavoriteArticleCardItemFragment
 }
     ${UseManageAllFolderFavoriteArticleFragmentFragmentDoc}
 ${AllFolderFavoriteArticleCardItemFragmentFragmentDoc}`;
-export const CopyTargetFavoriteArticleFolderItemFragmentFragmentDoc = gql`
-    fragment CopyTargetFavoriteArticleFolderItemFragment on FavoriteArticleFolder {
+export const AllCopyTargetFavoriteArticleFolderItemFragmentFragmentDoc = gql`
+    fragment AllCopyTargetFavoriteArticleFolderItemFragment on FavoriteArticleFolder {
   id
   title
   favoriteArticles {
@@ -1370,11 +1375,11 @@ export const AllCopyFavoriteArticleDropdownMenuContentFragmentFragmentDoc = gql`
     node {
       id
       title
-      ...CopyTargetFavoriteArticleFolderItemFragment
+      ...AllCopyTargetFavoriteArticleFolderItemFragment
     }
   }
 }
-    ${CopyTargetFavoriteArticleFolderItemFragmentFragmentDoc}`;
+    ${AllCopyTargetFavoriteArticleFolderItemFragmentFragmentDoc}`;
 export const FavoriteFolderUseManageAllFolderFavoriteArticleFragmentFragmentDoc = gql`
     fragment FavoriteFolderUseManageAllFolderFavoriteArticleFragment on FavoriteArticleFolderConnection {
   edges {
@@ -1477,6 +1482,16 @@ export const FavoriteArticleCardWrapperFragmentFragmentDoc = gql`
 }
     ${FavoriteArticleCardItemFragmentFragmentDoc}
 ${UseManageFavoriteArticleFragmentDoc}`;
+export const CopyTargetFavoriteArticleFolderItemFragmentFragmentDoc = gql`
+    fragment CopyTargetFavoriteArticleFolderItemFragment on FavoriteArticleFolder {
+  id
+  title
+  favoriteArticles {
+    id
+    articleId
+  }
+}
+    `;
 export const CopyFavoriteArticleDropdownMenuContentFragmentFragmentDoc = gql`
     fragment CopyFavoriteArticleDropdownMenuContentFragment on FavoriteArticleFolderConnection {
   edges {
