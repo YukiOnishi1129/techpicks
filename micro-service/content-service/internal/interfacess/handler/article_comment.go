@@ -8,11 +8,11 @@ import (
 )
 
 func (ch *contentHandler) UpsertArticleComment(ctx context.Context, req *cpb.UpsertArticleCommentRequest) (*cpb.UpsertArticleCommentResponse, error) {
-	// res, err := ch.contentUseCase.ListComment(ctx, req)
-	// if err != nil {
-	// 	return nil, err
-	// }
-	return nil, nil
+	res, err := ch.contentUseCase.UpsertArticleComment(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
 }
 
 func (ch *contentHandler) DeleteArticleComment(ctx context.Context, req *cpb.DeleteArticleCommentRequest) (*emptypb.Empty, error) {

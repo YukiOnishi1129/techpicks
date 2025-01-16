@@ -17,24 +17,30 @@ type ContentUseCase interface {
 
 	GetFeeds(ctx context.Context, req *cpb.GetFeedsRequest) (*cpb.GetFeedsResponse, error)
 	GetFeed(ctx context.Context, req *cpb.GetFeedRequest) (*cpb.GetFeedResponse, error)
+
+	UpsertArticleComment(ctx context.Context, req *cpb.UpsertArticleCommentRequest) (*cpb.UpsertArticleCommentResponse, error)
+	// DeleteArticleComment(ctx context.Context, req *cpb.DeleteArticleCommentRequest) (*cpb.DeleteArticleCommentResponse, error)
 }
 
 type contentUseCase struct {
-	articlePersistenceAdapter persistenceadapter.ArticlePersistenceAdapter
-	feedPersistenceAdapter    persistenceadapter.FeedPersistenceAdapter
-	bookmarkExternalAdapter   externaladapter.BookmarkExternalAdapter
-	favoriteExternalAdapter   externaladapter.FavoriteExternalAdapter
+	articlePersistenceAdapter        persistenceadapter.ArticlePersistenceAdapter
+	feedPersistenceAdapter           persistenceadapter.FeedPersistenceAdapter
+	articleCommentPersistenceAdapter persistenceadapter.ArticleCommentPersistenceAdapter
+	bookmarkExternalAdapter          externaladapter.BookmarkExternalAdapter
+	favoriteExternalAdapter          externaladapter.FavoriteExternalAdapter
 }
 
 func NewContentUseCase(
 	apa persistenceadapter.ArticlePersistenceAdapter,
 	fpa persistenceadapter.FeedPersistenceAdapter,
+	acpa persistenceadapter.ArticleCommentPersistenceAdapter,
 	bea externaladapter.BookmarkExternalAdapter,
 	fea externaladapter.FavoriteExternalAdapter) ContentUseCase {
 	return &contentUseCase{
-		articlePersistenceAdapter: apa,
-		feedPersistenceAdapter:    fpa,
-		bookmarkExternalAdapter:   bea,
-		favoriteExternalAdapter:   fea,
+		articlePersistenceAdapter:        apa,
+		feedPersistenceAdapter:           fpa,
+		articleCommentPersistenceAdapter: acpa,
+		bookmarkExternalAdapter:          bea,
+		favoriteExternalAdapter:          fea,
 	}
 }
