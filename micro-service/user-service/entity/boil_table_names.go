@@ -4,7 +4,9 @@
 package entity
 
 var TableNames = struct {
-	Profiles string
+	ArticleComments string
+	Profiles        string
 }{
-	Profiles: "profiles",
+	ArticleComments: "article_comments",
+	Profiles:        "profiles",
 }
