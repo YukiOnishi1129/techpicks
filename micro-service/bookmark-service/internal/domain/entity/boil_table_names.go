@@ -4,13 +4,15 @@
 package entity
 
 var TableNames = struct {
-	Articles  string
-	Bookmarks string
-	Platforms string
-	Profiles  string
+	ArticleComments string
+	Articles        string
+	Bookmarks       string
+	Platforms       string
+	Profiles        string
 }{
-	Articles:  "articles",
-	Bookmarks: "bookmarks",
-	Platforms: "platforms",
-	Profiles:  "profiles",
+	ArticleComments: "article_comments",
+	Articles:        "articles",
+	Bookmarks:       "bookmarks",
+	Platforms:       "platforms",
+	Profiles:        "profiles",
 }
