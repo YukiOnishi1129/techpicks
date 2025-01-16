@@ -6,8 +6,8 @@ import (
 	cpb "github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go/grpc/content"
 )
 
-func (ch *contentHandler) GetArticles(ctx context.Context, req *cpb.GetArticlesRequest) (*cpb.GetArticlesResponse, error) {
-	res, err := ch.contentUseCase.GetArticles(ctx, req)
+func (ch *contentHandler) ListArticle(ctx context.Context, req *cpb.ListArticleRequest) (*cpb.ListArticleResponse, error) {
+	res, err := ch.contentUseCase.ListArticle(ctx, req)
 	if err != nil {
 		return nil, err
 	}

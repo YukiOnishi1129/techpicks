@@ -15,7 +15,7 @@ import (
 )
 
 type ArticlePersistenceAdapter interface {
-	GetArticles(ctx context.Context, req *cpb.GetArticlesRequest, limit int) (entity.ArticleSlice, error)
+	ListArticle(ctx context.Context, req *cpb.ListArticleRequest, limit int) (entity.ArticleSlice, error)
 	GetArticlesByArticleURLAndPlatformURL(ctx context.Context, articleURL, platformURL string) (entity.ArticleSlice, error)
 	ListArticleByArticleURL(ctx context.Context, articleURL string, limit int) (entity.ArticleSlice, error)
 	GetPrivateArticlesByArticleURL(ctx context.Context, articleURL string) (entity.ArticleSlice, error)
@@ -33,7 +33,7 @@ func NewArticlePersistenceAdapter(ar repository.ArticleRepository) ArticlePersis
 	}
 }
 
-func (apa *articlePersistenceAdapter) GetArticles(ctx context.Context, req *cpb.GetArticlesRequest, limit int) (entity.ArticleSlice, error) {
+func (apa *articlePersistenceAdapter) ListArticle(ctx context.Context, req *cpb.ListArticleRequest, limit int) (entity.ArticleSlice, error) {
 	q := []qm.QueryMod{
 		qm.InnerJoin("platforms ON articles.platform_id = platforms.id"),
 		qm.LeftOuterJoin("feed_article_relations ON articles.id = feed_article_relations.article_id"),
@@ -107,7 +107,7 @@ func (apa *articlePersistenceAdapter) GetArticles(ctx context.Context, req *cpb.
 		q = append(q, qm.WhereIn("feed_article_relations.feed_id IN ?", qmWhere...))
 	}
 
-	articles, err := apa.articleRepository.GetArticles(ctx, q)
+	articles, err := apa.articleRepository.ListArticle(ctx, q)
 	if err != nil {
 		fmt.Printf("Error executing query: %v\n", err)
 		return nil, err
@@ -125,7 +125,7 @@ func (apa *articlePersistenceAdapter) GetArticlesByArticleURLAndPlatformURL(ctx 
 		qm.Where("articles.is_private = ?", false),
 	}
 
-	articles, err := apa.articleRepository.GetArticles(ctx, q)
+	articles, err := apa.articleRepository.ListArticle(ctx, q)
 	if err != nil {
 		return nil, err
 	}
@@ -141,7 +141,7 @@ func (apa *articlePersistenceAdapter) ListArticleByArticleURL(ctx context.Contex
 		qm.Limit(limit),
 	}
 
-	articles, err := apa.articleRepository.GetArticles(ctx, q)
+	articles, err := apa.articleRepository.ListArticle(ctx, q)
 	if err != nil {
 		fmt.Printf("Error executing query: %v\n", err)
 		return nil, err
@@ -156,7 +156,7 @@ func (apa *articlePersistenceAdapter) GetPrivateArticlesByArticleURL(ctx context
 		qm.Where("articles.is_private = ?", true),
 	}
 
-	articles, err := apa.articleRepository.GetArticles(ctx, q)
+	articles, err := apa.articleRepository.ListArticle(ctx, q)
 	if err != nil {
 		fmt.Printf("Error executing query: %v\n", err)
 		return nil, err

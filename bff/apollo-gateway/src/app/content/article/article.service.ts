@@ -1,5 +1,5 @@
 import {
-  GetArticlesRequest,
+  ListArticleRequest,
   GetArticleOGPRequest,
 } from '@checkpicks/checkpicks-rpc-ts/src/grpc/content/content_pb';
 import { Injectable } from '@nestjs/common';
@@ -26,7 +26,7 @@ export class ArticleService {
     userId: string,
     input: ArticlesInput,
   ): Promise<ArticleConnection> {
-    const req = new GetArticlesRequest();
+    const req = new ListArticleRequest();
     if (input?.first) req.setLimit(input.first);
     if (input?.after) req.setCursor(input.after);
     if (input?.keywords && input.keywords.length !== 0) {
@@ -51,7 +51,7 @@ export class ArticleService {
 
     return new Promise((resolve, reject) => {
       const client = this.grpcContentClientService.getGrpcContentService();
-      client.getArticles(req, (err, res) => {
+      client.listArticle(req, (err, res) => {
         if (err) {
           reject({
             code: err?.code || 500,
