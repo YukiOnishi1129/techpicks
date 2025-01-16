@@ -21,7 +21,7 @@ func NewArticlePersistence(db *sql.DB) repository.ArticleRepository {
 	}
 }
 
-func (ap *articlePersistence) GetArticles(ctx context.Context, q []qm.QueryMod) (entity.ArticleSlice, error) {
+func (ap *articlePersistence) ListArticle(ctx context.Context, q []qm.QueryMod) (entity.ArticleSlice, error) {
 	// boil.DebugMode = true
 	articles, err := entity.Articles(q...).All(ctx, ap.db)
 	if err != nil {
