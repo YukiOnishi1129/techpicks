@@ -16,9 +16,9 @@ func (ch *contentHandler) UpsertArticleComment(ctx context.Context, req *cpb.Ups
 }
 
 func (ch *contentHandler) DeleteArticleComment(ctx context.Context, req *cpb.DeleteArticleCommentRequest) (*emptypb.Empty, error) {
-	// res, err := ch.contentUseCase.ListComment(ctx, req)
-	// if err != nil {
-	// 	return nil, err
-	// }
-	return nil, nil
+	res, err := ch.contentUseCase.DeleteArticleComment(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
 }

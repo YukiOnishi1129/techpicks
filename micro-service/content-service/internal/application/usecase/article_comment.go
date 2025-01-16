@@ -6,6 +6,7 @@ import (
 	cpb "github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go/grpc/content"
 	persistenceadapter "github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/adapter/persistence_adapter"
 	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/domain/entity"
+	"google.golang.org/protobuf/types/known/emptypb"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
@@ -31,20 +32,18 @@ func (cu *contentUseCase) UpsertArticleComment(ctx context.Context, req *cpb.Ups
 	return res, nil
 }
 
-// func (cu *contentUseCase) DeleteArticleComment(ctx context.Context, req *cpb.DeleteArticleCommentRequest) (*cpb.DeleteArticleCommentResponse, error) {
-// 	input := persistenceadapter.DeleteArticleCommentAdapterInputDTO{
-// 		UserID: req.GetUserId(),
-// 		ID:     req.GetId(),
-// 	}
+func (cu *contentUseCase) DeleteArticleComment(ctx context.Context, req *cpb.DeleteArticleCommentRequest) (*emptypb.Empty, error) {
+	input := persistenceadapter.DeleteArticleCommentAdapterInputDTO{
+		UserID: req.GetUserId(),
+		ID:     req.GetId(),
+	}
 
-// 	err := cu.articleCommentPersistenceAdapter.DeleteArticleComment(ctx, input)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-
-// 	res := &cpb.DeleteArticleCommentResponse{}
-// 	return res, nil
-// }
+	err := cu.articleCommentPersistenceAdapter.DeleteArticleComment(ctx, input)
+	if err != nil {
+		return nil, err
+	}
+	return &emptypb.Empty{}, nil
+}
 
 func (cu *contentUseCase) convertPBComment(ac *entity.ArticleComment) *cpb.ArticleComment {
 	return &cpb.ArticleComment{
