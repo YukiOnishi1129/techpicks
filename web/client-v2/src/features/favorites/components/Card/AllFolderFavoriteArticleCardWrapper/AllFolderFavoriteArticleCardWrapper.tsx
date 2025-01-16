@@ -1,6 +1,8 @@
 "use client";
 import { FragmentOf, readFragment } from "gql.tada";
-import { FC } from "react";
+import { FC, useMemo } from "react";
+
+import { useManageAllFolderFavoriteArticle } from "@/features/favorites/hooks/useManageAllFolderFavoriteArticle";
 
 import { IconTitleLink } from "@/shared/components/ui/link/IconTitleLink";
 import { ShareLinks } from "@/shared/components/ui/share";
@@ -9,6 +11,7 @@ import {
   AllFolderFavoriteArticleCardWrapperFragment,
   FavoriteFolderAllFolderArticleCardWrapperFragment,
 } from "./AllFolderFavoriteArticleCardWrapperFragment";
+import { AllCopyFavoriteArticleDropdownMenu } from "../../DropdownMenu";
 import { AllFolderFavoriteArticleCardItem } from "../AllFolderFavoriteArticleCardItem";
 
 type AllFolderFavoriteArticleCardWrapperProps = {
@@ -25,9 +28,23 @@ export const AllFolderFavoriteArticleCardWrapper: FC<
     AllFolderFavoriteArticleCardWrapperFragment,
     data
   );
-  const foldersFragment = readFragment(
+  const fragmentFolders = readFragment(
     FavoriteFolderAllFolderArticleCardWrapperFragment,
     favoriteArticleFolders
+  );
+
+  const {
+    handleCreateFavoriteArticle,
+    handleRemoveFavoriteArticle,
+    handleCreateFavoriteArticleFolder,
+  } = useManageAllFolderFavoriteArticle({
+    data: fragment.node,
+    favoriteArticleFolders: fragmentFolders,
+  });
+
+  const isLastIncludedFolder = useMemo(
+    () => fragment.favoriteArticleFolders.length === 1,
+    [fragment.favoriteArticleFolders]
   );
 
   return (
@@ -49,16 +66,15 @@ export const AllFolderFavoriteArticleCardWrapper: FC<
               shareTitle={fragment.node.title}
               shareUrl={fragment.node.articleUrl}
             />
-            {/* <CopyFavoriteArticleDropdownMenu
-                data={showFavoriteArticleFolders}
-                articleId={fragment.articleId}
-                targetFavoriteFolderId={fragment.favoriteArticleFolderId}
-                handleCreateFavoriteArticle={handleCreateFavoriteArticle}
-                handleRemoveFavoriteArticle={handleRemoveFavoriteArticle}
-                handleCreateFavoriteArticleFolder={
-                  handleCreateFavoriteArticleFolder
-                }
-              /> */}
+            <AllCopyFavoriteArticleDropdownMenu
+              data={fragmentFolders}
+              articleId={fragment.node.articleId}
+              articleTitle={fragment.node.title}
+              isLastIncludedFolder={isLastIncludedFolder}
+              onCreateFavoriteArticle={handleCreateFavoriteArticle}
+              onRemoveFavoriteArticle={handleRemoveFavoriteArticle}
+              onCreateFavoriteArticleFolder={handleCreateFavoriteArticleFolder}
+            />
           </div>
         </div>
 

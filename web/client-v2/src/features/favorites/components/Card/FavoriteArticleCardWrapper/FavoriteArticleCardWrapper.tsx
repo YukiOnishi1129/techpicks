@@ -69,9 +69,9 @@ export const FavoriteArticleCardWrapper: FC<
                 data={fragmentFavoriteFolders}
                 articleId={fragment.articleId}
                 targetFavoriteFolderId={fragment.favoriteArticleFolderId}
-                handleCreateFavoriteArticle={handleCreateFavoriteArticle}
-                handleRemoveFavoriteArticle={handleRemoveFavoriteArticle}
-                handleCreateFavoriteArticleFolder={
+                onCreateFavoriteArticle={handleCreateFavoriteArticle}
+                onRemoveFavoriteArticle={handleRemoveFavoriteArticle}
+                onCreateFavoriteArticleFolder={
                   handleCreateFavoriteArticleFolder
                 }
               />

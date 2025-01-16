@@ -11,11 +11,12 @@ import { AllFolderFavoriteArticleListTemplateQuery } from "../../Template/AllFol
 
 type AllFolderFavoriteArticleListFragmentProps = {
   keywordList: Array<string>;
+  limit: number;
 };
 
 export const AllFolderFavoriteArticleList: FC<
   AllFolderFavoriteArticleListFragmentProps
-> = ({ keywordList }) => {
+> = ({ keywordList, limit }) => {
   const observerTarget = useRef(null);
 
   const { data: resSuspenseData, error } = useSuspenseQuery(
@@ -23,7 +24,7 @@ export const AllFolderFavoriteArticleList: FC<
     {
       variables: {
         favoriteAllFolderArticlesInput: {
-          first: 20,
+          first: limit,
           after: null,
           keywords: keywordList,
         },
@@ -43,7 +44,7 @@ export const AllFolderFavoriteArticleList: FC<
   } = useQuery(AllFolderFavoriteArticleListQuery, {
     variables: {
       input: {
-        first: 20,
+        first: limit,
         after: null,
         keywords: keywordList,
       },
@@ -64,7 +65,7 @@ export const AllFolderFavoriteArticleList: FC<
     const { data: resData, error: resError } = await fetchMore({
       variables: {
         input: {
-          first: 20,
+          first: limit,
           after: endCursor,
           keywords: keywordList,
         },
@@ -94,7 +95,7 @@ export const AllFolderFavoriteArticleList: FC<
       setIsNextPage(false);
 
     setHashMore(resData.favoriteAllFolderArticles.edges.length > 0);
-  }, [endCursor, isNextPage, keywordList, fetchMore]);
+  }, [endCursor, isNextPage, keywordList, fetchMore, limit]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(

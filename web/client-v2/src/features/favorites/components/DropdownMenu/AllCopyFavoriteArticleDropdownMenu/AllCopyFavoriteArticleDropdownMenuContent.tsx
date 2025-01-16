@@ -13,18 +13,19 @@ import {
 } from "@/shared/components/ui/dropdown-menu";
 import { Input } from "@/shared/components/ui/input";
 
-import { CopyFavoriteArticleDropdownMenuContentFragment } from "./CopyFavoriteArticleDropdownMenuFragment";
-import { CopyTargetFavoriteArticleFolderItem } from "./CopyTargetFavoriteArticleFolderItem";
+import { AllCopyFavoriteArticleDropdownMenuContentFragment } from "./AllCopyFavoriteArticleDropdownMenuFragment";
+import { AllCopyTargetFavoriteArticleFolderItem } from "./AllCopyTargetFavoriteArticleFolderItem";
 import { CreateFavoriteArticleFolderDialog } from "../../Dialog";
 
 const formSchema = z.object({
   keyword: z.string(),
 });
 
-type CopyFavoriteArticleDropdownMenuContentProps = {
-  data: FragmentOf<typeof CopyFavoriteArticleDropdownMenuContentFragment>;
+type AllCopyFavoriteArticleDropdownMenuContentProps = {
+  data: FragmentOf<typeof AllCopyFavoriteArticleDropdownMenuContentFragment>;
   articleId: string;
-  targetFavoriteFolderId: string;
+  articleTitle: string;
+  isLastIncludedFolder: boolean;
   onCreateFavoriteArticle: (
     targetFavoriteArticleFolderId: string
   ) => Promise<string | undefined>;
@@ -38,12 +39,13 @@ type CopyFavoriteArticleDropdownMenuContentProps = {
   ) => Promise<void>;
 };
 
-export const CopyFavoriteArticleDropdownMenuContent: FC<
-  CopyFavoriteArticleDropdownMenuContentProps
+export const AllCopyFavoriteArticleDropdownMenuContent: FC<
+  AllCopyFavoriteArticleDropdownMenuContentProps
 > = ({
   data,
   articleId,
-  targetFavoriteFolderId,
+  articleTitle,
+  isLastIncludedFolder,
   onCreateFavoriteArticle,
   onRemoveFavoriteArticle,
   onCreateFavoriteArticleFolder,
@@ -57,7 +59,7 @@ export const CopyFavoriteArticleDropdownMenuContent: FC<
   const searchKeyword = watch("keyword");
 
   const fragment = readFragment(
-    CopyFavoriteArticleDropdownMenuContentFragment,
+    AllCopyFavoriteArticleDropdownMenuContentFragment,
     data
   );
 
@@ -86,12 +88,13 @@ export const CopyFavoriteArticleDropdownMenuContent: FC<
       <DropdownMenuSeparator />
       <div className="max-h-[200px] overflow-y-auto overflow-x-hidden">
         {showFavoriteArticleFolders.map((folder) => {
-          if (folder.node.id === targetFavoriteFolderId) return;
           return (
-            <CopyTargetFavoriteArticleFolderItem
+            <AllCopyTargetFavoriteArticleFolderItem
               key={folder.node.id}
               data={folder.node}
               articleId={articleId}
+              articleTitle={articleTitle}
+              isLastIncludedFolder={isLastIncludedFolder}
               onCreateFavoriteArticle={onCreateFavoriteArticle}
               onRemoveFavoriteArticle={onRemoveFavoriteArticle}
             />

@@ -17,7 +17,7 @@ type CreateFavoriteArticleFolderDialogProps = {
     | "ghost"
     | "link";
   buttonSize?: number;
-  handleCreateFavoriteArticleFolder?: (
+  onCreateFavoriteArticleFolder?: (
     favoriteArticleFolderId: string,
     title: string
   ) => Promise<void>;
@@ -25,7 +25,7 @@ type CreateFavoriteArticleFolderDialogProps = {
 
 export const CreateFavoriteArticleFolderDialog: FC<
   CreateFavoriteArticleFolderDialogProps
-> = ({ buttonVariant, buttonSize = 24, handleCreateFavoriteArticleFolder }) => {
+> = ({ buttonVariant, buttonSize = 24, onCreateFavoriteArticleFolder }) => {
   const [open, setOpen] = useState(false);
 
   const handleCloseDialog = useCallback(() => {
@@ -43,7 +43,7 @@ export const CreateFavoriteArticleFolderDialog: FC<
       {open && (
         <CreateFavoriteArticleFolderDialogContent
           onCloseDialog={handleCloseDialog}
-          onCreateFavoriteArticleFolder={handleCreateFavoriteArticleFolder}
+          onCreateFavoriteArticleFolder={onCreateFavoriteArticleFolder}
         />
       )}
     </Dialog>

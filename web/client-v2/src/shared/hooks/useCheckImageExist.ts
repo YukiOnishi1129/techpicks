@@ -1,11 +1,11 @@
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 const NO_IMAGE_URL = "/no_image.png";
 
 export const useCheckImageExist = (src?: string) => {
   const [result, setResult] = useState(true);
 
-  const checkImagePath = () => {
+  const checkImagePath = useCallback(() => {
     return new Promise(function (resolve, reject) {
       if (!src) {
         return NO_IMAGE_URL;
@@ -19,15 +19,17 @@ export const useCheckImageExist = (src?: string) => {
         reject(NO_IMAGE_URL);
       };
     });
-  };
+  }, [src]);
 
-  checkImagePath()
-    .then(() => {
-      setResult(true);
-    })
-    .catch(() => {
-      setResult(false);
-    });
+  useEffect(() => {
+    checkImagePath()
+      .then(() => {
+        setResult(true);
+      })
+      .catch(() => {
+        setResult(false);
+      });
+  }, [checkImagePath]);
 
   if (src === "") return NO_IMAGE_URL;
 
