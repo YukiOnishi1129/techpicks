@@ -26,6 +26,7 @@ import (
 func Test_UpsertArticleComment(t *testing.T) {
 	t.Parallel()
 
+	articleCommentID1, _ := uuid.NewRandom()
 	articleID, _ := uuid.NewRandom()
 	publishedAt := time.Now().Add(-time.Hour * 24 * 7).Unix()
 	mockPlatforms := mock.GetPlatformMock()
@@ -33,10 +34,11 @@ func Test_UpsertArticleComment(t *testing.T) {
 	userId1 := mockProfiles[0].ID
 
 	test := map[string]struct {
-		recordArticles []entity.Article
-		arg            *cpb.UpsertArticleCommentRequest
-		want           *cpb.UpsertArticleCommentResponse
-		wantErrMsg     string
+		recordArticles        []entity.Article
+		recordArticleComments []entity.ArticleComment
+		arg                   *cpb.UpsertArticleCommentRequest
+		want                  *cpb.UpsertArticleCommentResponse
+		wantErrMsg            string
 	}{
 		"succeed to inset article comment": {
 			recordArticles: []entity.Article{
@@ -66,6 +68,46 @@ func Test_UpsertArticleComment(t *testing.T) {
 					UserId:    userId1,
 					ArticleId: articleID.String(),
 					Comment:   "test comment",
+				},
+			},
+		},
+		"succeed to update article comment": {
+			recordArticles: []entity.Article{
+				{
+					ID: articleID.String(),
+					PlatformID: null.String{
+						Valid:  true,
+						String: mockPlatforms[0].ID,
+					},
+					Title:        "test title1",
+					Description:  "test description1",
+					ArticleURL:   "https://test.com/article1",
+					PublishedAt:  null.TimeFrom(time.Unix(publishedAt, 0)),
+					ThumbnailURL: "https://test.com/article1/thumbnail",
+					IsEng:        true,
+					IsPrivate:    false,
+				},
+			},
+			recordArticleComments: []entity.ArticleComment{
+				{
+					ID:        articleCommentID1.String(),
+					UserID:    userId1,
+					ArticleID: articleID.String(),
+					Comment:   "test comment",
+				},
+			},
+			arg: &cpb.UpsertArticleCommentRequest{
+				Id:        wrapperspb.String(articleCommentID1.String()),
+				UserId:    userId1,
+				ArticleId: articleID.String(),
+				Comment:   "test comment1111",
+			},
+			want: &cpb.UpsertArticleCommentResponse{
+				Comment: &cpb.ArticleComment{
+					// Id:        articleCommentID1.String(),
+					UserId:    userId1,
+					ArticleId: articleID.String(),
+					Comment:   "test comment1111",
 				},
 			},
 		},
@@ -121,6 +163,15 @@ func Test_UpsertArticleComment(t *testing.T) {
 					err = v.Insert(ctx, db, boil.Infer())
 					if err != nil {
 						t.Fatalf("Failed to insert article: %s", err)
+					}
+				}
+			}
+
+			if tt.recordArticleComments != nil {
+				for _, v := range tt.recordArticleComments {
+					err = v.Insert(ctx, db, boil.Infer())
+					if err != nil {
+						t.Fatalf("Failed to insert article comment: %s", err)
 					}
 				}
 			}

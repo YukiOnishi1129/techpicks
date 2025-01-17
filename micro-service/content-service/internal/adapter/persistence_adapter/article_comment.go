@@ -37,8 +37,6 @@ func (ap *articleCommentPersistenceAdapter) UpsertArticleComment(ctx context.Con
 			return nil, err
 		}
 	} else {
-		println("🔥")
-		println(articleComment.UserID)
 		acID, _ := uuid.NewUUID()
 		articleComment.ID = acID.String()
 		if err := ap.articleCommentRepository.CreateArticleComment(ctx, articleComment); err != nil {
