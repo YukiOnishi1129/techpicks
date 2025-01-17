@@ -23,7 +23,7 @@ export const DeleteBookmarkTooltip: FC<DeleteBookmarkTooltipProps> = ({
       <Tooltip>
         <TooltipTrigger onClick={() => handleRemoveBookmark(bookmarkId)}>
           <IconContext.Provider value={{ className: "hover:text-rose-900" }}>
-            <FcBookmark className="inline-block" size={36} />
+            <FcBookmark className="inline-block" size={18} />
           </IconContext.Provider>
         </TooltipTrigger>
         <TooltipContent>

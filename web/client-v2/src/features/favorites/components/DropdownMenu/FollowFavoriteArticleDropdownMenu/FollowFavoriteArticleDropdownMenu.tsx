@@ -58,13 +58,13 @@ export const FollowFavoriteArticleDropdownMenu: FC<
                 <IconContext.Provider
                   value={{ className: "hover:text-rose-900" }}
                 >
-                  <FaHeart size={30} className="cursor-pointer" color="red" />
+                  <FaHeart size={18} className="cursor-pointer" color="red" />
                 </IconContext.Provider>
               ) : (
                 <IconContext.Provider
                   value={{ className: "hover:text-rose-600" }}
                 >
-                  <FaRegHeart size={30} className="cursor-pointer" />
+                  <FaRegHeart size={18} className="cursor-pointer" />
                 </IconContext.Provider>
               )}
             </TooltipTrigger>
