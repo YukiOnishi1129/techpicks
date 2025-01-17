@@ -1,0 +1,14 @@
+type Mutation {
+	upsertArticleComment(input: UpsertArticleCommentInput!): ArticleComment!
+	deleteArticleComment(input: DeleteArticleCommentInput!): Boolean!
+}
+
+input UpsertArticleCommentInput {
+	articleCommentId: ID
+	articleId: ID!
+	comment: String!
+}
+
+input DeleteArticleCommentInput {
+	articleCommentId: ID!
+}

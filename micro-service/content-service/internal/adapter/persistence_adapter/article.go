@@ -41,7 +41,7 @@ func (apa *articlePersistenceAdapter) ListArticle(ctx context.Context, req *cpb.
 		qm.Where("feeds.deleted_at IS NULL"),
 		qm.InnerJoin("platforms as feed_platforms ON feeds.platform_id = feed_platforms.id"),
 		qm.InnerJoin("categories as feed_categories ON feeds.category_id = feed_categories.id"),
-		qm.LeftOuterJoin("article_comments on article.id = article_comments.article_id"),
+		qm.LeftOuterJoin("article_comments on articles.id = article_comments.article_id"),
 		qm.Load(qm.Rels(entity.ArticleRels.Platform)),
 		qm.Load(qm.Rels(entity.ArticleRels.FeedArticleRelations)),
 		qm.Load(qm.Rels(
