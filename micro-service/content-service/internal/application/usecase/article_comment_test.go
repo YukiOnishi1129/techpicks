@@ -31,7 +31,7 @@ func Test_UpsertArticleComment(t *testing.T) {
 	publishedAt := time.Now().Add(-time.Hour * 24 * 7).Unix()
 	mockPlatforms := mock.GetPlatformMock()
 	mockProfiles := mock.GetProfileMock()
-	userId1 := mockProfiles[0].ID
+	userID1 := mockProfiles[0].ID
 
 	test := map[string]struct {
 		recordArticles        []entity.Article
@@ -58,14 +58,14 @@ func Test_UpsertArticleComment(t *testing.T) {
 				},
 			},
 			arg: &cpb.UpsertArticleCommentRequest{
-				UserId:    userId1,
+				UserId:    userID1,
 				ArticleId: articleID.String(),
 				Comment:   "test comment",
 			},
 			want: &cpb.UpsertArticleCommentResponse{
 				Comment: &cpb.ArticleComment{
 					// Id:        "test_article_comment_id",
-					UserId:    userId1,
+					UserId:    userID1,
 					ArticleId: articleID.String(),
 					Comment:   "test comment",
 				},
@@ -91,21 +91,21 @@ func Test_UpsertArticleComment(t *testing.T) {
 			recordArticleComments: []entity.ArticleComment{
 				{
 					ID:        articleCommentID1.String(),
-					UserID:    userId1,
+					UserID:    userID1,
 					ArticleID: articleID.String(),
 					Comment:   "test comment",
 				},
 			},
 			arg: &cpb.UpsertArticleCommentRequest{
 				Id:        wrapperspb.String(articleCommentID1.String()),
-				UserId:    userId1,
+				UserId:    userID1,
 				ArticleId: articleID.String(),
 				Comment:   "test comment1111",
 			},
 			want: &cpb.UpsertArticleCommentResponse{
 				Comment: &cpb.ArticleComment{
 					// Id:        articleCommentID1.String(),
-					UserId:    userId1,
+					UserId:    userID1,
 					ArticleId: articleID.String(),
 					Comment:   "test comment1111",
 				},
@@ -130,14 +130,14 @@ func Test_UpsertArticleComment(t *testing.T) {
 			},
 			arg: &cpb.UpsertArticleCommentRequest{
 				Id:        wrapperspb.String(articleCommentID1.String()),
-				UserId:    userId1,
+				UserId:    userID1,
 				ArticleId: articleID.String(),
 				Comment:   "test comment",
 			},
 			want: &cpb.UpsertArticleCommentResponse{
 				Comment: &cpb.ArticleComment{
 					// Id:        "test_article_comment_id",
-					UserId:    userId1,
+					UserId:    userID1,
 					ArticleId: articleID.String(),
 					Comment:   "test comment",
 				},
