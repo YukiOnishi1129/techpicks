@@ -41,6 +41,7 @@ func (apa *articlePersistenceAdapter) ListArticle(ctx context.Context, req *cpb.
 		qm.Where("feeds.deleted_at IS NULL"),
 		qm.InnerJoin("platforms as feed_platforms ON feeds.platform_id = feed_platforms.id"),
 		qm.InnerJoin("categories as feed_categories ON feeds.category_id = feed_categories.id"),
+		qm.LeftOuterJoin("article_comments on article.id = article_comments.article_id"),
 		qm.Load(qm.Rels(entity.ArticleRels.Platform)),
 		qm.Load(qm.Rels(entity.ArticleRels.FeedArticleRelations)),
 		qm.Load(qm.Rels(
@@ -49,6 +50,7 @@ func (apa *articlePersistenceAdapter) ListArticle(ctx context.Context, req *cpb.
 		)),
 		qm.Load("FeedArticleRelations.Feed.Category"),
 		qm.Load("FeedArticleRelations.Feed.Platform"),
+		qm.Load(qm.Rels(entity.ArticleRels.ArticleComments)),
 		qm.Where("articles.is_private = ?", false),
 		qm.GroupBy("articles.id"),
 		qm.Limit(limit),

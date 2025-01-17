@@ -174,6 +174,17 @@ func (cu *contentUseCase) convertPBArticle(a entity.Article) *cpb.Article {
 	if a.R != nil && a.R.Platform != nil {
 		article.Platform = cu.convertPBPlatform(*a.R.Platform)
 	}
+	if a.R != nil && a.R.ArticleComments != nil && len(a.R.ArticleComments) > 0 {
+		ac := a.R.ArticleComments[0]
+		article.Comment = &cpb.ArticleComment{
+			Id:        ac.ID,
+			UserId:    ac.UserID,
+			ArticleId: ac.ArticleID,
+			Comment:   ac.Comment,
+			CreatedAt: timestamppb.New(ac.CreatedAt),
+			UpdatedAt: timestamppb.New(ac.UpdatedAt),
+		}
+	}
 	return article
 }
 

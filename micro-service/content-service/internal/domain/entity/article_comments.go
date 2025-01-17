@@ -135,13 +135,16 @@ var ArticleCommentWhere = struct {
 // ArticleCommentRels is where relationship names are stored.
 var ArticleCommentRels = struct {
 	Article string
+	User    string
 }{
 	Article: "Article",
+	User:    "User",
 }
 
 // articleCommentR is where relationships are stored.
 type articleCommentR struct {
 	Article *Article `boil:"Article" json:"Article" toml:"Article" yaml:"Article"`
+	User    *Profile `boil:"User" json:"User" toml:"User" yaml:"User"`
 }
 
 // NewStruct creates a new relationship struct
@@ -154,6 +157,13 @@ func (r *articleCommentR) GetArticle() *Article {
 		return nil
 	}
 	return r.Article
+}
+
+func (r *articleCommentR) GetUser() *Profile {
+	if r == nil {
+		return nil
+	}
+	return r.User
 }
 
 // articleCommentL is where Load methods for each relationship are stored.
@@ -483,6 +493,17 @@ func (o *ArticleComment) Article(mods ...qm.QueryMod) articleQuery {
 	return Articles(queryMods...)
 }
 
+// User pointed to by the foreign key.
+func (o *ArticleComment) User(mods ...qm.QueryMod) profileQuery {
+	queryMods := []qm.QueryMod{
+		qm.Where("\"id\" = ?", o.UserID),
+	}
+
+	queryMods = append(queryMods, mods...)
+
+	return Profiles(queryMods...)
+}
+
 // LoadArticle allows an eager lookup of values, cached into the
 // loaded structs of the objects. This is for an N-1 relationship.
 func (articleCommentL) LoadArticle(ctx context.Context, e boil.ContextExecutor, singular bool, maybeArticleComment interface{}, mods queries.Applicator) error {
@@ -603,6 +624,126 @@ func (articleCommentL) LoadArticle(ctx context.Context, e boil.ContextExecutor, 
 	return nil
 }
 
+// LoadUser allows an eager lookup of values, cached into the
+// loaded structs of the objects. This is for an N-1 relationship.
+func (articleCommentL) LoadUser(ctx context.Context, e boil.ContextExecutor, singular bool, maybeArticleComment interface{}, mods queries.Applicator) error {
+	var slice []*ArticleComment
+	var object *ArticleComment
+
+	if singular {
+		var ok bool
+		object, ok = maybeArticleComment.(*ArticleComment)
+		if !ok {
+			object = new(ArticleComment)
+			ok = queries.SetFromEmbeddedStruct(&object, &maybeArticleComment)
+			if !ok {
+				return errors.New(fmt.Sprintf("failed to set %T from embedded struct %T", object, maybeArticleComment))
+			}
+		}
+	} else {
+		s, ok := maybeArticleComment.(*[]*ArticleComment)
+		if ok {
+			slice = *s
+		} else {
+			ok = queries.SetFromEmbeddedStruct(&slice, maybeArticleComment)
+			if !ok {
+				return errors.New(fmt.Sprintf("failed to set %T from embedded struct %T", slice, maybeArticleComment))
+			}
+		}
+	}
+
+	args := make(map[interface{}]struct{})
+	if singular {
+		if object.R == nil {
+			object.R = &articleCommentR{}
+		}
+		args[object.UserID] = struct{}{}
+
+	} else {
+		for _, obj := range slice {
+			if obj.R == nil {
+				obj.R = &articleCommentR{}
+			}
+
+			args[obj.UserID] = struct{}{}
+
+		}
+	}
+
+	if len(args) == 0 {
+		return nil
+	}
+
+	argsSlice := make([]interface{}, len(args))
+	i := 0
+	for arg := range args {
+		argsSlice[i] = arg
+		i++
+	}
+
+	query := NewQuery(
+		qm.From(`profiles`),
+		qm.WhereIn(`profiles.id in ?`, argsSlice...),
+	)
+	if mods != nil {
+		mods.Apply(query)
+	}
+
+	results, err := query.QueryContext(ctx, e)
+	if err != nil {
+		return errors.Wrap(err, "failed to eager load Profile")
+	}
+
+	var resultSlice []*Profile
+	if err = queries.Bind(results, &resultSlice); err != nil {
+		return errors.Wrap(err, "failed to bind eager loaded slice Profile")
+	}
+
+	if err = results.Close(); err != nil {
+		return errors.Wrap(err, "failed to close results of eager load for profiles")
+	}
+	if err = results.Err(); err != nil {
+		return errors.Wrap(err, "error occurred during iteration of eager loaded relations for profiles")
+	}
+
+	if len(profileAfterSelectHooks) != 0 {
+		for _, obj := range resultSlice {
+			if err := obj.doAfterSelectHooks(ctx, e); err != nil {
+				return err
+			}
+		}
+	}
+
+	if len(resultSlice) == 0 {
+		return nil
+	}
+
+	if singular {
+		foreign := resultSlice[0]
+		object.R.User = foreign
+		if foreign.R == nil {
+			foreign.R = &profileR{}
+		}
+		foreign.R.UserArticleComments = append(foreign.R.UserArticleComments, object)
+		return nil
+	}
+
+	for _, local := range slice {
+		for _, foreign := range resultSlice {
+			if local.UserID == foreign.ID {
+				local.R.User = foreign
+				if foreign.R == nil {
+					foreign.R = &profileR{}
+				}
+				foreign.R.UserArticleComments = append(foreign.R.UserArticleComments, local)
+				break
+			}
+		}
+	}
+
+	return nil
+}
+
 // SetArticle of the articleComment to the related item.
 // Sets o.R.Article to related.
 // Adds o to related.R.ArticleComments.
@@ -645,6 +786,53 @@ func (o *ArticleComment) SetArticle(ctx context.Context, exec boil.ContextExecut
 		}
 	} else {
 		related.R.ArticleComments = append(related.R.ArticleComments, o)
+	}
+
+	return nil
+}
+
+// SetUser of the articleComment to the related item.
+// Sets o.R.User to related.
+// Adds o to related.R.UserArticleComments.
+func (o *ArticleComment) SetUser(ctx context.Context, exec boil.ContextExecutor, insert bool, related *Profile) error {
+	var err error
+	if insert {
+		if err = related.Insert(ctx, exec, boil.Infer()); err != nil {
+			return errors.Wrap(err, "failed to insert into foreign table")
+		}
+	}
+
+	updateQuery := fmt.Sprintf(
+		"UPDATE \"article_comments\" SET %s WHERE %s",
+		strmangle.SetParamNames("\"", "\"", 1, []string{"user_id"}),
+		strmangle.WhereClause("\"", "\"", 2, articleCommentPrimaryKeyColumns),
+	)
+	values := []interface{}{related.ID, o.ID}
+
+	if boil.IsDebug(ctx) {
+		writer := boil.DebugWriterFrom(ctx)
+		fmt.Fprintln(writer, updateQuery)
+		fmt.Fprintln(writer, values)
+	}
+	if _, err = exec.ExecContext(ctx, updateQuery, values...); err != nil {
+		return errors.Wrap(err, "failed to update local table")
+	}
+
+	o.UserID = related.ID
+	if o.R == nil {
+		o.R = &articleCommentR{
+			User: related,
+		}
+	} else {
+		o.R.User = related
+	}
+
+	if related.R == nil {
+		related.R = &profileR{
+			UserArticleComments: ArticleCommentSlice{o},
+		}
+	} else {
+		related.R.UserArticleComments = append(related.R.UserArticleComments, o)
 	}
 
 	return nil

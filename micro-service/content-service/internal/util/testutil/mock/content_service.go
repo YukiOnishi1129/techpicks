@@ -11,6 +11,7 @@ import (
 	content "github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go/grpc/content"
 	gomock "github.com/golang/mock/gomock"
 	grpc "google.golang.org/grpc"
+	emptypb "google.golang.org/protobuf/types/known/emptypb"
 )
 
 // MockContentServiceClient is a mock of ContentServiceClient interface.
@@ -54,6 +55,26 @@ func (mr *MockContentServiceClientMockRecorder) CreateUploadArticle(arg0, arg1 i
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{arg0, arg1}, arg2...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateUploadArticle", reflect.TypeOf((*MockContentServiceClient)(nil).CreateUploadArticle), varargs...)
+}
+
+// DeleteArticleComment mocks base method.
+func (m *MockContentServiceClient) DeleteArticleComment(arg0 context.Context, arg1 *content.DeleteArticleCommentRequest, arg2 ...grpc.CallOption) (*emptypb.Empty, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{arg0, arg1}
+	for _, a := range arg2 {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "DeleteArticleComment", varargs...)
+	ret0, _ := ret[0].(*emptypb.Empty)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// DeleteArticleComment indicates an expected call of DeleteArticleComment.
+func (mr *MockContentServiceClientMockRecorder) DeleteArticleComment(arg0, arg1 interface{}, arg2 ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{arg0, arg1}, arg2...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteArticleComment", reflect.TypeOf((*MockContentServiceClient)(nil).DeleteArticleComment), varargs...)
 }
 
 // GetArticleOGP mocks base method.
@@ -212,6 +233,21 @@ func (m *MockContentServiceServer) CreateUploadArticle(arg0 context.Context, arg
 func (mr *MockContentServiceServerMockRecorder) CreateUploadArticle(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateUploadArticle", reflect.TypeOf((*MockContentServiceServer)(nil).CreateUploadArticle), arg0, arg1)
+}
+
+// DeleteArticleComment mocks base method.
+func (m *MockContentServiceServer) DeleteArticleComment(arg0 context.Context, arg1 *content.DeleteArticleCommentRequest) (*emptypb.Empty, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DeleteArticleComment", arg0, arg1)
+	ret0, _ := ret[0].(*emptypb.Empty)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// DeleteArticleComment indicates an expected call of DeleteArticleComment.
+func (mr *MockContentServiceServerMockRecorder) DeleteArticleComment(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteArticleComment", reflect.TypeOf((*MockContentServiceServer)(nil).DeleteArticleComment), arg0, arg1)
 }
 
 // GetArticleOGP mocks base method.
