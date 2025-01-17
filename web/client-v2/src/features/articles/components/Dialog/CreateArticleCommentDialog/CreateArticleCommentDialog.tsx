@@ -1,8 +1,7 @@
 "use client";
 
 import { FC, useState, useCallback } from "react";
-import { IconContext } from "react-icons";
-import { FaRegCommentDots } from "react-icons/fa";
+import { FaComment } from "react-icons/fa";
 
 import { Dialog, DialogTrigger } from "@/shared/components/ui/dialog";
 import {
@@ -11,6 +10,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/shared/components/ui/tooltip";
+
+import { CreateArticleCommentDialogContent } from "./CreateArticleCommentDialogContent";
 
 type CreateArticleCommentDialogProps = {
   articleId: string;
@@ -32,9 +33,7 @@ export const CreateArticleCommentDialog: FC<
         <Tooltip>
           <DialogTrigger asChild>
             <TooltipTrigger>
-              <IconContext.Provider value={{}}>
-                <FaRegCommentDots size={20} className="cursor-pointer" />
-              </IconContext.Provider>
+              <FaComment size={20} className="cursor-pointer" />
             </TooltipTrigger>
           </DialogTrigger>
           <TooltipContent className="px-4 py-3 font-semibold">
@@ -42,6 +41,12 @@ export const CreateArticleCommentDialog: FC<
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>
+      {open && (
+        <CreateArticleCommentDialogContent
+          articleId={articleId}
+          articleTitle={articleTitle}
+        />
+      )}
     </Dialog>
   );
 };

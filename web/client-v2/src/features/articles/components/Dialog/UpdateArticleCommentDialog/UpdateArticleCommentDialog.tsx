@@ -2,7 +2,7 @@
 
 import { FC, useState, useCallback } from "react";
 import { IconContext } from "react-icons";
-import { FaRegCommentDots } from "react-icons/fa";
+import { FaComment } from "react-icons/fa";
 
 import { Dialog, DialogTrigger } from "@/shared/components/ui/dialog";
 import {
@@ -35,7 +35,7 @@ export const UpdateArticleCommentDialog: FC<
               <IconContext.Provider
                 value={{ className: "hover:text-rose-900" }}
               >
-                <FaRegCommentDots size={20} className="cursor-pointer" />
+                <FaComment size={20} className="cursor-pointer" color="red" />
               </IconContext.Provider>
             </TooltipTrigger>
           </DialogTrigger>
