@@ -73,7 +73,7 @@ export const ArticleCardItem: FC<ArticleCardItemProps> = ({ data }) => {
 
           {fragment?.comment && (
             <p className="flex items-center gap-2 text-sm">
-              <FaComment className="inline-block" />
+              <FaComment className="inline-block" size={18} />
               <span className="line-clamp-1 ">{fragment.comment.comment}</span>
             </p>
           )}
