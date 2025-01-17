@@ -4,3 +4,4 @@ export * from "./SearchDetailArticleDialogFloatButton";
 
 export * from "./CreateArticleCommentDialog";
 export * from "./UpdateArticleCommentDialog";
+export * from "./ShowArticleCommentDialog";

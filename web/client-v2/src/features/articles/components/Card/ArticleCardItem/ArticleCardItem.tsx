@@ -4,7 +4,6 @@ import { clsx } from "clsx";
 import { FragmentOf, readFragment } from "gql.tada";
 import NextLink from "next/link";
 import { FC } from "react";
-import { FaComment } from "react-icons/fa";
 
 import { ZoomableImage } from "@/shared/components/ui/image";
 import { Link } from "@/shared/components/ui/link";
@@ -12,6 +11,7 @@ import { showDiffDateToCurrentDate } from "@/shared/lib/date";
 
 import styles from "./ArticleCardItem.module.css";
 import { ArticleCardItemFragment } from "./ArticleCardItemFragment";
+import { ShowArticleCommentDialog } from "../../Dialog";
 
 type ArticleCardItemProps = {
   data: FragmentOf<typeof ArticleCardItemFragment>;
@@ -72,10 +72,11 @@ export const ArticleCardItem: FC<ArticleCardItemProps> = ({ data }) => {
           </div>
 
           {fragment?.comment && (
-            <p className="flex items-center gap-2 text-sm">
-              <FaComment className="inline-block" size={18} />
-              <span className="line-clamp-1 ">{fragment.comment.comment}</span>
-            </p>
+            <ShowArticleCommentDialog data={fragment.comment} />
+            // <p className="flex items-center gap-2 text-sm">
+            //   <FaComment className="inline-block" size={18} />
+            //   <span className="line-clamp-1 ">{fragment.comment.comment}</span>
+            // </p>
           )}
         </div>
       </div>

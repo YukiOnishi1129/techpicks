@@ -671,11 +671,15 @@ export type UpsertArticleCommentInput = {
   comment: Scalars['String']['input'];
 };
 
-export type ArticleCardItemFragmentFragment = { __typename?: 'Article', id: string, title: string, description: string, articleUrl: string, publishedAt?: number | null, thumbnailUrl: string, isEng: boolean, isPrivate: boolean, isBookmarked: boolean, bookmarkId?: string | null, likeCount?: number | null, platform?: { __typename?: 'Platform', id: string, name: string, siteUrl: string, faviconUrl: string } | null, feeds?: Array<{ __typename?: 'Feed', id: string, name: string }> | null };
+export type ArticleCardItemFragmentFragment = { __typename?: 'Article', id: string, title: string, description: string, articleUrl: string, publishedAt?: number | null, thumbnailUrl: string, isEng: boolean, isPrivate: boolean, isBookmarked: boolean, bookmarkId?: string | null, likeCount?: number | null, platform?: { __typename?: 'Platform', id: string, name: string, siteUrl: string, faviconUrl: string } | null, feeds?: Array<{ __typename?: 'Feed', id: string, name: string }> | null, comment?: { __typename?: 'ArticleComment', id: string, comment: string } | null };
 
 export type ArticleCardWrapperFragmentFragment = { __typename: 'Article', id: string, title: string, description: string, articleUrl: string, publishedAt?: number | null, authorName?: string | null, tags?: string | null, thumbnailUrl: string, isEng: boolean, isPrivate: boolean, isBookmarked: boolean, bookmarkId?: string | null, likeCount?: number | null, isFollowing: boolean, favoriteArticleFolderIds: Array<string>, platform?: { __typename?: 'Platform', id: string, name: string, siteUrl: string, faviconUrl: string } | null, comment?: { __typename?: 'ArticleComment', id: string, comment: string } | null, feeds?: Array<{ __typename?: 'Feed', id: string, name: string }> | null };
 
 export type FavoriteFolderArticleCardWrapperFragmentFragment = { __typename?: 'FavoriteArticleFolderConnection', edges: Array<{ __typename?: 'FavoriteArticleFolderEdge', node: { __typename?: 'FavoriteArticleFolder', id: string, title: string } }> };
+
+export type ShowArticleCommentDialogFragmentFragment = { __typename?: 'ArticleComment', id: string, comment: string };
+
+export type UpdateArticleCommentDialogFragmentFragment = { __typename?: 'ArticleComment', id: string, comment: string };
 
 export type ArticleListQueryQueryVariables = Exact<{
   input: ArticlesInput;
@@ -727,6 +731,13 @@ export type UseArticleManageBookmarkFragmentFragment = { __typename?: 'Article',
 export type UseArticleManageFavoriteArticleFragmentFragment = { __typename: 'Article', id: string, title: string, description: string, articleUrl: string, publishedAt?: number | null, authorName?: string | null, tags?: string | null, thumbnailUrl: string, isEng: boolean, isPrivate: boolean, isBookmarked: boolean, bookmarkId?: string | null, likeCount?: number | null, isFollowing: boolean, favoriteArticleFolderIds: Array<string>, platform?: { __typename?: 'Platform', id: string, name: string, siteUrl: string, faviconUrl: string } | null };
 
 export type FavoriteFolderUseArticleManageFavoriteArticleFragmentFragment = { __typename?: 'FavoriteArticleFolderConnection', edges: Array<{ __typename?: 'FavoriteArticleFolderEdge', node: { __typename?: 'FavoriteArticleFolder', id: string, title: string } }> };
+
+export type UpsertArticleCommentMutationMutationVariables = Exact<{
+  input: UpsertArticleCommentInput;
+}>;
+
+
+export type UpsertArticleCommentMutationMutation = { __typename?: 'Mutation', upsertArticleComment: { __typename?: 'ArticleComment', id: string, comment: string } };
 
 export type CreateBookmarkForUploadArticleMutationMutationVariables = Exact<{
   input: CreateBookmarkForUploadArticleInput;
@@ -1113,6 +1124,18 @@ export type GetMobileSidebarQueryQuery = { __typename?: 'Query', favoriteArticle
 
 export type MyFeedFolderLinkFragmentFragment = { __typename?: 'MyFeedFolder', id: string, title: string, feeds?: Array<{ __typename?: 'Feed', id: string, name: string, platform: { __typename?: 'Platform', faviconUrl: string } }> | null };
 
+export const UpdateArticleCommentDialogFragmentFragmentDoc = gql`
+    fragment UpdateArticleCommentDialogFragment on ArticleComment {
+  id
+  comment
+}
+    `;
+export const ShowArticleCommentDialogFragmentFragmentDoc = gql`
+    fragment ShowArticleCommentDialogFragment on ArticleComment {
+  id
+  comment
+}
+    `;
 export const ArticleCardItemFragmentFragmentDoc = gql`
     fragment ArticleCardItemFragment on Article {
   id
@@ -1136,8 +1159,13 @@ export const ArticleCardItemFragmentFragmentDoc = gql`
     id
     name
   }
+  comment {
+    id
+    comment
+    ...ShowArticleCommentDialogFragment
+  }
 }
-    `;
+    ${ShowArticleCommentDialogFragmentFragmentDoc}`;
 export const UseArticleManageBookmarkFragmentFragmentDoc = gql`
     fragment UseArticleManageBookmarkFragment on Article {
   id
@@ -1207,13 +1235,15 @@ export const ArticleCardWrapperFragmentFragmentDoc = gql`
   comment {
     id
     comment
+    ...UpdateArticleCommentDialogFragment
   }
   favoriteArticleFolderIds
   ...ArticleCardItemFragment
   ...UseArticleManageBookmarkFragment
   ...UseArticleManageFavoriteArticleFragment
 }
-    ${ArticleCardItemFragmentFragmentDoc}
+    ${UpdateArticleCommentDialogFragmentFragmentDoc}
+${ArticleCardItemFragmentFragmentDoc}
 ${UseArticleManageBookmarkFragmentFragmentDoc}
 ${UseArticleManageFavoriteArticleFragmentFragmentDoc}`;
 export const BookmarkCardItemFragmentFragmentDoc = gql`
@@ -2069,6 +2099,40 @@ export type ListServerSelectedFeedSearchArticleListTemplateQueryQueryHookResult 
 export type ListServerSelectedFeedSearchArticleListTemplateQueryLazyQueryHookResult = ReturnType<typeof useListServerSelectedFeedSearchArticleListTemplateQueryLazyQuery>;
 export type ListServerSelectedFeedSearchArticleListTemplateQuerySuspenseQueryHookResult = ReturnType<typeof useListServerSelectedFeedSearchArticleListTemplateQuerySuspenseQuery>;
 export type ListServerSelectedFeedSearchArticleListTemplateQueryQueryResult = Apollo.QueryResult<ListServerSelectedFeedSearchArticleListTemplateQueryQuery, ListServerSelectedFeedSearchArticleListTemplateQueryQueryVariables>;
+export const UpsertArticleCommentMutationDocument = gql`
+    mutation UpsertArticleCommentMutation($input: UpsertArticleCommentInput!) {
+  upsertArticleComment(input: $input) {
+    id
+    comment
+  }
+}
+    `;
+export type UpsertArticleCommentMutationMutationFn = Apollo.MutationFunction<UpsertArticleCommentMutationMutation, UpsertArticleCommentMutationMutationVariables>;
+
+/**
+ * __useUpsertArticleCommentMutationMutation__
+ *
+ * To run a mutation, you first call `useUpsertArticleCommentMutationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpsertArticleCommentMutationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [upsertArticleCommentMutationMutation, { data, loading, error }] = useUpsertArticleCommentMutationMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpsertArticleCommentMutationMutation(baseOptions?: Apollo.MutationHookOptions<UpsertArticleCommentMutationMutation, UpsertArticleCommentMutationMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpsertArticleCommentMutationMutation, UpsertArticleCommentMutationMutationVariables>(UpsertArticleCommentMutationDocument, options);
+      }
+export type UpsertArticleCommentMutationMutationHookResult = ReturnType<typeof useUpsertArticleCommentMutationMutation>;
+export type UpsertArticleCommentMutationMutationResult = Apollo.MutationResult<UpsertArticleCommentMutationMutation>;
+export type UpsertArticleCommentMutationMutationOptions = Apollo.BaseMutationOptions<UpsertArticleCommentMutationMutation, UpsertArticleCommentMutationMutationVariables>;
 export const CreateBookmarkForUploadArticleMutationDocument = gql`
     mutation CreateBookmarkForUploadArticleMutation($input: CreateBookmarkForUploadArticleInput!) {
   createBookmarkForUploadArticle(input: $input) {
