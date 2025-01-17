@@ -47,7 +47,7 @@ export const FavoriteArticleCardWrapper: FC<
       className="mb-4 rounded-2xl border-2 bg-primary-foreground px-4 pb-4 md:px-2 md:pb-2"
     >
       <div>
-        <div className="mb-4 flex h-16 justify-between border-b-2 py-4 md:ml-6">
+        <div className="mb-4 flex h-16 justify-between border-b-2 py-4 md:ml-6 gap-2">
           <div className="flex">
             <IconTitleLink
               url={fragment.platformUrl}
@@ -57,14 +57,14 @@ export const FavoriteArticleCardWrapper: FC<
             />
           </div>
 
-          <div className="flex items-center justify-center p-4">
-            <div className="mr-4">
+          <div className="flex items-center justify-center p-4 gap-2">
+            <div>
               <ShareLinks
                 shareTitle={fragment.title}
                 shareUrl={fragment.articleUrl}
               />
             </div>
-            <div className="mr-4">
+            <div className="mt-2">
               <CopyFavoriteArticleDropdownMenu
                 data={fragmentFavoriteFolders}
                 articleId={fragment.articleId}
@@ -76,7 +76,7 @@ export const FavoriteArticleCardWrapper: FC<
                 }
               />
             </div>
-            <div>
+            <div className="mt-2">
               <RemoveFavoriteArticleAlertDialog
                 favoriteArticleId={fragment.id}
                 favoriteArticleTitle={fragment.title}
