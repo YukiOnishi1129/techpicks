@@ -45,6 +45,7 @@ export const CreateArticleCommentDialog: FC<
         <CreateArticleCommentDialogContent
           articleId={articleId}
           articleTitle={articleTitle}
+          onClose={handleClose}
         />
       )}
     </Dialog>

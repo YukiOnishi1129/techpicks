@@ -42,11 +42,12 @@ const FormSchema = z.object({
 type CreateArticleCommentDialogContentProps = {
   articleId: string;
   articleTitle: string;
+  onClose: () => void;
 };
 
 export const CreateArticleCommentDialogContent: FC<
   CreateArticleCommentDialogContentProps
-> = ({ articleId, articleTitle }) => {
+> = ({ articleId, articleTitle, onClose }) => {
   const { successToast, failToast } = useStatusToast();
   const [isPending, startTransition] = useTransition();
 
@@ -119,6 +120,7 @@ export const CreateArticleCommentDialogContent: FC<
       successToast({
         description: `add comment at article title: '${articleTitle}'`,
       });
+      onClose();
     },
     [
       articleId,
@@ -126,6 +128,7 @@ export const CreateArticleCommentDialogContent: FC<
       upsertArticleCommentMutation,
       successToast,
       articleTitle,
+      onClose,
     ]
   );
 
