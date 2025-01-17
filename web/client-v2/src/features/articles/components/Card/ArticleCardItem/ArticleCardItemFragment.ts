@@ -23,5 +23,9 @@ export const ArticleCardItemFragment = graphql(`
       id
       name
     }
+    comment {
+      id
+      comment
+    }
   }
 `);

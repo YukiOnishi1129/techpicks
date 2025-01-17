@@ -4,6 +4,7 @@ import { clsx } from "clsx";
 import { FragmentOf, readFragment } from "gql.tada";
 import NextLink from "next/link";
 import { FC } from "react";
+import { FaComment } from "react-icons/fa";
 
 import { ZoomableImage } from "@/shared/components/ui/image";
 import { Link } from "@/shared/components/ui/link";
@@ -69,6 +70,13 @@ export const ArticleCardItem: FC<ArticleCardItemProps> = ({ data }) => {
                 </NextLink>
               ))}
           </div>
+
+          {fragment?.comment && (
+            <p className="flex items-center gap-2 text-sm">
+              <FaComment className="inline-block" />
+              <span className="line-clamp-1 ">{fragment.comment.comment}</span>
+            </p>
+          )}
         </div>
       </div>
     </div>
