@@ -8,6 +8,16 @@
 /* tslint:disable */
 /* eslint-disable */
 
+export class UpsertArticleCommentInput {
+    articleCommentId?: Nullable<string>;
+    articleId: string;
+    comment: string;
+}
+
+export class DeleteArticleCommentInput {
+    articleCommentId: string;
+}
+
 export class ArticlesInput {
     userId?: Nullable<string>;
     languageStatus?: Nullable<number>;
@@ -207,6 +217,40 @@ export interface Node {
     id: string;
 }
 
+export abstract class IMutation {
+    abstract upsertArticleComment(input: UpsertArticleCommentInput): ArticleComment | Promise<ArticleComment>;
+
+    abstract deleteArticleComment(input: DeleteArticleCommentInput): boolean | Promise<boolean>;
+
+    abstract createBookmark(createBookmarkInput: CreateBookmarkInput): Bookmark | Promise<Bookmark>;
+
+    abstract createBookmarkForUploadArticle(input: CreateBookmarkForUploadArticleInput): Bookmark | Promise<Bookmark>;
+
+    abstract deleteBookmark(deleteBookmarkInput: DeleteBookmarkInput): boolean | Promise<boolean>;
+
+    abstract createFavoriteArticleFolder(input: CreateFavoriteArticleFolderInput): FavoriteArticleFolder | Promise<FavoriteArticleFolder>;
+
+    abstract updateFavoriteArticleFolder(input: UpdateFavoriteArticleFolderInput): FavoriteArticleFolder | Promise<FavoriteArticleFolder>;
+
+    abstract deleteFavoriteArticleFolder(input: DeleteFavoriteArticleFolderInput): boolean | Promise<boolean>;
+
+    abstract createFavoriteArticle(input: CreateFavoriteArticleInput): FavoriteArticle | Promise<FavoriteArticle>;
+
+    abstract createFavoriteArticleForUploadArticle(input: CreateFavoriteArticleForUploadArticleInput): FavoriteArticle | Promise<FavoriteArticle>;
+
+    abstract createMultiFavoriteArticleForUploadArticle(input: CreateMultiFavoriteArticleForUploadArticleInput): CreatedMultiFolderFavoriteArticle | Promise<CreatedMultiFolderFavoriteArticle>;
+
+    abstract deleteFavoriteArticle(input: DeleteFavoriteArticleInput): boolean | Promise<boolean>;
+
+    abstract deleteFavoriteArticleByArticleId(input: DeleteFavoriteArticleByArticleIdInput): boolean | Promise<boolean>;
+
+    abstract createMyFeedFolder(createMyFeedFolderInput: CreateMyFeedFolderInput): MyFeedFolder | Promise<MyFeedFolder>;
+
+    abstract updateMyFeedFolder(updateMyFeedFolderInput: UpdateMyFeedFolderInput): MyFeedFolder | Promise<MyFeedFolder>;
+
+    abstract deleteMyFeedFolder(deleteMyFeedFolderInput: DeleteMyFeedFolderInput): boolean | Promise<boolean>;
+}
+
 export abstract class IQuery {
     abstract articles(articlesInput: ArticlesInput): ArticleConnection | Promise<ArticleConnection>;
 
@@ -248,9 +292,15 @@ export class Article implements Node {
     bookmarkId?: Nullable<string>;
     isBookmarked: boolean;
     isFollowing: boolean;
+    comment?: Nullable<ArticleComment>;
     likeCount?: Nullable<number>;
     createdAt: number;
     updatedAt: number;
+}
+
+export class ArticleComment {
+    id: string;
+    comment: string;
 }
 
 export class ArticleConnection {
@@ -278,36 +328,6 @@ export class PageInfo {
     hasPreviousPage: boolean;
     startCursor?: Nullable<string>;
     endCursor?: Nullable<string>;
-}
-
-export abstract class IMutation {
-    abstract createBookmark(createBookmarkInput: CreateBookmarkInput): Bookmark | Promise<Bookmark>;
-
-    abstract createBookmarkForUploadArticle(input: CreateBookmarkForUploadArticleInput): Bookmark | Promise<Bookmark>;
-
-    abstract deleteBookmark(deleteBookmarkInput: DeleteBookmarkInput): boolean | Promise<boolean>;
-
-    abstract createFavoriteArticleFolder(input: CreateFavoriteArticleFolderInput): FavoriteArticleFolder | Promise<FavoriteArticleFolder>;
-
-    abstract updateFavoriteArticleFolder(input: UpdateFavoriteArticleFolderInput): FavoriteArticleFolder | Promise<FavoriteArticleFolder>;
-
-    abstract deleteFavoriteArticleFolder(input: DeleteFavoriteArticleFolderInput): boolean | Promise<boolean>;
-
-    abstract createFavoriteArticle(input: CreateFavoriteArticleInput): FavoriteArticle | Promise<FavoriteArticle>;
-
-    abstract createFavoriteArticleForUploadArticle(input: CreateFavoriteArticleForUploadArticleInput): FavoriteArticle | Promise<FavoriteArticle>;
-
-    abstract createMultiFavoriteArticleForUploadArticle(input: CreateMultiFavoriteArticleForUploadArticleInput): CreatedMultiFolderFavoriteArticle | Promise<CreatedMultiFolderFavoriteArticle>;
-
-    abstract deleteFavoriteArticle(input: DeleteFavoriteArticleInput): boolean | Promise<boolean>;
-
-    abstract deleteFavoriteArticleByArticleId(input: DeleteFavoriteArticleByArticleIdInput): boolean | Promise<boolean>;
-
-    abstract createMyFeedFolder(createMyFeedFolderInput: CreateMyFeedFolderInput): MyFeedFolder | Promise<MyFeedFolder>;
-
-    abstract updateMyFeedFolder(updateMyFeedFolderInput: UpdateMyFeedFolderInput): MyFeedFolder | Promise<MyFeedFolder>;
-
-    abstract deleteMyFeedFolder(deleteMyFeedFolderInput: DeleteMyFeedFolderInput): boolean | Promise<boolean>;
 }
 
 export class Bookmark implements Node {
