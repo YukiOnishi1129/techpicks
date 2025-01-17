@@ -1,5 +1,6 @@
 "use client";
 
+import { FragmentOf } from "gql.tada";
 import { FC, useState, useCallback } from "react";
 import { IconContext } from "react-icons";
 import { FaComment } from "react-icons/fa";
@@ -12,14 +13,18 @@ import {
   TooltipTrigger,
 } from "@/shared/components/ui/tooltip";
 
+import { UpdateArticleCommentDialogContent } from "./UpdateArticleCommentDialogContent";
+import { UpdateArticleCommentDialogFragment } from "./UpdateArticleCommentDialogFragment";
+
 type UpdateArticleCommentDialogProps = {
+  data: FragmentOf<typeof UpdateArticleCommentDialogFragment>;
   articleId: string;
   articleTitle: string;
 };
 
 export const UpdateArticleCommentDialog: FC<
   UpdateArticleCommentDialogProps
-> = ({ articleId, articleTitle }) => {
+> = ({ data, articleId, articleTitle }) => {
   const [open, setOpen] = useState(false);
 
   const handleClose = useCallback(() => {
@@ -44,6 +49,14 @@ export const UpdateArticleCommentDialog: FC<
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>
+      {open && (
+        <UpdateArticleCommentDialogContent
+          data={data}
+          articleId={articleId}
+          articleTitle={articleTitle}
+          onClose={handleClose}
+        />
+      )}
     </Dialog>
   );
 };

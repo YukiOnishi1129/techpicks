@@ -130,6 +130,7 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
                 <div className="mt-2">
                   {fragment.comment ? (
                     <UpdateArticleCommentDialog
+                      data={fragment.comment}
                       articleId={fragment.id}
                       articleTitle={fragment.title}
                     />
