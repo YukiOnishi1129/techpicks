@@ -111,6 +111,39 @@ func Test_UpsertArticleComment(t *testing.T) {
 				},
 			},
 		},
+		"failed to update article comment as not exited article comment": {
+			recordArticles: []entity.Article{
+				{
+					ID: articleID.String(),
+					PlatformID: null.String{
+						Valid:  true,
+						String: mockPlatforms[0].ID,
+					},
+					Title:        "test title1",
+					Description:  "test description1",
+					ArticleURL:   "https://test.com/article1",
+					PublishedAt:  null.TimeFrom(time.Unix(publishedAt, 0)),
+					ThumbnailURL: "https://test.com/article1/thumbnail",
+					IsEng:        true,
+					IsPrivate:    false,
+				},
+			},
+			arg: &cpb.UpsertArticleCommentRequest{
+				Id:        wrapperspb.String(articleCommentID1.String()),
+				UserId:    userId1,
+				ArticleId: articleID.String(),
+				Comment:   "test comment",
+			},
+			want: &cpb.UpsertArticleCommentResponse{
+				Comment: &cpb.ArticleComment{
+					// Id:        "test_article_comment_id",
+					UserId:    userId1,
+					ArticleId: articleID.String(),
+					Comment:   "test comment",
+				},
+			},
+			wantErrMsg: "comment does not exist as update target",
+		},
 	}
 
 	for name, tt := range test {

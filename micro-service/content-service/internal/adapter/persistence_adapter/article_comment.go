@@ -2,6 +2,7 @@ package persistenceadapter
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/domain/entity"
 	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/domain/repository"
@@ -33,6 +34,13 @@ func (ap *articleCommentPersistenceAdapter) UpsertArticleComment(ctx context.Con
 
 	if input.ID != nil {
 		articleComment.ID = *input.ID
+		res, err := ap.articleCommentRepository.GetArticleCommentByID(ctx, articleComment.ID, nil)
+		if err != nil {
+			return nil, err
+		}
+		if res.ID == "" {
+			return nil, fmt.Errorf("comment does not exist as update target")
+		}
 		if err := ap.articleCommentRepository.UpdateArticleComment(ctx, articleComment); err != nil {
 			return nil, err
 		}
