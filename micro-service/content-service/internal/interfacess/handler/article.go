@@ -22,6 +22,14 @@ func (ch *contentHandler) ListArticleByArticleURL(ctx context.Context, req *cpb.
 	return res, nil
 }
 
+func (ch *contentHandler) GetArticle(ctx context.Context, req *cpb.GetArticleRequest) (*cpb.GetArticleResponse, error) {
+	res, err := ch.contentUseCase.GetArticle(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}
+
 func (ch *contentHandler) CreateUploadArticle(ctx context.Context, req *cpb.CreateUploadArticleRequest) (*cpb.CreateArticleResponse, error) {
 	res, err := ch.contentUseCase.CreateUploadArticle(ctx, req)
 	if err != nil {

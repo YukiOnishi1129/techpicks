@@ -12,6 +12,7 @@ import (
 type ContentUseCase interface {
 	ListArticle(ctx context.Context, req *cpb.ListArticleRequest) (*cpb.ListArticleResponse, error)
 	ListArticleByArticleURL(ctx context.Context, req *cpb.ListArticleByArticleURLRequest) (*cpb.ListArticleByArticleURLResponse, error)
+	GetArticle(ctx context.Context, req *cpb.GetArticleRequest) (*cpb.GetArticleResponse, error)
 	CreateUploadArticle(ctx context.Context, req *cpb.CreateUploadArticleRequest) (*cpb.CreateArticleResponse, error)
 
 	GetArticleOGP(ctx context.Context, articleURL string) (*cpb.GetArticleOGPResponse, error)

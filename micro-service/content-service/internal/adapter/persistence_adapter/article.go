@@ -19,6 +19,7 @@ type ArticlePersistenceAdapter interface {
 	GetArticlesByArticleURLAndPlatformURL(ctx context.Context, articleURL, platformURL string) (entity.ArticleSlice, error)
 	ListArticleByArticleURL(ctx context.Context, articleURL string, limit int) (entity.ArticleSlice, error)
 	GetPrivateArticlesByArticleURL(ctx context.Context, articleURL string) (entity.ArticleSlice, error)
+	GetArticleByID(ctx context.Context, dto GetArticleAdapterInputDTO) (entity.Article, error)
 	GetArticleRelationPlatform(ctx context.Context, articleID string) (entity.Article, error)
 	CreateUploadArticle(ctx context.Context, req *cpb.CreateUploadArticleRequest, isEng bool) (*entity.Article, error)
 }
@@ -165,6 +166,24 @@ func (apa *articlePersistenceAdapter) GetPrivateArticlesByArticleURL(ctx context
 	}
 
 	return articles, nil
+}
+
+func (apa *articlePersistenceAdapter) GetArticleByID(ctx context.Context, dto GetArticleAdapterInputDTO) (entity.Article, error) {
+	q := []qm.QueryMod{
+		qm.InnerJoin("platforms ON articles.platform_id = platforms.id"),
+		qm.LeftOuterJoin("feed_article_relations ON articles.id = feed_article_relations.article_id"),
+		qm.InnerJoin("feeds ON feed_article_relations.feed_id = feeds.id"),
+		qm.Where("feeds.deleted_at IS NULL"),
+		qm.LeftOuterJoin("article_comments on articles.id = article_comments.article_id"),
+		qm.Load(qm.Rels(entity.ArticleRels.Platform)),
+		qm.Load(qm.Rels(entity.ArticleRels.ArticleComments)),
+	}
+	article, err := apa.articleRepository.GetArticleByID(ctx, dto.ArticleID, q)
+	if err != nil {
+		return entity.Article{}, err
+	}
+
+	return article, nil
 }
 
 func (apa *articlePersistenceAdapter) GetArticleRelationPlatform(ctx context.Context, articleID string) (entity.Article, error) {
