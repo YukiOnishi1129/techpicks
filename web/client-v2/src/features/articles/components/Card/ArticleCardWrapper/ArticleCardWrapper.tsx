@@ -17,7 +17,10 @@ import {
   ArticleCardWrapperFragment,
   FavoriteFolderArticleCardWrapperFragment,
 } from "./ArticleCardWrapperFragment";
-import { CreateArticleCommentDialog } from "../../Dialog";
+import {
+  CreateArticleCommentDialog,
+  UpdateArticleCommentDialog,
+} from "../../Dialog";
 import { AddBookmarkTooltip, DeleteBookmarkTooltip } from "../../ToolTip";
 import { ArticleCardItem } from "../ArticleCardItem";
 
@@ -125,10 +128,17 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
                   />
                 </div>
                 <div className="mt-2">
-                  <CreateArticleCommentDialog
-                    articleId={fragment.id}
-                    articleTitle={fragment.title}
-                  />
+                  {fragment.comment ? (
+                    <UpdateArticleCommentDialog
+                      articleId={fragment.id}
+                      articleTitle={fragment.title}
+                    />
+                  ) : (
+                    <CreateArticleCommentDialog
+                      articleId={fragment.id}
+                      articleTitle={fragment.title}
+                    />
+                  )}
                 </div>
               </>
             </div>

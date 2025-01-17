@@ -33,6 +33,10 @@ export const ArticleCardWrapperFragment = graphql(
       bookmarkId
       likeCount
       isFollowing
+      comment {
+        id
+        comment
+      }
       favoriteArticleFolderIds
       ...ArticleCardItemFragment
       ...UseArticleManageBookmarkFragment
