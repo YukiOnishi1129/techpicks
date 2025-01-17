@@ -69,7 +69,7 @@ func (ap *articleCommentPersistenceAdapter) DeleteArticleComment(ctx context.Con
 		return err
 	}
 	if articleComment.ID == "" {
-		return nil
+		return fmt.Errorf("comment does not exist as delete target")
 	}
 
 	if err := ap.articleCommentRepository.DeleteArticleComment(ctx, articleComment); err != nil {
