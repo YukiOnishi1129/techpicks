@@ -337,3 +337,8 @@ CREATE TABLE article_comments
 );
 
 CREATE TRIGGER article_comments_update_tri BEFORE UPDATE ON article_comments FOR EACH ROW EXECUTE PROCEDURE set_article_comments_update_time();
+
+ALTER TABLE article_comments DROP CONSTRAINT fk_articles_comments_article_id;
+
+ALTER TABLE article_comments
+ADD CONSTRAINT fk_article_comments_article_id FOREIGN KEY (article_id) REFERENCES articles(id) ON UPDATE RESTRICT ON DELETE CASCADE;
