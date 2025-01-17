@@ -7,6 +7,7 @@ import {
 } from "@/features/articles/hooks/useArticleManageFavoriteArticle";
 import { FollowFavoriteArticleDropdownMenuContentFragment } from "@/features/favorites/components/DropdownMenu/FollowFavoriteArticleDropdownMenu/FollowFavoriteArticleDropdownMenuFragment";
 
+import { UpdateArticleCommentDialogFragment } from "../../Dialog/UpdateArticleCommentDialog/UpdateArticleCommentDialogFragment";
 import { ArticleCardItemFragment } from "../ArticleCardItem";
 
 export const ArticleCardWrapperFragment = graphql(
@@ -33,6 +34,11 @@ export const ArticleCardWrapperFragment = graphql(
       bookmarkId
       likeCount
       isFollowing
+      comment {
+        id
+        comment
+        ...UpdateArticleCommentDialogFragment
+      }
       favoriteArticleFolderIds
       ...ArticleCardItemFragment
       ...UseArticleManageBookmarkFragment
@@ -43,6 +49,7 @@ export const ArticleCardWrapperFragment = graphql(
     ArticleCardItemFragment,
     UseArticleManageBookmarkFragment,
     UseArticleManageFavoriteArticleFragment,
+    UpdateArticleCommentDialogFragment,
   ]
 );
 

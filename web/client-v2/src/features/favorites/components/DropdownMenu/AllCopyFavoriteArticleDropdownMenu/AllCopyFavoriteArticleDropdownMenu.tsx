@@ -57,7 +57,7 @@ export const AllCopyFavoriteArticleDropdownMenu: FC<
               <IconContext.Provider
                 value={{ className: "hover:text-rose-600" }}
               >
-                <FaRegCopy size={30} className="cursor-pointer" />
+                <FaRegCopy size={18} className="cursor-pointer" />
               </IconContext.Provider>
             </TooltipTrigger>
           </DropdownMenuTrigger>

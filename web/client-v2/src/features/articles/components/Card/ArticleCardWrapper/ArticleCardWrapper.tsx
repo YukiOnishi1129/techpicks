@@ -17,6 +17,10 @@ import {
   ArticleCardWrapperFragment,
   FavoriteFolderArticleCardWrapperFragment,
 } from "./ArticleCardWrapperFragment";
+import {
+  CreateArticleCommentDialog,
+  UpdateArticleCommentDialog,
+} from "../../Dialog";
 import { AddBookmarkTooltip, DeleteBookmarkTooltip } from "../../ToolTip";
 import { ArticleCardItem } from "../ArticleCardItem";
 
@@ -61,7 +65,7 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
       className="rounded-2xl border bg-primary-foreground px-4 pb-4 md:px-2"
     >
       <div className="grid gap-4">
-        <div className="flex h-16 justify-between border-b py-4 md:px-6">
+        <div className="flex h-16 justify-between gap-2 border-b py-4 md:px-6">
           <>
             <div className="flex">
               {tab === TREND_TAB && (
@@ -92,7 +96,7 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
               )}
             </div>
 
-            <div className="flex items-center justify-center gap-4">
+            <div className="flex items-center justify-center gap-3">
               <div>
                 <ShareLinks
                   shareTitle={fragment.title}
@@ -122,6 +126,20 @@ export const ArticleCardWrapper: FC<ArticleCardWrapperProps> = ({
                       handleCreateFavoriteArticleFolder
                     }
                   />
+                </div>
+                <div className="mt-2">
+                  {fragment.comment ? (
+                    <UpdateArticleCommentDialog
+                      data={fragment.comment}
+                      articleId={fragment.id}
+                      articleTitle={fragment.title}
+                    />
+                  ) : (
+                    <CreateArticleCommentDialog
+                      articleId={fragment.id}
+                      articleTitle={fragment.title}
+                    />
+                  )}
                 </div>
               </>
             </div>

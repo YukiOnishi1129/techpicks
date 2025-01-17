@@ -46,7 +46,7 @@ export const BookmarkCardWrapper: FC<BookmarkCardWrapperProps> = ({
       key={fragment.id}
       className="rounded-2xl border bg-primary-foreground px-4 pb-4 md:px-2"
     >
-      <div className="grid gap-4">
+      <div className="grid gap-2">
         <div className="flex h-16 justify-between border-b py-4 md:px-6">
           <IconTitleLink
             url={fragment.platformUrl}
@@ -55,7 +55,7 @@ export const BookmarkCardWrapper: FC<BookmarkCardWrapperProps> = ({
             target="_blank"
           />
 
-          <div className="flex items-center justify-center gap-4">
+          <div className="flex items-center justify-center gap-2">
             <div>
               <ShareLinks
                 shareTitle={fragment.title}
