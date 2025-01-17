@@ -77,6 +77,26 @@ func (mr *MockContentServiceClientMockRecorder) DeleteArticleComment(arg0, arg1 
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteArticleComment", reflect.TypeOf((*MockContentServiceClient)(nil).DeleteArticleComment), varargs...)
 }
 
+// GetArticle mocks base method.
+func (m *MockContentServiceClient) GetArticle(arg0 context.Context, arg1 *content.GetArticleRequest, arg2 ...grpc.CallOption) (*content.GetArticleResponse, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{arg0, arg1}
+	for _, a := range arg2 {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "GetArticle", varargs...)
+	ret0, _ := ret[0].(*content.GetArticleResponse)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetArticle indicates an expected call of GetArticle.
+func (mr *MockContentServiceClientMockRecorder) GetArticle(arg0, arg1 interface{}, arg2 ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{arg0, arg1}, arg2...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetArticle", reflect.TypeOf((*MockContentServiceClient)(nil).GetArticle), varargs...)
+}
+
 // GetArticleOGP mocks base method.
 func (m *MockContentServiceClient) GetArticleOGP(arg0 context.Context, arg1 *content.GetArticleOGPRequest, arg2 ...grpc.CallOption) (*content.GetArticleOGPResponse, error) {
 	m.ctrl.T.Helper()
@@ -248,6 +268,21 @@ func (m *MockContentServiceServer) DeleteArticleComment(arg0 context.Context, ar
 func (mr *MockContentServiceServerMockRecorder) DeleteArticleComment(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteArticleComment", reflect.TypeOf((*MockContentServiceServer)(nil).DeleteArticleComment), arg0, arg1)
+}
+
+// GetArticle mocks base method.
+func (m *MockContentServiceServer) GetArticle(arg0 context.Context, arg1 *content.GetArticleRequest) (*content.GetArticleResponse, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetArticle", arg0, arg1)
+	ret0, _ := ret[0].(*content.GetArticleResponse)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetArticle indicates an expected call of GetArticle.
+func (mr *MockContentServiceServerMockRecorder) GetArticle(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetArticle", reflect.TypeOf((*MockContentServiceServer)(nil).GetArticle), arg0, arg1)
 }
 
 // GetArticleOGP mocks base method.
