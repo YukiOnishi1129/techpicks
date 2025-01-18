@@ -113,6 +113,7 @@ func Test_UseCase_GetBookmarkByArticleID(t *testing.T) {
 	t.Parallel()
 
 	bookmarkID, _ := uuid.NewRandom()
+	articleCommentID, _ := uuid.NewRandom()
 
 	publishedAt := time.Now().Add(-time.Hour * 24 * 7).Unix()
 
@@ -128,9 +129,10 @@ func Test_UseCase_GetBookmarkByArticleID(t *testing.T) {
 	userID2 := mockProfiles[1].ID
 
 	test := map[string]struct {
-		recordBookmarks []entity.Bookmark
-		arg             *bpb.GetBookmarkByArticleIDRequest
-		want            *bpb.GetBookmarkResponse
+		recordBookmarks         []entity.Bookmark
+		arg                     *bpb.GetBookmarkByArticleIDRequest
+		mockGetUserSavedArticle *cpb.GetUserSavedArticleResponse
+		want                    *bpb.GetBookmarkResponse
 	}{
 		"Success: get bookmark by articleId": {
 			recordBookmarks: []entity.Bookmark{
@@ -158,6 +160,32 @@ func Test_UseCase_GetBookmarkByArticleID(t *testing.T) {
 				ArticleId: articleID1,
 				UserId:    userID1,
 			},
+			mockGetUserSavedArticle: &cpb.GetUserSavedArticleResponse{
+				Article: &cpb.Article{
+					Id: articleID1,
+					Platform: &cpb.Platform{
+						Id:         platformID1,
+						Name:       "platform_name_1",
+						SiteUrl:    "platform_url_1",
+						FaviconUrl: "platform_favicon_url_1",
+					},
+					Feeds:                    []*cpb.Feed{},
+					Title:                    "title_1",
+					Description:              "description_1",
+					ArticleUrl:               "article_url_1",
+					ThumbnailUrl:             "thumbnail_url_1",
+					PublishedAt:              &timestamppb.Timestamp{Seconds: publishedAt},
+					IsEng:                    true,
+					IsPrivate:                false,
+					FavoriteArticleFolderIds: []string{},
+					Comment: &cpb.ArticleComment{
+						Id:        articleCommentID.String(),
+						UserId:    userID1,
+						ArticleId: articleID1,
+						Comment:   "comment",
+					},
+				},
+			},
 			want: &bpb.GetBookmarkResponse{
 				Bookmark: &bpb.Bookmark{
 					Id:                       bookmarkID.String(),
@@ -176,6 +204,12 @@ func Test_UseCase_GetBookmarkByArticleID(t *testing.T) {
 					IsEng:                    true,
 					IsRead:                   false,
 					IsFollowing:              false,
+					ArticleComment: &cpb.ArticleComment{
+						Id:        articleCommentID.String(),
+						UserId:    userID1,
+						ArticleId: articleID1,
+						Comment:   "comment",
+					},
 				},
 			},
 		},
@@ -204,6 +238,31 @@ func Test_UseCase_GetBookmarkByArticleID(t *testing.T) {
 			arg: &bpb.GetBookmarkByArticleIDRequest{
 				ArticleId: articleID2,
 				UserId:    userID1,
+			},
+			mockGetUserSavedArticle: &cpb.GetUserSavedArticleResponse{
+				Article: &cpb.Article{
+					Id: articleID2,
+					Platform: &cpb.Platform{
+						Id:         platformID1,
+						Name:       "platform_name_1",
+						SiteUrl:    "platform_url_1",
+						FaviconUrl: "platform_favicon_url_1",
+					},
+					Feeds:        []*cpb.Feed{},
+					Title:        "title_2",
+					Description:  "description_2",
+					ArticleUrl:   "article_url_2",
+					ThumbnailUrl: "thumbnail_url_2",
+					PublishedAt:  &timestamppb.Timestamp{Seconds: publishedAt},
+					IsEng:        true,
+					IsPrivate:    false,
+					Comment: &cpb.ArticleComment{
+						Id:        articleCommentID.String(),
+						UserId:    userID1,
+						ArticleId: articleID2,
+						Comment:   "comment",
+					},
+				},
 			},
 			want: &bpb.GetBookmarkResponse{
 				Bookmark: &bpb.Bookmark{},
@@ -235,6 +294,31 @@ func Test_UseCase_GetBookmarkByArticleID(t *testing.T) {
 				ArticleId: articleID1,
 				UserId:    userID2,
 			},
+			mockGetUserSavedArticle: &cpb.GetUserSavedArticleResponse{
+				Article: &cpb.Article{
+					Id: articleID1,
+					Platform: &cpb.Platform{
+						Id:         platformID1,
+						Name:       "platform_name_1",
+						SiteUrl:    "platform_url_1",
+						FaviconUrl: "platform_favicon_url_1",
+					},
+					Feeds:        []*cpb.Feed{},
+					Title:        "title_1",
+					Description:  "description_1",
+					ArticleUrl:   "article_url_1",
+					ThumbnailUrl: "thumbnail_url_1",
+					PublishedAt:  &timestamppb.Timestamp{Seconds: publishedAt},
+					IsEng:        true,
+					IsPrivate:    false,
+					Comment: &cpb.ArticleComment{
+						Id:        articleCommentID.String(),
+						UserId:    userID2,
+						ArticleId: articleID1,
+						Comment:   "comment",
+					},
+				},
+			},
 			want: &bpb.GetBookmarkResponse{
 				Bookmark: &bpb.Bookmark{},
 			},
@@ -260,6 +344,10 @@ func Test_UseCase_GetBookmarkByArticleID(t *testing.T) {
 
 			mockContentClient := mock.NewMockContentServiceClient(ctrl)
 			mockFavoriteClient := mock.NewMockFavoriteServiceClient(ctrl)
+
+			if tt.mockGetUserSavedArticle != nil {
+				mockContentClient.EXPECT().GetUserSavedArticle(ctx, gomock.Any()).Return(tt.mockGetUserSavedArticle, nil).AnyTimes()
+			}
 
 			testBookmarkRepository := persistence.NewBookmarkPersistence(db)
 			testContentExternal := external.NewContentExternal(mockContentClient)
@@ -289,6 +377,7 @@ func Test_UseCase_GetBookmarkByArticleID(t *testing.T) {
 			opts := []cmp.Option{
 				cmp.AllowUnexported(bpb.Bookmark{}),
 				cmpopts.IgnoreFields(bpb.Bookmark{}, "state", "sizeCache", "unknownFields", "CreatedAt", "UpdatedAt"),
+				cmpopts.IgnoreFields(cpb.ArticleComment{}, "state", "sizeCache", "unknownFields", "CreatedAt", "UpdatedAt"),
 				cmpopts.IgnoreUnexported(wrapperspb.StringValue{}, timestamppb.Timestamp{}),
 			}
 			if diff := cmp.Diff(got.Bookmark, tt.want.Bookmark, opts...); diff != "" {
@@ -302,6 +391,7 @@ func Test_UseCase_CreateBookmark(t *testing.T) {
 	t.Parallel()
 
 	bookmarkID, _ := uuid.NewRandom()
+	articleCommentID, _ := uuid.NewRandom()
 
 	publishedAt := time.Now().Add(-time.Hour * 24 * 7).Unix()
 
@@ -314,14 +404,14 @@ func Test_UseCase_CreateBookmark(t *testing.T) {
 	userID1 := mockProfiles[0].ID
 
 	test := map[string]struct {
-		recordBookmarks    []entity.Bookmark
-		arg                *bpb.CreateBookmarkRequest
-		want               *bpb.Bookmark
-		wantBookmarkRecord entity.Bookmark
-		wantErrMsg         string
+		recordBookmarks                 []entity.Bookmark
+		arg                             *bpb.CreateBookmarkRequest
+		want                            *bpb.Bookmark
+		mockGetUserSavedArticleResponse *cpb.GetUserSavedArticleResponse
+		wantBookmarkRecord              entity.Bookmark
+		wantErrMsg                      string
 	}{
 		"Success: create bookmark": {
-			// recordBookmarks: []entity.Bookmark{},
 			arg: &bpb.CreateBookmarkRequest{
 				ArticleId: articleID1,
 				UserId:    userID1,
@@ -341,6 +431,38 @@ func Test_UseCase_CreateBookmark(t *testing.T) {
 				IsEng:              true,
 				IsRead:             false,
 			},
+			mockGetUserSavedArticleResponse: &cpb.GetUserSavedArticleResponse{
+				Article: &cpb.Article{
+					Id: articleID1,
+					Platform: &cpb.Platform{
+						Id:               platformID1,
+						Name:             "platform_name_1",
+						SiteUrl:          "platform_url_1",
+						FaviconUrl:       "platform_favicon_url_1",
+						PlatformSiteType: 1,
+						IsEng:            true,
+					},
+					Feeds:                    []*cpb.Feed{},
+					Title:                    "title",
+					Description:              "description",
+					ArticleUrl:               "article_url",
+					ThumbnailUrl:             "thumbnail_url",
+					PublishedAt:              &timestamppb.Timestamp{Seconds: publishedAt},
+					IsEng:                    true,
+					IsPrivate:                false,
+					IsBookmarked:             false,
+					IsFollowing:              false,
+					LikeCount:                0,
+					IsTrend:                  false,
+					FavoriteArticleFolderIds: []string{},
+					Comment: &cpb.ArticleComment{
+						Id:        articleCommentID.String(),
+						UserId:    userID1,
+						ArticleId: articleID1,
+						Comment:   "comment",
+					},
+				},
+			},
 			want: &bpb.Bookmark{
 				ArticleId: articleID1,
 				UserId:    userID1,
@@ -359,6 +481,12 @@ func Test_UseCase_CreateBookmark(t *testing.T) {
 				IsEng:                    true,
 				IsRead:                   false,
 				IsFollowing:              false,
+				ArticleComment: &cpb.ArticleComment{
+					Id:        articleCommentID.String(),
+					UserId:    userID1,
+					ArticleId: articleID1,
+					Comment:   "comment",
+				},
 			},
 			wantBookmarkRecord: entity.Bookmark{
 				ArticleID: articleID1,
@@ -394,6 +522,30 @@ func Test_UseCase_CreateBookmark(t *testing.T) {
 				IsEng:              true,
 				IsRead:             false,
 			},
+			mockGetUserSavedArticleResponse: &cpb.GetUserSavedArticleResponse{
+				Article: &cpb.Article{
+					Id:                       articleID1,
+					Feeds:                    []*cpb.Feed{},
+					Title:                    "title",
+					Description:              "description",
+					ArticleUrl:               "article_url",
+					ThumbnailUrl:             "thumbnail_url",
+					PublishedAt:              &timestamppb.Timestamp{Seconds: publishedAt},
+					IsEng:                    true,
+					IsPrivate:                false,
+					IsBookmarked:             false,
+					IsFollowing:              false,
+					LikeCount:                0,
+					IsTrend:                  false,
+					FavoriteArticleFolderIds: []string{},
+					Comment: &cpb.ArticleComment{
+						Id:        articleCommentID.String(),
+						UserId:    userID1,
+						ArticleId: articleID1,
+						Comment:   "comment",
+					},
+				},
+			},
 			want: &bpb.Bookmark{
 				ArticleId:                articleID1,
 				UserId:                   userID1,
@@ -408,6 +560,12 @@ func Test_UseCase_CreateBookmark(t *testing.T) {
 				IsEng:                    true,
 				IsRead:                   false,
 				IsFollowing:              false,
+				ArticleComment: &cpb.ArticleComment{
+					Id:        articleCommentID.String(),
+					UserId:    userID1,
+					ArticleId: articleID1,
+					Comment:   "comment",
+				},
 			},
 			wantBookmarkRecord: entity.Bookmark{
 				ArticleID:          articleID1,
@@ -443,6 +601,32 @@ func Test_UseCase_CreateBookmark(t *testing.T) {
 					PlatformFaviconURL: "platform_favicon_url_1",
 					IsEng:              true,
 					IsRead:             false,
+				},
+			},
+			mockGetUserSavedArticleResponse: &cpb.GetUserSavedArticleResponse{
+				Article: &cpb.Article{
+					Id: articleID1,
+					Platform: &cpb.Platform{
+						Id:               platformID1,
+						Name:             "platform_name_1",
+						SiteUrl:          "platform_url_1",
+						FaviconUrl:       "platform_favicon_url_1",
+						PlatformSiteType: 1,
+						IsEng:            true,
+					},
+					Feeds:                    []*cpb.Feed{},
+					Title:                    "title",
+					Description:              "description",
+					ArticleUrl:               "article_url",
+					ThumbnailUrl:             "thumbnail_url",
+					PublishedAt:              &timestamppb.Timestamp{Seconds: publishedAt},
+					IsEng:                    true,
+					IsPrivate:                false,
+					IsBookmarked:             false,
+					IsFollowing:              false,
+					LikeCount:                0,
+					IsTrend:                  false,
+					FavoriteArticleFolderIds: []string{},
 				},
 			},
 			arg: &bpb.CreateBookmarkRequest{
@@ -505,6 +689,11 @@ func Test_UseCase_CreateBookmark(t *testing.T) {
 			defer ctrl.Finish()
 
 			mockContentClient := mock.NewMockContentServiceClient(ctrl)
+			mockContentClient.EXPECT().GetUserSavedArticle(gomock.Any(), &cpb.GetUserSavedArticleRequest{
+				ArticleId: tt.arg.ArticleId,
+				UserId:    tt.arg.UserId,
+			}).Return(tt.mockGetUserSavedArticleResponse, nil).AnyTimes()
+
 			mockFavoriteClient := mock.NewMockFavoriteServiceClient(ctrl)
 
 			testBookmarkRepository := persistence.NewBookmarkPersistence(db)
@@ -514,7 +703,6 @@ func Test_UseCase_CreateBookmark(t *testing.T) {
 			testBookmarkPersistenceAdapter := persistenceadapter.NewBookmarkPersistenceAdapter(testBookmarkRepository)
 			testContentExternalAdapter := externaladapter.NewContentExternalAdapter(testContentExternal)
 			testFavoriteExternalAdapter := externaladapter.NewFavoriteExternalAdapter(testFavoriteExternal)
-
 			testBookmarkUseCase := NewBookmarkUseCase(testBookmarkPersistenceAdapter, testContentExternalAdapter, testFavoriteExternalAdapter)
 			if tt.recordBookmarks != nil {
 				for _, v := range tt.recordBookmarks {
@@ -539,6 +727,7 @@ func Test_UseCase_CreateBookmark(t *testing.T) {
 			optsPbBookmark := []cmp.Option{
 				cmp.AllowUnexported(bpb.Bookmark{}),
 				cmpopts.IgnoreFields(bpb.Bookmark{}, "state", "sizeCache", "unknownFields", "Id", "CreatedAt", "UpdatedAt"),
+				cmpopts.IgnoreFields(cpb.ArticleComment{}, "state", "sizeCache", "unknownFields", "CreatedAt", "UpdatedAt"),
 				cmpopts.IgnoreUnexported(wrapperspb.StringValue{}, timestamppb.Timestamp{}),
 			}
 			if diff := cmp.Diff(got.Bookmark, tt.want, optsPbBookmark...); diff != "" {
@@ -561,6 +750,7 @@ func Test_UseCase_CreateBookmarkForUploadArticle(t *testing.T) {
 	t.Parallel()
 
 	bookmarkID, _ := uuid.NewRandom()
+	articleCommentID, _ := uuid.NewRandom()
 
 	publishedAt := time.Now().Add(-time.Hour * 24 * 7).Unix()
 
@@ -615,7 +805,7 @@ func Test_UseCase_CreateBookmarkForUploadArticle(t *testing.T) {
 			},
 			mockCreateUploadArticleResponse: &cpb.CreateArticleResponse{
 				Article: &cpb.Article{
-					Id: articleID1,
+					Id: articleID2,
 					Platform: &cpb.Platform{
 						Id:               platformID1,
 						Name:             "platform_name_1",
@@ -623,17 +813,24 @@ func Test_UseCase_CreateBookmarkForUploadArticle(t *testing.T) {
 						SiteUrl:          "platform_url_1",
 						FaviconUrl:       "platform_favicon_url_1",
 					},
-					Title:        "title_1",
-					Description:  "description_1",
-					ArticleUrl:   "https://test.com/article1",
-					ThumbnailUrl: "thumbnail_url_1",
-					PublishedAt:  &timestamppb.Timestamp{Seconds: publishedAt},
-					IsEng:        true,
-					IsPrivate:    false,
+					Title:                    "title_1",
+					Description:              "description_1",
+					ArticleUrl:               "https://test.com/article1",
+					ThumbnailUrl:             "thumbnail_url_1",
+					PublishedAt:              &timestamppb.Timestamp{Seconds: publishedAt},
+					IsEng:                    true,
+					IsPrivate:                false,
+					FavoriteArticleFolderIds: []string{},
+					Comment: &cpb.ArticleComment{
+						Id:        articleCommentID.String(),
+						UserId:    userID1,
+						ArticleId: articleID2,
+						Comment:   "comment",
+					},
 				},
 			},
 			want: &bpb.Bookmark{
-				ArticleId: articleID1,
+				ArticleId: articleID2,
 				UserId:    userID1,
 				PlatformId: &wrapperspb.StringValue{
 					Value: platformID1,
@@ -650,9 +847,15 @@ func Test_UseCase_CreateBookmarkForUploadArticle(t *testing.T) {
 				IsEng:                    true,
 				IsRead:                   false,
 				IsFollowing:              false,
+				ArticleComment: &cpb.ArticleComment{
+					Id:        articleCommentID.String(),
+					UserId:    userID1,
+					ArticleId: articleID2,
+					Comment:   "comment",
+				},
 			},
 			wantBookmarkRecord: entity.Bookmark{
-				ArticleID: articleID1,
+				ArticleID: articleID2,
 				UserID:    userID1,
 				PlatformID: null.String{
 					Valid:  true,
@@ -704,13 +907,20 @@ func Test_UseCase_CreateBookmarkForUploadArticle(t *testing.T) {
 			},
 			mockCreateUploadArticleResponse: &cpb.CreateArticleResponse{
 				Article: &cpb.Article{
-					Id:           articleID1,
-					Title:        "title_1",
-					Description:  "description_1",
-					ArticleUrl:   "https://test.com/article1",
-					ThumbnailUrl: "thumbnail_url_1",
-					IsEng:        true,
-					IsPrivate:    true,
+					Id:                       articleID1,
+					Title:                    "title_1",
+					Description:              "description_1",
+					ArticleUrl:               "https://test.com/article1",
+					ThumbnailUrl:             "thumbnail_url_1",
+					IsEng:                    true,
+					IsPrivate:                true,
+					FavoriteArticleFolderIds: []string{},
+					Comment: &cpb.ArticleComment{
+						Id:        articleCommentID.String(),
+						UserId:    userID1,
+						ArticleId: articleID1,
+						Comment:   "comment",
+					},
 				},
 			},
 			want: &bpb.Bookmark{
@@ -727,6 +937,12 @@ func Test_UseCase_CreateBookmarkForUploadArticle(t *testing.T) {
 				IsEng:                    true,
 				IsRead:                   false,
 				IsFollowing:              false,
+				ArticleComment: &cpb.ArticleComment{
+					Id:        articleCommentID.String(),
+					UserId:    userID1,
+					ArticleId: articleID1,
+					Comment:   "comment",
+				},
 			},
 			wantBookmarkRecord: entity.Bookmark{
 				ArticleID:          articleID1,
@@ -853,6 +1069,7 @@ func Test_UseCase_CreateBookmarkForUploadArticle(t *testing.T) {
 			optsPbBookmark := []cmp.Option{
 				cmp.AllowUnexported(bpb.Bookmark{}),
 				cmpopts.IgnoreFields(bpb.Bookmark{}, "state", "sizeCache", "unknownFields", "Id", "CreatedAt", "UpdatedAt"),
+				cmpopts.IgnoreFields(cpb.ArticleComment{}, "state", "sizeCache", "unknownFields", "CreatedAt", "UpdatedAt"),
 				cmpopts.IgnoreUnexported(wrapperspb.StringValue{}, timestamppb.Timestamp{}),
 			}
 			if diff := cmp.Diff(got.Bookmark, tt.want, optsPbBookmark...); diff != "" {

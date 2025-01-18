@@ -7,6 +7,7 @@ import (
 	copb "github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go/grpc/common"
 	cpb "github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go/grpc/content"
 	fpb "github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go/grpc/favorite"
+	persistenceadapter "github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/adapter/persistence_adapter"
 	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/domain/entity"
 	"github.com/YukiOnishi1129/techpicks/micro-service/content-service/internal/util"
 	"google.golang.org/protobuf/types/known/timestamppb"
@@ -147,6 +148,42 @@ func (cu *contentUseCase) ListArticleByArticleURL(ctx context.Context, req *cpb.
 			HasNextPage: len(edges) == limit,
 			EndCursor:   edges[len(edges)-1].Cursor,
 		},
+	}, nil
+}
+
+func (cu *contentUseCase) GetArticle(ctx context.Context, req *cpb.GetArticleRequest) (*cpb.GetArticleResponse, error) {
+	article, err := cu.articlePersistenceAdapter.GetArticleByID(ctx, persistenceadapter.GetArticleAdapterInputDTO{
+		ArticleID: req.GetArticleId(),
+		UserID:    req.GetUserId(),
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	res := cu.convertPBArticle(article)
+
+	farFeeds := make([]*cpb.Feed, len(article.R.FeedArticleRelations))
+	for j, far := range article.R.FeedArticleRelations {
+		farFeeds[j] = cu.convertPBFeed(*far.R.Feed)
+	}
+	res.Feeds = farFeeds
+
+	return &cpb.GetArticleResponse{
+		Article: res,
+	}, nil
+}
+
+func (cu *contentUseCase) GetUserSavedArticle(ctx context.Context, req *cpb.GetUserSavedArticleRequest) (*cpb.GetUserSavedArticleResponse, error) {
+	article, err := cu.articlePersistenceAdapter.GetArticleWithoutFeeds(ctx, persistenceadapter.GetArticleWithoutFeedsAdapterInputDTO{
+		ArticleID: req.GetArticleId(),
+		UserID:    req.GetUserId(),
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return &cpb.GetUserSavedArticleResponse{
+		Article: cu.convertPBArticle(article),
 	}, nil
 }
 

@@ -12,6 +12,7 @@ import (
 	copb "github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go/grpc/common"
 	cpb "github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go/grpc/content"
 	fpb "github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go/grpc/favorite"
+	externaladapter "github.com/YukiOnishi1129/techpicks/micro-service/favorite-service/internal/adapter/external_adapter"
 	persistenceadapter "github.com/YukiOnishi1129/techpicks/micro-service/favorite-service/internal/adapter/persistence_adapter"
 	"github.com/YukiOnishi1129/techpicks/micro-service/favorite-service/internal/domain/entity"
 	"github.com/volatiletech/null/v8"
@@ -43,9 +44,17 @@ func (fu *favoriteUseCase) GetFavoriteArticles(ctx context.Context, req *fpb.Get
 	}
 
 	for _, fa := range fas {
+		a, err := fu.contentExternalAdapter.GetUserSavedArticle(ctx, externaladapter.GetUserSavedArticleInputDTO{
+			ArticleID: fa.ArticleID,
+			UserID:    fa.UserID,
+		})
+		if err != nil {
+			return &fpb.GetFavoriteArticlesResponse{}, err
+		}
+		resFa := fu.convertPBFavoriteArticle(fa, a.GetArticle())
 		resFas = append(resFas, &fpb.FavoriteArticleEdge{
 			Cursor: fa.ID,
-			Node:   fu.convertPBFavoriteArticle(fa),
+			Node:   resFa,
 		})
 	}
 
@@ -128,9 +137,16 @@ func (fu *favoriteUseCase) GetFavoriteAllFolderArticles(ctx context.Context, req
 				}
 			}
 
+			a, err := fu.contentExternalAdapter.GetUserSavedArticle(ctx, externaladapter.GetUserSavedArticleInputDTO{
+				ArticleID: fa.ArticleID,
+				UserID:    fa.UserID,
+			})
+			if err != nil {
+				return &fpb.GetFavoriteAllFolderArticlesResponse{}, err
+			}
 			resFa := &fpb.FavoriteAllFolderArticleEdge{
 				Cursor:                 fa.ID,
-				Node:                   fu.convertPBFavoriteArticle(fa),
+				Node:                   fu.convertPBFavoriteArticle(fa, a.GetArticle()),
 				FavoriteArticleFolders: resFaFs,
 			}
 			resFas = append(resFas, resFa)
@@ -173,8 +189,16 @@ func (fu *favoriteUseCase) CreateFavoriteArticle(ctx context.Context, req *fpb.C
 		return &fpb.CreateFavoriteArticleResponse{}, err
 	}
 
+	a, err := fu.contentExternalAdapter.GetUserSavedArticle(ctx, externaladapter.GetUserSavedArticleInputDTO{
+		ArticleID: fa.ArticleID,
+		UserID:    fa.UserID,
+	})
+	if err != nil {
+		return &fpb.CreateFavoriteArticleResponse{}, err
+	}
+
 	return &fpb.CreateFavoriteArticleResponse{
-		FavoriteArticle: fu.convertPBFavoriteArticle(&fa),
+		FavoriteArticle: fu.convertPBFavoriteArticle(&fa, a.GetArticle()),
 	}, nil
 }
 
@@ -241,8 +265,16 @@ func (fu *favoriteUseCase) CreateFavoriteArticleForUploadArticle(ctx context.Con
 		return &fpb.CreateFavoriteArticleResponse{}, err
 	}
 
+	a, err := fu.contentExternalAdapter.GetUserSavedArticle(ctx, externaladapter.GetUserSavedArticleInputDTO{
+		ArticleID: fa.ArticleID,
+		UserID:    fa.UserID,
+	})
+	if err != nil {
+		return &fpb.CreateFavoriteArticleResponse{}, err
+	}
+
 	return &fpb.CreateFavoriteArticleResponse{
-		FavoriteArticle: fu.convertPBFavoriteArticle(&fa),
+		FavoriteArticle: fu.convertPBFavoriteArticle(&fa, a.GetArticle()),
 	}, nil
 }
 
@@ -328,7 +360,14 @@ func (fu *favoriteUseCase) CreateMultiFavoriteArticlesForUploadArticle(ctx conte
 		})
 
 		if len(req.GetFavoriteArticleFolderIds())-1 == i {
-			resFa = fu.convertPBFavoriteArticle(&fa)
+			a, err := fu.contentExternalAdapter.GetUserSavedArticle(ctx, externaladapter.GetUserSavedArticleInputDTO{
+				ArticleID: fa.ArticleID,
+				UserID:    fa.UserID,
+			})
+			if err != nil {
+				return &fpb.CreateMultiFavoriteArticlesForUploadArticleResponse{}, err
+			}
+			resFa = fu.convertPBFavoriteArticle(&fa, a.GetArticle())
 		}
 	}
 
@@ -387,28 +426,31 @@ func (fu *favoriteUseCase) DeleteFavoriteArticlesByArticleID(ctx context.Context
 	return &emptypb.Empty{}, nil
 }
 
-func (fu *favoriteUseCase) convertPBFavoriteArticle(fa *entity.FavoriteArticle) *fpb.FavoriteArticle {
+func (fu *favoriteUseCase) convertPBFavoriteArticle(fa *entity.FavoriteArticle, a *cpb.Article) *fpb.FavoriteArticle {
 	resFa := &fpb.FavoriteArticle{
 		Id:                      fa.ID,
 		FavoriteArticleFolderId: fa.FavoriteArticleFolderID,
 		ArticleId:               fa.ArticleID,
 		UserId:                  fa.UserID,
-		Title:                   fa.Title,
-		Description:             fa.Description,
-		ThumbnailUrl:            fa.ThumbnailURL,
-		ArticleUrl:              fa.ArticleURL,
+		Title:                   a.GetTitle(),
+		Description:             a.GetDescription(),
+		ThumbnailUrl:            a.GetThumbnailUrl(),
+		ArticleUrl:              a.GetArticleUrl(),
 		PlatformName:            fa.PlatformName,
 		PlatformUrl:             fa.PlatformURL,
 		PlatformFaviconUrl:      fa.PlatformFaviconURL,
-		IsEng:                   fa.IsEng,
-		IsPrivate:               fa.IsPrivate,
+		IsEng:                   a.GetIsEng(),
+		IsPrivate:               a.GetIsPrivate(),
 		IsRead:                  fa.IsRead,
 		CreatedAt:               timestamppb.New(fa.CreatedAt),
 		UpdatedAt:               timestamppb.New(fa.UpdatedAt),
 	}
 
-	if fa.PlatformID.Valid {
-		resFa.PlatformId = wrapperspb.String(fa.PlatformID.String)
+	if a.GetPlatform() != nil {
+		resFa.PlatformId = wrapperspb.String(a.GetPlatform().GetId())
+		resFa.PlatformName = a.GetPlatform().GetName()
+		resFa.PlatformUrl = a.GetPlatform().GetSiteUrl()
+		resFa.PlatformFaviconUrl = a.GetPlatform().GetFaviconUrl()
 	}
 	if fa.PublishedAt.Valid {
 		resFa.PublishedAt = timestamppb.New(fa.PublishedAt.Time)

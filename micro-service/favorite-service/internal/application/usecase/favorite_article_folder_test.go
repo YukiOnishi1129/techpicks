@@ -6,6 +6,7 @@ import (
 	"time"
 
 	copb "github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go/grpc/common"
+	cpb "github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go/grpc/content"
 	fpb "github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go/grpc/favorite"
 	externaladapter "github.com/YukiOnishi1129/techpicks/micro-service/favorite-service/internal/adapter/external_adapter"
 	persistenceadapter "github.com/YukiOnishi1129/techpicks/micro-service/favorite-service/internal/adapter/persistence_adapter"
@@ -52,11 +53,12 @@ func Test_UseCase_GetFavoriteArticleFolders(t *testing.T) {
 	userID3 := mockProfiles[2].ID
 
 	test := map[string]struct {
-		recordFavoriteArticleFolders []entity.FavoriteArticleFolder
-		recordFavoriteArticles       []entity.FavoriteArticle
-		arg                          *fpb.GetFavoriteArticleFoldersRequest
-		want                         *fpb.GetFavoriteArticleFoldersResponse
-		wantErrMsg                   string
+		recordFavoriteArticleFolders     []entity.FavoriteArticleFolder
+		recordFavoriteArticles           []entity.FavoriteArticle
+		arg                              *fpb.GetFavoriteArticleFoldersRequest
+		mockGetUserSavedArticleResponses []*cpb.GetUserSavedArticleResponse
+		want                             *fpb.GetFavoriteArticleFoldersResponse
+		wantErrMsg                       string
 	}{
 		"Success": {
 			recordFavoriteArticleFolders: []entity.FavoriteArticleFolder{
@@ -144,6 +146,19 @@ func Test_UseCase_GetFavoriteArticleFolders(t *testing.T) {
 			},
 			arg: &fpb.GetFavoriteArticleFoldersRequest{
 				UserId: userID1,
+			},
+			mockGetUserSavedArticleResponses: []*cpb.GetUserSavedArticleResponse{
+				{
+					Article: &cpb.Article{
+						Id:           articleID2,
+						Title:        "fa_title2",
+						Description:  "fa_description2",
+						ThumbnailUrl: "https://example.com/thumbnail2",
+						ArticleUrl:   "https://example.com/article2",
+						IsEng:        true,
+						IsPrivate:    false,
+					},
+				},
 			},
 			want: &fpb.GetFavoriteArticleFoldersResponse{
 				FavoriteArticleFoldersEdge: []*fpb.FavoriteArticleFolderEdge{
@@ -288,6 +303,19 @@ func Test_UseCase_GetFavoriteArticleFolders(t *testing.T) {
 				UserId:   userID1,
 				Keywords: []*wrapperspb.StringValue{{Value: "e1"}},
 			},
+			mockGetUserSavedArticleResponses: []*cpb.GetUserSavedArticleResponse{
+				{
+					Article: &cpb.Article{
+						Id:           articleID2,
+						Title:        "fa_title2",
+						Description:  "fa_description2",
+						ThumbnailUrl: "https://example.com/thumbnail2",
+						ArticleUrl:   "https://example.com/article2",
+						IsEng:        true,
+						IsPrivate:    false,
+					},
+				},
+			},
 			want: &fpb.GetFavoriteArticleFoldersResponse{
 				FavoriteArticleFoldersEdge: []*fpb.FavoriteArticleFolderEdge{
 					{
@@ -410,6 +438,19 @@ func Test_UseCase_GetFavoriteArticleFolders(t *testing.T) {
 			arg: &fpb.GetFavoriteArticleFoldersRequest{
 				UserId: userID1,
 				Limit:  &wrapperspb.Int64Value{Value: 1},
+			},
+			mockGetUserSavedArticleResponses: []*cpb.GetUserSavedArticleResponse{
+				{
+					Article: &cpb.Article{
+						Id:           articleID1,
+						Title:        "fa_title2",
+						Description:  "fa_description2",
+						ArticleUrl:   "https://example.com/article2",
+						ThumbnailUrl: "https://example.com/thumbnail2",
+						IsEng:        true,
+						IsPrivate:    false,
+					},
+				},
 			},
 			want: &fpb.GetFavoriteArticleFoldersResponse{
 				FavoriteArticleFoldersEdge: []*fpb.FavoriteArticleFolderEdge{
@@ -563,7 +604,7 @@ func Test_UseCase_GetFavoriteArticleFolders(t *testing.T) {
 				},
 			},
 		},
-		"Success: favorite_article_limit 2": {
+		"Success: favorite article limit 2": {
 			recordFavoriteArticleFolders: []entity.FavoriteArticleFolder{
 				{
 					ID:     fafID1.String(),
@@ -665,6 +706,30 @@ func Test_UseCase_GetFavoriteArticleFolders(t *testing.T) {
 			arg: &fpb.GetFavoriteArticleFoldersRequest{
 				UserId:               userID1,
 				FavoriteArticleLimit: &wrapperspb.Int64Value{Value: 2},
+			},
+			mockGetUserSavedArticleResponses: []*cpb.GetUserSavedArticleResponse{
+				{
+					Article: &cpb.Article{
+						Id:           articleID3,
+						Title:        "fa_title3",
+						Description:  "fa_description3",
+						ThumbnailUrl: "https://example.com/thumbnail3",
+						ArticleUrl:   "https://example.com/article3",
+						IsEng:        true,
+						IsPrivate:    false,
+					},
+				},
+				{
+					Article: &cpb.Article{
+						Id:           articleID2,
+						Title:        "fa_title2",
+						Description:  "fa_description2",
+						ThumbnailUrl: "https://example.com/thumbnail2",
+						ArticleUrl:   "https://example.com/article2",
+						IsEng:        true,
+						IsPrivate:    false,
+					},
+				},
 			},
 			want: &fpb.GetFavoriteArticleFoldersResponse{
 				FavoriteArticleFoldersEdge: []*fpb.FavoriteArticleFolderEdge{
@@ -919,6 +984,35 @@ func Test_UseCase_GetFavoriteArticleFolders(t *testing.T) {
 				UserId:       userID1,
 				IsFolderOnly: &wrapperspb.BoolValue{Value: true},
 			},
+			// 	{
+			// 		Article: &cpb.Article{
+			// 			Id: articleID1,
+			// 			Platform: &cpb.Platform{
+			// 				Id:         platformID1,
+			// 				Name:       "platform1",
+			// 				SiteUrl:    "https://example.com/platform1",
+			// 				FaviconUrl: "https://example.com/favicon1",
+			// 			},
+			// 			Title:        "fa_title1",
+			// 			Description:  "fa_description1",
+			// 			ThumbnailUrl: "https://example.com/thumbnail1",
+			// 			ArticleUrl:   "https://example.com/article1",
+			// 			IsEng:        true,
+			// 			IsPrivate:    false,
+			// 		},
+			// 	},
+			// 	{
+			// 		Article: &cpb.Article{
+			// 			Id:           articleID2,
+			// 			Title:        "fa_title2",
+			// 			Description:  "fa_description2",
+			// 			ThumbnailUrl: "https://example.com/thumbnail2",
+			// 			ArticleUrl:   "https://example.com/article2",
+			// 			IsEng:        true,
+			// 			IsPrivate:    false,
+			// 		},
+			// 	},
+			// },
 			want: &fpb.GetFavoriteArticleFoldersResponse{
 				FavoriteArticleFoldersEdge: []*fpb.FavoriteArticleFolderEdge{
 					{
@@ -1046,6 +1140,19 @@ func Test_UseCase_GetFavoriteArticleFolders(t *testing.T) {
 				UserId:     userID1,
 				Limit:      &wrapperspb.Int64Value{Value: 1},
 				IsAllFetch: &wrapperspb.BoolValue{Value: true},
+			},
+			mockGetUserSavedArticleResponses: []*cpb.GetUserSavedArticleResponse{
+				{
+					Article: &cpb.Article{
+						Id:           articleID2,
+						Title:        "fa_title2",
+						Description:  "fa_description2",
+						ThumbnailUrl: "https://example.com/thumbnail2",
+						ArticleUrl:   "https://example.com/article2",
+						IsEng:        true,
+						IsPrivate:    false,
+					},
+				},
 			},
 			want: &fpb.GetFavoriteArticleFoldersResponse{
 				FavoriteArticleFoldersEdge: []*fpb.FavoriteArticleFolderEdge{
@@ -1206,6 +1313,47 @@ func Test_UseCase_GetFavoriteArticleFolders(t *testing.T) {
 				FavoriteArticleLimit:      &wrapperspb.Int64Value{Value: 2},
 				IsFavoriteArticleAllFetch: &wrapperspb.BoolValue{Value: true},
 			},
+			mockGetUserSavedArticleResponses: []*cpb.GetUserSavedArticleResponse{
+				{
+					Article: &cpb.Article{
+						Id:           articleID3,
+						Title:        "fa_title3",
+						Description:  "fa_description3",
+						ThumbnailUrl: "https://example.com/thumbnail3",
+						ArticleUrl:   "https://example.com/article3",
+						IsEng:        true,
+						IsPrivate:    false,
+					},
+				},
+				{
+					Article: &cpb.Article{
+						Id:           articleID2,
+						Title:        "fa_title2",
+						Description:  "fa_description2",
+						ThumbnailUrl: "https://example.com/thumbnail2",
+						ArticleUrl:   "https://example.com/article2",
+						IsEng:        true,
+						IsPrivate:    false,
+					},
+				},
+				{
+					Article: &cpb.Article{
+						Id: articleID1,
+						Platform: &cpb.Platform{
+							Id:         platformID1,
+							Name:       "platform1",
+							SiteUrl:    "https://example.com/platform1",
+							FaviconUrl: "https://example.com/favicon1",
+						},
+						Title:        "fa_title1",
+						Description:  "fa_description1",
+						ThumbnailUrl: "https://example.com/thumbnail1",
+						ArticleUrl:   "https://example.com/article1",
+						IsEng:        true,
+						IsPrivate:    false,
+					},
+				},
+			},
 			want: &fpb.GetFavoriteArticleFoldersResponse{
 				FavoriteArticleFoldersEdge: []*fpb.FavoriteArticleFolderEdge{
 					{
@@ -1316,6 +1464,19 @@ func Test_UseCase_GetFavoriteArticleFolders(t *testing.T) {
 			defer ctrl.Finish()
 
 			mockContentClient := mock.NewMockContentServiceClient(ctrl)
+
+			if len(tt.mockGetUserSavedArticleResponses) != 0 {
+				for _, v := range tt.mockGetUserSavedArticleResponses {
+					mockContentClient.EXPECT().GetUserSavedArticle(
+						gomock.Any(),
+						// &cpb.GetUserSavedArticleRequest{
+						// 	UserId:    tt.arg.UserId,
+						// 	ArticleId: v.Article.Id,
+						// },
+						gomock.Any(),
+					).Return(v, nil)
+				}
+			}
 
 			testFavoriteArticleFolderRepository := persistence.NewFavoriteArticleFolderPersistence(db)
 			testFavoriteArticleRepository := persistence.NewFavoriteArticlePersistence(db)

@@ -8,6 +8,7 @@ import (
 
 type ContentExternal interface {
 	ListArticleByArticleURL(ctx context.Context, dto *cpb.ListArticleByArticleURLRequest) (*cpb.ListArticleByArticleURLResponse, error)
+	GetUserSavedArticle(ctx context.Context, dto *cpb.GetUserSavedArticleRequest) (*cpb.GetUserSavedArticleResponse, error)
 	CreateUploadArticle(ctx context.Context, dto *cpb.CreateUploadArticleRequest) (*cpb.CreateArticleResponse, error)
 }
 
@@ -23,6 +24,14 @@ func NewContentExternal(cc cpb.ContentServiceClient) ContentExternal {
 
 func (ce *contentExternal) ListArticleByArticleURL(ctx context.Context, dto *cpb.ListArticleByArticleURLRequest) (*cpb.ListArticleByArticleURLResponse, error) {
 	res, err := ce.cpbClient.ListArticleByArticleURL(ctx, dto)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}
+
+func (ce *contentExternal) GetUserSavedArticle(ctx context.Context, dto *cpb.GetUserSavedArticleRequest) (*cpb.GetUserSavedArticleResponse, error) {
+	res, err := ce.cpbClient.GetUserSavedArticle(ctx, dto)
 	if err != nil {
 		return nil, err
 	}

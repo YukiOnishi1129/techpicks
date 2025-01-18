@@ -6,6 +6,7 @@ import (
 
 	copb "github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go/grpc/common"
 	fpb "github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go/grpc/favorite"
+	externaladapter "github.com/YukiOnishi1129/techpicks/micro-service/favorite-service/internal/adapter/external_adapter"
 	"github.com/YukiOnishi1129/techpicks/micro-service/favorite-service/internal/domain/entity"
 	"google.golang.org/protobuf/types/known/emptypb"
 	"google.golang.org/protobuf/types/known/timestamppb"
@@ -184,7 +185,14 @@ func (fu *favoriteUseCase) convertPBFavoriteArticleFolder(ctx context.Context, f
 	resFas := make([]*fpb.FavoriteArticle, len(fas))
 	if len(fas) != 0 {
 		for i, fa := range fas {
-			resFa := fu.convertPBFavoriteArticle(fa)
+			a, err := fu.contentExternalAdapter.GetUserSavedArticle(ctx, externaladapter.GetUserSavedArticleInputDTO{
+				ArticleID: fa.ArticleID,
+				UserID:    fa.UserID,
+			})
+			if err != nil {
+				break
+			}
+			resFa := fu.convertPBFavoriteArticle(fa, a.GetArticle())
 			resFas[i] = resFa
 		}
 	}
