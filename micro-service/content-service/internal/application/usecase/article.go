@@ -160,7 +160,29 @@ func (cu *contentUseCase) GetArticle(ctx context.Context, req *cpb.GetArticleReq
 		return nil, err
 	}
 
+	res := cu.convertPBArticle(article)
+
+	farFeeds := make([]*cpb.Feed, len(article.R.FeedArticleRelations))
+	for j, far := range article.R.FeedArticleRelations {
+		farFeeds[j] = cu.convertPBFeed(*far.R.Feed)
+	}
+	res.Feeds = farFeeds
+
 	return &cpb.GetArticleResponse{
+		Article: res,
+	}, nil
+}
+
+func (cu *contentUseCase) GetUserSavedArticle(ctx context.Context, req *cpb.GetUserSavedArticleRequest) (*cpb.GetUserSavedArticleResponse, error) {
+	article, err := cu.articlePersistenceAdapter.GetArticleWithoutFeeds(ctx, persistenceadapter.GetArticleWithoutFeedsAdapterInputDTO{
+		ArticleID: req.GetArticleId(),
+		UserID:    req.GetUserId(),
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return &cpb.GetUserSavedArticleResponse{
 		Article: cu.convertPBArticle(article),
 	}, nil
 }

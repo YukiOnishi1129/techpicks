@@ -30,6 +30,14 @@ func (ch *contentHandler) GetArticle(ctx context.Context, req *cpb.GetArticleReq
 	return res, nil
 }
 
+func (ch *contentHandler) GetUserSavedArticle(ctx context.Context, req *cpb.GetUserSavedArticleRequest) (*cpb.GetUserSavedArticleResponse, error) {
+	res, err := ch.contentUseCase.GetUserSavedArticle(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}
+
 func (ch *contentHandler) CreateUploadArticle(ctx context.Context, req *cpb.CreateUploadArticleRequest) (*cpb.CreateArticleResponse, error) {
 	res, err := ch.contentUseCase.CreateUploadArticle(ctx, req)
 	if err != nil {

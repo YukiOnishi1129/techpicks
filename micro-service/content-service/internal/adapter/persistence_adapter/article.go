@@ -20,6 +20,7 @@ type ArticlePersistenceAdapter interface {
 	ListArticleByArticleURL(ctx context.Context, articleURL string, limit int) (entity.ArticleSlice, error)
 	GetPrivateArticlesByArticleURL(ctx context.Context, articleURL string) (entity.ArticleSlice, error)
 	GetArticleByID(ctx context.Context, dto GetArticleAdapterInputDTO) (entity.Article, error)
+	GetArticleWithoutFeeds(ctx context.Context, dto GetArticleWithoutFeedsAdapterInputDTO) (entity.Article, error)
 	GetArticleRelationPlatform(ctx context.Context, articleID string) (entity.Article, error)
 	CreateUploadArticle(ctx context.Context, req *cpb.CreateUploadArticleRequest, isEng bool) (*entity.Article, error)
 }
@@ -42,7 +43,7 @@ func (apa *articlePersistenceAdapter) ListArticle(ctx context.Context, req *cpb.
 		qm.Where("feeds.deleted_at IS NULL"),
 		qm.InnerJoin("platforms as feed_platforms ON feeds.platform_id = feed_platforms.id"),
 		qm.InnerJoin("categories as feed_categories ON feeds.category_id = feed_categories.id"),
-		qm.LeftOuterJoin("article_comments on articles.id = article_comments.article_id"),
+		qm.LeftOuterJoin("article_comments on articles.id = article_comments.article_id and article_comments.user_id = ?", req.GetUserId().GetValue()),
 		qm.Load(qm.Rels(entity.ArticleRels.Platform)),
 		qm.Load(qm.Rels(entity.ArticleRels.FeedArticleRelations)),
 		qm.Load(qm.Rels(
@@ -174,6 +175,30 @@ func (apa *articlePersistenceAdapter) GetArticleByID(ctx context.Context, dto Ge
 		qm.LeftOuterJoin("feed_article_relations ON articles.id = feed_article_relations.article_id"),
 		qm.InnerJoin("feeds ON feed_article_relations.feed_id = feeds.id"),
 		qm.Where("feeds.deleted_at IS NULL"),
+		qm.InnerJoin("platforms as feed_platforms ON feeds.platform_id = feed_platforms.id"),
+		qm.InnerJoin("categories as feed_categories ON feeds.category_id = feed_categories.id"),
+		qm.LeftOuterJoin("article_comments on articles.id = article_comments.article_id and article_comments.user_id = ?", dto.UserID),
+		qm.Load(qm.Rels(entity.ArticleRels.Platform)),
+		qm.Load(qm.Rels(entity.ArticleRels.FeedArticleRelations)),
+		qm.Load(qm.Rels(
+			entity.ArticleRels.FeedArticleRelations,
+			entity.FeedArticleRelationRels.Feed,
+		)),
+		qm.Load("FeedArticleRelations.Feed.Category"),
+		qm.Load("FeedArticleRelations.Feed.Platform"),
+		qm.Load(qm.Rels(entity.ArticleRels.ArticleComments)),
+	}
+	article, err := apa.articleRepository.GetArticleByID(ctx, dto.ArticleID, q)
+	if err != nil {
+		return entity.Article{}, err
+	}
+
+	return article, nil
+}
+
+func (apa *articlePersistenceAdapter) GetArticleWithoutFeeds(ctx context.Context, dto GetArticleWithoutFeedsAdapterInputDTO) (entity.Article, error) {
+	q := []qm.QueryMod{
+		qm.InnerJoin("platforms ON articles.platform_id = platforms.id"),
 		qm.LeftOuterJoin("article_comments on articles.id = article_comments.article_id"),
 		qm.Load(qm.Rels(entity.ArticleRels.Platform)),
 		qm.Load(qm.Rels(entity.ArticleRels.ArticleComments)),
