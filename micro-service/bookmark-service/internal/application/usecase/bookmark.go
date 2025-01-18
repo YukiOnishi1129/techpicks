@@ -6,7 +6,6 @@ import (
 
 	bpb "github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go/grpc/bookmark"
 	copb "github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go/grpc/common"
-	cpb "github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go/grpc/content"
 	fpb "github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go/grpc/favorite"
 	externaladapter "github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/internal/adapter/external_adapter"
 	persistenceadapter "github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/internal/adapter/persistence_adapter"
@@ -46,11 +45,11 @@ func (bu *bookmarkUseCase) GetBookmarks(ctx context.Context, req *bpb.GetBookmar
 
 	edges := make([]*bpb.BookmarkEdge, len(bookmarks))
 	for i, b := range bookmarks {
-		resA, err := bu.contentExternalAdapter.GetUserSavedArticle(ctx, externaladapter.GetUserSavedArticleInputDTO{
+		resA, err := bu.contentExternalAdapter.GetUserSavedArticle(ctx, &externaladapter.GetUserSavedArticleInputDTO{
 			ArticleID: b.ArticleID,
 			UserID:    req.GetUserId(),
 		})
-		resB := bu.convertPBBookmark(b, resA.GetArticle())
+		resB := bu.convertPBBookmark(b, resA.Article)
 
 		resFavoriteFolders, err := bu.favoriteExternalAdapter.GetFavoriteArticleFoldersByArticleID(ctx, &fpb.GetFavoriteArticleFoldersByArticleIdRequest{
 			ArticleId: b.ArticleID,
@@ -100,16 +99,16 @@ func (bu *bookmarkUseCase) GetBookmarkByArticleID(ctx context.Context, req *bpb.
 	if err != nil {
 		return nil, err
 	}
-	a, err := bu.contentExternalAdapter.GetUserSavedArticle(ctx, externaladapter.GetUserSavedArticleInputDTO{
+	a, err := bu.contentExternalAdapter.GetUserSavedArticle(ctx, &externaladapter.GetUserSavedArticleInputDTO{
 		ArticleID: b.ArticleID,
 		UserID:    req.GetUserId(),
 	})
 	return &bpb.GetBookmarkResponse{
-		Bookmark: bu.convertPBBookmark(&b, a.GetArticle()),
+		Bookmark: bu.convertPBBookmark(&b, a.Article),
 	}, nil
 }
 
-func (bu *bookmarkUseCase) convertPBBookmark(b *entity.Bookmark, a *cpb.Article) *bpb.Bookmark {
+func (bu *bookmarkUseCase) convertPBBookmark(b *entity.Bookmark, a *externaladapter.ArticleDTO) *bpb.Bookmark {
 	if b.ID == "" {
 		return &bpb.Bookmark{}
 	}
@@ -118,25 +117,25 @@ func (bu *bookmarkUseCase) convertPBBookmark(b *entity.Bookmark, a *cpb.Article)
 		Id:                       b.ID,
 		ArticleId:                b.ArticleID,
 		UserId:                   b.UserID,
-		Title:                    a.GetTitle(),
-		Description:              a.GetDescription(),
-		ArticleUrl:               a.GetArticleUrl(),
-		ThumbnailUrl:             a.GetThumbnailUrl(),
+		Title:                    a.Title,
+		Description:              a.Description,
+		ArticleUrl:               a.ArticleURL,
+		ThumbnailUrl:             a.ThumbnailURL,
 		PlatformName:             b.PlatformName,
 		PlatformUrl:              b.PlatformURL,
 		PlatformFaviconUrl:       b.PlatformFaviconURL,
-		IsEng:                    a.GetIsEng(),
+		IsEng:                    a.IsEng,
 		IsRead:                   b.IsRead,
-		IsFollowing:              false,
-		FavoriteArticleFolderIds: []string{},
+		IsFollowing:              a.IsFollowing,
+		FavoriteArticleFolderIds: a.FavoriteArticleFolderIDs,
 		CreatedAt:                timestamppb.New(b.CreatedAt),
 		UpdatedAt:                timestamppb.New(b.UpdatedAt),
 	}
-	if a.GetPlatform() != nil {
-		resB.PlatformId = wrapperspb.String(a.GetPlatform().GetId())
-		resB.PlatformName = a.GetPlatform().GetName()
-		resB.PlatformUrl = a.GetPlatform().GetSiteUrl()
-		resB.PlatformFaviconUrl = a.GetPlatform().GetFaviconUrl()
+	if a.Platform != nil {
+		resB.PlatformId = wrapperspb.String(a.Platform.ID)
+		resB.PlatformName = a.Platform.Name
+		resB.PlatformUrl = a.Platform.SiteURL
+		resB.PlatformFaviconUrl = a.Platform.FaviconURL
 	}
 	if b.PublishedAt.Valid {
 		resB.PublishedAt = timestamppb.New(b.PublishedAt.Time)
@@ -158,13 +157,13 @@ func (bu *bookmarkUseCase) CreateBookmark(ctx context.Context, req *bpb.CreateBo
 		return &bpb.CreateBookmarkResponse{}, err
 	}
 
-	a, err := bu.contentExternalAdapter.GetUserSavedArticle(ctx, externaladapter.GetUserSavedArticleInputDTO{
+	a, err := bu.contentExternalAdapter.GetUserSavedArticle(ctx, &externaladapter.GetUserSavedArticleInputDTO{
 		ArticleID: b.ArticleID,
 		UserID:    req.GetUserId(),
 	})
 
 	return &bpb.CreateBookmarkResponse{
-		Bookmark: bu.convertPBBookmark(&b, a.GetArticle()),
+		Bookmark: bu.convertPBBookmark(&b, a.Article),
 	}, nil
 }
 
@@ -179,15 +178,15 @@ func (bu *bookmarkUseCase) CreateBookmarkForUploadArticle(ctx context.Context, r
 	}
 
 	// create article
-	article, err := bu.contentExternalAdapter.CreateUploadArticle(ctx, &cpb.CreateUploadArticleRequest{
-		UserId:             req.GetUserId(),
+	article, err := bu.contentExternalAdapter.CreateUploadArticle(ctx, &externaladapter.GetOrCreateUploadArticleInputDTO{
+		UserID:             req.GetUserId(),
 		Title:              req.GetTitle(),
 		Description:        req.GetDescription(),
-		ArticleUrl:         req.GetArticleUrl(),
-		ThumbnailUrl:       req.GetThumbnailUrl(),
+		ArticleURL:         req.GetArticleUrl(),
+		ThumbnailURL:       req.GetThumbnailUrl(),
 		PlatformName:       req.GetPlatformName(),
-		PlatformUrl:        req.GetPlatformUrl(),
-		PlatformFaviconUrl: req.GetPlatformFaviconUrl(),
+		PlatformURL:        req.GetPlatformUrl(),
+		PlatformFaviconURL: req.GetPlatformFaviconUrl(),
 	})
 	if err != nil {
 		return &bpb.CreateBookmarkResponse{}, err
@@ -199,13 +198,13 @@ func (bu *bookmarkUseCase) CreateBookmarkForUploadArticle(ctx context.Context, r
 		return &bpb.CreateBookmarkResponse{}, err
 	}
 
-	a, err := bu.contentExternalAdapter.GetUserSavedArticle(ctx, externaladapter.GetUserSavedArticleInputDTO{
+	a, err := bu.contentExternalAdapter.GetUserSavedArticle(ctx, &externaladapter.GetUserSavedArticleInputDTO{
 		ArticleID: b.ArticleID,
 		UserID:    req.GetUserId(),
 	})
 
 	return &bpb.CreateBookmarkResponse{
-		Bookmark: bu.convertPBBookmark(&b, a.GetArticle()),
+		Bookmark: bu.convertPBBookmark(&b, a.Article),
 	}, nil
 }
 
