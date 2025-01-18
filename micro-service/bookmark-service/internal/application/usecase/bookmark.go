@@ -242,13 +242,8 @@ func (bu *bookmarkUseCase) CreateBookmarkForUploadArticle(ctx context.Context, r
 		return &bpb.CreateBookmarkResponse{}, err
 	}
 
-	a, err := bu.contentExternalAdapter.GetUserSavedArticle(ctx, &externaladapter.GetUserSavedArticleInputDTO{
-		ArticleID: article.Article.ID,
-		UserID:    req.GetUserId(),
-	})
-
 	return &bpb.CreateBookmarkResponse{
-		Bookmark: bu.convertPBBookmark(b.Bookmark, a.Article),
+		Bookmark: bu.convertPBBookmark(b.Bookmark, article.Article),
 	}, nil
 }
 

@@ -314,12 +314,12 @@ func Test_UseCase_CreateBookmark(t *testing.T) {
 	userID1 := mockProfiles[0].ID
 
 	test := map[string]struct {
-		recordBookmarks        []entity.Bookmark
-		arg                    *bpb.CreateBookmarkRequest
-		want                   *bpb.Bookmark
-		resGetUserSavedArticle *cpb.GetUserSavedArticleResponse
-		wantBookmarkRecord     entity.Bookmark
-		wantErrMsg             string
+		recordBookmarks                 []entity.Bookmark
+		arg                             *bpb.CreateBookmarkRequest
+		want                            *bpb.Bookmark
+		mockGetUserSavedArticleResponse *cpb.GetUserSavedArticleResponse
+		wantBookmarkRecord              entity.Bookmark
+		wantErrMsg                      string
 	}{
 		"Success: create bookmark": {
 			arg: &bpb.CreateBookmarkRequest{
@@ -341,7 +341,7 @@ func Test_UseCase_CreateBookmark(t *testing.T) {
 				IsEng:              true,
 				IsRead:             false,
 			},
-			resGetUserSavedArticle: &cpb.GetUserSavedArticleResponse{
+			mockGetUserSavedArticleResponse: &cpb.GetUserSavedArticleResponse{
 				Article: &cpb.Article{
 					Id: articleID1,
 					Platform: &cpb.Platform{
@@ -420,7 +420,7 @@ func Test_UseCase_CreateBookmark(t *testing.T) {
 				IsEng:              true,
 				IsRead:             false,
 			},
-			resGetUserSavedArticle: &cpb.GetUserSavedArticleResponse{
+			mockGetUserSavedArticleResponse: &cpb.GetUserSavedArticleResponse{
 				Article: &cpb.Article{
 					Id:                       articleID1,
 					Feeds:                    []*cpb.Feed{},
@@ -489,7 +489,7 @@ func Test_UseCase_CreateBookmark(t *testing.T) {
 					IsRead:             false,
 				},
 			},
-			resGetUserSavedArticle: &cpb.GetUserSavedArticleResponse{
+			mockGetUserSavedArticleResponse: &cpb.GetUserSavedArticleResponse{
 				Article: &cpb.Article{
 					Id: articleID1,
 					Platform: &cpb.Platform{
@@ -578,7 +578,7 @@ func Test_UseCase_CreateBookmark(t *testing.T) {
 			mockContentClient.EXPECT().GetUserSavedArticle(gomock.Any(), &cpb.GetUserSavedArticleRequest{
 				ArticleId: tt.arg.ArticleId,
 				UserId:    tt.arg.UserId,
-			}).Return(tt.resGetUserSavedArticle, nil).AnyTimes()
+			}).Return(tt.mockGetUserSavedArticleResponse, nil).AnyTimes()
 
 			mockFavoriteClient := mock.NewMockFavoriteServiceClient(ctrl)
 
@@ -689,7 +689,7 @@ func Test_UseCase_CreateBookmarkForUploadArticle(t *testing.T) {
 			},
 			mockCreateUploadArticleResponse: &cpb.CreateArticleResponse{
 				Article: &cpb.Article{
-					Id: articleID1,
+					Id: articleID2,
 					Platform: &cpb.Platform{
 						Id:               platformID1,
 						Name:             "platform_name_1",
@@ -697,17 +697,18 @@ func Test_UseCase_CreateBookmarkForUploadArticle(t *testing.T) {
 						SiteUrl:          "platform_url_1",
 						FaviconUrl:       "platform_favicon_url_1",
 					},
-					Title:        "title_1",
-					Description:  "description_1",
-					ArticleUrl:   "https://test.com/article1",
-					ThumbnailUrl: "thumbnail_url_1",
-					PublishedAt:  &timestamppb.Timestamp{Seconds: publishedAt},
-					IsEng:        true,
-					IsPrivate:    false,
+					Title:                    "title_1",
+					Description:              "description_1",
+					ArticleUrl:               "https://test.com/article1",
+					ThumbnailUrl:             "thumbnail_url_1",
+					PublishedAt:              &timestamppb.Timestamp{Seconds: publishedAt},
+					IsEng:                    true,
+					IsPrivate:                false,
+					FavoriteArticleFolderIds: []string{},
 				},
 			},
 			want: &bpb.Bookmark{
-				ArticleId: articleID1,
+				ArticleId: articleID2,
 				UserId:    userID1,
 				PlatformId: &wrapperspb.StringValue{
 					Value: platformID1,
@@ -726,7 +727,7 @@ func Test_UseCase_CreateBookmarkForUploadArticle(t *testing.T) {
 				IsFollowing:              false,
 			},
 			wantBookmarkRecord: entity.Bookmark{
-				ArticleID: articleID1,
+				ArticleID: articleID2,
 				UserID:    userID1,
 				PlatformID: null.String{
 					Valid:  true,
@@ -778,13 +779,14 @@ func Test_UseCase_CreateBookmarkForUploadArticle(t *testing.T) {
 			},
 			mockCreateUploadArticleResponse: &cpb.CreateArticleResponse{
 				Article: &cpb.Article{
-					Id:           articleID1,
-					Title:        "title_1",
-					Description:  "description_1",
-					ArticleUrl:   "https://test.com/article1",
-					ThumbnailUrl: "thumbnail_url_1",
-					IsEng:        true,
-					IsPrivate:    true,
+					Id:                       articleID1,
+					Title:                    "title_1",
+					Description:              "description_1",
+					ArticleUrl:               "https://test.com/article1",
+					ThumbnailUrl:             "thumbnail_url_1",
+					IsEng:                    true,
+					IsPrivate:                true,
+					FavoriteArticleFolderIds: []string{},
 				},
 			},
 			want: &bpb.Bookmark{
