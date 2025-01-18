@@ -4,11 +4,12 @@ import (
 	"context"
 
 	fpb "github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go/grpc/favorite"
+
 	"github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/internal/infrastructure/external"
 )
 
 type FavoriteExternalAdapter interface {
-	GetFavoriteArticleFoldersByArticleID(ctx context.Context, dto *fpb.GetFavoriteArticleFoldersByArticleIdRequest) (*fpb.GetFavoriteArticleFoldersResponse, error)
+	ListFavoriteArticleFoldersByArticleID(ctx context.Context, input *ListFavoriteArticleFoldersByArticleIDInputDTO) (*ListFavoriteArticleFoldersByArticleIDOutputDTO, error)
 }
 
 type favoriteExternalAdapter struct {
@@ -21,10 +22,96 @@ func NewFavoriteExternalAdapter(fe external.FavoriteExternal) FavoriteExternalAd
 	}
 }
 
-func (fea *favoriteExternalAdapter) GetFavoriteArticleFoldersByArticleID(ctx context.Context, dto *fpb.GetFavoriteArticleFoldersByArticleIdRequest) (*fpb.GetFavoriteArticleFoldersResponse, error) {
-	res, err := fea.favoriteExternal.GetFavoriteArticleFoldersByArticleID(ctx, dto)
+func (fea *favoriteExternalAdapter) ListFavoriteArticleFoldersByArticleID(ctx context.Context, input *ListFavoriteArticleFoldersByArticleIDInputDTO) (*ListFavoriteArticleFoldersByArticleIDOutputDTO, error) {
+	req := &fpb.GetFavoriteArticleFoldersByArticleIdRequest{
+		ArticleId: input.ArticleID,
+		UserId:    input.UserID,
+	}
+
+	res, err := fea.favoriteExternal.ListFavoriteArticleFoldersByArticleID(ctx, req)
 	if err != nil {
 		return nil, err
 	}
-	return res, nil
+
+	fafs := make([]*FavoriteArticleFolderDTO, len(res.FavoriteArticleFoldersEdge))
+	for i, faf := range res.FavoriteArticleFoldersEdge {
+		fafs[i] = fea.convertFavoriteArticleFolderDTO(faf.Node)
+	}
+
+	return &ListFavoriteArticleFoldersByArticleIDOutputDTO{
+		FavoriteArticleFolders: fafs,
+		PageInfo: &PageInfoDTO{
+			HasNextPage: res.PageInfo.HasNextPage,
+			EndCursor:   res.PageInfo.EndCursor,
+		},
+	}, nil
+}
+
+func (fea *favoriteExternalAdapter) convertFavoriteArticleFolderDTO(faf *fpb.FavoriteArticleFolder) *FavoriteArticleFolderDTO {
+	res := &FavoriteArticleFolderDTO{
+		ID:          faf.Id,
+		UserID:      faf.UserId,
+		Title:       faf.Title,
+		Description: faf.Description,
+		CreatedAt:   faf.CreatedAt,
+		UpdatedAt:   faf.UpdatedAt,
+	}
+
+	if faf.FavoriteArticles != nil && len(faf.FavoriteArticles) > 0 {
+		favoriteArticles := make([]*FavoriteArticleDTO, len(faf.FavoriteArticles))
+		for i, fa := range faf.FavoriteArticles {
+			favoriteArticles[i] = fea.convertFavoriteArticleFolderSliceDTO(fa)
+		}
+		res.FavoriteArticles = favoriteArticles
+	}
+
+	return res
+}
+
+func (fea *favoriteExternalAdapter) convertFavoriteArticleFolderSliceDTO(fa *fpb.FavoriteArticle) *FavoriteArticleDTO {
+	res := &FavoriteArticleDTO{
+		ID:                      fa.GetId(),
+		ArticleID:               fa.GetArticleId(),
+		FavoriteArticleFolderID: fa.GetFavoriteArticleFolderId(),
+		UserID:                  fa.GetUserId(),
+		Title:                   fa.GetTitle(),
+		Description:             fa.GetDescription(),
+		ThumbnailURL:            fa.GetThumbnailUrl(),
+		ArticleURL:              fa.GetArticleUrl(),
+		PlatformName:            fa.GetPlatformName(),
+		PlatformURL:             fa.GetPlatformUrl(),
+		PlatformFaviconURL:      fa.GetPlatformFaviconUrl(),
+		IsEng:                   fa.GetIsEng(),
+		IsRead:                  fa.GetIsRead(),
+		CreatedAt:               fa.GetCreatedAt(),
+		UpdatedAt:               fa.GetUpdatedAt(),
+	}
+
+	if fa.GetPlatformId() != nil {
+		pID := fa.GetPlatformId().GetValue()
+		res.PlatformID = &pID
+	}
+	if fa.GetPublishedAt() != nil {
+		res.PublishedAt = fa.GetPublishedAt()
+	}
+	if fa.GetAuthorName() != nil {
+		authorName := fa.GetAuthorName().GetValue()
+		res.AuthorName = &authorName
+	}
+	if fa.GetTags() != nil {
+		tags := fa.GetTags().GetValue()
+		res.Tags = &tags
+	}
+	if fa.GetComment() != nil {
+		res.Comment = &ArticleCommentDTO{
+			ID:        fa.GetComment().GetId(),
+			ArticleID: fa.GetComment().GetArticleId(),
+			UserID:    fa.GetComment().GetUserId(),
+			Comment:   fa.GetComment().GetComment(),
+			CreatedAt: fa.GetComment().GetCreatedAt(),
+			UpdatedAt: fa.GetComment().GetUpdatedAt(),
+		}
+	}
+
+	return res
 }

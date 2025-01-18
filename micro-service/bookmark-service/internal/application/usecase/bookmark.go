@@ -6,7 +6,6 @@ import (
 
 	bpb "github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go/grpc/bookmark"
 	copb "github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go/grpc/common"
-	fpb "github.com/YukiOnishi1129/checkpicks-protocol-buffers/checkpicks-rpc-go/grpc/favorite"
 	externaladapter "github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/internal/adapter/external_adapter"
 	persistenceadapter "github.com/YukiOnishi1129/techpicks/micro-service/bookmark-service/internal/adapter/persistence_adapter"
 	"google.golang.org/protobuf/types/known/emptypb"
@@ -61,19 +60,19 @@ func (bu *bookmarkUseCase) GetBookmarks(ctx context.Context, req *bpb.GetBookmar
 		})
 		resB := bu.convertPBBookmark(b, resA.Article)
 
-		resFavoriteFolders, err := bu.favoriteExternalAdapter.GetFavoriteArticleFoldersByArticleID(ctx, &fpb.GetFavoriteArticleFoldersByArticleIdRequest{
-			ArticleId: b.ArticleID,
-			UserId:    req.GetUserId(),
+		resFavoriteFolders, err := bu.favoriteExternalAdapter.ListFavoriteArticleFoldersByArticleID(ctx, &externaladapter.ListFavoriteArticleFoldersByArticleIDInputDTO{
+			ArticleID: b.ArticleID,
+			UserID:    req.GetUserId(),
 		})
 
 		if err != nil {
 			return nil, err
 		}
 
-		if len(resFavoriteFolders.GetFavoriteArticleFoldersEdge()) > 0 {
-			resFavIds := make([]string, len(resFavoriteFolders.GetFavoriteArticleFoldersEdge()))
-			for i, f := range resFavoriteFolders.GetFavoriteArticleFoldersEdge() {
-				resFavIds[i] = f.GetNode().GetId()
+		if len(resFavoriteFolders.FavoriteArticleFolders) > 0 {
+			resFavIds := make([]string, len(resFavoriteFolders.FavoriteArticleFolders))
+			for i, f := range resFavoriteFolders.FavoriteArticleFolders {
+				resFavIds[i] = f.ID
 			}
 			resB.FavoriteArticleFolderIds = resFavIds
 			resB.IsFollowing = true
