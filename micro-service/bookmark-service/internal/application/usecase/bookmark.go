@@ -46,7 +46,11 @@ func (bu *bookmarkUseCase) GetBookmarks(ctx context.Context, req *bpb.GetBookmar
 
 	edges := make([]*bpb.BookmarkEdge, len(bookmarks))
 	for i, b := range bookmarks {
-		resB := bu.convertPBBookmark(*b)
+		resA, err := bu.contentExternalAdapter.GetUserSavedArticle(ctx, externaladapter.GetUserSavedArticleInputDTO{
+			ArticleID: b.ArticleID,
+			UserID:    req.GetUserId(),
+		})
+		resB := bu.convertPBBookmark(b, resA.GetArticle())
 
 		resFavoriteFolders, err := bu.favoriteExternalAdapter.GetFavoriteArticleFoldersByArticleID(ctx, &fpb.GetFavoriteArticleFoldersByArticleIdRequest{
 			ArticleId: b.ArticleID,
@@ -92,45 +96,52 @@ func (bu *bookmarkUseCase) GetBookmarks(ctx context.Context, req *bpb.GetBookmar
 }
 
 func (bu *bookmarkUseCase) GetBookmarkByArticleID(ctx context.Context, req *bpb.GetBookmarkByArticleIDRequest) (*bpb.GetBookmarkResponse, error) {
-	bookmark, err := bu.bookmarkPersistenceAdapter.GetBookmarkByArticleID(ctx, req.GetArticleId(), req.GetUserId())
+	b, err := bu.bookmarkPersistenceAdapter.GetBookmarkByArticleID(ctx, req.GetArticleId(), req.GetUserId())
 	if err != nil {
 		return nil, err
 	}
+	a, err := bu.contentExternalAdapter.GetUserSavedArticle(ctx, externaladapter.GetUserSavedArticleInputDTO{
+		ArticleID: b.ArticleID,
+		UserID:    req.GetUserId(),
+	})
 	return &bpb.GetBookmarkResponse{
-		Bookmark: bu.convertPBBookmark(bookmark),
+		Bookmark: bu.convertPBBookmark(&b, a.GetArticle()),
 	}, nil
 }
 
-func (bu *bookmarkUseCase) convertPBBookmark(b entity.Bookmark) *bpb.Bookmark {
+func (bu *bookmarkUseCase) convertPBBookmark(b *entity.Bookmark, a *cpb.Article) *bpb.Bookmark {
 	if b.ID == "" {
 		return &bpb.Bookmark{}
 	}
 
-	resBookmark := &bpb.Bookmark{
+	resB := &bpb.Bookmark{
 		Id:                       b.ID,
 		ArticleId:                b.ArticleID,
 		UserId:                   b.UserID,
-		Title:                    b.Title,
-		Description:              b.Description,
-		ArticleUrl:               b.ArticleURL,
-		ThumbnailUrl:             b.ThumbnailURL,
+		Title:                    a.GetTitle(),
+		Description:              a.GetDescription(),
+		ArticleUrl:               a.GetArticleUrl(),
+		ThumbnailUrl:             a.GetThumbnailUrl(),
 		PlatformName:             b.PlatformName,
 		PlatformUrl:              b.PlatformURL,
 		PlatformFaviconUrl:       b.PlatformFaviconURL,
-		IsEng:                    b.IsEng,
+		IsEng:                    a.GetIsEng(),
 		IsRead:                   b.IsRead,
 		IsFollowing:              false,
 		FavoriteArticleFolderIds: []string{},
 		CreatedAt:                timestamppb.New(b.CreatedAt),
 		UpdatedAt:                timestamppb.New(b.UpdatedAt),
 	}
-	if b.PlatformID.Valid {
-		resBookmark.PlatformId = wrapperspb.String(b.PlatformID.String)
+	if a.GetPlatform() != nil {
+		resB.PlatformId = wrapperspb.String(a.GetPlatform().GetId())
+		resB.PlatformName = a.GetPlatform().GetName()
+		resB.PlatformUrl = a.GetPlatform().GetSiteUrl()
+		resB.PlatformFaviconUrl = a.GetPlatform().GetFaviconUrl()
 	}
 	if b.PublishedAt.Valid {
-		resBookmark.PublishedAt = timestamppb.New(b.PublishedAt.Time)
+		resB.PublishedAt = timestamppb.New(b.PublishedAt.Time)
 	}
-	return resBookmark
+	return resB
 }
 
 func (bu *bookmarkUseCase) CreateBookmark(ctx context.Context, req *bpb.CreateBookmarkRequest) (*bpb.CreateBookmarkResponse, error) {
@@ -147,8 +158,13 @@ func (bu *bookmarkUseCase) CreateBookmark(ctx context.Context, req *bpb.CreateBo
 		return &bpb.CreateBookmarkResponse{}, err
 	}
 
+	a, err := bu.contentExternalAdapter.GetUserSavedArticle(ctx, externaladapter.GetUserSavedArticleInputDTO{
+		ArticleID: b.ArticleID,
+		UserID:    req.GetUserId(),
+	})
+
 	return &bpb.CreateBookmarkResponse{
-		Bookmark: bu.convertPBBookmark(b),
+		Bookmark: bu.convertPBBookmark(&b, a.GetArticle()),
 	}, nil
 }
 
@@ -178,13 +194,18 @@ func (bu *bookmarkUseCase) CreateBookmarkForUploadArticle(ctx context.Context, r
 	}
 
 	// create bookmark
-	bookmark, err := bu.bookmarkPersistenceAdapter.CreateBookmarkForUploadArticle(ctx, req, article.Article)
+	b, err := bu.bookmarkPersistenceAdapter.CreateBookmarkForUploadArticle(ctx, req, article.Article)
 	if err != nil {
 		return &bpb.CreateBookmarkResponse{}, err
 	}
 
+	a, err := bu.contentExternalAdapter.GetUserSavedArticle(ctx, externaladapter.GetUserSavedArticleInputDTO{
+		ArticleID: b.ArticleID,
+		UserID:    req.GetUserId(),
+	})
+
 	return &bpb.CreateBookmarkResponse{
-		Bookmark: bu.convertPBBookmark(bookmark),
+		Bookmark: bu.convertPBBookmark(&b, a.GetArticle()),
 	}, nil
 }
 

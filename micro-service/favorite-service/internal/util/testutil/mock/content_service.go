@@ -157,6 +157,26 @@ func (mr *MockContentServiceClientMockRecorder) GetFeeds(arg0, arg1 interface{},
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetFeeds", reflect.TypeOf((*MockContentServiceClient)(nil).GetFeeds), varargs...)
 }
 
+// GetUserSavedArticle mocks base method.
+func (m *MockContentServiceClient) GetUserSavedArticle(arg0 context.Context, arg1 *content.GetUserSavedArticleRequest, arg2 ...grpc.CallOption) (*content.GetUserSavedArticleResponse, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{arg0, arg1}
+	for _, a := range arg2 {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "GetUserSavedArticle", varargs...)
+	ret0, _ := ret[0].(*content.GetUserSavedArticleResponse)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetUserSavedArticle indicates an expected call of GetUserSavedArticle.
+func (mr *MockContentServiceClientMockRecorder) GetUserSavedArticle(arg0, arg1 interface{}, arg2 ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{arg0, arg1}, arg2...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetUserSavedArticle", reflect.TypeOf((*MockContentServiceClient)(nil).GetUserSavedArticle), varargs...)
+}
+
 // ListArticle mocks base method.
 func (m *MockContentServiceClient) ListArticle(arg0 context.Context, arg1 *content.ListArticleRequest, arg2 ...grpc.CallOption) (*content.ListArticleResponse, error) {
 	m.ctrl.T.Helper()
@@ -328,6 +348,21 @@ func (m *MockContentServiceServer) GetFeeds(arg0 context.Context, arg1 *content.
 func (mr *MockContentServiceServerMockRecorder) GetFeeds(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetFeeds", reflect.TypeOf((*MockContentServiceServer)(nil).GetFeeds), arg0, arg1)
+}
+
+// GetUserSavedArticle mocks base method.
+func (m *MockContentServiceServer) GetUserSavedArticle(arg0 context.Context, arg1 *content.GetUserSavedArticleRequest) (*content.GetUserSavedArticleResponse, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetUserSavedArticle", arg0, arg1)
+	ret0, _ := ret[0].(*content.GetUserSavedArticleResponse)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetUserSavedArticle indicates an expected call of GetUserSavedArticle.
+func (mr *MockContentServiceServerMockRecorder) GetUserSavedArticle(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetUserSavedArticle", reflect.TypeOf((*MockContentServiceServer)(nil).GetUserSavedArticle), arg0, arg1)
 }
 
 // ListArticle mocks base method.

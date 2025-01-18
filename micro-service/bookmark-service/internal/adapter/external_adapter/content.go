@@ -8,6 +8,7 @@ import (
 )
 
 type ContentExternalAdapter interface {
+	GetUserSavedArticle(ctx context.Context, dto GetUserSavedArticleInputDTO) (*cpb.GetUserSavedArticleResponse, error)
 	CreateUploadArticle(ctx context.Context, dto *cpb.CreateUploadArticleRequest) (*cpb.CreateArticleResponse, error)
 }
 
@@ -19,6 +20,18 @@ func NewContentExternalAdapter(ce external.ContentExternal) ContentExternalAdapt
 	return &contentExternalAdapter{
 		contentExternal: ce,
 	}
+}
+
+func (cea *contentExternalAdapter) GetUserSavedArticle(ctx context.Context, dto GetUserSavedArticleInputDTO) (*cpb.GetUserSavedArticleResponse, error) {
+	req := &cpb.GetUserSavedArticleRequest{
+		ArticleId: dto.ArticleID,
+		UserId:    dto.UserID,
+	}
+	res, err := cea.contentExternal.GetUserSavedArticle(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
 }
 
 func (cea *contentExternalAdapter) CreateUploadArticle(ctx context.Context, dto *cpb.CreateUploadArticleRequest) (*cpb.CreateArticleResponse, error) {
