@@ -57,11 +57,11 @@ func (cea *contentExternalAdapter) GetOrCreateUploadArticle(ctx context.Context,
 	}, nil
 }
 
-func (cpa *contentExternalAdapter) convertArticleDTO(a *cpb.Article) *ArticleDTO {
+func (cea *contentExternalAdapter) convertArticleDTO(a *cpb.Article) *ArticleDTO {
 	res := &ArticleDTO{
 		ID:                       a.GetId(),
-		Platform:                 cpa.convertPlatformDTO(a.GetPlatform()),
-		ArticleComment:           cpa.convertArticleCommentDTO(a.GetComment()),
+		Platform:                 cea.convertPlatformDTO(a.GetPlatform()),
+		ArticleComment:           cea.convertArticleCommentDTO(a.GetComment()),
 		Title:                    a.GetTitle(),
 		Description:              a.GetDescription(),
 		ArticleURL:               a.GetArticleUrl(),
@@ -92,13 +92,13 @@ func (cpa *contentExternalAdapter) convertArticleDTO(a *cpb.Article) *ArticleDTO
 	if a.GetFeeds() != nil && len(a.GetFeeds()) > 0 {
 		redFeeds := make([]*FeedDTO, len(a.GetFeeds()))
 		for i, f := range a.GetFeeds() {
-			redFeeds[i] = cpa.convertDTOFeed(f)
+			redFeeds[i] = cea.convertDTOFeed(f)
 		}
 	}
 	return res
 }
 
-func (cpa *contentExternalAdapter) convertPlatformDTO(p *cpb.Platform) *PlatformDTO {
+func (cea *contentExternalAdapter) convertPlatformDTO(p *cpb.Platform) *PlatformDTO {
 	if p == nil {
 		return nil
 	}
@@ -115,14 +115,14 @@ func (cpa *contentExternalAdapter) convertPlatformDTO(p *cpb.Platform) *Platform
 	}
 }
 
-func (cpa *contentExternalAdapter) convertDTOFeed(f *cpb.Feed) *FeedDTO {
+func (cea *contentExternalAdapter) convertDTOFeed(f *cpb.Feed) *FeedDTO {
 	if f == nil {
 		return nil
 	}
 	res := &FeedDTO{
 		ID:                f.GetId(),
-		Platform:          cpa.convertPlatformDTO(f.GetPlatform()),
-		Category:          cpa.convertCategoryDTO(f.GetCategory()),
+		Platform:          cea.convertPlatformDTO(f.GetPlatform()),
+		Category:          cea.convertCategoryDTO(f.GetCategory()),
 		MyFeedIds:         f.GetMyFeedIds(),
 		Name:              f.GetName(),
 		Description:       f.GetDescription(),
@@ -145,7 +145,7 @@ func (cpa *contentExternalAdapter) convertDTOFeed(f *cpb.Feed) *FeedDTO {
 	return res
 }
 
-func (cpa *contentExternalAdapter) convertCategoryDTO(c *cpb.Category) *CategoryDTO {
+func (cea *contentExternalAdapter) convertCategoryDTO(c *cpb.Category) *CategoryDTO {
 	if c == nil {
 		return nil
 	}
@@ -163,7 +163,7 @@ func (cpa *contentExternalAdapter) convertCategoryDTO(c *cpb.Category) *Category
 	return res
 }
 
-func (cpa *contentExternalAdapter) convertArticleCommentDTO(ac *cpb.ArticleComment) *ArticleCommentDTO {
+func (cea *contentExternalAdapter) convertArticleCommentDTO(ac *cpb.ArticleComment) *ArticleCommentDTO {
 	if ac == nil {
 		return nil
 	}
