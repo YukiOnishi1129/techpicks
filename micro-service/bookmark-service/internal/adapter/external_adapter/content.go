@@ -9,7 +9,7 @@ import (
 
 type ContentExternalAdapter interface {
 	GetUserSavedArticle(ctx context.Context, dto *GetUserSavedArticleInputDTO) (*GetUserSavedArticleOutputDTO, error)
-	CreateUploadArticle(ctx context.Context, dto *GetOrCreateUploadArticleInputDTO) (*GetOrCreateUploadArticleOutputDTO, error)
+	GetOrCreateUploadArticle(ctx context.Context, dto *GetOrCreateUploadArticleInputDTO) (*GetOrCreateUploadArticleOutputDTO, error)
 }
 
 type contentExternalAdapter struct {
@@ -36,7 +36,7 @@ func (cea *contentExternalAdapter) GetUserSavedArticle(ctx context.Context, dto 
 	}, nil
 }
 
-func (cea *contentExternalAdapter) CreateUploadArticle(ctx context.Context, dto *GetOrCreateUploadArticleInputDTO) (*GetOrCreateUploadArticleOutputDTO, error) {
+func (cea *contentExternalAdapter) GetOrCreateUploadArticle(ctx context.Context, dto *GetOrCreateUploadArticleInputDTO) (*GetOrCreateUploadArticleOutputDTO, error) {
 	req := &cpb.CreateUploadArticleRequest{
 		UserId:             dto.UserID,
 		Title:              dto.Title,
@@ -136,7 +136,7 @@ func (cpa *contentExternalAdapter) convertDTOFeed(f *cpb.Feed) *FeedDTO {
 
 	if f.GetApiQueryParam() != nil {
 		apiParam := f.GetApiQueryParam().GetValue()
-		res.ApiQueryParam = &apiParam
+		res.APIQueryParam = &apiParam
 	}
 	if f.GetDeletedAt() != nil {
 		res.DeleteAt = f.GetDeletedAt()

@@ -72,7 +72,7 @@ type FeedDTO struct {
 	SiteURL           string
 	ThumbnailURL      string
 	TrendPlatformType int64
-	ApiQueryParam     *string
+	APIQueryParam     *string
 	CreatedAt         *timestamppb.Timestamp
 	UpdatedAt         *timestamppb.Timestamp
 	DeleteAt          *timestamppb.Timestamp

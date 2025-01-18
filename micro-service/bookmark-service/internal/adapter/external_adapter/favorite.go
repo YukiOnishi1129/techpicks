@@ -57,7 +57,7 @@ func (fea *favoriteExternalAdapter) convertFavoriteArticleFolderDTO(faf *fpb.Fav
 		UpdatedAt:   faf.UpdatedAt,
 	}
 
-	if faf.FavoriteArticles != nil && len(faf.FavoriteArticles) > 0 {
+	if len(faf.FavoriteArticles) > 0 {
 		favoriteArticles := make([]*FavoriteArticleDTO, len(faf.FavoriteArticles))
 		for i, fa := range faf.FavoriteArticles {
 			favoriteArticles[i] = fea.convertFavoriteArticleFolderSliceDTO(fa)
@@ -102,14 +102,15 @@ func (fea *favoriteExternalAdapter) convertFavoriteArticleFolderSliceDTO(fa *fpb
 		tags := fa.GetTags().GetValue()
 		res.Tags = &tags
 	}
-	if fa.GetComment() != nil {
+	if fa.GetArticleComment() != nil {
+		fac := fa.GetArticleComment()
 		res.Comment = &ArticleCommentDTO{
-			ID:        fa.GetComment().GetId(),
-			ArticleID: fa.GetComment().GetArticleId(),
-			UserID:    fa.GetComment().GetUserId(),
-			Comment:   fa.GetComment().GetComment(),
-			CreatedAt: fa.GetComment().GetCreatedAt(),
-			UpdatedAt: fa.GetComment().GetUpdatedAt(),
+			ID:        fac.GetId(),
+			ArticleID: fac.GetArticleId(),
+			UserID:    fac.GetUserId(),
+			Comment:   fac.GetComment(),
+			CreatedAt: fac.GetCreatedAt(),
+			UpdatedAt: fac.GetUpdatedAt(),
 		}
 	}
 

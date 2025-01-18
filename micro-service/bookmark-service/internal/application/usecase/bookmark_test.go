@@ -113,6 +113,7 @@ func Test_UseCase_GetBookmarkByArticleID(t *testing.T) {
 	t.Parallel()
 
 	bookmarkID, _ := uuid.NewRandom()
+	articleCommentID, _ := uuid.NewRandom()
 
 	publishedAt := time.Now().Add(-time.Hour * 24 * 7).Unix()
 
@@ -177,6 +178,12 @@ func Test_UseCase_GetBookmarkByArticleID(t *testing.T) {
 					IsEng:                    true,
 					IsPrivate:                false,
 					FavoriteArticleFolderIds: []string{},
+					Comment: &cpb.ArticleComment{
+						Id:        articleCommentID.String(),
+						UserId:    userID1,
+						ArticleId: articleID1,
+						Comment:   "comment",
+					},
 				},
 			},
 			want: &bpb.GetBookmarkResponse{
@@ -197,6 +204,12 @@ func Test_UseCase_GetBookmarkByArticleID(t *testing.T) {
 					IsEng:                    true,
 					IsRead:                   false,
 					IsFollowing:              false,
+					ArticleComment: &cpb.ArticleComment{
+						Id:        articleCommentID.String(),
+						UserId:    userID1,
+						ArticleId: articleID1,
+						Comment:   "comment",
+					},
 				},
 			},
 		},
@@ -243,6 +256,12 @@ func Test_UseCase_GetBookmarkByArticleID(t *testing.T) {
 					PublishedAt:  &timestamppb.Timestamp{Seconds: publishedAt},
 					IsEng:        true,
 					IsPrivate:    false,
+					Comment: &cpb.ArticleComment{
+						Id:        articleCommentID.String(),
+						UserId:    userID1,
+						ArticleId: articleID2,
+						Comment:   "comment",
+					},
 				},
 			},
 			want: &bpb.GetBookmarkResponse{
@@ -292,6 +311,12 @@ func Test_UseCase_GetBookmarkByArticleID(t *testing.T) {
 					PublishedAt:  &timestamppb.Timestamp{Seconds: publishedAt},
 					IsEng:        true,
 					IsPrivate:    false,
+					Comment: &cpb.ArticleComment{
+						Id:        articleCommentID.String(),
+						UserId:    userID2,
+						ArticleId: articleID1,
+						Comment:   "comment",
+					},
 				},
 			},
 			want: &bpb.GetBookmarkResponse{
@@ -352,6 +377,7 @@ func Test_UseCase_GetBookmarkByArticleID(t *testing.T) {
 			opts := []cmp.Option{
 				cmp.AllowUnexported(bpb.Bookmark{}),
 				cmpopts.IgnoreFields(bpb.Bookmark{}, "state", "sizeCache", "unknownFields", "CreatedAt", "UpdatedAt"),
+				cmpopts.IgnoreFields(cpb.ArticleComment{}, "state", "sizeCache", "unknownFields", "CreatedAt", "UpdatedAt"),
 				cmpopts.IgnoreUnexported(wrapperspb.StringValue{}, timestamppb.Timestamp{}),
 			}
 			if diff := cmp.Diff(got.Bookmark, tt.want.Bookmark, opts...); diff != "" {
@@ -365,6 +391,7 @@ func Test_UseCase_CreateBookmark(t *testing.T) {
 	t.Parallel()
 
 	bookmarkID, _ := uuid.NewRandom()
+	articleCommentID, _ := uuid.NewRandom()
 
 	publishedAt := time.Now().Add(-time.Hour * 24 * 7).Unix()
 
@@ -428,6 +455,12 @@ func Test_UseCase_CreateBookmark(t *testing.T) {
 					LikeCount:                0,
 					IsTrend:                  false,
 					FavoriteArticleFolderIds: []string{},
+					Comment: &cpb.ArticleComment{
+						Id:        articleCommentID.String(),
+						UserId:    userID1,
+						ArticleId: articleID1,
+						Comment:   "comment",
+					},
 				},
 			},
 			want: &bpb.Bookmark{
@@ -448,6 +481,12 @@ func Test_UseCase_CreateBookmark(t *testing.T) {
 				IsEng:                    true,
 				IsRead:                   false,
 				IsFollowing:              false,
+				ArticleComment: &cpb.ArticleComment{
+					Id:        articleCommentID.String(),
+					UserId:    userID1,
+					ArticleId: articleID1,
+					Comment:   "comment",
+				},
 			},
 			wantBookmarkRecord: entity.Bookmark{
 				ArticleID: articleID1,
@@ -499,6 +538,12 @@ func Test_UseCase_CreateBookmark(t *testing.T) {
 					LikeCount:                0,
 					IsTrend:                  false,
 					FavoriteArticleFolderIds: []string{},
+					Comment: &cpb.ArticleComment{
+						Id:        articleCommentID.String(),
+						UserId:    userID1,
+						ArticleId: articleID1,
+						Comment:   "comment",
+					},
 				},
 			},
 			want: &bpb.Bookmark{
@@ -515,6 +560,12 @@ func Test_UseCase_CreateBookmark(t *testing.T) {
 				IsEng:                    true,
 				IsRead:                   false,
 				IsFollowing:              false,
+				ArticleComment: &cpb.ArticleComment{
+					Id:        articleCommentID.String(),
+					UserId:    userID1,
+					ArticleId: articleID1,
+					Comment:   "comment",
+				},
 			},
 			wantBookmarkRecord: entity.Bookmark{
 				ArticleID:          articleID1,
@@ -676,6 +727,7 @@ func Test_UseCase_CreateBookmark(t *testing.T) {
 			optsPbBookmark := []cmp.Option{
 				cmp.AllowUnexported(bpb.Bookmark{}),
 				cmpopts.IgnoreFields(bpb.Bookmark{}, "state", "sizeCache", "unknownFields", "Id", "CreatedAt", "UpdatedAt"),
+				cmpopts.IgnoreFields(cpb.ArticleComment{}, "state", "sizeCache", "unknownFields", "CreatedAt", "UpdatedAt"),
 				cmpopts.IgnoreUnexported(wrapperspb.StringValue{}, timestamppb.Timestamp{}),
 			}
 			if diff := cmp.Diff(got.Bookmark, tt.want, optsPbBookmark...); diff != "" {
@@ -698,6 +750,7 @@ func Test_UseCase_CreateBookmarkForUploadArticle(t *testing.T) {
 	t.Parallel()
 
 	bookmarkID, _ := uuid.NewRandom()
+	articleCommentID, _ := uuid.NewRandom()
 
 	publishedAt := time.Now().Add(-time.Hour * 24 * 7).Unix()
 
@@ -768,6 +821,12 @@ func Test_UseCase_CreateBookmarkForUploadArticle(t *testing.T) {
 					IsEng:                    true,
 					IsPrivate:                false,
 					FavoriteArticleFolderIds: []string{},
+					Comment: &cpb.ArticleComment{
+						Id:        articleCommentID.String(),
+						UserId:    userID1,
+						ArticleId: articleID2,
+						Comment:   "comment",
+					},
 				},
 			},
 			want: &bpb.Bookmark{
@@ -788,6 +847,12 @@ func Test_UseCase_CreateBookmarkForUploadArticle(t *testing.T) {
 				IsEng:                    true,
 				IsRead:                   false,
 				IsFollowing:              false,
+				ArticleComment: &cpb.ArticleComment{
+					Id:        articleCommentID.String(),
+					UserId:    userID1,
+					ArticleId: articleID2,
+					Comment:   "comment",
+				},
 			},
 			wantBookmarkRecord: entity.Bookmark{
 				ArticleID: articleID2,
@@ -850,6 +915,12 @@ func Test_UseCase_CreateBookmarkForUploadArticle(t *testing.T) {
 					IsEng:                    true,
 					IsPrivate:                true,
 					FavoriteArticleFolderIds: []string{},
+					Comment: &cpb.ArticleComment{
+						Id:        articleCommentID.String(),
+						UserId:    userID1,
+						ArticleId: articleID1,
+						Comment:   "comment",
+					},
 				},
 			},
 			want: &bpb.Bookmark{
@@ -866,6 +937,12 @@ func Test_UseCase_CreateBookmarkForUploadArticle(t *testing.T) {
 				IsEng:                    true,
 				IsRead:                   false,
 				IsFollowing:              false,
+				ArticleComment: &cpb.ArticleComment{
+					Id:        articleCommentID.String(),
+					UserId:    userID1,
+					ArticleId: articleID1,
+					Comment:   "comment",
+				},
 			},
 			wantBookmarkRecord: entity.Bookmark{
 				ArticleID:          articleID1,
@@ -992,6 +1069,7 @@ func Test_UseCase_CreateBookmarkForUploadArticle(t *testing.T) {
 			optsPbBookmark := []cmp.Option{
 				cmp.AllowUnexported(bpb.Bookmark{}),
 				cmpopts.IgnoreFields(bpb.Bookmark{}, "state", "sizeCache", "unknownFields", "Id", "CreatedAt", "UpdatedAt"),
+				cmpopts.IgnoreFields(cpb.ArticleComment{}, "state", "sizeCache", "unknownFields", "CreatedAt", "UpdatedAt"),
 				cmpopts.IgnoreUnexported(wrapperspb.StringValue{}, timestamppb.Timestamp{}),
 			}
 			if diff := cmp.Diff(got.Bookmark, tt.want, optsPbBookmark...); diff != "" {

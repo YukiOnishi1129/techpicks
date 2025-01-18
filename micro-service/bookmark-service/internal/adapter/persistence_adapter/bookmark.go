@@ -46,7 +46,7 @@ func (bpa *bookmarkPersistenceAdapter) ListBookmark(ctx context.Context, input *
 		q = append(q, qm.Where("created_at < (SELECT created_at FROM bookmarks WHERE id = ?)", input.Cursor))
 	}
 
-	if input.Keywords != nil && len(input.Keywords) > 0 {
+	if len(input.Keywords) > 0 {
 		for _, keyword := range input.Keywords {
 			q = append(q, qm.Expr(
 				qm.And("title ILIKE ?", "%"+keyword+"%"),
