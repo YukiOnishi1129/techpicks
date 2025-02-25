@@ -12,8 +12,8 @@ type ShareLinksProps = {
 export const ShareLinks: FC<ShareLinksProps> = ({
   shareTitle,
   shareUrl,
-  postIconSize = 24,
-  xIconSize = 24,
+  postIconSize = 18,
+  xIconSize = 18,
 }) => {
   let newUrl: URL | undefined = undefined;
   try {
@@ -22,7 +22,7 @@ export const ShareLinks: FC<ShareLinksProps> = ({
     console.log(`Invalid URL at ShareLinks components: ${shareUrl}`);
   }
   return (
-    <div className="flex items-center justify-center gap-4">
+    <div className="flex items-center justify-center gap-3">
       {newUrl ? (
         <ReadPostTooltip postUrl={newUrl} size={postIconSize} />
       ) : (

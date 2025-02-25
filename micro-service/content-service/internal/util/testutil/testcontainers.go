@@ -103,6 +103,11 @@ func SetupTest(ctx context.Context, t *testing.T, schemaPath string) (*PostgresC
 		return nil, fmt.Errorf("feeds is empty %d", len(feeds))
 	}
 
+	profiles := mock.GetProfileMock()
+	if len(profiles) == 0 {
+		return nil, fmt.Errorf("profiles is empty %d", len(profiles))
+	}
+
 	for _, v := range mock.GetPlatformMock() {
 		err = v.Insert(ctx, c.DB, boil.Infer())
 		if err != nil {
@@ -120,6 +125,14 @@ func SetupTest(ctx context.Context, t *testing.T, schemaPath string) (*PostgresC
 	}
 
 	for _, v := range mock.GetFeedMock() {
+		err = v.Insert(ctx, c.DB, boil.Infer())
+		if err != nil {
+			t.Fatal(err)
+			return nil, err
+		}
+	}
+
+	for _, v := range profiles {
 		err = v.Insert(ctx, c.DB, boil.Infer())
 		if err != nil {
 			t.Fatal(err)

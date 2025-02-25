@@ -15,7 +15,7 @@ import (
 )
 
 type ArticlePersistenceAdapter interface {
-	GetArticles(ctx context.Context, req *cpb.GetArticlesRequest, limit int) (entity.ArticleSlice, error)
+	ListArticle(ctx context.Context, req *cpb.ListArticleRequest, limit int) (entity.ArticleSlice, error)
 	GetArticlesByArticleURLAndPlatformURL(ctx context.Context, articleURL, platformURL string) (entity.ArticleSlice, error)
 	ListArticleByArticleURL(ctx context.Context, articleURL string, limit int) (entity.ArticleSlice, error)
 	GetPrivateArticlesByArticleURL(ctx context.Context, articleURL string) (entity.ArticleSlice, error)
@@ -33,7 +33,7 @@ func NewArticlePersistenceAdapter(ar repository.ArticleRepository) ArticlePersis
 	}
 }
 
-func (apa *articlePersistenceAdapter) GetArticles(ctx context.Context, req *cpb.GetArticlesRequest, limit int) (entity.ArticleSlice, error) {
+func (apa *articlePersistenceAdapter) ListArticle(ctx context.Context, req *cpb.ListArticleRequest, limit int) (entity.ArticleSlice, error) {
 	q := []qm.QueryMod{
 		qm.InnerJoin("platforms ON articles.platform_id = platforms.id"),
 		qm.LeftOuterJoin("feed_article_relations ON articles.id = feed_article_relations.article_id"),
@@ -41,6 +41,7 @@ func (apa *articlePersistenceAdapter) GetArticles(ctx context.Context, req *cpb.
 		qm.Where("feeds.deleted_at IS NULL"),
 		qm.InnerJoin("platforms as feed_platforms ON feeds.platform_id = feed_platforms.id"),
 		qm.InnerJoin("categories as feed_categories ON feeds.category_id = feed_categories.id"),
+		qm.LeftOuterJoin("article_comments on articles.id = article_comments.article_id"),
 		qm.Load(qm.Rels(entity.ArticleRels.Platform)),
 		qm.Load(qm.Rels(entity.ArticleRels.FeedArticleRelations)),
 		qm.Load(qm.Rels(
@@ -49,6 +50,7 @@ func (apa *articlePersistenceAdapter) GetArticles(ctx context.Context, req *cpb.
 		)),
 		qm.Load("FeedArticleRelations.Feed.Category"),
 		qm.Load("FeedArticleRelations.Feed.Platform"),
+		qm.Load(qm.Rels(entity.ArticleRels.ArticleComments)),
 		qm.Where("articles.is_private = ?", false),
 		qm.GroupBy("articles.id"),
 		qm.Limit(limit),
@@ -107,7 +109,7 @@ func (apa *articlePersistenceAdapter) GetArticles(ctx context.Context, req *cpb.
 		q = append(q, qm.WhereIn("feed_article_relations.feed_id IN ?", qmWhere...))
 	}
 
-	articles, err := apa.articleRepository.GetArticles(ctx, q)
+	articles, err := apa.articleRepository.ListArticle(ctx, q)
 	if err != nil {
 		fmt.Printf("Error executing query: %v\n", err)
 		return nil, err
@@ -125,7 +127,7 @@ func (apa *articlePersistenceAdapter) GetArticlesByArticleURLAndPlatformURL(ctx 
 		qm.Where("articles.is_private = ?", false),
 	}
 
-	articles, err := apa.articleRepository.GetArticles(ctx, q)
+	articles, err := apa.articleRepository.ListArticle(ctx, q)
 	if err != nil {
 		return nil, err
 	}
@@ -141,7 +143,7 @@ func (apa *articlePersistenceAdapter) ListArticleByArticleURL(ctx context.Contex
 		qm.Limit(limit),
 	}
 
-	articles, err := apa.articleRepository.GetArticles(ctx, q)
+	articles, err := apa.articleRepository.ListArticle(ctx, q)
 	if err != nil {
 		fmt.Printf("Error executing query: %v\n", err)
 		return nil, err
@@ -156,7 +158,7 @@ func (apa *articlePersistenceAdapter) GetPrivateArticlesByArticleURL(ctx context
 		qm.Where("articles.is_private = ?", true),
 	}
 
-	articles, err := apa.articleRepository.GetArticles(ctx, q)
+	articles, err := apa.articleRepository.ListArticle(ctx, q)
 	if err != nil {
 		fmt.Printf("Error executing query: %v\n", err)
 		return nil, err

@@ -1,6 +1,8 @@
 import {
-  GetArticlesRequest,
+  ListArticleRequest,
   GetArticleOGPRequest,
+  UpsertArticleCommentRequest,
+  DeleteArticleCommentRequest,
 } from '@checkpicks/checkpicks-rpc-ts/src/grpc/content/content_pb';
 import { Injectable } from '@nestjs/common';
 import {
@@ -12,6 +14,9 @@ import {
   ArticleConnection,
   ArticlesInput,
   ArticleOGP,
+  UpsertArticleCommentInput,
+  ArticleComment,
+  DeleteArticleCommentInput,
 } from '../../../graphql/types/graphql';
 import { convertTimestampToInt } from '../../../utils/timestamp';
 import { GrpcContentClientService } from '../../grpc/grpc-content-client.service';
@@ -26,7 +31,7 @@ export class ArticleService {
     userId: string,
     input: ArticlesInput,
   ): Promise<ArticleConnection> {
-    const req = new GetArticlesRequest();
+    const req = new ListArticleRequest();
     if (input?.first) req.setLimit(input.first);
     if (input?.after) req.setCursor(input.after);
     if (input?.keywords && input.keywords.length !== 0) {
@@ -51,7 +56,7 @@ export class ArticleService {
 
     return new Promise((resolve, reject) => {
       const client = this.grpcContentClientService.getGrpcContentService();
-      client.getArticles(req, (err, res) => {
+      client.listArticle(req, (err, res) => {
         if (err) {
           reject({
             code: err?.code || 500,
@@ -69,6 +74,12 @@ export class ArticleService {
                   node: {
                     articleUrl: edge.article.articleUrl,
                     bookmarkId: edge.article?.bookmarkId?.value,
+                    comment: edge.article?.comment
+                      ? {
+                          comment: edge.article.comment.comment,
+                          id: edge.article.comment.id,
+                        }
+                      : undefined,
                     createdAt: convertTimestampToInt(edge.article.createdAt),
                     description: edge.article.description,
                     favoriteArticleFolderIds: edge.article
@@ -185,6 +196,63 @@ export class ArticleService {
         };
 
         resolve(articleOgp);
+      });
+    });
+  }
+
+  async upsertArticleComment(
+    userId: string,
+    input: UpsertArticleCommentInput,
+  ): Promise<ArticleComment> {
+    const req = new UpsertArticleCommentRequest();
+    req.setArticleId(input.articleId);
+    req.setUserId(userId);
+    req.setComment(input.comment);
+    if (input.articleCommentId)
+      req.setId(new StringValue().setValue(input.articleCommentId));
+
+    return new Promise((resolve, reject) => {
+      const client = this.grpcContentClientService.getGrpcContentService();
+      client.upsertArticleComment(req, (err, res) => {
+        if (err) {
+          reject({
+            code: err?.code || 500,
+            message: err?.message || 'something went wrong',
+          });
+          return;
+        }
+
+        const resArticleComment = res.toObject();
+        const articleComment: ArticleComment = {
+          comment: resArticleComment.comment.comment,
+          id: resArticleComment.comment.id,
+        };
+
+        resolve(articleComment);
+      });
+    });
+  }
+
+  async deleteArticleComment(
+    userId: string,
+    input: DeleteArticleCommentInput,
+  ): Promise<boolean> {
+    const req = new DeleteArticleCommentRequest();
+    req.setUserId(userId);
+    req.setId(input.articleCommentId);
+
+    return new Promise((resolve, reject) => {
+      const client = this.grpcContentClientService.getGrpcContentService();
+      client.deleteArticleComment(req, (err) => {
+        if (err) {
+          reject({
+            code: err?.code || 500,
+            message: err?.message || 'something went wrong',
+          });
+          return;
+        }
+
+        resolve(true);
       });
     });
   }

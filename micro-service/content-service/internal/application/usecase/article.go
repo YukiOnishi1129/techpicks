@@ -13,13 +13,13 @@ import (
 	"google.golang.org/protobuf/types/known/wrapperspb"
 )
 
-func (cu *contentUseCase) GetArticles(ctx context.Context, req *cpb.GetArticlesRequest) (*cpb.GetArticlesResponse, error) {
+func (cu *contentUseCase) ListArticle(ctx context.Context, req *cpb.ListArticleRequest) (*cpb.ListArticleResponse, error) {
 	limit := 20
 	if req.GetLimit() != 0 {
 		limit = int(req.GetLimit())
 	}
 
-	articles, err := cu.articlePersistenceAdapter.GetArticles(ctx, req, limit)
+	articles, err := cu.articlePersistenceAdapter.ListArticle(ctx, req, limit)
 	if err != nil {
 		return nil, err
 	}
@@ -77,7 +77,7 @@ func (cu *contentUseCase) GetArticles(ctx context.Context, req *cpb.GetArticlesR
 	}
 
 	if len(edges) == 0 {
-		return &cpb.GetArticlesResponse{
+		return &cpb.ListArticleResponse{
 			ArticlesEdge: edges,
 			PageInfo: &copb.PageInfo{
 				HasNextPage: false,
@@ -86,7 +86,7 @@ func (cu *contentUseCase) GetArticles(ctx context.Context, req *cpb.GetArticlesR
 		}, nil
 	}
 
-	return &cpb.GetArticlesResponse{
+	return &cpb.ListArticleResponse{
 		ArticlesEdge: edges,
 		PageInfo: &copb.PageInfo{
 			HasNextPage: len(edges) == limit,
@@ -173,6 +173,17 @@ func (cu *contentUseCase) convertPBArticle(a entity.Article) *cpb.Article {
 	}
 	if a.R != nil && a.R.Platform != nil {
 		article.Platform = cu.convertPBPlatform(*a.R.Platform)
+	}
+	if a.R != nil && a.R.ArticleComments != nil && len(a.R.ArticleComments) > 0 {
+		ac := a.R.ArticleComments[0]
+		article.Comment = &cpb.ArticleComment{
+			Id:        ac.ID,
+			UserId:    ac.UserID,
+			ArticleId: ac.ArticleID,
+			Comment:   ac.Comment,
+			CreatedAt: timestamppb.New(ac.CreatedAt),
+			UpdatedAt: timestamppb.New(ac.UpdatedAt),
+		}
 	}
 	return article
 }

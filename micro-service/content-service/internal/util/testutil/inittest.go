@@ -6,4 +6,5 @@ func BeforeAllTest() {
 	mock.CreatePlatformMock()
 	mock.CreateCategoryMock()
 	mock.CreateFeedsMock()
+	mock.CreateProfileMock()
 }

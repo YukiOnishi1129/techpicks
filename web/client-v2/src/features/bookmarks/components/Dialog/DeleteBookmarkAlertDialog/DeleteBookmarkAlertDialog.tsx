@@ -38,7 +38,7 @@ export const DeleteBookmarkAlertDialog: FC<DeleteBookmarkAlertDialogProps> = ({
         <Tooltip>
           <AlertDialogTrigger asChild>
             <TooltipTrigger>
-              <FcBookmark className="inline-block" size={36} />
+              <FcBookmark className="inline-block" size={24} />
             </TooltipTrigger>
           </AlertDialogTrigger>
           <TooltipContent className="px-4 py-3 font-semibold">

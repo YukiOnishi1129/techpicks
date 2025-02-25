@@ -24,7 +24,7 @@ export const AddBookmarkTooltip: FC<AddBookmarkTooltipProps> = ({
           onClick={handleAddBookmark}
         >
           <IconContext.Provider value={{ className: "hover:text-rose-600" }}>
-            <MdOutlineBookmarkAdd className="inline-block " size={36} />
+            <MdOutlineBookmarkAdd className="inline-block " size={22} />
           </IconContext.Provider>
         </TooltipTrigger>
         <TooltipContent>

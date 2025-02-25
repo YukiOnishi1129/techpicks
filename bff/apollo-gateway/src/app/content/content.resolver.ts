@@ -1,5 +1,5 @@
 import { UseGuards } from '@nestjs/common';
-import { Resolver, Args, Query, Context } from '@nestjs/graphql';
+import { Resolver, Args, Query, Context, Mutation } from '@nestjs/graphql';
 
 import { ArticleService } from './article/article.service';
 import { FeedService } from './feed/feed.service';
@@ -12,6 +12,9 @@ import {
   Feed,
   FeedsInput,
   FeedInput,
+  ArticleComment,
+  UpsertArticleCommentInput,
+  DeleteArticleCommentInput,
 } from '../../graphql/types/graphql';
 import { SupabaseAuthGuard } from '../auth/auth.guard';
 
@@ -58,5 +61,25 @@ export class ContentResolver {
   ): Promise<Feed> {
     const user = context.req.user;
     return await this.feedService.getFeed(user.id, feedInput);
+  }
+
+  @Mutation(() => ArticleComment)
+  @UseGuards(SupabaseAuthGuard)
+  async upsertArticleComment(
+    @Args('input') input: UpsertArticleCommentInput,
+    @Context() context: GraphQLContext,
+  ): Promise<ArticleComment> {
+    const user = context.req.user;
+    return await this.articleService.upsertArticleComment(user.id, input);
+  }
+
+  @Mutation(() => ArticleComment)
+  @UseGuards(SupabaseAuthGuard)
+  async deleteArticleComment(
+    @Args('input') input: DeleteArticleCommentInput,
+    @Context() context: GraphQLContext,
+  ): Promise<boolean> {
+    const user = context.req.user;
+    return await this.articleService.deleteArticleComment(user.id, input);
   }
 }

@@ -18,9 +18,15 @@ type Article implements Node {
   bookmarkId: String
   isBookmarked: Boolean!
   isFollowing: Boolean!
+  comment: ArticleComment
   likeCount: Int
   createdAt: Int!
   updatedAt: Int!
+}
+
+type ArticleComment {
+  id: ID!
+  comment: String!
 }
 
 type ArticleConnection {

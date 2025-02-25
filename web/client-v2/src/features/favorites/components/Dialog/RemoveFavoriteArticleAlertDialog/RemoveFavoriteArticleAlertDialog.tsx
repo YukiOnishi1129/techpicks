@@ -44,7 +44,7 @@ export function RemoveFavoriteArticleAlertDialog({
               <IconContext.Provider
                 value={{ className: "hover:text-rose-900" }}
               >
-                <FaHeart size={30} className="cursor-pointer" color="red" />
+                <FaHeart size={20} className="cursor-pointer" color="red" />
               </IconContext.Provider>
             </TooltipTrigger>
           </AlertDialogTrigger>

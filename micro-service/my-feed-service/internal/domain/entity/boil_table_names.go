@@ -4,9 +4,11 @@
 package entity
 
 var TableNames = struct {
-	MyFeedFolders string
-	MyFeeds       string
+	ArticleComments string
+	MyFeedFolders   string
+	MyFeeds         string
 }{
-	MyFeedFolders: "my_feed_folders",
-	MyFeeds:       "my_feeds",
+	ArticleComments: "article_comments",
+	MyFeedFolders:   "my_feed_folders",
+	MyFeeds:         "my_feeds",
 }
