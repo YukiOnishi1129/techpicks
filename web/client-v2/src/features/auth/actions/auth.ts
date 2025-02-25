@@ -44,7 +44,7 @@ export async function logoutToLoginPage() {
 
 export async function getSession() {
   const supabase = await createGetOnlyServerSideClient();
-  const session = supabase.auth.getSession();
+  const session = await supabase.auth.getSession();
 
   return session;
 }
