@@ -5,9 +5,7 @@ import { useCallback } from "react";
 import { logoutToLoginPage } from "@/features/auth/actions/auth";
 import { getUser } from "@/features/auth/actions/user";
 
-import { serverRevalidatePage } from "@/shared/actions/actServerRevalidatePage";
 import { useStatusToast } from "@/shared/hooks/useStatusToast";
-
 
 import { CreateFavoriteArticleMutation } from "../mutations/CreateFavoriteArticleMutation";
 import { DeleteFavoriteArticleByArticleIdMutation } from "../mutations/DeleteFavoriteArticleByArticleIdMutation";
@@ -161,11 +159,6 @@ export const useManageFavoriteArticle = ({
         description: `Follow the article title: '${fragment.title}' into the folder ${folderTitle}`,
       });
 
-      // Revalidate the page to update the favorite article list
-      await serverRevalidatePage(
-        `/favorite/article/${targetFavoriteArticleFolderId}`
-      );
-
       return resData?.createFavoriteArticle.id;
     },
     [
@@ -246,11 +239,6 @@ export const useManageFavoriteArticle = ({
       successToast({
         description: `Unfollowed the article title '${fragment.title}' from the folder '${targetFolder?.node.title}'`,
       });
-
-      // Revalidate the page to update the favorite article list
-      await serverRevalidatePage(
-        `/favorite/article/${targetFavoriteArticleFolderId}`
-      );
 
       return favoriteArticleId;
     },

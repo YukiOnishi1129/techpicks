@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "@apollo/server": "^4.11.0",
-    "@checkpicks/checkpicks-rpc-ts": "^1.5.0",
+    "@checkpicks/checkpicks-rpc-ts": "^1.5.5",
     "@grpc/grpc-js": "^1.11.1",
     "@grpc/proto-loader": "^0.7.13",
     "@nestjs/apollo": "^12.2.0",

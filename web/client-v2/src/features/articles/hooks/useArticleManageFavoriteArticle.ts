@@ -7,9 +7,7 @@ import { getUser } from "@/features/auth/actions/user";
 import { CreateFavoriteArticleMutation } from "@/features/favorites/mutations/CreateFavoriteArticleMutation";
 import { DeleteFavoriteArticleByArticleIdMutation } from "@/features/favorites/mutations/DeleteFavoriteArticleByArticleIdMutation";
 
-import { serverRevalidatePage } from "@/shared/actions/actServerRevalidatePage";
 import { useStatusToast } from "@/shared/hooks/useStatusToast";
-
 
 export const UseArticleManageFavoriteArticleFragment = graphql(`
   fragment UseArticleManageFavoriteArticleFragment on Article {
@@ -161,11 +159,6 @@ export const useArticleManageFavoriteArticle = ({
         description: `Follow the article title:'${fragment.title}'`,
       });
 
-      // Revalidate favorite article page
-      await serverRevalidatePage(`/favorite/article`);
-      await serverRevalidatePage(
-        `/favorite/article/${favoriteArticleFolderId}`
-      );
       return data?.createFavoriteArticle.id;
     },
     [
@@ -231,12 +224,6 @@ export const useArticleManageFavoriteArticle = ({
       successToast({
         description: `Unfollow the article title: '${deletedTitle}'`,
       });
-
-      // Revalidate favorite article page
-      await serverRevalidatePage(`/favorite/article`);
-      await serverRevalidatePage(
-        `/favorite/article/${favoriteArticleFolderId}`
-      );
 
       return favoriteArticleId;
     },
