@@ -7,7 +7,6 @@ import { getUser } from "@/features/auth/actions/user";
 import { CreateBookmarkMutation } from "@/features/bookmarks/mutations/CreateBookmarkMutation";
 import { DeleteBookmarkMutation } from "@/features/bookmarks/mutations/DeleteBookmarkMutation";
 
-import { serverRevalidatePage } from "@/shared/actions/actServerRevalidatePage";
 import { useStatusToast } from "@/shared/hooks/useStatusToast";
 
 export const UseArticleManageBookmarkFragment = graphql(`
@@ -96,9 +95,6 @@ export const useArticleManageBookmark = ({
     successToast({
       description: `Added bookmark title '${fragment.title}'`,
     });
-
-    // Revalidate bookmarks page
-    await serverRevalidatePage("/bookmarks");
   }, [createArticleBookmarkMutation, fragment, successToast, failToast]);
 
   const handleDeleteBookmark = useCallback(
@@ -145,9 +141,6 @@ export const useArticleManageBookmark = ({
       successToast({
         description: `Removed bookmark title '${fragment.title}'`,
       });
-
-      // Revalidate bookmarks page
-      await serverRevalidatePage("/bookmarks");
     },
     [deleteArticleBookmarkMutation, fragment, failToast, successToast]
   );
