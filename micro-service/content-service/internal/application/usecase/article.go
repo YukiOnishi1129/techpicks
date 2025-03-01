@@ -26,7 +26,7 @@ func (cu *contentUseCase) ListArticle(ctx context.Context, req *cpb.ListArticleR
 
 	edges := make([]*cpb.ArticleEdge, len(articles))
 	for i, article := range articles {
-		res := cu.convertPBArticle(*article)
+		res := cu.convertPBArticle(*article, req.GetUserId().GetValue())
 
 		farFeeds := make([]*cpb.Feed, len(article.R.FeedArticleRelations))
 
@@ -150,7 +150,7 @@ func (cu *contentUseCase) ListArticleByArticleURL(ctx context.Context, req *cpb.
 	}, nil
 }
 
-func (cu *contentUseCase) convertPBArticle(a entity.Article) *cpb.Article {
+func (cu *contentUseCase) convertPBArticle(a entity.Article, userID string) *cpb.Article {
 	article := &cpb.Article{
 		Id:           a.ID,
 		Title:        a.Title,
@@ -176,14 +176,17 @@ func (cu *contentUseCase) convertPBArticle(a entity.Article) *cpb.Article {
 	}
 	if a.R != nil && a.R.ArticleComments != nil && len(a.R.ArticleComments) > 0 {
 		ac := a.R.ArticleComments[0]
-		article.Comment = &cpb.ArticleComment{
-			Id:        ac.ID,
-			UserId:    ac.UserID,
-			ArticleId: ac.ArticleID,
-			Comment:   ac.Comment,
-			CreatedAt: timestamppb.New(ac.CreatedAt),
-			UpdatedAt: timestamppb.New(ac.UpdatedAt),
+		if ac.UserID == userID {
+			article.Comment = &cpb.ArticleComment{
+				Id:        ac.ID,
+				UserId:    ac.UserID,
+				ArticleId: ac.ArticleID,
+				Comment:   ac.Comment,
+				CreatedAt: timestamppb.New(ac.CreatedAt),
+				UpdatedAt: timestamppb.New(ac.UpdatedAt),
+			}
 		}
+
 	}
 	return article
 }
@@ -199,7 +202,7 @@ func (cu *contentUseCase) CreateUploadArticle(ctx context.Context, req *cpb.Crea
 	}
 	if len(res) > 0 {
 		return &cpb.CreateArticleResponse{
-			Article: cu.convertPBArticle(*res[0]),
+			Article: cu.convertPBArticle(*res[0], ""),
 		}, nil
 	}
 
@@ -210,7 +213,7 @@ func (cu *contentUseCase) CreateUploadArticle(ctx context.Context, req *cpb.Crea
 	}
 	if len(res) > 0 {
 		return &cpb.CreateArticleResponse{
-			Article: cu.convertPBArticle(*res[0]),
+			Article: cu.convertPBArticle(*res[0], ""),
 		}, nil
 	}
 
@@ -226,6 +229,6 @@ func (cu *contentUseCase) CreateUploadArticle(ctx context.Context, req *cpb.Crea
 	}
 
 	return &cpb.CreateArticleResponse{
-		Article: cu.convertPBArticle(article),
+		Article: cu.convertPBArticle(article, ""),
 	}, nil
 }
